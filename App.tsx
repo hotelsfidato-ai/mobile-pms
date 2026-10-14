@@ -10,7 +10,7 @@ import { SignIn } from "./src/SignIn";
 import { c } from "./src/theme";
 
 /* ══════════════════════════════════════════════════════════════════
-   THE FIDATO PMS ON A PHONE — slice 1, the owner's figures (D27-321):
+   THE FIDATO PMS ON A PHONE — slice 1, the owner's figures (D27-322):
    sign in, every property, one property's Dashboard. Three screens, so a
    state and Android's back button instead of a navigation library; the
    library comes when a slice needs more than one level of back.

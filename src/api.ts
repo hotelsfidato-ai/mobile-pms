@@ -12,7 +12,7 @@
    Email and password through Firebase come with the live setup.
 
    Reads only, so far: the web's offline rules (src/lib/offline.ts) are for
-   writes, and arrive with the first slice that writes (D27-321).
+   writes, and arrive with the first slice that writes (D27-322).
    ══════════════════════════════════════════════════════════════════ */
 
 export const API_URL = process.env.EXPO_PUBLIC_API_URL || "https://api.fidatohotels.com";
