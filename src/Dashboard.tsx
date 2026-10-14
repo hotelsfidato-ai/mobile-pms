@@ -3,7 +3,7 @@ import type { Room, Stay } from "../../src/data/repositories/types";
 import { api, orNull } from "./api";
 import { Period } from "./AllProperties";
 import {
-  cash, count, dateLong, dateShort, methodsToday, monthStart, pct, pick, todaysWork,
+  DASH, cash, count, dateLong, dateShort, methodsToday, monthStart, pct, pick, todaysWork,
   type DueOut, type Figure, type Hotel, type HouseNow, type ReportDoc,
 } from "./figures";
 import { c, space, t } from "./theme";
@@ -144,8 +144,7 @@ export function Dashboard({ hotel, onBack }: { hotel: Hotel; onBack: () => void 
         <Text style={[t.heading, { marginBottom: 4 }]}>Money</Text>
         <MoneyRow label="Collected today" value={show(cash(paid?.today))}
           note={methods.length ? methods.map((m) => `${m.label} ${cash(m.today)}`).join(" · ") : "Nothing taken yet today"} />
-        <MoneyRow label="Owed by guests, less refunds" value={show(cash(owedByGuests?.today))} note="Every guest bill still open"
-          warn={(owedByGuests?.today ?? 0) > 0} />
+        <MoneyRow label="Owed by guests, less refunds" value={show(cash(owedByGuests?.today))} note="Every guest bill still open" />
         <MoneyRow label="City ledger" value={show(cash(cityLedger?.today))} note={`Paid today ${cash(companyPaid?.today)}`} />
         <MoneyRow label="No-shows" value={show(count(noShow?.today))} note={`Month so far ${count(noShow?.ptd)}`}
           warn={(noShow?.today ?? 0) > 0} />
@@ -196,10 +195,11 @@ function Gauge({ label, value, show }: { label: string; value: number | null | u
 function MoneyRow({ label, value, note, warn }: { label: string; value: string; note: string; warn?: boolean }) {
   return (
     <View style={{ paddingVertical: 12, gap: 2, borderTopWidth: 1, borderTopColor: c.grey100 }}>
-      <Text style={[t.label, { color: c.ink900 }]}>{label}</Text>
+      <Text style={t.label}>{label}</Text>
       <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "baseline", gap: 12 }}>
         <Text style={[t.caption, { flexShrink: 1 }]}>{note}</Text>
-        <Text style={[t.figure, warn && { color: c.orange700 }]}>{value}</Text>
+        {/* Orange only for No-shows above 0, a dash grey: the web's Money. */}
+        <Text style={[t.figure, value === DASH ? { color: c.grey500 } : warn && { color: c.orange700 }]}>{value}</Text>
       </View>
     </View>
   );

@@ -39,8 +39,8 @@ export function SignIn({ onDev, busy, error }: { onDev: (uid: string) => void; b
 
       {__DEV__ ? (
         <View style={{ gap: space.tile }}>
-          <Text style={[t.caption, { color: c.yellow800, textTransform: "uppercase", letterSpacing: 1.2, fontWeight: "600" }]}>
-            Development only · {API_URL}
+          <Text style={[t.caption, { color: c.yellow800, fontWeight: "600" }]}>
+            <Text style={{ textTransform: "uppercase", letterSpacing: 1.2 }}>Development only</Text> · {API_URL}
           </Text>
           {PEOPLE.map((p) => (
             <Pressable

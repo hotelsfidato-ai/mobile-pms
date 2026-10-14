@@ -1,6 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
-import { BackHandler, SafeAreaView } from "react-native";
+import { BackHandler } from "react-native";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { api, setDevSubject } from "./src/api";
 import { AllProperties } from "./src/AllProperties";
 import { Dashboard } from "./src/Dashboard";
@@ -55,20 +56,22 @@ export default function App() {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: c.grey50 }}>
-      <StatusBar style="dark" />
-      {view.at === "sign-in" || !session ? (
-        <SignIn onDev={signInAs} busy={busy} error={error} />
-      ) : view.at === "hotel" ? (
-        <Dashboard hotel={view.hotel} onBack={() => setView({ at: "all" })} />
-      ) : (
-        <AllProperties
-          hotels={session.hotels}
-          who={session.scope.fullName}
-          onOpen={(hotel) => setView({ at: "hotel", hotel })}
-          onSignOut={signOut}
-        />
-      )}
-    </SafeAreaView>
+    <SafeAreaProvider>
+      <SafeAreaView style={{ flex: 1, backgroundColor: c.grey50 }}>
+        <StatusBar style="dark" />
+        {view.at === "sign-in" || !session ? (
+          <SignIn onDev={signInAs} busy={busy} error={error} />
+        ) : view.at === "hotel" ? (
+          <Dashboard hotel={view.hotel} onBack={() => setView({ at: "all" })} />
+        ) : (
+          <AllProperties
+            hotels={session.hotels}
+            who={session.scope.fullName}
+            onOpen={(hotel) => setView({ at: "hotel", hotel })}
+            onSignOut={signOut}
+          />
+        )}
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 }

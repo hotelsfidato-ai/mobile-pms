@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import {
-  Platform, Pressable, RefreshControl, ScrollView, StatusBar, StyleSheet, Text, View,
-  type StyleProp, type ViewStyle,
+  Pressable, RefreshControl, ScrollView, StyleSheet, Text, View, type StyleProp, type ViewStyle,
 } from "react-native";
 import { c, space, t } from "./theme";
 
@@ -26,18 +25,12 @@ export function useRead<T>(read: () => Promise<T>, key: string) {
   return { ...state, reload: () => setAsked((n) => n + 1) };
 }
 
-/* ponytail: the status bar's own height on Android (Expo draws edge to
-   edge), the system's notch inset on iOS through RN's own SafeAreaView in
-   App.tsx. react-native-safe-area-context does both properly; the owner
-   is asked before it is installed. */
-const TOP = Platform.OS === "android" ? (StatusBar.currentHeight ?? 24) : 0;
-
 /** A screen: the page's grey, the sides' 20px, pull down to read again. */
 export function Screen({ children, refreshing, onRefresh }: { children: ReactNode; refreshing: boolean; onRefresh: () => void }) {
   return (
     <ScrollView
       style={{ backgroundColor: c.grey50 }}
-      contentContainerStyle={{ paddingTop: TOP + 16, paddingHorizontal: space.side, paddingBottom: 40, gap: space.card }}
+      contentContainerStyle={{ paddingTop: 16, paddingHorizontal: space.side, paddingBottom: 40, gap: space.card }}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={c.orange} colors={[c.orange]} />}
     >
       {children}
