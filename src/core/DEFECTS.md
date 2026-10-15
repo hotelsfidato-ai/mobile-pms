@@ -1,6 +1,6 @@
 # core — defects (MCORE-)
 
-Every defect found in the core (`App.tsx`, `src/core/*`, `package.json`, `app.json`), numbered
+Every defect found in the core (`app/`, `src/core/*`, `package.json`, `app.json`), numbered
 **MCORE-1, MCORE-2 …** (AGENTS.md). Each entry: what happened, how it was found, what was done about
 it, and the rule it leaves. Fixed entries stay.
 

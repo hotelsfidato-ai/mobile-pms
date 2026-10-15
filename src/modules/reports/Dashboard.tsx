@@ -50,7 +50,7 @@ const TILE: Record<TileState, { bg: string; ring: string; note: string }> = {
 
 export function Dashboard({ hotel, onBack }: { hotel: Hotel; onBack: () => void }) {
   const date = hotel.businessDate;
-  const read = useRead(() => readDay(hotel.code, date), `${hotel.code}@${date}`);
+  const read = useRead(() => readDay(hotel.code, date), ["dashboard", hotel.code, date]);
   const r = read.data?.report;
   const w = read.data?.work ?? null;
   const owing = read.data?.due ?? null;

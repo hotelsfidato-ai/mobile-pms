@@ -12,7 +12,8 @@ phone:** 15 Oct 2026.
 | All properties | `AllProperties.tsx` | `/all-properties` | the group in one navy card (today, month so far, the month last year), "Needs you", a card per real property; tap opens its Dashboard |
 | Dashboard | `Dashboard.tsx` | `/` | today's work (four tiles), Occupancy in navy with month and year gauges, ARR / RevPAR / room revenue as blocks, Money as rows |
 
-Sign in (development) and the screen switch are the core's (`src/core/SignIn.tsx`, `App.tsx`).
+Sign in (development), who is signed in and the routes are the core's (`src/core/SignIn.tsx`,
+`src/core/session.tsx`, `app/`: `/all`, `/hotel/[code]`).
 
 **Left on the web for now** (each a later slice or the owner's call): the nights ahead, the house
 as a strip of rooms, the quick reports, opening the lists behind a tile.

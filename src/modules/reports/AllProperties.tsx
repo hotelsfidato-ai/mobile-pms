@@ -37,7 +37,7 @@ export function AllProperties({ hotels, who, onOpen, onSignOut }: {
   hotels: Hotel[]; who: string; onOpen: (h: Hotel) => void; onSignOut: () => void;
 }) {
   const real = hotels.filter((h) => !h.testOf);
-  const read = useRead(() => readAll(real), real.map((h) => `${h.code}@${h.businessDate}`).join());
+  const read = useRead(() => readAll(real), ["all-properties", ...real.map((h) => `${h.code}@${h.businessDate}`)]);
   const lines = read.data ?? [];
 
   const today = addUp(lines.map((l) => l.today));

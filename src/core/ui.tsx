@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useState, type ReactNode } from "react";
+import { useQuery } from "@tanstack/react-query";
+import type { ReactNode } from "react";
 import {
   Pressable, RefreshControl, ScrollView, StyleSheet, Text, View, type StyleProp, type ViewStyle,
 } from "react-native";
@@ -7,22 +8,16 @@ import { c, space, t } from "./theme";
 /* The few pieces every screen shares, after the web kit (src/components/ui). */
 
 /** One read: what came back, what failed, and a way to ask again. A failed
-    re-read keeps the last answer on screen and says it failed. */
-export function useRead<T>(read: () => Promise<T>, key: string) {
-  const [state, setState] = useState<{ data?: T; error?: string; loading: boolean }>({ loading: true });
-  const [asked, setAsked] = useState(0);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const run = useCallback(read, [key]);
-  useEffect(() => {
-    let live = true;
-    setState((s) => ({ ...s, loading: true }));
-    run().then(
-      (data) => live && setState({ data, loading: false }),
-      (e: unknown) => live && setState((s) => ({ data: s.data, loading: false, error: e instanceof Error ? e.message : String(e) })),
-    );
-    return () => { live = false; };
-  }, [run, asked]);
-  return { ...state, reload: () => setAsked((n) => n + 1) };
+    re-read keeps the last answer on screen and says it failed. The key
+    names the hotel (AGENTS rule 5); react-query keeps the answers (M-4). */
+export function useRead<T>(read: () => Promise<T>, key: readonly unknown[]) {
+  const q = useQuery({ queryKey: key, queryFn: read });
+  return {
+    data: q.data,
+    error: q.error ? q.error.message : undefined,
+    loading: q.isFetching,
+    reload: () => { void q.refetch(); },
+  };
 }
 
 /** A screen: the page's grey, the sides' 20px, pull down to read again. */

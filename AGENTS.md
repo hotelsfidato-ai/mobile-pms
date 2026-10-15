@@ -35,7 +35,7 @@ mobile/src/modules/<service>/DEFECTS.md   every defect found in it (below)
 
 **One helper per module at a time.** Its claim is a line in `HANDOVER.md` ("who holds what"),
 written by the mobile chat. **The core is frozen for helpers**: a change there is asked of the mobile
-chat. `App.tsx`, `package.json`, `app.json` and `mobile/src/core/*` are the core.
+chat. `app/` (the routes, expo-router), `package.json`, `app.json` and `mobile/src/core/*` are the core.
 
 ## Before your first write
 
