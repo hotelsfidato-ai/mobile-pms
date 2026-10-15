@@ -199,7 +199,7 @@ export function Rooms({ hotel, role, me, onBack, onSignOut }: {
           under={`${hotel.name} · Tap a room to move it on. Clean, then inspected.`}
           action={(
             <View style={{ gap: 8 }}>
-              {onBack ? <Capsule label="All" icon={<ChevronLeft size={16} color={c.grey700} />} onPress={onBack} /> : null}
+              {onBack ? <Capsule label="Back" icon={<ChevronLeft size={16} color={c.grey700} />} onPress={onBack} /> : null}
               {onSignOut ? <Capsule label="Sign out" onPress={onSignOut} /> : null}
             </View>
           )}
