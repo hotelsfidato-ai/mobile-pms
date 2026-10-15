@@ -1,6 +1,6 @@
 import { ChevronLeft, ChevronRight } from "lucide-react-native";
 import { Pressable, Text, View } from "react-native";
-import type { Room, Stay } from "../../../../src/data/repositories/types";
+import type { Room, Stay } from "../../core/types";
 import { orNull, type Hotel } from "../../core/api";
 import { DASH, cash, count, dateLong, dateShort, monthStart, pct } from "../../core/format";
 import { c, face, space, t } from "../../core/theme";

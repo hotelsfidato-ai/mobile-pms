@@ -1,4 +1,4 @@
-import type { PeriodStatistics, Room, Stay } from "../../../../src/data/repositories/types";
+import type { PeriodStatistics, Room, Stay } from "../../core/types";
 
 /* ══════════════════════════════════════════════════════════════════
    THE OWNER'S FIGURES — the web's own rules, ported, so the phone and

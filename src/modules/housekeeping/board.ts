@@ -1,4 +1,4 @@
-import type { Room, Stay } from "../../../../src/data/repositories/types";
+import type { Room, Stay } from "../../core/types";
 import type { OutboxEntry } from "../../core/offline.ts";
 import { whyNotMark } from "./roles.ts";
 

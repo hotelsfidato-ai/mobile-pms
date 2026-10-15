@@ -2,7 +2,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { ChevronLeft, Circle, CircleCheck, Plus, RotateCcw, Wrench } from "lucide-react-native";
 import { useState, type ReactNode } from "react";
 import { Pressable, Text, TextInput, View } from "react-native";
-import type { Room } from "../../../../src/data/repositories/types";
+import type { Room } from "../../core/types";
 import { api, send, type Hotel } from "../../core/api";
 import { dateLong } from "../../core/format";
 import { isOnline } from "../../core/offline";

@@ -5,7 +5,7 @@ import {
 } from "lucide-react-native";
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { AppState, Modal, Pressable, ScrollView, Text, View } from "react-native";
-import type { Room, Stay } from "../../../../src/data/repositories/types";
+import type { Room, Stay } from "../../core/types";
 import { api, HeldError, send, type Hotel } from "../../core/api";
 import { DASH, dateLong } from "../../core/format";
 import { isOnline, type OutboxEntry } from "../../core/offline";
