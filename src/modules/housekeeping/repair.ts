@@ -22,14 +22,8 @@ export const PRIORITIES = [
 /** RepairFlow.tsx REPAIR_KINDS, shown as the web shows them; the API's default is "maintenance". */
 export const REPAIR_KINDS = ["maintenance", "housekeeping", "electrical", "plumbing", "furniture", "it", "other"] as const;
 
-/** src/data/repositories/rooms.ts BLOCK_REASONS, the web's words. */
-export const BLOCK_REASONS = [
-  { value: "out_of_order", label: "Out of order - something is broken" },
-  { value: "out_of_service", label: "Out of service - held back deliberately" },
-  { value: "refurbishment", label: "Refurbishment" },
-  { value: "house_use", label: "NC - not for sale (house use: staff, storage, an office)" },
-  { value: "owner_occupied", label: "Owner occupied" },
-] as const;
+/** The web's block reasons: one list, in ./block.ts (src/data/repositories/rooms.ts). */
+export { BLOCK_REASONS } from "./block.ts";
 
 export interface RepairForm {
   what: string;
