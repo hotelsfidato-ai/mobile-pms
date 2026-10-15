@@ -1,4 +1,4 @@
-import type { PeriodStatistics, Room, Stay } from "../../src/data/repositories/types";
+import type { PeriodStatistics, Room, Stay } from "../../../../src/data/repositories/types";
 
 /* ══════════════════════════════════════════════════════════════════
    THE OWNER'S FIGURES — the web's own rules, ported, so the phone and
@@ -13,21 +13,6 @@ export type { PeriodStatistics };
 /* The web's shapes, the fields read here. The full ones live in files that
    import the web's own client, so they are copied, named the same. */
 
-/** src/lib/api.ts ApiHotel. */
-export interface Hotel {
-  code: string;
-  name: string;
-  businessDate: string;
-  /** The property's real date in its own time zone (D27-237). */
-  today?: string;
-  /** A test hotel's real hotel, by code (D27-296); null for a real one. */
-  testOf?: string | null;
-}
-/** src/lib/api.ts HotelsResponse. */
-export interface HotelsResponse {
-  scope: { fullName: string; isGroupAdmin: boolean; hotels: Array<{ hotelId: string; role: string }> };
-  hotels: Hotel[];
-}
 /** src/modules/reports/data/document.ts ReportDoc. */
 export interface ReportDoc {
   sections: Array<{ key: string; rows: Array<{ kind: "row" | "total" | "band"; cells: Record<string, unknown> }> }>;
@@ -40,35 +25,6 @@ export interface HouseNow {
 }
 /** src/modules/reports/data/dueOut.ts DueOut. */
 export interface DueOut { leaving: number; owing: number; owed: number }
-
-export const DASH = "-";
-
-const inr = new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 });
-export const cash = (n: number | null | undefined) => (n == null ? DASH : inr.format(n));
-export const pct = (n: number | null | undefined) => (n == null ? DASH : `${n}%`);
-/** A count is a real zero when nothing is there; unknown is a dash. */
-export const count = (n: number | null | undefined) => (n == null ? DASH : String(n));
-
-const MONTHS = ["January", "February", "March", "April", "May", "June", "July",
-  "August", "September", "October", "November", "December"];
-const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-const at = (date: string) => new Date(`${date}T00:00:00Z`);
-/** "Tuesday, 14 October 2026" (the web's dateLong). */
-export const dateLong = (date: string) =>
-  `${DAYS[at(date).getUTCDay()]}, ${Number(date.slice(8))} ${MONTHS[Number(date.slice(5, 7)) - 1]} ${date.slice(0, 4)}`;
-/** "14 Oct" (the web's dateShort). */
-export const dateShort = (date: string) => `${Number(date.slice(8))} ${MONTHS[Number(date.slice(5, 7)) - 1]!.slice(0, 3)}`;
-
-export const monthStart = (date: string) => `${date.slice(0, 7)}-01`;
-/** The same day a year back; 29 February becomes the 28th. */
-export const yearBack = (date: string) =>
-  `${Number(date.slice(0, 4)) - 1}${date.slice(4) === "-02-29" ? "-02-28" : date.slice(4)}`;
-
-/** Days the business date is behind the property's real date (the web's daysBehind). */
-export function daysBehind(h: Pick<Hotel, "today" | "businessDate">): number {
-  if (!h.today || !h.businessDate || h.businessDate >= h.today) return 0;
-  return Math.round((Date.parse(`${h.today}T00:00:00Z`) - Date.parse(`${h.businessDate}T00:00:00Z`)) / 86_400_000);
-}
 
 export type Figure = { today: number | null; ptd: number | null; ytd: number | null };
 

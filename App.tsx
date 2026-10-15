@@ -2,15 +2,14 @@ import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import { BackHandler } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { api, setDevSubject } from "./src/api";
-import { AllProperties } from "./src/AllProperties";
-import { Dashboard } from "./src/Dashboard";
-import type { Hotel, HotelsResponse } from "./src/figures";
-import { SignIn } from "./src/SignIn";
-import { c } from "./src/theme";
+import { api, setDevSubject, type Hotel, type HotelsResponse } from "./src/core/api";
+import { SignIn } from "./src/core/SignIn";
+import { c } from "./src/core/theme";
+import { AllProperties } from "./src/modules/reports/AllProperties";
+import { Dashboard } from "./src/modules/reports/Dashboard";
 
 /* ══════════════════════════════════════════════════════════════════
-   THE FIDATO PMS ON A PHONE — slice 1, the owner's figures (D27-322):
+   THE FIDATO PMS ON A PHONE — slice 1, the owner's figures (M-1):
    sign in, every property, one property's Dashboard. Three screens, so a
    state and Android's back button instead of a navigation library; the
    library comes when a slice needs more than one level of back.

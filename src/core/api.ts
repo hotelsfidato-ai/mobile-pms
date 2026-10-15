@@ -12,7 +12,7 @@
    Email and password through Firebase come with the live setup.
 
    Reads only, so far: the web's offline rules (src/lib/offline.ts) are for
-   writes, and arrive with the first slice that writes (D27-322).
+   writes, and arrive with the first slice that writes (M-1).
    ══════════════════════════════════════════════════════════════════ */
 
 export const API_URL = process.env.EXPO_PUBLIC_API_URL || "https://api.fidatohotels.com";
@@ -61,4 +61,21 @@ export async function orNull<T>(path: string, alsoNull: number[] = []): Promise<
     if (error instanceof ApiError && (error.status === 404 || alsoNull.includes(error.status))) return null;
     throw error;
   }
+}
+
+/* The signed-in person's properties, as GET /api/hotels answers. */
+/** src/lib/api.ts ApiHotel. */
+export interface Hotel {
+  code: string;
+  name: string;
+  businessDate: string;
+  /** The property's real date in its own time zone (D27-237). */
+  today?: string;
+  /** A test hotel's real hotel, by code (D27-296); null for a real one. */
+  testOf?: string | null;
+}
+/** src/lib/api.ts HotelsResponse. */
+export interface HotelsResponse {
+  scope: { fullName: string; isGroupAdmin: boolean; hotels: Array<{ hotelId: string; role: string }> };
+  hotels: Hotel[];
 }

@@ -1,6 +1,8 @@
 /* What the two screens will show, from a running API, in text.
-   Run: node --experimental-strip-types mobile/src/figures.live.ts http://<host>:<port> <dev person> */
-import { addUp, cash, count, methodsToday, monthStart, pct, pick, todaysWork, type HotelsResponse, type PeriodStatistics, type ReportDoc } from "./figures.ts";
+   Run: node --experimental-strip-types mobile/src/modules/reports/figures.live.ts http://<host>:<port> <dev person> */
+import type { HotelsResponse } from "../../core/api.ts";
+import { cash, count, monthStart, pct } from "../../core/format.ts";
+import { addUp, methodsToday, pick, todaysWork, type PeriodStatistics, type ReportDoc } from "./figures.ts";
 
 const [base, who] = [process.argv[2], process.argv[3] ?? "dev-owner"];
 const get = async <T,>(p: string): Promise<T> => {

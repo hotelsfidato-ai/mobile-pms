@@ -5,7 +5,7 @@ import { Card, s } from "./ui";
 
 /* ══════════════════════════════════════════════════════════════════
    SIGN IN. Staff sign in with the email and password they use on the
-   website (the owner's D27-322); Firebase takes the password, the API
+   website (the owner's M-1); Firebase takes the password, the API
    decides what each role may see.
 
    That part needs the website's public Firebase settings in the app,

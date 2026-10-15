@@ -1,13 +1,11 @@
 import { Text, View } from "react-native";
-import type { Room, Stay } from "../../src/data/repositories/types";
-import { api, orNull } from "./api";
+import type { Room, Stay } from "../../../../src/data/repositories/types";
+import { orNull, type Hotel } from "../../core/api";
+import { DASH, cash, count, dateLong, dateShort, monthStart, pct } from "../../core/format";
+import { c, space, t } from "../../core/theme";
+import { Capsule, Card, Head, ReadFailed, Row, Screen, s, useRead } from "../../core/ui";
 import { Period } from "./AllProperties";
-import {
-  DASH, cash, count, dateLong, dateShort, methodsToday, monthStart, pct, pick, todaysWork,
-  type DueOut, type Figure, type Hotel, type HouseNow, type ReportDoc,
-} from "./figures";
-import { c, space, t } from "./theme";
-import { Capsule, Card, Head, ReadFailed, Row, Screen, s, useRead } from "./ui";
+import { methodsToday, pick, todaysWork, type DueOut, type Figure, type HouseNow, type ReportDoc } from "./figures";
 
 /* ══════════════════════════════════════════════════════════════════
    ONE PROPERTY'S DASHBOARD on a phone — the web's `/` (Dashboard.tsx),

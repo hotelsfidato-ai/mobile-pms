@@ -1,6 +1,7 @@
-/* Run: node --experimental-strip-types mobile/src/figures.check.ts
+/* Run: node --experimental-strip-types mobile/src/modules/reports/figures.check.ts
    The counting rules the Dashboard and All properties use, on a tiny house. */
-import { addUp, cash, change, daysBehind, pick, todaysWork, yearBack, type HouseNow, type ReportDoc } from "./figures.ts";
+import { cash, daysBehind, yearBack } from "../../core/format.ts";
+import { addUp, change, pick, todaysWork, type HouseNow, type ReportDoc } from "./figures.ts";
 
 /* No node:assert, so the app's own type check reads this file too. */
 const eq = (got: unknown, want: unknown) => {

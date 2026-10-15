@@ -1,11 +1,9 @@
 import { Pressable, Text, View } from "react-native";
-import { api, orNull } from "./api";
-import {
-  DASH, addUp, cash, change, dateShort, daysBehind, monthStart, pct, yearBack,
-  type Hotel, type Notification, type PeriodStatistics,
-} from "./figures";
-import { c, t } from "./theme";
-import { Capsule, Card, Head, ReadFailed, Screen, s, useRead } from "./ui";
+import { api, orNull, type Hotel } from "../../core/api";
+import { DASH, cash, dateShort, daysBehind, monthStart, pct, yearBack } from "../../core/format";
+import { c, t } from "../../core/theme";
+import { Capsule, Card, Head, ReadFailed, Screen, s, useRead } from "../../core/ui";
+import { addUp, change, type Notification, type PeriodStatistics } from "./figures";
 
 /* ══════════════════════════════════════════════════════════════════
    ALL PROPERTIES on a phone — the web's /all-properties (D27-243): the
