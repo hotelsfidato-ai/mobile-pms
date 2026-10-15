@@ -29,6 +29,9 @@
 | Module / core | Held by | Since |
 |---|---|---|
 | everything (core, reports, housekeeping) | the mobile chat | 15 Oct |
+| pos: Tables and the order pad | Opus helper "tables": `.claude/worktrees/pos-tables`, `mobile/pos-tables`; Expo 8082, API 8861 (pid 28236) on `fidato_mobile_hk` | 15 Oct |
+| pos: the order | Opus helper "order": `.claude/worktrees/pos-order`, `mobile/pos-order`; Expo 8083, API 8862 (pid 27776) on `fidato_mobile_hk2` | 15 Oct |
+| pos: paying and printing | Opus helper "pay": `.claude/worktrees/pos-pay`, `mobile/pos-pay`; Expo 8084, API 8863 (pid 33524) on `fidato_mobile_hk3` | 15 Oct |
 
 **Next, in order**
 1. The build route is decided (M-8): Expo's cloud for both platforms, only `mobile/` uploaded, the
