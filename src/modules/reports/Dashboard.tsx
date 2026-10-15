@@ -1,8 +1,9 @@
+import { ChevronLeft } from "lucide-react-native";
 import { Text, View } from "react-native";
 import type { Room, Stay } from "../../../../src/data/repositories/types";
 import { orNull, type Hotel } from "../../core/api";
 import { DASH, cash, count, dateLong, dateShort, monthStart, pct } from "../../core/format";
-import { c, space, t } from "../../core/theme";
+import { c, face, space, t } from "../../core/theme";
 import { Capsule, Card, Head, ReadFailed, Row, Screen, s, useRead } from "../../core/ui";
 import { Period } from "./AllProperties";
 import { methodsToday, pick, todaysWork, type DueOut, type Figure, type HouseNow, type ReportDoc } from "./figures";
@@ -77,7 +78,7 @@ export function Dashboard({ hotel, onBack }: { hotel: Hotel; onBack: () => void 
         eyebrow={`Business date · ${dateLong(date)}`}
         title="Dashboard"
         under={`${hotel.name} · month so far from ${dateShort(monthStart(date))}`}
-        action={<Capsule label="‹ All" onPress={onBack} />}
+        action={<Capsule label="All" icon={<ChevronLeft size={16} color={c.grey700} />} onPress={onBack} />}
       />
 
       {read.error ? <ReadFailed what="today's figures" error={read.error} onRetry={read.reload} /> : null}
@@ -169,7 +170,7 @@ function WorkTile({ label, n, left, state, note, loading }: {
         {!loading && left != null && left > 0 ? <Text style={t.label}>· {left} left</Text> : null}
       </View>
       {note.map((part, i) => (
-        <Text key={i} style={[t.caption, { color: i === 0 ? tone.note : c.grey600, fontWeight: i === 0 && state !== "none" && state !== "done" ? "600" : "500" }]} numberOfLines={1}>
+        <Text key={i} style={[t.caption, { color: i === 0 ? tone.note : c.grey600, ...face[i === 0 && state !== "none" && state !== "done" ? 600 : 500] }]} numberOfLines={1}>
           {part}
         </Text>
       ))}

@@ -1,7 +1,8 @@
+import { ChevronRight } from "lucide-react-native";
 import { Pressable, Text, View } from "react-native";
 import { api, orNull, type Hotel } from "../../core/api";
 import { DASH, cash, dateShort, daysBehind, monthStart, pct, yearBack } from "../../core/format";
-import { c, t } from "../../core/theme";
+import { c, face, t } from "../../core/theme";
 import { Capsule, Card, Head, ReadFailed, Screen, s, useRead } from "../../core/ui";
 import { addUp, change, type Notification, type PeriodStatistics } from "./figures";
 
@@ -120,7 +121,7 @@ export function AllProperties({ hotels, who, onOpen, onSignOut }: {
               <Text style={t.heading}>{l.hotel.name}</Text>
               <Text style={[t.caption, t.tab]}>Business date {dateShort(l.hotel.businessDate)}</Text>
             </View>
-            <Text style={[t.heading, { color: c.grey500 }]} accessibilityElementsHidden>›</Text>
+            <ChevronRight size={20} color={c.grey500} />
           </View>
           <View style={{ flexDirection: "row", borderTopWidth: 1, borderTopColor: c.grey100, paddingTop: 8 }}>
             <Text style={[t.caption, { flex: 1 }]} />
@@ -135,7 +136,7 @@ export function AllProperties({ hotels, who, onOpen, onSignOut }: {
           ] as const).map(([label, now, so]) => (
             <View key={label} style={{ flexDirection: "row", alignItems: "baseline", paddingVertical: 4 }}>
               <Text style={[t.label, { flex: 1, color: c.grey500 }]} numberOfLines={1}>{label}</Text>
-              <Text style={[t.label, t.tab, { width: 96, textAlign: "right", color: c.ink900, fontWeight: "600" }]}>{show(now)}</Text>
+              <Text style={[t.label, t.tab, { width: 96, textAlign: "right", color: c.ink900, ...face[600] }]}>{show(now)}</Text>
               <Text style={[t.label, t.tab, { width: 104, textAlign: "right", color: c.grey700 }]}>{show(so)}</Text>
             </View>
           ))}

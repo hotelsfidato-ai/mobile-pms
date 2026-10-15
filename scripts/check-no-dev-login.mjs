@@ -15,8 +15,12 @@
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
 
-/* Strings only the test sign-in uses: the header, and the test people. */
-const MARKERS = ["x-dev-staff-id", "dev-owner", "dev-gm", "dev-hotel-manager", "dev-finance", "dev-desk"];
+/* Strings only the test sign-in uses: the header, and every test person of
+   the web's src/lib/devIdentities.ts. */
+const MARKERS = [
+  "x-dev-staff-id", "dev-owner", "dev-gm", "dev-desk", "dev-admin", "dev-hotel-manager", "dev-revenue",
+  "dev-housekeeping", "dev-stores", "dev-kitchen", "dev-chef", "dev-finance",
+];
 
 const dir = process.argv[2];
 if (!dir || !existsSync(dir)) {

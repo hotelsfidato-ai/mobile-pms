@@ -61,6 +61,27 @@ sentence and a Discard. Held entries belong to the person who made them.
 
 The web's own faults found on the way are in `docs/api-requests.md` for the PMS's main chat.
 
+## What the core gives the screens (built 15 Oct; the core is frozen for helpers)
+
+- **Writes:** `send(method, path, body)` in `src/core/api.ts`. It mints the idempotency key at the
+  tap and sends it from the first attempt (M-5). When nothing leaves the phone it either **holds**
+  the change (throws `HeldError`: say "Saved on this phone" and its message, and show the card as
+  queued) or **refuses** it (throws `ApiError` 503 with the web's sentence, e.g. taking a room out
+  of service). A server refusal is an `ApiError` with the server's own sentence.
+- **What is held:** `list()` and `subscribe()` in `src/core/outbox.ts` (oldest first; each entry
+  has `path`, `subject`, `status`). The board's "Queued: mark clean" comes from the entries whose
+  path is this room's `/rooms/:n/housekeeping` (the web's `readHeld`).
+- **The bar** (`src/core/HeldBar.tsx`, at the top of every signed-in screen) already shows held,
+  refused (with Discard) and another person's changes, and sends them. Screens do not drain.
+- **Reads:** `useRead(read, ["housekeeping", hotel.code, …])` from `src/core/ui.tsx`.
+- **Icons:** `lucide-react-native` (the web's family); **type:** `t.*` and `face[500|600|700]` from
+  `src/core/theme.ts`; never `fontWeight`.
+- **Where a housekeeper lands:** the web sends them to the board (`navigation.ts` 636). The route
+  (`app/`) is the mobile chat's: ask for it with the screen.
+- **To prove the held path** (not yet exercised, nothing calls `send` until these screens): tap
+  with the API stopped, or with `fetch` failing in the web preview; see the card queued, the bar
+  count it, and the change land when the API is back.
+
 ## Test people (development, `x-dev-staff-id`, hotel 5EL)
 
 `dev-housekeeping` (housekeeping, the one housekeeper), `dev-gm`, `dev-desk` (front desk: may mark

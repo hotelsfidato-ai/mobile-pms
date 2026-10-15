@@ -1,6 +1,6 @@
 import { Pressable, Text, View } from "react-native";
 import { API_URL } from "./api";
-import { c, space, t } from "./theme";
+import { c, face, space, t } from "./theme";
 import { Card, s } from "./ui";
 
 /* ══════════════════════════════════════════════════════════════════
@@ -14,14 +14,17 @@ import { Card, s } from "./ui";
    against the mobile chat's own local API and its demo data.
    ══════════════════════════════════════════════════════════════════ */
 
-/* The web's development sign-ins whose menu holds the Dashboard - the
-   people this first slice, the owner's figures, is for. Behind `__DEV__`
+/* The web's development sign-ins (src/lib/devIdentities.ts, the same
+   labels): the owner's figures (slice 1), then housekeeping and the desk
+   that marks rooms but may not raise a room repair (slice 2). Behind `__DEV__`
    so a release build carries not even their names (MCORE-1). */
 const PEOPLE = __DEV__ ? [
   { uid: "dev-owner", label: "Owner", detail: "every property · group admin" },
   { uid: "dev-gm", label: "General Manager", detail: "5 Elements Akkalkot · GM" },
   { uid: "dev-hotel-manager", label: "Hotel Manager", detail: "5 Elements Akkalkot" },
   { uid: "dev-finance", label: "Accountant", detail: "5 Elements Akkalkot · money" },
+  { uid: "dev-housekeeping", label: "Housekeeping", detail: "5 Elements Akkalkot · rooms" },
+  { uid: "dev-desk", label: "Reception", detail: "5 Elements Akkalkot · front desk" },
 ] : [];
 
 export function SignIn({ onDev, busy, error }: { onDev: (uid: string) => void; busy: boolean; error: string | null }) {
@@ -40,7 +43,7 @@ export function SignIn({ onDev, busy, error }: { onDev: (uid: string) => void; b
 
       {__DEV__ ? (
         <View style={{ gap: space.tile }}>
-          <Text style={[t.caption, { color: c.yellow800, fontWeight: "600" }]}>
+          <Text style={[t.caption, { color: c.yellow800, ...face[600] }]}>
             <Text style={{ textTransform: "uppercase", letterSpacing: 1.2 }}>Development only</Text> · {API_URL}
           </Text>
           {PEOPLE.map((p) => (

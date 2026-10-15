@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import {
   Pressable, RefreshControl, ScrollView, StyleSheet, Text, View, type StyleProp, type ViewStyle,
 } from "react-native";
-import { c, space, t } from "./theme";
+import { c, face, space, t } from "./theme";
 
 /* The few pieces every screen shares, after the web kit (src/components/ui). */
 
@@ -52,11 +52,14 @@ export function Card({ children, style }: { children: ReactNode; style?: StylePr
   return <View style={[s.card, style]}>{children}</View>;
 }
 
-/** A capsule button: 44px on a touch screen, a grey-300 ring. */
-export function Capsule({ label, onPress }: { label: string; onPress: () => void }) {
+/** A capsule button: 44px on a touch screen, a grey-300 ring, an icon before the words. */
+export function Capsule({ label, onPress, icon }: { label: string; onPress: () => void; icon?: ReactNode }) {
   return (
-    <Pressable onPress={onPress} accessibilityRole="button" style={({ pressed }) => [s.capsule, pressed && { backgroundColor: c.grey100 }]}>
-      <Text style={[t.label, { color: c.grey700 }]}>{label}</Text>
+    <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={label} style={({ pressed }) => [s.capsule, pressed && { backgroundColor: c.grey100 }]}>
+      <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
+        {icon}
+        <Text style={[t.label, { color: c.grey700 }]}>{label}</Text>
+      </View>
     </Pressable>
   );
 }
@@ -78,7 +81,7 @@ export function Row({ label, value, strong, onNavy }: { label: string; value: st
   return (
     <View style={s.row}>
       <Text style={[t.label, { color: onNavy ? c.onNavy : c.grey500, flexShrink: 1 }]}>{label}</Text>
-      <Text style={[t.label, t.tab, { color: onNavy ? c.white : strong ? c.ink900 : c.grey700, fontWeight: strong ? "600" : "500" }]}>{value}</Text>
+      <Text style={[t.label, t.tab, { color: onNavy ? c.white : strong ? c.ink900 : c.grey700, ...face[strong ? 600 : 500] }]}>{value}</Text>
     </View>
   );
 }

@@ -5,6 +5,53 @@ commits.
 
 ---
 
+## 2026-10-15 · slice 2's core: writes, the offline queue, test people, Inter and icons
+
+**Asked for:** "start slice 2's core: writes with the idempotency key, the offline queue on
+expo-sqlite, the housekeeping test people, icons and Inter."
+
+**Shipped** (all core, by the mobile chat)
+- `src/core/offline.ts`: the web's `src/lib/offline.ts` ported whole (22 rules, identical patterns
+  and tiers, compared by script), the connection state and the drain, pure so node can check it.
+  `newKey()` makes a v4 UUID (the API's column is `uuid`); Math.random where the phone has no
+  `crypto.randomUUID` (a key must be unique, not secret).
+- `src/core/outbox.ts` on expo-sqlite (oldest first, survives a closed app); `outbox.web.ts` keeps
+  the same queue in localStorage for the web preview only.
+- `src/core/api.ts`: `send()` — the key minted at the tap and sent from the first attempt (M-5);
+  held (`HeldError`) or refused (the web's sentence) when nothing leaves the phone; `sendHeld()`
+  re-sends with the same key. Reads now mark the connection up or down.
+- `src/core/HeldBar.tsx`: the web's OfflineBar, same sentences: refused with Discard, another
+  person's, held with Send now. The phone has no "online" event without another package, so it
+  also retries on coming back to the app and every 30 s while something waits.
+- Test people Housekeeping and Reception (the web's labels); the no-dev check knows every web test
+  person. Inter by weight (500/600/700 only, so the app carries three font files, not eighteen):
+  `face[...]` replaces every `fontWeight`; lucide chevrons for "›" and "‹ All"; the web's info and
+  red-100 colours in the theme.
+- `src/modules/housekeeping/MODULE.md`: what the core gives the screens.
+
+**Proved**
+- `offline.check.ts`: housekeeping's tiers, the drain (oldest first; a refusal kept with the
+  server's words and the drain goes on; a network failure or a 5xx stops it with the rest kept in
+  order; another person's waits), 2,000 keys all v4 and unique. Broke it twice — a drain that
+  skips a network failure, repairs moved to "refuse" — and saw both fail.
+- On the real API (8860) from the 375 × 812 preview: three held changes seeded, signed in as
+  Housekeeping: the good one sent and removed, `"bogus"` refused with the server's sentence and
+  kept, Reception's left waiting; a held change went with **exactly the key it was given**, as
+  the person who made it; Discard removed the refused one; Reception's sent when Reception signed
+  in. Rooms 201 and 202 still clean. Inter's three faces loaded.
+- `bash scripts/gates.sh` ALL GATES GREEN (no test person in either release build; only the three
+  Inter files in it); both phone bundles warm (under 0.2 s).
+
+**Not proved**
+- `send()`'s held path (nothing calls it until the housekeeping screens); the SQLite store and the
+  30 s retry on a phone; the screens in Inter on a phone.
+- 16 console 401s and three Metro "index.ts" errors in the preview tab came from before this work
+  (counts unchanged across a fresh three-person run); not chased further.
+
+**Commits:** this entry's commit.
+
+---
+
 ## 2026-10-15 · the owner's look at slice 1, the module layout, the gates, slice 2 decided (PLAN § 10)
 
 **Asked for:** start PLAN § 10 — the owner's look at slice 1 on the phone first, nothing before it.

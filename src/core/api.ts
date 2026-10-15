@@ -11,9 +11,14 @@
    reaches a phone never sends it, and the live API refuses it anyway.
    Email and password through Firebase come with the live setup.
 
-   Reads only, so far: the web's offline rules (src/lib/offline.ts) are for
-   writes, and arrive with the first slice that writes (M-1).
+   WRITES go through `send`: the web's tiers (./offline.ts) decide what is
+   held when nothing leaves the phone, and the idempotency key is minted at
+   the tap and sent from the first attempt (M-5), so a lost reply can never
+   make a second repair.
    ══════════════════════════════════════════════════════════════════ */
+
+import { newKey, noteReachable, noteUnreachable, ruleFor, type OutboxEntry } from "./offline";
+import { enqueue } from "./outbox";
 
 export const API_URL = process.env.EXPO_PUBLIC_API_URL || "https://api.fidatohotels.com";
 
@@ -22,6 +27,11 @@ export const setDevSubject = (subject: string | null) => {
   if (__DEV__) devSubject = subject;
 };
 
+/** The person who acted, stamped on a held change (the web's currentSubject). */
+export const currentSubject = () => (__DEV__ && devSubject ? devSubject : "");
+
+const who = (): Record<string, string> => (__DEV__ && devSubject ? { "x-dev-staff-id": devSubject } : {});
+
 export class ApiError extends Error {
   constructor(readonly status: number, message: string) {
     super(message);
@@ -29,27 +39,84 @@ export class ApiError extends Error {
   }
 }
 
-export async function api<T>(path: string): Promise<T> {
-  const headers: Record<string, string> = {};
-  if (__DEV__ && devSubject) headers["x-dev-staff-id"] = devSubject;
+/** A write that could not leave the phone and is held to send later. */
+export class HeldError extends Error {
+  constructor(message: string, readonly entryId: string, readonly warn: boolean) {
+    super(message);
+    this.name = "HeldError";
+  }
+}
 
+async function refused(response: Response): Promise<ApiError> {
+  const body = (await response.json().catch(() => null)) as
+    | { error?: string; reason?: string; message?: string } | null;
+  return new ApiError(
+    response.status,
+    body?.error ?? body?.reason ?? body?.message ?? `Request failed (${response.status}).`,
+  );
+}
+
+export async function api<T>(path: string): Promise<T> {
   let response: Response;
   try {
-    response = await fetch(`${API_URL}${path}`, { headers });
+    response = await fetch(`${API_URL}${path}`, { headers: who() });
   } catch {
+    noteUnreachable();
     throw new ApiError(0, __DEV__
       ? `Could not reach ${API_URL}. Is the API running, and is the phone on the same Wi-Fi?`
       : "Could not reach the server. Check the connection and try again.");
   }
-  if (!response.ok) {
-    const body = (await response.json().catch(() => null)) as
-      | { error?: string; reason?: string; message?: string } | null;
-    throw new ApiError(
-      response.status,
-      body?.error ?? body?.reason ?? body?.message ?? `Request failed (${response.status}).`,
+  noteReachable();
+  if (!response.ok) throw await refused(response);
+  return (await response.json()) as T;
+}
+
+/** A write. Tried at once; when nothing leaves the phone it is held or
+    refused by the web's tiers (HeldError / ApiError 503 with the reason). */
+export async function send<T>(method: "POST" | "PUT" | "PATCH" | "DELETE", path: string, body?: unknown): Promise<T> {
+  const text = body === undefined ? undefined : JSON.stringify(body);
+  const key = newKey();
+  let response: Response;
+  try {
+    response = await fetch(`${API_URL}${path}`, {
+      method,
+      headers: { ...who(), "content-type": "application/json", "idempotency-key": key },
+      ...(text === undefined ? {} : { body: text }),
+    });
+  } catch {
+    noteUnreachable();
+    const rule = ruleFor(path, method, text);
+    if (rule.tier === "refuse") throw new ApiError(503, rule.reason!);
+    const entry = await enqueue({
+      label: rule.label,
+      path,
+      method,
+      body: text,
+      idempotencyKey: key,
+      hotelId: path.match(/\/api\/hotels\/([^/]+)/)?.[1] ?? "",
+      subject: currentSubject(),
+    });
+    throw new HeldError(
+      rule.tier === "queue-warn"
+        ? `${rule.label} is held and will be sent when the connection is back. `
+          + "It is not confirmed until then - the room could be taken by another desk in the meantime."
+        : `${rule.label} is held and will be sent when the connection is back.`,
+      entry.id,
+      rule.tier === "queue-warn",
     );
   }
+  noteReachable();
+  if (!response.ok) throw await refused(response);
   return (await response.json()) as T;
+}
+
+/** One held change, sent again with the SAME key it was given at the tap. */
+export function sendHeld(entry: OutboxEntry): Promise<Response> {
+  return fetch(`${API_URL}${entry.path}`, {
+    method: entry.method,
+    headers: { ...who(), "content-type": "application/json", "idempotency-key": entry.idempotencyKey },
+    ...(entry.body === undefined ? {} : { body: entry.body }),
+  });
 }
 
 /** A property the caller may not see has no figures: a dash, not an error

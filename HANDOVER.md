@@ -12,9 +12,13 @@
 - **Slice 1 approved** on the phone (15 Oct, "it's good"); now in the module layout and on
   `expo-router` + react-query (M-4), no change in what it does (`a6a26ba5`). `bash scripts/gates.sh`
   is ALL GATES GREEN on it; MCORE-1 fixed.
-- **Slice 2 (housekeeping) decided (M-5)** and briefed: `src/modules/housekeeping/MODULE.md`. Nothing
-  of it built yet. The web's own faults found on the way: `docs/api-requests.md` R-1 to R-5, for the
-  owner to take to the PMS's main chat.
+- **Slice 2 (housekeeping) decided (M-5)** and briefed: `src/modules/housekeeping/MODULE.md`.
+  **Its core is built** (15 Oct): `send()` with the key from the first tap, the web's offline tiers
+  and drain (`src/core/offline.ts`, checked), the queue on expo-sqlite (`outbox.ts`), the held bar,
+  the Housekeeping and Reception test people, Inter and lucide icons. Proved on the real API from
+  the preview; **not yet on a phone**, and `send()`'s held path waits for the first screen. The
+  screens are not built. The web's own faults: `docs/api-requests.md` R-1 to R-5, for the owner to
+  take to the PMS's main chat.
 - **Not proved on a device:** Android's back button, the notch edges (the owner's look was overall);
   the router build has been opened only in the 375 × 812 preview, not yet on the phone.
 - **Running when this was written:** API 8860 (pid 26964, untouched) and Expo 8081 (restarted for
@@ -29,14 +33,11 @@
 | everything | the mobile chat | 15 Oct |
 
 **Next, in order** (slice 2, housekeeping)
-1. Core (the mobile chat, Opus): writes in `src/core/api.ts` (PUT/POST/DELETE, the idempotency key
-   from the first tap); the outbox on `expo-sqlite`, ported from `src/lib/offline.ts` and
-   `outbox.ts` (tiers, oldest first, 4xx kept as refused with Discard, entries per person); the
-   housekeeping test people in the dev sign-in and in `check-no-dev-login.mjs`'s markers; icons and
-   Inter (M-4). Each with its `*.check.ts`.
-2. The screens (Rooms, Report a repair, Out of service) by a helper in its own copy (AGENTS.md),
-   Sonnet for the screens; the mobile chat reviews and merges.
-3. The owner's look on the phone, then slice 3.
+1. The screens (Rooms, Report a repair, Out of service) by a helper in its own copy (AGENTS.md),
+   Sonnet for the screens, from `src/modules/housekeeping/MODULE.md` ("What the core gives the
+   screens"); the mobile chat adds the routes (a housekeeper lands on Rooms), reviews (Opus for the
+   held path) and merges.
+2. The owner's look on the phone: Inter, the held bar, then slice 2's screens; then slice 3.
 
 **Questions waiting for the owner:** none (M-4 and M-5 answered 15 Oct).
 
