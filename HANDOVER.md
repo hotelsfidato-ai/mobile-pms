@@ -19,7 +19,8 @@
   the router build has been opened only in the 375 × 812 preview, not yet on the phone.
 - **Running when this was written:** API 8860 (pid 26964, untouched) and Expo 8081 (restarted for
   the router: pid 35748 under a Git Bash wrapper; log `../.local/mobile-expo.log`); both phone
-  bundles warm. Stop Expo by its tree: `taskkill /PID <cmd.exe parent of 35748> /T /F` (PowerShell).
+  bundles warm. Stop Expo by its whole tree (PowerShell, this PC): `taskkill /PID 34616 /T /F` (the
+  Git Bash wrapper; then check 8081 is free).
 
 **Who holds what**
 
