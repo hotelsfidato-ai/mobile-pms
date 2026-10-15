@@ -25,6 +25,9 @@ const PEOPLE = __DEV__ ? [
   { uid: "dev-finance", label: "Accountant", detail: "5 Elements Akkalkot · money" },
   { uid: "dev-housekeeping", label: "Housekeeping", detail: "5 Elements Akkalkot · rooms" },
   { uid: "dev-desk", label: "Reception", detail: "5 Elements Akkalkot · front desk" },
+  /* The waiter (slice 3, M-9): made in this app's own demo database; the web
+     has none yet (R-10). */
+  { uid: "dev-pos", label: "Waiter", detail: "5 Elements Akkalkot · the restaurant" },
 ] : [];
 
 export function SignIn({ onDev, busy, error }: { onDev: (uid: string) => void; busy: boolean; error: string | null }) {

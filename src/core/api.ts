@@ -96,10 +96,14 @@ export async function send<T>(method: "POST" | "PUT" | "PATCH" | "DELETE", path:
       hotelId: path.match(/\/api\/hotels\/([^/]+)/)?.[1] ?? "",
       subject: currentSubject(),
     });
+    /* The web says the check-in sentence for every warned write (R-14); a
+       room charge's own risk is the guest leaving first (offline.ts, 8 Sep). */
+    const warning = rule.label === "Room charge"
+      ? "It is not confirmed until then - the guest could check out in the meantime."
+      : "It is not confirmed until then - the room could be taken by another desk in the meantime.";
     throw new HeldError(
       rule.tier === "queue-warn"
-        ? `${rule.label} is held and will be sent when the connection is back. `
-          + "It is not confirmed until then - the room could be taken by another desk in the meantime."
+        ? `${rule.label} is held and will be sent when the connection is back. ${warning}`
         : `${rule.label} is held and will be sent when the connection is back.`,
       entry.id,
       rule.tier === "queue-warn",

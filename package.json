@@ -10,6 +10,7 @@
     "expo-constants": "~57.0.22",
     "expo-font": "~57.0.4",
     "expo-linking": "~57.0.13",
+    "expo-print": "~57.0.2",
     "expo-router": "~57.0.27",
     "expo-sqlite": "~57.0.4",
     "expo-status-bar": "~57.0.1",

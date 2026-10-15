@@ -19,7 +19,7 @@ import { join, relative } from "node:path";
    the web's src/lib/devIdentities.ts. */
 const MARKERS = [
   "x-dev-staff-id", "dev-owner", "dev-gm", "dev-desk", "dev-admin", "dev-hotel-manager", "dev-revenue",
-  "dev-housekeeping", "dev-stores", "dev-kitchen", "dev-chef", "dev-finance",
+  "dev-housekeeping", "dev-stores", "dev-kitchen", "dev-chef", "dev-finance", "dev-pos",
 ];
 
 const dir = process.argv[2];
