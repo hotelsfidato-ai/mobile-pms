@@ -53,3 +53,11 @@ export function useSession(): Session {
   if (!session) throw new Error("useSession outside SessionProvider");
   return session;
 }
+
+/** This person's role at a property, `owner` for a group administrator:
+    the API's own `roleAt` (api/src/modules/housekeeping/repairRoles.ts). */
+export function roleAt(who: HotelsResponse, code: string): string | null {
+  if (who.scope.isGroupAdmin) return "owner";
+  const id = who.hotels.find((h) => h.code === code)?.id;
+  return who.scope.hotels.find((h) => h.hotelId === id)?.role ?? null;
+}

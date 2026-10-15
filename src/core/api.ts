@@ -133,6 +133,8 @@ export async function orNull<T>(path: string, alsoNull: number[] = []): Promise<
 /* The signed-in person's properties, as GET /api/hotels answers. */
 /** src/lib/api.ts ApiHotel. */
 export interface Hotel {
+  /** Matches scope.hotels[].hotelId (the role there). */
+  id: string;
   code: string;
   name: string;
   businessDate: string;
