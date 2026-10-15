@@ -23,19 +23,13 @@
 |---|---|---|
 | everything | the mobile chat | 15 Oct |
 
-**Next, in order** (docs/PLAN.md § 10)
-1. The owner's answers to PLAN § 8 decisions 1-3 (asked 15 Oct, below); record them as M-4 …
-2. Write `src/modules/housekeeping/MODULE.md` from the web twin; then slice 2, housekeeping, with
-   the outbox (Opus), by a helper in its own copy (AGENTS.md).
+**Next, in order** (slice 2, housekeeping)
+1. Core (the mobile chat): install M-4's packages; slice 1 onto `expo-router` and react-query with
+   no change in what it does; then icons and Inter; then the outbox on `expo-sqlite` (Opus).
+2. `src/modules/housekeeping/MODULE.md` from the web twin; every difference shown to the owner.
+3. The housekeeping screens by a helper in its own copy (AGENTS.md).
 
-**Questions waiting for the owner** (asked 15 Oct, each with a recommendation; versions are SDK 57's
-or the last release before 1 Oct)
-1. Navigation: `expo-router` ~57.0.26 (with `expo-linking` ~57.0.12, `expo-constants` ~57.0.21,
-   `react-native-screens` ~4.26.0). Recommended.
-2. Data cache: `@tanstack/react-query` 5.104.0 (the PMS's own). Recommended.
-3. Offline queue storage: `expo-sqlite` ~57.0.4 (recommended) or async-storage 2.2.0.
-4. Icons and font: `lucide-react-native` 1.49.0 + `react-native-svg` 15.15.4; Inter by
-   `expo-font` ~57.0.4 + `@expo-google-fonts/inter` 0.4.2. Recommended with slice 2.
+**Questions waiting for the owner:** none. PLAN § 8, 1-3 answered 15 Oct: all as recommended (M-4).
 
 ---
 
