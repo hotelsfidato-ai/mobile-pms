@@ -29,7 +29,14 @@ step() {                       # step <name> -- <command...>
 }
 
 checks() { for f in $(find src -name '*.check.ts'); do node --experimental-strip-types --no-warnings "$f" || return 1; done; }
-bundle() { npx expo export --platform "$1" --output-dir "$S/export-$1" && node scripts/check-no-dev-login.mjs "$S/export-$1"; }
+# The bundle's screens are exactly this copy's app/ files (MCORE-2).
+routes() {
+  diff <(cd app && find . -name '*.tsx' | sort) \
+    <(grep -aohE '\./[A-Za-z0-9_/().+-]*(\[[a-z]+\][A-Za-z0-9_/.-]*)*\.tsx' "$1"/_expo/static/js/*/*.hbc | sort -u) \
+    && echo "  ✓ the bundle's routes are this copy's app/" \
+    || { echo "  x the bundle's routes are not this copy's app/ (< app only, > bundle only)"; return 1; }
+}
+bundle() { npx expo export --platform "$1" --output-dir "$S/export-$1" && node scripts/check-no-dev-login.mjs "$S/export-$1" && routes "$S/export-$1"; }
 
 step types -- npx tsc --noEmit
 step checks -- checks

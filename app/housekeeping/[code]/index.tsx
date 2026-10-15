@@ -15,8 +15,7 @@ export default function RoomsRoute() {
     <Rooms
       hotel={hotel}
       role={roleAt(s.who, hotel.code)}
-      /* GET /api/hotels sends scope.staffId; the core's type has not named it yet. */
-      me={(s.who.scope as { staffId?: string }).staffId ?? null}
+      me={s.who.scope.staffId}
       {...(router.canGoBack() ? { onBack: () => router.back() } : { onSignOut: s.signOut })}
     />
   );

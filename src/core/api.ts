@@ -145,6 +145,6 @@ export interface Hotel {
 }
 /** src/lib/api.ts HotelsResponse. */
 export interface HotelsResponse {
-  scope: { fullName: string; isGroupAdmin: boolean; hotels: Array<{ hotelId: string; role: string }> };
+  scope: { staffId: string; fullName: string; isGroupAdmin: boolean; hotels: Array<{ hotelId: string; role: string }> };
   hotels: Hotel[];
 }
