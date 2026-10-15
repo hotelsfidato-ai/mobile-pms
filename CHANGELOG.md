@@ -46,7 +46,14 @@ agents" (M-6); after the restart, "continue building and finish all the pending 
 - Nothing of slice 2 on a phone: Expo Go, the SQLite queue, Android's back button, a screen reader.
 - The empty state of Report a repair; Owner, GM and Hotel Manager on the housekeeping screens.
 
-**Left open:** the owner's questions in HANDOVER.
+**Then the owner's four answers (M-7), built** (`babf162a`): a day stepper on both forms
+(`DayStepper.tsx`, shared); a housekeeper opens on Mine when they have rooms; an ended block shows
+"Ended" without Put back; "take out too" only for a free room not already out; an end date at
+least the day after From. A check for each, each broken once and caught. Gates green on
+`babf162a`; seen on 8081 by script: the repair form's steppers (Until starts the day after From,
+its minus disabled there), room 308's ended block without Put back beside its open one with it.
+
+**Left open:** the owner's look at slice 2 on the phone; then the build route (M-3) and slice 3.
 
 ---
 

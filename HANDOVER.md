@@ -35,14 +35,10 @@
 2. The owner's answers below; then the build route decision (M-3: after slice 2) and slice 3, the
    restaurant waiter.
 
-**Questions waiting for the owner** (asked 15 Oct, each with a recommendation; see MODULE.md
-"Where the phone differs")
-1. Dates on the phone: a day stepper on both forms (no package) or the native picker
-   `@react-native-community/datetimepicker` 9.1.0 (SDK 57's). Recommended: the stepper.
-2. A housekeeper's first chip on Rooms: Mine when they have rooms today (the web opens on All).
-3. Safety differences from the web: ended blocks without Put back (R-7); "take out too" only for a
-   room that is free and not already out; an end date at least the day after From (R-8).
-4. The phone's own words and differences (MODULE.md 5-9; "IT" for the "it" kind).
+**Questions waiting for the owner:** none. The four of 15 Oct were answered as recommended (M-7)
+and built (`babf162a`, gates green): a day stepper on both forms; a housekeeper opens on Mine
+when they have rooms; ended blocks without Put back; "take out too" only for a free room not
+already out; an end date at least the day after From; the phone's own words approved.
 
 ---
 

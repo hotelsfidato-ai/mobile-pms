@@ -87,11 +87,16 @@ offline with nothing held; Reception and Accountant see the API's sentences; eve
    names or Due out and says why. Roster or sheet refused (finance): said in a note; Mine and
    Unassigned show a dash.
 6. No board head (the navy "Empty rooms" and six counts) on the phone yet.
+**All approved by the owner (M-7, 15 Oct)**, with three made stricter than the web for safety:
+an ended block shows "Ended" without Put back (R-7); "take room N out of service too" only for a
+room that is free and not already out; an end date at least the day after From (R-8).
+
 7. Out of service: a day stepper (− / +) instead of a date input; a block starting later says
    "goes out on <date>"; after Put back it says the status the room came back with, not the web's
    unconditional "It returns as dirty."; the screen stays open after a write.
-8. Report a repair: dates typed as YYYY-MM-DD when taking the room out too (no picker package);
+8. Report a repair: the same day stepper (`DayStepper.tsx`, shared) when taking the room out too;
    "Not a room" for a repair to the building; the outcome on a card with Done (no core toast).
+   Rooms opens on Mine for a housekeeper with rooms on today's sheet (`firstSheet`, M-7).
 9. New words: "Queued: give to X" / "Queued: unassigned" for a held assignment.
 
 ## What the core gives the screens (built 15 Oct; the core is frozen for helpers)
