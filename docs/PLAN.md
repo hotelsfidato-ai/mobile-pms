@@ -126,6 +126,20 @@ Apple Developer account (yearly fee); the app's name (the product-name work, e.g
 open), its icon and splash, its store listing and privacy policy. **The signing keys stay with the
 owner, never in git.**
 
+**The route chosen (M-8, 15 Oct): Expo's cloud (EAS) for Android and iPhone; only `mobile/` leaves.**
+EAS uploads the **whole git repository** by default, and this folder's repository is the entire PMS
+(a reported case shows even `.git` uploaded despite `.easignore`). So a build never runs from here:
+
+1. `mobile/` (its committed files only, `git archive HEAD:mobile`) is unpacked into a fresh folder
+   under `../.local/eas-build/`, which gets **its own new git repository** (no PMS history).
+2. The app first stops reading the PMS's types from `../src` (five `import type` lines today:
+   `board.ts`, `Rooms.tsx`, `OutOfService.tsx`, `Dashboard.tsx`, `figures.ts`); the shapes are
+   ported into `src/core` with their source named, so the copy stands alone and type-checks.
+3. `eas build:inspect --stage archive` in that folder shows the exact upload; it is read before the
+   first build is sent, and must hold the app's files alone.
+4. The owner signs in to their own Expo account there; the first build is a test build for a few
+   phones. `eas-cli` is run by `npx` at an exact version, recorded with the owner's yes.
+
 **Updates:** store releases only, or also **over-the-air updates** (EAS Update: small fixes without a
 store review; code leaves the machine: the owner's yes).
 
