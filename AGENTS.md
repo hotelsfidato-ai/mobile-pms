@@ -76,15 +76,15 @@ Packages        none added, or the owner's yes recorded in DECISIONS.md
 
 ## The gates (run in `mobile/`, all green before a merge)
 
-The mobile chat builds `mobile/scripts/gates.sh` first (PLAN § 6). Until then, by hand:
-
 ```bash
-# this PC, Git Bash, in D:\fidato pms moblie\mobile
-npx tsc --noEmit                                         # no output
-node --experimental-strip-types src/figures.check.ts     # every *.check.ts passes
-npx expo export --platform android --output-dir ../.local/mobile-export   # the Android bundle builds
-npx expo export --platform ios --output-dir ../.local/mobile-export       # the iPhone bundle builds
+# this PC, Git Bash, in D:\fidato pms moblie\mobile (or a helper's copy's mobile/)
+bash scripts/gates.sh
 ```
+
+It runs the type check, every `*.check.ts`, both phone bundles (`expo export`), and
+`scripts/check-no-dev-login.mjs` on each bundle (no test sign-in in a release build). One line per
+step in `../.local/mobile-gates/progress.txt`, logs beside it; the first line names the commit.
+"ALL GATES GREEN" on a clean commit is the proof a merge needs.
 
 A check that has never failed proves nothing: break the rule once, see it fail, put it back.
 

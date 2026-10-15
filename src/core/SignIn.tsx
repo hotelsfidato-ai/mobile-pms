@@ -15,13 +15,14 @@ import { Card, s } from "./ui";
    ══════════════════════════════════════════════════════════════════ */
 
 /* The web's development sign-ins whose menu holds the Dashboard - the
-   people this first slice, the owner's figures, is for. */
-const PEOPLE = [
+   people this first slice, the owner's figures, is for. Behind `__DEV__`
+   so a release build carries not even their names (MCORE-1). */
+const PEOPLE = __DEV__ ? [
   { uid: "dev-owner", label: "Owner", detail: "every property · group admin" },
   { uid: "dev-gm", label: "General Manager", detail: "5 Elements Akkalkot · GM" },
   { uid: "dev-hotel-manager", label: "Hotel Manager", detail: "5 Elements Akkalkot" },
   { uid: "dev-finance", label: "Accountant", detail: "5 Elements Akkalkot · money" },
-];
+] : [];
 
 export function SignIn({ onDev, busy, error }: { onDev: (uid: string) => void; busy: boolean; error: string | null }) {
   return (
