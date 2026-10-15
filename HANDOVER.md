@@ -24,7 +24,7 @@
 - **Left on the machine:** the scratch databases `fidato_mobile_hk`, `_hk2`, `_hk3` (the helpers'
   test writes); drop them through `D:\fidato pms\.local\dbq.sh` when no longer wanted.
 
-**Who holds what**
+**Who holds what** (memory is short: a helper starts its own API and Expo only under `../.local/mobile-preview.lock`, one at a time, and stops both when it releases it)
 
 | Module / core | Held by | Since |
 |---|---|---|
@@ -32,6 +32,11 @@
 | pos: Tables and the order pad | Opus helper "tables": `.claude/worktrees/pos-tables`, `mobile/pos-tables`; Expo 8082, API 8861 (pid 28236) on `fidato_mobile_hk` | 15 Oct |
 | pos: the order | Opus helper "order": `.claude/worktrees/pos-order`, `mobile/pos-order`; Expo 8083, API 8862 (pid 27776) on `fidato_mobile_hk2` | 15 Oct |
 | pos: paying and printing | Opus helper "pay": `.claude/worktrees/pos-pay`, `mobile/pos-pay`; Expo 8084, API 8863 (pid 33524) on `fidato_mobile_hk3` | 15 Oct |
+| front-desk (slice 4a: arrivals, check-in, in house, walk-ins) | Opus helper "desk": `.claude/worktrees/front-desk`, `mobile/front-desk`; Expo 8085, API 8864 on `fidato_mobile_desk` | 15 Oct |
+| finance (slice 4b: a stay's bill, payments, check-out) | Opus helper "folio": `.claude/worktrees/folio`, `mobile/folio`; Expo 8086, API 8865 on `fidato_mobile_folio` | 15 Oct |
+| pos: the kitchen (slice 6) | Opus helper "kitchen": `.claude/worktrees/kitchen`, `mobile/kitchen`; Expo 8087, API 8866 on `fidato_mobile_kitchen` | 15 Oct |
+| housekeeping: work orders (slice 7, maintenance) | Opus helper "maintenance": `.claude/worktrees/maintenance`, `mobile/maintenance`; Expo 8088, API 8867 on `fidato_mobile_maint` | 15 Oct |
+| guest-services (slice 8) | Opus helper "guest services": `.claude/worktrees/guest-services`, `mobile/guest-services`; Expo 8089, API 8868 on `fidato_mobile_gs` | 15 Oct |
 
 **Next, in order**
 1. The build route is decided (M-8): Expo's cloud for both platforms, only `mobile/` uploaded, the
