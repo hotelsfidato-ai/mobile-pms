@@ -61,6 +61,20 @@ sentence and a Discard. Held entries belong to the person who made them.
 
 The web's own faults found on the way are in `docs/api-requests.md` for the PMS's main chat.
 
+## The split: three helpers, one screen each (the owner, 15 Oct: Opus, several helpers)
+
+| Helper (copy, branch) | Builds | Route (a NEW file, only this one) | Its own files |
+|---|---|---|---|
+| rooms (`housekeeping`, `mobile/housekeeping`) | Rooms: the board, Clean / Inspected, assign | `app/housekeeping/[code]/index.tsx` → `/housekeeping/5EL` | `Rooms.tsx`, `board.ts`, `board.check.ts` |
+| repair (`hk-repair`, `mobile/hk-repair`) | Report a repair | `app/housekeeping/[code]/repair.tsx` → `/housekeeping/5EL/repair?room=204` | `ReportRepair.tsx`, `repair.ts`, `repair.check.ts` |
+| block (`hk-block`, `mobile/hk-block`) | Out of service: take out, put back | `app/housekeeping/[code]/out-of-service.tsx` → `/housekeeping/5EL/out-of-service?room=204` | `OutOfService.tsx`, `block.ts`, `block.check.ts` |
+
+Shared and **already written** (nobody edits it): `roles.ts` — who may mark, give, block and
+repair, with the API's own sentences (`whyNotMark`, `whyNotAssign`, `whyNotBlock`, `whyNotRepair`;
+`roleAt(who, code)` from `src/core/session.tsx` gives the role). The Rooms card opens the other two
+by their routes (`router.push`), with `?room=`. Each screen returns with `router.back()`. Nobody
+edits `MODULE.md` or `DEFECTS.md`: put that text in the report; the mobile chat merges it.
+
 ## What the core gives the screens (built 15 Oct; the core is frozen for helpers)
 
 - **Writes:** `send(method, path, body)` in `src/core/api.ts`. It mints the idempotency key at the
