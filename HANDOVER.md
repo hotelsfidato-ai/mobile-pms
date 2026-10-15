@@ -31,7 +31,9 @@
 | Module / core | Held by | Since |
 |---|---|---|
 | core, reports, everything else | the mobile chat | 15 Oct |
-| housekeeping (screens) | a Sonnet helper: `.claude/worktrees/housekeeping`, branch `mobile/housekeeping`; Expo 8082, API 8861 on `fidato_mobile_hk` (API pid 31984, started by the mobile chat) | 15 Oct |
+| housekeeping: Rooms | Opus helper "rooms": `.claude/worktrees/housekeeping`, `mobile/housekeeping`; Expo 8082, API 8861 (pid 31984) on `fidato_mobile_hk` | 15 Oct |
+| housekeeping: Report a repair | Opus helper "repair": `.claude/worktrees/hk-repair`, `mobile/hk-repair`; Expo 8083, API 8862 (pid 42108) on `fidato_mobile_hk2` | 15 Oct |
+| housekeeping: Out of service | Opus helper "block": `.claude/worktrees/hk-block`, `mobile/hk-block`; Expo 8084, API 8863 (pid 24180) on `fidato_mobile_hk3` | 15 Oct |
 
 **Next, in order** (slice 2, housekeeping)
 1. The screens (Rooms, Report a repair, Out of service) by a helper in its own copy (AGENTS.md),
