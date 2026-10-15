@@ -31,7 +31,10 @@
 | everything (core, reports, housekeeping) | the mobile chat | 15 Oct |
 
 **Next, in order**
-1. The build route (M-3: decided after slice 2), asked 15 Oct.
+1. The build route is decided (M-8): Expo's cloud for both platforms, only `mobile/` uploaded, the
+   owner's Expo account; store accounts at launch. Before the first build: the owner's account,
+   `eas.json`, the app's identifier (with the product-name decision), and a dry check that the
+   upload holds `mobile/` alone. The first build is a test build, when slice 3 needs one.
 2. Slice 3, the restaurant waiter: the web's waiter work mapped (read-only helper), then its
    `MODULE.md` and its decisions (printing, money, offline) asked of the owner.
 
