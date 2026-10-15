@@ -5,7 +5,7 @@ commits.
 
 ---
 
-## 2026-10-15 · the owner's look at slice 1, the module layout, the gates (PLAN § 10, steps 1-3)
+## 2026-10-15 · the owner's look at slice 1, the module layout, the gates, slice 2 decided (PLAN § 10)
 
 **Asked for:** start PLAN § 10 — the owner's look at slice 1 on the phone first, nothing before it.
 
@@ -17,6 +17,18 @@ commits.
 - `scripts/gates.sh` (types, every `*.check.ts`, both phone bundles, no test sign-in in either) and
   `scripts/check-no-dev-login.mjs`, ported from the PMS's; AGENTS.md's gate section points at it;
   `src/core/DEFECTS.md` — `ec5cfe17`.
+- **M-4** (PLAN § 8, 1-3, all as recommended) — `da0c5531`. Its packages installed in `mobile/`;
+  Expo's installer took the newest patch inside the approved ranges (expo-router 57.0.27,
+  expo-constants 57.0.22, expo-linking 57.0.13). `expo` stays 57.0.28 although Expo suggests
+  57.0.29 (not approved).
+- Slice 1 on `expo-router` and react-query, no change in what it does: `app/` (`_layout`, `index`,
+  `all`, `hotel/[code]`), `src/core/session.tsx`; `useRead` on `useQuery` with the hotel in every
+  key; signing in or out empties the cache; `App.tsx` and `index.ts` gone — `a6a26ba5`.
+- Slice 2's brief, `src/modules/housekeeping/MODULE.md` (from a read-only map of the web twin, its
+  key claims re-checked), and **M-5**: all four (mark clean/inspected, give rooms, report a repair,
+  out of service online only), no dirty button, Inspected as the web, the idempotency key from the
+  first tap.
+- `docs/api-requests.md` R-1 to R-5: the web's housekeeping faults, found by reading, for the PMS.
 
 **Found**
 - **MCORE-1:** the four test people's names were in both release bundles (the header was not, so
@@ -31,14 +43,18 @@ commits.
 - The 375 × 812 preview (Expo web): signed in as Owner, All properties → Dashboard → back → sign
   out, the same figures. The pane was hidden, so the buttons were pressed by script and read as
   text; no screenshot.
-- Both phone bundles re-warmed after the changes (under 0.1 s).
+- On the router build (`a6a26ba5`): gates green; Expo restarted (new pid 35748) and both phone
+  bundles warmed (Android 0.08 s, iOS 0.18 s); the preview as Owner, GM and Hotel Manager: `/` →
+  `/all` → `/hotel/5EL` → back → sign out, the same figures; a reload on `/hotel/5EL` lands on sign
+  in; no console errors. Not exercised: an unknown hotel's address (the web build's history
+  could not be driven fairly).
 
 **Left open**
-- PLAN § 8 decisions 1-3 (navigation and data cache, phone storage, icons and font): asked of the
-  owner now. Then slice 2, housekeeping, with the outbox (Opus).
+- Slice 2's build: core first (writes in `api.ts` with the key, the outbox on `expo-sqlite`, icons
+  and Inter, the housekeeping test people), then the screens by a helper.
 - Not proved on a device: Android's back button and the notch edges (the owner's look was overall).
 
-**Commits:** `7a8a4267`, `ec5cfe17`, and this note.
+**Commits:** `7a8a4267`, `ec5cfe17`, `1a9e5864`, `da0c5531`, `a6a26ba5`, and this note.
 
 ---
 

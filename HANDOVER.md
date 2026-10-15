@@ -9,13 +9,17 @@
 **Where it stands**
 - A **separate system** (M-2), rebuilt natively for phones with React Native + Expo (M-3). Rules:
   `CLAUDE.md`; working agreement: `AGENTS.md`; decisions: `DECISIONS.md`; plan: `docs/PLAN.md`.
-- **Slice 1 approved:** the owner looked at it on the phone on 15 Oct, "it's good".
-- **PLAN § 10 steps 1-3 done:** slice 1 is in the module layout (`src/core`, `src/modules/reports`
-  with `MODULE.md` / `DEFECTS.md`, `7a8a4267`); `bash scripts/gates.sh` exists and is ALL GATES
-  GREEN on `ec5cfe17`; MCORE-1 (test people's names in the release bundle) fixed.
-- **Not proved on a device:** Android's back button, the notch edges (the owner's look was overall).
-- **Running when this was written:** API 8860 (pid 26964) and Expo 8081 (pid 44876); both phone
-  bundles warm. The browser pane has a tab on `localhost:8081` (the Expo web preview).
+- **Slice 1 approved** on the phone (15 Oct, "it's good"); now in the module layout and on
+  `expo-router` + react-query (M-4), no change in what it does (`a6a26ba5`). `bash scripts/gates.sh`
+  is ALL GATES GREEN on it; MCORE-1 fixed.
+- **Slice 2 (housekeeping) decided (M-5)** and briefed: `src/modules/housekeeping/MODULE.md`. Nothing
+  of it built yet. The web's own faults found on the way: `docs/api-requests.md` R-1 to R-5, for the
+  owner to take to the PMS's main chat.
+- **Not proved on a device:** Android's back button, the notch edges (the owner's look was overall);
+  the router build has been opened only in the 375 × 812 preview, not yet on the phone.
+- **Running when this was written:** API 8860 (pid 26964, untouched) and Expo 8081 (restarted for
+  the router: pid 35748 under a Git Bash wrapper; log `../.local/mobile-expo.log`); both phone
+  bundles warm. Stop Expo by its tree: `taskkill /PID <cmd.exe parent of 35748> /T /F` (PowerShell).
 
 **Who holds what**
 
@@ -24,12 +28,16 @@
 | everything | the mobile chat | 15 Oct |
 
 **Next, in order** (slice 2, housekeeping)
-1. Core (the mobile chat): install M-4's packages; slice 1 onto `expo-router` and react-query with
-   no change in what it does; then icons and Inter; then the outbox on `expo-sqlite` (Opus).
-2. `src/modules/housekeeping/MODULE.md` from the web twin; every difference shown to the owner.
-3. The housekeeping screens by a helper in its own copy (AGENTS.md).
+1. Core (the mobile chat, Opus): writes in `src/core/api.ts` (PUT/POST/DELETE, the idempotency key
+   from the first tap); the outbox on `expo-sqlite`, ported from `src/lib/offline.ts` and
+   `outbox.ts` (tiers, oldest first, 4xx kept as refused with Discard, entries per person); the
+   housekeeping test people in the dev sign-in and in `check-no-dev-login.mjs`'s markers; icons and
+   Inter (M-4). Each with its `*.check.ts`.
+2. The screens (Rooms, Report a repair, Out of service) by a helper in its own copy (AGENTS.md),
+   Sonnet for the screens; the mobile chat reviews and merges.
+3. The owner's look on the phone, then slice 3.
 
-**Questions waiting for the owner:** none. PLAN § 8, 1-3 answered 15 Oct: all as recommended (M-4).
+**Questions waiting for the owner:** none (M-4 and M-5 answered 15 Oct).
 
 ---
 
