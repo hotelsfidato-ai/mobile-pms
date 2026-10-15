@@ -8,41 +8,41 @@
 
 **Where it stands**
 - A **separate system** (M-2), rebuilt natively for phones with React Native + Expo (M-3). Rules:
-  `CLAUDE.md`; working agreement: `AGENTS.md`; decisions: `DECISIONS.md`; plan: `docs/PLAN.md`.
-- **Slice 1 approved** on the phone (15 Oct, "it's good"); now in the module layout and on
-  `expo-router` + react-query (M-4), no change in what it does (`a6a26ba5`). `bash scripts/gates.sh`
-  is ALL GATES GREEN on it; MCORE-1 fixed.
-- **Slice 2 (housekeeping) decided (M-5)** and briefed: `src/modules/housekeeping/MODULE.md`.
-  **Its core is built** (15 Oct): `send()` with the key from the first tap, the web's offline tiers
-  and drain (`src/core/offline.ts`, checked), the queue on expo-sqlite (`outbox.ts`), the held bar,
-  the Housekeeping and Reception test people, Inter and lucide icons. Proved on the real API from
-  the preview; **not yet on a phone**, and `send()`'s held path waits for the first screen. The
-  screens are not built. The web's own faults: `docs/api-requests.md` R-1 to R-5, for the owner to
-  take to the PMS's main chat.
-- **Not proved on a device:** Android's back button, the notch edges (the owner's look was overall);
-  the router build has been opened only in the 375 × 812 preview, not yet on the phone.
-- **Running when this was written:** API 8860 (pid 26964, untouched) and Expo 8081 (restarted for
-  the router: pid 35748 under a Git Bash wrapper; log `../.local/mobile-expo.log`); both phone
-  bundles warm. Stop Expo by its whole tree (PowerShell, this PC): `taskkill /PID 34616 /T /F` (the
-  Git Bash wrapper; then check 8081 is free).
+  `CLAUDE.md`; working agreement: `AGENTS.md`; decisions: `DECISIONS.md` (M-1 to M-6); plan:
+  `docs/PLAN.md`.
+- **Slice 1** (the owner's figures) approved on the phone. **Slice 2** (housekeeping: Rooms, Report a
+  repair, Out of service) **built and merged** into `mobile/app` by three Opus helpers (M-6); its
+  core (writes with the key from the first tap, the offline queue, the held bar, Inter, icons) too.
+  `bash scripts/gates.sh` ALL GATES GREEN on the merge. **Not yet seen on a phone.**
+- The web's own faults found on the way: `docs/api-requests.md` R-1 to R-9, for the owner to take
+  to the PMS's main chat.
+- **Running:** API 8860 (pid 26964, on `fidato_mobile`) and Expo 8081 (listener pid 6624, its own
+  Metro cache, log `../.local/mobile-expo.log`); both phone bundles warm. Stop Expo (PowerShell, this
+  PC): `taskkill /PID 44692 /T /F` (the listener's own `cmd` parent; killing the top Git Bash wrapper
+  can leave the listener running), then check 8081 is free. The helpers' servers are stopped.
+- **Left on the machine:** the scratch databases `fidato_mobile_hk`, `_hk2`, `_hk3` (the helpers'
+  test writes); drop them through `D:\fidato pms\.local\dbq.sh` when no longer wanted.
 
 **Who holds what**
 
 | Module / core | Held by | Since |
 |---|---|---|
-| core, reports, everything else | the mobile chat | 15 Oct |
-| housekeeping: Rooms | Opus helper "rooms": `.claude/worktrees/housekeeping`, `mobile/housekeeping`; Expo 8082, API 8861 (pid 31984) on `fidato_mobile_hk` | 15 Oct |
-| housekeeping: Report a repair | Opus helper "repair": `.claude/worktrees/hk-repair`, `mobile/hk-repair`; Expo 8083, API 8862 (pid 42108) on `fidato_mobile_hk2` | 15 Oct |
-| housekeeping: Out of service | Opus helper "block": `.claude/worktrees/hk-block`, `mobile/hk-block`; Expo 8084, API 8863 (pid 24180) on `fidato_mobile_hk3` | 15 Oct |
+| everything (core, reports, housekeeping) | the mobile chat | 15 Oct |
 
-**Next, in order** (slice 2, housekeeping)
-1. The screens (Rooms, Report a repair, Out of service) by a helper in its own copy (AGENTS.md),
-   Sonnet for the screens, from `src/modules/housekeeping/MODULE.md` ("What the core gives the
-   screens"); the mobile chat adds the routes (a housekeeper lands on Rooms), reviews (Opus for the
-   held path) and merges.
-2. The owner's look on the phone: Inter, the held bar, then slice 2's screens; then slice 3.
+**Next, in order**
+1. The owner's look at slice 2 on the phone (`exp://192.168.1.33:8081`, Expo Go, same Wi-Fi; sign in
+   as Housekeeping, and as Owner → a property → "Needs cleaning"), and their changes.
+2. The owner's answers below; then the build route decision (M-3: after slice 2) and slice 3, the
+   restaurant waiter.
 
-**Questions waiting for the owner:** none (M-4 and M-5 answered 15 Oct).
+**Questions waiting for the owner** (asked 15 Oct, each with a recommendation; see MODULE.md
+"Where the phone differs")
+1. Dates on the phone: a day stepper on both forms (no package) or the native picker
+   `@react-native-community/datetimepicker` 9.1.0 (SDK 57's). Recommended: the stepper.
+2. A housekeeper's first chip on Rooms: Mine when they have rooms today (the web opens on All).
+3. Safety differences from the web: ended blocks without Put back (R-7); "take out too" only for a
+   room that is free and not already out; an end date at least the day after From (R-8).
+4. The phone's own words and differences (MODULE.md 5-9; "IT" for the "it" kind).
 
 ---
 

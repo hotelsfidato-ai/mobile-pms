@@ -5,6 +5,51 @@ commits.
 
 ---
 
+## 2026-10-15 · slice 2 built: Rooms, Report a repair, Out of service (three Opus helpers)
+
+**Asked for:** "send a helper to build the housekeeping screens"; then "use Opus and multiple
+agents" (M-6); after the restart, "continue building and finish all the pending things".
+
+**Shipped** (merged into `mobile/app`; tip `0d016b3f` before these notes)
+- The shared rules first, by the mobile chat: `roles.ts` (who may mark, give, block, repair, in the
+  API's own sentences, read back from it as dev-finance and dev-desk; `roles.check.ts`), `roleAt()`
+  and `Hotel.id` in the core, fixed routes for the three screens.
+- **Rooms** (rooms helper, `468b47a3`), **Report a repair** (repair helper, `06d18e0c`), **Out of
+  service** (block helper, `cf254d91`): see `src/modules/housekeeping/MODULE.md` "Built". Each in
+  its own copy, ports and scratch database (`fidato_mobile_hk`, `_hk2`, `_hk3`).
+- A housekeeper lands on Rooms (the web's WORKING_HOME) with Sign out; the Dashboard's "Needs
+  cleaning" tile opens Rooms (the web's Dashboard.tsx 312), whose Back returns there.
+- At merge: one block-reasons list; `scope.staffId` in the core type; Rooms' back says "Back".
+- **MCORE-2 fixed:** every copy had shared one Metro cache, so previews served another copy's
+  screens. `gates.sh` now gives each copy its own cache and refuses a bundle whose routes are not
+  exactly its `app/` (proved failing on two mismatched exports); 8081 restarted with its own cache.
+- MHK-1, MHK-2 (fixed by the helpers); MEMORY 4 (the shared browser pane), 5 (the Metro cache);
+  M-6; R-6 to R-9 for the PMS; AGENTS.md (copies' Expo with their own cache, the pane, the gate
+  lock); PLAN § 9's Expo command.
+- The three copies' junctions out, the copies in the Recycle Bin, their branches deleted.
+
+**Proved**
+- `bash scripts/gates.sh` ALL GATES GREEN on `8cb43c0e` (the merge): types, all six checks
+  (offline, figures, roles, board, repair, block), both phone bundles with no test sign-in and
+  exactly the six routes of `app/`. Each helper's own gates were green too.
+- The helpers, each on its own API and copy of the demo, pressed by script at 375 × 812: marks
+  accepted / refused with the server's sentence / held and sent with the tap's key; assign and
+  unassign; a repair once per key (the same key twice: one work order), held and sent once; out of
+  service taken and put back, refused offline with nothing held; Reception and Accountant see the
+  API's sentences; every button ≥ 44 px.
+- The mobile chat, on 8081 against the phone's demo, by script: Housekeeping signs in → lands on
+  `/housekeeping/5EL` with Sign out → Repair (`?room=208`) → Back → Out of service → Back → Sign
+  out; Owner → All properties → Dashboard → "Needs cleaning" → Rooms → Back → Dashboard. No writes.
+- Both phone bundles warm on 8081 (under 0.2 s), each carrying all six routes.
+
+**Not proved**
+- Nothing of slice 2 on a phone: Expo Go, the SQLite queue, Android's back button, a screen reader.
+- The empty state of Report a repair; Owner, GM and Hotel Manager on the housekeeping screens.
+
+**Left open:** the owner's questions in HANDOVER.
+
+---
+
 ## 2026-10-15 · slice 2's core: writes, the offline queue, test people, Inter and icons
 
 **Asked for:** "start slice 2's core: writes with the idempotency key, the offline queue on

@@ -5,6 +5,22 @@ module's `DEFECTS.md` instead. Read the newest first.
 
 ---
 
+### 5 · Copies that share node_modules must not share Metro's cache (15 Oct)
+
+Three helper copies at once, one `%TEMP%\metro-cache`: expo-router's route list was cached for
+whichever copy built first, so two previews served another copy's screens. **The rule:** every
+Expo and every gate run gets its own `TEMP`/`TMP` (AGENTS.md, PLAN § 9; `gates.sh` does it and
+checks the bundle's routes). MCORE-2.
+
+### 4 · The browser pane is shared, and its tab ids are reused (15 Oct)
+
+With three helpers previewing at once, one helper's script (undoing its fetch wrapper) ran on
+another helper's page: `tab-1` had become that helper's 8084. **The rule:** start every page script
+with `if (location.origin !== "http://localhost:<your port>") throw …`, pass `tabId` to every browser
+call, and re-check your own wrapper and window size before trusting a result. Typing a URL reloads
+the preview and drops the in-memory sign-in: move inside the app with expo-router's `router.push`
+(in development, through Metro's `__r.getModules()`).
+
 ### 3 · Two decision lists, one number (14-15 Oct)
 
 The mobile chat wrote the app's plan as "D27-321", saw the PMS take 321, renumbered it "D27-322" —

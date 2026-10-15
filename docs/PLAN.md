@@ -157,8 +157,8 @@ icon (with the product-name decision).
 # Git Bash, in D:\fidato pms moblie\api - the PMS's API for the app, port 8860, database fidato_mobile
 DATABASE_URL="postgres://pms_app:CHANGE_ME_app@127.0.0.1:55432/fidato_mobile" PORT=8860 NODE_ENV=development ALLOW_DEV_AUTH=1 DB_POOL_MAX=5 CORS_ORIGIN="http://localhost:8081" node_modules/.bin/tsx src/server.ts
 
-# Git Bash, in D:\fidato pms moblie\mobile - Expo, port 8081 (do not set CI=1)
-EXPO_PUBLIC_API_URL=http://192.168.1.33:8860 npx expo start --lan --port 8081
+# Git Bash, in D:\fidato pms moblie\mobile - Expo, port 8081, its own Metro cache (MCORE-2; do not set CI=1)
+TEMP='D:\fidato pms moblie\.local\metro-tmp' TMP='D:\fidato pms moblie\.local\metro-tmp' EXPO_PUBLIC_API_URL=http://192.168.1.33:8860 npx expo start --lan --port 8081
 ```
 
 Then warm both phone bundles (MEMORY 1); the owner opens `exp://192.168.1.33:8081` in Expo Go on the

@@ -19,7 +19,13 @@ differ, this file wins inside `mobile/`.
 - A helper's copy shares `mobile/node_modules` through a junction (never `npm install` in a copy).
   The junction comes out **before** the copy goes to the Recycle Bin, right after its merge.
 - Each helper gets its own ports (API 8861 +, Expo 8082 +) and, only if it needs one, its own scratch
-  database `fidato_mobile_<name>` built through `D:\fidato pms\.local\dbq.sh`.
+  database `fidato_mobile_<name>` built through `D:\fidato pms\.local\dbq.sh` (a copy of
+  `fidato_mobile` by `pg_dump | psql` works while the phone's API is connected).
+- **Each copy's Expo gets its own Metro cache** (MCORE-2, MEMORY 5), Git Bash, in the copy's `mobile/`:
+  `TEMP='<copy>\.local\metro-tmp' TMP='<copy>\.local\metro-tmp' EXPO_PUBLIC_API_URL=... npx expo start --lan --port <port>`.
+- **The browser pane is shared** (MEMORY 4): every page script checks `location.origin` first, every
+  browser call names its `tabId`. Helpers run the gates one at a time:
+  `until mkdir "/d/fidato pms moblie/.local/mobile-gates.lock" 2>/dev/null; do sleep 15; done; bash scripts/gates.sh; rmdir "/d/fidato pms moblie/.local/mobile-gates.lock"`.
 
 ## Lanes: one module each
 

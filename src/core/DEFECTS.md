@@ -6,6 +6,19 @@ it, and the rule it leaves. Fixed entries stay.
 
 ---
 
+### MCORE-2 · One Metro cache for every copy: a preview served another copy's screens (15 Oct) — fixed
+
+**What happened:** the helpers' copies share `mobile/node_modules` through a junction, and every
+Expo used Metro's one cache in `%TEMP%\metro-cache`. expo-router's route list (`_ctx`, with the app
+folder written in) was cached once for all copies: 8084 (out of service) and 8082 (rooms) served the
+repair copy's routes, and a gate's export could have carried another copy's screens.
+**How it was found:** the block and rooms helpers, by `/_sitemap` and their bundles.
+**What was done:** `scripts/gates.sh` gives each copy its own cache (`TEMP`/`TMP` under its
+`.local/metro-tmp`) and refuses a bundle whose routes are not exactly the copy's `app/` files
+(proved failing on two mismatched exports); 8081 restarted with its own cache; every Expo command
+in AGENTS.md and PLAN § 9 carries it. **The rule:** a copy never shares Metro's cache; check
+`/_sitemap` before trusting a preview.
+
 ### MCORE-1 · The test people's names reached the release bundle (15 Oct) — fixed
 
 **What happened:** `SignIn.tsx` kept its development sign-in list (`dev-owner`, `dev-gm`,

@@ -5,7 +5,7 @@
 API in `api/src/routes/property.ts`, `api/src/modules/housekeeping/` (`housekeeping.ts`,
 `roomStatus.ts`, `repairRoles.ts`). Its `MODULE.md` and `DEFECTS.md` (HK-1 … HK-14) are the source.
 Mapped from the code on 15 Oct (read, not run); the key claims re-checked by the mobile chat.
-**Decided:** M-5 (15 Oct). **Held by:** the mobile chat (core first); then a helper in its own copy.
+**Decided:** M-5, M-6 (15 Oct). **Built** 15 Oct by three Opus helpers, merged into `mobile/app` (`88ae75c9`); held by the mobile chat. Seen in the 375 × 812 preview only, not yet on a phone.
 
 ## Screens (M-5)
 
@@ -61,19 +61,38 @@ sentence and a Discard. Held entries belong to the person who made them.
 
 The web's own faults found on the way are in `docs/api-requests.md` for the PMS's main chat.
 
-## The split: three helpers, one screen each (the owner, 15 Oct: Opus, several helpers)
+## Built (15 Oct)
 
-| Helper (copy, branch) | Builds | Route (a NEW file, only this one) | Its own files |
+| Screen | Route → file | Rules (checked) | Reads (key) |
 |---|---|---|---|
-| rooms (`housekeeping`, `mobile/housekeeping`) | Rooms: the board, Clean / Inspected, assign | `app/housekeeping/[code]/index.tsx` → `/housekeeping/5EL` | `Rooms.tsx`, `board.ts`, `board.check.ts` |
-| repair (`hk-repair`, `mobile/hk-repair`) | Report a repair | `app/housekeeping/[code]/repair.tsx` → `/housekeeping/5EL/repair?room=204` | `ReportRepair.tsx`, `repair.ts`, `repair.check.ts` |
-| block (`hk-block`, `mobile/hk-block`) | Out of service: take out, put back | `app/housekeeping/[code]/out-of-service.tsx` → `/housekeeping/5EL/out-of-service?room=204` | `OutOfService.tsx`, `block.ts`, `block.check.ts` |
+| Rooms (title "Housekeeping", the web's) | `app/housekeeping/[code]/index.tsx` → `Rooms.tsx` | `board.ts` (`board.check.ts`) | rooms + house-now (required); stays board=1, assignments, housekeepers (each may be refused: said, not fatal) — `["housekeeping", code, "rooms", date]`; every 30 s while on screen (HK-1) |
+| Report a repair | `app/housekeeping/[code]/repair.tsx?room=` → `ReportRepair.tsx` | `repair.ts` (`repair.check.ts`) | rooms + house-now — `["housekeeping", code, "repair", "rooms"]` |
+| Out of service | `app/housekeeping/[code]/out-of-service.tsx?room=` → `OutOfService.tsx` | `block.ts` (`block.check.ts`) | rooms (that room's `blocks[]`) + house-now — `["housekeeping", code, "block", room]` |
 
-Shared and **already written** (nobody edits it): `roles.ts` — who may mark, give, block and
-repair, with the API's own sentences (`whyNotMark`, `whyNotAssign`, `whyNotBlock`, `whyNotRepair`;
-`roleAt(who, code)` from `src/core/session.tsx` gives the role). The Rooms card opens the other two
-by their routes (`router.push`), with `?room=`. Each screen returns with `router.back()`. Nobody
-edits `MODULE.md` or `DEFECTS.md`: put that text in the report; the mobile chat merges it.
+Shared: `roles.ts` (`roles.check.ts`) — who may mark, give, block and repair, in the API's words.
+Every accepted write re-reads the prefix `["housekeeping", code]`. A housekeeper lands on Rooms
+(the web's WORKING_HOME), which then offers Sign out; others reach it from the Dashboard's
+"Needs cleaning" tile, and its Back returns there. A grey button stays tappable and says why on
+the card (the web's D17-8), the API's sentence first.
+
+**Proved in the preview** (pressed by script, on each helper's own copy of the demo): marks
+accepted, refused with the server's sentence, and held → sent with the tap's key; assign and
+unassign, held too; a repair raised once per key (the same key twice: one work order), held and
+sent once, its take-out-too refused offline and said; out of service taken and put back, refused
+offline with nothing held; Reception and Accountant see the API's sentences; every button ≥ 44 px.
+
+## Where the phone differs from the web, added while building (for the owner's yes)
+
+5. Guest names refused (stores, chef): the web's board fails whole; the phone draws it without
+   names or Due out and says why. Roster or sheet refused (finance): said in a note; Mine and
+   Unassigned show a dash.
+6. No board head (the navy "Empty rooms" and six counts) on the phone yet.
+7. Out of service: a day stepper (− / +) instead of a date input; a block starting later says
+   "goes out on <date>"; after Put back it says the status the room came back with, not the web's
+   unconditional "It returns as dirty."; the screen stays open after a write.
+8. Report a repair: dates typed as YYYY-MM-DD when taking the room out too (no picker package);
+   "Not a room" for a repair to the building; the outcome on a card with Done (no core toast).
+9. New words: "Queued: give to X" / "Queued: unassigned" for a held assignment.
 
 ## What the core gives the screens (built 15 Oct; the core is frozen for helpers)
 
