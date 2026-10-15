@@ -97,6 +97,10 @@ export function heldAssignee(held: OutboxEntry[], code: string, n: string): stri
 
 /** Whose sheet: the web's All / a person / Unassigned, the person being me. */
 export type Sheet = "mine" | "all" | "unassigned";
+/** The chip a person opens on (M-7): a housekeeper with rooms on today's
+    sheet sees Mine; anybody else, or a housekeeper with none, All (the web's). */
+export const firstSheet = (role: string | null, mine: number): Sheet => (role === "housekeeping" && mine > 0 ? "mine" : "all");
+
 export const onSheet = (rooms: BoardRoom[], sheet: Sheet, assignee: (n: string) => string | null, me: string | null) =>
   sheet === "all" ? rooms
     : sheet === "unassigned" ? rooms.filter((r) => assignee(r.number) == null)

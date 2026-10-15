@@ -2,7 +2,7 @@
    The board's rules on a tiny house: groups, names, the sheet, held taps, grey buttons. */
 import type { OutboxEntry } from "../../core/offline.ts";
 import {
-  boardRooms, heldAssignee, heldMark, inGroup, markPath, assignPath, onSheet, whyNotClean, whyNotInspected,
+  boardRooms, firstSheet, heldAssignee, heldMark, inGroup, markPath, assignPath, onSheet, whyNotClean, whyNotInspected,
 } from "./board.ts";
 
 /* No node:assert, so the app's own type check reads this file too. */
@@ -64,6 +64,12 @@ eq(onSheet(b, "mine", who, "me").map((r) => r.number), ["202", "203"]);
 eq(onSheet(b, "unassigned", who, "me").map((r) => r.number), ["201", "205", "206"]);
 eq(onSheet(b, "mine", who, null).length, 0);
 eq(onSheet(b, "all", who, "me").length, 6);
+
+/* The first chip (M-7): a housekeeper with rooms today opens on Mine, anybody else on All. */
+eq(firstSheet("housekeeping", 2), "mine");
+eq(firstSheet("housekeeping", 0), "all");
+eq(firstSheet("gm", 2), "all");
+eq(firstSheet(null, 2), "all");
 
 /* Grey buttons: the API's refusal of the person first, then the room's order. */
 eq(whyNotClean("housekeeping", "201", "dirty", false), null);

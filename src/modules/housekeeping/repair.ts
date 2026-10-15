@@ -9,6 +9,7 @@
    Pure: no React Native here, so `repair.check.ts` runs under node.
    ══════════════════════════════════════════════════════════════════ */
 
+import { whyNotTake } from "./block.ts";
 import { whyNotRepair } from "./roles.ts";
 
 /** RepairFlow.tsx PRIORITIES; the API's default is "normal". */
@@ -46,21 +47,16 @@ export const blankForm = (room: string, businessDate: string): RepairForm => ({
 });
 
 /** GET /house-now's rooms (src/modules/front-desk/data/stays.ts HouseNow). */
-export interface HouseNow { rooms: Array<{ number: string; inHouse: boolean }> }
+export interface HouseNow { rooms: Array<{ number: string; inHouse: boolean; outOfOrder: boolean }> }
 
 /** "Take room N out of service too" is offered only for a room nobody is
     in (RepairFlow's mayTakeOut; the API refuses an occupied room). The
     house unknown, nothing is offered. */
 export function offerTakeOut(room: string, house: HouseNow | null | undefined): boolean {
   const n = room.trim();
-  return n.length > 0 && house?.rooms.find((r) => r.number === n)?.inHouse === false;
-}
-
-/** A real calendar day written YYYY-MM-DD (the web's <input type="date">). */
-export function isDay(s: string): boolean {
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(s)) return false;
-  const d = new Date(`${s}T00:00:00Z`);
-  return !Number.isNaN(d.getTime()) && d.toISOString().slice(0, 10) === s;
+  const r = house?.rooms.find((x) => x.number === n);
+  /* Stricter than the web (M-7): not for a room already out of service. */
+  return n.length > 0 && r?.inHouse === false && r.outOfOrder === false;
 }
 
 /** Why "Raise it" is disabled, or null. The person's role first (the
@@ -72,12 +68,8 @@ export function whyNotRaise(f: RepairForm, role: string | null, offered: boolean
   const refused = whyNotRepair(role);
   if (refused) return refused;
   if (!f.what.trim()) return "What needs fixing?";
-  if (f.takeOut && offered) {
-    if (!isDay(f.from)) return "From which date?";
-    /* ponytail: no date picker without the owner's yes; a typed day is checked here. */
-    if (f.until && !isDay(f.until)) return "Until: write the day as 2026-10-20, or leave it empty if unknown.";
-    if (f.until && f.until < f.from) return "A block cannot end before it starts.";
-  }
+  /* The block's own rules (./block.ts): one place for both forms. */
+  if (f.takeOut && offered) return whyNotTake({ reason: f.reason, from: f.from, to: f.until || null, note: "" });
   return null;
 }
 

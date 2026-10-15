@@ -1,6 +1,6 @@
 /* Run: node --experimental-strip-types mobile/src/modules/housekeeping/block.check.ts
    Out of service: the day stepper's dates, the form's rule, the body, the words. */
-import { addDays, blockBody, blockSpan, reasonLabel, takenOut, whyNotTake, type BlockForm } from "./block.ts";
+import { addDays, blockBody, blockSpan, ended, reasonLabel, takenOut, whyNotTake, type BlockForm } from "./block.ts";
 
 /* No node:assert, so the app's own type check reads this file too. */
 const eq = (got: unknown, want: unknown) => {
@@ -21,7 +21,14 @@ eq(addDays("2026-03-29", 1), "2026-03-30"); // a European clock change: still on
 /* The web's rule: sendable with a reason and a from; never to < from. */
 const f: BlockForm = { reason: "out_of_order", from: "2026-10-14", to: null, note: "" };
 eq(whyNotTake(f), null); // no end date is allowed
-eq(whyNotTake({ ...f, to: "2026-10-14" }), null); // the web lets to = from
+eq(whyNotTake({ ...f, to: "2026-10-14" }), "A block holds at least one night: it ends the day after it starts, or later."); // the web lets to = from; the phone does not (M-7, R-8)
+eq(whyNotTake({ ...f, to: "2026-10-15" }), null); // one night
+
+/* An ended block (back on sale on or before the business date) gets no Put back (M-7, R-7). */
+eq(ended({ to: "2026-10-14" }, "2026-10-14"), true);
+eq(ended({ to: "2026-09-26" }, "2026-10-14"), true);
+eq(ended({ to: "2026-10-15" }, "2026-10-14"), false);
+eq(ended({ to: null }, "2026-10-14"), false); // no end date: still holding
 eq(whyNotTake({ ...f, to: "2026-10-20" }), null);
 eq(whyNotTake({ ...f, to: "2026-10-13" }), "A block cannot end before it starts.");
 eq(whyNotTake({ ...f, reason: "" }), "Why is the room coming out?");

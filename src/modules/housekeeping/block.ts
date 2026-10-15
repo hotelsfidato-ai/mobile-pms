@@ -32,13 +32,19 @@ export interface BlockForm { reason: string; from: string; to: string | null; no
 
 /** Null when the form may be sent, else why not, in the API's words.
     The web's rule (OutOfOrderFlow 226): disabled while `!from` or
-    `to < from`; the API refuses the same three (roomStatus.ts). */
+    `to < from`; the API refuses the same three (roomStatus.ts). Stricter
+    than both (M-7, R-8): an end on the start day holds no night. */
 export function whyNotTake(f: BlockForm): string | null {
   if (!BLOCK_REASONS.some((r) => r.value === f.reason)) return "Why is the room coming out?";
   if (!f.from) return "From which date?";
   if (f.to && f.to < f.from) return "A block cannot end before it starts.";
+  if (f.to && f.to === f.from) return "A block holds at least one night: it ends the day after it starts, or later.";
   return null;
 }
+
+/** A block whose end (the day the room is back on sale) has come: shown,
+    never put back (M-7, R-7), since deleting it rewrites past nights. */
+export const ended = (b: { to: string | null }, businessDate: string) => b.to != null && b.to <= businessDate;
 
 /** What POST …/rooms/:n/block is sent: the web's blockRoom input. */
 export const blockBody = (f: BlockForm) => ({

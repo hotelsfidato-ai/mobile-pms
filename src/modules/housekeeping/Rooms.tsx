@@ -13,7 +13,7 @@ import { list, subscribe } from "../../core/outbox";
 import { c, face, space, t } from "../../core/theme";
 import { Capsule, Card, Head, ReadFailed, Screen, useRead } from "../../core/ui";
 import {
-  assignPath, boardRooms, GROUPS, heldAssignee, heldMark, inGroup, markPath, onSheet, whyNotClean, whyNotInspected,
+  assignPath, boardRooms, firstSheet, GROUPS, heldAssignee, heldMark, inGroup, markPath, onSheet, whyNotClean, whyNotInspected,
   type BoardRoom, type Housekeeper, type HouseNow, type RoomAssignment, type Sheet,
 } from "./board";
 import { whyNotAssign, whyNotBlock, whyNotRepair } from "./roles";
@@ -60,7 +60,8 @@ export function Rooms({ hotel, role, me, onBack, onSignOut }: {
   const key = ["housekeeping", code, "rooms", date];
   const cache = useQueryClient();
   const board = useRead(() => readBoard(code, date), key);
-  const [sheet, setSheet] = useState<Sheet>("all");
+  /* Null until somebody taps a chip: until then the first sheet follows the role (M-7). */
+  const [chosen, setSheet] = useState<Sheet | null>(null);
   const [chipSaid, setChipSaid] = useState<string | null>(null);
   const [said, setSaid] = useState<Said | null>(null);
   const [picking, setPicking] = useState<string | null>(null);
@@ -92,6 +93,7 @@ export function Rooms({ hotel, role, me, onBack, onSignOut }: {
   const assignee = (n: string) => { const h = heldAssignee(held, code, n); return h === undefined ? given.get(n)?.staffId ?? null : h; };
   const nameOf = (id: string) => staff.find((p) => p.id === id)?.name ?? [...given.values()].find((a) => a.staffId === id)?.staffName ?? DASH;
   const rooms = data?.rooms ?? [];
+  const sheet = chosen ?? firstSheet(role, onSheet(rooms, "mine", assignee, me).length);
   const shown = onSheet(rooms, sheet, assignee, me);
   const sheetReason = data?.sheet.error ? `Who has which room could not be read. ${data.sheet.error}` : null;
   const assignReason = whyNotAssign(role)

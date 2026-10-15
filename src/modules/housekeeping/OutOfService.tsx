@@ -1,5 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { ChevronLeft, Circle, CircleCheck, Minus, Plus, RotateCcw, Wrench } from "lucide-react-native";
+import { ChevronLeft, Circle, CircleCheck, Plus, RotateCcw, Wrench } from "lucide-react-native";
 import { useState, type ReactNode } from "react";
 import { Pressable, Text, TextInput, View } from "react-native";
 import type { Room } from "../../../../src/data/repositories/types";
@@ -9,8 +9,9 @@ import { isOnline } from "../../core/offline";
 import { c, face, t } from "../../core/theme";
 import { Capsule, Card, Head, ReadFailed, Screen, s, useRead } from "../../core/ui";
 import {
-  addDays, BLOCK_REASONS, blockBody, blockSpan, reasonLabel, statusWord, takenOut, whyNotTake, type BlockForm,
+  addDays, BLOCK_REASONS, blockBody, blockSpan, ended, reasonLabel, statusWord, takenOut, whyNotTake, type BlockForm,
 } from "./block";
+import { Day } from "./DayStepper";
 import { whyNotBlock } from "./roles";
 
 /* ══════════════════════════════════════════════════════════════════
@@ -142,10 +143,14 @@ export function OutOfService({ hotel, room: n, role, onBack }: {
                   <Text style={t.heading}>{reasonLabel(b.reason)}</Text>
                   <Text style={[t.caption, t.tab]}>{blockSpan(b)}</Text>
                 </View>
-                <Button
-                  label="Put back" icon={RotateCcw} disabled={off} onPress={() => void putBack(b.id)}
-                  a11y={`Put room ${n} back: ${reasonLabel(b.reason)}, ${blockSpan(b)}`} hint={forbidden ?? undefined}
-                />
+                {ended(b, hotel.businessDate) ? (
+                  <Text style={[t.caption, { color: c.grey600 }]}>Ended</Text>
+                ) : (
+                  <Button
+                    label="Put back" icon={RotateCcw} disabled={off} onPress={() => void putBack(b.id)}
+                    a11y={`Put room ${n} back: ${reasonLabel(b.reason)}, ${blockSpan(b)}`} hint={forbidden ?? undefined}
+                  />
+                )}
               </View>
             ))}
           </Card>
@@ -178,7 +183,7 @@ export function OutOfService({ hotel, room: n, role, onBack }: {
               </Field>
 
               <Field label="From">
-                <Day label="From" value={form.from} off={off} onChange={(from) => set({ from })} />
+                <Day label="From" value={form.from} off={off} onChange={(from) => set({ from, to: form.to && form.to <= from ? addDays(from, 1) : form.to })} />
               </Field>
 
               <Field label="Until" hint="Leave empty if unknown">
@@ -188,7 +193,7 @@ export function OutOfService({ hotel, room: n, role, onBack }: {
                   </View>
                 ) : (
                   <View style={{ gap: 8 }}>
-                    <Day label="Until" value={form.to} min={form.from} off={off} onChange={(to) => set({ to })} />
+                    <Day label="Until" value={form.to} min={addDays(form.from, 1)} off={off} onChange={(to) => set({ to })} />
                     <View style={{ flexDirection: "row" }}>
                       <Button label="No end date" disabled={off} onPress={() => set({ to: null })} />
                     </View>
@@ -224,33 +229,6 @@ function Field({ label, hint, children }: { label: string; hint?: string; childr
       {children}
       {hint ? <Text style={t.caption}>{hint}</Text> : null}
     </View>
-  );
-}
-
-/** The day stepper: no date-picker package (ponytail; the web uses its
-    date input). Never below `min`. */
-function Day({ label, value, min, off, onChange }: {
-  label: string; value: string; min?: string; off: boolean; onChange: (date: string) => void;
-}) {
-  return (
-    <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-      <Step icon={Minus} a11y={`${label}: a day earlier`} disabled={off || (min != null && value <= min)} onPress={() => onChange(addDays(value, -1))} />
-      <Text style={[t.label, t.tab, { flex: 1, textAlign: "center", color: off ? c.grey500 : c.ink900 }]} accessibilityLiveRegion="polite">
-        {dateLong(value)}
-      </Text>
-      <Step icon={Plus} a11y={`${label}: a day later`} disabled={off} onPress={() => onChange(addDays(value, 1))} />
-    </View>
-  );
-}
-
-function Step({ icon: Icon, a11y, disabled, onPress }: { icon: typeof Plus; a11y: string; disabled: boolean; onPress: () => void }) {
-  return (
-    <Pressable
-      onPress={onPress} disabled={disabled} accessibilityRole="button" accessibilityLabel={a11y}
-      style={({ pressed }) => [s.capsule, { width: 44, paddingHorizontal: 0 }, disabled ? { backgroundColor: c.grey50, borderColor: c.grey200 } : pressed && { backgroundColor: c.grey100 }]}
-    >
-      <Icon size={18} color={disabled ? c.grey300 : c.grey700} />
-    </Pressable>
   );
 }
 

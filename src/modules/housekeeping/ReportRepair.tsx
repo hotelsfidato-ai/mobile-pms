@@ -13,6 +13,8 @@ import {
   BLOCK_REASONS, PRIORITIES, REPAIR_KINDS, blankForm, blockBody, heldSentence, needsLine, offerTakeOut,
   whyNotRaise, workOrderBody, type HouseNow, type RepairForm,
 } from "./repair";
+import { addDays } from "./block";
+import { Day } from "./DayStepper";
 import { whyNotBlock } from "./roles";
 
 /* ══════════════════════════════════════════════════════════════════
@@ -179,18 +181,19 @@ export function ReportRepair({ hotel, room, role, onDone }: {
                     {BLOCK_REASONS.map((r) => <Chip key={r.value} label={r.label} on={f.reason === r.value} onPress={() => set({ reason: r.value })} wide />)}
                   </View>
                 </Field>
-                <View style={{ flexDirection: "row", gap: 12 }}>
-                  <View style={{ flex: 1 }}>
-                    <Field label="From" required>
-                      <Input value={f.from} onChangeText={(from) => set({ from })} label="From" placeholder="2026-10-20" date />
-                    </Field>
-                  </View>
-                  <View style={{ flex: 1 }}>
-                    <Field label="Until" hint="Leave empty if unknown">
-                      <Input value={f.until} onChangeText={(until) => set({ until })} label="Until" placeholder="2026-10-20" date />
-                    </Field>
-                  </View>
-                </View>
+                <Field label="From" required>
+                  <Day label="From" value={f.from} off={false} onChange={(from) => set({ from, until: f.until && f.until <= from ? addDays(from, 1) : f.until })} />
+                </Field>
+                <Field label="Until" hint="Leave empty if unknown">
+                  {f.until ? (
+                    <View style={{ gap: 8 }}>
+                      <Day label="Until" value={f.until} min={addDays(f.from, 1)} off={false} onChange={(until) => set({ until })} />
+                      <Chips><Chip label="No end date" on={false} onPress={() => set({ until: "" })} /></Chips>
+                    </View>
+                  ) : (
+                    <Chips><Chip label="Set an end date" on={false} onPress={() => set({ until: addDays(f.from, 1) })} /></Chips>
+                  )}
+                </Field>
               </>
             ) : null}
           </Card>
