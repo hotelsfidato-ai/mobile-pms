@@ -1,5 +1,5 @@
-import { ChevronLeft } from "lucide-react-native";
-import { Text, View } from "react-native";
+import { ChevronLeft, ChevronRight } from "lucide-react-native";
+import { Pressable, Text, View } from "react-native";
 import type { Room, Stay } from "../../../../src/data/repositories/types";
 import { orNull, type Hotel } from "../../core/api";
 import { DASH, cash, count, dateLong, dateShort, monthStart, pct } from "../../core/format";
@@ -49,7 +49,7 @@ const TILE: Record<TileState, { bg: string; ring: string; note: string }> = {
   none: { bg: c.white, ring: c.grey200, note: c.grey600 },
 };
 
-export function Dashboard({ hotel, onBack }: { hotel: Hotel; onBack: () => void }) {
+export function Dashboard({ hotel, onBack, onOpenRooms }: { hotel: Hotel; onBack: () => void; onOpenRooms: () => void }) {
   const date = hotel.businessDate;
   const read = useRead(() => readDay(hotel.code, date), ["dashboard", hotel.code, date]);
   const r = read.data?.report;
@@ -108,6 +108,8 @@ export function Dashboard({ hotel, onBack }: { hotel: Hotel; onBack: () => void 
           label="Needs cleaning" n={w?.dirty} loading={loading}
           state={w == null ? "none" : w.dirty > 0 ? "due" : "done"}
           note={w ? ["Free rooms ready", `${w.ready} of ${w.empty}`] : []}
+          /* The web's tile opens the housekeeping board (Dashboard.tsx 312). */
+          onPress={onOpenRooms}
         />
       </View>
 
@@ -156,13 +158,22 @@ export function Dashboard({ hotel, onBack }: { hotel: Hotel; onBack: () => void 
   );
 }
 
-function WorkTile({ label, n, left, state, note, loading }: {
-  label: string; n: number | null | undefined; left?: number; state: TileState; note: string[]; loading: boolean;
+function WorkTile({ label, n, left, state, note, loading, onPress }: {
+  label: string; n: number | null | undefined; left?: number; state: TileState; note: string[]; loading: boolean; onPress?: () => void;
 }) {
   const tone = TILE[state];
   return (
-    <View style={{ flexBasis: "47%", flexGrow: 1, backgroundColor: tone.bg, borderColor: tone.ring, borderWidth: 1, borderRadius: 12, paddingHorizontal: 14, paddingVertical: 12, gap: 6 }}>
-      <Text style={t.label} numberOfLines={1}>{label}</Text>
+    <Pressable
+      disabled={!onPress}
+      onPress={onPress}
+      accessibilityRole={onPress ? "button" : undefined}
+      accessibilityHint={onPress ? `Opens ${label.toLowerCase()}` : undefined}
+      style={({ pressed }) => ({ flexBasis: "47%", flexGrow: 1, backgroundColor: pressed ? c.grey100 : tone.bg, borderColor: tone.ring, borderWidth: 1, borderRadius: 12, paddingHorizontal: 14, paddingVertical: 12, gap: 6 })}
+    >
+      <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
+        <Text style={[t.label, { flex: 1 }]} numberOfLines={1}>{label}</Text>
+        {onPress ? <ChevronRight size={16} color={c.grey500} /> : null}
+      </View>
       <View style={{ flexDirection: "row", alignItems: "baseline", gap: 8 }}>
         <Text style={[t.figure, n == null ? { color: c.grey500 } : state === "done" && { color: c.success600 }]}>
           {loading ? "…" : count(n)}{state === "done" && !loading ? " ✓" : ""}
@@ -174,7 +185,7 @@ function WorkTile({ label, n, left, state, note, loading }: {
           {part}
         </Text>
       ))}
-    </View>
+    </Pressable>
   );
 }
 

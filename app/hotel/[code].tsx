@@ -9,5 +9,11 @@ export default function DashboardRoute() {
   /* Only a property the API listed for this person. */
   const hotel = s.who.hotels.find((h) => h.code === code);
   if (!hotel) return <Redirect href="/all" />;
-  return <Dashboard hotel={hotel} onBack={() => (router.canGoBack() ? router.back() : router.replace("/all"))} />;
+  return (
+    <Dashboard
+      hotel={hotel}
+      onBack={() => (router.canGoBack() ? router.back() : router.replace("/all"))}
+      onOpenRooms={() => router.push(`/housekeeping/${hotel.code}`)}
+    />
+  );
 }
