@@ -1,4 +1,4 @@
-# pos — the restaurant waiter on a phone (slice 3) — DRAFT, waiting on the owner
+# pos — the restaurant waiter on a phone (slice 3)
 
 **Web twin:** `src/modules/pos` one folder up — `pages/Floor.tsx` (Tables, `/pos/:code/tables`, the
 waiter's first screen: WORKING_HOME), `flows/OrderPad.tsx` (a round built on the device, one Send),
@@ -34,16 +34,44 @@ second look before merging (AGENTS rule 7).**
   (question 2).
 - **Live:** the server streams `/live` (SSE); the web also polls (floor 30 s) as a backstop.
 
-## Proposed for the phone (the owner decides; questions in HANDOVER)
+## Decided (M-9, 15 Oct): every waiter act, exactly as the web's mobile version
 
-| Screen | Web twin | On the phone |
-|---|---|---|
-| Tables | Floor | sections and tiles as the web, the amount or a dash, minutes, "N ready" → Taken; tap a free table → the order pad, a running one → a new round or the order |
-| Order pad | OrderPad | the menu by section, dishes with their variations and sides (the web's DishDialog rules), the pad's "before tax" total, one Send |
-| The order | Till / Terminal | its lines from the server (totals, tax, the server's figures only), quantity and strike (a sent dish: managers only, with a reason, disabled with it for others), Send to the kitchen, Print bill, Charge to room, and the settle methods the owner picks |
+**The reference is the web as it draws itself today at phone width:** `../.local/pos-reference/`
+(eight pictures and a README, captured from the running website, looking only), then the web's own
+code (`Floor.tsx`, `OrderPad.tsx`, `DishDialog.tsx`, `Till.tsx`, `Terminal.tsx`, `BillSlip.tsx`,
+`printBill.tsx`). Same words, same order of controls, same states. Where the web is broken on a
+phone (R-15: the Till runs off the right edge) the phone draws the same thing, unclipped.
 
-**Live updates:** polling only at first (the web's 30 s backstop, and after every write); the
-stream later. **Test person:** none has the `pos` role (question 4).
+**Built by the mobile chat first (`5971acf5`):** `types.ts` (the till's shapes, copied by name
+from the web's `data/till.ts`), `roles.ts` (`whyNotRing`, `whyNotRead`, `whyNotStrikeSent`: the
+API's lists and sentences), `Pay.tsx` (the contract below), `expo-print` ~57.0.2, the test waiter
+`dev-pos` (`scripts/dev-pos.sql`, "Waiter" on the sign-in), a waiter landing on Tables, a room
+charge's own held words (R-14).
+
+## The split: three Opus helpers, one part each
+
+| Helper (copy, branch) | Builds | Its route (NEW files only) | Its own files (prefix) |
+|---|---|---|---|
+| tables (`pos-tables`, `mobile/pos-tables`) | Tables (the floor: tiles and states, the key, the KOT printer lines, Close early / Reopen, "N ready" → Taken, Clear) **and the order pad** (menu by section, search, a dish's sheet with variations, sides and the kitchen note, the round, Send = one batch) | `app/pos/[code]/tables.tsx` → `/pos/5EL/tables`; `app/pos/[code]/pad.tsx` → `/pos/5EL/pad?table=N1` or `?order=<id>&table=T9`, shown as a modal sheet like the web's | `Tables*`, `OrderPad*`, `DishSheet*`, `floor.ts`, `pad.ts` (+ `.check.ts`) |
+| order (`pos-order`, `mobile/pos-order`) | The order (the web's Till order card at phone width): header, lines from the server, quantity, strike (a sent dish: managers only, with a reason), Taken, Send to the kitchen, Change discount / promotion, Round off, Close unpaid, Clear | `app/pos/[code]/order/[id].tsx` → `/pos/5EL/order/<id>` | `Order*`, `order.ts` (+ `.check.ts`) |
+| pay (`pos-pay`, `mobile/pos-pay`) | Paying and printing: Charge to room (choose the guest when a room has two bills; the whole bill only), Cash · Card · UPI, Part - pay two ways, the cash limit, and **Print bill** (to the bill printer, else from the phone with expo-print) | none (components) | `Pay.tsx` (replaces the stub), `pay.ts`, `bill.ts` (+ `.check.ts`) |
+
+**How the parts meet (fixed now, so nobody waits):**
+- Tables opens the pad by `router.push("/pos/<code>/pad?table=<T>")` (a free table) or
+  `"?order=<id>&table=<T>"` (a new round on a running one), and the order by
+  `router.push("/pos/<code>/order/<id>")` (the web's Eye). The order adds a round the same way.
+- `PayActions` (props `{ hotel, order, role, onChanged }`) sits under the order's own buttons;
+  `PrintBill` (`{ hotel, orderId, onPrinted? }`) on the order and on a tile. Until merged, the stub
+  draws nothing: build against its props.
+- Reads: `useRead(fn, ["pos", code, "<tables|pad|order|pay>", …])`; after any accepted write
+  invalidate the prefix `["pos", code]`. Polling as the web's backstop (the floor every 30 s, while
+  on screen); the live stream later.
+- Every write through `send()`; a `HeldError` said as held (never a failure), an `ApiError` 503 is
+  the web's refusal sentence, any other `ApiError` the server's own words.
+- **Money is the server's.** The phone never totals a bill: Net, Discount, Taxable, Tax, Total,
+  Round off and Payable come from the order. The pad's "before tax" figure is the web's
+  `src/modules/pos/lib/pricing.ts`, ported with its check. A printed bill takes its tax lines from
+  the server's figures, never per line (R-11).
 
 ## Faults found in the web and the API (in `docs/api-requests.md`, R-10 to R-14)
 
