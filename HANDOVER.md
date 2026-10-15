@@ -30,7 +30,8 @@
 
 | Module / core | Held by | Since |
 |---|---|---|
-| everything | the mobile chat | 15 Oct |
+| core, reports, everything else | the mobile chat | 15 Oct |
+| housekeeping (screens) | a Sonnet helper: `.claude/worktrees/housekeeping`, branch `mobile/housekeeping`; Expo 8082, API 8861 on `fidato_mobile_hk` (API pid 31984, started by the mobile chat) | 15 Oct |
 
 **Next, in order** (slice 2, housekeeping)
 1. The screens (Rooms, Report a repair, Out of service) by a helper in its own copy (AGENTS.md),
