@@ -13,7 +13,8 @@
 - **Slice 1** (the owner's figures) approved on the phone. **Slice 2** (housekeeping: Rooms, Report a
   repair, Out of service) **built and merged** into `mobile/app` by three Opus helpers (M-6); its
   core (writes with the key from the first tap, the offline queue, the held bar, Inter, icons) too.
-  `bash scripts/gates.sh` ALL GATES GREEN on the merge. **Not yet seen on a phone.**
+  `bash scripts/gates.sh` ALL GATES GREEN on the merge. **The owner looked at it on the phone on
+  15 Oct: "it's good".**
 - The web's own faults found on the way: `docs/api-requests.md` R-1 to R-9, for the owner to take
   to the PMS's main chat.
 - **Running:** API 8860 (pid 26964, on `fidato_mobile`) and Expo 8081 (listener pid 6624, its own
@@ -30,10 +31,9 @@
 | everything (core, reports, housekeeping) | the mobile chat | 15 Oct |
 
 **Next, in order**
-1. The owner's look at slice 2 on the phone (`exp://192.168.1.33:8081`, Expo Go, same Wi-Fi; sign in
-   as Housekeeping, and as Owner → a property → "Needs cleaning"), and their changes.
-2. The owner's answers below; then the build route decision (M-3: after slice 2) and slice 3, the
-   restaurant waiter.
+1. The build route (M-3: decided after slice 2), asked 15 Oct.
+2. Slice 3, the restaurant waiter: the web's waiter work mapped (read-only helper), then its
+   `MODULE.md` and its decisions (printing, money, offline) asked of the owner.
 
 **Questions waiting for the owner:** none. The four of 15 Oct were answered as recommended (M-7)
 and built (`babf162a`, gates green): a day stepper on both forms; a housekeeper opens on Mine

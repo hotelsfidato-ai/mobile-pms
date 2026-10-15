@@ -53,7 +53,9 @@ least the day after From. A check for each, each broken once and caught. Gates g
 `babf162a`; seen on 8081 by script: the repair form's steppers (Until starts the day after From,
 its minus disabled there), room 308's ended block without Put back beside its open one with it.
 
-**Left open:** the owner's look at slice 2 on the phone; then the build route (M-3) and slice 3.
+**The owner's look on the phone (15 Oct): "it's good".**
+
+**Left open:** the build route (M-3) and slice 3, the restaurant waiter.
 
 ---
 
