@@ -37,6 +37,7 @@
 | pos: the kitchen (slice 6) | Opus helper "kitchen": `.claude/worktrees/kitchen`, `mobile/kitchen`; Expo 8087, API 8866 on `fidato_mobile_kitchen` | 15 Oct |
 | housekeeping: work orders (slice 7, maintenance) | Opus helper "maintenance": `.claude/worktrees/maintenance`, `mobile/maintenance`; Expo 8088, API 8867 on `fidato_mobile_maint` | 15 Oct |
 | guest-services (slice 8) | Opus helper "guest services": `.claude/worktrees/guest-services`, `mobile/guest-services`; Expo 8089, API 8868 on `fidato_mobile_gs` | 15 Oct |
+| core: real sign-in (slice 5, M-10) | Opus helper "signin": `.claude/worktrees/signin`, `mobile/signin` (may edit the core's sign-in files only); Expo 8090, API 8869 on `fidato_mobile_signin` | 17 Oct |
 
 **Next, in order**
 1. The build route is decided (M-8): Expo's cloud for both platforms, only `mobile/` uploaded, the
