@@ -12,7 +12,7 @@ review and green gates.
 | ✅ Merged, seen on the owner's phone | **6** | Sign in (development) · All properties · Dashboard · Rooms · Report a repair · Out of service |
 | 🔨 Written and committed in their copies, not yet gated or merged | **3** | Tables · Order pad (with a dish's sheet) · The order (with paying and printing in it) |
 | ⏳ Tier 1, assigned to a copy, not started | **12** | Arrivals · In house · Walk-in · Check-in · A stay's bill and check-out · Kitchen · Work orders · Guest requests · A request · Wake-up calls · Online check-ins (desk) · The menu (every role's list of its screens) |
-| ⏳ Tier 1, waiting on the owner | **2** | Real sign-in (email and password) · Switch hotel — slice 5: the `firebase` package and the public sign-in settings |
+| ⏳ Tier 1, being built (M-10) | **2** | Real sign-in (email and password) · Switch hotel — slice 5; the owner's public sign-in settings to come |
 | ⏳ Tier 2, planned (one copy each, in waves) | **15** | below |
 | ◻ Tier 3, desk set-up: kept on the website unless the owner says otherwise | 9 | below |
 
@@ -30,7 +30,7 @@ review and green gates.
 | 3 Waiter | Paying, printing (in the order) | `pos-pay` · `mobile/pos-pay` | `_hk3` · 8863 · 8084 | 🔨 `a2f82310`, gates not run |
 | 4a Reception | Arrivals, In house, Walk-in, Check-in | `front-desk` · `mobile/front-desk` | `_desk` · 8864 · 8085 | ⏳ restarting |
 | 4b Reception money | A stay's bill, payments, check-out | `folio` · `mobile/folio` | `_folio` · 8865 · 8086 | ⏳ restarting |
-| 5 Real sign-in | Sign in, Switch hotel | (made when unblocked) | — | ⏸ the owner: `firebase` version and the public settings; reading live data |
+| 5 Real sign-in | Sign in, Switch hotel | `signin` · `mobile/signin` | `_signin` · 8869 · 8090 | ⏳ started 17 Oct (M-10); the owner's public settings to come |
 | 6 Kitchen | Kitchen | `kitchen` · `mobile/kitchen` | `_kitchen` · 8866 · 8087 | ⏳ restarting |
 | 7 Maintenance | Work orders | `maintenance` · `mobile/maintenance` | `_maint` · 8867 · 8088 | ⏳ restarting |
 | 8 Guest services | Requests, a request, wake-up calls, online check-ins | `guest-services` · `mobile/guest-services` | `_gs` · 8868 · 8089 | ⏳ restarting |
