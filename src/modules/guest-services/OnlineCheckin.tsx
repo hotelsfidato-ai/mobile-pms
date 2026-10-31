@@ -4,17 +4,17 @@ import { Text, View } from "react-native";
 import type { Hotel } from "../../core/api";
 import { c, face, space, t } from "../../core/theme";
 import { Head, Screen, useRead } from "../../core/ui";
-import { confirmDetails, getDesk, handleRequest, setAsideDetails } from "./data";
-import { Back, Box, Btn, Empty, Failed, Loading, NotYours, SectionHead, Stale, Toast, saidOf, type Said } from "./kit";
+import { confirmDetails, getDesk, getKeptPhotos, handleRequest, setAsideDetails } from "./data";
+import { Back, Box, Btn, Empty, Failed, Loading, NotYours, SectionHead, Stale, Toast, saidOf, type Said, body } from "./kit";
 import { ON_THE_WEBSITE, whyNotDesk } from "./roles";
 import {
-  KIND_LABEL, dateShort, dateTime, detailLines, photoLine, type DeskView, type OpenRequest, type RoomCardRow, type WaitingDetails,
+  KIND_LABEL, dateShort, dateTime, detailLines, keptLine, photoLine, type DeskView, type OpenRequest, type RoomCardRow, type WaitingDetails,
 } from "./rules";
 
 /* ══════════════════════════════════════════════════════════════════
    ONLINE CHECK-IN, THE DESK'S SIDE on a phone — the web's
    /h/:code/online-checkin (src/modules/online-checkin/pages/Desk.tsx;
-   picture pms-shots/all/09-front-desk-online-check-in). What a guest's own
+   picture pms-shots/flows/guest-services/w-online-checkin). What a guest's own
    page leaves for a person: details to check against the ID (only a
    clerk's Confirm reaches guest_documents, and so Form C), spa and laundry
    requests to mark, and the room cards.
@@ -23,8 +23,8 @@ import {
    · printing a card: the phone has no QR library (the web's `qrcode`
      1.5.4), and a card is shown once and printing kills the old one, so
      the button must not go live until the QR can be drawn;
-   · the ID photo: Show, Remove, and the kept photos (a question for the
-     owner: should an ID's picture open on a phone at all?).
+   · the ID photo itself: Show, Remove, Delete (a question for the owner:
+     should an ID's picture open on a phone at all?). The kept list is read.
    The guest's own page stays on the web.
    ══════════════════════════════════════════════════════════════════ */
 
@@ -71,9 +71,7 @@ export function OnlineCheckin({ hotel, role, onBack }: { hotel: Hotel; role: str
                   onConfirm={(d) => void run(() => confirmDetails(code, d.id), { title: "Confirmed", body: d.guest, tone: "ok" })}
                   onAside={(d) => void run(() => setAsideDetails(code, d.id))}
                 />
-                {data.idPhotos?.keeper ? (
-                  <Section title="ID photos kept"><Text style={t.label}>{ON_THE_WEBSITE}</Text></Section>
-                ) : null}
+                {data.idPhotos?.keeper ? <KeptPhotos code={code} /> : null}
                 <Requests
                   rows={data.requests} busy={busy}
                   onHandle={(q, status) => void run(() => handleRequest(code, q.id, status))}
@@ -99,7 +97,7 @@ function Waiting({ rows, photosOff, busy, onConfirm, onAside }: {
   return (
     <Section title="Details waiting to be checked">
       {/* The server's own sentence where this hotel cannot keep ID photos. */}
-      {photosOff ? <Text style={[t.label, { marginBottom: 12 }]}>{photosOff}</Text> : null}
+      {photosOff ? <Text style={[body, { marginBottom: 12 }]}>{photosOff}</Text> : null}
       {rows.length === 0 ? (
         <Box><Empty compact title="Nothing waiting" description="When a guest sends their ID and address from their own page, it waits here until somebody checks it against the ID." /></Box>
       ) : (
@@ -107,21 +105,21 @@ function Waiting({ rows, photosOff, busy, onConfirm, onAside }: {
           {rows.map((d) => (
             <Box key={d.id} style={{ paddingHorizontal: space.cardX, paddingVertical: space.cardY }}>
               <View style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "baseline", justifyContent: "space-between", gap: 8 }}>
-                <Text style={[t.label, { color: c.ink900 }]}>{d.guest}</Text>
-                <Text style={[t.label, t.tab]}>{d.reference} · sent {dateTime(d.submittedAt)}</Text>
+                <Text style={[body, { color: c.ink900 }]}>{d.guest}</Text>
+                <Text style={[body, t.tab]}>{d.reference} · sent {dateTime(d.submittedAt)}</Text>
               </View>
               {/* What they typed, under a hairline: label, then value. */}
               <View style={{ marginTop: 12, borderTopWidth: 1, borderTopColor: c.grey100, paddingTop: 10, gap: 6 }}>
                 {detailLines(d).map(([label, value]) => (
                   <View key={label} style={{ flexDirection: "row", gap: 16 }}>
-                    <Text style={[t.label, { color: c.grey500, width: 130 }]}>{label}</Text>
-                    <Text style={[t.label, { flex: 1, color: c.ink900 }]}>{value}</Text>
+                    <Text style={[body, { color: c.grey500, width: 130 }]}>{label}</Text>
+                    <Text style={[body, { flex: 1, color: c.ink900 }]}>{value}</Text>
                   </View>
                 ))}
               </View>
               {photosOff ? null : d.photo ? (
                 <View style={{ marginTop: 12, borderTopWidth: 1, borderTopColor: c.grey100, paddingTop: 10, gap: 8 }}>
-                  <Text style={t.label}>{photoLine(d.photo)} An Aadhaar must have its first 8 digits hidden.</Text>
+                  <Text style={body}>{photoLine(d.photo)} An Aadhaar must have its first 8 digits hidden.</Text>
                   <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
                     <Btn label="Show the photo" disabled onPress={() => undefined} />
                     <Btn label="Remove the photo" variant="ghost" disabled onPress={() => undefined} />
@@ -129,7 +127,7 @@ function Waiting({ rows, photosOff, busy, onConfirm, onAside }: {
                   <Text style={[t.caption, { color: c.grey600 }]}>{ON_THE_WEBSITE}</Text>
                 </View>
               ) : (
-                <Text style={[t.label, { color: c.grey500, marginTop: 12 }]}>No ID photo was sent with these.</Text>
+                <Text style={[body, { color: c.grey500, marginTop: 12 }]}>No ID photo was sent with these.</Text>
               )}
               <View style={{ marginTop: 14, gap: 8 }}>
                 <Btn label="Confirm against the ID" a11y={`Confirm against the ID: ${d.guest}`} disabled={busy} onPress={() => onConfirm(d)} style={{ alignSelf: "flex-start" }} />
@@ -139,6 +137,32 @@ function Waiting({ rows, photosOff, busy, onConfirm, onAside }: {
           ))}
         </View>
       )}
+    </Section>
+  );
+}
+
+/** "ID photos kept": the owner, an administrator, the GM (IdPhotosAtDesk.tsx KeptPhotos). */
+function KeptPhotos({ code }: { code: string }) {
+  const kept = useRead(() => getKeptPhotos(code), ["guest-services", code, "online-checkin", "kept"]);
+  const rows = kept.data?.photos ?? [];
+  return (
+    <Section title="ID photos kept">
+      {kept.error ? <Text style={[body, { color: c.red700 }]}>{kept.error}</Text>
+        : !kept.data ? <Loading words="Reading the photos kept…" />
+          : rows.length === 0 ? (
+            <Box><Empty compact title="None kept" description="Once the desk has checked a guest's details, or added a photo at check-in, the photo is kept here for the owner, an administrator and the general manager." /></Box>
+          ) : (
+            <Box>
+              {rows.map((p, i) => (
+                <View key={p.id} style={{ paddingHorizontal: 16, paddingVertical: 12, gap: 8, borderTopWidth: i ? 1 : 0, borderTopColor: c.grey100 }}>
+                  <Text style={[body, { color: c.ink900 }]}>{p.guest}</Text>
+                  <Text style={[body, t.tab]}>{keptLine(p)}</Text>
+                  {p.notYetDeleted ? <Text style={[body, { color: c.red700 }]}>Removed here, but not yet deleted from Drive.</Text> : null}
+                  <Text style={[t.caption, { color: c.grey600 }]}>{ON_THE_WEBSITE}</Text>
+                </View>
+              ))}
+            </Box>
+          )}
     </Section>
   );
 }
@@ -154,10 +178,10 @@ function Requests({ rows, busy, onHandle }: {
         <View style={{ gap: 12 }}>
           {rows.map((q) => (
             <Box key={q.id} style={{ paddingHorizontal: space.cardX, paddingVertical: space.cardY }}>
-              <Text style={[t.label, { color: c.ink900, ...face[600] }]}>
-                {KIND_LABEL[q.kind] ?? q.kind}: <Text style={[t.label, { color: c.ink900 }]}>{q.what}</Text>
+              <Text style={[body, { color: c.ink900, ...face[600] }]}>
+                {KIND_LABEL[q.kind] ?? q.kind}: <Text style={[body, { color: c.ink900 }]}>{q.what}</Text>
               </Text>
-              <Text style={[t.label, { marginTop: 2 }]}>
+              <Text style={[body, { marginTop: 2 }]}>
                 {q.guest} · {q.reference}{q.wanted ? ` · wanted ${q.wanted}` : ""} · asked {dateTime(q.createdAt)}
               </Text>
               <View style={{ marginTop: 12, flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
@@ -175,17 +199,14 @@ function Requests({ rows, busy, onHandle }: {
 function RoomCards({ rooms }: { rooms: RoomCardRow[] }) {
   return (
     <View>
-      <SectionHead title="Room cards" note={CARD_NOTE} />
-      <View style={{ gap: 4, marginBottom: 12 }}>
-        <Btn label="Print cards for every room" disabled onPress={() => undefined} style={{ alignSelf: "flex-start" }} />
-        <Text style={[t.caption, { color: c.grey600 }]}>{ON_THE_WEBSITE}</Text>
-      </View>
+      <SectionHead title="Room cards" note={CARD_NOTE} action={<Btn label="Print cards for every room" disabled onPress={() => undefined} />} />
+      <Text style={[t.caption, { color: c.grey600, marginBottom: 12, marginTop: -4 }]}>{ON_THE_WEBSITE}</Text>
       <Box>
         {rooms.map((r, i) => (
           <View key={r.id} style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 12, paddingHorizontal: 16, paddingVertical: 12, minHeight: 56, borderTopWidth: i ? 1 : 0, borderTopColor: c.grey100 }}>
             <View style={{ flex: 1, minWidth: 0 }}>
-              <Text style={[t.label, t.tab, { color: c.ink900 }]}>Room {r.number}</Text>
-              <Text style={t.label}>{r.cardSince ? `Card printed ${dateShort(r.cardSince)}` : "No card yet"}</Text>
+              <Text style={[body, t.tab, { color: c.ink900 }]}>Room {r.number}</Text>
+              <Text style={body}>{r.cardSince ? `Card printed ${dateShort(r.cardSince)}` : "No card yet"}</Text>
             </View>
             <Btn label={r.cardSince ? "Print a new card" : "Print a card"} a11y={`${r.cardSince ? "Print a new card" : "Print a card"} for room ${r.number}: ${ON_THE_WEBSITE}`} variant="ghost" disabled onPress={() => undefined} />
           </View>
@@ -199,9 +220,9 @@ function RoomCards({ rooms }: { rooms: RoomCardRow[] }) {
 function HotelCard({ name }: { name: string }) {
   return (
     <Box style={{ paddingHorizontal: space.cardX, paddingVertical: space.cardY, alignItems: "center", gap: 12 }}>
-      <Text style={t.label}>{name}</Text>
-      <Text style={t.heading}>Your stay, by room and phone</Text>
-      <Text style={[t.label, { textAlign: "center" }]}>Scan, then type your room number and phone number.</Text>
+      <Text style={body}>{name}</Text>
+      <Text style={[body, { color: c.ink900, ...face[600] }]}>Your stay, by room and phone</Text>
+      <Text style={[body, { textAlign: "center" }]}>Scan, then type your room number and phone number.</Text>
       <Btn label="Print the hotel's card" disabled onPress={() => undefined} />
       <Text style={[t.caption, { color: c.grey600 }]}>{ON_THE_WEBSITE}</Text>
     </Box>

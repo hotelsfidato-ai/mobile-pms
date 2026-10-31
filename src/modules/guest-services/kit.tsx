@@ -26,6 +26,9 @@ const success = "#1f6f5c";
 const success50 = "#eaf4f1";
 const yellow = "#ffb600";
 
+/** The web's text-sm and text-base: 14 on 21. */
+export const body = { ...t.label, lineHeight: 21 };
+
 /** Said, not only seen (the web's toast). */
 export type Said = { title: string; body?: string; tone: "ok" | "held" | "bad" };
 export const message = (e: unknown) => (e instanceof Error ? e.message : String(e));
@@ -319,7 +322,7 @@ export function Field({ label, required, hint, children }: { label: string; requ
   return (
     <View style={{ gap: 6 }}>
       <Text style={[t.label, { color: c.grey700 }]}>
-        {label}{required ? <Text style={{ color: brandRed }}> *</Text> : null}
+        {label}{required ? <Text style={{ color: brandRed }}>{"\u200A*"}</Text> : null}
       </Text>
       {children}
       {hint ? <Text style={t.caption}>{hint}</Text> : null}
@@ -328,28 +331,31 @@ export function Field({ label, required, hint, children }: { label: string; requ
 }
 
 /** The web's Input and Textarea: 44 on a touch screen, 16px type. */
-export function Input({ label, rows, ...props }: {
-  label: string; value: string; onChangeText: (v: string) => void; rows?: number; maxLength?: number;
+export function Input({ label, rows, icon: Icon, ...props }: {
+  label: string; value: string; onChangeText: (v: string) => void; rows?: number; maxLength?: number; icon?: LucideIcon;
   autoFocus?: boolean; placeholder?: string; keyboardType?: "default" | "numbers-and-punctuation"; autoCapitalize?: "characters";
 }) {
   return (
-    <TextInput
-      {...props}
-      accessibilityLabel={label}
-      multiline={Boolean(rows)}
-      placeholderTextColor={grey400}
-      style={{
-        minHeight: rows ? 16 + rows * 24 : 44, paddingHorizontal: 12, paddingVertical: rows ? 8 : 0, borderRadius: 10, borderWidth: 1,
-        borderColor: c.grey300, backgroundColor: c.white, fontSize: 16, color: c.ink900, ...face[500],
-        textAlignVertical: rows ? "top" : "center",
-      }}
-    />
+    <View style={{ justifyContent: "center" }}>
+      <TextInput
+        {...props}
+        accessibilityLabel={label}
+        multiline={Boolean(rows)}
+        placeholderTextColor={grey400}
+        style={{
+          minHeight: rows ? 18 + rows * 26 : 44, paddingHorizontal: 12, paddingVertical: rows ? 8 : 0, borderRadius: 10, borderWidth: 1,
+          borderColor: c.grey300, backgroundColor: c.white, fontSize: 16, color: c.ink900, ...face[500],
+          textAlignVertical: rows ? "top" : "center",
+        }}
+      />
+      {Icon ? <View pointerEvents="none" style={{ position: "absolute", right: 12 }}><Icon size={16} color={c.ink900} /></View> : null}
+    </View>
   );
 }
 
 /** The web's native select: a field that opens its choices from the foot of the screen. */
-export function Select<T extends string>({ label, value, options, onChange }: {
-  label: string; value: T; options: { value: T; label: string }[]; onChange: (v: T) => void;
+export function Select<T extends string>({ label, value, options, onChange, icon: Icon = ChevronDown }: {
+  label: string; value: T; options: { value: T; label: string }[]; onChange: (v: T) => void; icon?: LucideIcon;
 }) {
   const [open, setOpen] = useState(false);
   const shown = options.find((o) => o.value === value)?.label ?? "";
@@ -360,7 +366,7 @@ export function Select<T extends string>({ label, value, options, onChange }: {
         style={{ minHeight: 44, flexDirection: "row", alignItems: "center", gap: 8, paddingLeft: 12, paddingRight: 10, borderRadius: 10, borderWidth: 1, borderColor: c.grey300, backgroundColor: c.white }}
       >
         <Text style={{ flex: 1, fontSize: 16, color: c.ink900, ...face[500] }} numberOfLines={1}>{shown}</Text>
-        <ChevronDown size={16} color={c.grey500} />
+        <Icon size={16} color={Icon === ChevronDown ? c.grey500 : c.ink900} />
       </Pressable>
       <Modal visible={open} transparent animationType="fade" onRequestClose={() => setOpen(false)}>
         <View style={{ flex: 1, backgroundColor: "rgba(3,23,40,0.4)" }}>

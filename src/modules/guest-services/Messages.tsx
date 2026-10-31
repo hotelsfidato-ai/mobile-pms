@@ -6,7 +6,7 @@ import { c, face, t } from "../../core/theme";
 import { Head, Screen, useRead } from "../../core/ui";
 import { getDeskMessages, handleRequest, replyToGuest } from "./data";
 import {
-  Back, Box, Btn, Empty, Failed, Field, InDialog, Input, Loading, NotYours, Pill, Stale, Toast, saidOf, type Said,
+  Back, Box, Btn, body, Empty, Failed, Field, InDialog, Input, Loading, NotYours, Pill, Stale, Toast, saidOf, type Said,
 } from "./kit";
 import { whyNotDesk } from "./roles";
 import { dateTime, replyFits, thread, unread } from "./rules";
@@ -101,17 +101,17 @@ export function Messages({ hotel, role, reservation, onBack, onOpen }: {
                     ) : null}
                     {lines.map(({ m, r }, i) => (r ? (
                       <View key={r.id} style={{ paddingHorizontal: 16, paddingVertical: 12, backgroundColor: c.grey50, borderTopWidth: i ? 1 : 0, borderTopColor: c.grey100, borderRadius: 12 }}>
-                        <Text style={[t.label, { color: c.ink900, ...face[600] }]}>Reply from the front desk</Text>
-                        <Text style={[t.label, { color: c.ink900, marginTop: 2 }]}>{r.what}</Text>
-                        <Text style={[t.label, { marginTop: 2 }]}>{r.sentBy ?? "A member of staff"}, {dateTime(r.sentAt)}</Text>
+                        <Text style={[body, { color: c.ink900, ...face[600] }]}>Reply from the front desk</Text>
+                        <Text style={[body, { color: c.ink900, marginTop: 2 }]}>{r.what}</Text>
+                        <Text style={[body, { marginTop: 2 }]}>{r.sentBy ?? "A member of staff"}, {dateTime(r.sentAt)}</Text>
                       </View>
                     ) : m ? (
                       <View key={m.id} style={{ paddingHorizontal: 16, paddingVertical: 12, gap: 12, borderTopWidth: i ? 1 : 0, borderTopColor: c.grey100 }}>
                         <View>
                           {/* The guest's words: a text node, never markup. */}
-                          <Text style={[t.label, { color: c.ink900 }]}>{m.what}</Text>
-                          <Text style={[t.label, { marginTop: 2 }]}>{m.guest} · {m.reference} · {dateTime(m.createdAt)}</Text>
-                          {m.handledAt ? <Text style={[t.label, { marginTop: 2 }]}>Handled by {m.handledBy ?? "a member of staff"}, {dateTime(m.handledAt)}</Text> : null}
+                          <Text style={[body, { color: c.ink900 }]}>{m.what}</Text>
+                          <Text style={[body, { marginTop: 2 }]}>{m.guest} · {m.reference} · {dateTime(m.createdAt)}</Text>
+                          {m.handledAt ? <Text style={[body, { marginTop: 2 }]}>Handled by {m.handledBy ?? "a member of staff"}, {dateTime(m.handledAt)}</Text> : null}
                         </View>
                         {!m.handledAt ? (
                           <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8, alignItems: "center" }}>
@@ -134,7 +134,7 @@ export function Messages({ hotel, role, reservation, onBack, onOpen }: {
                       <Btn label={busy ? "Sending…" : "Send reply"} disabled={busy || !replyFits(reply)} onPress={() => void sendReply()} />
                     </View>
                   </Box>
-                ) : <Text style={t.label}>This guest has checked out. Replies stop at check-out.</Text>) : null}
+                ) : <Text style={body}>This guest has checked out. Replies stop at check-out.</Text>) : null}
               </>
             ) : null}
       </Screen>

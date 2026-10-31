@@ -7,7 +7,7 @@ import { c, space, t } from "../../core/theme";
 import { Head, Screen, useRead } from "../../core/ui";
 import { clearLost, listLost, logLost } from "./data";
 import {
-  Back, Box, Btn, Dialog, Empty, Failed, Field, Foot, IconChip, InDialog, Input, Loading, NotYours, Pill,
+  Back, Box, Btn, body, Dialog, Empty, Failed, Field, Foot, IconChip, InDialog, Input, Loading, NotYours, Pill,
   Segmented, Stale, saidOf, type Said,
 } from "./kit";
 import { CLEAR_REFUSED, whyNotLost } from "./roles";
@@ -72,13 +72,13 @@ export function LostProperty({ hotel, role, onBack }: { hotel: Hotel; role: stri
                       <IconChip Icon={PackageSearch} />
                       <View style={{ flex: 1, minWidth: 0 }}>
                         <View style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center", gap: 8 }}>
-                          <Text style={[t.label, { color: c.ink900 }]}>{i.what}</Text>
+                          <Text style={[body, { color: c.ink900 }]}>{i.what}</Text>
                           {i.status === "returned" ? <Pill tone="success">Returned</Pill> : null}
                           {i.status === "disposed" ? <Pill>Disposed of</Pill> : null}
                         </View>
-                        <Text style={[t.label, { color: c.grey500, marginTop: 4 }]}>{foundLine(i)}</Text>
-                        {i.keptWhere ? <Text style={[t.label, { marginTop: 2 }]}>Kept: {i.keptWhere}</Text> : null}
-                        {clearedLine(i) ? <Text style={[t.label, { marginTop: 2 }]}>{clearedLine(i)}</Text> : null}
+                        <Text style={[body, { color: c.grey500, marginTop: 4 }]}>{foundLine(i)}</Text>
+                        {i.keptWhere ? <Text style={[body, { marginTop: 2 }]}>Kept: {i.keptWhere}</Text> : null}
+                        {clearedLine(i) ? <Text style={[body, { marginTop: 2 }]}>{clearedLine(i)}</Text> : null}
                       </View>
                     </View>
                     {i.status === "kept" ? (

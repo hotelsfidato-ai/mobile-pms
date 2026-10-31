@@ -1,6 +1,6 @@
 import { api, send } from "../../core/api";
 import type { Team } from "./roles";
-import type { DeskMessages, DeskView, InHouse, LostItem, RequestList, WakeUpCall } from "./rules";
+import type { DeskMessages, DeskView, InHouse, KeptPhoto, LostItem, RequestList, WakeUpCall } from "./rules";
 
 /* ══════════════════════════════════════════════════════════════════
    GUEST SERVICES' CALLS — the web's data/requests.ts, data/wakeAndLost.ts
@@ -50,6 +50,9 @@ export const setAsideDetails = (code: string, id: string) =>
 /** A spa or laundry request, done or declined; a message to the desk is marked handled with `done`. */
 export const handleRequest = (code: string, id: string, status: "done" | "declined") =>
   send<{ status: string }>("POST", `${desk(code)}/requests/${id}`, { status });
+
+/** The ID photos kept, the list only: the owner, an administrator, the GM. */
+export const getKeptPhotos = (code: string) => api<{ photos: KeptPhoto[] }>(`${desk(code)}/id-photos`);
 
 /* Messages to the desk, and replies */
 export const getDeskMessages = (code: string, reservation?: string) =>

@@ -135,6 +135,19 @@ export function timeOf(raw: string): string | null {
   return TIME.test(t) ? t : null;
 }
 
+/** The phone's own: the web's date input is a calendar from today; here,
+    the next `n` days from the hotel's today, each as that input writes it
+    (the value the API takes, the words "31-10-2026"). ponytail: a list, no
+    date-picker package; @react-native-community/datetimepicker 9.1.0 if the
+    owner wants the phone's own calendar. */
+export function daysFrom(today: string, n: number): { value: string; label: string }[] {
+  const start = Date.parse(`${today}T00:00:00Z`);
+  return Array.from({ length: n }, (_, i) => {
+    const value = new Date(start + i * 86_400_000).toISOString().slice(0, 10);
+    return { value, label: `${value.slice(8)}-${value.slice(5, 7)}-${value.slice(0, 4)}` };
+  });
+}
+
 /* ── Lost property (LostProperty.tsx) ──────────────────────────── */
 
 export interface LostItem {
@@ -232,6 +245,15 @@ export function detailLines(d: WaitingDetails): [string, string][] {
 /** The ID photo sent with the details, said (IdPhotosAtDesk.tsx). */
 export const photoLine = (p: { sides: string[]; at: string }) =>
   `ID photo: ${p.sides.includes("back") ? "front and back" : "front"}, sent ${dateTime(p.at)}.`;
+
+/** "ID photos kept": the list, never the image (data/desk.ts KeptPhoto). */
+export interface KeptPhoto {
+  id: string; guest: string; reference: string; sides: string[]; at: string;
+  /** Null: the guest sent it from their own page. */
+  addedBy: string | null; notYetDeleted: boolean;
+}
+export const keptLine = (p: KeptPhoto) =>
+  `${p.reference} · ${p.sides.includes("back") ? "front and back" : "front"} · ${dateTime(p.at)} · ${p.addedBy ? `added by ${p.addedBy}` : "sent by the guest"}`;
 
 /* ── Messages to the desk, and replies (MessagesToTheDesk.tsx) ─── */
 

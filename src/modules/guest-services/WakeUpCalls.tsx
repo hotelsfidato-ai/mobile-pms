@@ -1,18 +1,17 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { AlarmClock, Check, Plus } from "lucide-react-native";
+import { AlarmClock, Calendar, Check, Clock, Plus } from "lucide-react-native";
 import { useState } from "react";
 import { Text, View } from "react-native";
 import type { Hotel } from "../../core/api";
 import { c, space, t } from "../../core/theme";
 import { Head, Screen, useRead } from "../../core/ui";
-import { Day } from "../housekeeping/DayStepper";
 import { actOnWakeUp, listWakeUps, setWakeUp } from "./data";
 import {
-  Back, Box, Btn, Dialog, Empty, Failed, Field, Foot, IconChip, InDialog, Input, Loading, NotYours, Pill,
+  Back, Box, Btn, body, Dialog, Empty, Failed, Field, Foot, IconChip, InDialog, Input, Loading, NotYours, Pill,
   Segmented, Select, Stale, Toast, roomChoices, saidOf, usePoll, type Said,
 } from "./kit";
 import { whyNotWakeUps } from "./roles";
-import { timeOf, wakeLine, wakeWhen, type InHouse, type WakeUpCall } from "./rules";
+import { daysFrom, timeOf, wakeLine, wakeWhen, type InHouse, type WakeUpCall } from "./rules";
 
 /* ══════════════════════════════════════════════════════════════════
    WAKE-UP CALLS on a phone — the web's /h/:code/wake-up-calls
@@ -21,9 +20,9 @@ import { timeOf, wakeLine, wakeWhen, type InHouse, type WakeUpCall } from "./rul
    their own page, and it waits here until the desk confirms it. Due from
    fifteen minutes before until marked done; no "missed" state. Every time
    is the hotel's own clock, as the server writes it.
-   Where the phone differs: the day is the housekeeping forms' day stepper
-   (M-7, no date-picker package) and the time is typed (the web's time
-   input), read by rules.ts timeOf.
+   Where the phone differs (no date-picker package): the day is chosen from
+   the next 31 days and the time is typed (rules.ts daysFrom, timeOf); the
+   web has a date input and a time input, side by side, as here.
    ══════════════════════════════════════════════════════════════════ */
 
 type View_ = "open" | "done";
@@ -90,15 +89,15 @@ export function WakeUpCalls({ hotel, role, onBack }: { hotel: Hotel; role: strin
                       <IconChip Icon={AlarmClock} tone={w.due ? "orange" : "neutral"} />
                       <View style={{ flex: 1, minWidth: 0 }}>
                         <View style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center", gap: 8 }}>
-                          <Text style={[t.label, t.tab, { color: c.ink900 }]}>{wakeWhen(w.callAt)}</Text>
+                          <Text style={[body, t.tab, { color: c.ink900 }]}>{wakeWhen(w.callAt)}</Text>
                           {w.due ? <Pill tone="warning">Due</Pill> : null}
                           {w.status === "asked" ? <Pill tone="info">Asked</Pill> : null}
                           {w.status === "done" ? <Pill tone="success">Done</Pill> : null}
                           {w.status === "cancelled" ? <Pill>Cancelled</Pill> : null}
                         </View>
-                        <Text style={[t.label, { color: c.grey500, marginTop: 4 }]}>{wakeLine(w)}</Text>
-                        {w.note ? <Text style={[t.label, { marginTop: 2 }]}>{w.note}</Text> : null}
-                        {w.cancelReason ? <Text style={[t.label, { marginTop: 2 }]}>{w.cancelReason}</Text> : null}
+                        <Text style={[body, { color: c.grey500, marginTop: 4 }]}>{wakeLine(w)}</Text>
+                        {w.note ? <Text style={[body, { marginTop: 2 }]}>{w.note}</Text> : null}
+                        {w.cancelReason ? <Text style={[body, { marginTop: 2 }]}>{w.cancelReason}</Text> : null}
                       </View>
                     </View>
                     {w.status === "asked" || w.status === "set" ? (
@@ -151,18 +150,25 @@ function SetDialog({ code, rooms, today, onClose, onDone }: {
   return (
     <Dialog title="Set a wake-up call" description="For a guest in house now, on the hotel's clock." onClose={onClose}>
       {rooms.length === 0 ? (
-        <Text style={t.label}>Nobody is checked in, so there is nobody to call.</Text>
+        <Text style={body}>Nobody is checked in, so there is nobody to call.</Text>
       ) : (
         <>
           <Field label="Room" required>
             <Select label="Room" value={reservationId} options={roomChoices(rooms)} onChange={setReservationId} />
           </Field>
-          <Field label="Day" required>
-            <Day label="Day" value={day} min={today} off={false} onChange={setDay} />
-          </Field>
-          <Field label="Time" required hint="24-hour clock, as 06:30.">
-            <Input label="Time" value={time} onChangeText={setTime} maxLength={5} placeholder="06:30" keyboardType="numbers-and-punctuation" />
-          </Field>
+          <View style={{ flexDirection: "row", gap: 12 }}>
+            <View style={{ flex: 1 }}>
+              <Field label="Day" required>
+                <Select label="Day" icon={Calendar} value={day} options={daysFrom(today, 31)} onChange={setDay} />
+              </Field>
+            </View>
+            <View style={{ flex: 1 }}>
+              <Field label="Time" required>
+                <Input label="Time" icon={Clock} value={time} onChangeText={setTime} maxLength={5} placeholder="--:--" keyboardType="numbers-and-punctuation" />
+              </Field>
+            </View>
+          </View>
+          {time && !clock ? <Text style={t.caption}>Type the time as 06:30, on the 24-hour clock.</Text> : null}
           <Field label="Note" hint="Only if there is something to say on the call.">
             <Input label="Note" maxLength={200} value={note} onChangeText={setNote} />
           </Field>

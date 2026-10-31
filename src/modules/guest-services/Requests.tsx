@@ -7,7 +7,7 @@ import { c, space, t } from "../../core/theme";
 import { Head, Screen, useRead } from "../../core/ui";
 import { actOnRequest, listRequests, raiseRequest } from "./data";
 import {
-  Back, Box, Btn, Dialog, Empty, Failed, Field, Foot, IconChip, InDialog, Input, Loading, NotYours, Pill,
+  Back, Box, Btn, body, Dialog, Empty, Failed, Field, Foot, IconChip, InDialog, Input, Loading, NotYours, Pill,
   Segmented, Select, Stale, Toast, roomChoices, saidOf, usePoll, type Said,
 } from "./kit";
 import { TEAMS, whyNotRequests, type Team } from "./roles";
@@ -125,15 +125,15 @@ function RequestCard({ r, busy, onTake, onDone, onCancel }: {
         <IconChip Icon={TEAM_ICON[r.team]} />
         <View style={{ flex: 1, minWidth: 0 }}>
           <View style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center", gap: 8 }}>
-            <Text style={[t.label, { color: c.ink900 }]}>{r.what}</Text>
+            <Text style={[body, { color: c.ink900 }]}>{r.what}</Text>
             <Pill>{TEAM_LABEL[r.team]}</Pill>
             {r.status === "in_progress" ? <Pill tone="info">Being done</Pill> : null}
             {r.status === "done" ? <Pill tone="success">Done</Pill> : null}
             {r.status === "cancelled" ? <Pill>Cancelled</Pill> : null}
           </View>
-          {r.when ? <Text style={[t.label, { marginTop: 2 }]}>When: {r.when}</Text> : null}
-          <Text style={[t.label, { color: c.grey500, marginTop: 4 }]}>{requestLine(r)}</Text>
-          {closed && r.resolution && r.resolution !== "Done" ? <Text style={[t.label, { marginTop: 2 }]}>{r.resolution}</Text> : null}
+          {r.when ? <Text style={[body, { marginTop: 2 }]}>When: {r.when}</Text> : null}
+          <Text style={[body, { color: c.grey500, marginTop: 4 }]}>{requestLine(r)}</Text>
+          {closed && r.resolution && r.resolution !== "Done" ? <Text style={[body, { marginTop: 2 }]}>{r.resolution}</Text> : null}
         </View>
       </View>
       {!closed ? (
@@ -173,7 +173,7 @@ function RaiseDialog({ code, rooms, onClose, onDone }: {
   return (
     <Dialog title="New request" description="For a guest in house now." onClose={onClose}>
       {rooms.length === 0 ? (
-        <Text style={t.label}>Nobody is checked in, so there is nobody to raise a request for.</Text>
+        <Text style={body}>Nobody is checked in, so there is nobody to raise a request for.</Text>
       ) : (
         <>
           <Field label="Room" required>
