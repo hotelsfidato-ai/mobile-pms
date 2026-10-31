@@ -3,7 +3,7 @@
    acts refused in the server's words; the server's sentences recognised. */
 import {
   asksCredit, asksLateReason, asksPan, billName, closingWord, dateDay, editable, headline, inSections,
-  moveTargets, overLimit, rupees, sectionOf, settleIsMain, stillOutstanding, whyNotEditLine, whyNotLeave,
+  chargesToCome, moveTargets, overLimit, rupees, sectionOf, settleIsMain, stillOutstanding, whyNotEditLine, whyNotLeave,
   whyNotReverseLine, type BillLine, type StayFolio,
 } from "./bill.ts";
 
@@ -42,6 +42,13 @@ eq(headline(1890).pill, "Outstanding", "owing");
 eq(headline(-784).pill, "Overpaid", "overpaid");
 eq(headline(0).pill, "Settled", "settled");
 eq(closingWord(null), "Balance", "closing, no bill");
+eq(headline(-1001, true), { label: "Balance", pill: "Charges to come", tone: "neutral" }, "D27-199: never Overpaid over nights to come");
+eq(closingWord(-1001, true), "Balance", "the closing row too");
+const running = { status: "in-house", isComplimentary: false, offeredTariff: 3000 };
+eq(chargesToCome(running, 2), true, "nights to come");
+eq(chargesToCome(running, 0), false, "none");
+eq(chargesToCome({ ...running, isComplimentary: true }, 2), false, "complimentary");
+eq(chargesToCome({ ...running, status: "checked-out" }, 2), false, "gone");
 eq(rupees(null), "-", "a dash, never ₹0");
 eq(rupees(1234567.5), "₹12,34,567.50", "Indian grouping, to the paisa");
 eq(dateDay("2026-08-25"), "25 Aug 2026", "the web's date");

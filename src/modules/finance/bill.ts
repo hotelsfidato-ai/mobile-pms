@@ -141,7 +141,10 @@ export function inSections<T extends BillLine>(lines: T[], keep: SectionKey[] = 
 export type Tone = "danger" | "info" | "success" | "neutral";
 
 /** The balance's word and colour; null is no bill yet (D17-16), a dash. */
-export function headline(balance: number | null): { label: string; pill: string; tone: Tone } {
+export function headline(balance: number | null, toCome = false): { label: string; pill: string; tone: Tone } {
+  /* D27-199: the posted balance is not what they owe while nights are to come,
+     and the phone adds none of them up: no "Overpaid" over a stay still running. */
+  if (toCome) return { label: "Balance", pill: "Charges to come", tone: "neutral" };
   if (balance === null) return { label: "Balance", pill: "No bill yet", tone: "neutral" };
   if (balance > 0) return { label: "Balance", pill: "Outstanding", tone: "danger" };
   if (balance < 0) return { label: "Balance", pill: "Overpaid", tone: "info" };
@@ -149,8 +152,8 @@ export function headline(balance: number | null): { label: string; pill: string;
 }
 
 /** The bill's closing row: the server's balance and its word. */
-export const closingWord = (balance: number | null) =>
-  balance === null ? "Balance" : balance > 0 ? "Outstanding" : balance < 0 ? "Overpaid" : "Settled";
+export const closingWord = (balance: number | null, toCome = false) =>
+  balance === null || toCome ? "Balance" : balance > 0 ? "Outstanding" : balance < 0 ? "Overpaid" : "Settled";
 
 /** canCheckOut (src/lib/rules.ts): the departure turns on the balance on
     screen. No bill owes nothing (D17-16), as the web reads it. */
@@ -165,6 +168,15 @@ export function whyNotLeave(status: string, balance: number | null): string | nu
 
 /** Settle is the main action while money is owed (FolioPanel 179). */
 export const settleIsMain = (status: string, balance: number | null) => (balance ?? 0) > 0 && status !== "due-in";
+
+/** canPostCharge (rules.ts): a closed bill takes no charge. */
+export const whyNotAddTo = (status: string) =>
+  status === "checked-out" ? "The folio closed at check-out." : status === "cancelled" ? "This reservation was cancelled." : null;
+
+/** Nights the audit has still to post (FolioPanel useChargesToCome): how many
+    is the server's own count, `nightsToCome` on the bill (FIN-24). */
+export const chargesToCome = (s: { status: string; isComplimentary: boolean; offeredTariff: number }, nights: number) =>
+  nights > 0 && !s.isComplimentary && s.offeredTariff > 0 && ["due-in", "in-house", "due-out"].includes(s.status);
 
 /** Form III: a guest from abroad says where they go next (D27-25). */
 export const isForeign = (nationality: string | null | undefined) => (nationality ?? "IN").toUpperCase() !== "IN";
@@ -222,7 +234,6 @@ export const typed = (text: string) => Number(text) || 0;
     Form 97. Asked by the method's kind - the server's own test (panFor). */
 export const PAN_ABOVE = 100_000;
 export const asksPan = (kind: string | undefined, amount: number) => kind === "cash" && amount > PAN_ABOVE;
-export const PAN_SHAPE = /^[A-Z]{5}[0-9]{4}[A-Z]$/;
 
 /** A refused payment named what would satisfy it (`needs`), which the core's
     ApiError does not carry yet: the server's own sentences, recognised. */
