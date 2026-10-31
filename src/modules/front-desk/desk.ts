@@ -44,14 +44,16 @@ export const STATUS: Record<string, { label: string; tone: Tone }> = {
 export const statusOf = (s: { status: string }) => STATUS[s.status] ?? { label: s.status, tone: "neutral" as Tone };
 
 /* ── The desk's lists (stays.ts, Arrivals.tsx) ────────────────────── */
-const byRoom = (a: Stay, b: Stay) => a.roomNumber.localeCompare(b.roomNumber);
+const byRoom = (a: Stay, b: Stay) => a.roomNumber.localeCompare(b.roomNumber, undefined, { numeric: true });
+/** Not happening: cancelled, or voided (FD-32); the API says `void`, which StayStatus does not name. */
+const gone = (s: { status: string }) => s.status === "cancelled" || s.status === "void";
 
-/** Today's arrivals: arriving on the date and not cancelled, by room. */
+/** Today's arrivals: arriving on the date and not cancelled or void, by room. */
 export const arrivals = (stays: Stay[], date: string) =>
-  stays.filter((s) => s.arrival === date && s.status !== "cancelled").sort(byRoom);
+  stays.filter((s) => s.arrival === date && !gone(s)).sort(byRoom);
 /** The next fortnight, excluding today: planning, not working (server order). */
 export const upcoming = (stays: Stay[], date: string) =>
-  stays.filter((s) => s.arrival > date && s.arrival <= addDays(date, 14) && s.status !== "cancelled");
+  stays.filter((s) => s.arrival > date && s.arrival <= addDays(date, 14) && !gone(s));
 /** Who has checked in and not left (D17-10), by room. */
 export const inHouse = (stays: Stay[]) => stays.filter((s) => s.status === "in-house" || s.status === "due-out").sort(byRoom);
 /** Of them, leaving today. */
@@ -62,8 +64,15 @@ export const walkIns = (stays: Stay[]) => stays.filter((s) => s.source === "Walk
 /** The list's filter box: guest, reference or room. */
 export const matches = (s: Stay, query: string) => {
   const q = query.trim().toLowerCase();
-  return !q || s.guest.toLowerCase().includes(q) || s.reference.toLowerCase().includes(q) || s.roomNumber.includes(q);
+  return !q || s.guest.toLowerCase().includes(q) || s.reference.toLowerCase().includes(q) || s.roomNumber.toLowerCase().includes(q);
 };
+
+/** Who still owes on the departure list, and how much in all (InHouse.tsx
+    `outstanding`, `owed`): the server's balances added, in whole paise. */
+export function owing(stays: Array<{ balance?: number }>) {
+  const owe = stays.filter((s) => (s.balance ?? 0) > 0);
+  return { count: owe.length, owed: owe.reduce((t, s) => t + Math.round((s.balance ?? 0) * 100), 0) / 100 };
+}
 
 /* ── Check-in (rules.ts canCheckIn) ───────────────────────────────── */
 export function whyNotYet(stay: { status: string; arrival: string }, businessDate: string): string | null {
@@ -78,6 +87,7 @@ export function whyNotYet(stay: { status: string; arrival: string }, businessDat
 /** A room for the check-in's list (operations.ts assignableRooms). */
 export interface Assignable {
   number: string;
+  type: string;
   housekeeping: string;
   /** "Occupied" or "Guest still in": its state in words (QA FD-10). */
   label?: string;
@@ -85,17 +95,31 @@ export interface Assignable {
   reason?: string;
 }
 
-/** Rooms of the booked type - and the room already on the booking, whatever
-    its type - with why not for the ones that cannot take the guest.
-    Occupied is CHECKED IN and not left (status, not dates: MEMORY 3). */
-export function assignable(rooms: Room[], checkedIn: Stay[], roomType: string, currentRoom?: string | null): Assignable[] {
+/* rooms.ts BLOCK_REASONS, each up to its " - ". */
+const BLOCK_WORDS: Record<string, string> = {
+  out_of_order: "Out of order", out_of_service: "Maintenance / out of service", refurbishment: "Refurbishment", house_use: "NC",
+};
+/** Why a room cannot take a stay of nights [from, to) because of a block
+    (rooms.ts blockedFor, D27-339); a day use counts its one day. */
+export function blockedFor(room: Room, from: string, to: string): string | null {
+  const b = (room.blocks ?? []).find((x) => (to > from ? x.from < to : x.from <= from) && (x.to === null || x.to >= from));
+  if (!b) return null;
+  return `${BLOCK_WORDS[b.reason ?? ""] ?? "Blocked"} from ${b.from}${b.to ? ` to ${b.to}` : " until further notice"}.`;
+}
+
+/** Every room, the booked type's first (D27-330: another type is an upgrade,
+    the booked rate kept), with why not for the ones that cannot take the
+    guest. Occupied is CHECKED IN and not left (status, not dates: MEMORY 3). */
+export function assignable(rooms: Room[], checkedIn: Stay[], roomType: string, businessDate: string, currentRoom?: string | null, departure?: string): Assignable[] {
   const takenBy = new Map(checkedIn.map((s) => [s.roomNumber, s.guest]));
-  return rooms
-    .filter((r) => r.type === roomType || (currentRoom != null && currentRoom !== "" && r.number === currentRoom))
+  return [...rooms]
+    .sort((a, b) => Number(b.type === roomType) - Number(a.type === roomType))
     .map((r): Assignable => {
-      const base = { number: r.number, housekeeping: r.status };
+      const base = { number: r.number, type: r.type, housekeeping: r.status };
       if (r.status === "out-of-service") return { ...base, allowed: false, reason: "Held out of service." };
       if (r.status === "dirty") return { ...base, allowed: false, reason: "Not cleaned yet." };
+      const blocked = departure ? blockedFor(r, businessDate, departure) : null;
+      if (blocked) return { ...base, allowed: false, reason: blocked };
       const occupant = takenBy.get(r.number);
       if (occupant && r.number !== currentRoom) return { ...base, allowed: false, reason: `${occupant} is in this room.`, label: "Occupied" };
       if (occupant) return { ...base, allowed: true, reason: `${occupant} has not left this room yet.`, label: "Guest still in" };
@@ -114,10 +138,21 @@ export const mealPlanChoices = (current: string) =>
 
 /** More than a day early moves the whole booking (D27-193): confirmed first. */
 export const isBigMove = (arrival: string, businessDate: string) => dayNumber(arrival) - dayNumber(businessDate) > 1;
-/** What the confirm says. The web adds what the stay now costs, worked out
-    in the browser; the phone never totals money (MODULE.md, difference 3). */
-export const moveWords = (stay: { arrival: string; departure: string }, businessDate: string) =>
-  `This moves the arrival from ${day(stay.arrival)} to ${day(businessDate)}: ${nightsBetween(businessDate, stay.departure)} nights.`;
+const inrPrecise = new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", minimumFractionDigits: 2, maximumFractionDigits: 2 });
+/** The web's moneyPrecise, "₹1,20,000.00". */
+export const moneyPrecise = (n: number) => inrPrecise.format(n);
+const paise = (rupees: number) => Math.round(rupees * 100);
+
+/** What the confirm says, CheckInFlow's `moved`: the web's own preview of the
+    move, from the agreed rate and the server's GST rate; the server charges it. */
+export function moveWords(stay: { arrival: string; departure: string; isComplimentary: boolean; offeredTariff: number }, businessDate: string, gstRate: number | null | undefined) {
+  const nights = nightsBetween(businessDate, stay.departure);
+  const taxNight = gstRate == null ? null : Math.round(paise(stay.offeredTariff) * gstRate / 100) / 100;
+  return `This moves the arrival from ${day(stay.arrival)} to ${day(businessDate)}: ${nights} nights, `
+    + (stay.isComplimentary ? "complimentary."
+      : taxNight === null ? `${moneyPrecise(stay.offeredTariff * nights)} before GST (no GST rule for this rate).`
+        : `${moneyPrecise((paise(stay.offeredTariff) + paise(taxNight)) * nights / 100)} with GST.`);
+}
 
 /** The party as typed (FD-8): "abc" is not 0 adults. */
 export const partyProblem = (adults: string, children: string) =>
