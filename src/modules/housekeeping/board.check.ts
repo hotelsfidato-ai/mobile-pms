@@ -2,7 +2,7 @@
    The board's rules on a tiny house: groups, names, the sheet, held taps, grey buttons. */
 import type { OutboxEntry } from "../../core/offline.ts";
 import {
-  boardRooms, firstSheet, heldAssignee, heldMark, inGroup, markPath, assignPath, onSheet, whyNotClean, whyNotInspected,
+  boardHead, boardRooms, firstSheet, heldAssignee, heldMark, inGroup, markPath, assignPath, onSheet, whyNotClean, whyNotInspected, whyNotOpenRepair,
 } from "./board.ts";
 
 /* No node:assert, so the app's own type check reads this file too. */
@@ -38,6 +38,10 @@ eq(inGroup(b, "dirty").map((r) => r.number), ["201"]);
 eq(inGroup(b, "occupied").map((r) => r.number), ["205", "206"]);
 eq(inGroup(b, "out-of-service").map((r) => r.number), ["204"]);
 
+/* The head counts what the groups show: empty rooms by state, a guest's room in none of them. */
+eq(boardHead(b), { dirty: 1, clean: 1, inspected: 1, out: 1, empty: 3, ready: 2, inHouse: 2, dueOut: 1 });
+eq(boardHead([]).empty, 0);
+
 /* Held taps: the whole path, waiting only, the last one wins. */
 const e = (path: string, method: string, body: unknown, status: OutboxEntry["status"] = "waiting") =>
   ({ path, method, body: body === undefined ? undefined : JSON.stringify(body), status }) as OutboxEntry;
@@ -65,6 +69,10 @@ eq(onSheet(b, "unassigned", who, "me").map((r) => r.number), ["201", "205", "206
 eq(onSheet(b, "mine", who, null).length, 0);
 eq(onSheet(b, "all", who, "me").length, 6);
 
+/* A person's chip: their sheet, whoever is looking. */
+eq(onSheet(b, "someone", who, "me").map((r) => r.number), ["204"]);
+eq(onSheet(b, "nobody", who, "me").length, 0);
+
 /* The first chip (M-7): a housekeeper with rooms today opens on Mine, anybody else on All. */
 eq(firstSheet("housekeeping", 2), "mine");
 eq(firstSheet("housekeeping", 0), "all");
@@ -80,4 +88,10 @@ eq(whyNotClean("housekeeping", "203", "inspected", false), "Room 203 is already 
 eq(whyNotInspected("housekeeping", "203", "inspected", true), "Room 203 is already inspected, on this phone, waiting to sync.");
 eq(whyNotClean("finance", "201", "dirty", false)?.startsWith("Changing a room's status is for"), true);
 eq(whyNotInspected(null, "202", "clean", false)?.startsWith("Changing a room's status is for"), true);
+
+/* Repair opens for who may report one or take the room out; grey for who may do neither. */
+eq(whyNotOpenRepair("housekeeping"), null);
+eq(whyNotOpenRepair("front_desk"), null); // refused a repair, allowed Out of service: the web's foot of the form
+eq(whyNotOpenRepair("finance")?.startsWith("Reporting a repair"), true);
+eq(whyNotOpenRepair(null)?.startsWith("Reporting a repair"), true);
 console.log("board: all checks pass");

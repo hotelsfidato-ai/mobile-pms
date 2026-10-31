@@ -1,6 +1,6 @@
 import type { Room, Stay } from "../../core/types";
 import type { OutboxEntry } from "../../core/offline.ts";
-import { whyNotMark } from "./roles.ts";
+import { whyNotBlock, whyNotMark, whyNotRepair } from "./roles.ts";
 
 /* ══════════════════════════════════════════════════════════════════
    THE HOUSEKEEPING BOARD'S RULES — the web's, ported, so the phone and
@@ -65,6 +65,21 @@ export const GROUPS = [
 export const inGroup = (rooms: BoardRoom[], key: string) =>
   key === "occupied" ? rooms.filter((r) => r.occupied) : rooms.filter((r) => !r.occupied && r.housekeeping === key);
 
+/** The board's head (the web's BoardHead): counted from the same rooms as the
+    groups below, so a count here and a group's pill can never disagree. */
+export function boardHead(rooms: BoardRoom[]) {
+  const free = rooms.filter((r) => !r.occupied);
+  const n = (key: string) => free.filter((r) => r.housekeeping === key).length;
+  const dirty = n("dirty"), clean = n("clean"), inspected = n("inspected"), out = n("out-of-service");
+  return {
+    dirty, clean, inspected, out,
+    /* The navy anchor: of the empty rooms, how many are ready (clean or inspected). */
+    empty: dirty + clean + inspected, ready: clean + inspected,
+    inHouse: rooms.length - free.length,
+    dueOut: rooms.filter((r) => r.dueOut).length,
+  };
+}
+
 /* ── What this phone holds (the web's readHeld) ────────────────── */
 /* Matched on the whole path, the hotel's code in it, so a held change for
    room 204 at one property never shows on 204 at another (AGENTS rule 5). */
@@ -95,16 +110,24 @@ export function heldAssignee(held: OutboxEntry[], code: string, n: string): stri
   return e.method === "DELETE" ? null : field(e.body, "staffId");
 }
 
-/** Whose sheet: the web's All / a person / Unassigned, the person being me. */
-export type Sheet = "mine" | "all" | "unassigned";
+/** Whose sheet: the web's All rooms / a person / Unassigned: "all", "unassigned",
+    a person's staff id, or "mine" for the person signed in (M-7). */
+export type Sheet = string;
 /** The chip a person opens on (M-7): a housekeeper with rooms on today's
     sheet sees Mine; anybody else, or a housekeeper with none, All (the web's). */
 export const firstSheet = (role: string | null, mine: number): Sheet => (role === "housekeeping" && mine > 0 ? "mine" : "all");
 
-export const onSheet = (rooms: BoardRoom[], sheet: Sheet, assignee: (n: string) => string | null, me: string | null) =>
-  sheet === "all" ? rooms
-    : sheet === "unassigned" ? rooms.filter((r) => assignee(r.number) == null)
-      : rooms.filter((r) => me != null && assignee(r.number) === me);
+export function onSheet(rooms: BoardRoom[], sheet: Sheet, assignee: (n: string) => string | null, me: string | null) {
+  if (sheet === "all") return rooms;
+  if (sheet === "unassigned") return rooms.filter((r) => assignee(r.number) == null);
+  const person = sheet === "mine" ? me : sheet;
+  return rooms.filter((r) => person != null && assignee(r.number) === person);
+}
+
+/** The card's Repair is the one way in to both choices (the web's RepairFlow):
+    report a repair, or "Out of service without a repair" at its foot. So it
+    opens for anybody who may do either, and is grey only for who may do neither. */
+export const whyNotOpenRepair = (role: string | null) => (whyNotBlock(role) ? whyNotRepair(role) : null);
 
 /* ── Why a button is grey (Housekeeping.tsx whyNotClean / whyNotInspected)
    The API's refusal of the person first (roles.ts), then the order the
