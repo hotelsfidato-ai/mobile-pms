@@ -41,7 +41,7 @@ export function Pill({ tone, children, dot = true }: { tone: Tone; children: str
 /** PageHeader.tsx: the title, the pill beside it, the description under it. */
 export function PageHead({ title, pill, description, children }: { title: string; pill?: ReactNode; description?: string; children?: ReactNode }) {
   return (
-    <View style={{ gap: 14, marginBottom: 8 }}>
+    <View style={{ gap: 16, marginBottom: 8 }}>
       <View style={{ gap: 2 }}>
         <View style={{ flexDirection: "row", alignItems: "center", flexWrap: "wrap", gap: 10 }}>
           <Text style={t.title} accessibilityRole="header">{title}</Text>
@@ -79,9 +79,9 @@ export function Segmented<T extends string>({ value, onChange, options }: {
 
 /** Button.tsx: one capsule shape; the disabled label stays readable. NOT
     `disabled` when it has a reason: the tap is when a person asks why. */
-export function Button({ label, onPress, kind = "secondary", Icon, busy, reason, size = "md", style }: {
-  label: string; onPress: () => void; kind?: "primary" | "secondary" | "danger" | "ghost"; Icon?: LucideIcon;
-  busy?: boolean; reason?: string | null; size?: "sm" | "md" | "lg"; style?: StyleProp<ViewStyle>;
+export function Button({ label, onPress, kind = "secondary", Icon, Trail, busy, reason, onRefused, size = "md", style }: {
+  label: string; onPress: () => void; kind?: "primary" | "secondary" | "danger" | "ghost"; Icon?: LucideIcon; Trail?: LucideIcon;
+  busy?: boolean; reason?: string | null; onRefused?: (reason: string) => void; size?: "sm" | "md" | "lg"; style?: StyleProp<ViewStyle>;
 }) {
   const off = busy === true || reason != null;
   const fill = off && kind !== "secondary" && kind !== "ghost" ? c.grey300
@@ -89,7 +89,7 @@ export function Button({ label, onPress, kind = "secondary", Icon, busy, reason,
   const ink = kind === "primary" || kind === "danger" ? (off ? c.grey600 : c.white) : off ? c.grey500 : kind === "ghost" ? c.grey600 : c.ink900;
   return (
     <Pressable
-      onPress={off ? undefined : onPress} accessibilityRole="button" accessibilityLabel={label}
+      onPress={off ? () => { if (reason) onRefused?.(reason); } : onPress} accessibilityRole="button" accessibilityLabel={label}
       accessibilityState={{ disabled: off, busy: busy === true }} accessibilityHint={reason ?? undefined}
       style={({ pressed }) => [{
         minHeight: size === "lg" ? 48 : 44, paddingHorizontal: size === "sm" ? 12 : 16, borderRadius: 999, flexDirection: "row",
@@ -99,6 +99,19 @@ export function Button({ label, onPress, kind = "secondary", Icon, busy, reason,
     >
       {busy ? <ActivityIndicator size="small" color={ink} /> : Icon ? <Icon size={16} color={ink} /> : null}
       <Text numberOfLines={1} style={[t.label, { color: ink, fontSize: size === "lg" ? 16 : 14 }]}>{label}</Text>
+      {Trail ? <Trail size={16} color={ink} /> : null}
+    </Pressable>
+  );
+}
+
+/** The quiet underlined link beside the marks (Mark VIP, Edit guest). A grey one says why when tapped. */
+export function MarkLink({ label, onPress, reason, onRefused }: { label: string; onPress: () => void; reason?: string | null; onRefused?: (reason: string) => void }) {
+  return (
+    <Pressable
+      onPress={() => { if (reason) onRefused?.(reason); else onPress(); }} accessibilityRole="button" accessibilityLabel={label}
+      accessibilityState={{ disabled: reason != null }} accessibilityHint={reason ?? undefined} hitSlop={8} style={{ minHeight: 32, justifyContent: "center", paddingHorizontal: 4 }}
+    >
+      <Text style={[t.label, { color: reason ? c.grey500 : c.grey600, textDecorationLine: "underline" }]}>{label}</Text>
     </Pressable>
   );
 }
@@ -127,7 +140,7 @@ export function Field({ label, required, hint, error, children }: { label: strin
   );
 }
 
-const BOX: ViewStyle = { minHeight: 44, borderRadius: 8, borderWidth: 1, borderColor: c.grey300, backgroundColor: c.white, paddingHorizontal: 12 };
+const BOX: ViewStyle = { minHeight: 44, borderRadius: 10, borderWidth: 1, borderColor: c.grey300, backgroundColor: c.white, paddingHorizontal: 12 };
 
 /** Input.tsx Input: 44px under a thumb, 16px text so a phone does not zoom. */
 export function Box({ value, onChange, placeholder, label, keyboard, disabled, upper, max, multiline, tall }: {
@@ -207,7 +220,7 @@ export function Toggle({ value, onChange, label, description }: { value: boolean
       </View>
       <Switch
         value={value} onValueChange={onChange} accessibilityLabel={label}
-        trackColor={{ true: c.orange, false: c.grey300 }} thumbColor={c.white}
+        trackColor={{ true: "#1f6f5c", false: c.grey300 }} thumbColor={c.white}
       />
     </View>
   );

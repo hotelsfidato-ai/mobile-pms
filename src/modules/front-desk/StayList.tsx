@@ -138,7 +138,7 @@ export function StayList({ code, rows, read, columns, emptyTitle, emptyLine, wha
   return (
     <View style={{ gap: 8 }}>
       <View style={{ flexDirection: "row", alignItems: "center", gap: 8, marginBottom: 4 }}>
-        <View style={{ flex: 1, minHeight: 44, borderRadius: 8, borderWidth: 1, borderColor: c.grey300, backgroundColor: c.white, flexDirection: "row", alignItems: "center", gap: 8, paddingHorizontal: 12 }}>
+        <View style={{ flex: 1, minHeight: 44, borderRadius: 10, borderWidth: 1, borderColor: c.grey300, backgroundColor: c.white, flexDirection: "row", alignItems: "center", gap: 8, paddingHorizontal: 12 }}>
           <Search size={16} color={c.grey500} />
           <TextInput
             value={query} onChangeText={setQuery} placeholder="Guest, reference or room…" placeholderTextColor="#9aa2a9"
@@ -178,7 +178,7 @@ export function Blacklist({ code, from, to, ids }: { code: string; from: string;
   return (
     <View style={{ gap: 8 }}>
       {warnings.map((w) => (
-        <View key={`${w.stayId}-${w.blacklistedName}`} accessibilityRole="alert" style={{ flexDirection: "row", gap: 8, borderRadius: 8, borderWidth: 1, borderColor: c.red100, backgroundColor: c.red50, padding: 12 }}>
+        <View key={`${w.stayId}-${w.blacklistedName}`} accessibilityRole="alert" style={{ flexDirection: "row", gap: 8, borderRadius: 12, borderWidth: 1, borderColor: c.red100, backgroundColor: c.red50, padding: 12 }}>
           <AlertTriangle size={16} color={c.red700} style={{ marginTop: 2 }} />
           <Text style={[t.label, { flex: 1, color: c.red700 }]}>
             {`${w.guest} (${w.reference}, ${w.source}) has the phone or email of ${w.blacklistedName}, who is blacklisted.`}

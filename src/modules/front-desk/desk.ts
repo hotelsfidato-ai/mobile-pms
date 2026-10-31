@@ -153,6 +153,16 @@ const inrPrecise = new Intl.NumberFormat("en-IN", { style: "currency", currency:
 export const moneyPrecise = (n: number) => inrPrecise.format(n);
 const paise = (rupees: number) => Math.round(rupees * 100);
 
+/** FolioPanel.tsx useChargesToCome: what a stay owes with its charges to come
+    counted (D27-199), or null when none are to come or the tax is unknown.
+    The nights are the server's, the rate its GST rule's. */
+export function stayDue(s: { status: string; isComplimentary: boolean; offeredTariff: number }, nights: number, pct: number | null | undefined, balance: number | null) {
+  const rate = s.offeredTariff;
+  if (!(nights > 0 && !s.isComplimentary && rate > 0 && ["due-in", "in-house", "due-out"].includes(s.status))) return undefined;
+  if (pct == null) return null;
+  return (paise(balance ?? 0) + paise(rate) * nights + Math.round(paise(rate) * pct / 100) * nights) / 100;
+}
+
 /** What the confirm says, CheckInFlow's `moved`: the web's own preview of the
     move, from the agreed rate and the server's GST rate; the server charges it. */
 export function moveWords(stay: { arrival: string; departure: string; isComplimentary: boolean; offeredTariff: number }, businessDate: string, gstRate: number | null | undefined) {

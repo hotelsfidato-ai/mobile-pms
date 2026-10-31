@@ -1,18 +1,18 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { router, useFocusEffect, type Href } from "expo-router";
-import { Globe, LogIn, LogOut, Mail, Phone, Printer, X } from "lucide-react-native";
+import { ChevronDown, Globe, LogIn, LogOut, Mail, Phone, Printer, X } from "lucide-react-native";
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { KeyboardAvoidingView, Linking, Platform, Pressable, ScrollView, Text, View } from "react-native";
-import { type Hotel } from "../../core/api";
+import { HeldError, type Hotel } from "../../core/api";
 import { cash } from "../../core/format";
 import { isOnline } from "../../core/offline";
 import { c, face, space, t } from "../../core/theme";
 import { ReadFailed, useRead } from "../../core/ui";
-import { Companions } from "./Companions";
-import { readFolio, readGuestMarks, readStay, rulesOf, said, setWhatsapp, type DeskStay } from "./data";
-import { day, foreignNationality, guestsWords, statusOf, stayedWords, whyNotYet } from "./desk";
-import { body, Button, Pill, Tick, Toast, takeNote, WEBSITE, type Said } from "./kit";
-import { maySettle, seesBills, whyNotCheckIn } from "./roles";
+import { Companions, IdPhoto } from "./Companions";
+import { readFoot, readGuestMarks, readStay, readVipLevels, rulesOf, said, setVip, setWhatsapp, type DeskStay } from "./data";
+import { day, foreignNationality, guestsWords, moneyPrecise, statusOf, stayedWords, whyNotYet } from "./desk";
+import { body, Button, MarkLink, Pill, Sheet, Tick, Toast, takeNote, WEBSITE, type Said } from "./kit";
+import { maySettle, seesBills, whyNotCheckIn, whyNotGuest } from "./roles";
 import { isHeldCheckIn, useHeld } from "./StayList";
 
 /* ══════════════════════════════════════════════════════════════════
@@ -32,7 +32,6 @@ export function StayScreen({ hotel, role, id, offer, onClose }: {
   const today = hotel.businessDate;
   const read = useRead(() => readStay(code, id), ["front-desk", code, "stay", id]);
   const bills = seesBills(role);
-  const folio = useRead(() => (bills ? readFolio(code, id) : Promise.resolve(null)), ["front-desk", code, "folio", id, bills]);
   const held = useHeld();
   const [toast, setToast] = useState<Said | null>(null);
   useFocusEffect(useCallback(() => { const n = takeNote(); if (n) setToast(n); }, []));
@@ -43,6 +42,7 @@ export function StayScreen({ hotel, role, id, offer, onClose }: {
   }, [toast]);
 
   const stay = read.data;
+  const foot = useRead(() => (bills && stay ? readFoot(code, stay) : Promise.resolve(null)), ["front-desk", code, "foot", id, bills, stay?.status]);
   if (!stay) {
     return (
       <Panel title="" onClose={onClose}>
@@ -54,6 +54,7 @@ export function StayScreen({ hotel, role, id, offer, onClose }: {
   }
 
   const state = statusOf(stay);
+  const why = (reason: string) => setToast({ title: reason, tone: "held" });
   const arrived = stay.status === "in-house" || stay.status === "due-out";
   const isHeld = isHeldCheckIn(held, code, id);
   /* The web's order: who may, then whether it can yet. An arrival on a later
@@ -66,28 +67,32 @@ export function StayScreen({ hotel, role, id, offer, onClose }: {
     <View style={{ flex: 1 }}>
       <Panel
         title={stay.guest} onClose={onClose}
-        foot={bills ? <Totals stay={stay} folio={folio.data ?? null} loading={folio.loading} /> : undefined}
+        foot={bills ? <Totals stay={stay} foot={foot.data ?? null} loading={foot.loading} /> : undefined}
         under={<HeaderLine stay={stay} />}
       >
         <View style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center", gap: 8 }}>
           <Pill tone={state.tone}>{state.label}</Pill>
           <Marks stay={stay} />
+          {/* The toggle changes the guest rather than reporting them: beside the marks. */}
+          {stay.guestId ? <VipToggle code={code} stay={stay} role={role} onSaid={setToast} /> : null}
+          {stay.guestId ? <MarkLink label="Edit guest" reason={whyNotGuest(role) ?? WEBSITE} onPress={() => undefined} onRefused={why} /> : null}
+          <GuestMarks code={code} stay={stay} role={role} onSaid={setToast} />
         </View>
-        <GuestMarks code={code} stay={stay} role={role} onSaid={setToast} />
 
-        {/* The act, then everything else: at the TOP, one orange button. */}
-        <View style={{ gap: 6 }}>
+        {/* The act, then everything else: at the TOP, one orange button; the rare acts in More options. */}
+        <View style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "flex-start", gap: 8 }}>
           {offer && stay.status === "due-in" ? (
-            <Button label="Check in" kind="primary" Icon={LogIn} reason={notYet} onPress={() => router.push(`/front-desk/${code}/check-in/${id}`)} />
+            <View style={{ gap: 6 }}>
+              <Button label="Check in" kind="primary" Icon={LogIn} reason={notYet} onPress={() => router.push(`/front-desk/${code}/check-in/${id}`)} />
+            </View>
           ) : null}
-          {offer && stay.status === "due-in" && notYet ? <Text style={[t.label, body, { color: c.grey500 }]}>{notYet}</Text> : null}
           {arrived && maySettle(role) ? (
             <Button label="Settle and check out" kind="primary" Icon={LogOut} onPress={() => router.push(`/folio/${code}/${id}` as Href)} />
           ) : null}
-          {arrived ? <Button label="Print registration card" Icon={Printer} reason={WEBSITE} onPress={() => undefined} /> : null}
-          <Button label="More options" reason={WEBSITE} onPress={() => undefined} />
-          <Text style={[t.caption, { color: c.grey500 }]}>{WEBSITE}</Text>
+          {arrived || stay.status === "checked-out" ? <Button label="Print registration card" Icon={Printer} reason={WEBSITE} onPress={() => undefined} onRefused={why} /> : null}
+          <Button label="More options" Trail={ChevronDown} reason={WEBSITE} onPress={() => undefined} onRefused={why} />
         </View>
+        {offer && stay.status === "due-in" && notYet ? <Text style={[t.label, body, { color: c.grey500, marginTop: -12 }]}>{notYet}</Text> : null}
 
         {/* The Bill tab is its own screen on a phone. */}
         {bills ? (
@@ -103,6 +108,7 @@ export function StayScreen({ hotel, role, id, offer, onClose }: {
 
         <Facts stay={stay} />
         <Companions code={code} stayId={id} today={today} rules={rulesOf(hotel)} />
+        <IdPhoto code={code} />
       </Panel>
       <Toast said={toast} onClose={() => setToast(null)} />
     </View>
@@ -127,7 +133,7 @@ export function Panel({ title, under, onClose, foot, children }: {
       <ScrollView contentContainerStyle={{ padding: space.side, gap: 20 }} keyboardShouldPersistTaps="handled">
         {children}
       </ScrollView>
-      {foot ? <View style={{ paddingHorizontal: space.side, paddingVertical: 12, borderTopWidth: 1, borderTopColor: c.grey200, backgroundColor: c.white }}>{foot}</View> : null}
+      {foot ? <View style={{ paddingHorizontal: space.side, paddingVertical: 12, borderTopWidth: 1, borderTopColor: c.grey200, backgroundColor: c.grey50 }}>{foot}</View> : null}
     </KeyboardAvoidingView>
   );
 }
@@ -172,6 +178,37 @@ function Marks({ stay }: { stay: DeskStay }) {
   );
 }
 
+/** StayDrawer.tsx VipToggle: the moment somebody knows is when they are looking
+    at the booking. The group's levels: with any, marking asks which. Held offline. */
+function VipToggle({ code, stay, role, onSaid }: { code: string; stay: DeskStay; role: string | null; onSaid: (s: Said) => void }) {
+  const levels = useRead(() => readVipLevels(code), ["front-desk", code, "vip-levels"]);
+  const cache = useQueryClient();
+  const [asking, setAsking] = useState(false);
+  const active = (levels.data ?? []).filter((l) => l.active);
+  const refused = whyNotGuest(role);
+  const toggle = async (levelId?: string) => {
+    setAsking(false);
+    try {
+      const r = await setVip(code, stay.guestId!, !stay.isVip, levelId);
+      onSaid({ title: stay.isVip ? "No longer marked VIP" : "Marked VIP", body: `${r.guest} - this holds for their next visit too.`, tone: "ok" });
+      void cache.invalidateQueries({ queryKey: ["front-desk", code] });
+    } catch (e) {
+      onSaid(e instanceof HeldError ? { title: "Saved on this phone", body: e.message, tone: "held" } : { title: "Not changed", body: said(e), tone: "bad" });
+    }
+  };
+  return (
+    <>
+      <MarkLink
+        label={stay.isVip ? "Remove VIP" : "Mark VIP"} reason={refused} onRefused={(r) => onSaid({ title: r, tone: "held" })}
+        onPress={() => (!stay.isVip && active.length > 0 ? setAsking(true) : void toggle())}
+      />
+      <Sheet open={asking} onClose={() => setAsking(false)} title="Mark VIP">
+        {active.map((l) => <Button key={l.id} label={l.label} onPress={() => void toggle(l.id)} />)}
+      </Sheet>
+    </>
+  );
+}
+
 /** flows/GuestMarks.tsx: the visits before this one, and the WhatsApp tick (customer edit). */
 function GuestMarks({ code, stay, role, onSaid }: { code: string; stay: DeskStay; role: string | null; onSaid: (s: Said) => void }) {
   const key = ["front-desk", code, "guest-marks", stay.id];
@@ -180,7 +217,6 @@ function GuestMarks({ code, stay, role, onSaid }: { code: string; stay: DeskStay
   const [busy, setBusy] = useState(false);
   const m = marks.data;
   if (!m) return null;
-  const mayTick = role === "owner" || role === "admin" || role === "gm" || role === "hotel_manager" || role === "front_desk";
   const tick = async (agreed: boolean) => {
     setBusy(true);
     try {
@@ -192,10 +228,10 @@ function GuestMarks({ code, stay, role, onSaid }: { code: string; stay: DeskStay
     setBusy(false);
   };
   return (
-    <View style={{ gap: 4 }}>
-      {m.stayedBefore > 0 ? <View style={{ flexDirection: "row" }}><Pill tone="info">{stayedWords(m.stayedBefore)}</Pill></View> : null}
-      {mayTick ? <Tick value={m.whatsappAgreed} onChange={(v) => void tick(v)} label="Agreed to WhatsApp" disabled={busy} /> : null}
-    </View>
+    <>
+      {m.stayedBefore > 0 ? <Pill tone="info">{stayedWords(m.stayedBefore)}</Pill> : null}
+      <Tick value={m.whatsappAgreed} onChange={(v) => void tick(v)} label="Agreed to WhatsApp" disabled={busy || whyNotGuest(role) != null} />
+    </>
   );
 }
 
@@ -237,7 +273,7 @@ function Facts({ stay: s }: { stay: DeskStay }) {
       </FactGroup>
 
       {s.voidReason ? (
-        <View style={{ borderRadius: 8, borderWidth: 1, borderColor: c.red100, backgroundColor: c.red50, paddingHorizontal: 16, paddingVertical: 14, gap: 4 }}>
+        <View style={{ borderRadius: 12, borderWidth: 1, borderColor: c.red100, backgroundColor: c.red50, paddingHorizontal: 16, paddingVertical: 14, gap: 4 }}>
           <Text style={[t.eyebrow, { color: c.red700 }]}>Voided</Text>
           <Text style={[t.label, body, { color: c.grey700, lineHeight: 21 }]}>
             {`${s.voidReason} - this booking is on the record as never having happened, and is left out of revenue and cancellation figures alike.`}
@@ -245,7 +281,7 @@ function Facts({ stay: s }: { stay: DeskStay }) {
         </View>
       ) : null}
       {s.notes ? (
-        <View style={{ borderRadius: 8, borderWidth: 1, borderColor: c.grey200, backgroundColor: c.grey50, paddingHorizontal: 16, paddingVertical: 14, gap: 4 }}>
+        <View style={{ borderRadius: 12, borderWidth: 1, borderColor: c.grey200, backgroundColor: c.grey50, paddingHorizontal: 16, paddingVertical: 14, gap: 4 }}>
           <Text style={[t.eyebrow, { color: c.grey600 }]}>Note</Text>
           <Text style={[t.label, body, { color: c.grey700, lineHeight: 21 }]}>{s.notes}</Text>
         </View>
@@ -272,27 +308,34 @@ function Fact({ label, tab, children }: { label: string; tab?: boolean; children
   );
 }
 
-/** What is owed, pinned: the folio's own figures, a dash for none. "Charged",
-    not "Total": nights post at the audit, and ₹0 would read as a free stay. */
-function Totals({ stay, folio, loading }: { stay: DeskStay; folio: { balance: number; payments: number } | null; loading: boolean }) {
-  if (!folio && loading) return <Text style={t.caption}>Reading the bill…</Text>;
+/** What is owed, pinned (FolioTotals): the folio's own figures, a dash for
+    none. "Charged", not "Total": nights post at the audit. While charges are to
+    come the foot says what is due with them counted (D27-199), to the paisa. */
+function Totals({ stay, foot, loading }: {
+  stay: DeskStay; foot: { folio: { balance: number; payments: number } | null; due: number | null | undefined } | null; loading: boolean;
+}) {
+  if (!foot && loading) return <Text style={t.caption}>Reading the bill…</Text>;
+  const folio = foot?.folio ?? null;
   const balance = folio ? folio.balance : null;
-  const label = balance !== null && balance < 0 ? (stay.status === "checked-out" ? "Overpaid" : "In advance") : "Balance";
-  const tone = balance === null ? c.ink900 : balance > 0 ? c.red700 : balance < 0 ? c.info : c.success600;
+  const counted = foot?.due !== undefined;
+  const owed = counted ? foot!.due ?? null : balance;
+  const label = counted && (owed === null || owed > 0) ? "Due"
+    : balance !== null && balance < 0 ? (stay.status === "checked-out" ? "Overpaid" : "In advance") : "Balance";
+  const tone = owed === null ? c.ink900 : owed > 0 ? c.red700 : owed < 0 ? c.info : c.success600;
   return (
     <View style={{ flexDirection: "row", gap: 16 }}>
-      <Total label="Charged" value={folio ? folio.balance + folio.payments : null} />
-      <Total label="Paid" value={folio ? folio.payments : null} />
-      <Total label={label} value={balance === null ? null : Math.abs(balance)} big color={tone} />
+      <Total label="Charged" value={folio ? cash(folio.balance + folio.payments) : "-"} />
+      <Total label="Paid" value={folio ? cash(folio.payments) : "-"} />
+      <Total label={label} value={owed === null ? "-" : counted ? moneyPrecise(Math.abs(owed)) : cash(Math.abs(owed))} big color={tone} />
     </View>
   );
 }
 
-function Total({ label, value, big, color }: { label: string; value: number | null; big?: boolean; color?: string }) {
+function Total({ label, value, big, color }: { label: string; value: string; big?: boolean; color?: string }) {
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: big ? 1.4 : 1 }}>
       <Text style={[t.label, body, { color: c.grey600, textAlign: big ? "right" : "left" }]}>{label}</Text>
-      <Text style={[t.heading, t.tab, face[600], { color: color ?? c.ink900, fontSize: big ? 18 : 16, textAlign: big ? "right" : "left" }]}>{cash(value)}</Text>
+      <Text style={[t.heading, t.tab, { color: color ?? c.ink900, fontSize: big ? 18 : 16, textAlign: big ? "right" : "left" }]}>{value}</Text>
     </View>
   );
 }

@@ -1,14 +1,14 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { X } from "lucide-react-native";
+import { Camera, X } from "lucide-react-native";
 import { useState } from "react";
 import { Modal, Pressable, ScrollView, Text, View } from "react-native";
 import { HeldError } from "../../core/api";
 import { c, face, space, t } from "../../core/theme";
 import { useRead } from "../../core/ui";
-import { addCompanion, readCompanions, removeCompanion, said, saveCompanion, type Companion } from "./data";
+import { addCompanion, readCompanions, readDesk, removeCompanion, said, saveCompanion, type Companion } from "./data";
 import { deskGuestId, guestIdState, ID_TYPES, noGuestId, particularsPayload, sameVisit, type GuestId, type Particulars } from "./guestId";
 import { GuestIdFields } from "./GuestIdFields";
-import { body, Box, Button, Field, Pill, Toast, type Said } from "./kit";
+import { body, Box, Button, Field, Pill, Toast, WEBSITE, type Said } from "./kit";
 import type { DeskRules } from "./data";
 
 /* ══════════════════════════════════════════════════════════════════
@@ -93,6 +93,25 @@ export function Companions({ code, stayId, today, rules, adults, leadAnswers }: 
         />
       ) : null}
       <Toast said={toast} onClose={() => setToast(null)} />
+    </View>
+  );
+}
+
+/** AddIdPhotoAtDesk.tsx (D27-210): the desk's roles only; the hotel's own
+    sentence where it keeps no ID photos. Taking one needs a camera package. */
+export function IdPhoto({ code }: { code: string }) {
+  const desk = useRead(() => readDesk(code), ["front-desk", code, "desk"]);
+  const photos = desk.data?.idPhotos;
+  if (!photos) return null;
+  return (
+    <View style={{ gap: 6 }}>
+      <Text style={[t.label, { color: c.ink900 }]}>A photo of the ID</Text>
+      {photos.on ? (
+        <>
+          <Button label="Add the photo" Icon={Camera} reason={WEBSITE} onPress={() => undefined} />
+          <Text style={t.caption}>{WEBSITE}</Text>
+        </>
+      ) : <Text style={[t.label, body, { color: c.grey600, lineHeight: 21 }]}>{photos.off}</Text>}
     </View>
   );
 }

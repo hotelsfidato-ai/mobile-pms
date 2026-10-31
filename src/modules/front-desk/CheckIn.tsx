@@ -1,14 +1,14 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { router } from "expo-router";
-import { BedDouble, Camera, Check, Info } from "lucide-react-native";
+import { BedDouble, Check, Info } from "lucide-react-native";
 import { useState, type ReactNode } from "react";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, ScrollView, Text, View } from "react-native";
 import { ApiError, HeldError, type Hotel } from "../../core/api";
 import { cash } from "../../core/format";
 import { isOnline } from "../../core/offline";
 import { c, face, t } from "../../core/theme";
 import { ReadFailed, useRead } from "../../core/ui";
-import { Companions } from "./Companions";
+import { Companions, IdPhoto } from "./Companions";
 import {
   checkIn, readAssignable, readDesk, readEarly, readExpress, readStay, readTaxRate, rulesOf, said, type DeskStay,
 } from "./data";
@@ -17,7 +17,7 @@ import {
 } from "./desk";
 import { deskGuestId, guestIdPayload, guestIdState, noGuestId, type GuestId } from "./guestId";
 import { GuestIdFields } from "./GuestIdFields";
-import { body, Box, Button, Field, leaveNote, Pick, Pill, Tick, Toast, Toggle, WEBSITE, type Said } from "./kit";
+import { body, Box, Button, Field, leaveNote, Pick, Pill, Tick, Toast, Toggle, type Said } from "./kit";
 import type { Tone } from "./desk";
 import { whyNotCheckIn } from "./roles";
 import { Panel } from "./Stay";
@@ -76,7 +76,7 @@ function Form({ hotel, role, stay, onClose }: { hotel: Hotel; role: string | nul
   const express = useRead(() => readExpress(code, stay.id, prepaid), [...scope, "express", prepaid]);
   const early = useRead(() => readEarly(code), ["front-desk", code, "early"]);
   const rooms = useRead(() => readAssignable(code, stay.roomType, businessDate, stay.roomNumber, stay.departure), [...scope, "rooms"]);
-  const desk = useRead(() => readDesk(code), [...scope, "desk"]);
+  const desk = useRead(() => readDesk(code), ["front-desk", code, "desk"]);
 
   const byExpress = (express.data?.express ?? false) && !otherId;
   const earlyByDate = stay.arrival > businessDate;
@@ -175,12 +175,15 @@ function Form({ hotel, role, stay, onClose }: { hotel: Hotel; role: string | nul
               </Explained>
               {rooms.error && !rooms.data ? <ReadFailed what="the rooms" error={rooms.error} onRetry={rooms.reload} /> : null}
               {!rooms.data && !rooms.error ? <Text style={t.label}>Reading the rooms…</Text> : null}
-              {(rooms.data ?? []).map((room) => (
-                <RoomChoice
-                  key={room.number} room={room} booked={stay.roomType} selected={room.number === roomNumber}
-                  onPick={() => { setRoomNumber(room.number); setChanging((x) => ({ ...x, room: false })); }}
-                />
-              ))}
+              {/* The web's list scrolls at 240 px. */}
+              <ScrollView style={{ maxHeight: 240 }} nestedScrollEnabled contentContainerStyle={{ gap: 8 }}>
+                {(rooms.data ?? []).map((room) => (
+                  <RoomChoice
+                    key={room.number} room={room} booked={stay.roomType} selected={room.number === roomNumber}
+                    onPick={() => { setRoomNumber(room.number); setChanging((x) => ({ ...x, room: false })); }}
+                  />
+                ))}
+              </ScrollView>
             </>
           )}
         </View>
@@ -207,17 +210,7 @@ function Form({ hotel, role, stay, onClose }: { hotel: Hotel; role: string | nul
             </>
           )}
           {/* D27-210: the desk adds the ID photo for a guest who sent none. */}
-          {desk.data?.idPhotos ? (
-            <View style={{ gap: 6 }}>
-              <Text style={[t.label, { color: c.ink900 }]}>A photo of the ID</Text>
-              {desk.data.idPhotos.on ? (
-                <>
-                  <Button label="Add the photo" Icon={Camera} reason={WEBSITE} onPress={() => undefined} />
-                  <Text style={t.caption}>{WEBSITE}</Text>
-                </>
-              ) : <Text style={[t.label, body, { color: c.grey600 }]}>{desk.data.idPhotos.off}</Text>}
-            </View>
-          ) : null}
+          <IdPhoto code={code} />
         </View>
 
         <View style={{ paddingTop: 16, borderTopWidth: 1, borderTopColor: c.grey200 }}>
@@ -229,7 +222,7 @@ function Form({ hotel, role, stay, onClose }: { hotel: Hotel; role: string | nul
 
         {/* Arriving early: only when the property says so, on its own clock. */}
         {isEarly ? (
-          <View style={{ borderRadius: 8, borderWidth: 1, borderColor: c.yellow100, backgroundColor: c.yellow50, padding: 12, gap: 10 }}>
+          <View style={{ borderRadius: 12, borderWidth: 1, borderColor: c.yellow100, backgroundColor: c.yellow50, padding: 12, gap: 10 }}>
             <Text style={[t.label, body, { color: c.yellow800 }]}>
               {earlyByDate ? `This booking is for ${day(stay.arrival)}. Checking in now moves it to today, so tonight is charged.`
                 : `Rooms are ready from ${early.data?.checkInTime ?? ""}.`}
@@ -257,7 +250,7 @@ function Form({ hotel, role, stay, onClose }: { hotel: Hotel; role: string | nul
         />
 
         {/* The stay: its dates, the party, the meal plan and the rate. */}
-        <View style={{ borderRadius: 8, borderWidth: 1, borderColor: c.grey200, backgroundColor: c.grey50, padding: 12, gap: 12 }}>
+        <View style={{ borderRadius: 12, borderWidth: 1, borderColor: c.grey200, backgroundColor: c.grey50, padding: 12, gap: 12 }}>
           <Text style={[t.label, body, { color: c.ink900 }]}>
             {`${day(stay.arrival)} – ${day(stay.departure)}`}
             <Text style={{ color: c.grey500 }}>{` · ${stay.isDayUse ? "day use" : `${stay.nights} ${stay.nights === 1 ? "night" : "nights"}`}`}</Text>
@@ -305,13 +298,13 @@ function RoomChoice({ room, booked, selected, onPick }: { room: Assignable; book
         onPress={() => (room.allowed ? onPick() : setWhy(true))} accessibilityRole="button"
         accessibilityLabel={`Room ${room.number}, ${room.label ?? room.housekeeping}`} accessibilityState={{ selected, disabled: !room.allowed }} accessibilityHint={room.reason}
         style={{
-          minHeight: 44, flexDirection: "row", flexWrap: "wrap", alignItems: "center", columnGap: 8, paddingHorizontal: 12, paddingVertical: 6, borderRadius: 8, borderWidth: 1,
+          minHeight: 44, flexDirection: "row", flexWrap: "wrap", alignItems: "center", columnGap: 8, paddingHorizontal: 12, paddingVertical: 6, borderRadius: 12, borderWidth: 1,
           borderColor: selected ? c.orange : c.grey200, backgroundColor: selected ? c.orange50 : room.allowed ? c.white : c.grey50, opacity: room.allowed ? 1 : 0.6,
         }}
       >
         <BedDouble size={16} color="#9aa2a9" />
         <Text style={[t.label, t.tab, { color: c.ink900 }]}>{room.number}</Text>
-        <View style={{ marginLeft: "auto" }}><Pill tone={roomTone(room)} dot={false}>{room.label ?? room.housekeeping}</Pill></View>
+        <View style={{ marginLeft: "auto" }}><Pill tone={roomTone(room)}>{room.label ?? room.housekeeping}</Pill></View>
         {room.type !== booked ? <Text style={[t.caption, { width: "100%", paddingLeft: 24, color: c.yellow800 }]}>{`${room.type} (different type)`}</Text> : null}
       </Pressable>
       {/* The web's tooltip needs a pointer: the tap says it. */}
@@ -335,7 +328,7 @@ function Changeable({ what, children, onChange }: { what: string; children: Reac
     <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
       <Text style={[t.label, body, { flex: 1, color: c.ink900 }]}>{children}</Text>
       <Pressable onPress={onChange} accessibilityRole="button" accessibilityLabel={`Change ${what}`} hitSlop={10} style={{ minHeight: 44, justifyContent: "center" }}>
-        <Text style={[t.label, { color: c.orange }]}>Change</Text>
+        <Text style={[t.label, { color: c.orange700 }]}>Change</Text>
       </Pressable>
     </View>
   );

@@ -1,7 +1,7 @@
 /* Run: node --experimental-strip-types mobile/src/modules/front-desk/desk.check.ts
    The desk's lists and the check-in's rules, on a tiny house. */
 import {
-  arrivals, assignable, blockedFor, checkInBlocked, day, dueOut, emptyRooms, inHouse, isBigMove, matches, mealPlanChoices, moveWords, owing,
+  arrivals, assignable, blockedFor, checkInBlocked, day, dueOut, emptyRooms, inHouse, isBigMove, matches, mealPlanChoices, moveWords, owing, stayDue,
   partyProblem, upcoming, walkIns, whyNotYet,
 } from "./desk.ts";
 
@@ -75,6 +75,14 @@ eq(checkInBlocked({ ...ok, advanceWords: "An advance of ₹3,000 is owed before 
 eq(checkInBlocked({ ...ok, party: "Adults is a whole number from 1 to 99.", room: "" }), "Adults is a whole number from 1 to 99.", "the party first");
 eq(partyProblem("abc", "0"), "Adults is a whole number from 1 to 99.", "abc adults");
 eq(partyProblem("2", ""), null, "an empty children box is none, as the web reads it");
+
+/* The panel's foot, the picture's own figure: three nights at ₹3,169.54 with 5%. */
+const arriving = { status: "due-in", isComplimentary: false, offeredTariff: 3169.54 };
+eq(stayDue(arriving, 3, 5, null), 9984.06, "Due, on the picture");
+eq(stayDue(arriving, 3, 5, -1000), 8984.06, "an advance taken off");
+eq(stayDue(arriving, 0, 5, null), undefined, "no charges to come");
+eq(stayDue({ ...arriving, isComplimentary: true }, 3, 5, null), undefined, "complimentary");
+eq(stayDue(arriving, 3, null, null), null, "no tax rule: no figure");
 
 /* More than a day early moves the booking, confirmed first (D27-193). */
 eq(isBigMove("2026-08-26", d), false, "a day early");

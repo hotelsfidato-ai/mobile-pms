@@ -1,7 +1,7 @@
 import { api, ApiError, orNull, send, type Hotel } from "../../core/api";
 import type { Room, Stay } from "../../core/types";
 import type { Promotion, Split, Tariff } from "./booking";
-import { arrivals, assignable, dueOut, emptyRooms, inHouse, upcoming, walkIns } from "./desk";
+import { arrivals, assignable, dueOut, emptyRooms, inHouse, stayDue, upcoming, walkIns } from "./desk";
 
 /* ══════════════════════════════════════════════════════════════════
    THE FRONT DESK'S READS AND WRITES — the web's calls, one file:
@@ -53,6 +53,15 @@ export const readHouse = (code: string) =>
 /** A role without bills reads none (D27-143): the balance prints its dash. */
 export const readFolio = (code: string, id: string) =>
   orNull<{ balance: number; payments: number }>(`/api/hotels/${code}/stays/${id}/folio`, [403]);
+
+/** The stay's foot (FolioTotals): the bill's figures, and what is due with
+    the charges to come counted (useStayDue): undefined when none are to come. */
+export async function readFoot(code: string, s: DeskStay) {
+  const [folio, bill] = await Promise.all([readFolio(code, s.id), orNull<{ nightsToCome?: number }>(`/api/hotels/${code}/stays/${s.id}/bill`, [403])]);
+  const nights = bill?.nightsToCome ?? 0;
+  const gst = nights > 0 && !s.isComplimentary && s.offeredTariff > 0 ? await readTaxRate(code, s.offeredTariff).catch(() => null) : null;
+  return { folio, due: stayDue(s, nights, gst?.rate, folio?.balance ?? null) };
+}
 
 async function withBalances(code: string, list: DeskStay[], bills: boolean): Promise<DeskStay[]> {
   if (!bills) return list;
@@ -116,6 +125,11 @@ export const assignRoom = (code: string, id: string, roomNumber: string) =>
 export const readGuestMarks = (code: string, id: string) =>
   orNull<{ stayedBefore: number; whatsappAgreed: boolean }>(`/api/hotels/${code}/stays/${id}/guest-marks`, [403]);
 export const setWhatsapp = (code: string, id: string, agreed: boolean) => send("POST", `/api/hotels/${code}/stays/${id}/whatsapp`, { agreed });
+/** The guest's record, held offline ("VIP"). The group's levels: with any, marking asks which (D27-260). */
+export const setVip = (code: string, guestId: string, isVip: boolean, levelId?: string) =>
+  send<{ ok: true; guest: string }>("POST", `/api/hotels/${code}/guests/${guestId}/vip`, { isVip, ...(levelId ? { levelId } : {}) });
+export const readVipLevels = (code: string) =>
+  api<Array<{ id: string; label: string; active: boolean }>>(`/api/hotels/${code}/vip-levels`).catch(() => []);
 
 /* ── Every adult in the room (D27-382) ─────────────────────────────── */
 export interface Companion {

@@ -345,7 +345,7 @@ export function WalkIn({ hotel, role, room: walkRoom, onClose }: { hotel: Hotel;
         <Section title="ID" description="Recorded by Check in now. Save booking keeps only the nationality.">
           <GuestIdFields value={guestId} onChange={setGuestId} today={today} idsOff={rules?.idTypesOff ?? []} />
           {isEarly ? (
-            <View style={{ borderRadius: 8, borderWidth: 1, borderColor: c.yellow100, backgroundColor: c.yellow50, padding: 12, gap: 10 }}>
+            <View style={{ borderRadius: 12, borderWidth: 1, borderColor: c.yellow100, backgroundColor: c.yellow50, padding: 12, gap: 10 }}>
               <Text style={[t.label, body, { color: c.yellow800 }]}>
                 {`Rooms are ready from ${early.data?.checkInTime ?? "-"}.`}
                 {early.data?.charge == null ? " This property does not charge for an early arrival." : ` An early arrival is ${cash(early.data.charge)}.`}
@@ -560,7 +560,7 @@ function Returning({ code, phone, email, chosen, onChoose, onUseCompany }: {
   return (
     <View style={{ gap: 8 }}>
       {matches.filter((m) => m.blacklisted).map((m) => (
-        <View key={`w-${m.guestId ?? m.name}`} accessibilityRole="alert" style={{ flexDirection: "row", gap: 8, borderRadius: 8, borderWidth: 1, borderColor: c.red100, backgroundColor: c.red50, padding: 12 }}>
+        <View key={`w-${m.guestId ?? m.name}`} accessibilityRole="alert" style={{ flexDirection: "row", gap: 8, borderRadius: 12, borderWidth: 1, borderColor: c.red100, backgroundColor: c.red50, padding: 12 }}>
           <AlertTriangle size={16} color={c.red700} style={{ marginTop: 2 }} />
           <Text style={[t.label, { flex: 1, color: c.red700 }]}>
             {`${m.name} is blacklisted.`}<Text style={body}>{` Reason: ${m.blacklistReason ?? "-"}. The booking is not refused - you decide.`}</Text>
@@ -571,7 +571,7 @@ function Returning({ code, phone, email, chosen, onChoose, onUseCompany }: {
         const isChosen = chosen?.id === m.guestId;
         const company = isChosen && onUseCompany ? m.lastCompany : undefined;
         return (
-          <View key={m.guestId} style={{ borderRadius: 8, borderWidth: 1, borderColor: c.grey200, backgroundColor: c.grey50, padding: 12, gap: 8 }}>
+          <View key={m.guestId} style={{ borderRadius: 12, borderWidth: 1, borderColor: c.grey200, backgroundColor: c.grey50, padding: 12, gap: 8 }}>
             <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
               <UserCheck size={16} color={c.grey500} />
               <Text style={[t.label, body, { flex: 1, color: c.ink900 }]}>
