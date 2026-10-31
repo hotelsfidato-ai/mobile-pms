@@ -1,25 +1,26 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { ChevronLeft, Circle, CircleCheck, Plus, RotateCcw, Wrench } from "lucide-react-native";
-import { useState, type ReactNode } from "react";
-import { Pressable, Text, TextInput, View } from "react-native";
+import { Plus, RotateCcw, Wrench } from "lucide-react-native";
+import { useState } from "react";
+import { Pressable, Text, View } from "react-native";
 import type { Room } from "../../core/types";
-import { api, send, type Hotel } from "../../core/api";
-import { dateLong } from "../../core/format";
+import { api, orNull, send, type Hotel } from "../../core/api";
 import { isOnline } from "../../core/offline";
-import { c, face, t } from "../../core/theme";
-import { Capsule, Card, Head, ReadFailed, Screen, s, useRead } from "../../core/ui";
+import { c, t } from "../../core/theme";
+import { Capsule, ReadFailed, s, useRead } from "../../core/ui";
 import {
   addDays, BLOCK_REASONS, blockBody, blockSpan, ended, reasonLabel, statusWord, takenOut, whyNotTake, type BlockForm,
 } from "./block";
 import { Day } from "./DayStepper";
+import { Button, Field, Input, Select, Sheet } from "./Form";
 import { whyNotBlock } from "./roles";
 
 /* ══════════════════════════════════════════════════════════════════
    OUT OF SERVICE on a phone — the web's OutOfOrderFlow
    (src/modules/housekeeping/flows/OutOfOrderFlow.tsx) as a screen: what
    already holds the room out, each with Put back; then why, from, until
-   and a note. ONLINE ONLY (M-5): `send` refuses it offline with the web's
-   sentence (src/core/offline.ts, unlisted), and nothing is held.
+   and a note, with the hotel's ready reasons. ONLINE ONLY (M-5): `send`
+   refuses it offline with the web's sentence (src/core/offline.ts,
+   unlisted), and nothing is held.
    Differences from the web: a day stepper for the dates (no date-picker
    package); a block starting after the business date is said as "goes
    out on", and Put back says the status the room was read back with,
@@ -28,15 +29,20 @@ import { whyNotBlock } from "./roles";
 
 /** /house-now, the field read here: somebody is in the room (the board's rule). */
 interface HouseNow { rooms: Array<{ number: string; inHouse: boolean }> }
+/** src/modules/front-desk/data/lists.ts ListItem, the fields read here. */
+interface ReadyReason { id: string; label: string; active: boolean }
 
 async function readRoom(code: string, n: string) {
-  const [rooms, house] = await Promise.all([
+  const [rooms, house, ready] = await Promise.all([
     api<Room[]>(`/api/hotels/${code}/rooms`),
     api<HouseNow>(`/api/hotels/${code}/house-now`),
+    /* The hotel's ready reasons (D27-260): a help, never worth failing the form for. */
+    orNull<ReadyReason[]>(`/api/hotels/${code}/lists/reason_block`).catch(() => null),
   ]);
   return {
     room: rooms.find((r) => r.number === n) ?? null,
     occupied: house.rooms.find((r) => r.number === n)?.inHouse ?? false,
+    ready: (ready ?? []).filter((r) => r.active),
   };
 }
 
@@ -92,14 +98,10 @@ export function OutOfService({ hotel, room: n, role, onBack }: {
   const backAs = said?.back && room && !read.loading && !read.error ? `It is ${statusWord(room.status)} now.` : "";
 
   return (
-    <Screen refreshing={read.loading && Boolean(read.data)} onRefresh={read.reload}>
-      <Head
-        eyebrow="Out of service"
-        title={n ? `Room ${n}` : "No room"}
-        under={room ? `${room.type} · now ${statusWord(room.status)}` : hotel.name}
-        action={<Capsule label="Back" icon={<ChevronLeft size={16} color={c.grey700} />} onPress={onBack} />}
-      />
-
+    <Sheet
+      title={n ? `Room ${n}` : "No room"} under="Out of service, and for how long." onClose={onBack}
+      refreshing={read.loading && Boolean(read.data)} onRefresh={read.reload}
+    >
       {said ? (
         <View style={[s.card, { gap: 2 }, said.ok ? { borderColor: c.grey200 } : { backgroundColor: c.red50, borderColor: c.red100 }]} accessibilityRole="alert">
           <Text style={[t.heading, !said.ok && { color: c.red700 }]}>{said.title}</Text>
@@ -122,11 +124,13 @@ export function OutOfService({ hotel, room: n, role, onBack }: {
       {!read.data && read.loading ? <Text style={t.label}>Reading room {n}…</Text> : null}
 
       {read.data && !room ? (
-        <Card><Text style={t.heading}>{n ? `There is no room ${n} here.` : "Open a room from the Rooms board."}</Text></Card>
+        <Text style={t.heading}>{n ? `There is no room ${n} here.` : "Open a room from the Rooms board."}</Text>
       ) : null}
 
       {room ? (
         <>
+          <Text style={t.caption}>{room.type} · now {statusWord(room.status)}</Text>
+
           {forbidden ? (
             <View style={[s.card, { backgroundColor: c.grey50 }]} accessibilityRole="text">
               <Text style={[t.label, { color: c.grey700 }]}>{forbidden}</Text>
@@ -134,55 +138,41 @@ export function OutOfService({ hotel, room: n, role, onBack }: {
           ) : null}
 
           {/* What already holds the room out, each with its way back (the web's "Already out"). */}
-          <Card style={{ gap: 8 }}>
-            <Text style={t.eyebrow}>Already out</Text>
-            {room.blocks.length === 0 ? <Text style={t.label}>Room {n} is not held out of service.</Text> : null}
-            {room.blocks.map((b) => (
-              <View key={b.id} style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
-                <View style={{ flex: 1, gap: 2 }}>
-                  <Text style={t.heading}>{reasonLabel(b.reason)}</Text>
-                  <Text style={[t.caption, t.tab]}>{blockSpan(b)}</Text>
+          {room.blocks.length > 0 ? (
+            <View style={{ borderWidth: 1, borderColor: c.grey200, borderRadius: 10, backgroundColor: c.grey50, padding: 12, gap: 8 }}>
+              <Text style={[t.caption, { textTransform: "uppercase", letterSpacing: 0.3 }]}>Already out</Text>
+              {room.blocks.map((b) => (
+                <View key={b.id} style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
+                  <View style={{ flex: 1, gap: 2 }}>
+                    <Text style={[t.label, { color: c.ink900 }]}>{reasonLabel(b.reason)}</Text>
+                    <Text style={[t.label, t.tab, { color: c.grey500 }]}>{blockSpan(b)}</Text>
+                  </View>
+                  {ended(b, hotel.businessDate) ? (
+                    <Text style={[t.caption, { color: c.grey600 }]}>Ended</Text>
+                  ) : (
+                    <Button
+                      label="Put back" icon={RotateCcw} disabled={off} onPress={() => void putBack(b.id)}
+                      a11y={`Put room ${n} back: ${reasonLabel(b.reason)}, ${blockSpan(b)}`} hint={forbidden ?? undefined}
+                    />
+                  )}
                 </View>
-                {ended(b, hotel.businessDate) ? (
-                  <Text style={[t.caption, { color: c.grey600 }]}>Ended</Text>
-                ) : (
-                  <Button
-                    label="Put back" icon={RotateCcw} disabled={off} onPress={() => void putBack(b.id)}
-                    a11y={`Put room ${n} back: ${reasonLabel(b.reason)}, ${blockSpan(b)}`} hint={forbidden ?? undefined}
-                  />
-                )}
-              </View>
-            ))}
-          </Card>
+              ))}
+            </View>
+          ) : null}
 
           {read.data?.occupied ? (
             /* No form: the web's own words (OutOfOrderFlow 154-165); the server refuses it too. */
-            <View style={[s.card, { backgroundColor: c.red50, borderColor: c.red100, gap: 2 }]}>
-              <Text style={t.heading}>Somebody is in this room.</Text>
+            <View style={{ borderWidth: 1, borderColor: c.red100, borderRadius: 10, backgroundColor: c.red50, padding: 12, gap: 2 }}>
+              <Text style={[t.label, { color: c.ink900 }]}>Somebody is in this room.</Text>
               <Text style={[t.label, { color: c.grey600 }]}>Move them out before taking it off sale.</Text>
             </View>
           ) : (
-            <Card style={{ gap: 16 }}>
-              <Field label="Why is it coming out?">
-                <View accessibilityRole="radiogroup" accessibilityLabel="Why is it coming out?">
-                  {BLOCK_REASONS.map((r) => {
-                    const on = form.reason === r.value;
-                    const Mark = on ? CircleCheck : Circle;
-                    return (
-                      <Pressable
-                        key={r.value} onPress={() => set({ reason: r.value })} disabled={off}
-                        accessibilityRole="radio" accessibilityLabel={r.label} aria-checked={on}
-                        style={{ minHeight: 44, flexDirection: "row", alignItems: "center", gap: 10 }}
-                      >
-                        <Mark size={20} color={off ? c.grey300 : on ? c.orange600 : c.grey500} />
-                        <Text style={[t.label, { flex: 1, color: off ? c.grey500 : c.ink900 }]}>{r.label}</Text>
-                      </Pressable>
-                    );
-                  })}
-                </View>
+            <>
+              <Field label="Why is it coming out?" required>
+                <Select label="Why is it coming out?" value={form.reason} options={BLOCK_REASONS} onChange={(reason) => set({ reason })} off={off} />
               </Field>
 
-              <Field label="From">
+              <Field label="From" required>
                 <Day label="From" value={form.from} off={off} onChange={(from) => set({ from, to: form.to && form.to <= from ? addDays(from, 1) : form.to })} />
               </Field>
 
@@ -201,54 +191,35 @@ export function OutOfService({ hotel, room: n, role, onBack }: {
                 )}
               </Field>
 
-              <Field label="Note" hint="What is actually wrong">
-                <TextInput
-                  value={form.note} onChangeText={(note) => set({ note })} editable={!off} multiline
-                  placeholder="Shower mixer leaking" placeholderTextColor={c.grey500} accessibilityLabel="Note"
-                  style={[t.label, { color: c.ink900, minHeight: 64, borderWidth: 1, borderColor: c.grey300, borderRadius: 8, paddingHorizontal: 12, paddingVertical: 10, textAlignVertical: "top" }]}
-                />
-              </Field>
+              <View style={{ gap: 6 }}>
+                <Field label="Note" hint="What is actually wrong">
+                  <Input value={form.note} onChangeText={(note) => set({ note })} label="Note" placeholder="Shower mixer leaking" multiline off={off} />
+                </Field>
+                {read.data?.ready.length ? (
+                  <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 6 }}>
+                    {read.data.ready.map((r) => (
+                      <Pressable
+                        key={r.id} onPress={() => set({ note: r.label })} disabled={off} accessibilityRole="button" accessibilityLabel={r.label}
+                        style={{ minHeight: 44, paddingHorizontal: 10, borderRadius: 999, borderWidth: 1, borderColor: c.grey200, backgroundColor: c.white, justifyContent: "center" }}
+                      >
+                        <Text style={[t.label, { color: c.ink900 }]}>{r.label}</Text>
+                      </Pressable>
+                    ))}
+                  </View>
+                ) : null}
+              </View>
 
               <View style={{ gap: 8 }}>
-                <Text style={[t.label, t.tab]}>{form.to ? blockSpan(form) : "No end date"}</Text>
-                <Button primary label="Take out of service" icon={Wrench} disabled={off || invalid != null} onPress={() => void take()} hint={forbidden ?? invalid ?? undefined} />
+                <View style={{ alignSelf: "flex-start", paddingHorizontal: 8, paddingVertical: 2, borderRadius: 999, backgroundColor: c.grey100 }}>
+                  <Text style={[t.caption, t.tab, { color: c.grey600 }]}>{form.to ? blockSpan(form) : "No end date"}</Text>
+                </View>
+                <Button kind="primary" label="Take out of service" icon={Wrench} disabled={off || invalid != null} onPress={() => void take()} hint={forbidden ?? invalid ?? undefined} />
                 {forbidden ?? invalid ? <Text style={[t.caption, { color: c.grey600 }]}>{forbidden ?? invalid}</Text> : null}
               </View>
-            </Card>
+            </>
           )}
         </>
       ) : null}
-    </Screen>
-  );
-}
-
-function Field({ label, hint, children }: { label: string; hint?: string; children: ReactNode }) {
-  return (
-    <View style={{ gap: 6 }}>
-      <Text style={[t.label, { color: c.ink900, ...face[600] }]}>{label}</Text>
-      {children}
-      {hint ? <Text style={t.caption}>{hint}</Text> : null}
-    </View>
-  );
-}
-
-/** The web's Button, primary or secondary, its disabled colours (src/components/ui/Button.tsx). */
-function Button({ label, icon: Icon, primary, disabled, onPress, a11y, hint }: {
-  label: string; icon?: typeof Plus; primary?: boolean; disabled: boolean; onPress: () => void; a11y?: string; hint?: string;
-}) {
-  const fg = primary ? (disabled ? c.grey600 : c.white) : disabled ? c.grey500 : c.ink900;
-  return (
-    <Pressable
-      onPress={onPress} disabled={disabled} accessibilityRole="button" accessibilityLabel={a11y ?? label}
-      accessibilityHint={hint}
-      style={({ pressed }) => [
-        s.capsule, { flexDirection: "row", gap: 6 },
-        primary ? { backgroundColor: disabled ? c.grey300 : pressed ? c.orange700 : c.orange600, borderColor: "transparent" }
-          : disabled ? { backgroundColor: c.grey50 } : pressed && { backgroundColor: c.grey100 },
-      ]}
-    >
-      {Icon ? <Icon size={16} color={fg} /> : null}
-      <Text style={[t.label, { color: fg, ...face[600] }]}>{label}</Text>
-    </Pressable>
+    </Sheet>
   );
 }
