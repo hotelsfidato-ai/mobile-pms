@@ -1,14 +1,14 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { Camera, X } from "lucide-react-native";
+import { Camera } from "lucide-react-native";
 import { useState } from "react";
-import { Modal, Pressable, ScrollView, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import { HeldError } from "../../core/api";
-import { c, face, space, t } from "../../core/theme";
+import { c, t } from "../../core/theme";
 import { useRead } from "../../core/ui";
 import { addCompanion, readCompanions, readDesk, removeCompanion, said, saveCompanion, type Companion } from "./data";
 import { deskGuestId, guestIdState, ID_TYPES, noGuestId, particularsPayload, sameVisit, type GuestId, type Particulars } from "./guestId";
 import { GuestIdFields } from "./GuestIdFields";
-import { body, Box, Button, Field, Pill, Toast, WEBSITE, type Said } from "./kit";
+import { body, Box, Button, Field, FormSheet, Pill, Toast, WEBSITE, type Said } from "./kit";
 import type { DeskRules } from "./data";
 
 /* ══════════════════════════════════════════════════════════════════
@@ -151,18 +151,19 @@ function AdultSheet({ code, stayId, today, rules, person, nationality, leadVisit
   };
 
   return (
-    <Modal visible animationType="slide" onRequestClose={() => onDone(null)}>
-      <View style={{ flex: 1, backgroundColor: c.white }}>
-        <View style={{ flexDirection: "row", alignItems: "flex-start", gap: 8, paddingHorizontal: space.side, paddingTop: 16, paddingBottom: 12, borderBottomWidth: 1, borderBottomColor: c.grey200 }}>
-          <View style={{ flex: 1, gap: 2 }}>
-            <Text style={[t.heading, face[600], { fontSize: 18 }]} accessibilityRole="header">{person ? `Edit ${person.name}` : "Add an adult"}</Text>
-            <Text style={[t.label, body, { color: c.grey500 }]}>Their own name and ID, as on the document. Saved on the stay at once; nothing here holds up the check-in.</Text>
+    <FormSheet
+      title={person ? `Edit ${person.name}` : "Add an adult"} onClose={() => onDone(null)} said={bad} onSaid={setBad}
+      description="Their own name and ID, as on the document. Saved on the stay at once; nothing here holds up the check-in."
+      foot={(
+        <View style={{ gap: 6 }}>
+          <View style={{ flexDirection: "row", gap: 8, justifyContent: "flex-end" }}>
+            <Button label="Cancel" size="lg" onPress={() => onDone(null)} />
+            <Button label="Save" kind="primary" size="lg" busy={busy} reason={wrong} onPress={() => void save()} />
           </View>
-          <Pressable onPress={() => onDone(null)} accessibilityRole="button" accessibilityLabel="Close" hitSlop={10} style={{ width: 44, height: 44, alignItems: "center", justifyContent: "center" }}>
-            <X size={20} color={c.grey600} />
-          </Pressable>
+          {wrong ? <Text style={t.caption}>{wrong}</Text> : null}
         </View>
-        <ScrollView contentContainerStyle={{ padding: space.side, gap: 16 }} keyboardShouldPersistTaps="handled">
+      )}
+    >
           <Field label="Full name" required><Box value={name} label="Full name" onChange={setName} /></Field>
           {person?.idNumber ? (
             <Text style={[t.label, body, { color: c.grey600 }]}>{`On record: ${idWord.get(person.idType ?? "") ?? "ID"} ${person.idNumber}. Fill in the document only to replace it.`}</Text>
@@ -174,14 +175,6 @@ function AdultSheet({ code, stayId, today, rules, person, nationality, leadVisit
               <Button label="Same as the guest" size="sm" onPress={() => setId({ ...id, particulars: sameVisit(id.particulars, leadVisit) })} />
             </View>
           ) : null}
-        </ScrollView>
-        <View style={{ flexDirection: "row", gap: 8, justifyContent: "flex-end", padding: space.side, borderTopWidth: 1, borderTopColor: c.grey200 }}>
-          <Button label="Cancel" size="lg" onPress={() => onDone(null)} />
-          <Button label="Save" kind="primary" size="lg" busy={busy} reason={wrong} onPress={() => void save()} />
-        </View>
-        {wrong ? <Text style={[t.caption, { paddingHorizontal: space.side, paddingBottom: 12 }]}>{wrong}</Text> : null}
-        <Toast said={bad} onClose={() => setBad(null)} />
-      </View>
-    </Modal>
+    </FormSheet>
   );
 }

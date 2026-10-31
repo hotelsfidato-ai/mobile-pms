@@ -29,6 +29,8 @@ const allow = (list: readonly string[], role: string | null, refusal: string) =>
   role != null && list.includes(role) ? null : refusal;
 
 /** Each answers null when the API would allow it, else the API's sentence. */
+export const whyNotChange = (role: string | null) =>
+  allow(EDIT, role, `Changing a booking is for ${FIVE}. Ask one of them.`);
 export const whyNotGuest = (role: string | null) =>
   allow(EDIT, role, `Changing a guest's record is for ${FIVE}. Ask one of them.`);
 export const whyNotCheckIn = (role: string | null) =>

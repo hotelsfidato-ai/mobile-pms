@@ -1,7 +1,7 @@
 /* Run: node --experimental-strip-types mobile/src/modules/front-desk/desk.check.ts
    The desk's lists and the check-in's rules, on a tiny house. */
 import {
-  arrivals, assignable, blockedFor, checkInBlocked, day, dueOut, emptyRooms, inHouse, isBigMove, matches, mealPlanChoices, moveWords, owing, stayDue,
+  amendLine, amendWrong, arrivals, assignable, blockedFor, checkInBlocked, day, dueOut, emptyRooms, inHouse, isBigMove, matches, mealPlanChoices, moveWords, owing, stayDue,
   partyProblem, upcoming, walkIns, whyNotYet,
 } from "./desk.ts";
 
@@ -75,6 +75,17 @@ eq(checkInBlocked({ ...ok, advanceWords: "An advance of ₹3,000 is owed before 
 eq(checkInBlocked({ ...ok, party: "Adults is a whole number from 1 to 99.", room: "" }), "Adults is a whole number from 1 to 99.", "the party first");
 eq(partyProblem("abc", "0"), "Adults is a whole number from 1 to 99.", "abc adults");
 eq(partyProblem("2", ""), null, "an empty children box is none, as the web reads it");
+
+/* Change dates or guests: the sentence under the boxes. */
+eq(amendWrong("0", "0", 2), "Adults is a whole number from 1 to 99.", "no adults");
+eq(amendWrong("2", "-1", 2), "Children is a whole number from 0 to 99.", "children -1");
+eq(amendWrong("2", "0", 91), "A stay is at most 90 nights. Split a longer one into two bookings.", "too long");
+eq(amendLine(2, 3, d, null, 3000), { tone: "strong", text: "2 → 3 nights", tail: " · ₹9,000 of room charges at ₹3,000 a night" }, "a night added");
+eq(amendLine(2, 2, d, null, 3000).text, "2 nights, the same as before.", "the same");
+eq(amendLine(0, 0, d, null, 3000).text, "Day use, in and out on 25 Aug 2026, at its day price.", "a day use");
+eq(amendLine(0, 2, d, null, 3000).text, "A day use stays a day use: its price is the day's. To stay the night, book the nights.", "a day use is not a stay");
+eq(amendLine(2, 0, d, null, 3000).text, "A stay does not become a day use here: book the day use on New booking, with its day price.", "a stay is not a day use");
+eq(amendLine(2, -1, d, null, 3000).tone, "bad", "departure before arrival");
 
 /* The panel's foot, the picture's own figure: three nights at ₹3,169.54 with 5%. */
 const arriving = { status: "due-in", isComplimentary: false, offeredTariff: 3169.54 };

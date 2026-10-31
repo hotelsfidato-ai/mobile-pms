@@ -1,7 +1,7 @@
-import { Check, ChevronDown, type LucideIcon } from "lucide-react-native";
+import { Check, ChevronDown, X, type LucideIcon } from "lucide-react-native";
 import { useState, type ReactNode } from "react";
 import {
-  ActivityIndicator, Modal, Pressable, ScrollView, Switch, Text, TextInput, View,
+  ActivityIndicator, KeyboardAvoidingView, Modal, Platform, Pressable, ScrollView, Switch, Text, TextInput, View,
   type KeyboardTypeOptions, type StyleProp, type TextStyle, type ViewStyle,
 } from "react-native";
 import { c, face, space, t } from "../../core/theme";
@@ -206,6 +206,30 @@ export function Sheet({ open, onClose, title, children }: { open: boolean; onClo
           {children}
         </View>
       </View>
+    </Modal>
+  );
+}
+
+/** The web's dialog on a phone: the whole screen, its head and a pinned foot. */
+export function FormSheet({ title, description, foot, onClose, said, onSaid, children }: {
+  title: string; description?: string; foot: ReactNode; onClose: () => void; said: Said | null; onSaid: (s: Said | null) => void; children: ReactNode;
+}) {
+  return (
+    <Modal visible animationType="slide" onRequestClose={onClose}>
+      <KeyboardAvoidingView style={{ flex: 1, backgroundColor: c.white }} behavior={Platform.OS === "ios" ? "padding" : undefined}>
+        <View style={{ flexDirection: "row", alignItems: "flex-start", gap: 8, paddingHorizontal: space.side, paddingTop: 16, paddingBottom: 12, borderBottomWidth: 1, borderBottomColor: c.grey200 }}>
+          <View style={{ flex: 1, gap: 2 }}>
+            <Text style={[t.heading, { fontSize: 16 }]} accessibilityRole="header">{title}</Text>
+            {description ? <Text style={[t.label, body, { color: c.grey500 }]}>{description}</Text> : null}
+          </View>
+          <Pressable onPress={onClose} accessibilityRole="button" accessibilityLabel="Close" hitSlop={10} style={{ width: 44, height: 44, alignItems: "center", justifyContent: "center" }}>
+            <X size={20} color={c.grey600} />
+          </Pressable>
+        </View>
+        <ScrollView contentContainerStyle={{ padding: space.side, gap: 16 }} keyboardShouldPersistTaps="handled">{children}</ScrollView>
+        <View style={{ padding: space.side, borderTopWidth: 1, borderTopColor: c.grey200 }}>{foot}</View>
+        <Toast said={said} onClose={() => onSaid(null)} />
+      </KeyboardAvoidingView>
     </Modal>
   );
 }

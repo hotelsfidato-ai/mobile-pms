@@ -1,7 +1,7 @@
 /* Run: node --experimental-strip-types mobile/src/modules/front-desk/roles.check.ts
    Who may check in, give a room, book, take the advance and see the bill:
    today's API's answers, read back on 31 Oct as dev-housekeeping. */
-import { mayGiveComp, maySettle, seesBills, whyNotBook, whyNotCheckIn, whyNotGuest, whyNotPay, whyNotRoom } from "./roles.ts";
+import { mayGiveComp, maySettle, seesBills, whyNotBook, whyNotChange, whyNotCheckIn, whyNotGuest, whyNotPay, whyNotRoom } from "./roles.ts";
 
 const eq = (got: unknown, want: unknown, what: string) => {
   if (JSON.stringify(got) !== JSON.stringify(want)) throw new Error(`${what}: got ${JSON.stringify(got)}, want ${JSON.stringify(want)}`);
@@ -12,6 +12,7 @@ eq(whyNotCheckIn("housekeeping"), "Checking a guest in is for the owner, an admi
 eq(whyNotRoom("housekeeping"), "Giving a booking a room, or moving it is for the owner, an administrator, the general manager, the hotel manager or reception. Ask one of them.", "housekeeping gives a room");
 eq(whyNotBook("housekeeping"), "Making a booking is for the owner, an administrator, the general manager, the hotel manager or reception. Ask one of them.", "housekeeping books");
 eq(whyNotGuest("housekeeping"), "Changing a guest's record is for the owner, an administrator, the general manager, the hotel manager or reception. Ask one of them.", "housekeeping changes a guest");
+eq(whyNotChange("housekeeping"), "Changing a booking is for the owner, an administrator, the general manager, the hotel manager or reception. Ask one of them.", "housekeeping changes a booking");
 eq(whyNotPay("housekeeping"), "Taking a payment is for the owner, an administrator, the general manager, the hotel manager, reception or the accountant. Ask one of them.", "housekeeping takes money");
 
 for (const role of ["owner", "admin", "gm", "hotel_manager", "front_desk"]) {

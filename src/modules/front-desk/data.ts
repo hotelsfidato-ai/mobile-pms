@@ -131,6 +131,33 @@ export const setVip = (code: string, guestId: string, isVip: boolean, levelId?: 
 export const readVipLevels = (code: string) =>
   api<Array<{ id: string; label: string; active: boolean }>>(`/api/hotels/${code}/vip-levels`).catch(() => []);
 
+/* ── More options (operations.ts, stayExtras.ts, reservations' booking.ts) ── */
+export const amendStay = (code: string, id: string, input: object) =>
+  send<{ guest: string; nightsBefore: number; nightsAfter: number; roomHeld: string | null }>("PATCH", `/api/hotels/${code}/stays/${id}`, input);
+export const moveRoom = (code: string, id: string, input: object) =>
+  send<{ guest: string; from: string; to: string; nightsBefore: number; nightsAfter: number }>("POST", `/api/hotels/${code}/stays/${id}/move`, input);
+export const unassignRoom = (code: string, id: string) => send<{ room: string }>("POST", `/api/hotels/${code}/stays/${id}/unassign`, {});
+export const voidStay = (code: string, id: string, reason: string) => send("POST", `/api/hotels/${code}/stays/${id}/void`, { reason });
+export const confirmWaiting = (code: string, id: string) => send("POST", `/api/hotels/${code}/stays/${id}/confirm`, {});
+export const cancelWaiting = (code: string, id: string, reason: string) => send("POST", `/api/hotels/${code}/stays/${id}/cancel`, { reason });
+export const cancelConfirmed = (code: string, id: string, reason: string, waive: boolean) =>
+  send<{ charged: number | null; waived: boolean }>("POST", `/api/hotels/${code}/stays/${id}/cancel`, { reason, ...(waive ? { waive } : {}) });
+/** What cancelling would charge, written nowhere. `charge` null: no terms; 0: the free window. */
+export const cancelPreview = (code: string, id: string) =>
+  send<{ preview: { terms: string | null; charge: number | null } }>("POST", `/api/hotels/${code}/stays/${id}/cancel`, { dryRun: true });
+export const readReasons = (code: string, kind: string) =>
+  api<Array<{ id: string; label: string; active: boolean }>>(`/api/hotels/${code}/lists/${kind}`).catch(() => []);
+export const readExchangeable = (code: string, id: string) =>
+  api<{ rooms: Array<{ id: string; guest: string; room: string; reference: string; departs: string }> }>(`/api/hotels/${code}/stays/${id}/exchangeable`).then((o) => o.rooms, () => []);
+export const exchangeRooms = (code: string, id: string, input: object) =>
+  send<{ from: string; to: string }>("POST", `/api/hotels/${code}/stays/${id}/exchange`, input);
+export const readInclusions = (code: string) =>
+  api<{ inclusions: Array<{ id: string; name: string; rate: number | null }> }>(`/api/hotels/${code}/inclusions`).then((o) => o.inclusions, () => []);
+export const readStayInclusions = (code: string, id: string) =>
+  api<{ inclusions: Array<{ id: string; name: string; quantity: number; rate: number | null; notes: string | null; addedBy: string; at: string }> }>(`/api/hotels/${code}/stays/${id}/inclusions`).then((o) => o.inclusions, () => []);
+export const addStayInclusion = (code: string, id: string, input: object) => send("POST", `/api/hotels/${code}/stays/${id}/inclusions`, input);
+export const removeStayInclusion = (code: string, id: string, lineId: string) => send("DELETE", `/api/hotels/${code}/stays/${id}/inclusions/${lineId}`);
+
 /* ── Every adult in the room (D27-382) ─────────────────────────────── */
 export interface Companion {
   guestId: string; name: string; nationality: string; idType: string | null; idNumber: string | null; filed: boolean;

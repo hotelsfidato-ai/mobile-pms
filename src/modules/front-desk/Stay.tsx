@@ -1,6 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { router, useFocusEffect, type Href } from "expo-router";
-import { ChevronDown, Globe, LogIn, LogOut, Mail, Phone, Printer, X } from "lucide-react-native";
+import { Globe, LogIn, LogOut, Mail, Phone, Printer, X } from "lucide-react-native";
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { KeyboardAvoidingView, Linking, Platform, Pressable, ScrollView, Text, View } from "react-native";
 import { HeldError, type Hotel } from "../../core/api";
@@ -13,6 +13,7 @@ import { readFoot, readGuestMarks, readStay, readVipLevels, rulesOf, said, setVi
 import { day, foreignNationality, guestsWords, moneyPrecise, statusOf, stayedWords, whyNotYet } from "./desk";
 import { body, Button, MarkLink, Pill, Sheet, Tick, Toast, takeNote, WEBSITE, type Said } from "./kit";
 import { maySettle, seesBills, whyNotCheckIn, whyNotGuest } from "./roles";
+import { MoreOptions } from "./StayActs";
 import { isHeldCheckIn, useHeld } from "./StayList";
 
 /* ══════════════════════════════════════════════════════════════════
@@ -90,7 +91,7 @@ export function StayScreen({ hotel, role, id, offer, onClose }: {
             <Button label="Settle and check out" kind="primary" Icon={LogOut} onPress={() => router.push(`/folio/${code}/${id}` as Href)} />
           ) : null}
           {arrived || stay.status === "checked-out" ? <Button label="Print registration card" Icon={Printer} reason={WEBSITE} onPress={() => undefined} onRefused={why} /> : null}
-          <Button label="More options" Trail={ChevronDown} reason={WEBSITE} onPress={() => undefined} onRefused={why} />
+          <MoreOptions hotel={hotel} stay={stay} role={role} onSaid={setToast} />
         </View>
         {offer && stay.status === "due-in" && notYet ? <Text style={[t.label, body, { color: c.grey500, marginTop: -12 }]}>{notYet}</Text> : null}
 

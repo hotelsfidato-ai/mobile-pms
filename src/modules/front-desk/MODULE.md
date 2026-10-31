@@ -17,7 +17,7 @@ from `flows/desk/`. **Decided:** M-1, M-5, M-9, M-11.
 | Arrivals: Today · Upcoming | `/front-desk/<code>` · `?view=upcoming` | `Arrivals.tsx` | `/h/:code/arrivals`, `/arrivals/upcoming`; 04, 05 |
 | In house: In house now · Due out | `/front-desk/<code>/in-house` · `?view=due-out` | `InHouse.tsx` | `/h/:code/in-house`, `/in-house/due-out`; 06, 07 |
 | Walk-ins (the record) | `/front-desk/<code>/walk-ins` | `WalkIns.tsx` | `/h/:code/walk-ins`; 08 |
-| The stay | `/front-desk/<code>/stay/<id>` (`?offer=1`: Check in offered) | `Stay.tsx` | the stay panel |
+| The stay | `/front-desk/<code>/stay/<id>` (`?offer=1`: Check in offered) | `Stay.tsx`, `StayActs.tsx` (More options) | the stay panel; `flows/StayActions.tsx` and its flows |
 | Check in | `/front-desk/<code>/check-in/<id>` | `CheckIn.tsx` | the check-in dialog |
 | Take a walk-in | `/front-desk/<code>/take-walk-in` | `TakeWalkIn.tsx` | **the phone's own**: the empty tiles of Rooms, until the Calendar (slice 10) |
 | A walk-in (New booking on a room) | `/front-desk/<code>/walk-in?room=306` | `WalkIn.tsx` | `/h/:code/book?room=&date=`; 14 |
@@ -46,6 +46,10 @@ Keys: `["front-desk", code, …]`; every write re-reads the prefix (a check-in, 
 | Another adult | `POST·PUT·DELETE /stays/:id/companions…` | `customer` edit | **refused** (not listed) |
 | The WhatsApp tick | `POST /stays/:id/whatsapp` | `customer` edit | **refused** (not listed) |
 | Form III | carried by the check-in's body; `/form-c` itself is refused | | as the check-in |
+| Mark VIP | `POST /guests/:id/vip` | `customer` edit | **held** ("VIP") |
+| Amend · Move · Exchange · Inclusions | `PATCH /stays/:id`, `POST …/move`, `…/exchange`, `…/inclusions` | `reservation` edit | **refused** |
+| Take out of the room | `POST /stays/:id/unassign` | `reservation` edit | **held**, warned |
+| Void · Cancel · Confirm | `POST …/void`, `…/cancel` (`dryRun` previews), `…/confirm` | `reservation` cancel, create | **refused** |
 
 **Rights:** `roles.ts`, the API's sentences read back on 31 Oct (a refused curl as dev-housekeeping).
 Check in, Book: greyed with the sentence, where the web hides them. Who sees bills: `invoice` view.
@@ -61,10 +65,9 @@ sentence, "N departures still owing ₹X". Each is what the picture shows; the s
 3. **Take a walk-in** is the phone's own screen, and Open Calendar opens it, until slice 10.
 4. **A walk-in is one room, tonight:** no Another room, no Rooms box, no group, Arrival fixed; the
    Departure is the day stepper (M-7). Form III's dates are typed YYYY-MM-DD; the expected times HH:MM.
-5. **Greyed "On the website for now":** More options (amend, move, exchange, inclusions, void, change
-   rate), Print registration card, Add the photo (needs `expo-image-picker` ~57.0.20), Send voucher.
-6. **Not on the phone yet, drawn nowhere:** Mark VIP and Edit guest, Guest 360, the guest page link,
-   the CRS facts, key cards, a company's credit-limit allow (the core's `ApiError` has no `needs`).
-7. **The stay's foot** says Charged · Paid · Balance from the folio; the web's "Due" with charges to
-   come is finance's figure (the folio helper's).
+5. **Greyed "On the website for now":** Edit guest, View voucher, Change rate, Print registration card,
+   Add the photo (needs `expo-image-picker` ~57.0.20), Send voucher.
+6. **Not on the phone yet, drawn nowhere:** Guest 360, the guest page link, the CRS facts, key cards, a
+   company's credit-limit allow (the core's `ApiError` has no `needs`).
+7. **Dates** on More options use the day stepper (M-7); the web's dialogs are full-screen sheets here.
 8. **Font:** the web's body is Inter 400; the core loads 500-700 (report).

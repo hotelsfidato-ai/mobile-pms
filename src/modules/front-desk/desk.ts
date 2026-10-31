@@ -148,6 +148,7 @@ export const mealPlanChoices = (current: string) =>
 
 /** More than a day early moves the whole booking (D27-193): confirmed first. */
 export const isBigMove = (arrival: string, businessDate: string) => dayNumber(arrival) - dayNumber(businessDate) > 1;
+const inr0 = new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 });
 const inrPrecise = new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", minimumFractionDigits: 2, maximumFractionDigits: 2 });
 /** The web's moneyPrecise, "₹1,20,000.00". */
 export const moneyPrecise = (n: number) => inrPrecise.format(n);
@@ -204,6 +205,37 @@ export function stayedWords(visits: number): string {
   if (visits === 1) return "Stayed with the group once";
   return `Stayed with the group ${visits} times`;
 }
+
+/* ── Change dates or guests (AmendStayFlow.tsx) ─────────────────── */
+export const MAX_NIGHTS = 90;
+/** The server's own rules, said before Save (FD-4, FD-6, FD-9); the stepper keeps the dates real. */
+export const amendWrong = (adults: string, children: string, nights: number) =>
+  countProblem(Number(adults), "Adults", 1) ?? countProblem(Number(children), "Children", 0)
+    ?? (nights > MAX_NIGHTS ? `A stay is at most ${MAX_NIGHTS} nights. Split a longer one into two bookings.` : null);
+
+/** The arithmetic said out loud under the boxes. */
+export function amendLine(was: number, nights: number, checkIn: string, wrong: string | null, rate: number): { tone: "bad" | "plain" | "strong"; text: string; tail?: string } {
+  if (wrong) return { tone: "bad", text: wrong };
+  if (nights === 0 && was === 0) return { tone: "plain", text: `Day use, in and out on ${day(checkIn)}, at its day price.` };
+  if ((nights === 0) !== (was === 0) && nights >= 0) {
+    return { tone: "bad", text: was === 0
+      ? "A day use stays a day use: its price is the day's. To stay the night, book the nights."
+      : "A stay does not become a day use here: book the day use on New booking, with its day price." };
+  }
+  if (nights < 1) return { tone: "bad", text: "Departure has to be after arrival. The night of departure is not charged, so a guest leaving on the 5th has their last night on the 4th." };
+  const word = `${nights} ${nights === 1 ? "night" : "nights"}`;
+  if (nights === was) return { tone: "plain", text: `${word}, the same as before.` };
+  return { tone: "strong", text: `${was} → ${word}`, ...(rate > 0 ? { tail: ` · ${inr0.format(rate * nights)} of room charges at ${inr0.format(rate)} a night` } : {}) };
+}
+
+/** MoveRoomFlow.tsx REASONS: why they moved is recorded. */
+export const MOVE_REASONS = [
+  { value: "move", label: "Guest asked to move", hint: "They wanted a different room" },
+  { value: "upgrade", label: "Upgrade", hint: "A better room, usually at the same rate" },
+  { value: "downgrade", label: "Downgrade", hint: "A lesser room - the rate usually comes down with it" },
+  { value: "fault", label: "Something wrong with the room", hint: "The hotel had to move them. Worth being able to find later" },
+  { value: "group_consolidation", label: "Putting a group together", hint: "Rearranging so a group is on one floor" },
+];
 
 /** Only a foreign nationality is shown: "IN" is the database's default, not a fact. */
 export const foreignNationality = (n: string | null | undefined) => (n && n.toUpperCase() !== "IN" ? n : null);
