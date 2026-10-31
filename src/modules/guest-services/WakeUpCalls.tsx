@@ -61,7 +61,7 @@ export function WakeUpCalls({ hotel, role, onBack }: { hotel: Hotel; role: strin
     <View style={{ flex: 1 }}>
       <Screen refreshing={pulled && list.loading} onRefresh={() => { setPulled(true); list.reload(); }}>
         <Head title="Wake-up calls" under="Calls to make, on the hotel's clock. Due from fifteen minutes before." action={<Back onPress={onBack} />} />
-        <View style={{ flexDirection: "row", marginBottom: 8 }}>
+        <View style={{ flexDirection: "row", marginTop: -4, marginBottom: 8 }}>
           <Btn label="Set a call" variant="primary" icon={Plus} disabled={refused != null} onPress={() => setSetting(true)} />
         </View>
         <View style={{ marginBottom: 8 }}>

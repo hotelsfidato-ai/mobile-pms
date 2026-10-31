@@ -61,7 +61,7 @@ export function Requests({ hotel, role, onBack }: { hotel: Hotel; role: string |
     <View style={{ flex: 1 }}>
       <Screen refreshing={pulled && list.loading} onRefresh={() => { setPulled(true); list.reload(); }}>
         <Head title="Guest requests" under="What guests in house have asked for, and who is doing it." action={<Back onPress={onBack} />} />
-        <View style={{ flexDirection: "row", marginBottom: 8 }}>
+        <View style={{ flexDirection: "row", marginTop: -4, marginBottom: 8 }}>
           <Btn label="New request" variant="primary" icon={Plus} disabled={refused != null} onPress={() => setRaising(true)} />
         </View>
 

@@ -217,7 +217,7 @@ export function Empty({ title, description, compact }: { title: string; descript
         <Inbox size={20} color={grey400} />
       </View>
       <Text style={[t.heading, { textAlign: "center" }]}>{title}</Text>
-      {description ? <Text style={[t.label, { color: c.grey500, marginTop: 6, textAlign: "center", lineHeight: 22 }]}>{description}</Text> : null}
+      {description ? <Text style={[t.label, { color: c.grey500, marginTop: 6, textAlign: "center", lineHeight: 23 }]}>{description}</Text> : null}
     </View>
   );
 }

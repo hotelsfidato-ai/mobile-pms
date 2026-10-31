@@ -43,7 +43,7 @@ export function LostProperty({ hotel, role, onBack }: { hotel: Hotel; role: stri
     <View style={{ flex: 1 }}>
       <Screen refreshing={pulled && list.loading} onRefresh={() => { setPulled(true); list.reload(); }}>
         <Head title="Lost property" under="What was found, kept until it goes back to its owner or is disposed of." action={<Back onPress={onBack} />} />
-        <View style={{ flexDirection: "row", marginBottom: 8 }}>
+        <View style={{ flexDirection: "row", marginTop: -4, marginBottom: 8 }}>
           <Btn label="Log an item" variant="primary" icon={Plus} disabled={refused != null} onPress={() => setLogging(true)} />
         </View>
         <View style={{ marginBottom: 8 }}>
