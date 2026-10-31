@@ -246,7 +246,14 @@ export function Fold({ title, children }: { title: string; children: ReactNode }
   );
 }
 
+/** The reason on a control the phone cannot do yet (the rules' words). */
+export const WEBSITE = "On the website for now";
+
 export type Said = { title: string; body?: string; tone: "ok" | "held" | "bad" };
+/* A word for the screen a write returns to: the web's toast outlives its dialog. */
+let note: Said | null = null;
+export const leaveNote = (s: Said) => { note = s; };
+export const takeNote = () => { const n = note; note = null; return n; };
 const SAID = {
   ok: { bg: c.ink900, ring: c.ink900, fg: c.white },
   held: { bg: c.yellow50, ring: c.yellow100, fg: c.yellow800 },

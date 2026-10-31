@@ -239,3 +239,11 @@ export function guestIdPayload(id: GuestId) {
     idSkipReason: id.idSkipReason,
   };
 }
+
+/** "Same as the guest" (D27-386): the lead's visit answers over a companion's,
+    only what the lead has. Their phones and document stay their own. */
+export function sameVisit(to: Particulars, lead: Record<string, string | null | undefined>): Particulars {
+  const next = { ...to };
+  for (const [k] of VISIT) { const v = lead[k]; if (v) next[k] = v; }
+  return next;
+}

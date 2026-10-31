@@ -110,6 +110,11 @@ export const checkIn = (code: string, id: string, body: object) => send<{ ok: tr
 export const assignRoom = (code: string, id: string, roomNumber: string) =>
   send<{ ok: true; room: string; guest: string; typeChanged: boolean; typeName: string }>("POST", `/api/hotels/${code}/stays/${id}/assign`, { roomNumber });
 
+/** stayExtras.ts: the visits before this one, and the WhatsApp tick. */
+export const readGuestMarks = (code: string, id: string) =>
+  orNull<{ stayedBefore: number; whatsappAgreed: boolean }>(`/api/hotels/${code}/stays/${id}/guest-marks`, [403]);
+export const setWhatsapp = (code: string, id: string, agreed: boolean) => send("POST", `/api/hotels/${code}/stays/${id}/whatsapp`, { agreed });
+
 /* ── Every adult in the room (D27-382) ─────────────────────────────── */
 export interface Companion {
   guestId: string; name: string; nationality: string; idType: string | null; idNumber: string | null; filed: boolean;

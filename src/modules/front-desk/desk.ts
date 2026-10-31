@@ -178,6 +178,13 @@ export const partyWords = (adults: string, children: string) =>
 export const guestsWords = (s: { adults: number; children: number }) =>
   `${s.adults} adult${s.adults === 1 ? "" : "s"}${s.children ? `, ${s.children} child${s.children === 1 ? "" : "ren"}` : ""}`;
 
+/** "Stayed with the group 3 times" (ReturningGuest.tsx): checked-in visits, a group of rooms once. */
+export function stayedWords(visits: number): string {
+  if (visits <= 0) return "Has not stayed with the group yet";
+  if (visits === 1) return "Stayed with the group once";
+  return `Stayed with the group ${visits} times`;
+}
+
 /** Only a foreign nationality is shown: "IN" is the database's default, not a fact. */
 export const foreignNationality = (n: string | null | undefined) => (n && n.toUpperCase() !== "IN" ? n : null);
 
