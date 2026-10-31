@@ -171,7 +171,7 @@ function Period({ label, value }: { label: string; value: string }) {
 function Stat({ label, children }: { label: string; children: ReactNode }) {
   return (
     <View style={{ flexDirection: "row", gap: 12 }}>
-      <Text style={[t.caption, { width: 134, paddingTop: 2, textTransform: "uppercase", letterSpacing: 0.3 }]}>{label}</Text>
+      <Text style={[t.caption, { width: 132, paddingTop: 2, textTransform: "uppercase", letterSpacing: 0.3 }]}>{label}</Text>
       <View style={{ alignItems: "flex-end" }}>{children}</View>
     </View>
   );

@@ -188,11 +188,12 @@ export function Dashboard({ hotel, onBack, onOpenArrivals, onOpenDueOut, onOpenI
         {figures.map(({ label, term, f, line }, i) => (
           <View key={label} style={[{ paddingHorizontal: space.cardX, paddingVertical: space.cardY, gap: 8 }, i > 0 && { borderTopWidth: 1, borderTopColor: c.grey200 }]}>
             <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "baseline", gap: 12 }}>
-              <View style={{ flexShrink: 1 }}>{term ? <Term name={term} style={t.label}>{label}</Term> : <Text style={t.label}>{label}</Text>}</View>
+              {term ? <Term name={term} style={[t.label, { flexShrink: 1 }]}>{label}</Term> : <Text style={[t.label, { flexShrink: 1 }]}>{label}</Text>}
               <Text style={[t.figure, { textAlign: "right" }, f?.today == null && !loading && { color: c.grey500 }]}>{show(cash(f?.today))}</Text>
             </View>
-            <View style={{ flexDirection: "row", gap: 16 }}>
-              <View style={{ width: 96, gap: 2 }}>
+            {/* zIndex: a Last 14 days reading stands over what is beside it. */}
+            <View style={{ flexDirection: "row", gap: 16, zIndex: 1 }}>
+              <View style={{ width: 96, gap: 2, zIndex: 1 }}>
                 <Text style={t.caption} numberOfLines={1}>Last 14 days</Text>
                 <Spark name={label.replace(/ \(.*/, "")} days={lastRows} line={line} loading={sparking} />
               </View>
@@ -228,7 +229,7 @@ export function Dashboard({ hotel, onBack, onOpenArrivals, onOpenDueOut, onOpenI
       </Card>
 
       {/* ── Money ────────────────────────────────────────────────── */}
-      <Card style={{ paddingBottom: space.cardY }}>
+      <Card>
         <CardTitle title="Money" info={NOTES.money} />
         <MoneyItem
           first icon={Wallet} tone="green" label="Collected today" value={show(cash(paid?.today))}
@@ -253,7 +254,7 @@ export function Dashboard({ hotel, onBack, onOpenArrivals, onOpenDueOut, onOpenI
           note={[`Paid today ${cash(companyPaid?.today)}`]}
         />
         <MoneyItem
-          icon={UserX} tone={(noShow?.today ?? 0) > 0 ? "orange" : "neutral"} warn={(noShow?.today ?? 0) > 0}
+          last icon={UserX} tone={(noShow?.today ?? 0) > 0 ? "orange" : "neutral"} warn={(noShow?.today ?? 0) > 0}
           label="No-shows" value={show(count(noShow?.today))} note={[`Month so far ${count(noShow?.ptd)}`]}
         />
       </Card>
@@ -340,11 +341,11 @@ function WorkTile({ icon, chip, label, n, left, state, note, loading, onPress }:
 
 /** A Money row: the chip beside the label and the note, the amount under the
     label on the right; a split bar, when there is one, on a row of its own. */
-function MoneyItem({ icon, tone = "neutral", label, term, value, note, bar, warn, first }: {
-  icon: LucideIcon; tone?: ChipTone; label: string; term?: TermKey; value: string; note: ReactNode[]; bar?: ReactNode; warn?: boolean; first?: boolean;
+function MoneyItem({ icon, tone = "neutral", label, term, value, note, bar, warn, first, last }: {
+  icon: LucideIcon; tone?: ChipTone; label: string; term?: TermKey; value: string; note: ReactNode[]; bar?: ReactNode; warn?: boolean; first?: boolean; last?: boolean;
 }) {
   return (
-    <View style={[{ paddingVertical: 12 }, first ? { paddingTop: 0 } : { borderTopWidth: 1, borderTopColor: c.grey100 }]}>
+    <View style={[{ paddingVertical: 12 }, first ? { paddingTop: 0 } : { borderTopWidth: 1, borderTopColor: c.grey100 }, last && { paddingBottom: 0 }]}>
       <View style={{ flexDirection: "row", alignItems: "center", gap: 14 }}>
         <IconChip icon={icon} tone={tone} />
         <View style={{ flex: 1, gap: 2 }}>
