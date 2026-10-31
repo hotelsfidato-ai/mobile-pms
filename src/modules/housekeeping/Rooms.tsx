@@ -184,10 +184,10 @@ export function Rooms({ hotel, role, me, onBack, onSignOut }: {
       const inIt = inGroup(shown, g.key);
       return (
         <View
-          key={g.key} style={{ gap: 8, marginTop: i === 0 ? 8 : 12 }}
+          key={g.key} style={{ gap: 10, marginTop: i === 0 ? 8 : 12 }}
           onLayout={(e) => { groupAt.current[g.key] = e.nativeEvent.layout.y; }}
         >
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 8, marginBottom: 4 }}>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 8, marginBottom: 2 }}>
             <Text style={t.heading} accessibilityRole="header">{g.label}</Text>
             <Pill tone={TONE[g.key]!}>{String(inIt.length)}</Pill>
           </View>
@@ -234,7 +234,7 @@ export function Rooms({ hotel, role, me, onBack, onSignOut }: {
           )}
         />
         {/* Connectivity, the shared answer rather than the OS's optimism. */}
-        <View style={{ flexDirection: "row", marginTop: -8, marginBottom: 8 }}>
+        <View style={{ flexDirection: "row", marginBottom: 8 }}>
           <View
             accessibilityLiveRegion="polite"
             style={{
@@ -264,7 +264,7 @@ export function Rooms({ hotel, role, me, onBack, onSignOut }: {
 
         {/* Whose sheet. Scrolls sideways rather than wrapping into a block that pushes the rooms off the screen. */}
         {staff.length > 0 ? (
-          <View style={{ gap: 6, marginTop: 8 }}>
+          <View style={{ gap: 6, marginTop: 10 }}>
             <View style={{ marginHorizontal: -space.side }}>
               <ScrollView
                 horizontal showsHorizontalScrollIndicator={false} accessibilityLabel="Whose rooms"
@@ -468,7 +468,7 @@ function RoomCard({ code, room, role, pending, who, queuedWho, assignReason, onM
           onPress={() => (putBack ? setSaid(putBack) : open("out-of-service"))}
           accessibilityRole="button" accessibilityLabel={`Put room ${n} back`} accessibilityState={{ disabled: putBack != null }} accessibilityHint={putBack ?? undefined}
           style={({ pressed }) => ({
-            minHeight: 44, borderRadius: 999, borderWidth: 1, borderColor: c.grey300, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 6,
+            minHeight: 44, marginTop: 4, borderRadius: 999, borderWidth: 1, borderColor: c.grey300, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 6,
             backgroundColor: putBack ? c.grey100 : pressed ? c.red50 : c.white,
           })}
         >

@@ -133,10 +133,12 @@ export function OccupancyByDay({ days, date, loading, month }: { days: MonthDay[
       >
         {width > 0 ? (
           <Svg width={width} height={CHART.h}>
+            <Line x1={CHART.axis} x2={width} y1={CHART.top} y2={CHART.top} stroke={c.grey100} strokeWidth={1} />
             {[0, 50, 100].map((v) => (
               <G key={v}>
                 <Line x1={CHART.axis} x2={width} y1={yOf(v)} y2={yOf(v)} stroke={v === 0 ? c.grey300 : c.grey100} strokeWidth={1} />
-                <SvgText x={CHART.axis - 8} y={yOf(v) + 4} textAnchor="end" fontSize={12} fontFamily={FONT.font} fill={c.grey500}>{`${v}%`}</SvgText>
+                {/* Whole: on the website 100% is cut off at the chart's edge at phone width (reported). */}
+                <SvgText x={CHART.axis - 10} y={yOf(v) + 4} textAnchor="end" fontSize={12} fontFamily={FONT.font} fill={c.grey500}>{`${v}%`}</SvgText>
               </G>
             ))}
             {nights.map((n, i) => (n.weekend
@@ -147,13 +149,13 @@ export function OccupancyByDay({ days, date, loading, month }: { days: MonthDay[
               if (!dayWritten(n, i, todayAt, every)) return null;
               const cx = CHART.axis + (i + 0.5) * band;
               if (!n.today) {
-                return <SvgText key={n.date} x={cx} y={floor + 18} textAnchor="middle" fontSize={12} fontFamily={FONT.font} fill={c.grey500}>{n.day}</SvgText>;
+                return <SvgText key={n.date} x={cx} y={floor + 19} textAnchor="middle" fontSize={12} fontFamily={FONT.font} fill={c.grey500}>{n.day}</SvgText>;
               }
               const w = Math.max(18, n.day.length * 7 + 10);
               return (
                 <G key={n.date}>
-                  <Rect x={cx - w / 2} y={floor + 5} width={w} height={18} rx={9} fill={c.ink900} />
-                  <SvgText x={cx} y={floor + 18} textAnchor="middle" fontSize={12} fontFamily={FONT.bold} fill={c.white}>{n.day}</SvgText>
+                  <Rect x={cx - w / 2} y={floor + 6} width={w} height={18} rx={9} fill={c.ink900} />
+                  <SvgText x={cx} y={floor + 19} textAnchor="middle" fontSize={12} fontFamily={FONT.bold} fill={c.white}>{n.day}</SvgText>
                 </G>
               );
             })}
