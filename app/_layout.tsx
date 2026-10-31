@@ -1,3 +1,4 @@
+import { Inter_400Regular } from "@expo-google-fonts/inter/400Regular";
 import { Inter_500Medium } from "@expo-google-fonts/inter/500Medium";
 import { Inter_600SemiBold } from "@expo-google-fonts/inter/600SemiBold";
 import { Inter_700Bold } from "@expo-google-fonts/inter/700Bold";
@@ -8,6 +9,7 @@ import { StatusBar } from "expo-status-bar";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { HeldBar } from "../src/core/HeldBar";
 import { SessionProvider, useSession } from "../src/core/session";
+import { Shell } from "../src/core/Shell";
 import { c } from "../src/core/theme";
 
 /* ══════════════════════════════════════════════════════════════════
@@ -25,26 +27,32 @@ import { c } from "../src/core/theme";
 const cache = new QueryClient({ defaultOptions: { queries: { retry: false, refetchOnWindowFocus: false } } });
 
 export default function Layout() {
-  /* The Type Ladder's three faces (src/core/theme.ts). If they cannot
+  /* The Type Ladder's three faces (src/core/theme.ts) and the web's regular, the frame's. If they cannot
      load, the phone's own font is used rather than a blank screen. */
-  const [loaded, failed] = useFonts({ Inter_500Medium, Inter_600SemiBold, Inter_700Bold });
+  const [loaded, failed] = useFonts({ Inter_400Regular, Inter_500Medium, Inter_600SemiBold, Inter_700Bold });
   if (!loaded && !failed) return null;
   return (
     <SafeAreaProvider>
       <QueryClientProvider client={cache}>
         <SessionProvider>
-          <SafeAreaView style={{ flex: 1, backgroundColor: c.grey50 }}>
-            <StatusBar style="dark" />
-            <SignedInBar />
-            <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: c.grey50 } }} />
-          </SafeAreaView>
+          <Frame />
         </SessionProvider>
       </QueryClientProvider>
     </SafeAreaProvider>
   );
 }
 
-/** The held changes belong to a person: shown, and sent, only while someone is signed in. */
-function SignedInBar() {
-  return useSession().who ? <HeldBar /> : null;
+/** The frame and the held changes belong to a person: shown, and sent, only
+    while someone is signed in. The top of the screen is the bar's white. */
+function Frame() {
+  const signedIn = Boolean(useSession().who);
+  return (
+    <SafeAreaView edges={["top", "left", "right"]} style={{ flex: 1, backgroundColor: signedIn ? c.white : c.grey50 }}>
+      <StatusBar style="dark" />
+      {signedIn ? <><Shell /><HeldBar /></> : null}
+      <SafeAreaView edges={["bottom"]} style={{ flex: 1, backgroundColor: c.grey50 }}>
+        <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: c.grey50 } }} />
+      </SafeAreaView>
+    </SafeAreaView>
+  );
 }
