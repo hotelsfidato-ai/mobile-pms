@@ -8,7 +8,7 @@
                               view) and refusalFor's sentence
      api/src/permissions.ts   the matrix those grants read
      src/modules/reservations/data/booking.ts   LIST_KEEPERS (comp)
-   The sentences were read back from the API on 17 Oct (roles.check.ts).
+   The sentences were read back from today's API (8870) on 31 Oct (roles.check.ts).
    If the PMS changes a role, change it here.
    ══════════════════════════════════════════════════════════════════ */
 

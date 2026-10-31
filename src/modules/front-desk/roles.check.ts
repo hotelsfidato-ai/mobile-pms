@@ -1,6 +1,6 @@
 /* Run: node --experimental-strip-types mobile/src/modules/front-desk/roles.check.ts
    Who may check in, give a room, book, take the advance and see the bill:
-   the API's answers, read back on 17 Oct as dev-housekeeping. */
+   today's API's answers, read back on 31 Oct as dev-housekeeping. */
 import { mayGiveComp, maySettle, seesBills, whyNotBook, whyNotCheckIn, whyNotPay, whyNotRoom } from "./roles.ts";
 
 const eq = (got: unknown, want: unknown, what: string) => {

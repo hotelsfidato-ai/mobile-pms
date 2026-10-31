@@ -10,7 +10,7 @@ import { c, face, t } from "../../core/theme";
 import { ReadFailed, useRead } from "../../core/ui";
 import { Companions } from "./Companions";
 import {
-  checkIn, readAssignable, readEarly, readExpress, readStay, readTaxRate, readWaiting, rulesOf, said, type DeskStay,
+  checkIn, readAssignable, readDesk, readEarly, readExpress, readStay, readTaxRate, rulesOf, said, type DeskStay,
 } from "./data";
 import {
   checkInBlocked, day, idWord, isBigMove, mealPlanChoices, moveWords, partyProblem, partyWords, whyNotYet, type Assignable,
@@ -76,7 +76,7 @@ function Form({ hotel, role, stay, onClose }: { hotel: Hotel; role: string | nul
   const express = useRead(() => readExpress(code, stay.id, prepaid), [...scope, "express", prepaid]);
   const early = useRead(() => readEarly(code), ["front-desk", code, "early"]);
   const rooms = useRead(() => readAssignable(code, stay.roomType, businessDate, stay.roomNumber, stay.departure), [...scope, "rooms"]);
-  const waiting = useRead(() => readWaiting(code), [...scope, "waiting"]);
+  const desk = useRead(() => readDesk(code), [...scope, "desk"]);
 
   const byExpress = (express.data?.express ?? false) && !otherId;
   const earlyByDate = stay.arrival > businessDate;
@@ -197,7 +197,7 @@ function Form({ hotel, role, stay, onClose }: { hotel: Hotel; role: string | nul
           ) : (
             <>
               <Explained title="ID">Indian properties must record a guest's identity document. It can be skipped, but the reason is kept in the stay's note.</Explained>
-              {(waiting.data ?? []).some((d) => d.reference === stay.reference) ? (
+              {(desk.data?.waiting ?? []).some((d) => d.reference === stay.reference) ? (
                 <Text style={[t.label, body, { color: c.ink900 }]}>
                   {"This guest sent their ID details online - "}
                   <Text onPress={() => router.push(`/guest-services/${code}/online-checkin`)} style={[face[500], { color: c.orange700 }]}>check them on Online check-in</Text>
@@ -207,11 +207,17 @@ function Form({ hotel, role, stay, onClose }: { hotel: Hotel; role: string | nul
             </>
           )}
           {/* D27-210: the desk adds the ID photo for a guest who sent none. */}
-          <View style={{ gap: 6 }}>
-            <Text style={[t.label, { color: c.ink900 }]}>A photo of the ID</Text>
-            <Button label="Add a photo" Icon={Camera} reason={WEBSITE} onPress={() => undefined} />
-            <Text style={t.caption}>{WEBSITE}</Text>
-          </View>
+          {desk.data?.idPhotos ? (
+            <View style={{ gap: 6 }}>
+              <Text style={[t.label, { color: c.ink900 }]}>A photo of the ID</Text>
+              {desk.data.idPhotos.on ? (
+                <>
+                  <Button label="Add the photo" Icon={Camera} reason={WEBSITE} onPress={() => undefined} />
+                  <Text style={t.caption}>{WEBSITE}</Text>
+                </>
+              ) : <Text style={[t.label, body, { color: c.grey600 }]}>{desk.data.idPhotos.off}</Text>}
+            </View>
+          ) : null}
         </View>
 
         <View style={{ paddingTop: 16, borderTopWidth: 1, borderTopColor: c.grey200 }}>

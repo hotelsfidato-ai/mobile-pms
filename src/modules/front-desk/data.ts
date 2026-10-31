@@ -102,9 +102,10 @@ export const readBlacklist = (code: string, from: string, to: string) =>
   api<{ warnings?: BlacklistWarning[] }>(`/api/hotels/${code}/guests/blacklist-warnings?from=${from}&to=${to}`)
     .then((r) => r.warnings ?? [], () => [] as BlacklistWarning[]);
 
-/** This booking has ID details waiting from the guest's own page (WaitingDetailsLink). */
-export const readWaiting = (code: string) =>
-  api<{ waiting: Array<{ reference: string }> }>(`/api/hotels/${code}/online-checkin/desk`).then((d) => d.waiting, () => []);
+/** The desk's roles only (DESK_ROLES): ID details waiting from the guest's own
+    page, and whether this hotel keeps ID photos. Null for anybody else. */
+export const readDesk = (code: string) =>
+  api<{ waiting: Array<{ reference: string }>; idPhotos?: { on: boolean; off: string | null } }>(`/api/hotels/${code}/online-checkin`).catch(() => null);
 
 export const checkInPath = (code: string, id: string) => `/api/hotels/${code}/stays/${id}/check-in`;
 export const checkIn = (code: string, id: string, body: object) => send<{ ok: true }>("POST", checkInPath(code, id), body);
