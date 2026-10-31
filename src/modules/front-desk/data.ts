@@ -1,6 +1,7 @@
 import { api, ApiError, orNull, send, type Hotel } from "../../core/api";
 import type { Room, Stay } from "../../core/types";
-import { arrivals, assignable, dueOut, inHouse, upcoming, walkIns } from "./desk";
+import type { Promotion, Split, Tariff } from "./booking";
+import { arrivals, assignable, dueOut, emptyRooms, inHouse, upcoming, walkIns } from "./desk";
 
 /* ══════════════════════════════════════════════════════════════════
    THE FRONT DESK'S READS AND WRITES — the web's calls, one file:
@@ -131,6 +132,50 @@ export const readCompanions = (code: string, id: string) =>
 export const addCompanion = (code: string, id: string, person: object) => send("POST", `/api/hotels/${code}/stays/${id}/companions`, person);
 export const saveCompanion = (code: string, id: string, guestId: string, person: object) => send("PUT", `/api/hotels/${code}/stays/${id}/companions/${guestId}`, person);
 export const removeCompanion = (code: string, id: string, guestId: string) => send("DELETE", `/api/hotels/${code}/stays/${id}/companions/${guestId}`);
+
+/* ── A walk-in: New booking's one page opened from an empty room ───── */
+export interface InventoryCell { roomTypeId: string; roomType: string; date: string; available: number }
+export const readInventory = (code: string, from: string, to: string) =>
+  api<{ from: string; to: string; cells: InventoryCell[] }>(`/api/hotels/${code}/inventory?from=${from}&to=${to}`).catch(() => null);
+
+interface Party { roomTypeId: string; mealPlan: string; from: string; to: string; adults: number; children: number }
+const party = (p: Party) => `roomType=${p.roomTypeId}&mealPlan=${p.mealPlan}&from=${p.from}&to=${p.to}&adults=${p.adults}&children=${p.children}`;
+export const readTariff = (code: string, p: Party) => api<Tariff>(`/api/hotels/${code}/tariff?${party(p)}`).catch(() => null);
+export const readContract = (code: string, p: Party, companyId: string) =>
+  api<Tariff>(`/api/hotels/${code}/contract-price?companyId=${companyId}&${party(p)}`).catch(() => null);
+export const readBeforeGst = (code: string, gross: number) => api<Split>(`/api/hotels/${code}/tax/room/before-gst?gross=${encodeURIComponent(String(gross))}`);
+
+export interface BookingSource { id: string; name: string; kind: string; isActive: boolean }
+export const readSources = (code: string) => api<BookingSource[]>(`/api/hotels/${code}/booking-sources`);
+/** Unreadable is not off: {} shows every section (BookingPage.tsx `show`). */
+export const readModules = (code: string) =>
+  api<{ modules: Array<{ module: string; enabled: boolean }> }>(`/api/hotels/${code}/modules`)
+    .then((b) => Object.fromEntries(b.modules.map((m) => [m.module, m.enabled])) as Record<string, boolean>, () => ({} as Record<string, boolean>));
+export const readAccounts = (code: string) => api<Array<{ name: string }>>(`/api/hotels/${code}/companies`).catch(() => [] as Array<{ name: string }>);
+export const readBilling = (code: string) => api<Array<{ id: string; name: string; gstin: string | null }>>(`/api/hotels/${code}/billing-companies`);
+export const readSalesPeople = (code: string) => api<Array<{ id: string; name: string }>>(`/api/hotels/${code}/sales-people`).catch(() => []);
+export const readPromotions = (code: string) => api<Promotion[]>(`/api/hotels/${code}/room-promotions`).catch(() => []);
+export const readSegments = (code: string) => api<Array<{ label: string; active: boolean }>>(`/api/hotels/${code}/lists/market_segment`).catch(() => null);
+
+export interface ReturningMatch {
+  guestId?: string; visits?: number; name: string; suggested: boolean; blacklisted: boolean; blacklistReason: string | null;
+  lastCompany?: { name: string | null; gstin: string | null; address: string | null };
+}
+export const readReturning = (code: string, phone: string, email: string) =>
+  api<{ matches: ReturningMatch[] }>(`/api/hotels/${code}/guests/returning?phone=${encodeURIComponent(phone)}&email=${encodeURIComponent(email)}`)
+    .then((o) => o.matches, () => [] as ReturningMatch[]);
+
+export interface Booked { ok: true; groupId: string | null; guest: string; bookings: Array<{ id?: string; reference: string; roomType: string; rate: number }>; status?: string }
+/** Refused offline by the web's tiers (not a held write): the walk-in waits for the line. */
+export const createBooking = (code: string, input: object) => send<Booked>("POST", `/api/hotels/${code}/bookings`, input);
+/** The advance, held as credit (D27-4). A payment: refused offline. */
+export const takeAdvance = (code: string, id: string, input: object) => send("POST", `/api/hotels/${code}/stays/${id}/payments`, input);
+
+/** The tiles a walk-in can start from (Rooms' empty ones). */
+export async function readEmpty(code: string, date: string) {
+  const [rooms, house, list] = await Promise.all([readRooms(code), readHouse(code), api<DeskStay[]>(`/api/hotels/${code}/stays?from=${date}&to=${date}&board=1`)]);
+  return emptyRooms(rooms, list, new Set(house.rooms.filter((r) => r.outOfOrder).map((r) => r.number)), date);
+}
 
 /** A refused write's sentence, as a screen says it. */
 export const said = (e: unknown) => (e instanceof ApiError || e instanceof Error ? e.message : String(e));

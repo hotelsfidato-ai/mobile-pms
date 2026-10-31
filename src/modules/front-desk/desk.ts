@@ -61,6 +61,16 @@ export const dueOut = (stays: Stay[]) => stays.filter((s) => s.status === "due-o
 /** Walk-ins on record, newest arrival first (WalkIns.tsx). */
 export const walkIns = (stays: Stay[]) => stays.filter((s) => s.source === "Walk-in").sort((a, b) => b.arrival.localeCompare(a.arrival));
 
+/** A room that can take a walk-in tonight (HouseFloor.tsx): nobody in it, no
+    arrival given it today, not out of service. "dirty" ones open too: the
+    booking stands, and the check-in says the room is not cleaned yet. */
+export function emptyRooms(rooms: Room[], stays: Stay[], outOfOrder: ReadonlySet<string>, date: string) {
+  const live = new Set(stays
+    .filter((s) => s.status === "in-house" || s.status === "due-out" || (s.status === "due-in" && s.arrival === date))
+    .map((s) => s.roomNumber));
+  return rooms.filter((r) => r.status !== "out-of-service" && !outOfOrder.has(r.number) && !live.has(r.number));
+}
+
 /** The list's filter box: guest, reference or room. */
 export const matches = (s: Stay, query: string) => {
   const q = query.trim().toLowerCase();

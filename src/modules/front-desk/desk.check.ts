@@ -1,7 +1,7 @@
 /* Run: node --experimental-strip-types mobile/src/modules/front-desk/desk.check.ts
    The desk's lists and the check-in's rules, on a tiny house. */
 import {
-  arrivals, assignable, blockedFor, checkInBlocked, day, dueOut, inHouse, isBigMove, matches, mealPlanChoices, moveWords, owing,
+  arrivals, assignable, blockedFor, checkInBlocked, day, dueOut, emptyRooms, inHouse, isBigMove, matches, mealPlanChoices, moveWords, owing,
   partyProblem, upcoming, walkIns, whyNotYet,
 } from "./desk.ts";
 
@@ -32,6 +32,12 @@ eq(refs(dueOut(stays)), ["D"], "leaving today");
 eq(refs(walkIns(stays)), ["G", "D"], "walk-ins, newest first");
 eq(matches(stays[0]!, "20"), true, "a room matches");
 eq(matches(stays[0]!, "zz"), false, "nothing matches");
+
+/* A walk-in's empty rooms: nobody in, no arrival today, not out of service. */
+const house = [{ number: "201", status: "clean" }, { number: "202", status: "dirty" }, { number: "203", status: "clean" }, { number: "204", status: "clean" },
+  { number: "205", status: "out-of-service" }, { number: "206", status: "clean" }, { number: "207", status: "clean" }] as never[];
+const tonight = [stay("P", "201", "in-house", d, "2026-08-27"), stay("Q", "203", "due-in", d, "2026-08-27"), stay("R", "204", "due-in", "2026-08-26", "2026-08-27"), stay("S", "207", "checked-out", "2026-08-23", d)];
+eq(emptyRooms(house, tonight, new Set(["206"]), d).map((r) => (r as { number: string }).number), ["202", "204", "207"], "dirty and tomorrow's rooms stay offered");
 
 /* canCheckIn (rules.ts), in its order. */
 eq(whyNotYet({ status: "in-house", arrival: d }, d), "This guest is already checked in.", "already in");
