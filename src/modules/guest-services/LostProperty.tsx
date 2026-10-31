@@ -134,7 +134,7 @@ function LogDialog({ code, onClose, onDone }: { code: string; onClose: () => voi
       <View style={{ flexDirection: "row", gap: 12 }}>
         <View style={{ flex: 1 }}>
           <Field label="Room" hint="If it was in one.">
-            <Input label="Room" keyboardType="number-pad" maxLength={10} value={roomNumber} onChangeText={setRoomNumber} />
+            <Input label="Room" autoCapitalize="characters" maxLength={10} value={roomNumber} onChangeText={setRoomNumber} />
           </Field>
         </View>
         <View style={{ flex: 1 }}>

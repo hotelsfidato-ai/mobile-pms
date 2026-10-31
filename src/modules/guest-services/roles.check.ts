@@ -21,7 +21,7 @@ eq(teamsFor("front_desk"), ["housekeeping", "maintenance", "fnb"], "the desk see
 eq(teamsFor("owner"), ["housekeeping", "maintenance", "fnb"], "the owner");
 eq(teamsFor("housekeeping"), ["housekeeping", "maintenance"], "housekeeping");
 eq(teamsFor("stores"), ["maintenance"], "the Inventory Manager");
-for (const role of ["kitchen_manager", "chef", "pos"]) eq(teamsFor(role), ["fnb"], role);
+for (const role of ["kitchen_manager", "chef", "pos", "bar"]) eq(teamsFor(role), ["fnb"], role);
 for (const role of ["finance", "revenue_manager", "read_only", null]) eq(teamsFor(role), [], `${role} sees none`);
 
 /* Who passes each gate. */

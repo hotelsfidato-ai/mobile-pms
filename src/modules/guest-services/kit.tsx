@@ -330,7 +330,7 @@ export function Field({ label, required, hint, children }: { label: string; requ
 /** The web's Input and Textarea: 44 on a touch screen, 16px type. */
 export function Input({ label, rows, ...props }: {
   label: string; value: string; onChangeText: (v: string) => void; rows?: number; maxLength?: number;
-  autoFocus?: boolean; placeholder?: string; keyboardType?: "default" | "numbers-and-punctuation" | "number-pad";
+  autoFocus?: boolean; placeholder?: string; keyboardType?: "default" | "numbers-and-punctuation"; autoCapitalize?: "characters";
 }) {
   return (
     <TextInput

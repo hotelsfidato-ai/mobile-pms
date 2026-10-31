@@ -25,7 +25,7 @@ export const DESK: readonly string[] = ["owner", "admin", "gm", "hotel_manager",
 const RECEIVERS: Record<Team, readonly string[]> = {
   housekeeping: ["housekeeping"],
   maintenance: ["owner", "admin", "gm", "hotel_manager", "stores", "housekeeping"],
-  fnb: ["kitchen_manager", "chef", "pos"],
+  fnb: ["kitchen_manager", "chef", "pos", "bar"],
 };
 
 /** The teams whose requests a role sees and acts on: all three for the desk (requests.ts teamsFor). */
