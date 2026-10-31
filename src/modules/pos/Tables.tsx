@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { router, useFocusEffect } from "expo-router";
-import { ChevronLeft, ChevronRight, DoorClosed, Eye, LayoutGrid, Printer, ShoppingBag } from "lucide-react-native";
+import { ChevronLeft, ChevronRight, Compass, DoorClosed, Eye, LayoutGrid, Printer, Receipt, Send, ShoppingBag } from "lucide-react-native";
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { AppState, Pressable, Text, View } from "react-native";
 import { ApiError, api, HeldError, send, type Hotel } from "../../core/api";
@@ -9,7 +9,7 @@ import { newKey } from "../../core/offline";
 import { c, face, space, t } from "../../core/theme";
 import { Capsule, Screen } from "../../core/ui";
 import {
-  CLOSE_FOR, closedLine, closure, kotLines, LEGEND, LOOK, maySetUpKots, openLabel, padHref, parcelTile, READY, takenLabel, tileLabel, tileOffers,
+  CLOSE_FOR, closedLine, closure, kotLines, LEGEND, LOOK, maySetUpKots, openLabel, padHref, parcelTile, READY, startCard, takenLabel, tileLabel, tileOffers,
   type FloorNow, type KotKind, type Tile as Table,
 } from "./floor";
 import { draftedTables } from "./pad";
@@ -29,7 +29,7 @@ import {
    running one opens it for another round; a finished bill offers Clear; a
    joined table only its bill. Not here (the web's): the live channel (the
    30 s poll stands), the KOT section and table setup ("Set up" says they are
-   on the website; "Set up tables" is not drawn), the Start-here card.
+   on the website; "Set up tables" is not drawn).
    ══════════════════════════════════════════════════════════════════ */
 
 /** The web polls the floor every 30 s; the minutes are the point of a tile. */
@@ -76,6 +76,27 @@ export function Tables({ hotel, role, onBack, onSignOut }: {
     const timer = setTimeout(() => setSaid(null), 6000);
     return () => clearTimeout(timer);
   }, [said]);
+
+  /* Start here: remembered on the server until "Got it" (migration 089). */
+  const card = startCard(role);
+  const me = useQuery({
+    queryKey: ["pos", code, "tables", "me"],
+    queryFn: () => api<{ scope: { startHereDismissed?: boolean } }>("/api/hotels"),
+    enabled: card != null,
+  });
+  async function putAway() {
+    const key = ["pos", code, "tables", "me"];
+    const was = cache.getQueryData(key);
+    /* Gone at once; put back if the server says no. */
+    cache.setQueryData(key, { scope: { startHereDismissed: true } });
+    try {
+      await send("PUT", "/api/me/preferences", { startHereDismissed: true });
+      setSaid({ title: "Put away", body: "Bring it back any time from your account menu.", tone: "ok" });
+    } catch (e) {
+      cache.setQueryData(key, was);
+      setSaid({ title: "Not remembered", body: e instanceof Error ? e.message : String(e), tone: "bad" });
+    }
+  }
 
   const ringReason = whyNotRing(role);
   const outlet = floor.data?.outlet ?? null;
@@ -194,6 +215,8 @@ export function Tables({ hotel, role, onBack, onSignOut }: {
             )}
           </View>
         ) : null}
+
+        {card && me.data && !me.data.scope.startHereDismissed ? <StartHere card={card} onPutAway={() => void putAway()} /> : null}
 
         {kot.data && kotLines(kot.data.kinds).length > 0 ? (
           <View style={{ gap: 4, marginBottom: 8 }}>
@@ -371,6 +394,45 @@ function Tile({ hotel, table: tb, closed, busy, drafted, ringReason, onRefused, 
           ) : null}
         </>
       )}
+    </View>
+  );
+}
+
+const JOB_ICONS = [LayoutGrid, Send, Receipt];
+
+/** A person's first jobs, on the screen they land on (StartHere.tsx), until
+    they tap Got it. The web's third job links to its Till; on the phone the
+    order is reached from a tile, so it is told, not linked. */
+function StartHere({ card, onPutAway }: { card: NonNullable<ReturnType<typeof startCard>>; onPutAway: () => void }) {
+  return (
+    <View style={{ backgroundColor: c.white, borderRadius: 12, borderWidth: 1, borderColor: c.grey200, padding: 16, marginBottom: 8 }}>
+      <View style={{ flexDirection: "row", alignItems: "flex-start", gap: 12 }}>
+        <View style={{ width: 36, height: 36, borderRadius: 10, backgroundColor: c.orange50, alignItems: "center", justifyContent: "center" }}>
+          <Compass size={20} color={c.orange700} />
+        </View>
+        <View style={{ flex: 1 }}>
+          <Text style={[t.heading, ty.md]} accessibilityRole="header">Start here</Text>
+          <Text style={[t.label, ty.sm, { marginTop: 2 }]}>{card.intro}</Text>
+        </View>
+        <Btn label="Got it" size="sm" onPress={onPutAway} />
+      </View>
+      <View style={{ marginTop: 16, gap: 6 }}>
+        {card.tasks.map((task, i) => {
+          const Icon = JOB_ICONS[i]!;
+          return (
+            <View key={task.job} style={{ flexDirection: "row", alignItems: "flex-start", gap: 12, borderRadius: 10, borderWidth: 1, borderColor: c.grey200, padding: 12 }}>
+              <View style={{ width: 32, height: 32, borderRadius: 10, backgroundColor: c.grey100, alignItems: "center", justifyContent: "center" }}>
+                <Icon size={16} color={c.grey500} />
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text style={[t.label, ty.sm, { color: c.ink900 }]}>{task.job}</Text>
+                <Text style={[t.label, { marginTop: 2, lineHeight: 19 }]}>{task.how}</Text>
+              </View>
+              {task.here ? <Text style={[t.caption, ty.xs, { marginTop: 4 }]}>On this screen</Text> : null}
+            </View>
+          );
+        })}
+      </View>
     </View>
   );
 }

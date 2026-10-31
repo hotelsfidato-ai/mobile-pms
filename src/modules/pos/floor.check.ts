@@ -2,7 +2,7 @@
    Tables' rules: what each tile offers in each state, where its tap goes,
    the KOT printer lines and the closed banner, in the web's words. */
 import {
-  closedLine, closure, finished, kotLines, maySetUpKots, openLabel, padHref, parcelTile, since, takenLabel, tileLabel, tileOffers,
+  closedLine, closure, finished, kotLines, maySetUpKots, openLabel, padHref, parcelTile, since, startCard, takenLabel, tileLabel, tileOffers,
   type KotKind, type Tile, type TileState,
 } from "./floor.ts";
 
@@ -44,6 +44,11 @@ eq([takenLabel(table("kot"), 3), openLabel(table("kot"))], ["Taken: the 3 ready 
 /* "Set up" on a red KOT line: edit on menu or room_config (api/src/permissions.ts). */
 for (const role of ["owner", "admin", "gm", "kitchen_manager"]) eq(maySetUpKots(role), true, `${role} sets up KOTs`);
 for (const role of ["hotel_manager", "pos", "bar", "front_desk", "finance", null]) eq(maySetUpKots(role), false, `${role} does not`);
+
+/* Start here: the waiter's and the Bar's first jobs, nobody else's on Tables. */
+eq(startCard("pos")!.tasks.map((x) => x.job), ["Open a table", "Send an order to the kitchen", "Settle a bill"], "the waiter's card");
+eq(startCard("bar")!.tasks[1]!.job, "Send an order to the bar", "the Bar's");
+eq([startCard("gm"), startCard(null)], [null, null], "no card for the GM");
 
 /* Where the tap goes (MODULE.md, How the parts meet). */
 eq(padHref("5EL", table("blank")), "/pos/5EL/pad?table=N1", "a free table");

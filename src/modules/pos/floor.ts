@@ -133,6 +133,23 @@ export const CLOSE_FOR = [
   { key: "next_business_day", label: "Rest of today" },
 ] as const;
 
+/* ── Start here (components/app/StartHere.tsx, startHereCards.ts) ──── */
+
+/** The waiter's card, and the Bar person's with their orders going to the bar
+    (D27-329). `here`: done on this screen. The third job is the web's Till,
+    which the phone does not have: it is told, not linked. */
+export function startCard(role: string | null) {
+  if (role !== "pos" && role !== "bar") return null;
+  return {
+    intro: "Your three jobs. Each one opens the screen it happens on.",
+    tasks: [
+      { job: "Open a table", how: "Tap the table - its order pad opens right there.", here: true },
+      { job: `Send an order to the ${role === "bar" ? "bar" : "kitchen"}`, how: "Add the dishes on the table's pad, then Send.", here: true },
+      { job: "Settle a bill", how: "Open the order and tap how they pay: cash, card, UPI, or Charge to room.", here: false },
+    ],
+  };
+}
+
 /* ── The KOT printer lines (KotStation.tsx) ──────────────────────── */
 
 /** till.ts KotKind: one KOT kind and the computer that prints it. */
