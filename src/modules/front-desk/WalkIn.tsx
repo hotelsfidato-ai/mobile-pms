@@ -2,7 +2,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { router, type Href } from "expo-router";
 import { AlertTriangle, UserCheck } from "lucide-react-native";
 import { useState, type ReactNode } from "react";
-import { Text, View } from "react-native";
+import { KeyboardAvoidingView, Platform, Text, View } from "react-native";
 import { ApiError, HeldError, type Hotel } from "../../core/api";
 import { cash, dateLong } from "../../core/format";
 import { c, face, space, t } from "../../core/theme";
@@ -262,7 +262,7 @@ export function WalkIn({ hotel, role, room: walkRoom, onClose }: { hotel: Hotel;
   const segmentNames = segments.data?.filter((m) => m.active).map((m) => m.label) ?? MARKET_SEGMENTS;
 
   return (
-    <View style={{ flex: 1 }}>
+    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : undefined}>
       <Screen refreshing={false} onRefresh={() => undefined}>
         <PageHead title="New booking" description={`A walk-in into room ${walkRoom}. Check them in, or save the booking.`} />
 
@@ -489,7 +489,7 @@ export function WalkIn({ hotel, role, room: walkRoom, onClose }: { hotel: Hotel;
         </View>
       </Screen>
       <Toast said={toast} onClose={() => setToast(null)} />
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 

@@ -2,7 +2,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { router, useFocusEffect, type Href } from "expo-router";
 import { Globe, LogIn, LogOut, Mail, Phone, Printer, X } from "lucide-react-native";
 import { useCallback, useEffect, useState, type ReactNode } from "react";
-import { Linking, Pressable, ScrollView, Text, View } from "react-native";
+import { KeyboardAvoidingView, Linking, Platform, Pressable, ScrollView, Text, View } from "react-native";
 import { type Hotel } from "../../core/api";
 import { cash } from "../../core/format";
 import { isOnline } from "../../core/offline";
@@ -86,7 +86,7 @@ export function StayScreen({ hotel, role, id, offer, onClose }: {
           ) : null}
           {arrived ? <Button label="Print registration card" Icon={Printer} reason={WEBSITE} onPress={() => undefined} /> : null}
           <Button label="More options" reason={WEBSITE} onPress={() => undefined} />
-          <Text style={[t.caption, { color: c.grey500 }]}>{`Print and More options: ${WEBSITE.toLowerCase()}.`}</Text>
+          <Text style={[t.caption, { color: c.grey500 }]}>{WEBSITE}</Text>
         </View>
 
         {/* The Bill tab is its own screen on a phone. */}
@@ -114,7 +114,7 @@ export function Panel({ title, under, onClose, foot, children }: {
   title: string; under?: ReactNode; onClose: () => void; foot?: ReactNode; children: ReactNode;
 }) {
   return (
-    <View style={{ flex: 1, backgroundColor: c.white }}>
+    <KeyboardAvoidingView style={{ flex: 1, backgroundColor: c.white }} behavior={Platform.OS === "ios" ? "padding" : undefined}>
       <View style={{ flexDirection: "row", alignItems: "flex-start", gap: 8, paddingHorizontal: space.side, paddingTop: 16, paddingBottom: 12, borderBottomWidth: 1, borderBottomColor: c.grey200 }}>
         <View style={{ flex: 1, gap: 2 }}>
           <Text style={[t.heading, face[600], { fontSize: 18 }]} accessibilityRole="header">{title}</Text>
@@ -128,7 +128,7 @@ export function Panel({ title, under, onClose, foot, children }: {
         {children}
       </ScrollView>
       {foot ? <View style={{ paddingHorizontal: space.side, paddingVertical: 12, borderTopWidth: 1, borderTopColor: c.grey200, backgroundColor: c.white }}>{foot}</View> : null}
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
