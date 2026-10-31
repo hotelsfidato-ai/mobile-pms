@@ -1,7 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useFocusEffect } from "expo-router";
 import {
-  AlertCircle, Check, ChevronDown, ChevronLeft, CloudOff, Inbox, RotateCw, X, type LucideIcon,
+  AlertCircle, Check, ChevronDown, ChevronLeft, CloudOff, Inbox, Info, RotateCw, X, type LucideIcon,
 } from "lucide-react-native";
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import {
@@ -180,6 +180,30 @@ export function Refused({ label, reason, icon, variant }: {
     <View style={{ gap: 4 }}>
       <Btn label={label} icon={icon} {...(variant ? { variant } : {})} disabled onPress={() => undefined} style={{ alignSelf: "flex-start" }} />
       <Text style={[t.caption, { color: c.grey600 }]}>{reason}</Text>
+    </View>
+  );
+}
+
+/** A section's title and its note behind an (i), the web's InfoButton
+    (the owner, D27-82); the note opens under the title, not in a popover. */
+export function SectionHead({ title, note, action }: { title: string; note?: string; action?: ReactNode }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <View style={{ gap: 2, marginBottom: 12 }}>
+      <View style={{ flexDirection: "row", alignItems: "center", gap: 4, minHeight: 24 }}>
+        <Text style={t.heading} accessibilityRole="header">{title}</Text>
+        {note ? (
+          <Pressable
+            onPress={() => setOpen(!open)} accessibilityRole="button" accessibilityLabel={note} accessibilityState={{ expanded: open }}
+            style={{ width: 44, height: 44, marginVertical: -10, alignItems: "center", justifyContent: "center" }}
+          >
+            <Info size={16} color={c.grey500} />
+          </Pressable>
+        ) : null}
+        <View style={{ flex: 1 }} />
+        {action}
+      </View>
+      {open ? <Text style={[t.label, { lineHeight: 22 }]}>{note}</Text> : null}
     </View>
   );
 }
