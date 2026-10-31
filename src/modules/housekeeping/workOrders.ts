@@ -77,8 +77,6 @@ export const UPDATE_REFUSED = `Updating a repair is for ${UPDATERS}. Ask one of 
 export const COST_REFUSED = `Recording a repair cost is for ${RECORDERS}. Ask one of them.`;
 /** The web's line over the list when Start and Close are not this person's (WorkOrders.tsx 110). */
 export const UPDATE_WHO = `Starting and closing a repair is for ${UPDATERS}.`;
-/** The web's line in Costs for somebody who may not record one (RepairCosts.tsx 197). */
-export const RECORD_WHO = `Recording a cost is for ${RECORDERS}.`;
 /** A control the phone cannot do yet (the helpers' rule): a proof is a photo or a file. */
 export const ON_WEBSITE = "On the website for now";
 /** The API's own refusal of a close with nothing said (PATCH /work-orders/:id). */
@@ -134,6 +132,12 @@ export function heldStatus(held: OutboxEntry[], code: string, id: string): strin
   } catch {
     return null;
   }
+}
+
+/** What the card says while a change waits on this phone. */
+export function queued(status: string | null): string | null {
+  if (status == null) return null;
+  return ({ in_progress: "Queued: start", open: "Queued: put back", done: "Queued: close as fixed", cancelled: "Queued: close as not needed" } as Record<string, string>)[status] ?? "Queued";
 }
 
 /** Start or Put back: the word, and what a tap sends. */

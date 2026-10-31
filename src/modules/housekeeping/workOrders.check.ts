@@ -2,7 +2,7 @@
    Work orders' rules: the card's pills and line, held Start / Close, who may, the words. */
 import type { OutboxEntry } from "../../core/offline.ts";
 import {
-  closeBody, closedWords, COST_REFUSED, day, empty, foot, heldStatus, meta, ON_WEBSITE, orderPath, paise, pills,
+  closeBody, closedWords, COST_REFUSED, day, empty, foot, heldStatus, meta, ON_WEBSITE, orderPath, paise, pills, queued,
   startBody, startLabel, UPDATE_REFUSED, whyNotCancel, whyNotRecord, whyNotUpdate, type WorkOrder, type WorkOrderList,
 } from "./workOrders.ts";
 
@@ -49,6 +49,8 @@ const q = [
 eq(heldStatus(q, "5EL", "w1"), "open", "the last held wins");
 eq(heldStatus(q, "5EL", "w2"), null, "a refused one is not held");
 eq(heldStatus(q, "5EL", "w3"), null, "another hotel's is not this one's");
+eq([queued(null), queued("in_progress"), queued("open"), queued("done"), queued("cancelled")],
+  [null, "Queued: start", "Queued: put back", "Queued: close as fixed", "Queued: close as not needed"], "queued words");
 
 /* Start and Put back. */
 eq([startLabel("open"), startBody("open")], ["Start", { status: "in_progress" }], "start");
