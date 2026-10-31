@@ -1,5 +1,5 @@
 import { Redirect } from "expo-router";
-import { SignIn } from "../src/core/SignIn";
+import { Checking, SignIn } from "../src/core/SignIn";
 import { roleAt, useSession } from "../src/core/session";
 
 export default function SignInRoute() {
@@ -17,5 +17,5 @@ export default function SignInRoute() {
     if (first && (role === "chef" || role === "kitchen_manager")) return <Redirect href={`/pos/${first.code}/kitchen`} />;
     return <Redirect href="/all" />;
   }
-  return <SignIn onDev={s.signInAs} busy={s.busy} error={s.error} />;
+  return <SignIn onSignIn={s.signIn} onDev={s.signInAs} busy={s.busy} error={s.error} notice={s.notice} />;
 }
