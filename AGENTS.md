@@ -71,6 +71,7 @@ chat. `app/` (the routes, expo-router), `package.json`, `app.json` and `mobile/s
 ```
 Screen          file and its place in the navigation
 Web twin        the PMS screen it mirrors, and any difference (the owner's yes for each)
+Picture         its phone-view picture in ../.local/pms-shots (M-11); shot side by side with the native screen; every difference listed
 Reads/Writes    which API endpoints, through which data file
 Rules           which ported rule decides each control; blocked = disabled with its reason
 Offline         which writes queue, which are refused, the words the user sees
