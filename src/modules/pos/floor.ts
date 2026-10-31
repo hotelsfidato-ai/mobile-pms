@@ -5,7 +5,8 @@ import type { Floor, FloorTable, TableState } from "./types";
      src/modules/pos/pages/Floor.tsx         the key, the tile colours, what
                                              a tile offers, Close early's times
      src/modules/pos/components/KotStation.tsx  statusOf, since (the KOT lines)
-     src/modules/pos/data/till.ts            KotKind (the API's answer)
+     src/modules/pos/data/till.ts            KotKind, FloorParcel, joinedTo (the API's answers)
+   Today's web, 31 Oct (M-11): the picture .local/pms-shots/all/42 is the spec.
    THE COLOUR IS DERIVED, NEVER STORED: the server sends the state; the
    phone only draws it. Pure: no React Native, so `floor.check.ts` runs.
    ══════════════════════════════════════════════════════════════════ */
@@ -14,17 +15,39 @@ import type { Floor, FloorTable, TableState } from "./types";
 const success = "#1f6f5c", success50 = "#eaf4f1", success100 = "#cde5de";
 const yellow = "#ffb600", grey400 = "#9aa2a9";
 
+/** Today's floor (till.ts): `types.ts` holds the shapes of 15 Oct and is the
+    mobile chat's. A joined table's orderId is the bill it went onto (D27-372);
+    a parcel (D27-359) is an order named by its customer, with no table. */
+export type TileState = TableState | "joined";
+export interface Tile extends Omit<FloorTable, "state"> {
+  state: TileState;
+  joinedTo?: string | null;
+  /** The customer, on a parcel's tile. */
+  parcel?: string;
+}
+export interface FloorParcel {
+  orderId: string; orderNo: string; name: string; phone: string | null;
+  minutes: number; payable: number; ready: number; readyIds: string[];
+}
+export interface FloorNow {
+  outlet: Floor["outlet"];
+  sections: { id: string; name: string; tables: Tile[] }[];
+  /** The open parcels, oldest first. Absent on an older server: none. */
+  parcels?: FloorParcel[];
+}
+
 /** One state's look: the tile's wash, its hairline, and the key's swatch ring. */
 export interface Look { fill: string; ring: string; swatch: string }
 
 /** The tile (Floor.tsx TILE) and the key's swatch ring (LEGEND), by state. */
-export const LOOK: Record<TableState, Look> = {
+export const LOOK: Record<TileState, Look> = {
   blank: { fill: "#ffffff", ring: "#e2e5e8", swatch: "#ccd0d4" },
   running: { fill: "#ebf2f9", ring: "#d2e2f2", swatch: "#2b6cb0" },
   kot: { fill: "#fdf1eb", ring: "#f9dccd", swatch: "#df6128" },
   printed: { fill: success50, ring: success100, swatch: success },
   paid: { fill: "#fff8e6", ring: "#ffedbf", swatch: yellow },
   closed: { fill: "#eef0f2", ring: "#e2e5e8", swatch: grey400 },
+  joined: { fill: "#f7f8f9", ring: "#e2e5e8", swatch: "#e2e5e8" },
 };
 export const READY = { fill: success50, ring: success100, text: "#1a5f4f" };
 
@@ -39,14 +62,16 @@ export const LEGEND: { state: TableState; label: string }[] = [
 ];
 
 /** A bill that is over - paid, or closed unpaid (POS-33) - takes no more dishes. */
-export const finished = (s: TableState) => s === "paid" || s === "closed";
+export const finished = (s: TileState) => s === "paid" || s === "closed";
 
 /** What a tile offers, as the web's Floor.tsx draws it:
       tap      the pad: a first round on a free table, another on a running one;
-               none on a finished bill or while the outlet is closed
+               none on a finished bill, on a joined table or while the outlet is closed
       ready    "N ready", tapped is Taken (D27-222)
-      actions  Print bill and the Eye on a running bill, Clear on a finished one */
-export function tileOffers(table: FloorTable, closed: boolean) {
+      actions  Print bill and the Eye on a running bill, Clear on a finished one,
+               the Eye alone on a joined table (it opens the bill it went onto) */
+export function tileOffers(table: Tile, closed: boolean) {
+  if (table.state === "joined") return { tap: null, ready: 0, actions: "open" as const };
   const done = finished(table.state);
   return {
     tap: table.state === "blank" ? (closed ? null : "new" as const) : done || closed || !table.orderId ? null : "round" as const,
@@ -55,20 +80,35 @@ export function tileOffers(table: FloorTable, closed: boolean) {
   };
 }
 
+/** A parcel as the pad and the tile's buttons take a table (Floor.tsx parcelTable). */
+export function parcelTile(p: FloorParcel): Tile {
+  return {
+    id: `parcel-${p.orderId}`, label: `Parcel · ${p.name}`, seats: null, row: 0, col: 0, orderId: p.orderId, orderNo: p.orderNo,
+    state: "running", minutes: p.minutes, payable: p.payable, ready: p.ready, readyIds: p.readyIds, parcel: p.name,
+  };
+}
+
 /** Where a tile's tap goes (MODULE.md "How the parts meet"): the pad by the table's name. */
-export function padHref(code: string, table: FloorTable): string {
+export function padHref(code: string, table: Tile): string {
   const name = encodeURIComponent(table.label);
   return table.state === "blank" || !table.orderId
     ? `/pos/${code}/pad?table=${name}`
     : `/pos/${code}/pad?order=${table.orderId}&table=${name}`;
 }
 
-/** The tile's spoken name for its tap (the web's aria-label). */
-export function tileLabel(table: FloorTable): string {
+/** The tile's spoken names (the web's aria-labels). */
+export function tileLabel(table: Tile): string {
+  if (table.parcel) return `Add to the parcel for ${table.parcel}`;
   if (table.state === "blank") return table.seats ? `${table.label}, ${table.seats} seats` : table.label;
+  if (table.state === "joined") return `${table.label}, joined to ${table.joinedTo ?? "another table"}`;
   if (finished(table.state)) return `${table.label}, ${table.state === "paid" ? "paid" : "closed unpaid"}`;
   return `Add a round to ${table.label}`;
 }
+export const takenLabel = (table: Tile, ready: number) =>
+  table.parcel ? `Taken: the ${ready} ready for ${table.parcel}` : `Taken: the ${ready} ready at ${table.label}`;
+export const openLabel = (table: Tile) =>
+  table.parcel ? `Open ${table.parcel}'s parcel`
+    : table.state === "joined" ? `Open the bill ${table.label} is joined to` : `Open ${table.label}`;
 
 /** Closed now, and the time it reopens ("04:30 pm", the web's en-IN). */
 export function closure(outlet: Floor["outlet"], now = Date.now()): { closed: boolean; reopens: string | null } {
@@ -118,6 +158,11 @@ export function since(iso: string | null, now = new Date()): string {
   return d.toDateString() === now.toDateString() ? timeOnly(d)
     : `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}, ${timeOnly(d)}`;
 }
+
+/** May open the KOT section: `edit` on `menu` or `room_config` (KotStation.tsx
+    maySetUpKots), read from api/src/permissions.ts on 31 Oct. The section is on
+    the website: the phone says so when "Set up" is tapped. */
+export const maySetUpKots = (role: string | null) => role != null && ["owner", "admin", "gm", "kitchen_manager"].includes(role);
 
 /** One line per kind something prints to; not printing is the red line. */
 export function kotLines(kinds: KotKind[], now = new Date()): { id: string; text: string; printing: boolean }[] {

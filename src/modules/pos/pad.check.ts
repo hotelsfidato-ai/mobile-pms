@@ -3,10 +3,11 @@
    picture 05: ₹785 / 2 dishes), the dish sheet's Add rule, and Send's body. */
 import {
   addNumbered, addToSent, batchBody, bump, chooseRule, clearDraft, customiseLine, customProblems, dishReady, draftCount,
-  draftKey, draftTotal, draftedTables, drop, footerLine, lessNumbered, menuShown, nameWithAddons, pickedIds, priceWithAddons,
-  putLine, saveDraft, toggleSide, typesOf, unitPriceOf, type DraftLine,
+  draftKey, draftTotal, draftedTables, drop, footerLine, kotsSent, lessNumbered, menuShown, nameWithAddons, onceMore,
+  oneLinePerDish, pickedIds, priceWithAddons, putLine, saveDraft, sentDishes, toggleSide, typesOf, unitPriceOf,
+  type DraftLine, type PadLine,
 } from "./pad.ts";
-import type { AddonGroup, MenuCategory, MenuItem, NumberedAddon, OrderLine } from "./types";
+import type { AddonGroup, MenuCategory, MenuItem, NumberedAddon } from "./types";
 
 const eq = (got: unknown, want: unknown, what: string) => {
   if (JSON.stringify(got) !== JSON.stringify(want)) throw new Error(`${what}: got ${JSON.stringify(got)}, want ${JSON.stringify(want)}`);
@@ -92,7 +93,7 @@ eq(customProblems("Extra papad", "", true).ready, true, "Free is chosen");
 eq(customProblems("Extra papad", "40.505", false).priceBad, true, "paise, two at most");
 
 /* Send's body, as the web's OrderPad builds it. */
-const sent: OrderLine = {
+const sent: PadLine = {
   id: "L1", name: "Veg Biryani", qty: 1, unitPrice: 310, taxRate: 5, note: null, voided: false, kotStatus: "sent", addedBy: null,
   parentLineId: null, isAddon: false, variationId: null,
 };
@@ -108,6 +109,32 @@ eq(batchBody({ orderId: "o1", outlet: "REST", tableId: "t1" }, round.slice(2)), 
   send: true,
 }, "another round: the order only; a sent dish's add-ons; a 0 goes as Free");
 eq(Object.keys(batchBody({ outlet: "REST", table: "N1" }, pad)).slice(0, 2), ["outlet", "table"], "no id held: the table's name");
+
+/* Already sent, today's web: one line per dish across rounds (D27-353), no packing charge. */
+const line = (id: string, more: Partial<PadLine> = {}): PadLine => ({ ...sent, id, itemId: "bp", name: "Bhaaji Pau (Butter)", unitPrice: 400, variationId: "butter", ...more });
+const side = (id: string, parent: string): PadLine => line(id, { name: "Sides: Onions", unitPrice: 25, parentLineId: parent, isAddon: true, addonId: "s0", itemId: null, variationId: null });
+const rounds: PadLine[] = [
+  line("1", { kotNo: 1, kotKind: { id: "k", name: "Kitchen" } }), side("2", "1"),
+  line("3", { kotNo: 2, kotKind: { id: "k", name: "Kitchen" } }), side("4", "3"),
+  line("5", { note: "Less Spicy", kotNo: 2, kotKind: { id: "b", name: "Bar" } }),
+  line("6", { voided: true }),
+  line("7", { name: "Packing", itemId: null, variationId: null, packing: true, unitPrice: 15 }),
+  line("8", { name: "Not sent", kotStatus: "pending" }),
+];
+eq(oneLinePerDish(rounds.slice(0, 4)).map((l) => [l.id, l.qty]), [["3", 2], ["4", 2]], "two rounds, one line, the newest id");
+eq(sentDishes(rounds).map((l) => [l.id, l.qty]), [["3", 2], ["5", 1]], "no struck, no packing, no unsent, no sides");
+eq(kotsSent(rounds).map((k) => k.label), ["KOT 1 · Kitchen", "KOT 2 · Kitchen", "KOT 2 · Bar"], "one per number and kind");
+eq(kotsSent([line("9", { kotNo: 4 })]), [{ no: 4, kindId: null, label: "KOT 4" }], "a line from before KOT kinds");
+
+/* One more of a sent dish (D27-349): the same choices, sides and note, on this round. */
+const more = onceMore([], sentDishes(rounds)[0]!, rounds, bhaaji);
+eq(more.lines.map((l) => [l.itemId, l.qty, l.variationId, l.addonIds, l.unitPrice, l.variationLabel, l.addonLabels]),
+  [["bp", 1, "butter", ["s0"], 425, "Butter", ["Onions"]]], "Bhaaji Pau, Butter, Onions: one more, ₹425");
+eq(onceMore(more.lines, sentDishes(rounds)[0]!, rounds, bhaaji).lines.map((l) => l.qty), [2], "again: the same line");
+const withKebab = line("10", { itemId: "c65", name: "Chicken 65", variationId: null, numberedAddons: { dish: "Chicken 65", base: 360, addons: [{ id: "k", number: 2, name: "Kebab", price: 120, qty: 1 }] } });
+const kebabOne = onceMore([], withKebab, [withKebab], chicken);
+eq(kebabOne.lines.map((l) => [l.qty, l.unitPrice, l.baseUnitPrice]), [[1, 480, 360]], "with its numbered add-on");
+eq(onceMore(kebabOne.lines, withKebab, [withKebab], chicken).lines.map((l) => l.qty), [2], "the same again joins it");
 
 /* The menu: a search crosses sections; a section chip shows one. */
 const menu: MenuCategory[] = [

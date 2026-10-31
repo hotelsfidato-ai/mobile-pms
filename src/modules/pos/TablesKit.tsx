@@ -1,7 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { AlertTriangle, Lock, Store, X } from "lucide-react-native";
 import type { ReactNode } from "react";
-import { KeyboardAvoidingView, Modal, Platform, Pressable, ScrollView, Text, View, type StyleProp, type ViewStyle } from "react-native";
+import {
+  ActivityIndicator, KeyboardAvoidingView, Modal, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View,
+  type StyleProp, type TextInputProps, type ViewStyle,
+} from "react-native";
 import { api, ApiError } from "../../core/api";
 import { c, face, space, t } from "../../core/theme";
 import { Capsule } from "../../core/ui";
@@ -9,9 +12,21 @@ import { timeOnly } from "./floor";
 
 /* ══════════════════════════════════════════════════════════════════
    THE PIECES TABLES AND THE PAD SHARE — after the web kit
-   (src/components/ui: Button, Dialog, toast, ReadProblem) and the POS's
-   PosGate. Its words are the web's.
+   (src/components/ui: Button.tsx, Overlays.tsx's Dialog, Input.tsx's Field,
+   ReadProblem.tsx, the toast) and the POS's PosGate. Their words, sizes and
+   colours are the web's (src/styles/theme.css).
    ══════════════════════════════════════════════════════════════════ */
+
+/** The web's type steps with their line heights (theme.css --text-*).
+    Its 400 is not loaded on the phone (core): 500 stands in. */
+export const ty = {
+  xs: { fontSize: 12, lineHeight: 17 },
+  sm: { fontSize: 14, lineHeight: 21 },
+  md: { fontSize: 16, lineHeight: 24 },
+  xl: { fontSize: 20, lineHeight: 28 },
+};
+/** theme.css values the phone's theme.ts does not carry yet. */
+export const web = { success: "#1f6f5c", success50: "#eaf4f1", success600: "#1a5f4f", grey400: "#9aa2a9" };
 
 /* ── Who may use the till here (components/PosGate.tsx) ─────────────
    Only an explicit refusal shuts the door: offline, "go ahead", and the
@@ -83,13 +98,13 @@ export function Stale({ error, loadedAt, onRetry }: { error: unknown; loadedAt: 
     : p.kind === "refused" ? `refused - ${p.reason}`
       : p.status ? `the server answered with an error (${p.status})` : p.message;
   return (
-    <View style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center", gap: 8, borderRadius: 8, borderWidth: 1, borderColor: c.yellow100, backgroundColor: c.yellow50, paddingHorizontal: 14, paddingVertical: 8 }} accessibilityRole="alert">
+    <View style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center", gap: 8, borderRadius: 10, borderWidth: 1, borderColor: c.yellow100, backgroundColor: c.yellow50, paddingHorizontal: 14, paddingVertical: 8 }} accessibilityRole="alert">
       <AlertTriangle size={16} color={c.yellow800} />
-      <Text style={[t.label, { color: c.yellow800, flexShrink: 1 }]}>
+      <Text style={[t.label, ty.sm, { color: c.yellow800, flexShrink: 1 }]}>
         Not up to date: {cause}.{loadedAt > 0 ? ` Showing what loaded at ${timeOnly(new Date(loadedAt))}.` : ""}
       </Text>
       <Pressable onPress={onRetry} accessibilityRole="button" style={{ minHeight: 44, justifyContent: "center" }}>
-        <Text style={[t.label, { color: c.yellow800, ...face[600], textDecorationLine: "underline" }]}>Try again</Text>
+        <Text style={[t.label, { color: c.yellow800, textDecorationLine: "underline" }]}>Try again</Text>
       </Pressable>
     </View>
   );
@@ -97,27 +112,39 @@ export function Stale({ error, loadedAt, onRetry }: { error: unknown; loadedAt: 
 
 const box: ViewStyle = { backgroundColor: c.white, borderRadius: 12, borderWidth: 1, borderColor: c.grey200, paddingHorizontal: space.cardX, paddingVertical: space.cardY };
 
-/* ── A button (the web's Button: primary orange, secondary white) ─── */
+/* ── A button (Button.tsx: every size a capsule, 44 px under a finger) ─
+   lg  px-5 text-md        md  px-3.5 text-base        row  px-4 text-sm
+   sm  px-3 text-sm
+   Primary is orange-600: white on the brand orange fails AA.         */
 
-export function Btn({ label, onPress, primary, disabled, busy, icon, a11y, hint, style, size = 48 }: {
+const SIZES = {
+  lg: { paddingHorizontal: 20, text: ty.md, gap: 8 },
+  md: { paddingHorizontal: 14, text: ty.sm, gap: 8 },
+  row: { paddingHorizontal: 16, text: ty.sm, gap: 8 },
+  sm: { paddingHorizontal: 12, text: ty.sm, gap: 6 },
+};
+
+export function Btn({ label, onPress, primary, disabled, busy, icon, a11y, hint, style, size = "lg" }: {
   label: string; onPress: () => void; primary?: boolean; disabled?: boolean; busy?: boolean; icon?: ReactNode;
-  a11y?: string; hint?: string; style?: StyleProp<ViewStyle>; size?: number;
+  a11y?: string; hint?: string; style?: StyleProp<ViewStyle>; size?: keyof typeof SIZES;
 }) {
-  const off = disabled || busy;
-  const bg = primary ? (off ? c.grey300 : c.orange) : c.white;
+  const off = Boolean(disabled || busy);
+  const S = SIZES[size];
+  const fg = primary ? (off ? c.grey600 : c.white) : off ? c.grey500 : c.ink900;
   return (
     <Pressable
       onPress={onPress} disabled={busy}
       accessibilityRole="button" accessibilityLabel={a11y ?? label} accessibilityHint={hint}
-      accessibilityState={{ disabled: Boolean(off), busy: Boolean(busy) }}
+      accessibilityState={{ disabled: off, busy: Boolean(busy) }}
       style={({ pressed }) => [{
-        minHeight: size, paddingHorizontal: 20, borderRadius: 999, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 6,
-        backgroundColor: pressed && !off ? (primary ? c.orange600 : c.grey50) : bg,
-        borderWidth: primary ? 0 : 1, borderColor: c.grey300, opacity: !primary && off ? 0.5 : 1,
+        minHeight: 44, paddingHorizontal: S.paddingHorizontal, gap: S.gap, borderRadius: 999,
+        flexDirection: "row", alignItems: "center", justifyContent: "center",
+        backgroundColor: primary ? (off ? c.grey300 : pressed ? c.orange700 : c.orange600) : off ? c.grey50 : pressed ? c.grey100 : c.white,
+        borderWidth: primary ? 0 : 1, borderColor: c.grey300,
       }, style]}
     >
-      {icon}
-      <Text style={[t.heading, { fontSize: 16, color: primary ? (off ? c.grey600 : c.white) : c.ink900 }]}>{busy ? `${label}…` : label}</Text>
+      {busy ? <ActivityIndicator size="small" color={fg} /> : icon}
+      <Text style={[S.text, face[500], { color: fg }]} numberOfLines={1}>{label}</Text>
     </Pressable>
   );
 }
@@ -140,18 +167,54 @@ export function RoundBtn({ a11y, onPress, children, disabled, tone }: {
   );
 }
 
-/* ── A dialog over the screen (the web's Dialog) ────────────────────── */
+/* ── A typing box and its label (Input.tsx: 44 px, 16 px type under a finger) ── */
 
-export function Sheet({ open, onClose, title, description, footer, children }: {
-  open: boolean; onClose: () => void; title: string; description?: string; footer: ReactNode; children: ReactNode;
+export function Input(props: TextInputProps) {
+  return (
+    <TextInput
+      placeholderTextColor={web.grey400}
+      {...props}
+      style={[{ minHeight: 44, paddingHorizontal: 12, borderRadius: 10, borderWidth: 1, borderColor: c.grey300, backgroundColor: c.white, ...face[500], fontSize: 16, color: c.ink900 }, props.style]}
+    />
+  );
+}
+
+export function Field({ label, hint, error, children }: { label: string; hint?: string; error?: string; children: ReactNode }) {
+  return (
+    <View style={{ gap: 6 }}>
+      <Text style={[t.label, ty.sm, { color: c.grey700 }]}>{label}</Text>
+      {children}
+      {error ? <Text style={[t.caption, ty.xs, { color: "#e0301e" }]}>{error}</Text>
+        : hint ? <Text style={[t.caption, ty.xs]}>{hint}</Text> : null}
+    </View>
+  );
+}
+
+/* ── A dialog over the screen (Overlays.tsx DialogContent) ──────────── */
+
+/** ink-950 at 25% (the web also blurs it 2 px: the phone has no blur package). */
+export const OVERLAY = "rgba(1,13,23,0.25)";
+
+/** The card: 16 px from the screen's sides, 12 px corners, a grey-200 hairline. */
+export const sheetCard: ViewStyle = {
+  backgroundColor: c.white, borderRadius: 12, borderWidth: 1, borderColor: c.grey200, maxHeight: "100%", overflow: "hidden",
+};
+export const sheetFooter: ViewStyle = {
+  borderTopWidth: 1, borderTopColor: c.grey200, backgroundColor: c.grey50, paddingHorizontal: space.side, paddingVertical: 14,
+};
+
+export function Sheet({ open, onClose, title, description, footer, children, gap = 16 }: {
+  open: boolean; onClose: () => void; title: string; description?: string; footer: ReactNode; children: ReactNode; gap?: number;
 }) {
   return (
     <Modal visible={open} transparent animationType="fade" onRequestClose={onClose}>
-      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : undefined} style={{ flex: 1, backgroundColor: "rgba(3,23,40,0.4)", justifyContent: "center", padding: 16 }}>
-        <View style={{ backgroundColor: c.white, borderRadius: 16, maxHeight: "100%", overflow: "hidden" }}>
+      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : undefined}
+        style={{ flex: 1, backgroundColor: OVERLAY, justifyContent: "center", paddingHorizontal: 16, paddingVertical: 32 }}>
+        <Pressable style={StyleSheet.absoluteFill} onPress={onClose} accessibilityLabel="Close" />
+        <View style={sheetCard}>
           <SheetHead title={title} description={description} onClose={onClose} />
-          <ScrollView contentContainerStyle={{ padding: space.side, gap: 20 }} keyboardShouldPersistTaps="handled">{children}</ScrollView>
-          <View style={{ backgroundColor: c.grey50, borderTopWidth: 1, borderTopColor: c.grey100, paddingHorizontal: space.side, paddingVertical: 12 }}>{footer}</View>
+          <ScrollView contentContainerStyle={{ paddingHorizontal: space.side, paddingVertical: 16, gap }} keyboardShouldPersistTaps="handled">{children}</ScrollView>
+          <View style={sheetFooter}>{footer}</View>
         </View>
       </KeyboardAvoidingView>
     </Modal>
@@ -160,13 +223,13 @@ export function Sheet({ open, onClose, title, description, footer, children }: {
 
 export function SheetHead({ title, description, onClose }: { title: string; description?: string; onClose: () => void }) {
   return (
-    <View style={{ flexDirection: "row", alignItems: "flex-start", gap: 12, paddingHorizontal: space.side, paddingVertical: 14, borderBottomWidth: 1, borderBottomColor: c.grey100 }}>
-      <View style={{ flex: 1, gap: 4 }}>
-        <Text style={t.heading} accessibilityRole="header">{title}</Text>
-        {description ? <Text style={[t.label, { color: c.grey500 }]}>{description}</Text> : null}
+    <View style={{ flexDirection: "row", alignItems: "flex-start", gap: 16, paddingHorizontal: space.side, paddingVertical: 16, borderBottomWidth: 1, borderBottomColor: c.grey200 }}>
+      <View style={{ flex: 1 }}>
+        <Text style={[t.heading, ty.md]} accessibilityRole="header">{title}</Text>
+        {description ? <Text style={[t.label, ty.sm, { color: c.grey500, marginTop: 4 }]}>{description}</Text> : null}
       </View>
-      <Pressable onPress={onClose} accessibilityRole="button" accessibilityLabel="Close" hitSlop={4} style={{ width: 44, height: 44, alignItems: "center", justifyContent: "center", marginRight: -12, marginTop: -10 }}>
-        <X size={20} color={c.grey500} />
+      <Pressable onPress={onClose} accessibilityRole="button" accessibilityLabel="Close" style={{ width: 44, height: 44, alignItems: "center", justifyContent: "center", margin: -14 }}>
+        <X size={16} color={c.grey500} />
       </Pressable>
     </View>
   );
@@ -174,13 +237,14 @@ export function SheetHead({ title, description, onClose }: { title: string; desc
 
 /** A small capital heading inside a sheet ("VARIATION", "NOTE FOR THE KITCHEN"). */
 export function Caps({ children }: { children: ReactNode }) {
-  return <Text style={[t.caption, { ...face[600], textTransform: "uppercase", letterSpacing: 0.4 }]}>{children}</Text>;
+  return <Text style={[t.caption, ty.xs, { ...face[600], textTransform: "uppercase", letterSpacing: 0.3 }]}>{children}</Text>;
 }
 
 /* ── What was said (the web's toast) ─────────────────────────────────
-   The pad closes on Send and Tables says what happened: the pad leaves
-   it here, the screen underneath picks it up when it comes back into view.
-   A word older than ten seconds is not said. */
+   The pad closes on Send and the screen underneath says what happened: the
+   pad leaves it here, that screen picks it up when it comes back into view
+   (and the pad picks up what Tables left when a parcel opens it). A word
+   older than ten seconds is not said. */
 
 export type Said = { title: string; body?: string; tone: "ok" | "held" | "bad" };
 let mailbox: { said: Said; at: number } | null = null;

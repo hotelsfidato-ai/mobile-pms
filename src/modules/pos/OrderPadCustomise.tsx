@@ -1,12 +1,12 @@
 import { Check, Minus, Plus, X } from "lucide-react-native";
 import { useState } from "react";
-import { Pressable, Text, TextInput, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import { cash } from "../../core/format";
 import { c, face, t } from "../../core/theme";
 import { Capsule } from "../../core/ui";
 import { addNumbered, customProblems, lessNumbered, LONGEST_NAME, MOST_OF_A_CUSTOM, nameWithAddons, priceWithAddons } from "./pad";
 import type { CustomAddon, LineAddon, NumberedAddon } from "./types";
-import { Btn, RoundBtn, Sheet } from "./TablesKit";
+import { Btn, Field, Input, RoundBtn, Sheet, ty, web } from "./TablesKit";
 
 /* ══════════════════════════════════════════════════════════════════
    CUSTOMISE: THE ADD-ONS ON ONE DISH — the web's CustomiseDialog
@@ -44,14 +44,14 @@ export function OrderPadCustomise({ dish, base, qty = 1, addons, chosen: initial
         : "Tap a number to add it to this dish. Tap again for two."}
       footer={(
         <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
-          <Text style={[t.heading, t.tab, { flex: 1 }]}>{sent ? (nothing ? "-" : `+${cash(figure)}`) : cash(figure)}</Text>
+          <Text style={[t.heading, ty.md, t.tab, { flex: 1 }]}>{sent ? (nothing ? "-" : `+${cash(figure)}`) : cash(figure)}</Text>
           <Btn label="Cancel" onPress={onCancel} />
           <Btn label="Done" primary disabled={(asks && scope === null) || nothing}
             onPress={() => { if (!((asks && scope === null) || nothing)) onDone(chosen, scope ?? "all", customs); }} />
         </View>
       )}
     >
-      {!sent ? <Text style={[t.label, { fontSize: 16, color: c.ink900 }]} accessibilityLiveRegion="polite">{nameWithAddons(dish, chosen)}</Text> : null}
+      {!sent ? <Text style={[t.label, ty.sm, { color: c.ink900 }]} accessibilityLiveRegion="polite">{nameWithAddons(dish, chosen)}</Text> : null}
 
       {asks ? (
         <View style={{ gap: 8 }}>
@@ -61,7 +61,7 @@ export function OrderPadCustomise({ dish, base, qty = 1, addons, chosen: initial
               <Pressable
                 key={value} onPress={() => setScope(value)} accessibilityRole="radio" accessibilityState={{ checked: scope === value }}
                 style={{ minHeight: 44, paddingHorizontal: 16, justifyContent: "center", borderRadius: 999, borderWidth: 1,
-                  borderColor: scope === value ? "#1f6f5c" : c.grey300, backgroundColor: scope === value ? "#eaf4f1" : c.white }}
+                  borderColor: scope === value ? web.success : c.grey300, backgroundColor: scope === value ? web.success50 : c.white }}
               >
                 <Text style={[t.label, { color: c.ink900 }]}>{label}</Text>
               </Pressable>
@@ -91,14 +91,14 @@ export function OrderPadCustomise({ dish, base, qty = 1, addons, chosen: initial
                 key={a.id} disabled={off} onPress={() => setChosen((prev) => addNumbered(prev, a))}
                 accessibilityRole="button" accessibilityLabel={`Add-on ${a.number}, ${a.name}${n ? `, ${n} on this dish` : ""}`}
                 style={{ minHeight: 64, paddingHorizontal: 14, paddingVertical: 8, borderRadius: 12, borderWidth: 1, flexDirection: "row", gap: 12,
-                  borderColor: off ? c.grey200 : n > 0 ? "#1f6f5c" : c.grey300, backgroundColor: off ? c.grey50 : n > 0 ? "#eaf4f1" : c.white }}
+                  borderColor: off ? c.grey200 : n > 0 ? web.success : c.grey300, backgroundColor: off ? c.grey50 : n > 0 ? web.success50 : c.white }}
               >
-                <Text style={[t.figure, t.tab, { color: off ? c.grey300 : c.ink900 }]}>{a.number}</Text>
+                <Text style={[t.figure, ty.xl, t.tab, { color: off ? web.grey400 : c.ink900 }]}>{a.number}</Text>
                 <View style={{ flex: 1 }}>
-                  <Text style={[t.label, { fontSize: 16, color: off ? c.grey500 : c.ink900, textDecorationLine: off ? "line-through" : "none" }]}>{a.name}</Text>
-                  <Text style={[t.label, t.tab]}>
+                  <Text style={[t.label, ty.sm, { color: off ? c.grey500 : c.ink900, textDecorationLine: off ? "line-through" : "none" }]}>{a.name}</Text>
+                  <Text style={[t.label, ty.sm, t.tab]}>
                     {off ? "off today" : a.price === 0 ? "Free" : `+${cash(a.price)}`}
-                    {n > 0 ? <Text style={{ ...face[600], color: "#1a5f4f" }}>{`  ×${n}`}</Text> : null}
+                    {n > 0 ? <Text style={{ ...face[600], color: web.success600 }}>{`  ×${n}`}</Text> : null}
                   </Text>
                 </View>
               </Pressable>
@@ -112,8 +112,8 @@ export function OrderPadCustomise({ dish, base, qty = 1, addons, chosen: initial
           {chosen.map((x) => (
             <View key={x.id} style={{ flexDirection: "row", alignItems: "center", gap: 12, paddingVertical: 6, borderTopWidth: 1, borderTopColor: c.grey100 }}>
               <Text style={[t.label, t.tab, { width: 24, color: c.grey500 }]}>{x.number}</Text>
-              <Text style={[t.label, { flex: 1, fontSize: 16, color: c.ink900 }]}>{sent ? "+ " : ""}{x.name}{x.qty > 1 ? ` ×${x.qty}` : ""}</Text>
-              <Text style={[t.label, t.tab]}>{x.price === 0 ? "Free" : `+${cash(x.price * x.qty)}`}</Text>
+              <Text style={[t.label, ty.sm, { flex: 1, color: c.ink900 }]}>{sent ? "+ " : ""}{x.name}{x.qty > 1 ? ` ×${x.qty}` : ""}</Text>
+              <Text style={[t.label, ty.sm, t.tab]}>{x.price === 0 ? "Free" : `+${cash(x.price * x.qty)}`}</Text>
               <RoundBtn a11y={`One less ${x.name}`} tone="danger" onPress={() => setChosen((prev) => lessNumbered(prev, x.id))}><X size={16} color={c.grey500} /></RoundBtn>
             </View>
           ))}
@@ -126,8 +126,8 @@ export function OrderPadCustomise({ dish, base, qty = 1, addons, chosen: initial
         <View accessibilityLabel="Custom add-ons">
           {customs.map((x, i) => (
             <View key={i} style={{ flexDirection: "row", alignItems: "center", gap: 12, paddingVertical: 6, borderTopWidth: 1, borderTopColor: c.grey100 }}>
-              <Text style={[t.label, { flex: 1, fontSize: 16, color: c.ink900 }]} numberOfLines={1}>+ {x.name} ×{x.qty}</Text>
-              <Text style={[t.label, t.tab]}>{x.price === 0 ? "Free" : `+${cash(x.price * x.qty)}`}</Text>
+              <Text style={[t.label, ty.sm, { flex: 1, color: c.ink900 }]} numberOfLines={1}>+ {x.name} ×{x.qty}</Text>
+              <Text style={[t.label, ty.sm, t.tab]}>{x.price === 0 ? "Free" : `+${cash(x.price * x.qty)}`}</Text>
               <RoundBtn a11y={`Take off ${x.name}`} tone="danger" onPress={() => setCustoms((prev) => prev.filter((_, j) => j !== i))}><X size={16} color={c.grey500} /></RoundBtn>
             </View>
           ))}
@@ -148,26 +148,27 @@ function CustomForm({ onAdd }: { onAdd: (x: CustomAddon) => void }) {
 
   if (!open) return <Btn label="Custom add-on" icon={<Plus size={16} color={c.ink900} />} onPress={() => setOpen(true)} />;
 
-  const input = { minHeight: 48, paddingHorizontal: 12, borderRadius: 8, borderWidth: 1, borderColor: c.grey300, ...t.label, fontSize: 16, color: c.ink900 };
   return (
     <View style={{ borderRadius: 12, borderWidth: 1, borderColor: c.grey200, padding: 14, gap: 12 }} accessibilityLabel="Custom add-on">
       <Text style={[t.label, { color: c.ink900 }]}>Custom add-on - something not on the list. Its own line under the dish.</Text>
-      <View style={{ gap: 6 }}>
-        <Text style={[t.label, { color: c.ink900 }]}>Name</Text>
-        <TextInput value={name} onChangeText={setName} placeholder="Extra papad" placeholderTextColor={c.grey500} accessibilityLabel="Name" autoFocus style={input} />
-        {name.trim().length > LONGEST_NAME ? <Text style={[t.caption, { color: c.red700 }]}>At most {LONGEST_NAME} letters, so the KOT can print it.</Text> : null}
-      </View>
-      <View style={{ flexDirection: "row", alignItems: "flex-end", gap: 12 }}>
-        <View style={{ flex: 1, gap: 6 }}>
-          <Text style={[t.label, { color: c.ink900 }]}>Price</Text>
-          <TextInput
-            value={free ? "" : price} onChangeText={setPrice} editable={!free} keyboardType="decimal-pad" accessibilityLabel="Price"
-            placeholder={free ? "Free" : "40"} placeholderTextColor={c.grey500} style={[input, free ? { backgroundColor: c.grey50 } : null]}
-          />
+      <Field label="Name" {...(name.trim().length > LONGEST_NAME ? { error: `At most ${LONGEST_NAME} letters, so the KOT can print it.` } : {})}>
+        <Input value={name} onChangeText={setName} placeholder="Extra papad" accessibilityLabel="Name" autoFocus />
+      </Field>
+      <View style={{ flexDirection: "row", alignItems: "flex-start", gap: 12 }}>
+        <View style={{ flex: 1 }}>
+          <Field
+            label="Price"
+            {...(!free && price.trim() !== "" && priceBad ? { error: "Rupees, more than 0 - like 40 or 40.50. Or tick Free." } : { hint: "Taxed at the dish's own rate." })}
+          >
+            <Input
+              value={free ? "" : price} onChangeText={setPrice} editable={!free} keyboardType="decimal-pad" accessibilityLabel="Price"
+              placeholder={free ? "Free" : "40"} style={free ? { backgroundColor: c.grey50 } : null}
+            />
+          </Field>
         </View>
         <Pressable
           onPress={() => setFree((f) => !f)} accessibilityRole="checkbox" accessibilityState={{ checked: free }}
-          style={{ minHeight: 48, flexDirection: "row", alignItems: "center", gap: 8 }}
+          style={{ minHeight: 44, marginTop: 27, flexDirection: "row", alignItems: "center", gap: 8 }}
         >
           <View style={{ width: 20, height: 20, borderRadius: 4, borderWidth: 1, borderColor: free ? c.orange : c.grey300, backgroundColor: free ? c.orange : c.white, alignItems: "center", justifyContent: "center" }}>
             {free ? <Check size={14} color={c.white} /> : null}
@@ -175,13 +176,10 @@ function CustomForm({ onAdd }: { onAdd: (x: CustomAddon) => void }) {
           <Text style={[t.label, { color: c.ink900 }]}>Free</Text>
         </Pressable>
       </View>
-      {!free && price.trim() !== "" && priceBad
-        ? <Text style={[t.caption, { color: c.red700 }]}>Rupees, more than 0 - like 40 or 40.50. Or tick Free.</Text>
-        : <Text style={t.caption}>Taxed at the dish's own rate.</Text>}
       <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
         <Text style={[t.label, { marginRight: 4 }]}>How many</Text>
         <RoundBtn a11y="One less" disabled={n <= 1} onPress={() => setN((x) => Math.max(1, x - 1))}><Minus size={16} color={c.grey600} /></RoundBtn>
-        <Text style={[t.label, t.tab, { width: 32, textAlign: "center", fontSize: 16, color: c.ink900 }]} accessibilityLiveRegion="polite">{n}</Text>
+        <Text style={[t.label, ty.sm, t.tab, { width: 32, textAlign: "center", color: c.ink900 }]} accessibilityLiveRegion="polite">{n}</Text>
         <RoundBtn a11y="One more" disabled={n >= MOST_OF_A_CUSTOM} onPress={() => setN((x) => Math.min(MOST_OF_A_CUSTOM, x + 1))}><Plus size={16} color={c.grey600} /></RoundBtn>
         <View style={{ flex: 1 }} />
         <Btn label="Add" primary disabled={!ready}

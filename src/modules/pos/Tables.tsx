@@ -1,33 +1,35 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { router, useFocusEffect } from "expo-router";
-import { ChevronLeft, ChevronRight, DoorClosed, Eye, LayoutGrid, Printer } from "lucide-react-native";
+import { ChevronLeft, ChevronRight, DoorClosed, Eye, LayoutGrid, Printer, ShoppingBag } from "lucide-react-native";
 import { useCallback, useEffect, useState, type ReactNode } from "react";
-import { AppState, Pressable, Text, TextInput, View } from "react-native";
-import { api, HeldError, send, type Hotel } from "../../core/api";
+import { AppState, Pressable, Text, View } from "react-native";
+import { ApiError, api, HeldError, send, type Hotel } from "../../core/api";
 import { cash, DASH } from "../../core/format";
 import { newKey } from "../../core/offline";
 import { c, face, space, t } from "../../core/theme";
-import { Capsule, Head, Screen } from "../../core/ui";
+import { Capsule, Screen } from "../../core/ui";
 import {
-  CLOSE_FOR, closedLine, closure, kotLines, LEGEND, LOOK, padHref, READY, tileLabel, tileOffers, type KotKind,
+  CLOSE_FOR, closedLine, closure, kotLines, LEGEND, LOOK, maySetUpKots, openLabel, padHref, parcelTile, READY, takenLabel, tileLabel, tileOffers,
+  type FloorNow, type KotKind, type Tile as Table,
 } from "./floor";
 import { draftedTables } from "./pad";
 import { PrintBill } from "./Pay";
 import { whyNotRing } from "./roles";
-import type { Floor, FloorTable } from "./types";
+import type { Order } from "./types";
 import {
-  Btn, ReadProblem, Refused, RoundBtn, SaidBar, Sheet, Stale, takeSaid, useAccess, type Said,
+  Btn, Field, Input, ReadProblem, Refused, RoundBtn, SaidBar, Sheet, Stale, leaveSaid, takeSaid, ty, useAccess, web, type Said,
 } from "./TablesKit";
 
 /* ══════════════════════════════════════════════════════════════════
    TABLES on a phone — the web's /pos/:code/tables (src/modules/pos/
-   pages/Floor.tsx, inside PosGate), the waiter's first screen. The room
-   as it stands: sections, two tiles across, each answering how long, which
-   table, how much. A free table opens the pad; a running one opens it for
-   another round; a finished bill offers Clear. Reference: .local/pos-
-   reference/01-02. Not here (the web's): the live channel (the 30 s poll
-   stands), the "Set up" link on a red KOT line and "Set up tables" (no
-   setup screen on the phone).
+   pages/Floor.tsx, inside PosGate), the waiter's first screen, drawn to the
+   PMS's own phone picture (M-11: .local/pms-shots/all/42). The room as it
+   stands: the open parcels first, then sections, two tiles across, each
+   answering how long, which table, how much. A free table opens the pad; a
+   running one opens it for another round; a finished bill offers Clear; a
+   joined table only its bill. Not here (the web's): the live channel (the
+   30 s poll stands), the KOT section and table setup ("Set up" says they are
+   on the website; "Set up tables" is not drawn), the Start-here card.
    ══════════════════════════════════════════════════════════════════ */
 
 /** The web polls the floor every 30 s; the minutes are the point of a tile. */
@@ -44,7 +46,7 @@ export function Tables({ hotel, role, onBack, onSignOut }: {
   const access = useAccess(code);
   const floor = useQuery({
     queryKey: ["pos", code, "tables", "floor"],
-    queryFn: () => api<Floor>(`/api/hotels/${code}/till/floor?outlet=${OUTLET}`),
+    queryFn: () => api<FloorNow>(`/api/hotels/${code}/till/floor?outlet=${OUTLET}`),
   });
   const kot = useQuery({
     queryKey: ["pos", code, "tables", "kot"],
@@ -54,6 +56,7 @@ export function Tables({ hotel, role, onBack, onSignOut }: {
   const [said, setSaid] = useState<Said | null>(null);
   const [drafted, setDrafted] = useState<Set<string>>(new Set());
   const [closing, setClosing] = useState(false);
+  const [parcel, setParcel] = useState(false);
   const [pulled, setPulled] = useState(false);
 
   const refresh = useCallback(() => { void cache.invalidateQueries({ queryKey: ["pos", code] }); }, [cache, code]);
@@ -93,26 +96,26 @@ export function Tables({ hotel, role, onBack, onSignOut }: {
       refresh();
     }
   }
-  const clear = (tb: FloorTable) => void act(tb.id, `/api/hotels/${code}/till/orders/${tb.orderId}/clear`, undefined,
+  const clear = (tb: Table) => void act(tb.id, `/api/hotels/${code}/till/orders/${tb.orderId}/clear`, undefined,
     () => ({ title: `${tb.label} is free`, tone: "ok" }), "Not cleared");
   /* Every ready dish on the table, taken out at once (D27-222). */
-  const take = (tb: FloorTable) => void act(tb.id, `/api/hotels/${code}/till/orders/${tb.orderId}/taken`, { lineIds: tb.readyIds ?? [] },
+  const take = (tb: Table) => void act(tb.id, `/api/hotels/${code}/till/orders/${tb.orderId}/taken`, { lineIds: tb.readyIds ?? [] },
     () => null, "Not taken");
   /** Refused by the API for this person: the reason, said when tapped (rule 1),
       under the title the web's refusal of that act carries. */
   const refuse = (title: string, why: string) => setSaid({ title, body: why, tone: "bad" });
 
   const head = (
-    <Head
-      title="Tables"
-      under="The room as it stands. Tap any table to take an order on it - the pad opens here, and nothing reaches the kitchen until you send it."
-      action={(
-        <View style={{ gap: 8 }}>
-          {onBack ? <Capsule label="Back" icon={<ChevronLeft size={16} color={c.grey700} />} onPress={onBack} /> : null}
-          {onSignOut ? <Capsule label="Sign out" onPress={onSignOut} /> : null}
-        </View>
-      )}
-    />
+    <View style={{ marginBottom: 4 }}>
+      <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
+        <Text style={[t.title, { flex: 1 }]} accessibilityRole="header">Tables</Text>
+        {onBack ? <Capsule label="Back" icon={<ChevronLeft size={16} color={c.grey700} />} onPress={onBack} /> : null}
+        {onSignOut ? <Capsule label="Sign out" onPress={onSignOut} /> : null}
+      </View>
+      <Text style={[t.label, ty.sm, { color: c.grey500, marginTop: 2 }]}>
+        The room as it stands. Tap any table to take an order on it - the pad opens here, and nothing reaches the kitchen until you send it.
+      </Text>
+    </View>
   );
 
   /* PosGate: the till's own answer first, once, for the whole service. */
@@ -127,7 +130,21 @@ export function Tables({ hotel, role, onBack, onSignOut }: {
     );
   }
 
+  const tile = (tb: Table) => (
+    <Tile
+      key={tb.id} hotel={hotel} table={tb} closed={closed} busy={busy === tb.id} drafted={drafted.has(tb.label)}
+      ringReason={ringReason} onRefused={refuse} onClear={() => clear(tb)} onTake={() => take(tb)} onPrinted={refresh}
+    />
+  );
+  const grid = (tables: Table[]) => pairs(tables).map((row) => (
+    <View key={row[0]!.id} style={{ flexDirection: "row", gap: space.tile }}>
+      {row.map(tile)}
+      {row.length === 1 ? <View style={{ flex: 1 }} /> : null}
+    </View>
+  ));
+
   const sections = floor.data?.sections ?? [];
+  const parcels = (floor.data?.parcels ?? []).map(parcelTile);
   let body: ReactNode;
   if (floor.isLoading) {
     body = <View style={{ height: 256, borderRadius: 12, backgroundColor: c.grey100 }} accessibilityLabel="Reading the tables" />;
@@ -144,20 +161,10 @@ export function Tables({ hotel, role, onBack, onSignOut }: {
       </View>
     );
   } else {
-    body = sections.map((section) => (
-      <View key={section.id} style={{ gap: 12, marginTop: 4 }}>
-        <Text style={t.heading} accessibilityRole="header">{section.name}</Text>
-        {pairs(section.tables).map((row) => (
-          <View key={row[0]!.id} style={{ flexDirection: "row", gap: space.tile }}>
-            {row.map((tb) => (
-              <Tile
-                key={tb.id} hotel={hotel} table={tb} closed={closed} busy={busy === tb.id} drafted={drafted.has(tb.label)}
-                ringReason={ringReason} onRefused={refuse} onClear={() => clear(tb)} onTake={() => take(tb)} onPrinted={refresh}
-              />
-            ))}
-            {row.length === 1 ? <View style={{ flex: 1 }} /> : null}
-          </View>
-        ))}
+    body = sections.map((section, i) => (
+      <View key={section.id} style={{ marginBottom: i < sections.length - 1 ? 12 : 0 }}>
+        <Text style={[t.heading, ty.md, { marginBottom: 12 }]} accessibilityRole="header">{section.name}</Text>
+        <View style={{ gap: space.tile }}>{grid(section.tables)}</View>
       </View>
     ));
   }
@@ -168,50 +175,77 @@ export function Tables({ hotel, role, onBack, onSignOut }: {
         {head}
 
         {outlet ? (
-          <View style={{ flexDirection: "row" }}>
+          <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8, marginBottom: 8 }}>
+            {/* A parcel (D27-359): named by its customer, its pad opens at once. */}
+            {!closed ? (
+              <Btn label="New parcel" icon={<ShoppingBag size={16} color={c.ink900} />}
+                onPress={() => { if (ringReason) refuse("Not opened", ringReason); else setParcel(true); }}
+                disabled={ringReason != null} hint={ringReason ?? undefined} />
+            ) : null}
             {closed ? (
-              <Btn label={`Reopen ${outlet.name}`} size={44}
+              <Btn label={`Reopen ${outlet.name}`} size="md"
                 onPress={() => (ringReason ? refuse("Not reopened", ringReason) : void act("outlet", `/api/hotels/${code}/till/outlet/${outlet.code}/closed`, { closed: false },
                   () => ({ title: `${outlet.name} is open`, tone: "ok" }), "Not reopened"))}
                 busy={busy === "outlet"} disabled={ringReason != null} hint={ringReason ?? undefined} />
             ) : (
-              <Btn label="Close early" size={44} icon={<DoorClosed size={16} color={c.ink900} />}
+              <Btn label="Close early" size="md" icon={<DoorClosed size={16} color={c.ink900} />}
                 onPress={() => { if (ringReason) refuse("Not closed", ringReason); else { setSaid(null); setClosing(true); } }}
                 disabled={ringReason != null} hint={ringReason ?? undefined} />
             )}
           </View>
         ) : null}
 
-        {kotLines(kot.data?.kinds ?? []).map((k) => (
-          <View
-            key={k.id} accessibilityRole={k.printing ? undefined : "alert"}
-            style={[{ flexDirection: "row", alignItems: "center", gap: 8, paddingHorizontal: 12, paddingVertical: 6, borderRadius: 8 },
-              k.printing ? null : { borderWidth: 1, borderColor: c.red100, backgroundColor: c.red50 }]}
-          >
-            <Printer size={16} color={k.printing ? c.grey600 : c.red700} />
-            <Text style={[t.label, { flex: 1, color: k.printing ? c.grey600 : c.red700 }, k.printing ? null : face[600]]}>{k.text}</Text>
-          </View>
-        ))}
-
-        {closed && outlet ? (
-          <View style={{ backgroundColor: c.white, borderRadius: 12, borderWidth: 1, borderColor: c.grey200, padding: space.cardX, gap: 2 }}>
-            <Text style={[t.label, { color: c.ink900 }]}>{closedLine(outlet, reopens)}</Text>
-            <Text style={t.label}>Bills already open can still be settled and printed. New orders are refused until it reopens.</Text>
+        {kot.data && kotLines(kot.data.kinds).length > 0 ? (
+          <View style={{ gap: 4, marginBottom: 8 }}>
+            {kotLines(kot.data.kinds).map((k) => (
+              <View
+                key={k.id} accessibilityRole={k.printing ? undefined : "alert"}
+                style={[{ flexDirection: "row", alignItems: "center", gap: 8, paddingHorizontal: 12, paddingVertical: 6, borderRadius: 10 },
+                  k.printing ? null : { borderWidth: 1, borderColor: c.red100, backgroundColor: c.red50 }]}
+              >
+                <Printer size={16} color={k.printing ? c.grey600 : c.red700} />
+                <Text style={[t.label, ty.sm, { flex: 1, color: k.printing ? c.grey600 : c.red700 }]}>{k.text}</Text>
+                {!k.printing && maySetUpKots(role) ? (
+                  <Pressable
+                    onPress={() => setSaid({ title: "Set up", body: "On the website for now", tone: "held" })}
+                    accessibilityRole="link" accessibilityHint="On the website for now"
+                    style={{ minHeight: 44, marginVertical: -11, justifyContent: "center" }}
+                  >
+                    <Text style={[t.label, ty.sm, { color: c.red700, textDecorationLine: "underline" }]}>Set up</Text>
+                  </Pressable>
+                ) : null}
+              </View>
+            ))}
           </View>
         ) : null}
 
-        {/* The key. */}
-        <View style={{ flexDirection: "row", flexWrap: "wrap", columnGap: 16, rowGap: 8 }}>
+        {closed && outlet ? (
+          <View style={{ backgroundColor: c.white, borderRadius: 12, borderWidth: 1, borderColor: c.grey200, padding: space.cardX, gap: 2, marginBottom: 8 }}>
+            <Text style={[t.label, ty.sm, { color: c.ink900 }]}>{closedLine(outlet, reopens)}</Text>
+            <Text style={[t.label, ty.sm]}>Bills already open can still be settled and printed. New orders are refused until it reopens.</Text>
+          </View>
+        ) : null}
+
+        {/* The key: a 12px caption, as the Rooms strip's. */}
+        <View style={{ flexDirection: "row", flexWrap: "wrap", columnGap: 16, rowGap: 8, marginBottom: 8 }}>
           {LEGEND.map((l) => (
             <View key={l.state} style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
               <View style={{ width: 12, height: 12, borderRadius: 4, borderWidth: 1, borderColor: LOOK[l.state].swatch, backgroundColor: LOOK[l.state].fill }} />
-              <Text style={[t.caption, { color: c.grey600 }]}>{l.label}</Text>
+              <Text style={[t.caption, ty.xs, { color: c.grey600 }]}>{l.label}</Text>
             </View>
           ))}
         </View>
 
         {floor.error && floor.data !== undefined ? (
           <Stale error={floor.error} loadedAt={floor.dataUpdatedAt} onRetry={() => void floor.refetch()} />
+        ) : null}
+
+        {/* The open parcels, above the room (D27-359). */}
+        {parcels.length > 0 ? (
+          <View style={{ marginBottom: 12 }}>
+            <Text style={[t.heading, ty.md, { marginBottom: 12 }]} accessibilityRole="header">Parcels</Text>
+            <View style={{ gap: space.tile }}>{grid(parcels)}</View>
+          </View>
         ) : null}
 
         {body}
@@ -227,6 +261,20 @@ export function Tables({ hotel, role, onBack, onSignOut }: {
             "Not closed")}
         />
       ) : null}
+
+      {parcel ? (
+        <NewParcel
+          code={code} onCancel={() => setParcel(false)}
+          onHeld={(word) => { setParcel(false); setSaid(word); }}
+          onOpened={(order, name) => {
+            setParcel(false);
+            refresh();
+            /* The pad says it, over the screen that asked. */
+            leaveSaid({ title: `Parcel for ${name}`, body: "Add the dishes and send them to the kitchen.", tone: "ok" });
+            router.push(`/pos/${code}/pad?order=${order.id}&table=${encodeURIComponent(order.table ?? `Parcel · ${name}`)}`);
+          }}
+        />
+      ) : null}
     </View>
   );
 }
@@ -236,13 +284,18 @@ const pairs = <T,>(list: T[]): T[][] => list.reduce<T[][]>((rows, x, i) => (i % 
 /** One table. Three things, in the order a person reads them across a room:
     how long, which table, how much (Floor.tsx). */
 function Tile({ hotel, table: tb, closed, busy, drafted, ringReason, onRefused, onClear, onTake, onPrinted }: {
-  hotel: Hotel; table: FloorTable; closed: boolean; busy: boolean; drafted: boolean; ringReason: string | null;
+  hotel: Hotel; table: Table; closed: boolean; busy: boolean; drafted: boolean; ringReason: string | null;
   onRefused: (title: string, why: string) => void; onClear: () => void; onTake: () => void; onPrinted: () => void;
 }) {
   const offer = tileOffers(tb, closed);
   const look = LOOK[tb.state];
   const open = () => (ringReason ? onRefused(tb.label, ringReason) : router.push(padHref(hotel.code, tb)));
-  const arrow = offer.tap ? <ChevronRight size={16} color="#9aa2a9" /> : null;
+  const arrow = offer.tap ? <ChevronRight size={16} color={web.grey400} /> : null;
+  const eye = (
+    <RoundBtn a11y={openLabel(tb)} onPress={() => router.push(`/pos/${hotel.code}/order/${tb.orderId}`)}>
+      <Eye size={16} color={c.grey600} />
+    </RoundBtn>
+  );
   return (
     <View
       style={{
@@ -251,63 +304,73 @@ function Tile({ hotel, table: tb, closed, busy, drafted, ringReason, onRefused, 
       }}
     >
       {drafted ? (
-        <Text style={[t.caption, { position: "absolute", top: 10, right: 12, fontSize: 11, color: c.orange700 }]}
+        <Text style={[t.caption, ty.xs, { position: "absolute", top: 12, right: 14, color: c.orange700 }]}
           accessibilityLabel="A round is on a pad and has not been sent">not sent</Text>
       ) : null}
-      <Pressable
-        onPress={open} disabled={!offer.tap || busy}
-        accessibilityRole="button" accessibilityLabel={tileLabel(tb)} accessibilityState={{ disabled: !offer.tap }}
-        accessibilityHint={offer.tap && ringReason ? ringReason : undefined}
-        style={({ pressed }) => [{ flex: 1, justifyContent: tb.state === "blank" ? "center" : "flex-start", opacity: pressed ? 0.7 : 1 }]}
-      >
-        {tb.state === "blank" ? (
-          <>
-            <Text style={[t.figure, { ...face[500], color: c.grey700 }]}>{tb.label}</Text>
-            <View style={{ flexDirection: "row", alignItems: "center", gap: 8, marginTop: 2 }}>
-              {tb.seats ? <Text style={[t.label, t.tab, { color: c.grey500 }]}>{tb.seats} seats</Text> : null}
-              <View style={{ flex: 1 }} />
-              {arrow}
-            </View>
-          </>
-        ) : (
-          <>
-            <Text style={[t.caption, t.tab, { color: c.grey600 }]}>{tb.minutes ?? DASH} min</Text>
-            <Text style={t.figure}>{tb.label}</Text>
-            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 8, marginTop: 4 }}>
-              {tb.state === "closed"
-                ? <Text style={[t.label, { color: c.grey700 }]}>Closed unpaid</Text>
-                : <Text style={[t.heading, t.tab]}>{cash(tb.payable)}</Text>}
-              {arrow}
-            </View>
-          </>
-        )}
-      </Pressable>
+      {tb.state === "joined" ? (
+        /* JOINED (D27-372): its food is on another table's bill until that bill
+           is settled; it takes nothing itself; the eye opens that bill. */
+        <>
+          <Text style={[t.figure, ty.xl, { ...face[500], color: c.grey700 }]} accessibilityLabel={tileLabel(tb)}>{tb.label}</Text>
+          <Text style={[t.label, ty.sm, { color: c.grey700 }]}>Joined to {tb.joinedTo ?? "another table"}</Text>
+          <View style={{ flexDirection: "row", marginTop: "auto", paddingTop: 8 }}>{eye}</View>
+        </>
+      ) : (
+        <>
+          <Pressable
+            onPress={open} disabled={!offer.tap || busy}
+            accessibilityRole="button" accessibilityLabel={tileLabel(tb)} accessibilityState={{ disabled: !offer.tap }}
+            accessibilityHint={offer.tap && ringReason ? ringReason : undefined}
+            style={({ pressed }) => [{ flexGrow: 1, justifyContent: tb.state === "blank" ? "center" : "flex-start", opacity: pressed ? 0.7 : 1 }]}
+          >
+            {tb.state === "blank" ? (
+              <>
+                <Text style={[t.figure, ty.xl, { ...face[500], color: c.grey700 }]}>{tb.label}</Text>
+                <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+                  {tb.seats ? <Text style={[t.label, ty.sm, t.tab, { color: c.grey500 }]}>{tb.seats} seats</Text> : null}
+                  <View style={{ flex: 1 }} />
+                  {arrow}
+                </View>
+              </>
+            ) : (
+              <>
+                <Text style={[t.caption, ty.xs, t.tab, { color: c.grey600 }]}>{tb.minutes ?? DASH} min</Text>
+                <Text style={[t.figure, ty.xl]}>{tb.parcel ?? tb.label}</Text>
+                <View style={{ marginTop: "auto", flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
+                  {tb.state === "closed"
+                    ? <Text style={[t.label, ty.sm, { color: c.grey700 }]}>Closed unpaid</Text>
+                    : <Text style={[t.heading, ty.md, t.tab]}>{cash(tb.payable)}</Text>}
+                  {arrow}
+                </View>
+              </>
+            )}
+          </Pressable>
 
-      {offer.ready > 0 ? (
-        <Pressable
-          onPress={() => (ringReason ? onRefused("Not taken", ringReason) : onTake())} disabled={busy}
-          accessibilityRole="button" accessibilityLabel={`Taken: the ${offer.ready} ready at ${tb.label}`}
-          accessibilityState={{ disabled: ringReason != null || busy }} accessibilityHint={ringReason ?? undefined}
-          style={({ pressed }) => ({
-            marginTop: 8, minHeight: 44, borderRadius: 999, borderWidth: 1, borderColor: pressed ? READY.text : READY.ring,
-            backgroundColor: READY.fill, alignItems: "center", justifyContent: "center", opacity: busy ? 0.5 : 1,
-          })}
-        >
-          <Text style={[t.label, t.tab, { ...face[600], color: READY.text }]}>{offer.ready} ready</Text>
-        </Pressable>
-      ) : null}
+          {offer.ready > 0 ? (
+            <Pressable
+              onPress={() => (ringReason ? onRefused("Not taken", ringReason) : onTake())} disabled={busy}
+              accessibilityRole="button" accessibilityLabel={takenLabel(tb, offer.ready)}
+              accessibilityState={{ disabled: ringReason != null || busy }} accessibilityHint={ringReason ?? undefined}
+              style={({ pressed }) => ({
+                marginTop: 8, minHeight: 44, borderRadius: 999, borderWidth: 1, borderColor: pressed ? web.success : READY.ring,
+                backgroundColor: READY.fill, alignItems: "center", justifyContent: "center", opacity: busy ? 0.5 : 1,
+              })}
+            >
+              <Text style={[t.label, ty.sm, t.tab, { ...face[600], color: READY.text }]}>{offer.ready} ready</Text>
+            </Pressable>
+          ) : null}
 
-      {offer.actions === "clear" ? (
-        <Btn label="Clear" size={44} a11y={`Clear ${tb.label}`} style={{ marginTop: 8 }} busy={busy}
-          onPress={() => (ringReason ? onRefused("Not cleared", ringReason) : onClear())} disabled={ringReason != null} hint={ringReason ?? undefined} />
-      ) : offer.actions === "print-open" && tb.orderId ? (
-        <View style={{ flexDirection: "row", gap: 8, marginTop: 8, alignItems: "center" }}>
-          <PrintBill hotel={hotel} orderId={tb.orderId} onPrinted={onPrinted} />
-          <RoundBtn a11y={`Open ${tb.label}`} onPress={() => router.push(`/pos/${hotel.code}/order/${tb.orderId}`)}>
-            <Eye size={16} color={c.grey600} />
-          </RoundBtn>
-        </View>
-      ) : null}
+          {offer.actions === "clear" ? (
+            <Btn label="Clear" size="sm" a11y={`Clear ${tb.label}`} style={{ marginTop: 8 }} busy={busy}
+              onPress={() => (ringReason ? onRefused("Not cleared", ringReason) : onClear())} disabled={ringReason != null} hint={ringReason ?? undefined} />
+          ) : offer.actions === "print-open" && tb.orderId ? (
+            <View style={{ flexDirection: "row", gap: 8, marginTop: 8, alignItems: "center" }}>
+              <PrintBill hotel={hotel} orderId={tb.orderId} onPrinted={onPrinted} />
+              {eye}
+            </View>
+          ) : null}
+        </>
+      )}
     </View>
   );
 }
@@ -331,19 +394,61 @@ function CloseOutlet({ open, name, busy, said, onCancel, onClose }: {
         </View>
       )}
     >
-      <View style={{ gap: 6 }}>
-        <Text style={[t.label, { color: c.ink900 }]}>Why</Text>
-        <TextInput
-          value={reason} onChangeText={setReason} placeholder="Power cut" placeholderTextColor={c.grey500} accessibilityLabel="Why"
-          style={{ minHeight: 48, paddingHorizontal: 12, borderRadius: 8, borderWidth: 1, borderColor: c.grey300, ...t.label, color: c.ink900 }}
-        />
-        <Text style={t.caption}>Shown to the waiter who tries to ring an order.</Text>
-      </View>
+      <Field label="Why" hint="Shown to the waiter who tries to ring an order.">
+        <Input value={reason} onChangeText={setReason} placeholder="Power cut" accessibilityLabel="Why" />
+      </Field>
       <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
         {CLOSE_FOR.map((o) => (
           <Btn key={o.key} label={o.label} busy={busy} onPress={() => onClose(o.key, reason)} style={{ flexBasis: "47%", flexGrow: 1 }} />
         ))}
       </View>
+    </Sheet>
+  );
+}
+
+/** A parcel has no table: it is named by its customer, with a phone to call
+    when it is ready (components/NewParcel.tsx, D27-359). Held offline it has
+    no order yet, so no pad opens: the held bar says it is waiting. */
+function NewParcel({ code, onCancel, onHeld, onOpened }: {
+  code: string; onCancel: () => void; onHeld: (word: Said) => void; onOpened: (order: Order, name: string) => void;
+}) {
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [problem, setProblem] = useState<string | null>(null);
+
+  async function create() {
+    const who = name.trim();
+    if (!who) { setProblem("Whose parcel is it? Type the customer's name."); return; }
+    setBusy(true);
+    try {
+      const order = await send<Order & { ok: true }>("POST", `/api/hotels/${code}/till/orders`, { outlet: OUTLET, parcel: { name: who, phone: phone.trim() || null } });
+      onOpened(order, who);
+    } catch (e) {
+      if (e instanceof HeldError) onHeld({ title: "Saved on this phone", body: e.message, tone: "held" });
+      else setProblem(e instanceof ApiError || e instanceof Error ? e.message : String(e));
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <Sheet
+      open onClose={onCancel} title="New parcel" gap={12}
+      footer={(
+        <View style={{ flexDirection: "row", justifyContent: "flex-end", gap: 8 }}>
+          <Btn label="Cancel" size="md" onPress={onCancel} />
+          <Btn label="Open the parcel" size="md" primary busy={busy} onPress={() => void create()} />
+        </View>
+      )}
+    >
+      <Field label="Customer's name">
+        <Input value={name} onChangeText={setName} maxLength={60} autoFocus accessibilityLabel="Customer's name" />
+      </Field>
+      <Field label="Phone" hint="To call when it is ready. Not needed.">
+        <Input value={phone} onChangeText={setPhone} keyboardType="phone-pad" accessibilityLabel="Phone" />
+      </Field>
+      {problem ? <Text style={[t.label, ty.sm, { color: c.red700 }]} accessibilityRole="alert">{problem}</Text> : null}
     </Sheet>
   );
 }

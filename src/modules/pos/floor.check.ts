@@ -1,14 +1,16 @@
 /* Run: node --experimental-strip-types mobile/src/modules/pos/floor.check.ts
    Tables' rules: what each tile offers in each state, where its tap goes,
    the KOT printer lines and the closed banner, in the web's words. */
-import { closedLine, closure, finished, kotLines, padHref, since, tileLabel, tileOffers, type KotKind } from "./floor.ts";
-import type { FloorTable, TableState } from "./types";
+import {
+  closedLine, closure, finished, kotLines, maySetUpKots, openLabel, padHref, parcelTile, since, takenLabel, tileLabel, tileOffers,
+  type KotKind, type Tile, type TileState,
+} from "./floor.ts";
 
 const eq = (got: unknown, want: unknown, what: string) => {
   if (JSON.stringify(got) !== JSON.stringify(want)) throw new Error(`${what}: got ${JSON.stringify(got)}, want ${JSON.stringify(want)}`);
 };
 
-const table = (state: TableState, more: Partial<FloorTable> = {}): FloorTable => ({
+const table = (state: TileState, more: Partial<Tile> = {}): Tile => ({
   id: "t1", label: "N1", seats: 6, row: 0, col: 0, orderId: state === "blank" ? null : "o1", orderNo: null, state,
   minutes: state === "blank" ? null : 12, payable: state === "blank" ? null : 441, ready: 0, readyIds: [], ...more,
 });
@@ -24,6 +26,24 @@ eq(tileOffers(table("kot"), true), { tap: null, ready: 0, actions: "print-open" 
 /* Food at the pass: "N ready" on any bill with an order. */
 eq(tileOffers(table("kot", { ready: 3, readyIds: ["a", "b"] }), false).ready, 3, "3 ready");
 eq(tileOffers(table("kot", { ready: 3, orderId: null }), false).ready, 0, "no order, no Taken");
+
+/* A joined table (D27-372) takes nothing itself; its Eye opens the bill it went onto. */
+const joined = table("joined", { minutes: null, payable: null, joinedTo: "AC3", label: "AC2" });
+eq(tileOffers(joined, false), { tap: null, ready: 0, actions: "open" }, "joined");
+eq([tileLabel(joined), openLabel(joined)], ["AC2, joined to AC3", "Open the bill AC2 is joined to"], "joined's spoken names");
+
+/* A parcel (D27-359, picture 42: Rahul): a running tile named by its customer, a round by the order. */
+const rahul = parcelTile({ orderId: "p1", orderNo: "20261011-118", name: "Rahul", phone: null, minutes: 13440, payable: 966, ready: 2, readyIds: ["a"] });
+eq(tileOffers(rahul, false), { tap: "round", ready: 2, actions: "print-open" }, "a parcel takes more, like a table");
+eq(tileOffers(rahul, true).tap, null, "closed: a parcel takes no more");
+eq(padHref("5EL", rahul), "/pos/5EL/pad?order=p1&table=Parcel%20%C2%B7%20Rahul", "its pad, by its name");
+eq([tileLabel(rahul), takenLabel(rahul, 2), openLabel(rahul)],
+  ["Add to the parcel for Rahul", "Taken: the 2 ready for Rahul", "Open Rahul's parcel"], "a parcel's spoken names");
+eq([takenLabel(table("kot"), 3), openLabel(table("kot"))], ["Taken: the 3 ready at N1", "Open N1"], "a table's spoken names");
+
+/* "Set up" on a red KOT line: edit on menu or room_config (api/src/permissions.ts). */
+for (const role of ["owner", "admin", "gm", "kitchen_manager"]) eq(maySetUpKots(role), true, `${role} sets up KOTs`);
+for (const role of ["hotel_manager", "pos", "bar", "front_desk", "finance", null]) eq(maySetUpKots(role), false, `${role} does not`);
 
 /* Where the tap goes (MODULE.md, How the parts meet). */
 eq(padHref("5EL", table("blank")), "/pos/5EL/pad?table=N1", "a free table");

@@ -11,6 +11,8 @@ import type {
      src/modules/pos/flows/DishDialog.tsx  the dish sheet's Add rule, sides, notes
      src/modules/pos/flows/CustomiseDialog.tsx  the numbered add-ons, the typed one
      src/modules/pos/data/till.ts       isBarSection, isBarDish, customInputs
+     src/modules/pos/lib/oneLinePerDish.ts  the same dish sent twice is one line (D27-353)
+     src/modules/pos/components/KotStation.tsx  KotsSent, the table's KOTs (D27-324)
    The web wins if the two differ: copy again. Its long notes say WHY.
 
    ⚠ THE PAD'S "BEFORE TAX" FIGURE IS THE ONLY SUM ON THE PHONE. It is
@@ -41,6 +43,18 @@ export interface DraftLine {
   customAddons?: CustomAddon[];
   /** An add-on for a dish already on the bill (D27-291), not a dish. */
   extraFor?: { lineId: string; dish: string; numberedId?: string };
+}
+
+/** Today's order line (till.ts): `types.ts` holds the shape of 15 Oct and is
+    the mobile chat's. Absent on an answer from before each of these. */
+export interface PadLine extends OrderLine {
+  kotNo?: number | null;
+  kotKind?: { id: string; name: string } | null;
+  /** A parcel's packing charge (D27-359): on the bill, never a dish. */
+  packing?: boolean;
+  itemId?: string | null;
+  addonId?: string | null;
+  moreChoiceIds?: string[];
 }
 
 /* ── What one dish costs (pricing.ts) ─────────────────────────────── */
@@ -131,8 +145,8 @@ export const isBarDish = (menu: MenuCategory[] | undefined, itemId: string | und
 
 /** Two tabs only when the menu has both sides; one section at a time when
     its chip is tapped; a search looks across the whole menu. */
-export function menuShown(categories: MenuCategory[], side: "restaurant" | "bar", section: string | null, search: string) {
-  const split = categories.some(isBarSection) && categories.some((c) => !isBarSection(c));
+export function menuShown(categories: MenuCategory[], side: "restaurant" | "bar", section: string | null, search: string, barOnly = false) {
+  const split = !barOnly && categories.some(isBarSection) && categories.some((c) => !isBarSection(c));
   const onSide = split ? categories.filter((c) => isBarSection(c) === (side === "bar")) : categories;
   const q = search.trim().toLowerCase();
   const filtered = !q ? (section ? onSide.filter((c) => c.id === section) : onSide)
@@ -230,12 +244,77 @@ export function customiseLine(
     : next;
 }
 
-/** The table's dishes the kitchen already has (D27-291): each takes add-ons. */
-export const sentDishes = (orderLines: OrderLine[]) =>
-  orderLines.filter((l) => !l.voided && l.parentLineId === null && l.kotStatus !== "pending");
+/** ONE LINE PER DISH (D27-353): the same dish, size, choices, sides, add-ons,
+    note and price, sent in two rounds, shows once; a struck line stays its
+    own. Display only; the merged line carries the NEWEST round's id. */
+export function oneLinePerDish(lines: readonly PadLine[]): PadLine[] {
+  const kids = (id: string) => lines.filter((c) => c.parentLineId === id);
+  const kidKey = (c: PadLine) => JSON.stringify([c.name, c.unitPrice, c.addonId ?? null, c.extra ?? null]);
+  const key = (l: PadLine) => l.voided ? `struck ${l.id}` : JSON.stringify([
+    l.itemId ?? null, l.name, l.variationId ?? null, l.unitPrice, l.taxRate, l.note ?? "",
+    l.numberedAddons ?? null, [...(l.moreChoiceIds ?? [])].sort(), l.extra ?? null,
+    kids(l.id).filter((c) => !c.voided).map((c) => `${kidKey(c)} ${c.qty / l.qty}`).sort(),
+  ]);
+  const groups = new Map<string, PadLine[]>();
+  for (const l of lines) {
+    if (l.parentLineId !== null) continue;
+    const k = key(l);
+    groups.set(k, [...(groups.get(k) ?? []), l]);
+  }
+  const out: PadLine[] = [];
+  for (const same of groups.values()) {
+    const newest = same[same.length - 1]!;
+    out.push({ ...newest, qty: same.reduce((n, l) => n + l.qty, 0) });
+    const children = same.flatMap((l) => kids(l.id));
+    const live = new Map<string, PadLine[]>();
+    for (const c of children.filter((x) => !x.voided)) live.set(kidKey(c), [...(live.get(kidKey(c)) ?? []), c]);
+    for (const alike of live.values()) out.push({ ...alike[alike.length - 1]!, qty: alike.reduce((n, c) => n + c.qty, 0) });
+    out.push(...children.filter((c) => c.voided));
+  }
+  return out;
+}
+
+/** The table's dishes the kitchen already has (D27-291, D27-353): each takes
+    one more and add-ons; a parcel's packing charge is not a dish. */
+export const sentDishes = (orderLines: PadLine[]) =>
+  oneLinePerDish(orderLines.filter((l) => l.kotStatus !== "pending"))
+    .filter((l) => !l.voided && l.parentLineId === null && !l.packing);
+
+/** ONE MORE OF A DISH ALREADY SENT (D27-349): the same dish with its choices,
+    sides, note and numbered add-ons joins this round; the sent one is
+    untouched. `item` is the dish on today's menu; none: the caller says so. */
+export function onceMore(lines: DraftLine[], d: PadLine, orderLines: PadLine[], item: MenuItem): { lines: DraftLine[]; uid: string } {
+  const sides = orderLines.filter((x) => x.parentLineId === d.id && x.isAddon && !x.voided && x.addonId).map((x) => x.addonId!);
+  const variationId = d.variationId ?? undefined;
+  const more = d.moreChoiceIds ?? [];
+  const chosen = d.numberedAddons?.addons ?? [];
+  if (chosen.length === 0) return putLine(lines, item, 1, d.note ?? "", variationId, sides, more);
+  const { variationLabel, addonLabels } = chosenLabels(item, variationId, sides, more);
+  const base = unitPriceOf(item, variationId, sides, more);
+  const line: DraftLine = {
+    uid: `${item.id}-${stamp()}`, itemId: item.id, name: item.name, qty: 1, note: d.note ?? "",
+    ...(variationId ? { variationId } : {}),
+    ...(more.length ? { moreChoiceIds: more } : {}),
+    ...(variationLabel ? { variationLabel } : {}),
+    addonIds: sides, addonLabels,
+    numberedAddons: chosen, baseUnitPrice: base, unitPrice: priceWithAddons(base, chosen),
+  };
+  const key = (l: DraftLine) => JSON.stringify([l.itemId, l.variationId ?? null, l.note.trim(),
+    l.moreChoiceIds ?? [], [...l.addonIds].sort(), (l.numberedAddons ?? []).map((a) => [a.id, a.qty])]);
+  const twin = lines.find((l) => !l.customAddons?.length && !l.extraFor && key(l) === key(line));
+  return { lines: twin ? lines.map((l) => (l === twin ? { ...l, qty: l.qty + 1 } : l)) : [...lines, line], uid: line.uid };
+}
+
+/** An order's KOTs, one per number and kind ("KOT 3 · Bar"). */
+export function kotsSent(lines: readonly PadLine[]) {
+  return [...new Map(lines.flatMap((l) => (l.kotNo == null ? [] : [[
+    `${l.kotNo}:${l.kotKind?.id ?? ""}`,
+    { no: l.kotNo, kindId: l.kotKind?.id ?? null, label: `KOT ${l.kotNo}${l.kotKind ? ` · ${l.kotKind.name}` : ""}` },
+  ] as const]))).values()];
+}
 
 /** Add-ons for a dish already sent: each a pad line of its own. */
-export function addToSent(lines: DraftLine[], dish: OrderLine, chosen: LineAddon[], customs: CustomAddon[]): DraftLine[] {
+export function addToSent(lines: DraftLine[], dish: PadLine, chosen: LineAddon[], customs: CustomAddon[]): DraftLine[] {
   const name = dish.numberedAddons?.dish ?? dish.name;
   const at = stamp();
   const extra = (i: number, line: Pick<DraftLine, "name" | "qty" | "unitPrice">, numberedId?: string): DraftLine => ({
