@@ -69,7 +69,7 @@ export interface KotSetup { kinds: KotKind[] }
 /* ── Who (the API decides; AGENTS rule 1) ─────────────────────────── */
 
 /** roleGate PASS: `payment` create, plus the chef and the kitchen manager
-    by name, in the matrix's order. Read back from the API on 17 Oct. */
+    by name, in the matrix's order. Read back from the API on 31 Oct as dev-pos and dev-housekeeping. */
 const PASS: readonly string[] = ["owner", "admin", "gm", "hotel_manager", "front_desk", "kitchen_manager", "chef", "finance"];
 
 /** Null when the API would let this person Start or Ready a dish, else its sentence. */
@@ -175,10 +175,15 @@ export function clock(at: Date): string {
   const h = at.getHours();
   return `${h % 12 || 12}:${String(at.getMinutes()).padStart(2, "0")} ${h < 12 ? "AM" : "PM"}`;
 }
+/** The API sends Postgres's own text ("2026-10-31 07:35:58.215147+05:30"):
+    a browser reads it, a phone's engine (Hermes) reads only ISO. */
+export const instant = (text: string) =>
+  text.replace(" ", "T").replace(/(\.\d{3})\d+/, "$1").replace(/([+-]\d\d)$/, "$1:00");
+
 /** KotStation.tsx since: the time today, else "16 Oct 2026, 4:05 PM" (dateTime). */
 export function since(iso: string | null, now: Date): string {
   if (!iso) return "-";
-  const d = new Date(iso);
+  const d = new Date(instant(iso));
   return d.toDateString() === now.toDateString() ? clock(d)
     : `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}, ${clock(d)}`;
 }

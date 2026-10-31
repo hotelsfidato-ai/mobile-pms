@@ -3,7 +3,7 @@
    the kind filter, the KOT printer lines, a held Start. */
 import type { OutboxEntry } from "../../core/offline.ts";
 import {
-  alarm, byTable, clock, columnOf, dish, estimate, heldMove, kindShown, maySetUpKots, movePath, ofKind, plusLine,
+  alarm, byTable, clock, columnOf, dish, estimate, heldMove, instant, kindShown, maySetUpKots, movePath, ofKind, plusLine,
   printingKinds, since, statusOf, waited, waitNow, where, whyNotMove, working, type KitchenLine, type KotKind,
 } from "./kitchen.ts";
 
@@ -12,7 +12,7 @@ const eq = (got: unknown, want: unknown, what: string) => {
   if (JSON.stringify(got) !== JSON.stringify(want)) throw new Error(`${what}: got ${JSON.stringify(got)}, want ${JSON.stringify(want)}`);
 };
 
-/* Who: the API's sentence, read back as dev-pos on 17 Oct, word for word. */
+/* Who: the API's sentence, read back as dev-pos on 31 Oct, word for word. */
 const PASS_REFUSAL = "Moving a dish along at the pass is for the owner, an administrator, the general manager, the hotel manager, "
   + "reception, the kitchen manager, a chef or the accountant. Ask one of them.";
 eq(whyNotMove("pos"), PASS_REFUSAL, "the waiter moves");
@@ -73,6 +73,9 @@ const now = new Date(2026, 9, 17, 16, 5);
 eq(clock(new Date(2026, 9, 17, 0, 7)), "12:07 AM", "midnight");
 eq(clock(now), "4:05 PM", "the afternoon");
 eq(since(null, now), "-", "never seen");
+eq(instant("2026-10-31 07:35:58.215147+05:30"), "2026-10-31T07:35:58.215+05:30", "Postgres's time, as a phone reads it");
+eq(instant("2026-10-31 02:05:58+00"), "2026-10-31T02:05:58+00:00", "a whole-hour zone");
+eq(instant("2026-10-31T02:05:58.000Z"), "2026-10-31T02:05:58.000Z", "already ISO");
 eq(since(new Date(2026, 9, 16, 9, 30).toISOString(), now), "16 Oct 2026, 9:30 AM", "another day");
 eq(statusOf(kind("k"), now), { text: "No computer prints Kitchen KOTs - they are not printing", printing: false }, "no computer");
 const pc = { id: "s", name: "Kitchen PC", mine: false, online: true, seenAt: null };
