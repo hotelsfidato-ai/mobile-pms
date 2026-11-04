@@ -1,3 +1,4 @@
+import { c } from "../../core/theme.ts";
 import type { Floor, FloorTable, TableState } from "./types";
 
 /* ══════════════════════════════════════════════════════════════════
@@ -11,7 +12,8 @@ import type { Floor, FloorTable, TableState } from "./types";
    phone only draws it. Pure: no React Native, so `floor.check.ts` runs.
    ══════════════════════════════════════════════════════════════════ */
 
-/** src/styles/theme.css values the phone's theme.ts does not carry yet. */
+/** src/styles/theme.css values the phone's theme.ts (core) does not carry
+    yet; every other colour here is a theme.ts token. */
 const success = "#1f6f5c", success50 = "#eaf4f1", success100 = "#cde5de";
 const yellow = "#ffb600", grey400 = "#9aa2a9";
 
@@ -41,15 +43,15 @@ export interface Look { fill: string; ring: string; swatch: string }
 
 /** The tile (Floor.tsx TILE) and the key's swatch ring (LEGEND), by state. */
 export const LOOK: Record<TileState, Look> = {
-  blank: { fill: "#ffffff", ring: "#e2e5e8", swatch: "#ccd0d4" },
-  running: { fill: "#ebf2f9", ring: "#d2e2f2", swatch: "#2b6cb0" },
-  kot: { fill: "#fdf1eb", ring: "#f9dccd", swatch: "#df6128" },
+  blank: { fill: c.white, ring: c.grey200, swatch: c.grey300 },
+  running: { fill: c.info50, ring: c.info100, swatch: c.info },
+  kot: { fill: c.orange50, ring: c.orange100, swatch: c.orange },
   printed: { fill: success50, ring: success100, swatch: success },
-  paid: { fill: "#fff8e6", ring: "#ffedbf", swatch: yellow },
-  closed: { fill: "#eef0f2", ring: "#e2e5e8", swatch: grey400 },
-  joined: { fill: "#f7f8f9", ring: "#e2e5e8", swatch: "#e2e5e8" },
+  paid: { fill: c.yellow50, ring: c.yellow100, swatch: yellow },
+  closed: { fill: c.grey100, ring: c.grey200, swatch: grey400 },
+  joined: { fill: c.grey50, ring: c.grey200, swatch: c.grey200 },
 };
-export const READY = { fill: success50, ring: success100, text: "#1a5f4f" };
+export const READY = { fill: success50, ring: success100, text: c.success600 };
 
 /** The key, in the web's order and words. */
 export const LEGEND: { state: TableState; label: string }[] = [
@@ -110,14 +112,34 @@ export const openLabel = (table: Tile) =>
   table.parcel ? `Open ${table.parcel}'s parcel`
     : table.state === "joined" ? `Open the bill ${table.label} is joined to` : `Open ${table.label}`;
 
+/** The API can send Postgres's own text for a time ("2026-10-31
+    07:35:58.215147+05:30"): a browser reads it, a phone's engine (Hermes)
+    reads only ISO and gets NaN (MPOS-1). The kitchen helper's `instant`
+    (kitchen.ts, read back from the API on 31 Oct), the same rule. */
+export const instant = (text: string) =>
+  text.replace(" ", "T").replace(/(\.\d{3})\d+/, "$1").replace(/([+-]\d\d)$/, "$1:00");
+/** A server time as milliseconds; null when there is none or it cannot be read. */
+export function at(text: string | null | undefined): number | null {
+  if (!text) return null;
+  const ms = Date.parse(instant(text));
+  return Number.isNaN(ms) ? null : ms;
+}
+
 /** Closed now, and the time it reopens ("04:30 pm", the web's en-IN). */
 export function closure(outlet: Floor["outlet"], now = Date.now()): { closed: boolean; reopens: string | null } {
-  const closed = Boolean(outlet?.closedUntil && Date.parse(outlet.closedUntil) > now);
+  const until = at(outlet?.closedUntil);
+  const closed = until !== null && until > now;
   return {
     closed,
-    reopens: closed ? new Date(outlet!.closedUntil!).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" }) : null,
+    reopens: closed ? new Date(until).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" }) : null,
   };
 }
+
+/** Off until a time still to come (a side, an add-on: "off today"). */
+export const offNow = (offUntil: string | null | undefined, now = Date.now()) => {
+  const until = at(offUntil);
+  return until !== null && until > now;
+};
 
 /** The banner's first line: "Fidato Restaurant is closed until 04:30 pm - Power cut." */
 export function closedLine(outlet: NonNullable<Floor["outlet"]>, reopens: string | null): string {
@@ -170,8 +192,9 @@ export function timeOnly(d: Date): string {
   return `${h}:${String(d.getMinutes()).padStart(2, "0")} ${d.getHours() < 12 ? "AM" : "PM"}`;
 }
 export function since(iso: string | null, now = new Date()): string {
-  if (!iso) return "-";
-  const d = new Date(iso);
+  const ms = at(iso);
+  if (ms === null) return "-";
+  const d = new Date(ms);
   return d.toDateString() === now.toDateString() ? timeOnly(d)
     : `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}, ${timeOnly(d)}`;
 }

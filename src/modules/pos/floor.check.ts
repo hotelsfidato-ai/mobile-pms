@@ -2,7 +2,7 @@
    Tables' rules: what each tile offers in each state, where its tap goes,
    the KOT printer lines and the closed banner, in the web's words. */
 import {
-  closedLine, closure, finished, kotLines, maySetUpKots, openLabel, padHref, parcelTile, since, startCard, takenLabel, tileLabel, tileOffers,
+  at, closedLine, closure, finished, instant, kotLines, maySetUpKots, openLabel, offNow, padHref, parcelTile, since, startCard, takenLabel, tileLabel, tileOffers,
   type KotKind, type Tile, type TileState,
 } from "./floor.ts";
 
@@ -76,5 +76,18 @@ eq(closure(outlet, Date.parse("2026-10-15T12:00:00Z")), { closed: false, reopens
 eq(closure(null).closed, false, "no outlet");
 eq(closedLine(outlet, "04:30 pm"), "Fidato Restaurant is closed until 04:30 pm - Power cut.", "the banner");
 eq(closedLine({ ...outlet, closedReason: null }, null), "Fidato Restaurant is closed.", "no reason given");
+
+/* MPOS-1: Postgres's own text for a time, as a phone's engine reads it (ISO
+   only). Node reads both, so the text itself is checked, not only the result. */
+eq(instant("2026-10-31 07:35:58.215147+05:30"), "2026-10-31T07:35:58.215+05:30", "Postgres's time, as a phone reads it");
+eq(instant("2026-10-31 02:05:58+00"), "2026-10-31T02:05:58+00:00", "a whole-hour zone");
+eq(instant("2026-10-15T11:00:00.000Z"), "2026-10-15T11:00:00.000Z", "already ISO");
+eq([at(null), at(""), at("not a time")], [null, null, null], "no time, or one that cannot be read");
+eq(at("2026-10-15 16:30:00+05:30"), Date.parse("2026-10-15T11:00:00Z"), "the same instant");
+eq(closure({ ...outlet, closedUntil: "2026-10-15 16:30:00+05:30" }, Date.parse("2026-10-15T10:00:00Z")).closed, true, "closed, told in Postgres's text");
+eq(closure({ ...outlet, closedUntil: "not a time" }, 0).closed, false, "an unreadable time is not a closure");
+eq(since("not a time", now), "-", "an unreadable time is a dash, never NaN");
+eq([offNow("2026-10-15 16:30:00+05:30", Date.parse("2026-10-15T10:00:00Z")), offNow("2026-10-15 16:30:00+05:30", Date.parse("2026-10-15T12:00:00Z")), offNow(null)],
+  [true, false, false], "a side off until 4:30 pm");
 
 console.log("pos floor: all checks pass");

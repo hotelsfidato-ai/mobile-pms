@@ -26,7 +26,7 @@ export const ty = {
   xl: { fontSize: 20, lineHeight: 28 },
 };
 /** theme.css values the phone's theme.ts does not carry yet. */
-export const web = { success: "#1f6f5c", success50: "#eaf4f1", success600: "#1a5f4f", grey400: "#9aa2a9" };
+export const web = { success: "#1f6f5c", success50: "#eaf4f1", success600: c.success600, grey400: "#9aa2a9" };
 
 /* ── Who may use the till here (components/PosGate.tsx) ─────────────
    Only an explicit refusal shuts the door: offline, "go ahead", and the
@@ -114,14 +114,15 @@ const box: ViewStyle = { backgroundColor: c.white, borderRadius: 12, borderWidth
 
 /* ── A button (Button.tsx: every size a capsule, 44 px under a finger) ─
    lg  px-5 text-md        md  px-3.5 text-base        row  px-4 text-sm
-   sm  px-3 text-sm
+   sm  px-3 text-sm, drawn 32 px high as the picture's Clear and Got it
+       (all/42, roles/r-waiter-home), its touch still 44 px (hitSlop)
    Primary is orange-600: white on the brand orange fails AA.         */
 
 const SIZES = {
-  lg: { paddingHorizontal: 20, text: ty.md, gap: 8 },
-  md: { paddingHorizontal: 14, text: ty.sm, gap: 8 },
-  row: { paddingHorizontal: 16, text: ty.sm, gap: 8 },
-  sm: { paddingHorizontal: 12, text: ty.sm, gap: 6 },
+  lg: { paddingHorizontal: 20, text: ty.md, gap: 8, height: 44 },
+  md: { paddingHorizontal: 14, text: ty.sm, gap: 8, height: 44 },
+  row: { paddingHorizontal: 16, text: ty.sm, gap: 8, height: 44 },
+  sm: { paddingHorizontal: 12, text: ty.sm, gap: 6, height: 32 },
 };
 
 export function Btn({ label, onPress, primary, disabled, busy, icon, a11y, hint, style, size = "lg" }: {
@@ -136,8 +137,9 @@ export function Btn({ label, onPress, primary, disabled, busy, icon, a11y, hint,
       onPress={onPress} disabled={busy}
       accessibilityRole="button" accessibilityLabel={a11y ?? label} accessibilityHint={hint}
       accessibilityState={{ disabled: off, busy: Boolean(busy) }}
+      hitSlop={(44 - S.height) / 2}
       style={({ pressed }) => [{
-        minHeight: 44, paddingHorizontal: S.paddingHorizontal, gap: S.gap, borderRadius: 999,
+        minHeight: S.height, paddingHorizontal: S.paddingHorizontal, gap: S.gap, borderRadius: 999,
         flexDirection: "row", alignItems: "center", justifyContent: "center",
         backgroundColor: primary ? (off ? c.grey300 : pressed ? c.orange700 : c.orange600) : off ? c.grey50 : pressed ? c.grey100 : c.white,
         borderWidth: primary ? 0 : 1, borderColor: c.grey300,

@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { router, useFocusEffect } from "expo-router";
 import { ChevronLeft, ChevronRight, Compass, DoorClosed, Eye, LayoutGrid, Printer, Receipt, Send, ShoppingBag } from "lucide-react-native";
-import { useCallback, useEffect, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { AppState, Pressable, Text, View } from "react-native";
 import { ApiError, api, HeldError, send, type Hotel } from "../../core/api";
 import { cash, DASH } from "../../core/format";
@@ -102,8 +102,12 @@ export function Tables({ hotel, role, onBack, onSignOut }: {
   const outlet = floor.data?.outlet ?? null;
   const { closed, reopens } = closure(outlet);
 
-  /** A write from a tile: the server's sentence on a refusal, held said as held. */
+  /** A write from a tile: the server's sentence on a refusal, held said as held.
+      One write per tile at a time, latched at the tap (MPOS-3). */
+  const writing = useRef(new Set<string>());
   async function act(id: string, path: string, body: unknown, ok: () => Said | null, failed: string) {
+    if (writing.current.has(id)) return;
+    writing.current.add(id);
     setBusy(id);
     try {
       await send("POST", path, body);
@@ -113,6 +117,7 @@ export function Tables({ hotel, role, onBack, onSignOut }: {
       setSaid(e instanceof HeldError ? { title: "Saved on this phone", body: e.message, tone: "held" }
         : { title: failed, body: e instanceof Error ? e.message : String(e), tone: "bad" });
     } finally {
+      writing.current.delete(id);
       setBusy(null);
       refresh();
     }
@@ -478,10 +483,14 @@ function NewParcel({ code, onCancel, onHeld, onOpened }: {
   const [phone, setPhone] = useState("");
   const [busy, setBusy] = useState(false);
   const [problem, setProblem] = useState<string | null>(null);
+  /* One parcel per tap: a second tap before the first answer is two orders (MPOS-3). */
+  const inFlight = useRef(false);
 
   async function create() {
     const who = name.trim();
     if (!who) { setProblem("Whose parcel is it? Type the customer's name."); return; }
+    if (inFlight.current) return;
+    inFlight.current = true;
     setBusy(true);
     try {
       const order = await send<Order & { ok: true }>("POST", `/api/hotels/${code}/till/orders`, { outlet: OUTLET, parcel: { name: who, phone: phone.trim() || null } });
@@ -490,6 +499,7 @@ function NewParcel({ code, onCancel, onHeld, onOpened }: {
       if (e instanceof HeldError) onHeld({ title: "Saved on this phone", body: e.message, tone: "held" });
       else setProblem(e instanceof ApiError || e instanceof Error ? e.message : String(e));
     } finally {
+      inFlight.current = false;
       setBusy(false);
     }
   }
