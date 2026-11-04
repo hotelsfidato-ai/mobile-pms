@@ -18,6 +18,13 @@ and the rule it leaves. Fixed entries stay.
 
 ## Fixed (before it shipped)
 
+### MAPR-4 · An unknown outcome on Approve, Refuse or Send back: checked, safe (4 Nov) — no change
+
+Checked applying MEMORY 16 across the modules: the decision route reads no idempotency key, but
+it refuses any request no longer pending ("That was already approved. To change it, raise a new
+request", routes/approvals.ts), so a second tap after a lost reply makes nothing twice. The phone's
+keeper per hotel stays (harmless). **The rule:** a write the server refuses twice needs no stop.
+
 ### MAPR-1 · The amount an approver reads would have been rounded to the rupee (4 Nov)
 
 - **What happened:** the web prints `money(Number(a.amount))`, whole rupees: a ₹450.50 cash expense
