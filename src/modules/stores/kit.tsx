@@ -1,7 +1,7 @@
 import {
   AlertTriangle, ClipboardList, IndianRupee, PackageX, Trash2, TrendingDown, TrendingUp, Truck, type LucideIcon,
 } from "lucide-react-native";
-import { Modal, Pressable, ScrollView, Text, View } from "react-native";
+import { Modal, Platform, Pressable, ScrollView, Text, View } from "react-native";
 import { ROLE_LABELS, asRole } from "../../core/menu";
 import { c, face, space, t } from "../../core/theme";
 import { Box, Empty } from "../guest-services/kit";
@@ -59,16 +59,22 @@ export function Tiles({ counts, picked, onPick }: { counts: Record<Tile, number>
 }
 
 /** A group's heading and its flat count pill (Rooms' group headings, D27-82). */
-export function GroupHead({ title, n }: { title: string; n: number }) {
+export function GroupHead({ title, n }: { title: string; n?: number }) {
   return (
     <View style={{ flexDirection: "row", alignItems: "center", gap: 8, marginTop: 12 }}>
       <Text style={t.heading} accessibilityRole="header">{title}</Text>
-      <View style={{ height: 20, paddingHorizontal: 8, borderRadius: 999, backgroundColor: c.grey100, justifyContent: "center" }}>
-        <Text style={{ fontSize: 12, color: c.grey600, ...face[600], ...t.tab }}>{String(n)}</Text>
-      </View>
+      {n === undefined ? null : (
+        <View style={{ height: 20, paddingHorizontal: 8, borderRadius: 999, backgroundColor: c.grey100, justifyContent: "center" }}>
+          <Text style={{ fontSize: 12, color: c.grey600, ...face[600], ...t.tab }}>{String(n)}</Text>
+        </View>
+      )}
     </View>
   );
 }
+
+/* iOS shows no second Modal while the first is still fading out: a dialog
+   opened from the sheet waits for the sheet to go. */
+const later = (f: () => void) => (Platform.OS === "ios" ? setTimeout(f, 350) : f());
 
 export interface MenuChoice { label: string; icon: LucideIcon; onPress: () => void; reason?: string | null; gap?: boolean }
 
@@ -85,7 +91,7 @@ export function ActionSheet({ title, choices, onClose }: { title: string; choice
             const off = m.reason != null;
             return (
               <Pressable
-                key={m.label} disabled={off} onPress={() => { onClose(); m.onPress(); }}
+                key={m.label} disabled={off} onPress={() => { onClose(); later(m.onPress); }}
                 accessibilityRole="button" accessibilityLabel={off ? `${m.label}: ${m.reason}` : m.label} accessibilityState={{ disabled: off }}
                 style={({ pressed }) => ({
                   minHeight: 48, flexDirection: "row", alignItems: "center", gap: 12, paddingVertical: 8,

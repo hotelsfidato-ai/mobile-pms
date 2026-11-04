@@ -424,7 +424,7 @@ function BarSheetCard({ code, role, onSaid, onRequests }: { code: string; role: 
         <Box><Empty compact title={`Nothing in the ${barPlaceName(s)}`} description={s.place === "store" ? "A bar bill recorded puts its drinks here." : "A request approved moves drinks here from the store."} /></Box>
       ) : s.groups.map((g) => (
         <View key={g.section} style={{ gap: 8 }}>
-          <GroupHead title={g.section} n={g.drinks.length} />
+          <GroupHead title={g.section} />
           <View style={card}>
             {g.drinks.map((d, n) => (
               <DrinkLine key={d.id} d={d} s={s} first={n === 0} x={draft[d.id]}
