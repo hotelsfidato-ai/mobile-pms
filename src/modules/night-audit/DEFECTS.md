@@ -39,3 +39,11 @@ desk closed the day; a held change sent, which re-reads everything) changed "Clo
 the window holds the checklist as it stood when Run was tapped, and sends that day; a day closed
 elsewhere comes back as the server's "already closed" with its record. **The rule:** a confirmation
 sends exactly what it showed.
+
+### MNA-4 · An unknown outcome on Close the day: checked, safe (4 Nov) — no change
+
+Checked applying MEMORY 16 across the modules: the run reads no idempotency key, but a second run
+finds the day already closed and is refused (409, "… was already closed"), and the no-show charges
+it posts match `status = 'confirmed'` rows it has already moved (nightAudit.ts), so a second tap
+after a lost reply makes nothing twice. The phone's keeper stays (harmless). **The rule:** a write
+the server refuses twice needs no stop.
