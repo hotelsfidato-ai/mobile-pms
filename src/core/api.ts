@@ -86,9 +86,9 @@ export async function api<T>(path: string): Promise<T> {
 
 /** A write. Tried at once; when nothing leaves the phone it is held or
     refused by the web's tiers (HeldError / ApiError 503 with the reason).
-    `keeper` (keys.ts, MFIN-1): the same request tried again keeps its key,
-    so a write whose reply was lost is never made twice; without one, each
-    call has its own key, minted at the tap. */
+    `keeper` (keys.ts, MFIN-1): the same request tried again while its
+    outcome is unknown keeps its key, so a write whose reply was lost is never
+    made twice; without one, each call has its own key, minted at the tap. */
 export async function send<T>(
   method: "POST" | "PUT" | "PATCH" | "DELETE", path: string, body?: unknown, keeper?: KeyKeeper,
 ): Promise<T> {
@@ -103,6 +103,8 @@ export async function send<T>(
     });
   } catch {
     noteUnreachable();
+    /* Nothing came back: whether it was made is unknown, so its key is kept. */
+    keeper?.failed(method, path, text, 0);
     const rule = ruleFor(path, method, text);
     if (rule.tier === "refuse") throw new ApiError(503, rule.reason!);
     const entry = await enqueue({
@@ -128,7 +130,10 @@ export async function send<T>(
     );
   }
   noteReachable();
-  if (!response.ok) throw await refused(response);
+  if (!response.ok) {
+    keeper?.failed(method, path, text, response.status);
+    throw await refused(response);
+  }
   keeper?.landed(method, path, text);
   return (await response.json()) as T;
 }

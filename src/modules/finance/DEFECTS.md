@@ -14,10 +14,14 @@ bill in view; Add charge the same. **The fix is the core's:** `send(method, path
 the diff is in the report of 31 Oct. **4 Nov:** every write's button goes through `useOnce` (Kit.tsx), so
 two taps before `busy` draws are one request; what is left is a deliberate second press after a
 lost reply, which only the core's key can make safe. **Fixed by the mobile chat (4 Nov):**
-`core/keys.ts` `keyKeeper` keeps one key per request (method, path, body) until it lands, and
-`send(…, keeper)` uses it; `data.ts` gives every bill write one keeper, so the same payment tapped
-again — even after another write in between, or Settle closed and opened — keeps its key, and an
-edited amount is a new request with a new key (`keys.check.ts`, broken twice). **The rule:** a write
+`core/keys.ts` `keyKeeper` keeps a request's key (who, method, path, body) only while its outcome
+is unknown: tried again unchanged before the bill could be read, the SAME key (made once); changed,
+a new key; landed or refused by the server (a 4xx other than 409/425/429), forgotten; the bill read
+again after it failed (`readBill` → `seen`), forgotten — the person sees what was made, so a guest
+paying ₹500 twice is two payments; another person signed in, never shared. `send(…, keeper)` tells
+it each outcome; `data.ts` gives every bill write one keeper (`keys.check.ts`; each rule broken once).
+A first version kept the key until it landed: the review of 4 Nov showed it would swallow a
+deliberate second ₹500 (MEMORY 13). **The rule:** a write
 that moves money carries one key from the tap to the answer.
 
 ## MFIN-2 · The server's `needs` does not reach the screen (fixed 4 Nov, the core)

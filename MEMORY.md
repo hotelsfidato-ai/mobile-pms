@@ -5,6 +5,15 @@ module's `DEFECTS.md` instead. Read the newest first.
 
 ---
 
+### 13 · An idempotency key kept too long swallows a deliberate repeat (4 Nov)
+
+The mobile chat's first `keyKeeper` kept a payment's key until it landed. A guest paying ₹500, the
+reply lost, then the other ₹500 in cash the same day, would have sent the second with the first's
+key: the server answers with the stored first receipt, the phone says "taken", nothing is recorded.
+Found by the independent review before the merge. **The rule:** a key lives only while the outcome
+is unknown — forget it once the server answered (yes or its own no) or the person has seen the
+state again; and money changes get a second, independent look before they merge.
+
 ### 12 · A picture can be blank, or show a press that never happened (4 Nov)
 
 `all/09-front-desk-online-check-in` is a blank page with an empty `.txt`; every `r-<role>-account`

@@ -1,5 +1,5 @@
 import { keyKeeper } from "../../core/keys";
-import { api, orNull, send } from "../../core/api";
+import { api, currentSubject, orNull, send } from "../../core/api";
 import type { Stay } from "../../core/types";
 import type { Billable, BillLine, Folio, StayBill, StayFolio } from "./bill";
 import { WRITES } from "./writes";
@@ -17,15 +17,27 @@ const at = (code: string, stayId: string) => `/api/hotels/${code}/stays/${stayId
 /** The stay itself (bookings: `reservation` view); null when not found. */
 export const readStay = (code: string, stayId: string) => orNull<Stay>(at(code, stayId));
 
+/** One keeper for every write on a bill (MFIN-1, core/keys.ts): the same
+    payment, check-out or posting tapped again after a lost reply, before the
+    bill could be read, keeps its key, so the server (finance postings honour
+    the key, R-13) makes it once. Once the bill is read again (readBill, below)
+    the person sees what was made and a repeat is a new one; each signed-in
+    person has their own keys. */
+const keys = keyKeeper({ who: currentSubject });
+
 /** The whole bill in one read: every line, each bill's balance and the
-    server's totals. No bill yet (404 `noBill`, FIN-2) is a null folio. */
+    server's totals. No bill yet (404 `noBill`, FIN-2) is a null folio.
+    Once it is back, every write that had failed before it began is known
+    (keys.seen): tapped again, it is a new one. */
 export async function readBill(code: string, stayId: string) {
+  const started = Date.now();
   const [lines, folio, folios, bill] = await Promise.all([
     api<BillLine[]>(`${at(code, stayId)}/postings`),
     orNull<Folio>(`${at(code, stayId)}/folio`),
     api<StayFolio[]>(`${at(code, stayId)}/folios`),
     orNull<StayBill>(`${at(code, stayId)}/bill`),
   ]);
+  keys.seen(started);
   return { lines, folio, folios, bill };
 }
 export type BillRead = Awaited<ReturnType<typeof readBill>>;
@@ -67,11 +79,6 @@ export const readCompanies = (code: string) =>
 
 /* ── Writes ── */
 
-/** One keeper for every write on a bill (MFIN-1, core/keys.ts): the same
-    payment, check-out or posting tapped again after a lost reply keeps its
-    key, so the server (finance postings honour the key, R-13) makes it once,
-    even when Settle was closed and opened again in between. */
-const keys = keyKeeper();
 
 /** POST /stays/:id/payments: what Settle hands the server (data/postings.ts SettleInput). */
 export interface PaymentInput {
