@@ -6,6 +6,14 @@
 
 ## 4–5 November 2026 — read this first: the work moves to the cloud (M-12)
 
+**The cloud session, 4 Nov (latest):** step 1 done — `npm ci` and `bash scripts/gates.sh` ALL
+GATES GREEN on `main` `dafdea8`, the script unchanged (its logs and Metro cache land in
+`/home/user/.local/`, outside the repository). **The PMS's code cannot be read from the cloud**
+(clone and attach both refused): screens are built from `reference/pms-shots/` alone, never
+inventing a route, field, rule or figure. The 9 branches each type-check, pass their own checks
+and merge into `main` without a conflict (probed, not yet gated or reviewed). **Next:**
+`mobile/pos-tables`, once the owner says yes. Nothing was opened on a screen.
+
 **Where it is now**
 - The app's own repository: **`hotelsfidato-ai/mobile-pms`** (public, the owner's choice). `main` is
   the PMS worktree's `mobile/` folder with its history. The PMS itself is not here and stays
