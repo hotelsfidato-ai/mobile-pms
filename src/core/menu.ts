@@ -914,6 +914,8 @@ export const PHONE_ROUTES: Readonly<Record<string, string>> = {
   "/guests": "/guests/:code",
   "/companies": "/guests/:code/companies",
   "/crm/guests": "/guests/:code/find",
+  /* mobile/t2-purchasing (4 Nov): the list; an order is reached from it. */
+  "/h/:code/purchasing": "/purchasing/:code",
   /* mobile/t2-laundry (4 Nov) */
   "/h/:code/laundry": "/laundry/:code",
   /* mobile/t2-night-audit (4 Nov); the banner's link too (Shell.tsx) */
