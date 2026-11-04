@@ -83,7 +83,9 @@ export function Request({ hotel, role, id, onBack }: { hotel: Hotel; role: strin
   }
 
   /* Who: the setting as the server answered it (not known until the list is read: not offered), and the Store's rule. */
-  const why = { act: whyNotAct(listed?.me.mayRaise), receive: whyNotReceive(role) };
+  const why = { act: listed ? whyNotAct(listed.me.mayRaise) : null, receive: whyNotReceive(role) };
+  /* Until the list is read the setting is unknown: grey, with no sentence that may be wrong. */
+  const noAct = !listed || why.act != null;
   const shown = r ? { download: mayDownload(r.state), send: maySend(r), deliver: mayDeliver(r.state), cancel: mayCancel(r.state) } : null;
   const reasons = shown
     ? [...new Set([(shown.send || shown.cancel || (r && mayPrice(r.state))) && why.act, shown.deliver && why.receive].filter((x): x is string => Boolean(x)))]
@@ -115,12 +117,15 @@ export function Request({ hotel, role, id, onBack }: { hotel: Hotel; role: strin
             <View style={{ gap: 4 }}>
               <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
                 {shown!.download ? <Btn label="Download the order" icon={FileDown} disabled onPress={() => undefined} /> : null}
-                {shown!.send ? <Btn label="Send the order" variant="primary" icon={Send} disabled={why.act != null} onPress={() => setAct("send")} /> : null}
+                {shown!.send ? <Btn label="Send the order" variant="primary" icon={Send} disabled={noAct} onPress={() => setAct("send")} /> : null}
                 {shown!.deliver ? <Btn label="Record the delivery" variant="primary" icon={Truck} disabled={why.receive != null} onPress={() => setAct("deliver")} /> : null}
-                {shown!.cancel ? <Btn label="Cancel" a11y={`Cancel ${r.reference}`} variant="danger" icon={Ban} disabled={why.act != null} onPress={() => setAct("cancel")} /> : null}
+                {shown!.cancel ? <Btn label="Cancel" a11y={`Cancel ${r.reference}`} variant="danger" icon={Ban} disabled={noAct} onPress={() => setAct("cancel")} /> : null}
               </View>
               {shown!.download ? <Text style={[t.caption, { color: c.grey600 }]}>Download the order: {ON_THE_WEBSITE}</Text> : null}
               {reasons.map((x) => <Text key={x} style={[t.caption, { color: c.grey600 }]}>{x}</Text>)}
+              {!listed && list.error ? (
+                <Text style={[t.caption, { color: c.red700 }]} accessibilityRole="alert">Could not read who may act on this order: {list.error}</Text>
+              ) : null}
             </View>
 
             <View style={{ backgroundColor: c.white, borderRadius: 12, borderWidth: 1, borderColor: c.grey200, paddingHorizontal: space.cardX, paddingVertical: space.cardY, flexDirection: "row", flexWrap: "wrap", rowGap: 12 }}>
@@ -181,7 +186,7 @@ export function Request({ hotel, role, id, onBack }: { hotel: Hotel; role: strin
                     <View style={{ flexDirection: "row" }}>
                       <Btn
                         label={l.unitPrice === null ? "Agree a price" : "Change the price"} a11y={`Agreed price for ${l.item}`}
-                        icon={IndianRupee} disabled={why.act != null} onPress={() => setPricing(l)}
+                        icon={IndianRupee} disabled={noAct} onPress={() => setPricing(l)}
                       />
                     </View>
                   ) : null}
