@@ -1,8 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import type { ReactNode } from "react";
+import { useRef, useState, type ReactNode } from "react";
 import {
   Pressable, RefreshControl, ScrollView, StyleSheet, Text, View, type StyleProp, type ViewStyle,
 } from "react-native";
+import { outcomeUnknown } from "./api";
 import { c, face, space, t } from "./theme";
 
 /* The few pieces every screen shares, after the web kit (src/components/ui). */
@@ -18,6 +19,36 @@ export function useRead<T>(read: () => Promise<T>, key: readonly unknown[]) {
     loading: q.isFetching,
     reload: () => { void q.refetch(); },
   };
+}
+
+/** ONE INTENT, ONE WRITE when its outcome is unknown (MEMORY 8, 16; PMS R-30). For a write on a
+    route that reads no idempotency key, whose repeat would make a second thing (a docket, a
+    booking, a round, a block): `stop(e)` in its catch is true, and stuck from then on, when the
+    outcome is unknown (`outcomeUnknown`: nothing came back, or a 5xx). Stuck, the button takes no
+    more taps (`isStuck()` at the tap, `stuck` to grey it) until this dialog or screen is closed
+    and the record read again. A held write and the server's own no never stick. Shared by
+    front-desk, pos, housekeeping, guest-services, laundry and reservations (4 Nov). */
+export function useStuck() {
+  const on = useRef(false);
+  const [stuck, setStuck] = useState(false);
+  return {
+    stuck,
+    isStuck: () => on.current,
+    stop: (e: unknown) => {
+      if (!outcomeUnknown(e)) return false;
+      on.current = true;
+      setStuck(true);
+      return true;
+    },
+  };
+}
+
+/** The words for an unknown outcome: "Not known whether it was booked", what came back, and where
+    to look first; `line` is the same as one sentence, for a greyed button's reason. */
+export function notKnown(done: string, where: string, e?: unknown) {
+  const title = `Not known whether it was ${done}`;
+  const said = e === undefined ? "" : `${e instanceof Error ? e.message : String(e)} `;
+  return { title, body: `${said}Look at ${where} before trying again.`, line: `${title}: look at ${where} before trying again.` };
 }
 
 /** A screen: the page's grey, the sides' 20px, pull down to read again. */
