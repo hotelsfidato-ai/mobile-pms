@@ -141,6 +141,12 @@ export const ofKind = (lines: KitchenLine[], kind: string) => lines.filter((l) =
 /** "N dishes working": a struck dish is not being worked. */
 export const working = (lines: KitchenLine[]) => lines.filter((l) => !l.cancelled).length;
 
+/** A column's tickets and its count: a struck dish stays in its column (its
+    "stop cooking this" card) and is counted there, though not as working -
+    the picture's "Ordered 70 · On the fire 16" beside "84 dishes working"
+    with two struck cards in Ordered (pms-shots 45-point-of-sale-kitchen). */
+export const inColumn = (lines: KitchenLine[], key: string) => lines.filter((l) => l.status === key);
+
 export interface TableCard { key: string; title: string; orderNo: string; wait: number; courses: { course: number | null; lines: KitchenLine[] }[] }
 
 /** BY TABLE (Kitchen.tsx ByTable): one card per table, a takeaway per

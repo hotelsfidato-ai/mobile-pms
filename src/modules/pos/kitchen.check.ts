@@ -3,7 +3,7 @@
    the kind filter, the KOT printer lines, a held Start. */
 import type { OutboxEntry } from "../../core/offline.ts";
 import {
-  alarm, byTable, clock, columnOf, dish, estimate, heldMove, instant, kindShown, maySetUpKots, movePath, ofKind, plusLine,
+  alarm, byTable, clock, columnOf, dish, estimate, heldMove, inColumn, instant, kindShown, maySetUpKots, movePath, ofKind, plusLine,
   printingKinds, since, statusOf, waited, waitNow, where, whyNotMove, working, type KitchenLine, type KotKind,
 } from "./kitchen.ts";
 
@@ -54,6 +54,9 @@ eq(kindShown([kind("k")], "b"), "", "a kind that is gone reads as All");
 eq(ofKind(lines, "k").map((l) => l.id), ["a", "c"], "the kitchen's lines");
 eq(ofKind(lines, "").length, 3, "All");
 eq(working(lines), 2, "a struck dish is not worked");
+const staged = [line({ id: "s1" }), line({ id: "s2", cancelled: true }), line({ id: "p1", status: "preparing" })];
+eq([inColumn(staged, "sent").length, inColumn(staged, "preparing").length, working(staged)], [2, 1, 2],
+  "a struck dish is counted in its column, not as working");
 
 /* By table: oldest table first, a takeaway per order, courses in order and "Any time" last. */
 const cards = byTable([
