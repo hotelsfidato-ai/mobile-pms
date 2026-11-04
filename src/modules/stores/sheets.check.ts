@@ -4,7 +4,7 @@
    blank line never a zero. */
 import {
   askBody, barBody, barCountOf, barDifference, barLead, held, kitchenBody, kitchenDifference, morningText, moved, otherMoves,
-  countSaidWords, type BarSheet, type KitchenItem, type SheetDrink,
+  countSaidWords, dayStep, type BarSheet, type KitchenItem, type SheetDrink,
 } from "./sheets.ts";
 
 const eq = (got: unknown, want: unknown, what: string) => {
@@ -71,5 +71,9 @@ eq(barLead(s({ place: "store", mayCount: false }), "closing"), "Bar store, today
 eq(askBody([{ itemId: "ib", qty: "3" }, { itemId: "", qty: "" }], "party"), { body: { lines: [{ itemId: "ib", quantity: 3 }], note: "party" } }, "an ask");
 eq("missing" in askBody([{ itemId: "ib", qty: "1.5" }], ""), true, "whole NIPs, bottles or packets");
 eq("missing" in askBody([{ itemId: "", qty: "" }], ""), true, "nothing asked");
+
+eq(dayStep("2026-10-11", -1), "2026-10-10", "the day before");
+eq(dayStep("2026-03-01", -1), "2026-02-28", "over a month");
+eq(dayStep("2026-12-31", 1), "2027-01-01", "over a year");
 
 console.log("stores sheets: all checks pass");

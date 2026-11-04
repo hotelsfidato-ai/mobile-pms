@@ -97,3 +97,11 @@ export const approveRequest = (code: string, id: string) =>
 
 export const rejectRequest = (code: string, id: string, note: string) =>
   send<{ ok: true }>("POST", `${at(code)}/bar/requests/${encodeURIComponent(id)}/reject`, { note });
+
+/** The property's switches - the frame's own read (src/core/Shell.tsx), the
+    same key and answer, so Bar stock switched off drops the Bar tab as the
+    web's Inventory does; unreadable is "everything on", never "off". */
+export const readModules = (code: string) =>
+  api<{ modules: { module: string; enabled: boolean }[] }>(`/api/hotels/${code}/modules`)
+    .then((b): Record<string, boolean> => Object.fromEntries(b.modules.map((m) => [m.module, m.enabled])))
+    .catch((): Record<string, boolean> => ({}));

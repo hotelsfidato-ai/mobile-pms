@@ -221,3 +221,12 @@ export function askBody(lines: { itemId: string; qty: string }[], note: string):
   }
   return { body: { lines: out, note } };
 }
+
+/* ── The day picked (the web's date input, stepped on a phone, M-7) ── */
+
+/** The day before or after, as the server's YYYY-MM-DD. */
+export function dayStep(date: string, n: number): string {
+  const d = new Date(`${date}T00:00:00Z`);
+  d.setUTCDate(d.getUTCDate() + n);
+  return d.toISOString().slice(0, 10);
+}
