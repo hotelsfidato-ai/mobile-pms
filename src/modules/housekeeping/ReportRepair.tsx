@@ -4,13 +4,12 @@ import { CloudOff, Square, SquareCheck } from "lucide-react-native";
 import { useRef, useState } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { ApiError, HeldError, api, currentSubject, outcomeUnknown, send, type Hotel } from "../../core/api";
-import { keyKeeper } from "../../core/keys";
 import { dateLong } from "../../core/format";
 import { isOnline, newKey } from "../../core/offline";
 import { c, space, t } from "../../core/theme";
 import { ReadFailed, s, useRead } from "../../core/ui";
 import {
-  BLOCK_REASONS, PRIORITIES, REPAIR_KINDS, blankForm, blockBody, heldSentence, needsLine, offerTakeOut,
+  BLOCK_REASONS, PRIORITIES, REPAIR_KINDS, blankForm, blockBody, formKeeper, heldSentence, needsLine, offerTakeOut,
   whyNotRaise, workOrderBody, type HouseNow, type RepairForm,
 } from "./repair";
 import { addDays } from "./block";
@@ -59,8 +58,8 @@ export function ReportRepair({ hotel, room, role, onDone }: {
      and answers a repeat with the repair it already made (062). This form
      sends ONE key on every try, so a try after a lost reply - even with a
      word changed - is the same repair; latched at the tap (MEMORY 8). */
-  const keys = useRef<ReturnType<typeof keyKeeper> | null>(null);
-  if (!keys.current) { const key = newKey(); keys.current = keyKeeper({ who: currentSubject, make: () => key }); }
+  const keys = useRef<ReturnType<typeof formKeeper> | null>(null);
+  if (!keys.current) keys.current = formKeeper(newKey(), currentSubject);
   const latch = useRef(false);
 
   const here = f.room.trim();

@@ -9,6 +9,7 @@
    Pure: no React Native here, so `repair.check.ts` runs under node.
    ══════════════════════════════════════════════════════════════════ */
 
+import { keyKeeper, type KeyKeeper } from "../../core/keys.ts";
 import { whyNotTake } from "./block.ts";
 import { whyNotRepair } from "./roles.ts";
 
@@ -95,3 +96,9 @@ export const needsLine = (room: string) =>
 export function heldSentence(message: string, f: RepairForm, out: boolean): string {
   return out ? `${message} ${needsLine(f.room)}` : message;
 }
+
+/** ONE FORM, ONE REPAIR (MHK-3): POST work-orders reads the idempotency key and answers a repeat
+    with the repair it already made (062). A form sends ONE key on every try - after a lost reply,
+    after the server's own no, with a word changed - so one form never makes two repairs. */
+export const formKeeper = (key: string, who?: () => string): KeyKeeper =>
+  keyKeeper({ make: () => key, ...(who ? { who } : {}) });

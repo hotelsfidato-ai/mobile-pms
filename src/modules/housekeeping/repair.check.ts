@@ -1,6 +1,6 @@
 /* Run: node --experimental-strip-types mobile/src/modules/housekeeping/repair.check.ts
    Report a repair: the web's RepairFlow rules and the API's sentences. */
-import { blankForm, blockBody, heldSentence, offerTakeOut, whyNotRaise, workOrderBody, type RepairForm } from "./repair.ts";
+import { blankForm, blockBody, formKeeper, heldSentence, offerTakeOut, whyNotRaise, workOrderBody, type RepairForm } from "./repair.ts";
 
 /* No node:assert, so the app's own type check reads this file too. */
 const eq = (got: unknown, want: unknown, what: string) => {
@@ -51,4 +51,21 @@ const held = "Work order is held and will be sent when the connection is back.";
 eq(heldSentence(held, out({}), true), `${held} Taking room 208 out of service needs the connection - do it when you are back online.`, "held + out");
 eq(heldSentence(held, out({}), false), held, "held");
 
+/* One form, one repair (MHK-3): the same key on every try from one form, whatever came back. */
+{
+  const k = formKeeper("form-1");
+  const P = (what: string) => ["POST", "/api/hotels/5EL/work-orders", JSON.stringify({ title: what })] as const;
+  const first = k.begin(...P("Tap drips"));
+  eq(first.key, "form-1", "the first tap");
+  k.failed(first, 0);
+  eq(k.begin(...P("Tap drips")).key, "form-1", "again after a lost reply: the same key");
+  const edited = k.begin(...P("Tap drips badly"));
+  eq(edited.key, "form-1", "a word changed after a lost reply: still the same repair");
+  k.failed(edited, 409);
+  k.seen(k.mark() + 60_000);
+  eq(k.begin(...P("Tap drips badly")).key, "form-1", "after the server's own no and a read: still this form's key");
+  eq(formKeeper("form-2").begin(...P("Tap drips")).key, "form-2", "another form: its own key");
+}
+
 console.log("housekeeping repair: all checks pass");
+
