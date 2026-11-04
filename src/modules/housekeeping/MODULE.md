@@ -124,3 +124,64 @@ room that is free and not already out; an end date at least the day after From (
 
 `dev-housekeeping` (housekeeping, the one housekeeper), `dev-gm`, `dev-desk` (front desk: may mark
 rooms, may not raise a room repair), `dev-finance` (may not mark), `dev-stores`.
+
+## Work orders (slice 7, helper "maintenance"; 31 Oct, finished 4 Nov)
+
+| Screen | Route → file | Rules (checked) | Reads (key) |
+|---|---|---|---|
+| Work orders | `app/housekeeping/[code]/work-orders.tsx` → `WorkOrdersScreen.tsx` | `workOrders.ts` (`workOrders.check.ts`) | `GET /api/hotels/:code/work-orders` and `?view=closed` — `["housekeeping", code, "work-orders", view]` |
+
+**Web twin:** `pages/WorkOrders.tsx` and `flows/RepairCosts.tsx` (shapes from `data/housekeeping.ts`;
+the API's `GET /work-orders`, `PATCH /work-orders/:id`, `POST /repair-costs/:id/cancel`), ported on
+31 Oct with the source named in comments. Open · Closed with their counts; each repair's card (title,
+pills, the item it is on, the grey line that turns amber at a week, what was done once closed, its
+cost for those the list sends costs to); **Start / Put back**; **Close** as **Fixed** or **Not
+needed** with what was done (required); **Raise one** opens the repair form
+(`/housekeeping/[code]/repair`); **Costs** lists each cost with paise, and **Cancel this cost** with
+a reason.
+
+**Who may, in the API's words** (`repairRoles.ts`, read back on 17 Oct): Start / Put back / Close are
+grey with UPDATE_REFUSED unless the list says `mayUpdate`, and the line UPDATE_WHO stands over the
+list; Cancel this cost is grey with COST_REFUSED unless `mayRecordCosts`; Raise one is roles.ts's
+`whyNotRepair`. A grey button says why when tapped (D17-8), never hidden.
+
+**Money:** the cost total and each cost are the server's figures, shown as sent (`cash`, the web's
+`moneyPrecise` for a single cost); no cost is a dash, never ₹0; the phone adds nothing up. Costs
+are absent (not empty) for anybody who may not see money, and then no Costs button shows.
+
+**Offline (the web's tiers, `src/core/offline.ts`):** `PATCH /work-orders/:id` is **queued**
+("Work order"): a held Start / Close says "Saved on this phone", the card turns amber with
+"Queued: start / put back / close as fixed / close as not needed", and Start / Close stay grey on a
+close held on this phone. `/repair-costs` is **refused** offline (the default tier), in the web's
+sentence. The key is minted at the tap (M-5); one tap of Start / Put back is one change (MHK-W2).
+
+**Left on the website** ("On the website for now"): **Record the cost** (it needs the bill's photo
+or file as proof, D17-6; the phone has no picker — a package for the owner) and **See the proof**.
+The equipment item is plain words (the phone has no equipment page).
+
+**Where the phone differs from the web:** a held Start or Close is said and shown on its card, and
+the Close dialog shuts (the web says nothing and stays busy, PMS R-3); a grey button says why when
+tapped where the web hides it; Start / Put back is grey ("Sending…") while its tap is on its way.
+
+### Picture match (4 Nov) — compared by reading the code against the picture, never seen running
+
+**Work orders** — `reference/pms-shots/all/11-front-desk-work-orders.png` (+ `.txt`), the Open view,
+empty, one closed. Every word of the page matches the `.txt` (title, the line under it, Raise one,
+Open 0 · Closed 1, Nothing outstanding and its line, the footing). Measured on the picture (2×):
+the title 26 px (t.title), Raise one 117 × 44 with its + (orange600, a capsule), the tabs' 3 px
+track on grey100 with the white tab, the empty state's 44 px grey100 circle with the inbox, 84 px
+above it, the body's 23 px lines and the footing's 21 px lines, 80 px between them — the code's
+sizes give the same. **Differences left:**
+1. **The frame** (the top bar with the menu, search, bell and account; the business-date banner):
+   the shell's lane and the core (`app/_layout.tsx`), not this screen.
+2. **A Back capsule** right of the title, which the picture has not: the phone has no header
+   (`headerShown: false`) and no menu until the shell lands; Rooms has the same. Take it out when
+   the frame's menu is merged — the mobile chat's call.
+3. **The tabs are 44 px tall**, the picture's 36: the web's own Segmented grows to 44 under a finger
+   (pointer-coarse); the picture was taken with a mouse.
+4. **The line under the title** is drawn by the core's `Head` without the web's 21 px line height
+   (the picture's two lines are 21 px apart): a core change, in the report.
+5. Not in the picture, so not compared: a card (open, closed, held), the Close and Costs dialogs,
+   the refused and offline states — built from the web's code on 31 Oct.
+The equipment picture (`all/32-store-and-equipment-equipment.png`) was looked at only for the item's
+name and tag on a card; the phone draws them as plain words, no link.
