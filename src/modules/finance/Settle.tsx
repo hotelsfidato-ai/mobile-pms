@@ -4,7 +4,7 @@ import { ApiError, type Hotel } from "../../core/api";
 import { c, space, t } from "../../core/theme";
 import { Row } from "../../core/ui";
 import {
-  asksCredit, asksPan, billName, firstWay, owedLine, payingWays, rupees, startAmount, startBill, typed, typedShown,
+  asks, asksCredit, asksPan, billName, firstWay, owedLine, payingWays, rupees, startAmount, startBill, typed, typedShown,
   type DeskRules, type StayFolio,
 } from "./bill";
 import { takePayment } from "./data";
@@ -70,14 +70,15 @@ export function SettleSheet({ hotel, stayId, payer, balance, folios, active, onC
       onTaken(value, method);
     } catch (e) {
       const said = e instanceof Error ? e.message : "Could not settle.";
-      if (asksCredit(said)) {
+      if (asks(e instanceof ApiError ? e.needs : undefined, "credit", said, asksCredit)) {
         setCredit(said);
       } else {
         setRefused(said);
         /* The bill may have moved under the sheet: read it again (the web's onDone). */
         onReread();
-        /* ⚠ `send` mints a key per call (the core diff asked, MFIN-1): a reply lost
-           on the way back must not sit one tap from a second receipt. */
+        /* The same payment tapped again keeps its key (MFIN-1, data.ts's keeper),
+           so the server makes it once; emptied too, so a repeat is typed on
+           purpose with the bill in view. */
         if (e instanceof ApiError && e.status === 503) change("");
       }
     } finally {

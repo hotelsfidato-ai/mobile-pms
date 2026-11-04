@@ -1,11 +1,11 @@
 import { Clock, LogOut, ShieldCheck } from "lucide-react-native";
 import { useState } from "react";
 import { Text, View } from "react-native";
-import type { Hotel } from "../../core/api";
+import { ApiError, type Hotel } from "../../core/api";
 import { c, space, t } from "../../core/theme";
 import type { Stay } from "../../core/types";
 import { useRead } from "../../core/ui";
-import { asksLateReason, isForeign, rupees, stillOutstanding, whyNotLeave } from "./bill";
+import { asks, asksLateReason, isForeign, rupees, stillOutstanding, whyNotLeave } from "./bill";
 import { checkOut, readClock } from "./data";
 import { Btn, Field, Input, Refused, Sheet, Tick, type Said, useOnce } from "./Kit";
 import { whyNotCheckOut } from "./roles";
@@ -55,7 +55,7 @@ export function CheckOutPanel({ hotel, stay, balance, role, onLeft, onSaid, onRe
       const said = e instanceof Error ? e.message : "Could not check out.";
       setAsking(false);
       /* THE WAY THROUGH, not another refusal (FolioPanel 230-240). */
-      if (asksLateReason(said)) setLate(true);
+      if (asks(e instanceof ApiError ? e.needs : undefined, "late-reason", said, asksLateReason)) setLate(true);
       else onSaid({ tone: "refused", title: "Could not check out", text: said });
     } finally {
       setBusy(false);

@@ -5,7 +5,7 @@ import { ApiError, type Hotel } from "../../core/api";
 import { c, space, t } from "../../core/theme";
 import type { Stay } from "../../core/types";
 import { useRead } from "../../core/ui";
-import { CHARGE_CATEGORIES, FROM_LIST, overLimit, rupees, typed } from "./bill";
+import { asks, CHARGE_CATEGORIES, FROM_LIST, overLimit, rupees, typed } from "./bill";
 import {
   changeRate, openSecondBill, postCharge, readBeforeGst, readChargeList, readCompanies, readRoomRate,
 } from "./data";
@@ -55,11 +55,11 @@ export function AddChargeSheet({ hotel, stay, role, onClose, onDone }: Act & { r
       onDone({ tone: "ok", title: "Charge posted", text: `On room ${stay.roomNumber}` });
     } catch (e) {
       const said = e instanceof Error ? e.message : "Could not post.";
-      if (overLimit(said)) {
+      if (asks(e instanceof ApiError ? e.needs : undefined, "credit-limit", said, overLimit)) {
         setOver(said);
       } else {
         setRefused(said);
-        /* `send` mints a key per call (MFIN-1): no repeat one tap from a lost reply. */
+        /* The same charge tapped again keeps its key (MFIN-1); emptied too, so a repeat is typed on purpose. */
         if (e instanceof ApiError && e.status === 503) setAmount("");
       }
     } finally {

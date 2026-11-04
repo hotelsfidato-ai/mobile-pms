@@ -1,3 +1,4 @@
+import { keyKeeper } from "../../core/keys";
 import { api, orNull, send } from "../../core/api";
 import type { Stay } from "../../core/types";
 import type { Billable, BillLine, Folio, StayBill, StayFolio } from "./bill";
@@ -66,35 +67,41 @@ export const readCompanies = (code: string) =>
 
 /* ── Writes ── */
 
+/** One keeper for every write on a bill (MFIN-1, core/keys.ts): the same
+    payment, check-out or posting tapped again after a lost reply keeps its
+    key, so the server (finance postings honour the key, R-13) makes it once,
+    even when Settle was closed and opened again in between. */
+const keys = keyKeeper();
+
 /** POST /stays/:id/payments: what Settle hands the server (data/postings.ts SettleInput). */
 export interface PaymentInput {
   method: string; amount: number; businessDate: string;
   pan?: string; form97?: boolean; heldAsCredit?: boolean; folioId?: string;
 }
 export const takePayment = (code: string, stayId: string, input: PaymentInput) =>
-  send("POST", WRITES.payment(code, stayId), input);
+  send("POST", WRITES.payment(code, stayId), input, keys);
 
 export const checkOut = (code: string, stayId: string, late: { lateReason?: string; waiveLate?: boolean }, nextDestination: string) =>
-  send("POST", WRITES.checkOut(code, stayId), { ...late, ...(nextDestination ? { nextDestination } : {}) });
+  send("POST", WRITES.checkOut(code, stayId), { ...late, ...(nextDestination ? { nextDestination } : {}) }, keys);
 
 export const issueInvoice = (code: string, stayId: string, folioId: string) =>
-  send<{ ok: boolean; number?: string; vatBill?: string | null }>("POST", WRITES.invoice(code, stayId), { folioId });
+  send<{ ok: boolean; number?: string; vatBill?: string | null }>("POST", WRITES.invoice(code, stayId), { folioId }, keys);
 
 export const reverseLine = (code: string, stayId: string, lineId: string, reason: string) =>
-  send("POST", WRITES.reverse(code, stayId, lineId), { reason });
+  send("POST", WRITES.reverse(code, stayId, lineId), { reason }, keys);
 
 export const editLine = (code: string, stayId: string, lineId: string, edit: { description: string; amount: number; reason: string }) =>
-  send("POST", WRITES.edit(code, stayId, lineId), edit);
+  send("POST", WRITES.edit(code, stayId, lineId), edit, keys);
 
 export const postCharge = (code: string, stayId: string, input: {
   category: string; description: string; amount: number; taxable: boolean; businessDate: string; overLimitReason?: string;
-}) => send<{ ok: boolean; data?: { id?: string } }>("POST", WRITES.charge(code, stayId), input);
+}) => send<{ ok: boolean; data?: { id?: string } }>("POST", WRITES.charge(code, stayId), input, keys);
 
 export const changeRate = (code: string, stayId: string, input: { rate: number; reason: string; includesGst?: boolean }) =>
-  send<{ ok: boolean; data?: { corrected: number } }>("POST", WRITES.rate(code, stayId), input);
+  send<{ ok: boolean; data?: { corrected: number } }>("POST", WRITES.rate(code, stayId), input, keys);
 
 export const openSecondBill = (code: string, stayId: string, companyId: string) =>
-  send("POST", WRITES.secondBill(code, stayId), { billTo: "company", companyId });
+  send("POST", WRITES.secondBill(code, stayId), { billTo: "company", companyId }, keys);
 
 export const moveLine = (code: string, lineId: string, toFolioId: string) =>
-  send("POST", WRITES.move(code, lineId), { toFolioId });
+  send("POST", WRITES.move(code, lineId), { toFolioId }, keys);

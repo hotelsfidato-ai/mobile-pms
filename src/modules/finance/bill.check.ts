@@ -3,7 +3,7 @@
    acts refused in the server's words; the server's sentences recognised. */
 import {
   asksCredit, asksLateReason, asksPan, billName, closingWord, dateDay, editable, headline, inSections,
-  chargesToCome, moveTargets, overLimit, owedLine, rupees, sectionOf, settleIsMain, startAmount, startBill, stillOutstanding,
+  asks, chargesToCome, moveTargets, overLimit, owedLine, rupees, sectionOf, settleIsMain, startAmount, startBill, stillOutstanding,
   typedShown, whyNotEditLine, whyNotLeave, whyNotReverseLine, type BillLine, type StayFolio,
 } from "./bill.ts";
 
@@ -121,4 +121,8 @@ eq(startBill(folios, "f2"), "f2", "the open tab");
 eq(startBill([{ ...folios[0]!, balance: 0 }, { ...folios[1]!, balance: -5 }], null), "f1", "none owes: the first");
 eq(startBill([], null), null, "no bill at all");
 
+/* MFIN-2: the server's needs, or its sentence. */
+eq(asks("late-reason", "late-reason", "anything", asksLateReason), true, "needs names it");
+eq(asks(undefined, "late-reason", "Check-out was 11:00. A late departure needs a reason and somebody to allow it.", asksLateReason), true, "no needs: the sentence");
+eq(asks("credit", "late-reason", "Something else.", asksLateReason), false, "another need, another sentence: not asked");
 console.log("finance bill: all checks pass");

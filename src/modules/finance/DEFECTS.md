@@ -3,7 +3,7 @@
 Each entry: what happened, how it was found, what was done about it, the rule it leaves. Fixed
 entries stay.
 
-## MFIN-1 · A press of Take payment is not one key across repeats (open: a core change; narrowed 4 Nov)
+## MFIN-1 · A press of Take payment is not one key across repeats (fixed 4 Nov, the core)
 
 The web keeps one key per press until the payment lands, so a repeat after a lost reply answers
 "already done" (28 September, One press, one payment). The core's `send()` mints a new key on every
@@ -13,16 +13,23 @@ the server (503) re-reads the bill and empties the amount, so a repeat is typed 
 bill in view; Add charge the same. **The fix is the core's:** `send(method, path, body, pressKey?)`,
 the diff is in the report of 31 Oct. **4 Nov:** every write's button goes through `useOnce` (Kit.tsx), so
 two taps before `busy` draws are one request; what is left is a deliberate second press after a
-lost reply, which only the core's key can make safe. **The rule:** a write that moves money carries
-one key from the tap to the answer.
+lost reply, which only the core's key can make safe. **Fixed by the mobile chat (4 Nov):**
+`core/keys.ts` `keyKeeper` keeps one key per request (method, path, body) until it lands, and
+`send(…, keeper)` uses it; `data.ts` gives every bill write one keeper, so the same payment tapped
+again — even after another write in between, or Settle closed and opened — keeps its key, and an
+edited amount is a new request with a new key (`keys.check.ts`, broken twice). **The rule:** a write
+that moves money carries one key from the tap to the answer.
 
-## MFIN-2 · The server's `needs` does not reach the screen (open: a core change)
+## MFIN-2 · The server's `needs` does not reach the screen (fixed 4 Nov, the core)
 
 The API answers a refusal with `needs` ("credit", "late-reason", "credit-limit") and the core's
 `ApiError` keeps only the sentence, so the screen recognises the server's own sentences
 (`asksCredit`, `overLimit`, `asksLateReason`, checked in `bill.check.ts`). The web's own comment
 says why this is weak: "the sentence is not an interface". **Done:** recognised, with a check per
-sentence. **The fix is the core's:** `ApiError.needs`, the diff is in the report.
+sentence. **Fixed by the mobile chat (4 Nov):** `ApiError.needs` carries it; Settle, Check out and
+Add charge take the way through when `needs` names it or the sentence is recognised (`bill.ts`
+`asks`, checked) — either is enough, since the three values were recorded on 31 Oct and cannot be
+re-read from the cloud.
 
 ## MFIN-3 · `[stayId]` is not matched by the gate's route list (fixed 4 Nov)
 

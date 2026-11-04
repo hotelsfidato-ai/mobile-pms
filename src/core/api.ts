@@ -20,6 +20,7 @@
 
 import { auth } from "./firebase";
 import { newKey, noteReachable, noteUnreachable, ruleFor, type OutboxEntry } from "./offline";
+import type { KeyKeeper } from "./keys";
 import { enqueue } from "./outbox";
 
 export const API_URL = process.env.EXPO_PUBLIC_API_URL || "https://api.fidatohotels.com";
@@ -43,7 +44,8 @@ async function who(): Promise<Record<string, string>> {
 }
 
 export class ApiError extends Error {
-  constructor(readonly status: number, message: string) {
+  /** `needs`: what the server says would satisfy a refusal (MFIN-2), when it says. */
+  constructor(readonly status: number, message: string, readonly needs?: string) {
     super(message);
     this.name = "ApiError";
   }
@@ -59,10 +61,11 @@ export class HeldError extends Error {
 
 async function refused(response: Response): Promise<ApiError> {
   const body = (await response.json().catch(() => null)) as
-    | { error?: string; reason?: string; message?: string } | null;
+    | { error?: string; reason?: string; message?: string; needs?: string } | null;
   return new ApiError(
     response.status,
     body?.error ?? body?.reason ?? body?.message ?? `Request failed (${response.status}).`,
+    typeof body?.needs === "string" ? body.needs : undefined,
   );
 }
 
@@ -82,10 +85,15 @@ export async function api<T>(path: string): Promise<T> {
 }
 
 /** A write. Tried at once; when nothing leaves the phone it is held or
-    refused by the web's tiers (HeldError / ApiError 503 with the reason). */
-export async function send<T>(method: "POST" | "PUT" | "PATCH" | "DELETE", path: string, body?: unknown): Promise<T> {
+    refused by the web's tiers (HeldError / ApiError 503 with the reason).
+    `keeper` (keys.ts, MFIN-1): the same request tried again keeps its key,
+    so a write whose reply was lost is never made twice; without one, each
+    call has its own key, minted at the tap. */
+export async function send<T>(
+  method: "POST" | "PUT" | "PATCH" | "DELETE", path: string, body?: unknown, keeper?: KeyKeeper,
+): Promise<T> {
   const text = body === undefined ? undefined : JSON.stringify(body);
-  const key = newKey();
+  const key = keeper ? keeper.keyFor(method, path, text) : newKey();
   let response: Response;
   try {
     response = await fetch(`${API_URL}${path}`, {
@@ -121,6 +129,7 @@ export async function send<T>(method: "POST" | "PUT" | "PATCH" | "DELETE", path:
   }
   noteReachable();
   if (!response.ok) throw await refused(response);
+  keeper?.landed(method, path, text);
   return (await response.json()) as T;
 }
 

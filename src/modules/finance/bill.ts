@@ -261,6 +261,13 @@ export const startBill = (folios: StayFolio[], active: string | null) =>
 export const PAN_ABOVE = 100_000;
 export const asksPan = (kind: string | undefined, amount: number) => kind === "cash" && amount > PAN_ABOVE;
 
+/** What a refusal asks for (MFIN-2): the server's `needs` when it names it
+    ("credit", "late-reason", "credit-limit", recorded 31 Oct from the API),
+    or the server's own sentence recognised, as before - either is enough,
+    so a value spelled otherwise never loses the way through. */
+export const asks = (needs: string | undefined, want: string, said: string, recognise: (said: string) => boolean) =>
+  needs === want || recognise(said);
+
 /** A refused payment named what would satisfy it (`needs`), which the core's
     ApiError does not carry yet: the server's own sentences, recognised. */
 export const asksCredit = (said: string) => /more than the bill; it will be held as the (guest|host)'s credit\.$/.test(said);
