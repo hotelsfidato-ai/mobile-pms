@@ -2,7 +2,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { api, currentSubject, setDevSubject, type HotelsResponse } from "./api";
-import { auth, endSession, forget, keptNotice, remember, reopen, signInRefusal } from "./firebase";
+import { auth, endSession, forget, keptNotice, notSetUp, remember, reopen, signInRefusal } from "./firebase";
 import { list } from "./outbox";
 import { PasswordDue } from "./SignIn";
 
@@ -63,7 +63,8 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   }, [cache]);
 
   async function signIn(email: string, password: string) {
-    if (!auth) return;
+    /* The screen's Sign in is off then; said, never a quiet nothing. */
+    if (!auth) return setError(notSetUp);
     setBusy(true);
     setError(null);
     setNotice(null);

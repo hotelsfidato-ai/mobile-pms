@@ -21,6 +21,7 @@ const fake = {
   native: [] as unknown[],
   browser: 0,
   signedOut: 0,
+  refuseStart: false,
   held: [] as Array<{ subject: string; idempotencyKey: string; body?: string }>,
   storage: {
     setItem: async (k: string, v: string) => { shelf.set(k, v); },
@@ -37,7 +38,9 @@ const FAKES: Record<string, string> = {
   "firebase/app": stub("export const initializeApp = (c) => { __fake.inits.push(c); return {}; };"),
   "firebase/auth": stub(`
     export const getAuth = () => { __fake.browser += 1; return __fake.auth; };
-    export const initializeAuth = (app, options) => { __fake.native.push(options); return __fake.auth; };
+    export const initializeAuth = (app, options) => {
+      if (__fake.refuseStart) throw Object.assign(new Error("Firebase: Error (auth/invalid-api-key)."), { code: "auth/invalid-api-key" });
+      __fake.native.push(options); return __fake.auth; };
     export const getReactNativePersistence = (store) => ({ on: store === __fake.storage ? "AsyncStorage" : "?" });
     export const signOut = async () => { __fake.signedOut += 1; __fake.auth.currentUser = null; };`),
   "react-native": stub("export const Platform = __fake.platform;"),
@@ -64,7 +67,7 @@ process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID = "example";
 process.env.EXPO_PUBLIC_FIREBASE_APP_ID = "1:2:web:3";
 
 const { ApiError, HeldError, api, currentSubject, send, sendHeld, setDevSubject } = await import("./api.ts");
-const { endSession, isConfigured, keptNotice, remember, reopen, signInRefusal } = await import("./firebase.ts");
+const { endSession, isConfigured, keptNotice, missing, notSetUp, remember, reopen, signInRefusal } = await import("./firebase.ts");
 const { noteReachable } = await import("./offline.ts");
 
 /* ── Firebase: the same project, kept on the phone ──────────────── */
@@ -79,10 +82,41 @@ await import(webPreview);
 eq([fake.browser, fake.native.length], [1, 1], "the web preview uses the browser's own store");
 fake.platform.OS = "android";
 
+eq([missing, notSetUp], [[], null], "nothing missing, nothing said");
+
+type Started = { isConfigured: boolean; auth: unknown; missing: string[]; notSetUp: string | null };
+const load = async (as: string) => (await import(`./firebase.ts?${as}`)) as Started;
+
+/* The owner's settings not given yet: what is missing, by its name, and who sets it up. */
 delete process.env.EXPO_PUBLIC_FIREBASE_API_KEY;
-const without = "./firebase.ts?absent";
-const unset = (await import(without)) as { isConfigured: boolean; auth: unknown };
-eq([unset.isConfigured, unset.auth, fake.inits.length], [false, null, 2], "no settings: not set up, and nothing started");
+let unset = await load("absent");
+eq([unset.isConfigured, unset.auth, fake.inits.length], [false, null, 2], "no key: not set up, and nothing started");
+eq(unset.missing, ["EXPO_PUBLIC_FIREBASE_API_KEY"], "the missing value by its name");
+eq(unset.notSetUp, "Signing in with your email and password is not set up in this build yet. It was built without the sign-in setting EXPO_PUBLIC_FIREBASE_API_KEY. The owner sets it up.", "and the words say it");
+
+for (const k of Object.keys(process.env)) if (k.startsWith("EXPO_PUBLIC_FIREBASE_")) delete process.env[k];
+process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID = "  ";
+unset = await load("none");
+eq([unset.isConfigured, fake.inits.length], [false, 2], "none given (a blank is none): nothing started");
+eq(unset.missing, ["EXPO_PUBLIC_FIREBASE_API_KEY", "EXPO_PUBLIC_FIREBASE_PROJECT_ID", "EXPO_PUBLIC_FIREBASE_APP_ID"], "every required one named");
+eq(unset.notSetUp, "Signing in with your email and password is not set up in this build yet. It was built without the sign-in settings EXPO_PUBLIC_FIREBASE_API_KEY, EXPO_PUBLIC_FIREBASE_PROJECT_ID and EXPO_PUBLIC_FIREBASE_APP_ID. The owner sets them up.", "all of them said");
+const settings = () => Object.assign(process.env, {
+  EXPO_PUBLIC_FIREBASE_API_KEY: "public-key", EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN: "example.firebaseapp.com",
+  EXPO_PUBLIC_FIREBASE_PROJECT_ID: "example", EXPO_PUBLIC_FIREBASE_APP_ID: "1:2:web:3",
+});
+settings();
+
+delete process.env.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN;
+unset = await load("no-domain");
+eq([unset.isConfigured, unset.notSetUp], [true, null], "the domain is not needed for a password");
+settings();
+
+/* Settings Firebase will not start with: said, never a crash at start. */
+fake.refuseStart = true;
+unset = await load("refused");
+fake.refuseStart = false;
+eq([unset.isConfigured, unset.auth], [false, null], "a refused start leaves nobody able to sign in");
+eq(unset.notSetUp, "Signing in is not set up correctly in this build: Firebase did not accept its settings (auth/invalid-api-key). The owner checks the sign-in settings.", "and says why");
 
 /* ── The header on every request ────────────────────────────────── */
 let line: "up" | "down" = "up";
@@ -182,6 +216,9 @@ eq(fake.signedOut, 1, "nobody to sign out: Firebase is not asked");
 const NO_MATCH = "That email and password do not match.";
 for (const code of ["auth/wrong-password", "auth/user-not-found", "auth/invalid-credential", "auth/too-many-requests"]) {
   eq(signInRefusal(Object.assign(new Error("x"), { code })), NO_MATCH, `the web's one sentence for ${code}`);
+}
+for (const code of ["auth/invalid-api-key", "auth/api-key-not-valid.-please-pass-a-valid-api-key.", "auth/configuration-not-found", "auth/operation-not-allowed"]) {
+  eq(signInRefusal(Object.assign(new Error("x"), { code })), `Signing in is not set up correctly in this build: Firebase did not accept its settings (${code}). The owner checks the sign-in settings.`, `${code} is the settings, not a wrong password`);
 }
 eq(signInRefusal(expired), "Could not reach the server. Check the connection and try again.", "no line is not a wrong password");
 eq(signInRefusal(new ApiError(401, "No active staff record for this account.")), "No active staff record for this account.", "the API's own words");

@@ -18,9 +18,11 @@ import type { HotelsResponse } from "./api";
    through the persistence firebase/auth exports for React Native. The web
    preview has no such export and uses the browser's own store.
 
-   Without the settings `auth` is null: signing in says "not set up in this
-   build" and nothing else changes. `measurementId` is the web's analytics,
-   and the storage and messaging settings are not used for signing in.
+   Without the settings `auth` is null and the screen says which values
+   the build lacks and that the owner sets them up (`notSetUp`); a setting
+   Firebase will not start with says so too. Never a crash, never a quiet
+   fallback. `measurementId` is the web's analytics, and the storage and
+   messaging settings are not used for signing in.
    ══════════════════════════════════════════════════════════════════ */
 
 const config = {
@@ -30,14 +32,52 @@ const config = {
   appId: process.env.EXPO_PUBLIC_FIREBASE_APP_ID,
 };
 
-/** True when every required value is present (the web's own test). */
-export const isConfigured = Boolean(config.apiKey && config.projectId && config.appId);
+/* The names the owner gives them under (M-10). Read above only spelled out
+   in full: Expo writes in nothing it cannot see, so never process.env[name]. */
+const NAMES = {
+  apiKey: "EXPO_PUBLIC_FIREBASE_API_KEY",
+  authDomain: "EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN",
+  projectId: "EXPO_PUBLIC_FIREBASE_PROJECT_ID",
+  appId: "EXPO_PUBLIC_FIREBASE_APP_ID",
+} as const;
 
-const app = isConfigured ? initializeApp(config) : null;
+/** The required values this build was bundled without (the web's own test:
+    the key, the project and the app; the domain is for pop-up sign-ins). */
+export const missing: string[] = (["apiKey", "projectId", "appId"] as const)
+  .filter((k) => !config[k]?.trim())
+  .map((k) => NAMES[k]);
 
-export const auth: Auth | null = !app ? null
-  : Platform.OS === "web" ? getAuth(app)
-  : initializeAuth(app, { persistence: getReactNativePersistence(AsyncStorage) });
+const list = (names: string[]) => names.length < 2 ? names.join("") : `${names.slice(0, -1).join(", ")} and ${names[names.length - 1]}`;
+
+/** Firebase refused the settings themselves: a wrong key or project is the
+    build's fault, never the person's password. */
+const setUpWrong = (code: string) =>
+  `Signing in is not set up correctly in this build: Firebase did not accept its settings (${code}). The owner checks the sign-in settings.`;
+
+function start(): { auth: Auth | null; failed: string | null } {
+  if (missing.length) return { auth: null, failed: null };
+  try {
+    const app = initializeApp(config);
+    return {
+      auth: Platform.OS === "web" ? getAuth(app) : initializeAuth(app, { persistence: getReactNativePersistence(AsyncStorage) }),
+      failed: null,
+    };
+  } catch (error) {
+    return { auth: null, failed: setUpWrong((error as { code?: string })?.code ?? "it would not start") };
+  }
+}
+
+const started = start();
+
+export const auth: Auth | null = started.auth;
+
+/** True when Firebase started with every required value. */
+export const isConfigured = auth !== null;
+
+/** What the sign-in screen says when this build cannot sign anybody in by
+    email and password; null when it can. */
+export const notSetUp: string | null = isConfigured ? null : started.failed
+  ?? `Signing in with your email and password is not set up in this build yet. It was built without ${missing.length === 1 ? "the sign-in setting" : "the sign-in settings"} ${list(missing)}. The owner sets ${missing.length === 1 ? "it" : "them"} up.`;
 
 /* ══════════════════════════════════════════════════════════════════
    THE SESSION SURVIVES AN OUTAGE — src/lib/session.ts's loadOrRecall. A
@@ -91,8 +131,18 @@ export function signInRefusal(error: unknown): string {
   const e = error as { name?: string; code?: string; message: string };
   if (e?.name === "ApiError") return e.message;
   if (e?.code === "auth/network-request-failed") return "Could not reach the server. Check the connection and try again.";
+  if (e?.code && SET_UP_WRONG.some((c) => e.code!.startsWith(c))) return setUpWrong(e.code);
   return "That email and password do not match.";
 }
+
+/* Firebase's codes for a project or key it will not serve, or email and
+   password sign-in switched off in it: the settings, not the person. The
+   SDK (12.18.0, SERVER_ERROR_MAP) names the mapped ones and lowercases any
+   other server code ("API key not valid" -> auth/api-key-not-valid...). */
+const SET_UP_WRONG = [
+  "auth/invalid-api-key", "auth/api-key-not-valid", "auth/configuration-not-found",
+  "auth/operation-not-allowed", "auth/app-not-authorized", "auth/project-not-found",
+];
 
 /** Said on the sign-in screen after a sign-out: held changes wait for their
     person (src/lib/session.ts; "computer" there, a phone here). */

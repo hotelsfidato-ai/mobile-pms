@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import Svg, { Defs, LinearGradient, Path, Stop } from "react-native-svg";
 import { api, API_URL, send } from "./api";
-import { auth, isConfigured } from "./firebase";
+import { auth, isConfigured, notSetUp } from "./firebase";
 import { c, face, t } from "./theme";
 import { s } from "./ui";
 
@@ -16,14 +16,15 @@ import { s } from "./ui";
    SIGN IN — src/pages/SignIn.tsx at phone width (M-11): the group's band,
    then the form. Firebase takes the password; this screen never sees it
    after the call, and Postgres decides everything that happens next.
-   Without the public settings the form stands, with Sign in disabled.
+   Without the public settings the form stands, closed: its fields and
+   Sign in off, and a box saying which settings the build lacks and that
+   the owner sets them up (./firebase.ts notSetUp).
    ══════════════════════════════════════════════════════════════════ */
 
 /* theme.css's, for this screen only. */
 const RED = "#e0301e";
 const RED_RING = c.red100;
 const GREY400 = "#9aa2a9";
-const YELLOW = "#ffb600";
 
 /* The web's development sign-ins (src/lib/devIdentities.ts: the same
    people, labels and order), one per role, for every slice; and the waiter
@@ -62,7 +63,7 @@ function Mark() {
 }
 
 /** The web's Field and Input under a finger: a 14px label, a 44px box, 16px words. */
-function Field({ label, required, hint, trailing, ...input }: TextInputProps & {
+function Field({ label, required, hint, trailing, editable = true, ...input }: TextInputProps & {
   label: string; required?: boolean; hint?: string; trailing?: ReactNode;
 }) {
   return (
@@ -79,7 +80,7 @@ function Field({ label, required, hint, trailing, ...input }: TextInputProps & {
           style={[{
             height: 44, paddingLeft: 12, paddingRight: trailing ? 44 : 12, backgroundColor: c.white, borderWidth: 1,
             borderColor: c.grey300, borderRadius: 10, color: c.ink900, fontSize: 16, ...face[500],
-          }]}
+          }, editable ? null : { backgroundColor: c.grey50 }]}
           {...input}
         />
         {trailing ? <View style={{ position: "absolute", right: 0, top: 0 }}>{trailing}</View> : null}
@@ -161,6 +162,7 @@ export function SignIn({ onSignIn, onDev, busy, error, notice }: {
               value={email}
               onChangeText={setEmail}
               placeholder="you@fidatohotels.com"
+              editable={isConfigured}
               keyboardType="email-address"
               autoComplete="username"
               textContentType="username"
@@ -171,6 +173,7 @@ export function SignIn({ onSignIn, onDev, busy, error, notice }: {
               required
               value={password}
               onChangeText={setPassword}
+              editable={isConfigured}
               secureTextEntry={!show}
               autoComplete="current-password"
               textContentType="password"
@@ -189,14 +192,11 @@ export function SignIn({ onSignIn, onDev, busy, error, notice }: {
               )}
             />
 
+            {notSetUp ? <Say tone="info">{notSetUp}</Say> : null}
             {notice && !error ? <Say tone="info">{notice}</Say> : null}
             {error ? <Say tone="red">{error}</Say> : null}
 
             <Primary label="Sign in" onPress={submit} disabled={!ready} busy={busy} icon={<LogIn size={16} color={ready ? c.white : c.grey600} />} />
-
-            {isConfigured ? null : (
-              <Text style={[t.caption, { lineHeight: 17 }]}>Signing in with your email and password is not set up in this build yet.</Text>
-            )}
           </View>
 
           <Text style={[t.label, { color: c.grey500, marginTop: 24 }]}>Trouble signing in? Your general manager can reset your password.</Text>
@@ -205,7 +205,7 @@ export function SignIn({ onSignIn, onDev, busy, error, notice }: {
             <View style={{ marginTop: 32 }}>
               <View style={{ flexDirection: "row", alignItems: "center", gap: 12, marginBottom: 12 }}>
                 <View style={{ height: 1, flex: 1, backgroundColor: c.grey200 }} />
-                <Text style={{ fontSize: 12, ...face[600], letterSpacing: 1.2, textTransform: "uppercase", color: YELLOW }}>Development only</Text>
+                <Text style={{ fontSize: 12, ...face[600], letterSpacing: 1.2, textTransform: "uppercase", color: c.yellow800 }}>Development only</Text>
                 <View style={{ height: 1, flex: 1, backgroundColor: c.grey200 }} />
               </View>
               <View style={{ gap: 8 }}>

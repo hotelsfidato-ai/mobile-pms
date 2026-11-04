@@ -17,5 +17,8 @@ export default function SignInRoute() {
     if (first && (role === "chef" || role === "kitchen_manager")) return <Redirect href={`/pos/${first.code}/kitchen`} />;
     return <Redirect href="/all" />;
   }
+  /* Firebase is still reading the session it kept: not the form, or it
+     flashes before a kept person goes straight in. */
+  if (s.starting) return <Checking />;
   return <SignIn onSignIn={s.signIn} onDev={s.signInAs} busy={s.busy} error={s.error} notice={s.notice} />;
 }
