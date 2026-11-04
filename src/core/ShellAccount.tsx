@@ -54,8 +54,8 @@ export function ShellAccount({ hotel, routed, onClose }: { hotel: Hotel | null; 
             {seen.email ? <Text style={[styles.small, { marginTop: 2 }]}>{seen.email}</Text> : null}
             {scope.isGroupAdmin ? (
               <View style={{ flexDirection: "row", alignItems: "center", gap: 6, marginTop: 6 }}>
-                <ShieldCheck size={12} color="#1f6f5c" />
-                <Text style={[styles.small, { color: "#1f6f5c" }]}>Group administrator - every property</Text>
+                <ShieldCheck size={12} color={c.success} />
+                <Text style={[styles.small, { color: c.success }]}>Group administrator - every property</Text>
               </View>
             ) : null}
           </View>
@@ -107,7 +107,7 @@ export function ShellAccount({ hotel, routed, onClose }: { hotel: Hotel | null; 
             onPress={signOut} accessibilityRole="button" accessibilityLabel="Sign out"
             style={({ pressed }) => [styles.choice, { gap: 8 }, pressed && { backgroundColor: c.grey100 }]}
           >
-            <LogOut size={16} color="#9aa2a9" />
+            <LogOut size={16} color={c.grey400} />
             <Text style={[body, regular, { color: c.ink900 }]}>Sign out</Text>
           </Pressable>
         </ScrollView>

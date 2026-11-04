@@ -51,13 +51,13 @@ export const unreadOf = (notes: Note[] | undefined) => notes?.filter((n) => !n.i
 
 /* NOTE_TONE: the category's tone, as a tint, its ink and its dot. */
 const TONES: Record<string, [string, string, string]> = {
-  approval: [c.yellow50, c.yellow800, "#ffb600"],
+  approval: [c.yellow50, c.yellow800, c.yellow],
   reservation: [c.info50, c.info, c.info],
-  payment: [c.red50, c.red700, "#e0301e"],
+  payment: [c.red50, c.red700, c.red],
   automation: [c.orange50, c.orange700, c.orange],
   customer: [c.info50, c.info, c.info],
 };
-const NEUTRAL: [string, string, string] = [c.grey100, c.grey600, "#9aa2a9"];
+const NEUTRAL: [string, string, string] = [c.grey100, c.grey600, c.grey400];
 
 /** StatusPill.tsx. */
 function Pill({ tone, dot, children }: { tone: [string, string, string]; dot: boolean; children: string | number }) {
@@ -152,7 +152,7 @@ export function NotesScreen({ hotel }: { hotel: Hotel }) {
       <View style={{ marginBottom: 8, gap: 4 }}>
         <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
           <Text style={t.title} accessibilityRole="header">Notifications</Text>
-          {notes ? <Pill tone={notes.length ? TONES.approval! : ["#eaf4f1", c.success600, "#1f6f5c"]} dot>{notes.length}</Pill> : null}
+          {notes ? <Pill tone={notes.length ? TONES.approval! : [c.success50, c.success600, c.success]} dot>{notes.length}</Pill> : null}
         </View>
         <Text style={[body, regular, { color: c.grey500 }]}>
           Derived, never stored - so nothing here can go stale while the thing it describes changes.
@@ -200,7 +200,7 @@ export function NotesScreen({ hotel }: { hotel: Hotel }) {
 function Quiet({ title, line }: { title: string; line: string }) {
   return (
     <View style={{ alignItems: "center", paddingVertical: 40, paddingHorizontal: 24 }}>
-      <View style={styles.quietIcon}><Bell size={20} color="#9aa2a9" /></View>
+      <View style={styles.quietIcon}><Bell size={20} color={c.grey400} /></View>
       <Text style={[t.heading, { textAlign: "center" }]}>{title}</Text>
       <Text style={[body, regular, { color: c.grey500, marginTop: 6, textAlign: "center" }]}>{line}</Text>
     </View>

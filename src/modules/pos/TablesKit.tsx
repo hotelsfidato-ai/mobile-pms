@@ -26,7 +26,7 @@ export const ty = {
   xl: { fontSize: 20, lineHeight: 28 },
 };
 /** theme.css values the phone's theme.ts does not carry yet. */
-export const web = { success: "#1f6f5c", success50: "#eaf4f1", success600: c.success600, grey400: "#9aa2a9" };
+export const web = { success: c.success, success50: c.success50, success600: c.success600, grey400: c.grey400 };
 
 /* ── Who may use the till here (components/PosGate.tsx) ─────────────
    Only an explicit refusal shuts the door: offline, "go ahead", and the
@@ -186,7 +186,7 @@ export function Field({ label, hint, error, children }: { label: string; hint?: 
     <View style={{ gap: 6 }}>
       <Text style={[t.label, ty.sm, { color: c.grey700 }]}>{label}</Text>
       {children}
-      {error ? <Text style={[t.caption, ty.xs, { color: "#e0301e" }]}>{error}</Text>
+      {error ? <Text style={[t.caption, ty.xs, { color: c.red }]}>{error}</Text>
         : hint ? <Text style={[t.caption, ty.xs]}>{hint}</Text> : null}
     </View>
   );

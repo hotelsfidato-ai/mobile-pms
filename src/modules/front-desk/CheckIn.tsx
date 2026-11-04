@@ -301,7 +301,7 @@ function RoomChoice({ room, booked, selected, onPick }: { room: Assignable; book
           borderColor: selected ? c.orange : c.grey200, backgroundColor: selected ? c.orange50 : room.allowed ? c.white : c.grey50, opacity: room.allowed ? 1 : 0.6,
         }}
       >
-        <BedDouble size={16} color="#9aa2a9" />
+        <BedDouble size={16} color={c.grey400} />
         <Text style={[t.label, t.tab, { color: c.ink900 }]}>{room.number}</Text>
         <View style={{ marginLeft: "auto" }}><Pill tone={roomTone(room)}>{room.label ?? room.housekeeping}</Pill></View>
         {room.type !== booked ? <Text style={[t.caption, { width: "100%", paddingLeft: 24, color: c.yellow800 }]}>{`${room.type} (different type)`}</Text> : null}
@@ -340,7 +340,7 @@ function Explained({ title, children }: { title: string; children: ReactNode }) 
     <View style={{ gap: 4 }}>
       <Pressable onPress={() => setOpen(!open)} accessibilityRole="button" accessibilityLabel={`About ${title.toLowerCase()}`} accessibilityState={{ expanded: open }} style={{ minHeight: 44, alignSelf: "flex-start", flexDirection: "row", alignItems: "center", gap: 6 }}>
         <Text style={[t.label, { color: c.ink900 }]}>{title}</Text>
-        <Info size={14} color="#9aa2a9" />
+        <Info size={14} color={c.grey400} />
       </Pressable>
       {open ? <Text style={[t.label, body, { color: c.grey600 }]}>{children}</Text> : null}
     </View>

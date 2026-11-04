@@ -35,9 +35,9 @@ import {
    proof are on the website for now (a photo or a file; no picker here).
    ══════════════════════════════════════════════════════════════════ */
 
-/** The web's tokens the core's theme does not hold (src/styles/theme.css). */
+/** The web's tokens (src/styles/theme.css), named for this screen; the core's theme holds them since 4 Nov. */
 const web = {
-  grey400: "#9aa2a9", success: "#1f6f5c", success50: "#eaf4f1", yellow: "#ffb600", red: "#e0301e",
+  grey400: c.grey400, success: c.success, success50: c.success50, yellow: c.yellow, red: c.red,
   /** bg-ink-950/25, the dialog's shade. */
   shade: "rgba(1,13,23,0.25)",
 };

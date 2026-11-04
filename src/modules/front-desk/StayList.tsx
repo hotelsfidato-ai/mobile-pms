@@ -60,7 +60,7 @@ function StayCard({ s, columns, held, onOpen }: { s: DeskStay; columns: Column[]
         <Text style={[t.figure, !s.roomNumber ? { color: c.grey500 } : null]}>{s.roomNumber || "-"}</Text>
         <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
           <Pill tone={state.tone}>{state.label}</Pill>
-          <ChevronRight size={16} color="#9aa2a9" />
+          <ChevronRight size={16} color={c.grey400} />
         </View>
       </View>
       <Text numberOfLines={1} style={[t.label, { color: c.ink900, marginTop: 4 }]}>{s.guest}</Text>
@@ -130,7 +130,7 @@ export function StayList({ code, rows, read, columns, emptyTitle, emptyLine, wha
         <View style={{ flex: 1, minHeight: 44, borderRadius: 10, borderWidth: 1, borderColor: c.grey300, backgroundColor: c.white, flexDirection: "row", alignItems: "center", gap: 8, paddingHorizontal: 12 }}>
           <Search size={16} color={c.grey500} />
           <TextInput
-            value={query} onChangeText={setQuery} placeholder="Guest, reference or room…" placeholderTextColor="#9aa2a9"
+            value={query} onChangeText={setQuery} placeholder="Guest, reference or room…" placeholderTextColor={c.grey400}
             accessibilityLabel="Filter this list" style={{ flex: 1, minHeight: 42, fontSize: 16, color: c.ink900, ...face[500] }}
           />
           {query ? (

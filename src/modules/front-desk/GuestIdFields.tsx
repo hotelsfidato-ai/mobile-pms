@@ -38,7 +38,7 @@ function FormIII({ value, onChange, nationality, idCaptured, nothingRequired }: 
     );
   };
   return (
-    <View style={{ gap: 16, borderLeftWidth: 2, borderLeftColor: "#ffb600", paddingLeft: 14 }}>
+    <View style={{ gap: 16, borderLeftWidth: 2, borderLeftColor: c.yellow, paddingLeft: 14 }}>
       <Text style={t.caption}>
         {"Form III goes to the FRRO portal within 24 hours of arrival, and the departure within 24 hours of leaving. "}
         {nothingRequired ? "Fill in what you have; the rest can be completed later from the Form III register."

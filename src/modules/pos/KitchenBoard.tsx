@@ -33,11 +33,11 @@ import { whyNotRing } from "./roles";
 
 /** theme.css's full-colour edges and amber, which the phone's theme does
     not carry yet (the kitchen alone draws them). */
-const RED = "#e0301e";
-const YELLOW = "#ffb600";
-const TANGERINE = "#eb8c00";
-const TANGERINE_700 = "#a96500";
-const INK_800 = "#0b2135";
+const RED = c.red;
+const YELLOW = c.yellow;
+const TANGERINE = c.tangerine;
+const TANGERINE_700 = c.tangerine700;
+const INK_800 = c.ink800;
 
 const BOARD_EVERY_S = 6;
 const SETUP_EVERY_S = 30;

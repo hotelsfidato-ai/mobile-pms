@@ -13,13 +13,13 @@ import { c, face, space, t } from "../../core/theme";
 
 /** Tokens core/theme.ts does not carry yet. */
 export const more = {
-  grey400: "#9aa2a9",
-  yellow: "#ffb600",
-  redDot: "#e0301e",
+  grey400: c.grey400,
+  yellow: c.yellow,
+  redDot: c.red,
   infoAhead: "#95b6d8",
-  success: "#1f6f5c",
-  success50: "#eaf4f1",
-  success100: "#cde5de",
+  success: c.success,
+  success50: c.success50,
+  success100: c.success100,
   /** Labels on navy: white at 60% and 55%. */
   navy60: "rgba(255,255,255,0.6)",
   navy55: "rgba(255,255,255,0.55)",

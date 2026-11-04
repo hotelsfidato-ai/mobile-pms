@@ -19,11 +19,11 @@ export const body: TextStyle = { ...face[500] };
 export const orange600 = c.orange600;
 
 const PILL: Record<Tone, { bg: string; fg: string; dot: string }> = {
-  neutral: { bg: c.grey100, fg: c.grey600, dot: "#9aa2a9" },
+  neutral: { bg: c.grey100, fg: c.grey600, dot: c.grey400 },
   info: { bg: c.info50, fg: c.info, dot: c.info },
-  success: { bg: c.grey100, fg: c.success600, dot: "#1f6f5c" },
-  warning: { bg: c.yellow50, fg: c.yellow800, dot: "#ffb600" },
-  danger: { bg: c.red50, fg: c.red700, dot: "#e0301e" },
+  success: { bg: c.grey100, fg: c.success600, dot: c.success },
+  warning: { bg: c.yellow50, fg: c.yellow800, dot: c.yellow },
+  danger: { bg: c.red50, fg: c.red700, dot: c.red },
   accent: { bg: c.orange50, fg: c.orange700, dot: c.orange },
 };
 
@@ -85,7 +85,7 @@ export function Button({ label, onPress, kind = "secondary", Icon, Trail, busy, 
 }) {
   const off = busy === true || reason != null;
   const fill = off && kind !== "secondary" && kind !== "ghost" ? c.grey300
-    : kind === "primary" ? c.orange600 : kind === "danger" ? "#e0301e" : kind === "secondary" ? (off ? c.grey50 : c.white) : "transparent";
+    : kind === "primary" ? c.orange600 : kind === "danger" ? c.red : kind === "secondary" ? (off ? c.grey50 : c.white) : "transparent";
   const ink = kind === "primary" || kind === "danger" ? (off ? c.grey600 : c.white) : off ? c.grey500 : kind === "ghost" ? c.grey600 : c.ink900;
   return (
     <Pressable
@@ -131,10 +131,10 @@ export function Field({ label, required, hint, error, children }: { label: strin
   return (
     <View style={{ gap: 6 }}>
       <Text style={[t.label, { color: c.grey700 }]}>
-        {label}{required ? <Text style={{ color: "#e0301e" }}> *</Text> : null}
+        {label}{required ? <Text style={{ color: c.red }}> *</Text> : null}
       </Text>
       {children}
-      {error ? <Text style={[t.caption, { color: "#e0301e" }]}>{error}</Text>
+      {error ? <Text style={[t.caption, { color: c.red }]}>{error}</Text>
         : hint ? <Text style={[t.caption, { color: c.grey500 }]}>{hint}</Text> : null}
     </View>
   );
@@ -149,7 +149,7 @@ export function Box({ value, onChange, placeholder, label, keyboard, disabled, u
 }) {
   return (
     <TextInput
-      value={value} onChangeText={onChange} placeholder={placeholder} placeholderTextColor="#9aa2a9" editable={!disabled}
+      value={value} onChangeText={onChange} placeholder={placeholder} placeholderTextColor={c.grey400} editable={!disabled}
       accessibilityLabel={label} keyboardType={keyboard} autoCapitalize={upper ? "characters" : undefined} maxLength={max} multiline={multiline}
       style={[BOX, { fontSize: 16, color: c.ink900, ...face[500] }, tall ? { minHeight: 48 } : null, multiline ? { minHeight: 76, paddingTop: 10, textAlignVertical: "top" } : null, disabled ? { backgroundColor: c.grey50, color: c.grey500 } : null]}
     />
@@ -171,7 +171,7 @@ export function Pick({ value, onChange, options, title, label, placeholder, disa
         accessibilityLabel={`${label ?? title}: ${shown?.label ?? placeholder ?? ""}`} accessibilityState={{ disabled: disabled === true }}
         style={[BOX, { flexDirection: "row", alignItems: "center", gap: 8 }, tall ? { minHeight: 48 } : null, disabled ? { backgroundColor: c.grey50 } : null]}
       >
-        <Text numberOfLines={1} style={[t.heading, face[500], { flex: 1, color: shown ? c.ink900 : "#9aa2a9" }]}>{shown?.label ?? placeholder ?? ""}</Text>
+        <Text numberOfLines={1} style={[t.heading, face[500], { flex: 1, color: shown ? c.ink900 : c.grey400 }]}>{shown?.label ?? placeholder ?? ""}</Text>
         <ChevronDown size={16} color={c.grey500} />
       </Pressable>
       <Sheet open={open} onClose={() => setOpen(false)} title={title}>
@@ -244,7 +244,7 @@ export function Toggle({ value, onChange, label, description }: { value: boolean
       </View>
       <Switch
         value={value} onValueChange={onChange} accessibilityLabel={label}
-        trackColor={{ true: "#1f6f5c", false: c.grey300 }} thumbColor={c.white}
+        trackColor={{ true: c.success, false: c.grey300 }} thumbColor={c.white}
       />
     </View>
   );
@@ -321,7 +321,7 @@ export function Empty({ title, line, Icon, action }: { title: string; line: stri
   return (
     <View style={{ alignItems: "center", paddingVertical: 40, paddingHorizontal: 24, gap: 6 }}>
       <View style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: c.grey100, alignItems: "center", justifyContent: "center", marginBottom: 10 }}>
-        <Icon size={20} color="#9aa2a9" />
+        <Icon size={20} color={c.grey400} />
       </View>
       <Text style={[t.heading, { textAlign: "center" }]}>{title}</Text>
       <Text style={[t.label, body, { color: c.grey500, textAlign: "center", lineHeight: 21 }]}>{line}</Text>

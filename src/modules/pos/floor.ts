@@ -12,10 +12,10 @@ import type { Floor, FloorTable, TableState } from "./types";
    phone only draws it. Pure: no React Native, so `floor.check.ts` runs.
    ══════════════════════════════════════════════════════════════════ */
 
-/** src/styles/theme.css values the phone's theme.ts (core) does not carry
+/** src/styles/theme.css values, named for the floor (theme.ts carries them since 4 Nov);
     yet; every other colour here is a theme.ts token. */
-const success = "#1f6f5c", success50 = "#eaf4f1", success100 = "#cde5de";
-const yellow = "#ffb600", grey400 = "#9aa2a9";
+const success = c.success, success50 = c.success50, success100 = c.success100;
+const yellow = c.yellow, grey400 = c.grey400;
 
 /** Today's floor (till.ts): `types.ts` holds the shapes of 15 Oct and is the
     mobile chat's. A joined table's orderId is the bill it went onto (D27-372);

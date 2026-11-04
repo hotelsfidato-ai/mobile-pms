@@ -30,9 +30,9 @@ import { s } from "./ui";
    ══════════════════════════════════════════════════════════════════ */
 
 /* theme.css's, for this screen only. */
-const RED = "#e0301e";
+const RED = c.red;
 const RED_RING = c.red100;
-const GREY400 = "#9aa2a9";
+const GREY400 = c.grey400;
 
 /* The web's development sign-ins (src/lib/devIdentities.ts: the same
    people, labels and order), one per role, for every slice; and the waiter

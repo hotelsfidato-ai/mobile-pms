@@ -24,7 +24,7 @@ import { c, face, t } from "./theme";
 export const regular = { fontFamily: "Inter_400Regular" };
 /** text-sm / text-base: the web's 14 on 21. */
 export const body = { fontSize: 14, lineHeight: 21 };
-const GREY_400 = "#9aa2a9"; // --color-grey-400
+const GREY_400 = c.grey400; // --color-grey-400
 
 export function Shell() {
   const { who } = useSession();

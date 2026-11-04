@@ -31,6 +31,17 @@ export const c = {
   info: "#2b6cb0",
   info100: "#d2e2f2",
   info50: "#ebf2f9",
+  /* Added 4 Nov from the helpers' ports of theme.css (31 Oct), each one
+     the same value in every module that kept its own copy. */
+  grey400: "#9aa2a9",
+  ink800: "#0b2135",
+  success: "#1f6f5c",
+  success100: "#cde5de",
+  success50: "#eaf4f1",
+  yellow: "#ffb600",
+  red: "#e0301e",
+  tangerine: "#eb8c00",
+  tangerine700: "#a96500",
   /** Labels on navy: white at 72%. */
   onNavy: "rgba(255,255,255,0.72)",
   /** The gauge's track on navy: white at 12%. */

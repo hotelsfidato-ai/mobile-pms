@@ -15,14 +15,14 @@ import { readReasons } from "./data";
 
 /** Tokens the core's theme does not carry (src/styles/theme.css). */
 export const rose = "#b84659"; // brand-rose-700: the reversal's words, 5.17:1
-export const success = "#1f6f5c";
-export const success50 = "#eaf4f1";
+export const success = c.success;
+export const success50 = c.success50;
 
 const PILL: Record<Tone, { bg: string; fg: string; dot: string }> = {
-  neutral: { bg: c.grey100, fg: c.grey600, dot: "#9aa2a9" },
+  neutral: { bg: c.grey100, fg: c.grey600, dot: c.grey400 },
   info: { bg: c.info50, fg: c.info, dot: c.info },
   success: { bg: success50, fg: c.success600, dot: success },
-  danger: { bg: c.red50, fg: c.red700, dot: "#e0301e" },
+  danger: { bg: c.red50, fg: c.red700, dot: c.red },
 };
 
 /** The web's StatusPill: a soft tint, a dot, the small words. */

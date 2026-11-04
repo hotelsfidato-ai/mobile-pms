@@ -54,7 +54,7 @@ export function TakeWalkIn({ hotel, role }: { hotel: Hotel; role: string | null 
                     </View>
                     <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
                       <Text numberOfLines={1} style={[t.caption, { flex: 1 }]}>{room.type}</Text>
-                      <ChevronRight size={16} color="#9aa2a9" />
+                      <ChevronRight size={16} color={c.grey400} />
                     </View>
                   </Pressable>
                 );

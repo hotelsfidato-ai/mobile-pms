@@ -20,11 +20,11 @@ import { Capsule } from "../../core/ui";
    eyeballed; a core `theme` that gains them takes these out.
    ══════════════════════════════════════════════════════════════════ */
 
-const brandRed = "#e0301e";
-const grey400 = "#9aa2a9";
-const success = "#1f6f5c";
-const success50 = "#eaf4f1";
-const yellow = "#ffb600";
+const brandRed = c.red;
+const grey400 = c.grey400;
+const success = c.success;
+const success50 = c.success50;
+const yellow = c.yellow;
 
 /** The web's text-sm and text-base: 14 on 21. */
 export const body = { ...t.label, lineHeight: 21 };

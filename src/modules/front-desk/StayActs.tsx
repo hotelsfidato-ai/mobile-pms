@@ -278,7 +278,7 @@ function Exchange({ code, stay, businessDate, onClose, onDone }: { code: string;
                   key={o.id} onPress={() => setWithId(o.id)} accessibilityRole="button" accessibilityLabel={`Room ${o.room}, ${o.guest}`} accessibilityState={{ selected: o.id === withId }}
                   style={{ minHeight: 44, flexDirection: "row", alignItems: "center", gap: 10, paddingHorizontal: 12, paddingVertical: 8, borderRadius: 10, borderWidth: 1, borderColor: o.id === withId ? c.orange : c.grey200, backgroundColor: o.id === withId ? c.orange50 : c.white }}
                 >
-                  <BedDouble size={16} color="#9aa2a9" />
+                  <BedDouble size={16} color={c.grey400} />
                   <Text style={[t.label, t.tab, { color: c.ink900 }]}>{o.room}</Text>
                   <Text numberOfLines={1} style={[t.label, body, { flex: 1, color: c.ink900 }]}>{o.guest}</Text>
                   <Text style={[t.caption]}>{`out ${day(o.departs)}`}</Text>
