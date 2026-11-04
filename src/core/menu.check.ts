@@ -4,9 +4,10 @@
    on: unchanged since 31 Oct), every role's whole reach, and the phone's own
    rules. */
 import {
-  ROLES, activeRoute, asRole, coversTheFrame, flatNavigationFor, hiddenCount, initials, landing, mayReach, navigationFor,
+  PHONE_ROUTES, ROLES, activeRoute, asRole, coversTheFrame, flatNavigationFor, hiddenCount, initials, landing, mayReach, navigationFor,
   phoneRoute, relative, sidebarFor, spaceOf, spacesFor, workingHomeFor, type Role, type Space,
 } from "./menu.ts";
+import { existsSync, readdirSync } from "node:fs";
 
 /* No node:assert, so the app's own type check reads this file too. */
 const eq = (got: unknown, want: unknown) => {
@@ -228,4 +229,14 @@ const isoOnly = <T,>(fn: () => T): T => {
 };
 eq(isoOnly(() => relative("2026-10-31 17:25:00.123456+05:30", now)), "5 minutes ago");
 
+/* Every module's first screen is reached from the menu (4 Nov: Laundry's link was lost at a merge
+   and the gates stayed green). A module with app/<name>/[code]/index.tsx or app/<name>/[code].tsx
+   needs a PHONE_ROUTES target; the guest-services hub has no web twin (its MODULE.md). */
+const landings = readdirSync("app", { withFileTypes: true })
+  .filter((d) => d.isDirectory() && (existsSync(`app/${d.name}/[code]/index.tsx`) || existsSync(`app/${d.name}/[code].tsx`)))
+  .map((d) => `/${d.name}/:code`);
+const reached = new Set(Object.values(PHONE_ROUTES).map((r) => r.split("?")[0]));
+const NOT_IN_MENU = new Set(["/guest-services/:code"]);
+for (const l of landings) if (!NOT_IN_MENU.has(l) && !reached.has(l)) throw new Error(`${l}: a module's first screen with no menu link`);
+eq(landings.length > 8, true);
 console.log("menu: all checks pass");

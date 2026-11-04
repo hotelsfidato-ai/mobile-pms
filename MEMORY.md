@@ -5,6 +5,20 @@ module's `DEFECTS.md` instead. Read the newest first.
 
 ---
 
+### 15 · A link lost at a merge, and the gates stayed green (4 Nov)
+
+Resolving Laundry's menu conflict, the mobile chat's script refused to add its PHONE_ROUTES line
+(the address also appears in the web's entry list) and the merge was committed without it: every
+gate passed with Laundry unreachable. **The rule:** `menu.check.ts` now fails when a module's first
+screen (`app/<name>/[code]`) has no menu link; after any conflict, count what each side added.
+
+### 14 · A picture can be older than the code, or taken on a development build (4 Nov)
+
+All bookings and New booking changed on 2 Nov, after the pictures of 31 Oct (MRS-2); the role
+pictures' extra System entry was the web's development-only "Design system" (`index.json` shows
+`dev-*` sign-ins). **The rule:** before calling a difference, compare the page's last change in the
+PMS with the picture's date, and check how the picture was taken.
+
 ### 13 · An idempotency key kept too long swallows a deliberate repeat (4 Nov)
 
 The mobile chat's first `keyKeeper` kept a payment's key until it landed. A guest paying ₹500, the

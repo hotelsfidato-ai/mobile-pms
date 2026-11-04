@@ -35,7 +35,7 @@ says why this is weak: "the sentence is not an interface". **Done:** recognised,
 sentence. **Fixed by the mobile chat (4 Nov):** `ApiError.needs` carries it; Settle, Check out and
 Add charge take the way through when `needs` names it or the sentence is recognised (`bill.ts`
 `asks`, checked) — either is enough, since the three values were recorded on 31 Oct and cannot be
-re-read from the cloud.
+re-read from the cloud. **Confirmed 4 Nov** against today's PMS: `credit`, `credit-limit` (`api/src/modules/finance/`) and `late-reason` (`front-desk/operations.ts` 993) are the API's own values.
 
 ## MFIN-3 · `[stayId]` is not matched by the gate's route list (fixed 4 Nov)
 
