@@ -143,6 +143,7 @@ eq(phoneRoute("/h/5EL/lost-property", "5EL"), "/guest-services/5EL/lost-property
 eq(phoneRoute("/h/5EL/online-checkin", "5EL"), "/guest-services/5EL/online-checkin");
 eq(phoneRoute("/h/5EL/guest-messages", "5EL"), null); // the phone's Messages is only its card
 eq(phoneRoute("/h/5EL/approvals", "5EL"), "/approvals/5EL");
+eq(phoneRoute("/h/5EL/stores", "5EL"), "/stores/5EL");
 eq(phoneRoute("/h/5EL/laundry", "5EL"), "/laundry/5EL");
 eq(phoneRoute("/h/5EL/night-audit", "5EL"), "/night-audit/5EL");
 eq(phoneRoute("/h/5EL/calendar", "5EL"), "/reservations/5EL/calendar");
@@ -150,7 +151,7 @@ eq(phoneRoute("/h/5EL/reservations", "5EL"), "/reservations/5EL");
 eq(phoneRoute("/h/5EL/book", "5EL"), "/reservations/5EL/book");
 eq(phoneRoute("/h/5EL/rates", "5EL"), "/inventory/5EL");
 /* Only the routes the merged app has (the brief's route map). */
-const MERGED = /^\/(hotel\/[^/]+|all|approvals\/[^/]+|laundry\/[^/]+(\/[^/]+)?|night-audit\/[^/]+|reservations\/[^/]+(\/(calendar|book))?|inventory\/[^/]+|notifications\/[^/]+|housekeeping\/[^/]+(\/(repair|out-of-service|work-orders))?|pos\/[^/]+\/(tables|pad|kitchen|order\/[^/]+)|front-desk\/[^/]+(\/(in-house|walk-ins|walk-in|take-walk-in|stay\/[^/]+|check-in\/[^/]+))?|folio\/[^/]+\/[^/]+|guest-services\/[^/]+(\/(requests|wake-up-calls|lost-property|online-checkin|messages))?)(\?.*)?$/;
+const MERGED = /^\/(hotel\/[^/]+|all|approvals\/[^/]+|stores\/[^/]+(\/(count|inventory|bar-stock|kitchen-stock|history\/[^/]+))?|laundry\/[^/]+(\/[^/]+)?|night-audit\/[^/]+|reservations\/[^/]+(\/(calendar|book))?|inventory\/[^/]+|notifications\/[^/]+|housekeeping\/[^/]+(\/(repair|out-of-service|work-orders))?|pos\/[^/]+\/(tables|pad|kitchen|order\/[^/]+)|front-desk\/[^/]+(\/(in-house|walk-ins|walk-in|take-walk-in|stay\/[^/]+|check-in\/[^/]+))?|folio\/[^/]+\/[^/]+|guest-services\/[^/]+(\/(requests|wake-up-calls|lost-property|online-checkin|messages))?)(\?.*)?$/;
 for (const role of ROLES) {
   for (const item of flatNavigationFor(role, "5EL", ALL_ON)) {
     const route = phoneRoute(item.to, "5EL");
@@ -185,7 +186,7 @@ eq(landing("kitchen_manager", "AGR"), "/pos/AGR/kitchen");
 eq(landing("gm", "AGR"), "/hotel/AGR");
 eq(landing("owner", "AGR"), "/hotel/AGR");
 eq(landing("front_desk", "AGR"), "/hotel/AGR");
-eq(landing("stores", "AGR"), "/all"); // its Store is not on the phone yet
+eq(landing("stores", "AGR"), "/stores/AGR"); // mobile/t2-stores: the Store is on the phone (4 Nov)
 eq(workingHomeFor("stores", "AGR"), "/h/AGR/stores");
 
 /* The full-screen pages cover the frame. */
