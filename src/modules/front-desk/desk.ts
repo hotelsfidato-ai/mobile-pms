@@ -77,13 +77,6 @@ export const matches = (s: Stay, query: string) => {
   return !q || s.guest.toLowerCase().includes(q) || s.reference.toLowerCase().includes(q) || s.roomNumber.toLowerCase().includes(q);
 };
 
-/** Who still owes on the departure list, and how much in all (InHouse.tsx
-    `outstanding`, `owed`): the server's balances added, in whole paise. */
-export function owing(stays: Array<{ balance?: number }>) {
-  const owe = stays.filter((s) => (s.balance ?? 0) > 0);
-  return { count: owe.length, owed: owe.reduce((t, s) => t + Math.round((s.balance ?? 0) * 100), 0) / 100 };
-}
-
 /* ── Check-in (rules.ts canCheckIn) ───────────────────────────────── */
 export function whyNotYet(stay: { status: string; arrival: string }, businessDate: string): string | null {
   if (stay.status === "cancelled") return "This reservation was cancelled.";
@@ -152,27 +145,40 @@ const inr0 = new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR"
 const inrPrecise = new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", minimumFractionDigits: 2, maximumFractionDigits: 2 });
 /** The web's moneyPrecise, "₹1,20,000.00". */
 export const moneyPrecise = (n: number) => inrPrecise.format(n);
-const paise = (rupees: number) => Math.round(rupees * 100);
 
-/** FolioPanel.tsx useChargesToCome: what a stay owes with its charges to come
-    counted (D27-199), or null when none are to come or the tax is unknown.
-    The nights are the server's, the rate its GST rule's. */
-export function stayDue(s: { status: string; isComplimentary: boolean; offeredTariff: number }, nights: number, pct: number | null | undefined, balance: number | null) {
-  const rate = s.offeredTariff;
-  if (!(nights > 0 && !s.isComplimentary && rate > 0 && ["due-in", "in-house", "due-out"].includes(s.status))) return undefined;
-  if (pct == null) return null;
-  return (paise(balance ?? 0) + paise(rate) * nights + Math.round(paise(rate) * pct / 100) * nights) / 100;
+/** Nights still to be posted (D27-199): the bill's `nightsToCome`, on a stay
+    that pays for its room. Said, never added up (the folio's chargesToCome). */
+export const chargesToCome = (s: { status: string; isComplimentary: boolean; offeredTariff: number }, nights: number) =>
+  nights > 0 && !s.isComplimentary && s.offeredTariff > 0 && ["due-in", "in-house", "due-out"].includes(s.status);
+
+/** The stay's foot (FolioTotals), every figure the server's (MFD-3): Charged
+    and Paid are the bill's own `total` and `paid`, the balance the folio's.
+    The phone adds nothing up. While nights are still to come the posted
+    balance is not what they owe: it says Balance, grey, with "Charges to
+    come", never Overpaid over a stay still running. A missing figure is null (a dash). */
+export function footOf(
+  s: { status: string; isComplimentary: boolean; offeredTariff: number },
+  folio: { balance: number } | null,
+  bill: { total: number; paid: number; nightsToCome?: number } | null,
+) {
+  const toCome = chargesToCome(s, bill?.nightsToCome ?? 0);
+  const balance = folio ? folio.balance : null;
+  const label = toCome || balance === null || balance >= 0 ? "Balance" : s.status === "checked-out" ? "Overpaid" : "In advance";
+  const tone: "muted" | "plain" | "owed" | "over" | "clear" = toCome ? "muted" : balance === null ? "plain" : balance > 0 ? "owed" : balance < 0 ? "over" : "clear";
+  /* Running with nights to come, the balance keeps its sign: a credit is not a debt. */
+  const shown = balance === null ? null : toCome ? balance : Math.abs(balance);
+  return { charged: bill ? bill.total : null, paid: bill ? bill.paid : null, label, balance: shown, toCome, tone };
 }
 
-/** What the confirm says, CheckInFlow's `moved`: the web's own preview of the
-    move, from the agreed rate and the server's GST rate; the server charges it. */
+/** What the confirm says, CheckInFlow's `moved`, with the server's figures
+    only (MFD-3): the nights, the agreed rate, the server's GST rate. The
+    web adds the nights up with their GST; the phone says the parts. */
 export function moveWords(stay: { arrival: string; departure: string; isComplimentary: boolean; offeredTariff: number }, businessDate: string, gstRate: number | null | undefined) {
   const nights = nightsBetween(businessDate, stay.departure);
-  const taxNight = gstRate == null ? null : Math.round(paise(stay.offeredTariff) * gstRate / 100) / 100;
   return `This moves the arrival from ${day(stay.arrival)} to ${day(businessDate)}: ${nights} nights, `
     + (stay.isComplimentary ? "complimentary."
-      : taxNight === null ? `${moneyPrecise(stay.offeredTariff * nights)} before GST (no GST rule for this rate).`
-        : `${moneyPrecise((paise(stay.offeredTariff) + paise(taxNight)) * nights / 100)} with GST.`);
+      : gstRate == null ? `${moneyPrecise(stay.offeredTariff)} a night before GST (no GST rule for this rate).`
+        : `${moneyPrecise(stay.offeredTariff)} a night + GST (${gstRate}%).`);
 }
 
 /** The party as typed (FD-8): "abc" is not 0 adults. */
@@ -225,7 +231,8 @@ export function amendLine(was: number, nights: number, checkIn: string, wrong: s
   if (nights < 1) return { tone: "bad", text: "Departure has to be after arrival. The night of departure is not charged, so a guest leaving on the 5th has their last night on the 4th." };
   const word = `${nights} ${nights === 1 ? "night" : "nights"}`;
   if (nights === was) return { tone: "plain", text: `${word}, the same as before.` };
-  return { tone: "strong", text: `${was} → ${word}`, ...(rate > 0 ? { tail: ` · ${inr0.format(rate * nights)} of room charges at ${inr0.format(rate)} a night` } : {}) };
+  /* The web adds the nights' charges up; the phone says the rate (MFD-3). */
+  return { tone: "strong", text: `${was} → ${word}`, ...(rate > 0 ? { tail: ` · charged at ${inr0.format(rate)} a night` } : {}) };
 }
 
 /** MoveRoomFlow.tsx REASONS: why they moved is recorded. */

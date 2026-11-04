@@ -6,8 +6,7 @@ import { cash, dateLong } from "../../core/format";
 import { isOnline } from "../../core/offline";
 import { c, face, t } from "../../core/theme";
 import { Screen, useRead } from "../../core/ui";
-import { readDueOut, readHouse, readInHouse } from "./data";
-import { owing } from "./desk";
+import { readDueOut, readHouse, readInHouse, readOwed } from "./data";
 import { body, PageHead, Pill, Segmented } from "./kit";
 import { seesBills } from "./roles";
 import { Kept, StayList, type Column } from "./StayList";
@@ -36,7 +35,9 @@ export function InHouse({ hotel, role, view }: { hotel: Hotel; role: string | nu
   const house = useRead(() => readHouse(code), ["front-desk", code, "house-now"]);
   const active = out ? leaving : here;
   const rooms = out ? leaving.data?.length : house.data?.inHouse;
-  const { count, owed } = owing(leaving.data ?? []);
+  /* Who still owes, and how much: the server's own count and sum (MFD-3), as the Dashboard's tile. */
+  const owed = useRead(() => (out && bills ? readOwed(code) : Promise.resolve(null)), ["front-desk", code, "owed", date, out && bills]);
+  const count = owed.data?.owing ?? null;
 
   /* Offline, the last load stays and says how old it is (D27-271). */
   const kept = !isOnline() && active.data !== undefined;
@@ -46,7 +47,7 @@ export function InHouse({ hotel, role, view }: { hotel: Hotel; role: string | nu
   }, [active.loading, active.error, active.data]);
 
   return (
-    <Screen refreshing={pulled && active.loading} onRefresh={() => { setPulled(true); active.reload(); house.reload(); }}>
+    <Screen refreshing={pulled && active.loading} onRefresh={() => { setPulled(true); active.reload(); house.reload(); owed.reload(); }}>
       <PageHead
         title={out ? "Due out" : "In house"}
         pill={rooms !== undefined ? <Pill tone={out ? "warning" : "info"}>{`${rooms} room${rooms === 1 ? "" : "s"}`}</Pill> : undefined}
@@ -64,9 +65,9 @@ export function InHouse({ hotel, role, view }: { hotel: Hotel; role: string | nu
 
       {kept && bills && asOf ? <Text style={[t.label, body, { color: c.grey600 }]}>{`Balances as of ${asOf}, may be out of date.`}</Text> : null}
 
-      {out && count > 0 ? (
+      {out && count != null && count > 0 ? (
         <View style={{ borderRadius: 12, borderWidth: 1, borderColor: c.red100, backgroundColor: c.red50, paddingHorizontal: 16, paddingVertical: 14, gap: 2 }}>
-          <Text style={[t.label, face[500], t.tab, { color: c.ink900 }]}>{`${count} departure${count === 1 ? "" : "s"} still owing ${cash(owed)}`}</Text>
+          <Text style={[t.label, face[500], t.tab, { color: c.ink900 }]}>{`${count} departure${count === 1 ? "" : "s"} still owing ${cash(owed.data?.owed)}`}</Text>
           <Text style={[t.label, body, { color: c.grey600, lineHeight: 21 }]}>Settle from the Bill tab. Check-out stays disabled with its reason until each balance clears.</Text>
         </View>
       ) : null}

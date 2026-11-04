@@ -6,9 +6,9 @@ import { emailProblem, phoneProblem } from "./guestId.ts";
    empty room (src/modules/reservations/pages/BookingPage.tsx, D27-163):
    that room, tonight, one night, the Walk-in source. One room at a time:
    "Another room" and the group that comes with it are New booking's own
-   slice (10). The discount, the price line and the summary are the web's
-   preview of what the bill will carry, from the server's tariff and tax
-   rate, in whole paise as Postgres rounds; the server charges it.
+   slice (10). The discount is the web's preview of the night's price, from
+   the server's tariff, in whole paise as Postgres rounds; the server
+   charges it. No total and no tax is added up here (MFD-3).
    Pure: no React Native here, so `booking.check.ts` runs under node.
    ══════════════════════════════════════════════════════════════════ */
 
@@ -52,7 +52,6 @@ export const worthAsking = (phone: string, email: string) => phoneKey(phone) !==
 /* ── The price of the one line ─────────────────────────────────────── */
 const paise = (rupees: number) => Math.round(rupees * 100);
 const afterDiscount = (rate: number, pct: number) => Math.round(paise(rate) * (100 - pct) / 100) / 100;
-export const taxOn = (nightly: number, pct: number) => Math.round(paise(nightly) * pct / 100) / 100;
 
 export type DiscountMode = "none" | "hand" | "rupees" | "promotion";
 export interface Promotion { id: string; name: string; percent: number | null; amount: number | null }
@@ -115,16 +114,13 @@ export function priceLine(l: LineIn, t: Tariff | null | undefined, split: Split 
   return { nightly: off(inclusive(l, t) && split?.ok ? split.pre : first), unpriced: null, differs: t.nights.some((n) => n.total !== first), ...terms };
 }
 
-/** The Summary: refuses a total it cannot stand behind (a dash). */
-export function summary(q: Quote, taxRate: number | null | undefined, nights: number, dayUse: boolean, advance: number | null) {
-  const units = dayUse ? 1 : nights;
+/** The booking card (MFD-3): the server's GST rate for the line, and no
+    totals. The web adds the room charges, their GST and Due itself; the
+    phone shows the night's price and the rate, and the bill carries the rest.
+    `rate` undefined is not read yet; null is the server's "no rule". */
+export function summary(q: Quote, taxRate: number | null | undefined) {
   const rate = q.nightly === 0 ? 0 : taxRate;
-  const taxPerNight = q.nightly === null || rate === null || rate === undefined ? null : taxOn(q.nightly, rate);
-  const charges = q.nightly === null ? null : paise(q.nightly) * units / 100;
-  const tax = taxPerNight === null ? null : paise(taxPerNight) * units / 100;
-  const bill = charges !== null && tax !== null ? charges + tax : null;
-  const due = bill === null ? null : Math.round((bill - (advance ?? 0)) * 100) / 100;
-  return { rate, taxPerNight, charges, tax, due, noRule: q.nightly !== null && taxPerNight === null && rate === null };
+  return { rate, noRule: q.nightly !== null && q.nightly > 0 && rate === null };
 }
 
 /* ── Why a button is grey (RULE 6) ─────────────────────────────────── */

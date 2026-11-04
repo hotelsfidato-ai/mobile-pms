@@ -351,7 +351,7 @@ function Inclusions({ code, stay, onClose }: { code: string; stay: DeskStay; onC
               <Text style={[t.label, body, { color: c.ink900 }]}>{l.name}</Text>
               {l.quantity > 1 ? <Text style={[t.label, body, t.tab, { color: c.grey500 }]}>{`× ${l.quantity}`}</Text> : null}
               {/* INCLUDED when there is no rate: not the same as costing zero. */}
-              {l.rate === null ? <Pill tone="success">Included</Pill> : <Text style={[t.label, body, t.tab, { color: c.ink900 }]}>{cash(l.rate * l.quantity)}</Text>}
+              {l.rate === null ? <Pill tone="success">Included</Pill> : <Text style={[t.label, body, t.tab, { color: c.ink900 }]}>{l.quantity > 1 ? `${l.quantity} × ${cash(l.rate)}` : cash(l.rate)}</Text>}
             </View>
             <Text style={[t.label, body, { color: c.grey500 }]}>{`${l.addedBy} · ${l.at}${l.notes ? ` · ${l.notes}` : ""}`}</Text>
           </View>

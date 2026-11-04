@@ -27,7 +27,8 @@ export function WalkIns({ hotel }: { hotel: Hotel }) {
   const [pulled, setPulled] = useState(false);
   const read = useRead(() => readWalkIns(code), ["front-desk", code, "walk-ins"]);
   const rows = read.data;
-  const today = (rows ?? []).filter((s) => s.arrival === date).length;
+  /* Not read yet is a dash, never "0 today". */
+  const today = rows ? String(rows.filter((s) => s.arrival === date).length) : "-";
   useEffect(() => { if (!read.loading) setPulled(false); }, [read.loading]);
 
   return (

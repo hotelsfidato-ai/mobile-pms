@@ -225,7 +225,7 @@ function Form({ hotel, role, stay, onClose }: { hotel: Hotel; role: string | nul
           <View style={{ borderRadius: 12, borderWidth: 1, borderColor: c.yellow100, backgroundColor: c.yellow50, padding: 12, gap: 10 }}>
             <Text style={[t.label, body, { color: c.yellow800 }]}>
               {earlyByDate ? `This booking is for ${day(stay.arrival)}. Checking in now moves it to today, so tonight is charged.`
-                : `Rooms are ready from ${early.data?.checkInTime ?? ""}.`}
+                : `Rooms are ready from ${early.data?.checkInTime ?? "-"}.`}
               {earlyByClock ? (early.data?.charge == null ? " This property does not charge for an early arrival." : ` An early arrival is ${cash(early.data.charge)}.`) : ""}
             </Text>
             <Field label="Why the room is being given early" required>
@@ -339,7 +339,7 @@ function Explained({ title, children }: { title: string; children: ReactNode }) 
   const [open, setOpen] = useState(false);
   return (
     <View style={{ gap: 4 }}>
-      <Pressable onPress={() => setOpen(!open)} accessibilityRole="button" accessibilityLabel={`About ${title.toLowerCase()}`} accessibilityState={{ expanded: open }} style={{ minHeight: 28, flexDirection: "row", alignItems: "center", gap: 6 }}>
+      <Pressable onPress={() => setOpen(!open)} accessibilityRole="button" accessibilityLabel={`About ${title.toLowerCase()}`} accessibilityState={{ expanded: open }} style={{ minHeight: 44, alignSelf: "flex-start", flexDirection: "row", alignItems: "center", gap: 6 }}>
         <Text style={[t.label, { color: c.ink900 }]}>{title}</Text>
         <Info size={14} color="#9aa2a9" />
       </Pressable>

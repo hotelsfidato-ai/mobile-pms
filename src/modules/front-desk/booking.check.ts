@@ -1,7 +1,7 @@
 /* Run: node --experimental-strip-types mobile/src/modules/front-desk/booking.check.ts
    The walk-in's price line, summary and button reasons, as BookingPage.tsx. */
 import {
-  assignReason, byContract, checkInReason, discountIn, gstinProblem, inclusive, phoneKey, priceLine, saveReason, summary, taxOn, worthAsking,
+  assignReason, byContract, checkInReason, discountIn, gstinProblem, inclusive, phoneKey, priceLine, saveReason, summary, worthAsking,
   type Reasons, type Tariff,
 } from "./booking.ts";
 
@@ -13,14 +13,14 @@ const tariff = (...totals: Array<number | null>): Tariff => ({ nights: totals.ma
 const line = { rate: "", inclusive: false, comp: false };
 
 /* The picture's own figures: ₹3,699.00 a night + ₹184.95 tax (5%). */
+/* The booking card: the server's rate, never a total (MFD-3). */
+eq(summary({ nightly: 3699, unpriced: null, differs: false }, 5), { rate: 5, noRule: false }, "the booking card says the rate");
+eq(Object.keys(summary({ nightly: 3699, unpriced: null, differs: false }, 5)).some((k) => /charge|tax|due|total/i.test(k)), false, "no total, no tax figure");
+eq(summary({ nightly: 3699, unpriced: null, differs: false }, null), { rate: null, noRule: true }, "no tax rule");
+eq(summary({ nightly: 3699, unpriced: null, differs: false }, undefined), { rate: undefined, noRule: false }, "not read yet is not no rule");
+eq(summary({ nightly: 0, unpriced: null, differs: false }, undefined), { rate: 0, noRule: false }, "complimentary: nothing to tax");
+eq(summary({ nightly: null, unpriced: "2 adults", differs: false }, 5).noRule, false, "no price: nothing said of the tax");
 eq(priceLine(line, tariff(3699), null, none.off).nightly, 3699, "the calendar's price");
-eq(taxOn(3699, 5), 184.95, "the tax a night");
-eq(summary({ nightly: 3699, unpriced: null, differs: false }, 5, 1, false, null), { rate: 5, taxPerNight: 184.95, charges: 3699, tax: 184.95, due: 3883.95, noRule: false }, "the booking card");
-eq(summary({ nightly: 3699, unpriced: null, differs: false }, 5, 2, false, 1000).due, 6767.9, "two nights less an advance");
-eq(summary({ nightly: 2000, unpriced: null, differs: false }, 12, 3, true, null).charges, 2000, "a day use is one day");
-eq(summary({ nightly: null, unpriced: "2 adults", differs: false }, 5, 1, false, null).due, null, "no price: a dash, never a total");
-eq(summary({ nightly: 3699, unpriced: null, differs: false }, null, 1, false, null), { rate: null, taxPerNight: null, charges: 3699, tax: null, due: null, noRule: true }, "no tax rule");
-eq(summary({ nightly: 0, unpriced: null, differs: false }, undefined, 1, false, null).due, 0, "complimentary: nothing to charge");
 
 /* What a line costs. */
 eq(priceLine({ ...line, comp: true }, tariff(3699), null, none.off).nightly, 0, "complimentary");

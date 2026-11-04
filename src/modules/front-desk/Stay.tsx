@@ -10,7 +10,7 @@ import { c, face, space, t } from "../../core/theme";
 import { ReadFailed, useRead } from "../../core/ui";
 import { Companions, IdPhoto } from "./Companions";
 import { readFoot, readGuestMarks, readStay, readVipLevels, rulesOf, said, setVip, setWhatsapp, type DeskStay } from "./data";
-import { day, foreignNationality, guestsWords, moneyPrecise, statusOf, stayedWords, whyNotYet } from "./desk";
+import { day, foreignNationality, footOf, guestsWords, statusOf, stayedWords, whyNotYet } from "./desk";
 import { body, Button, MarkLink, Pill, Sheet, Tick, Toast, takeNote, WEBSITE, type Said } from "./kit";
 import { maySettle, seesBills, whyNotCheckIn, whyNotGuest } from "./roles";
 import { MoreOptions } from "./StayActs";
@@ -68,7 +68,7 @@ export function StayScreen({ hotel, role, id, offer, onClose }: {
     <View style={{ flex: 1 }}>
       <Panel
         title={stay.guest} onClose={onClose}
-        foot={bills ? <Totals stay={stay} foot={foot.data ?? null} loading={foot.loading} /> : undefined}
+        foot={bills ? <Totals foot={foot.data ?? null} loading={foot.loading} /> : undefined}
         under={<HeaderLine stay={stay} />}
       >
         <View style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center", gap: 8 }}>
@@ -148,12 +148,12 @@ function HeaderLine({ stay }: { stay: DeskStay }) {
     <View style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center", columnGap: 16, rowGap: 4 }}>
       <Text style={words}>{stay.reference}</Text>
       {stay.phone ? (
-        <Pressable style={item} accessibilityRole="link" accessibilityLabel={`Call ${stay.phone}`} onPress={() => void Linking.openURL(`tel:${stay.phone}`)}>
+        <Pressable style={item} hitSlop={10} accessibilityRole="link" accessibilityLabel={`Call ${stay.phone}`} onPress={() => void Linking.openURL(`tel:${stay.phone}`)}>
           <Phone size={14} color={c.grey600} /><Text style={words}>{stay.phone}</Text>
         </Pressable>
       ) : null}
       {stay.email ? (
-        <Pressable style={item} accessibilityRole="link" accessibilityLabel={`Email ${stay.email}`} onPress={() => void Linking.openURL(`mailto:${stay.email}`)}>
+        <Pressable style={item} hitSlop={10} accessibilityRole="link" accessibilityLabel={`Email ${stay.email}`} onPress={() => void Linking.openURL(`mailto:${stay.email}`)}>
           <Mail size={14} color={c.grey600} /><Text style={words}>{stay.email}</Text>
         </Pressable>
       ) : null}
@@ -309,25 +309,22 @@ function Fact({ label, tab, children }: { label: string; tab?: boolean; children
   );
 }
 
-/** What is owed, pinned (FolioTotals): the folio's own figures, a dash for
-    none. "Charged", not "Total": nights post at the audit. While charges are to
-    come the foot says what is due with them counted (D27-199), to the paisa. */
-function Totals({ stay, foot, loading }: {
-  stay: DeskStay; foot: { folio: { balance: number; payments: number } | null; due: number | null | undefined } | null; loading: boolean;
-}) {
+/** What is owed, pinned (FolioTotals): the server's figures, a dash for
+    none (MFD-3). "Charged", not "Total": nights post at the audit. While
+    nights are still to come the balance says Balance, grey, with "Charges to
+    come" (D27-199): the phone adds none of them up. */
+function Totals({ foot, loading }: { foot: ReturnType<typeof footOf> | null; loading: boolean }) {
   if (!foot && loading) return <Text style={t.caption}>Reading the bill…</Text>;
-  const folio = foot?.folio ?? null;
-  const balance = folio ? folio.balance : null;
-  const counted = foot?.due !== undefined;
-  const owed = counted ? foot!.due ?? null : balance;
-  const label = counted && (owed === null || owed > 0) ? "Due"
-    : balance !== null && balance < 0 ? (stay.status === "checked-out" ? "Overpaid" : "In advance") : "Balance";
-  const tone = owed === null ? c.ink900 : owed > 0 ? c.red700 : owed < 0 ? c.info : c.success600;
+  const f = foot ?? footOf({ status: "", isComplimentary: true, offeredTariff: 0 }, null, null);
+  const tone = { muted: c.grey600, plain: c.ink900, owed: c.red700, over: c.info, clear: c.success600 }[f.tone];
   return (
-    <View style={{ flexDirection: "row", gap: 16 }}>
-      <Total label="Charged" value={folio ? cash(folio.balance + folio.payments) : "-"} />
-      <Total label="Paid" value={folio ? cash(folio.payments) : "-"} />
-      <Total label={label} value={owed === null ? "-" : counted ? moneyPrecise(Math.abs(owed)) : cash(Math.abs(owed))} big color={tone} />
+    <View style={{ gap: 4 }}>
+      <View style={{ flexDirection: "row", gap: 16 }}>
+        <Total label="Charged" value={cash(f.charged)} />
+        <Total label="Paid" value={cash(f.paid)} />
+        <Total label={f.label} value={cash(f.balance)} big color={tone} />
+      </View>
+      {f.toCome ? <View style={{ flexDirection: "row", justifyContent: "flex-end" }}><Pill tone="neutral">Charges to come</Pill></View> : null}
     </View>
   );
 }

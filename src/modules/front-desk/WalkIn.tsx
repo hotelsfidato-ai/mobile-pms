@@ -153,7 +153,7 @@ export function WalkIn({ hotel, role, room: walkRoom, onClose }: { hotel: Hotel;
 
   const advanceAmount = advance.trim() === "" ? null : Number(advance);
   const advanceProblem = advanceAmount !== null && !(Number.isFinite(advanceAmount) && advanceAmount > 0) ? "An advance is an amount above 0." : null;
-  const sum = summary(q, quote.data?.taxRate, nights, dayUse, advanceProblem ? null : advanceAmount);
+  const sum = summary(q, quote.data?.taxRate);
 
   const salesPerson = salesPick === OTHER ? salesOther.trim() : salesPick;
   const idNow = guestIdState(guestId, today);
@@ -338,7 +338,7 @@ export function WalkIn({ hotel, role, room: walkRoom, onClose }: { hotel: Hotel;
             <Text style={[t.label, body, { color: left !== null && 1 > left ? c.yellow800 : c.grey600 }]}>
               {left === null ? "-" : `${left} left`}{left !== null && 1 > left ? " · this books more than that" : ""}
             </Text>
-            <PriceLine comp={comp} q={q} pricing={quote.loading} typed={rate.trim() !== ""} dayUse={dayUse} nights={nights} rate={sum.rate} tax={sum.taxPerNight} />
+            <PriceLine comp={comp} q={q} pricing={quote.loading} typed={rate.trim() !== ""} dayUse={dayUse} nights={nights} rate={sum.rate} />
           </View>
         </Section>
 
@@ -457,20 +457,23 @@ export function WalkIn({ hotel, role, room: walkRoom, onClose }: { hotel: Hotel;
           </Fold>
         ) : null}
 
+        {/* The web's card adds the room charges, their GST and Due itself: the
+            phone shows the night's price and the server's GST rate, and the
+            bill carries the totals (MFD-3, a question for the owner). */}
         <Section title="The booking">
-          <SumRow label="Nights" value={dayUse ? "Day use" : String(nights)} />
-          <SumRow label="Rooms" value="1" />
-          <SumRow label={`1 × ${typeName || "-"}${comp ? ", complimentary" : ""}`} value={sum.charges === null ? "-" : cash(sum.charges)} />
-          <SumRow label="Room charges" value={sum.charges === null ? "-" : moneyPrecise(sum.charges)} />
-          <SumRow label="GST" value={sum.tax === null ? "-" : moneyPrecise(sum.tax)} />
-          {advanceAmount !== null && !advanceProblem ? <SumRow label="Advance" value={`- ${moneyPrecise(advanceAmount)}`} /> : null}
-          <View style={{ flexDirection: "row", alignItems: "baseline", justifyContent: "space-between", paddingVertical: 8 }}>
-            <Text style={[t.label, { color: c.ink900 }]}>Due</Text>
-            <Text style={[t.lead, { fontSize: 24, color: sum.due === null ? c.grey500 : c.ink900 }]}>{sum.due === null ? "-" : moneyPrecise(sum.due)}</Text>
+          <View>
+            <SumRow first label="Nights" value={dayUse ? "Day use" : String(nights)} />
+            <SumRow label="Rooms" value="1" />
+            <SumRow
+              label={`1 × ${typeName || "-"}${comp ? ", complimentary" : ""}`}
+              value={q.nightly === null ? "-" : `${cash(q.nightly)} ${dayUse ? "for the day" : "a night"}`}
+            />
+            <SumRow label="GST" value={sum.rate === null || sum.rate === undefined ? "-" : `${sum.rate}%`} />
+            {advanceAmount !== null && !advanceProblem ? <SumRow label="Advance" value={moneyPrecise(advanceAmount)} /> : null}
           </View>
           {q.unpriced ? <Text style={[t.label, body, { color: c.yellow800 }]}>{`No price for ${q.unpriced}. Set it on Rates, or type a rate on the line.`}</Text>
             : sum.noRule ? <Text style={[t.label, body, { color: c.yellow800 }]}>The tax card has no rule for this rate. Set it before the night audit posts it.</Text>
-              : <Text style={[t.label, body, { color: c.grey500 }]}>{`As the bill will carry it.${advanceAmount === null ? " Nothing is paid at booking." : ""}`}</Text>}
+              : <Text style={[t.label, body, { color: c.grey500 }]}>{`The bill carries the room charges, their GST and what is due, as the server charges them.${advanceAmount === null ? " Nothing is paid at booking." : ""}`}</Text>}
         </Section>
 
         {/* The three buttons: the one filled is the job the page was opened for. */}
@@ -506,18 +509,20 @@ function Section({ title, description, children }: { title: string; description?
   );
 }
 
-function SumRow({ label, value }: { label: string; value: string }) {
+/** The card's rows, a hairline between each (the picture's). */
+function SumRow({ label, value, first }: { label: string; value: string; first?: boolean }) {
   return (
-    <View style={{ flexDirection: "row", alignItems: "baseline", justifyContent: "space-between", gap: 12, paddingVertical: 4, marginVertical: -6 }}>
+    <View style={[{ flexDirection: "row", alignItems: "baseline", justifyContent: "space-between", gap: 12, paddingVertical: 10 }, first ? null : { borderTopWidth: 1, borderTopColor: c.grey200 }]}>
       <Text style={[t.label, body, { flexShrink: 1, color: c.grey600 }]}>{label}</Text>
       <Text style={[t.label, body, t.tab, { color: c.ink900 }]}>{value}</Text>
     </View>
   );
 }
 
-function PriceLine({ comp, q, pricing, typed, dayUse, nights, rate, tax }: {
+/** The line's price: the night's, and the server's GST rate; the tax is not worked out here (MFD-3). */
+function PriceLine({ comp, q, pricing, typed, dayUse, nights, rate }: {
   comp: boolean; q: { nightly: number | null; unpriced: string | null; differs: boolean; contract?: string | null; note?: string | null }; pricing: boolean; typed: boolean;
-  dayUse: boolean; nights: number; rate: number | null | undefined; tax: number | null;
+  dayUse: boolean; nights: number; rate: number | null | undefined;
 }) {
   if (comp) return <Text style={[t.label, body, { color: c.grey600 }]}>Complimentary: no charge, nothing posted</Text>;
   if (q.unpriced) {
@@ -532,8 +537,8 @@ function PriceLine({ comp, q, pricing, typed, dayUse, nights, rate, tax }: {
   return (
     <View>
       <Text style={[t.label, body, { color: c.grey600 }]}>
-        {`${moneyPrecise(q.nightly)} ${dayUse ? "for the day" : "a night"} + ${tax === null ? "-" : moneyPrecise(tax)} tax`}
-        {rate !== null && rate !== undefined ? ` (${rate}%)` : ""}{typed ? ", agreed" : ""}
+        {`${moneyPrecise(q.nightly)} ${dayUse ? "for the day" : "a night"} + tax (${rate === null || rate === undefined ? "-" : `${rate}%`})`}
+        {typed ? ", agreed" : ""}
         {dayUse ? " · day use" : nights > 0 ? ` · ${nights} ${nights === 1 ? "night" : "nights"}` : ""}
       </Text>
       {q.differs ? <Text style={[t.label, body, { color: c.yellow800 }]}>The first night's price is kept for every night; the calendar differs later.</Text> : null}
@@ -575,7 +580,7 @@ function Returning({ code, phone, email, chosen, onChoose, onUseCompany }: {
             <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
               <UserCheck size={16} color={c.grey500} />
               <Text style={[t.label, body, { flex: 1, color: c.ink900 }]}>
-                <Text style={face[500]}>{m.name}</Text>{` · ${stayedWords(m.visits ?? 0)}${isChosen ? " - this booking is theirs." : " - same person?"}`}
+                <Text style={face[500]}>{m.name}</Text>{`${m.visits == null ? "" : ` · ${stayedWords(m.visits)}`}${isChosen ? " - this booking is theirs." : " - same person?"}`}
               </Text>
             </View>
             <View style={{ flexDirection: "row" }}>

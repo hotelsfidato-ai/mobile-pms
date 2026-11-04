@@ -1,7 +1,7 @@
 import { api, ApiError, orNull, send, type Hotel } from "../../core/api";
 import type { Room, Stay } from "../../core/types";
 import type { Promotion, Split, Tariff } from "./booking";
-import { arrivals, assignable, dueOut, emptyRooms, inHouse, stayDue, upcoming, walkIns } from "./desk";
+import { arrivals, assignable, dueOut, emptyRooms, footOf, inHouse, upcoming, walkIns } from "./desk";
 
 /* ══════════════════════════════════════════════════════════════════
    THE FRONT DESK'S READS AND WRITES — the web's calls, one file:
@@ -54,13 +54,15 @@ export const readHouse = (code: string) =>
 export const readFolio = (code: string, id: string) =>
   orNull<{ balance: number; payments: number }>(`/api/hotels/${code}/stays/${id}/folio`, [403]);
 
-/** The stay's foot (FolioTotals): the bill's figures, and what is due with
-    the charges to come counted (useStayDue): undefined when none are to come. */
+/** The stay's foot (FolioTotals): the folio's balance and the bill's own
+    total and paid (data/bill.ts StayBill), the server's figures; none added
+    here (MFD-3). A role without bills reads neither. */
 export async function readFoot(code: string, s: DeskStay) {
-  const [folio, bill] = await Promise.all([readFolio(code, s.id), orNull<{ nightsToCome?: number }>(`/api/hotels/${code}/stays/${s.id}/bill`, [403])]);
-  const nights = bill?.nightsToCome ?? 0;
-  const gst = nights > 0 && !s.isComplimentary && s.offeredTariff > 0 ? await readTaxRate(code, s.offeredTariff).catch(() => null) : null;
-  return { folio, due: stayDue(s, nights, gst?.rate, folio?.balance ?? null) };
+  const [folio, bill] = await Promise.all([
+    readFolio(code, s.id),
+    orNull<{ total: number; paid: number; nightsToCome?: number }>(`/api/hotels/${code}/stays/${s.id}/bill`, [403]),
+  ]);
+  return footOf(s, folio, bill);
 }
 
 async function withBalances(code: string, list: DeskStay[], bills: boolean): Promise<DeskStay[]> {
@@ -71,6 +73,10 @@ async function withBalances(code: string, list: DeskStay[], bills: boolean): Pro
   }));
 }
 export const readInHouse = async (code: string, date: string, bills: boolean) => withBalances(code, inHouse(await stays(code, date)), bills);
+/** What departing guests still owe, the server's own count and sum
+    (reports/data/dueOut.ts DueOut, as the Dashboard reads it); a role
+    without bills gets none (403), not an error. */
+export const readOwed = (code: string) => orNull<{ leaving: number; owing: number; owed: number }>(`/api/hotels/${code}/due-out`, [403]);
 export const readDueOut = async (code: string, date: string, bills: boolean) => withBalances(code, dueOut(await stays(code, date)), bills);
 
 /** What the check-in's room list reads (operations.ts assignableRooms). */

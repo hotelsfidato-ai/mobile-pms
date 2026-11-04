@@ -1,7 +1,7 @@
 /* Run: node --experimental-strip-types mobile/src/modules/front-desk/desk.check.ts
    The desk's lists and the check-in's rules, on a tiny house. */
 import {
-  amendLine, amendWrong, arrivals, assignable, blockedFor, checkInBlocked, day, dueOut, emptyRooms, inHouse, isBigMove, matches, mealPlanChoices, moveWords, owing, stayDue,
+  amendLine, amendWrong, arrivals, assignable, blockedFor, checkInBlocked, day, dueOut, emptyRooms, inHouse, isBigMove, matches, mealPlanChoices, moveWords, footOf,
   partyProblem, upcoming, walkIns, whyNotYet,
 } from "./desk.ts";
 
@@ -80,29 +80,32 @@ eq(partyProblem("2", ""), null, "an empty children box is none, as the web reads
 eq(amendWrong("0", "0", 2), "Adults is a whole number from 1 to 99.", "no adults");
 eq(amendWrong("2", "-1", 2), "Children is a whole number from 0 to 99.", "children -1");
 eq(amendWrong("2", "0", 91), "A stay is at most 90 nights. Split a longer one into two bookings.", "too long");
-eq(amendLine(2, 3, d, null, 3000), { tone: "strong", text: "2 → 3 nights", tail: " · ₹9,000 of room charges at ₹3,000 a night" }, "a night added");
+eq(amendLine(2, 3, d, null, 3000), { tone: "strong", text: "2 → 3 nights", tail: " · charged at ₹3,000 a night" }, "a night added: the rate, never the nights added up");
 eq(amendLine(2, 2, d, null, 3000).text, "2 nights, the same as before.", "the same");
 eq(amendLine(0, 0, d, null, 3000).text, "Day use, in and out on 25 Aug 2026, at its day price.", "a day use");
 eq(amendLine(0, 2, d, null, 3000).text, "A day use stays a day use: its price is the day's. To stay the night, book the nights.", "a day use is not a stay");
 eq(amendLine(2, 0, d, null, 3000).text, "A stay does not become a day use here: book the day use on New booking, with its day price.", "a stay is not a day use");
 eq(amendLine(2, -1, d, null, 3000).tone, "bad", "departure before arrival");
 
-/* The panel's foot, the picture's own figure: three nights at ₹3,169.54 with 5%. */
+/* The panel's foot: the server's figures only (MFD-3). */
 const arriving = { status: "due-in", isComplimentary: false, offeredTariff: 3169.54 };
-eq(stayDue(arriving, 3, 5, null), 9984.06, "Due, on the picture");
-eq(stayDue(arriving, 3, 5, -1000), 8984.06, "an advance taken off");
-eq(stayDue(arriving, 0, 5, null), undefined, "no charges to come");
-eq(stayDue({ ...arriving, isComplimentary: true }, 3, 5, null), undefined, "complimentary");
-eq(stayDue(arriving, 3, null, null), null, "no tax rule: no figure");
+const housed = { ...arriving, status: "in-house" };
+eq(footOf(housed, { balance: 1200 }, { total: 4810.5, paid: 3600, nightsToCome: 0 }),
+  { charged: 4810.5, paid: 3600, label: "Balance", balance: 1200, toCome: false, tone: "owed" }, "the bill's own total, never balance + paid");
+eq(footOf(arriving, { balance: -1000 }, { total: 0, paid: 1000, nightsToCome: 3 }),
+  { charged: 0, paid: 1000, label: "Balance", balance: -1000, toCome: true, tone: "muted" }, "nights to come: Balance, grey, its sign kept");
+eq(footOf(housed, { balance: -500 }, { total: 100, paid: 600 }).label, "In advance", "a credit while staying");
+eq(footOf({ ...housed, status: "checked-out" }, { balance: -500 }, { total: 100, paid: 600 }).label, "Overpaid", "a credit once gone");
+eq(footOf({ ...housed, isComplimentary: true }, { balance: 0 }, { total: 0, paid: 0, nightsToCome: 3 }).toCome, false, "complimentary: nothing to come");
+eq(footOf(housed, null, null), { charged: null, paid: null, label: "Balance", balance: null, toCome: false, tone: "plain" }, "no bill: dashes, never zeros");
 
 /* More than a day early moves the booking, confirmed first (D27-193). */
 eq(isBigMove("2026-08-26", d), false, "a day early");
 eq(isBigMove("2026-08-27", d), true, "two days early");
 const stayed = { arrival: "2026-08-28", departure: "2026-08-30", isComplimentary: false, offeredTariff: 3699 };
-eq(moveWords(stayed, d, 5), "This moves the arrival from 28 Aug 2026 to 25 Aug 2026: 5 nights, ₹19,419.75 with GST.", "the move, with the server's GST rate");
-eq(moveWords(stayed, d, null), "This moves the arrival from 28 Aug 2026 to 25 Aug 2026: 5 nights, ₹18,495.00 before GST (no GST rule for this rate).", "no GST rule");
+eq(moveWords(stayed, d, 5), "This moves the arrival from 28 Aug 2026 to 25 Aug 2026: 5 nights, ₹3,699.00 a night + GST (5%).", "the move: the rate and the server's GST rate, no total");
+eq(moveWords(stayed, d, null), "This moves the arrival from 28 Aug 2026 to 25 Aug 2026: 5 nights, ₹3,699.00 a night before GST (no GST rule for this rate).", "no GST rule");
 eq(moveWords({ ...stayed, isComplimentary: true }, d, 5), "This moves the arrival from 28 Aug 2026 to 25 Aug 2026: 5 nights, complimentary.", "complimentary");
-eq(owing([{ balance: 7582.1 }, { balance: 0.2 }, { balance: -100 }, {}]), { count: 2, owed: 7582.3 }, "who still owes, and how much, without float dust");
 eq(mealPlanChoices("Room Only").length, 4, "RO kept for a booking already on it");
 eq(mealPlanChoices("CP").length, 3, "RO not offered");
 
