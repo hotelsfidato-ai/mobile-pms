@@ -1,0 +1,36 @@
+9
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Equipment report
+
+11 Oct 2026
+
+Print
+PDF
+Excel
+CSV
+
+5 Elements Akkalkot
+
+EQUIPMENT REPORT
+
+11 Oct 2026
+
+As On Date 11/10/2026
+
+ITEM	TAG	WHERE	SINCE
+Out of the store
+A9 Test Split AC 1.5 ton	EQ-0001	Room 205	09/10/2026
+ITEM	TAG	OPEN REPAIR	SINCE	COST SO FAR (AS RECORDED)
+Under repair
+Nothing is under repair.
+ITEM	TAG	WARRANTY ENDS	AMC ENDS	WARRANTY DAYS LEFT	AMC DAYS LEFT
+Warranty and AMC
+No warranty or AMC date is on the register.
+Soonest first. A negative number of days: it has already ended.
+
+Printed 31/10/2026, 08:21:34 pm
+
+Test GM

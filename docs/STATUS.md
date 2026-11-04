@@ -5,19 +5,23 @@ Kept by the mobile chat; brought up to date at every merge. Each slice is built 
 its own scratch database, its own ports), and merged into `mobile/app` by the mobile chat after
 review and green gates.
 
-## Screens, at a glance (17 Oct)
+## Screens, at a glance (31 Oct)
+
+**The picture is the spec (M-11):** every native screen is matched to the PMS's own phone view,
+`../.local/pms-shots/` (today's PMS at 390 px: `all\` 81 screens, `new\` 63 more, `roles\` each role's
+home, menu and account menu), and compared side by side before it merges.
 
 | | Screens | |
 |---|---|---|
-| ✅ Merged, seen on the owner's phone | **6** | Sign in (development) · All properties · Dashboard · Rooms · Report a repair · Out of service |
-| 🔨 Written and committed in their copies, not yet gated or merged | **3** | Tables · Order pad (with a dish's sheet) · The order (with paying and printing in it) |
-| ⏳ Tier 1, assigned to a copy, not started | **12** | Arrivals · In house · Walk-in · Check-in · A stay's bill and check-out · Kitchen · Work orders · Guest requests · A request · Wake-up calls · Online check-ins (desk) · The menu (every role's list of its screens) |
-| ⏳ Tier 1, being built (M-10) | **2** | Real sign-in (email and password) · Switch hotel — slice 5; the owner's public sign-in settings to come |
+| ✅ Built and merged, being re-matched to the pictures | **7** | Sign in (development) · All properties · Dashboard · Rooms · Report a repair · Out of service · The order (with paying and printing) |
+| 🔨 Written in its copy, not merged | **2** | Tables · Order pad (with a dish's sheet) |
+| 🔨 Being built now | **12** | Arrivals · In house · Walk-in · Check-in · A stay's bill and check-out · Kitchen · Work orders · Guest requests · A request · Wake-up calls · Online check-ins (desk) · Real sign-in |
+| 🔨 New: the app's frame | **2** | The menu for each role · Notifications (with the top bar, the business-date banner and the account menu, which sit on every screen) |
 | ⏳ Tier 2, planned (one copy each, in waves) | **15** | below |
 | ◻ Tier 3, desk set-up: kept on the website unless the owner says otherwise | 9 | below |
 
-**Tier 1 (staff work away from a desk): 6 of 23 screens merged (26%); 9 of 23 written (39%).**
-**Tiers 1 and 2: 6 of 38 merged (16%); 9 of 38 written (24%).**
+**Tier 1: 23 screens; 7 merged, 2 written, 14 being built.** The first full comparison with the
+pictures comes when these helpers report.
 
 ## Tier 1 — every slice, its copy
 
@@ -25,16 +29,17 @@ review and green gates.
 |---|---|---|---|---|
 | 1 Owner's figures | Sign in (dev), All properties, Dashboard | merged | `fidato_mobile` · 8860 · 8081 | ✅ owner's look: "it's good" |
 | 2 Housekeeping | Rooms, Report a repair, Out of service | merged | — | ✅ owner's look: "it's good" |
-| 3 Waiter | Tables + the pad | `pos-tables` · `mobile/pos-tables` | `_hk` · 8861 · 8082 | 🔨 `7d8b6cd1`, gates not run |
-| 3 Waiter | The order | `pos-order` · `mobile/pos-order` | `_hk2` · 8862 · 8083 | 🔨 `fea11afd`, gates not run |
-| 3 Waiter | Paying, printing (in the order) | `pos-pay` · `mobile/pos-pay` | `_hk3` · 8863 · 8084 | 🔨 `a2f82310`, gates not run |
+| 3 Waiter | Tables + the pad | `pos-tables` · `mobile/pos-tables` | `_hk` · 8861 · 8082 | 🔨 `7d8b6cd1`, matching today's picture |
+| 3 Waiter | The order | merged | — | ✅ merged `14a4b25b` |
+| 3 Waiter | Paying, printing (in the order) | merged | — | ✅ merged `29337c78` |
 | 4a Reception | Arrivals, In house, Walk-in, Check-in | `front-desk` · `mobile/front-desk` | `_desk` · 8864 · 8085 | ⏳ restarting |
 | 4b Reception money | A stay's bill, payments, check-out | `folio` · `mobile/folio` | `_folio` · 8865 · 8086 | ⏳ restarting |
 | 5 Real sign-in | Sign in, Switch hotel | `signin` · `mobile/signin` | `_signin` · 8869 · 8090 | ⏳ started 17 Oct (M-10); the owner's public settings to come |
 | 6 Kitchen | Kitchen | `kitchen` · `mobile/kitchen` | `_kitchen` · 8866 · 8087 | ⏳ restarting |
 | 7 Maintenance | Work orders | `maintenance` · `mobile/maintenance` | `_maint` · 8867 · 8088 | ⏳ restarting |
 | 8 Guest services | Requests, a request, wake-up calls, online check-ins | `guest-services` · `mobile/guest-services` | `_gs` · 8868 · 8089 | ⏳ restarting |
-| core | The menu: each role's screens, as the web's ☰ | the mobile chat, in `mobile/` | — | ⏳ after wave 2's routes exist |
+| core | The frame: top bar, banner, each role's menu, notifications, account menu, switch hotel | `shell` · `mobile/shell` | `_hk3` · 8863 · 8084 | 🔨 started 31 Oct |
+| 1, 2 again | Dashboard, All properties, Rooms and its two screens, to today's pictures | `align` · `mobile/align` | `_hk2` · 8862 · 8083 | 🔨 started 31 Oct |
 
 ## Tier 2 — managers on the move (one copy each, started as Tier 1 copies finish)
 

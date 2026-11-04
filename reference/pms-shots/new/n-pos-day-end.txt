@@ -1,0 +1,172 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Close restaurant day
+
+5 Elements Akkalkot · Fidato Restaurant · Sunday, 11 October 2026
+
+Open the day
+
+This outlet's first float, counted once - cash is taken after it. From then on each day opens by itself on the float the close keeps.
+
+₹500
+×
+-
+₹200
+×
+-
+₹100
+×
+-
+₹50
+×
+-
+₹20
+×
+-
+₹10
+×
+-
+₹5
+×
+-
+₹2
+×
+-
+Count the float first
+1
+Overview
+What the shift did
+2
+Cash
+What is in the tin
+3
+Finalize·
+Close the day
+
+Settled
+
+₹12,989
+
+32 bills
+
+Walked out
+
+₹29,750
+
+64 abandoned
+
+Discount given
+
+₹69
+
+Off the settled bills
+
+Complimentary
+
+7
+
+NC bills, given free
+
+How the money arrived
+Cash
+₹5,901
+To a room
+₹2,954
+UPI
+₹2,343
+Card
+₹1,291
+Owner's allowance
+₹500
+
+Only cash reaches the drawer. A card settlement and a bill charged to a room are business done - they are not in the tin.
+
+Paid bills voided
+
+Not in the sales above. Their cash went back to the guest out of this tin, so it is not in Expected either.
+
+20261011-93 · VOIDPAID cash - Billed to the wrong table
+
+VOIDPAID Manager · 11:17 · Cash
+
+₹336.00
+
+20261011-94 · VOIDPAID upi - Paid twice
+
+VOIDPAID Manager · 11:17 · UPI · refund reference UPI 4471 2209
+
+₹336.00
+
+20261011-97 · VOIDPAID report - Guest complaint
+
+VOIDPAID Manager · 11:17 · Cash
+
+₹336.00
+No charge (NC)
+
+Bills given free. Not in the sales above, and no value is counted for them.
+
+20261011-6 · N5 - Owner's guestsOwner's guests
+
+Approved by Test GM · 10:45
+
+20261011-7 · N6 - Staff meal
+
+Approved by Test GM · 10:48
+
+20261011-11 · N5 - Owner's guests
+
+Approved by Test GM · 11:11
+
+20261011-12 · N5 - Owner's guests
+
+Approved by Test GM · 11:13
+
+20261011-16 · N3 - adw
+
+Approved by - · 21:20
+
+20261011-130 · N5 - Owner's guests
+
+Approved by Test GM · 14:48
+
+20261011-131 · N5 - Owner's guests
+
+Approved by Test GM · 14:49
+
+Payment mode changed
+
+Paid bills changed between cash, card and UPI. The cash above already counts them as changed.
+
+20261011-127 · Table GM-2 - UPI to Card, ₹336.00
+
+Paid by card, keyed as UPI · Test GM · 18:50
+
+Struck after it reached the kitchen
+
+1 × Butter Roti - not wanted after all
+
+20261011-72 · TILLTEST kot-struck · - · 11:16
+
+₹40
+
+1 × VTYPES Pizza 3 (Large, Cheese burst) - guest changed their mind - types test
+
+20261011-107 · VTYPES · - · 11:18
+
+₹480
+
+2 × Paneer Tikka - Guest changed their mind (asked, approved)
+
+20261011-126 · Table GM-1 · Test GM · 18:49
+
+₹640
+
+1 × Dal Tadka - guest changed their mind
+
+20261011-136 · T4 · Test GM · 12:23
+
+₹260

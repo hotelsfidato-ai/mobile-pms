@@ -1,0 +1,98 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Purchasing
+
+Ask for what is needed, get it approved, order it, and receive it into a store.
+
+Ask to buy
+Restaurant and hotel
+Bar
+Supplier dues
+PO-5EL-2610-0005
+STATE
+Delivered
+WHAT FOR
+A9 Test: the rice is down to two days
+DELIVER TO
+Main store
+SUPPLIER
+A9 Test Kirana Bros
+ITEMS
+1
+TOTAL
+₹2,050
+ASKED BY
+Test Inventory Manager
+ASKED
+28 Oct 2026
+PO-5EL-2610-0004
+STATE
+Ready to order
+WHAT FOR
+A9 Test: the rice is down to two days
+DELIVER TO
+Main store
+SUPPLIER
+-
+ITEMS
+1
+TOTAL
+-
+ASKED BY
+Test Inventory Manager
+ASKED
+21 Oct 2026
+PO-5EL-2610-0003
+STATE
+Refused
+WHAT FOR
+A12 Test: two more gas cylinders
+DELIVER TO
+Main store
+SUPPLIER
+-
+ITEMS
+1
+TOTAL
+₹3,700
+ASKED BY
+Test Inventory Manager
+ASKED
+9 Oct 2026
+PO-5EL-2610-0002
+STATE
+Ready to order
+WHAT FOR
+A12 Test: tea cups for the staff room
+DELIVER TO
+Main store
+SUPPLIER
+-
+ITEMS
+1
+TOTAL
+₹540
+ASKED BY
+Test Inventory Manager
+ASKED
+9 Oct 2026
+PO-5EL-2610-0001
+STATE
+Delivered
+WHAT FOR
+A9 Test: the rice is down to two days
+DELIVER TO
+Main store
+SUPPLIER
+A9 Test Kirana Bros
+ITEMS
+1
+TOTAL
+₹2,050
+ASKED BY
+Test Inventory Manager
+ASKED
+9 Oct 2026

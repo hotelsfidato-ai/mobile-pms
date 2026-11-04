@@ -1,0 +1,253 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Revenue outlook
+
+What the coming ninety nights look like, and what they suggest. Nothing here changes a price - Rates does that.
+
+This month, on the books
+Occupancy
+17.3%
+Rooms sold
+91
+Room nights
+527
+Against last year
+-
+The property was not selling then.
+A week ago
+-
+The records do not reach back a week.
+What to consider
+Consider holding or raising the rate for Sunday, 11 October 2026.
+tonight, 105.88% sold, 0 of 17 rooms left.
+Nearby: -
+Consider a lower rate for Tuesday, 13 October 2026.
+2 days out, 23.53% sold, 13 of 17 rooms left.
+Nearby: -
+Consider a lower rate for Wednesday, 14 October 2026.
+3 days out, 17.65% sold, 14 of 17 rooms left.
+Nearby: -
+Consider a lower rate for Thursday, 15 October 2026.
+4 days out, 11.76% sold, 15 of 17 rooms left.
+Nearby: -
+Consider a lower rate for Friday, 16 October 2026.
+5 days out, 5.88% sold, 16 of 17 rooms left.
+Nearby: -
+
+A suggestion never names a price, and nothing here sets one. Rates is where a rate is changed.
+
+Dates worth a look
+
+New 1 day, 7 days and 30 days: how many of the rooms sold for that night were booked in that long, counted back from 11 Oct 2026, the property's own day. Booking records here start on Friday, 9 October 2026, and this property's own day is Sunday, 11 October 2026. A window that opens before the records do is shown as a dash: it cannot tell what was picked up from everything on the books.
+
+17 Oct 2026
+DAYS OUT
+6
+ROOMS LEFT
+17
+OF
+17
+SOLD
+0.0%
+NEW 1 DAY
+0
+NEW 7 DAYS
+-
+NEW 30 DAYS
+-
+Soft
+18 Oct 2026
+DAYS OUT
+7
+ROOMS LEFT
+17
+OF
+17
+SOLD
+0.0%
+NEW 1 DAY
+0
+NEW 7 DAYS
+-
+NEW 30 DAYS
+-
+Soft
+19 Oct 2026
+DAYS OUT
+8
+ROOMS LEFT
+17
+OF
+17
+SOLD
+0.0%
+NEW 1 DAY
+0
+NEW 7 DAYS
+-
+NEW 30 DAYS
+-
+Soft
+16 Oct 2026
+DAYS OUT
+5
+ROOMS LEFT
+16
+OF
+17
+SOLD
+5.9%
+NEW 1 DAY
+0
+NEW 7 DAYS
+-
+NEW 30 DAYS
+-
+Soft
+23 Oct 2026
+DAYS OUT
+12
+ROOMS LEFT
+16
+OF
+17
+SOLD
+5.9%
+NEW 1 DAY
+1
+NEW 7 DAYS
+-
+NEW 30 DAYS
+-
+Soft
+15 Oct 2026
+DAYS OUT
+4
+ROOMS LEFT
+15
+OF
+17
+SOLD
+11.8%
+NEW 1 DAY
+0
+NEW 7 DAYS
+-
+NEW 30 DAYS
+-
+Soft
+20 Oct 2026
+DAYS OUT
+9
+ROOMS LEFT
+15
+OF
+17
+SOLD
+11.8%
+NEW 1 DAY
+0
+NEW 7 DAYS
+-
+NEW 30 DAYS
+-
+Soft
+21 Oct 2026
+DAYS OUT
+10
+ROOMS LEFT
+15
+OF
+17
+SOLD
+11.8%
+NEW 1 DAY
+0
+NEW 7 DAYS
+-
+NEW 30 DAYS
+-
+Soft
+22 Oct 2026
+DAYS OUT
+11
+ROOMS LEFT
+15
+OF
+17
+SOLD
+11.8%
+NEW 1 DAY
+1
+NEW 7 DAYS
+-
+NEW 30 DAYS
+-
+Soft
+14 Oct 2026
+DAYS OUT
+3
+ROOMS LEFT
+14
+OF
+17
+SOLD
+17.6%
+NEW 1 DAY
+0
+NEW 7 DAYS
+-
+NEW 30 DAYS
+-
+Soft
+24 Oct 2026
+DAYS OUT
+13
+ROOMS LEFT
+14
+OF
+17
+SOLD
+17.6%
+NEW 1 DAY
+1
+NEW 7 DAYS
+-
+NEW 30 DAYS
+-
+Soft
+25 Oct 2026
+DAYS OUT
+14
+ROOMS LEFT
+14
+OF
+17
+SOLD
+17.6%
+NEW 1 DAY
+1
+NEW 7 DAYS
+-
+NEW 30 DAYS
+-
+Soft
+13 Oct 2026
+DAYS OUT
+2
+ROOMS LEFT
+13
+OF
+17
+SOLD
+23.5%
+NEW 1 DAY
+0
+NEW 7 DAYS
+-
+NEW 30 DAYS
+-
+Soft

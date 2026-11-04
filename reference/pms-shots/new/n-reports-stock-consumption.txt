@@ -1,0 +1,57 @@
+9
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Consumption
+
+1 Oct 2026 to 11 Oct 2026
+
+Print
+PDF
+Excel
+CSV
+
+5 Elements Akkalkot
+
+CONSUMPTION
+
+1 Oct 2026 to 11 Oct 2026
+
+From 01/10/2026 To 11/10/2026
+
+ITEM	UNIT	ISSUED	VALUE (AS RECORDED)
+Per item
+A9 Imperial Blue 180 ml	bottle	4.5	₹750.19
+A9 Imperial Blue 750 ml	bottle	0.16	₹83.20
+A9 Kingfisher Strong 650 ml	bottle	9	₹1,310.32
+A9 Test Basmati rice	kg	10	₹800.00
+A9 Test LPG cylinder 19 kg	cylinder	1	₹1,850.00
+Butter	kg	0.04	-
+Paneer	kg	0.6	-
+Total		-	₹4,793.71
+2 items have no recorded cost and are left out of the total.
+OUTLET	ITEMS	VALUE (AS RECORDED)	TILL SALES (BEFORE GST)	FOOD COST (BEFORE GST)
+Per outlet
+Fidato Restaurant	7	₹4,793.71	₹18,751.24	25.56%
+Total	-	₹4,793.71	₹18,751.24	25.56%
+No outlet: issues to housekeeping, maintenance and the rest, which have no till. Food cost: what was issued to the outlet over what its till sold, both before GST.
+DEPARTMENT	ITEMS	VALUE (AS RECORDED)
+Per department
+Kitchen	1	₹800.00
+(not said)	6	₹3,993.71
+Total	-	₹4,793.71
+OUTLET	DISH	QUANTITY	MRP	VALUE AT MRP
+Given free (NC), at MRP
+Fidato Restaurant	Butter Roti	4	-	-
+Fidato Restaurant	Dal Tadka	5	₹280.00	₹1,400.00
+Fidato Restaurant	Masala Chai	6	-	-
+Fidato Restaurant	Paneer Tikka	5	₹350.00	₹1,750.00
+Total		-	-	₹3,150.00
+The dishes on bills given free, at the MRP typed on the Menu today. No sale and no tax: the restaurant's sales leave NC bills out. 2 dishes have no MRP and are left out of the total.
+
+* Costs as recorded: delivery prices before GST, each item at its running average at the moment.
+
+Printed 31/10/2026, 08:24:27 pm
+
+Test GM

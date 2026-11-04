@@ -1,0 +1,239 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Charges to rooms
+10 on guest bills
+
+What each restaurant sent to a room, what reached the guest's bill, and what was refused.
+
+This is the outside door
+
+An outside point of sale presents a key and posts a finished bill here - a retry after a timeout returns the original posting rather than charging twice, and a void reverses rather than deleting. The PMS has its own till on the Till screen, and it comes through this same door.
+
+Outlets
+
+Round C test
+
+RCFIX
+
+POSTS TO
+food
+BILLS
+0
+no key
+
+Fidato Restaurant
+
+REST
+
+POSTS TO
+food
+BILLS
+10
+no key
+
+Table Test Restaurant
+
+TBTEST
+
+POSTS TO
+food
+BILLS
+0
+no key
+Bills
+₹3,343 on folios
+
+Thursday, 1 October 2026 to Sunday, 11 October 2026. Refused bills are kept - they are how a dispute is settled.
+
+20261011-100
+
+REST
+
+CHARGED TO
+
+Vikram Desai
+
+room 202
+
+RECEIVED
+22 Oct, 11:18
+
+Sunday, 11 October 2026
+
+AMOUNT
+₹294
+on the bill
+
+20261011-99
+
+REST
+
+CHARGED TO
+
+Vikram Desai
+
+room 202
+
+RECEIVED
+22 Oct, 11:18
+
+Sunday, 11 October 2026
+
+AMOUNT
+₹588
+on the bill
+
+20261011-95
+
+REST
+
+CHARGED TO
+
+Vikram Desai
+
+room 202
+
+RECEIVED
+22 Oct, 11:17
+
+Sunday, 11 October 2026
+
+AMOUNT
+₹336
+on the bill
+
+20261011-54/18
+
+REST
+
+CHARGED TO
+
+Vikram Desai
+
+room 202
+
+RECEIVED
+22 Oct, 11:15
+
+Sunday, 11 October 2026
+
+AMOUNT
+₹42
+on the bill
+
+20261011-54/5
+
+REST
+
+CHARGED TO
+
+Vikram Desai
+
+room 202
+
+RECEIVED
+22 Oct, 11:15
+
+Sunday, 11 October 2026
+
+AMOUNT
+₹302
+on the bill
+
+20261011-31
+
+REST
+
+CHARGED TO
+
+Vikram Desai
+
+room 202
+
+RECEIVED
+22 Oct, 11:15
+
+Sunday, 11 October 2026
+
+AMOUNT
+₹336
+on the bill
+
+20261011-30
+
+REST
+
+CHARGED TO
+
+Vikram Desai
+
+room 202
+
+RECEIVED
+22 Oct, 11:15
+
+Sunday, 11 October 2026
+
+AMOUNT
+₹336
+on the bill
+
+20261011-29/18
+
+REST
+
+CHARGED TO
+
+Vikram Desai
+
+room 202
+
+RECEIVED
+22 Oct, 11:15
+
+Sunday, 11 October 2026
+
+AMOUNT
+₹47
+on the bill
+
+20261011-29/5
+
+REST
+
+CHARGED TO
+
+Vikram Desai
+
+room 202
+
+RECEIVED
+22 Oct, 11:15
+
+Sunday, 11 October 2026
+
+AMOUNT
+₹672
+on the bill
+
+20261010-4
+
+REST
+
+CHARGED TO
+
+Shridhar Kamble
+
+room 206
+
+RECEIVED
+13 Oct, 03:42
+
+Saturday, 10 October 2026
+
+AMOUNT
+₹389
+on the bill

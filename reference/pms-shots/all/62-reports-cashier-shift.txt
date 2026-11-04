@@ -1,0 +1,31 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Cashier shift
+
+11 Oct 2026
+
+Print
+CSV
+
+5 Elements Akkalkot
+
+CASHIER SHIFT
+
+11 Oct 2026
+
+Business date 11 Oct 2026 Receipts by cashier and method
+
+CASHIER	METHOD	RECEIPTS	AMOUNT
+Test Reception	Cash	1	₹399
+Test Reception	UPI	9	₹38,283
+not on record	Cash	1	₹100
+Total	11	₹38,782
+
+A receipt whose posting has been reversed is not money the cashier holds, so it is excluded - the same definition the Manager Report uses. A blank cashier is a posting made before this system recorded who made it; naming somebody would be worse than the dash.
+
+Printed 31/10/2026, 07:35:16 pm
+
+Test GM

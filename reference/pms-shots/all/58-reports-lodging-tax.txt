@@ -1,0 +1,43 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Lodging tax
+
+October 2026
+
+Print
+PDF
+Excel
+CSV
+
+5 Elements Akkalkot
+
+LODGING TAX
+
+October 2026
+
+Date From 01/10/2026 To 31/10/2026
+
+DATE	FROM BILL NO.	TO BILL NO.	TOTAL BILL AMOUNT	TOTAL ROOM RENT	NON-TAXABLE AMOUNT	CGST	SGST	SERVICE CHARGES	OTHER BILLS	LESS DISCOUNT	ROUND-OFF
+NET AMT.	TAX AMT.	NET AMT.	TAX AMT.
+Check Out Bills
+10/10/2026	5EL/2026-27/00001	5EL/2026-27/00002	₹7,170.19	₹6,828.75	₹0.00	₹6,828.75	₹170.72	₹6,828.75	₹170.72	-	₹0.00	₹0.00	₹0.00
+11/10/2026	5EL/2026-27/00003	5EL/2026-27/00012	₹33,373.73	₹31,784.50	₹0.00	₹31,784.50	₹794.62	₹31,784.50	₹794.62	-	₹0.00	₹0.00	₹0.00
+21/10/2026	P6MSG-BTN	P6MSG-OLD	₹5,250.00	₹0.00	₹0.00	₹0.00	₹0.00	₹0.00	₹0.00	-	₹0.00	₹0.00	₹0.00
+TOTAL	5EL/2026-27/00001	P6MSG-OLD	₹45,793.92	₹38,613.25	₹0.00	₹38,613.25	₹965.34	₹38,613.25	₹965.34	-	₹0.00	₹0.00	₹0.00
+
+* Bill numbers are contiguous per day and continuous across the month. A gap is an audit finding, not a display quirk.
+
+* The tax columns carry the room rent less its discount. CGST and SGST are half the tax the bills carried, each.
+
+* Everything else charged to those bills is in Other Bills, except alcohol and its VAT, which are not on this sheet.
+
+* Service charges are not recorded in this system and show "-".
+
+* The group's accountant confirms this sheet before anything is filed from it (the owner, 17 September). Nothing here is filed on this system's word alone.
+
+Printed 31/10/2026, 07:31:43 pm
+
+Test GM
