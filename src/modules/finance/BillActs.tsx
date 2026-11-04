@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Text, View } from "react-native";
-import { ApiError, type Hotel } from "../../core/api";
+import { ApiError, type Hotel, outcomeUnknown } from "../../core/api";
 import { c, space, t } from "../../core/theme";
 import type { Stay } from "../../core/types";
 import { useRead } from "../../core/ui";
@@ -60,7 +60,7 @@ export function AddChargeSheet({ hotel, stay, role, onClose, onDone }: Act & { r
       } else {
         setRefused(said);
         /* The same charge tapped again keeps its key (MFIN-1); emptied too, so a repeat is typed on purpose. */
-        if (e instanceof ApiError && e.status === 503) setAmount("");
+        if (outcomeUnknown(e)) setAmount("");
       }
     } finally {
       setBusy(false);

@@ -912,6 +912,14 @@ export const PHONE_ROUTES: Readonly<Record<string, string>> = {
   "/h/:code/approvals": "/approvals/:code",
   /* mobile/t2-spa (4 Nov) */
   "/h/:code/spa": "/spa/:code",
+  /* mobile/t2-banquet (4 Nov) */
+  "/h/:code/banquet": "/banquet/:code",
+  /* mobile/t2-guests (4 Nov): the web's three carry no property; Guest 360's page sits under its search. */
+  "/guests": "/guests/:code",
+  "/companies": "/guests/:code/companies",
+  "/crm/guests": "/guests/:code/find",
+  /* mobile/t2-purchasing (4 Nov): the list; an order is reached from it. */
+  "/h/:code/purchasing": "/purchasing/:code",
   /* mobile/t2-laundry (4 Nov) */
   "/h/:code/laundry": "/laundry/:code",
   /* mobile/t2-night-audit (4 Nov); the banner's link too (Shell.tsx) */

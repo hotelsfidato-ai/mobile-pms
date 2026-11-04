@@ -51,6 +51,18 @@ export class ApiError extends Error {
   }
 }
 
+/** Whether a failed write may still have been made: nothing came back (the
+    phone's own refusal after a network failure is a 503 from `send`), or the
+    server failed (5xx). The screen then empties the amount and says so, so a
+    repeat is typed on purpose with the record in view - the key keeper
+    forgets the key once the record is read again (keys.ts; the banquet
+    review of 4 Nov). A held change is not unknown: it is waiting. */
+export function outcomeUnknown(e: unknown): boolean {
+  if (e instanceof HeldError) return false;
+  if (e instanceof ApiError) return e.status === 0 || e.status >= 500;
+  return true;
+}
+
 /** A write that could not leave the phone and is held to send later. */
 export class HeldError extends Error {
   constructor(message: string, readonly entryId: string, readonly warn: boolean) {

@@ -1,3 +1,4 @@
+import { outcomeUnknown } from "../../core/api";
 import { useQueryClient } from "@tanstack/react-query";
 import { Clock } from "lucide-react-native";
 import { useRef, useState } from "react";
@@ -32,6 +33,7 @@ export function Book({ code, day, onClose, onDone }: { code: string; day: string
   const [time, setTime] = useState("");
   const [busy, setBusy] = useState(false);
   const latch = useRef(false);
+  const stuck = useRef(false);
   const [said, setSaid] = useState<Said | null>(null);
 
   const stays = useRead(() => readStays(code), ["spa", code, "stays"]);
@@ -55,9 +57,14 @@ export function Book({ code, day, onClose, onDone }: { code: string; day: string
       void cache.invalidateQueries({ queryKey: ["spa", code] });
       onDone({ title: "The treatment is in the diary.", tone: "ok" });
     } catch (e) {
-      setSaid(saidOf("Not booked", e));
+      /* Not known whether it was booked, and the route reads no key (R-30): this
+         dialog takes no more taps; it is closed and the diary read first (MEMORY 16). */
+      if (outcomeUnknown(e)) {
+        stuck.current = true;
+        setSaid({ title: "Not known whether it was booked", body: `${e instanceof Error ? e.message : String(e)} Close this and look at the diary before booking again.`, tone: "bad" });
+      } else setSaid(saidOf("Not booked", e));
     } finally {
-      latch.current = false;
+      latch.current = stuck.current;
       setBusy(false);
     }
   }

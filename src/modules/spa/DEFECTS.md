@@ -38,3 +38,10 @@ back in the words the screen will later show, before it is sent.
 - `POST /spa/appointments/:id/close` lets a stay that is `checked_out` or `cancelled` past its
   "not checked in yet" guard (`!["checked_in", "checked_out", "cancelled"].includes(...)`, spa.ts
   662); what then refuses it is finance's `postCharge`. Whether that is meant is the PMS's to say.
+
+### MSPA-2 · Book could be sent twice after a lost reply (4 Nov) — narrowed at the merge
+
+`POST /spa/appointments` reads no key (PMS R-30): a second tap after a lost reply books again (the
+therapist guard then refuses it, naming the person's own first booking). On an unknown outcome the
+Book dialog now takes no more taps: "Not known whether it was booked: close this and look at the
+diary before booking again" (MEMORY 16).
