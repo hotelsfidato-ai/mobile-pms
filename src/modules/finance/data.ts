@@ -1,6 +1,7 @@
 import { api, orNull, send } from "../../core/api";
 import type { Stay } from "../../core/types";
 import type { Billable, BillLine, Folio, StayBill, StayFolio } from "./bill";
+import { WRITES } from "./writes";
 
 /* ══════════════════════════════════════════════════════════════════
    THE BILL'S READS AND WRITES — the web's src/modules/finance/data/*.ts
@@ -71,29 +72,29 @@ export interface PaymentInput {
   pan?: string; form97?: boolean; heldAsCredit?: boolean; folioId?: string;
 }
 export const takePayment = (code: string, stayId: string, input: PaymentInput) =>
-  send("POST", `${at(code, stayId)}/payments`, input);
+  send("POST", WRITES.payment(code, stayId), input);
 
 export const checkOut = (code: string, stayId: string, late: { lateReason?: string; waiveLate?: boolean }, nextDestination: string) =>
-  send("POST", `${at(code, stayId)}/check-out`, { ...late, ...(nextDestination ? { nextDestination } : {}) });
+  send("POST", WRITES.checkOut(code, stayId), { ...late, ...(nextDestination ? { nextDestination } : {}) });
 
 export const issueInvoice = (code: string, stayId: string, folioId: string) =>
-  send<{ ok: boolean; number?: string; vatBill?: string | null }>("POST", `${at(code, stayId)}/invoice`, { folioId });
+  send<{ ok: boolean; number?: string; vatBill?: string | null }>("POST", WRITES.invoice(code, stayId), { folioId });
 
 export const reverseLine = (code: string, stayId: string, lineId: string, reason: string) =>
-  send("POST", `${at(code, stayId)}/charges/${lineId}/reverse`, { reason });
+  send("POST", WRITES.reverse(code, stayId, lineId), { reason });
 
 export const editLine = (code: string, stayId: string, lineId: string, edit: { description: string; amount: number; reason: string }) =>
-  send("POST", `${at(code, stayId)}/charges/${lineId}/edit`, edit);
+  send("POST", WRITES.edit(code, stayId, lineId), edit);
 
 export const postCharge = (code: string, stayId: string, input: {
   category: string; description: string; amount: number; taxable: boolean; businessDate: string; overLimitReason?: string;
-}) => send<{ ok: boolean; data?: { id?: string } }>("POST", `${at(code, stayId)}/charges`, input);
+}) => send<{ ok: boolean; data?: { id?: string } }>("POST", WRITES.charge(code, stayId), input);
 
 export const changeRate = (code: string, stayId: string, input: { rate: number; reason: string; includesGst?: boolean }) =>
-  send<{ ok: boolean; data?: { corrected: number } }>("POST", `${at(code, stayId)}/rate`, input);
+  send<{ ok: boolean; data?: { corrected: number } }>("POST", WRITES.rate(code, stayId), input);
 
 export const openSecondBill = (code: string, stayId: string, companyId: string) =>
-  send("POST", `${at(code, stayId)}/folios`, { billTo: "company", companyId });
+  send("POST", WRITES.secondBill(code, stayId), { billTo: "company", companyId });
 
 export const moveLine = (code: string, lineId: string, toFolioId: string) =>
-  send("POST", `/api/hotels/${code}/postings/${lineId}/transfer`, { toFolioId });
+  send("POST", WRITES.move(code, lineId), { toFolioId });
