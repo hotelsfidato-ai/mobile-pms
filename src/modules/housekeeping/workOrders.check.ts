@@ -2,8 +2,8 @@
    Work orders' rules: the card's pills and line, held Start / Close, who may, the words. */
 import type { OutboxEntry } from "../../core/offline.ts";
 import {
-  closeBody, closedWords, COST_REFUSED, day, empty, foot, heldStatus, meta, ON_WEBSITE, orderPath, paise, pills, queued,
-  startBody, startLabel, UPDATE_REFUSED, whyNotCancel, whyNotRecord, whyNotUpdate, type WorkOrder, type WorkOrderList,
+  closeBody, closedWords, COST_REFUSED, day, empty, foot, heldStatus, longDay, meta, ON_WEBSITE, orderPath, paise, pills, queued,
+  SENDING, startBody, startLabel, UPDATE_REFUSED, whyNotCancel, whyNotRecord, whyNotUpdate, type WorkOrder, type WorkOrderList,
 } from "./workOrders.ts";
 
 /* No node:assert, so the app's own type check reads this file too. */
@@ -31,6 +31,10 @@ eq(pills(order({ priority: "odd" }), "open")[0], { label: "Normal", tone: "neutr
 /* The line: a dash for no room, the web's dates, the age amber at a week. */
 eq(day("2026-09-17"), "17 Sep 2026", "the web's dateShort");
 eq(day(null), "-", "no date");
+/* A timestamp reads as its day, never NaN (MHK-W1). */
+eq(day("2026-10-10T08:21:34.000Z"), "10 Oct 2026", "a timestamp's day");
+eq([longDay("2026-10-10"), longDay("2026-10-10T08:21:34Z"), longDay(null)],
+  ["Saturday, 10 October 2026", "Saturday, 10 October 2026", "-"], "a cost's day");
 eq(meta(order({ room: null, raisedBy: null })), { head: "- · plumbing · raised 10 Oct 2026 · ", age: "today", late: false, tail: " · nobody has picked it up" }, "a lift");
 eq(meta(order({ daysOpen: 1, assignedTo: "Ravi" })).age + meta(order({ daysOpen: 1, assignedTo: "Ravi" })).tail, "1 day open · Ravi", "one day");
 eq([meta(order({ daysOpen: 6 })).late, meta(order({ daysOpen: 7 })).late], [false, true], "late at seven days");
@@ -60,6 +64,9 @@ eq([startLabel("in_progress"), startBody("in_progress")], ["Put back", { status:
 eq(whyNotUpdate(false, "open"), UPDATE_REFUSED, "refused person");
 eq(whyNotUpdate(true, "open"), null, "may update");
 eq(whyNotUpdate(true, "done"), "Closed on this phone, waiting to sync.", "held close");
+/* One tap, one change: grey while the last is on its way (MHK-W2); the API's refusal still first. */
+eq([whyNotUpdate(true, "open", true), whyNotUpdate(true, "in_progress", false)], [SENDING, null], "sending");
+eq(whyNotUpdate(false, "open", true), UPDATE_REFUSED, "refused before sending");
 
 /* Close: nothing said is nothing sent. */
 eq(closeBody("done", "  "), null, "empty resolution");

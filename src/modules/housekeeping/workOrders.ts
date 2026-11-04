@@ -12,7 +12,7 @@
    ══════════════════════════════════════════════════════════════════ */
 
 import type { OutboxEntry } from "../../core/offline.ts";
-import { DASH, dateShort } from "../../core/format.ts";
+import { DASH, dateLong, dateShort } from "../../core/format.ts";
 
 /* ── The shapes (data/housekeeping.ts) ─────────────────────────── */
 
@@ -105,8 +105,15 @@ export function pills(o: WorkOrder, status: string): Array<{ label: string; tone
   return out;
 }
 
+/** The calendar day of a date or a timestamp. The core's formats read
+    "2026-10-10" only; a timestamp ("2026-10-10T08:21:34Z") would print NaN
+    there (MHK-W1). The shapes do not say which the API sends, so both. */
+const ymd = (date: string) => date.slice(0, 10);
+
 /** The web's dateShort, "17 Sep 2026" (src/lib/format.ts); the core's leaves out the year. */
-export const day = (date: string | null) => (date ? `${dateShort(date)} ${date.slice(0, 4)}` : DASH);
+export const day = (date: string | null) => (date ? `${dateShort(ymd(date))} ${date.slice(0, 4)}` : DASH);
+/** The web's dateLong, "Saturday, 10 October 2026", for a cost and its cancelling. */
+export const longDay = (date: string | null) => (date ? dateLong(ymd(date)) : DASH);
 
 /** The grey line under the title, in three parts: the middle one turns
     amber at a week (WorkOrders.tsx 233-250). A dash, not a blank, for a
@@ -144,12 +151,17 @@ export function queued(status: string | null): string | null {
 export const startLabel = (status: string) => (status === "open" ? "Start" : "Put back");
 export const startBody = (status: string) => ({ status: status === "open" ? "in_progress" : "open" });
 
+/** Said on a button while its change is on its way. */
+export const SENDING = "Sending…";
+
 /** Why Start / Put back / Close is grey: the API's refusal of the person
-    first, then a repair closed on this phone and not yet sent. null = allowed.
-    A closed repair has no buttons at all (the web's). */
-export function whyNotUpdate(mayUpdate: boolean, status: string): string | null {
+    first, then a repair closed on this phone and not yet sent, then a tap
+    still on its way (a second tap would be a second change with its own
+    key, MHK-W2). null = allowed. A closed repair has no buttons at all (the web's). */
+export function whyNotUpdate(mayUpdate: boolean, status: string, sending = false): string | null {
   if (!mayUpdate) return UPDATE_REFUSED;
   if (isClosed(status)) return "Closed on this phone, waiting to sync.";
+  if (sending) return SENDING;
   return null;
 }
 
