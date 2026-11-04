@@ -2,7 +2,7 @@
    Every role's menu in every space it has, as the web's own sidebarFor gave
    it on 31 Oct (pms-ref, modules all on), and the phone's own rules. */
 import {
-  ROLES, asRole, coversTheFrame, flatNavigationFor, hiddenCount, initials, landing, mayReach, navigationFor,
+  ROLES, activeRoute, asRole, coversTheFrame, flatNavigationFor, hiddenCount, initials, landing, mayReach, navigationFor,
   phoneRoute, relative, sidebarFor, spaceOf, spacesFor, workingHomeFor, type Role, type Space,
 } from "./menu.ts";
 
@@ -104,6 +104,9 @@ eq(mayReach("gm", "/h/:code/night-audit"), true);
 eq(mayReach("front_desk", "/h/:code/night-audit"), true);
 eq(mayReach("housekeeping", "/h/:code/night-audit"), false);
 eq(mayReach("pos", "/h/:code/night-audit"), false);
+/* As the pictures underline it (roles/r-*-home): */
+for (const role of ["owner", "hotel_manager", "revenue_manager", "finance"] as Role[]) eq(mayReach(role, "/h/:code/night-audit"), true);
+eq(mayReach("stores", "/h/:code/night-audit"), false);
 
 /* What the phone has. */
 eq(phoneRoute("/", "5EL"), "/hotel/5EL");
@@ -113,7 +116,40 @@ eq(phoneRoute("/h/5EL/housekeeping", "5EL"), "/housekeeping/5EL");
 eq(phoneRoute("/h/5EL/work-orders", "5EL"), "/housekeeping/5EL/work-orders");
 eq(phoneRoute("/pos/5EL/tables", "5EL"), "/pos/5EL/tables");
 eq(phoneRoute("/h/5EL/arrivals?x=1", "5EL"), "/front-desk/5EL"); // a notification's link
+eq(phoneRoute("/h/5EL/arrivals/upcoming", "5EL"), "/front-desk/5EL?view=upcoming");
+eq(phoneRoute("/h/5EL/in-house/due-out", "5EL"), "/front-desk/5EL/in-house?view=due-out");
+eq(phoneRoute("/h/5EL/walk-ins", "5EL"), "/front-desk/5EL/walk-ins");
+eq(phoneRoute("/h/5EL/requests", "5EL"), "/guest-services/5EL/requests"); // the web's screen, not the hub
+eq(phoneRoute("/h/5EL/wake-up-calls", "5EL"), "/guest-services/5EL/wake-up-calls");
+eq(phoneRoute("/h/5EL/lost-property", "5EL"), "/guest-services/5EL/lost-property");
+eq(phoneRoute("/h/5EL/online-checkin", "5EL"), "/guest-services/5EL/online-checkin");
+eq(phoneRoute("/h/5EL/guest-messages", "5EL"), null); // the phone's Messages is only its card
 eq(phoneRoute("/h/5EL/approvals", "5EL"), null);
+/* Only the routes the merged app has (the brief's route map). */
+const MERGED = /^\/(hotel\/[^/]+|all|notifications\/[^/]+|housekeeping\/[^/]+(\/(repair|out-of-service|work-orders))?|pos\/[^/]+\/(tables|pad|kitchen|order\/[^/]+)|front-desk\/[^/]+(\/(in-house|walk-ins|walk-in|take-walk-in|stay\/[^/]+|check-in\/[^/]+))?|folio\/[^/]+\/[^/]+|guest-services\/[^/]+(\/(requests|wake-up-calls|lost-property|online-checkin|messages))?)(\?.*)?$/;
+for (const role of ROLES) {
+  for (const item of flatNavigationFor(role, "5EL", ALL_ON)) {
+    const route = phoneRoute(item.to, "5EL");
+    if (route !== null && !MERGED.test(route)) throw new Error(`${item.label} goes to ${route}, not a route of the app`);
+  }
+}
+
+/* Which entry is lit: the screen's own, never the one its route sits under (MCORE-3). */
+const FD = [
+  { route: "/front-desk/5EL", prefix: true }, { route: "/front-desk/5EL?view=upcoming", prefix: false },
+  { route: "/front-desk/5EL/in-house", prefix: true }, { route: "/front-desk/5EL/in-house?view=due-out", prefix: false },
+  { route: "/front-desk/5EL/walk-ins", prefix: false }, { route: "/hotel/5EL", prefix: false },
+];
+eq(activeRoute(FD, "/front-desk/5EL"), "/front-desk/5EL");
+eq(activeRoute(FD, "/front-desk/5EL/in-house"), "/front-desk/5EL/in-house");
+eq(activeRoute(FD, "/front-desk/5EL/walk-ins"), "/front-desk/5EL/walk-ins");
+eq(activeRoute(FD, "/front-desk/5EL?view=upcoming"), "/front-desk/5EL?view=upcoming");
+eq(activeRoute(FD, "/front-desk/5EL/in-house?view=due-out"), "/front-desk/5EL/in-house?view=due-out");
+eq(activeRoute(FD, "/front-desk/5EL/in-house?view=other"), "/front-desk/5EL/in-house");
+eq(activeRoute(FD, "/front-desk/5EL/stay/12"), "/front-desk/5EL"); // the stay opens from Arrivals
+eq(activeRoute(FD, "/front-desk/5EL/in-house/x"), "/front-desk/5EL/in-house");
+eq(activeRoute(FD, "/hotel/5EL/x"), null); // not a prefix entry
+eq(activeRoute(FD, "/all"), null);
 eq(phoneRoute("/settings/rates/taxes", "5EL"), null);
 
 /* A property's landing, by role (app/index.tsx, the web's WORKING_HOME). */

@@ -9,7 +9,7 @@ import { ON_THE_WEBSITE, ROLE_LABELS, asRole, can, coversTheFrame, initials, may
 import { roleAt, useSession } from "./session";
 import { ShellAccount } from "./ShellAccount";
 import { ShellMenu, type Modules } from "./ShellMenu";
-import { NotesDrawer, unreadOf, useNotes } from "./ShellNotes";
+import { NotesDrawer, forgetRead, unreadOf, useNotes } from "./ShellNotes";
 import { c, face, t } from "./theme";
 
 /* ══════════════════════════════════════════════════════════════════
@@ -29,7 +29,10 @@ const GREY_400 = "#9aa2a9"; // --color-grey-400
 export function Shell() {
   const { who } = useSession();
   const path = usePathname();
-  const routed = useGlobalSearchParams<{ code?: string }>().code;
+  const params = useGlobalSearchParams<{ code?: string; view?: string }>();
+  const routed = params.code;
+  /* A tab of a screen is a query on it (front desk's ?view=), and its own menu entry. */
+  const here = params.view ? `${path}?view=${params.view}` : path;
   const [open, setOpen] = useState<"menu" | "search" | "bell" | "account" | null>(null);
   /* Remembered for the person, as useUi's foldedSections (the frame goes on sign-out). */
   const [folded, setFolded] = useState<Record<string, boolean>>({});
@@ -59,6 +62,7 @@ export function Shell() {
   });
 
   const notes = useNotes(hotel);
+  useEffect(() => forgetRead, []);
   const close = () => setOpen(null);
   if (coversTheFrame(path)) return null;
 
@@ -99,7 +103,7 @@ export function Shell() {
 
       {open === "menu" ? (
         <ShellMenu
-          role={role} code={code} modules={modules.data} path={path}
+          role={role} code={code} modules={modules.data} path={here}
           folded={folded} onFold={(key, shownFolded) => setFolded((f) => ({ ...f, [key]: !shownFolded }))}
           onClose={close}
         />
@@ -128,7 +132,8 @@ function BellButton({ unread, onPress }: { unread: number; onPress: () => void }
 }
 
 /** BusinessDateBehind.tsx: one line while the business date is behind today.
-    The web links Night audit; the phone has no such screen yet. */
+    The web links Night audit (underlined, for a role that may open it); the
+    phone has no such screen yet, so the words stay and the reason follows. */
 function DateBehind({ hotel, audit }: { hotel: Hotel; audit: boolean }) {
   const days = daysBehind(hotel);
   if (!days) return null;
@@ -137,7 +142,8 @@ function DateBehind({ hotel, audit }: { hotel: Hotel; audit: boolean }) {
       <View style={{ marginTop: 2 }}><AlertTriangle size={16} color={c.yellow800} /></View>
       <Text style={[body, regular, { flex: 1, color: c.ink900 }]}>
         Business date {dateShort(hotel.businessDate)}, {days} {days === 1 ? "day" : "days"} behind
-        {" "}today ({dateShort(hotel.today!)}). Close the days in Night audit.
+        {" "}today ({dateShort(hotel.today!)}). Close the days in{" "}
+        <Text style={audit ? { textDecorationLine: "underline" } : undefined}>Night audit</Text>.
         {audit ? <Text style={{ color: c.grey500 }}> {ON_THE_WEBSITE}</Text> : null}
       </Text>
     </View>

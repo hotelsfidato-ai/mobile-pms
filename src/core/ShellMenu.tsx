@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
-  ON_THE_WEBSITE, hiddenCount, phoneRoute, sidebarFor, spaceOf, spacesFor,
+  ON_THE_WEBSITE, activeRoute, hiddenCount, phoneRoute, sidebarFor, spaceOf, spacesFor,
   type MenuIcon, type NavItem, type Role, type Space,
 } from "./menu";
 import { regular, SCRIM, Slide } from "./Shell";
@@ -40,6 +40,12 @@ export function ShellMenu({ role, code, modules, path, folded, onFold, onClose }
   const space = spaces.includes(wanted) ? wanted : spaces[0]!;
   const sections = sidebarFor(role, code, modules, space);
   const hidden = hiddenCount(role, code, modules, space);
+  /* The one entry lit, the screen in view's own (menu.ts activeRoute). */
+  const lit = activeRoute(sections.flatMap((section) => section.items.flatMap((item) => [item, ...(item.children ?? [])]))
+    .flatMap((item) => {
+      const route = phoneRoute(item.to, code);
+      return route ? [{ route, prefix: item.matchPrefix === true }] : [];
+    }), path);
 
   const go = (route: string) => { onClose(); router.push(route as never); };
   /* Where each space opens (SpaceSwitcher.tsx). */
@@ -73,17 +79,15 @@ export function ShellMenu({ role, code, modules, path, folded, onFold, onClose }
           {space === "settings" ? (
             <Row
               item={{ label: "Back to front office", to: "/", icon: "ArrowLeft", resource: "dashboard" }}
-              code={code} path={path} onGo={() => openSpace("front")}
+              code={code} lit={null} onGo={() => openSpace("front")}
             />
           ) : null}
 
           {sections.map((section, i) => {
             const key = section.key ?? section.label ?? `section-${i}`;
             /* The section holding the screen in view is never folded. */
-            const holds = section.items.some((it) => {
-              const route = phoneRoute(it.to, code);
-              return route !== null && (path === route || (it.matchPrefix === true && path.startsWith(route)));
-            });
+            const holds = lit !== null && section.items.some((it) =>
+              [it, ...(it.children ?? [])].some((one) => phoneRoute(one.to, code) === lit));
             const asItComes = space === "front" && FOLDED_AS_IT_COMES.has(key);
             const isFolded = !holds && section.label ? (folded[key] ?? asItComes) : false;
             return (
@@ -91,7 +95,7 @@ export function ShellMenu({ role, code, modules, path, folded, onFold, onClose }
                 {section.label ? (
                   <Pressable
                     onPress={() => onFold(key, isFolded)} accessibilityRole="button" accessibilityState={{ expanded: !isFolded }}
-                    accessibilityLabel={section.label} style={styles.section}
+                    accessibilityLabel={section.label} style={styles.section} hitSlop={{ top: 10, bottom: 10 }}
                   >
                     <Lucide.ChevronDown size={12} color={white(0.35)} style={isFolded ? { transform: [{ rotate: "-90deg" }] } : undefined} />
                     <Text style={styles.sectionWords}>{section.label}</Text>
@@ -101,7 +105,7 @@ export function ShellMenu({ role, code, modules, path, folded, onFold, onClose }
                 {!isFolded ? (
                   <View style={{ gap: 2 }}>
                     {section.items.map((item) => (
-                      <Row key={`${item.label}-${item.to}`} item={item} code={code} path={path} onGo={go} />
+                      <Row key={`${item.label}-${item.to}`} item={item} code={code} lit={lit} onGo={go} />
                     ))}
                   </View>
                 ) : null}
@@ -130,13 +134,10 @@ export function ShellMenu({ role, code, modules, path, folded, onFold, onClose }
 }
 
 /** A menu entry (Sidebar.tsx SidebarItem): 44px to a finger, the web's 36 to a mouse. */
-function Row({ item, code, path, onGo }: { item: NavItem; code: string; path: string; onGo: (route: string) => void }) {
+function Row({ item, code, lit, onGo }: { item: NavItem; code: string; lit: string | null; onGo: (route: string) => void }) {
   const route = phoneRoute(item.to, code);
-  const active = route !== null && (item.matchPrefix ? path === route || path.startsWith(`${route}/`) : path === route);
-  const childActive = item.children?.some((child) => {
-    const r = phoneRoute(child.to, code);
-    return r !== null && (path === r || path.startsWith(`${r}/`));
-  });
+  const active = route !== null && route === lit;
+  const childActive = item.children?.some((child) => phoneRoute(child.to, code) === lit && lit !== null);
   const groupActive = active || childActive;
   const Icon = Lucide[item.icon as MenuIcon] as Lucide.LucideIcon;
   const colour = !route ? white(0.35) : groupActive ? c.white : white(0.65);
@@ -161,7 +162,7 @@ function Row({ item, code, path, onGo }: { item: NavItem; code: string; path: st
         <View style={styles.children}>
           {item.children.map((child) => {
             const r = phoneRoute(child.to, code);
-            const here = r !== null && (path === r || (child.to !== item.to && path.startsWith(`${r}/`)));
+            const here = r !== null && r === lit;
             return (
               <Pressable
                 key={`${child.label}-${child.to}`} disabled={!r} onPress={() => onGo(r!)}

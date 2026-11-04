@@ -29,6 +29,9 @@ export interface Note {
 }
 
 const dismissed = new Set<string>();
+/** The frame goes on sign-out; what this person read goes with it, so the
+    next person on the same phone starts with everything unread. */
+export const forgetRead = () => dismissed.clear();
 
 /** The list for a property, every 30 s (D27-363). A role the API refuses (the
     waiter holds no `notification`) gets the web's quiet "No notifications". */
@@ -87,7 +90,10 @@ export function NotesDrawer({ hotel, onClose }: { hotel: Hotel | null; onClose: 
         <View style={styles.head}>
           <View style={{ flex: 1 }}>
             <Text style={[t.heading, { lineHeight: 24 }]} accessibilityRole="header">Notifications</Text>
-            <Text style={[body, regular, { color: c.grey500, marginTop: 4 }]}>{unread > 0 ? `${unread} unread` : "You are all caught up"}</Text>
+            {/* Said only once the list is read: loading or failed is not "caught up". */}
+            <Text style={[body, regular, { color: c.grey500, marginTop: 4 }]}>
+              {!notes ? "-" : unread > 0 ? `${unread} unread` : "You are all caught up"}
+            </Text>
           </View>
           <Pressable onPress={onClose} accessibilityRole="button" accessibilityLabel="Close" hitSlop={14} style={{ padding: 4 }}>
             <X size={16} color={c.grey500} />

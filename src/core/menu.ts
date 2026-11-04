@@ -888,15 +888,41 @@ export const PHONE_ROUTES: Readonly<Record<string, string>> = {
   "/h/:code/work-orders": "/housekeeping/:code/work-orders",
   "/pos/:code/tables": "/pos/:code/tables",
   "/pos/:code/kitchen": "/pos/:code/kitchen",
+  /* mobile/front-desk: its tabs are a query on the same screen (its MODULE.md). */
   "/h/:code/arrivals": "/front-desk/:code",
+  "/h/:code/arrivals/upcoming": "/front-desk/:code?view=upcoming",
   "/h/:code/in-house": "/front-desk/:code/in-house",
-  "/h/:code/requests": "/guest-services/:code",
+  "/h/:code/in-house/due-out": "/front-desk/:code/in-house?view=due-out",
+  "/h/:code/walk-ins": "/front-desk/:code/walk-ins",
+  /* mobile/guest-services: each web screen to its own twin, not to the
+     phone's hub (the hub has no web twin; its MODULE.md). Guest messages
+     stays on the website: the phone's Messages is only its card. */
+  "/h/:code/requests": "/guest-services/:code/requests",
+  "/h/:code/wake-up-calls": "/guest-services/:code/wake-up-calls",
+  "/h/:code/lost-property": "/guest-services/:code/lost-property",
+  "/h/:code/online-checkin": "/guest-services/:code/online-checkin",
 };
 
 /** The phone's route for a web address, null where the phone has none. */
 export function phoneRoute(to: string, code: string): string | null {
   const route = PHONE_ROUTES[to.split("?")[0]!.replace(/^\/(h|pos)\/[^/]+/, "/$1/:code")];
   return route ? resolve(route, code) : null;
+}
+
+/** The one route of a menu that the screen in view belongs to: the exact
+    match (with its ?view=), else the same screen without its query, else
+    the longest route of a matchPrefix entry the path sits under. The
+    phone's routes nest where the web's do not (/front-desk/:code holds In
+    house and Walk-ins), so the first prefix found is not enough (MCORE-3). */
+export function activeRoute(routes: readonly { route: string; prefix: boolean }[], here: string): string | null {
+  const bare = here.split("?")[0]!;
+  const exact = routes.find((r) => r.route === here) ?? routes.find((r) => r.route === bare);
+  if (exact) return exact.route;
+  let best: string | null = null;
+  for (const r of routes) {
+    if (r.prefix && !r.route.includes("?") && bare.startsWith(`${r.route}/`) && r.route.length > (best?.length ?? 0)) best = r.route;
+  }
+  return best;
 }
 
 /** The web's full-screen pages cover the frame (Kitchen.tsx, Terminal.tsx:
