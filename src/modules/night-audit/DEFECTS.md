@@ -21,3 +21,21 @@ and the rule it leaves. Fixed entries stay.
   mobile chat as a core change: `ApiError` keeping the parsed body.
 - **The rule:** when a refusal carries data the screen must show, read it again from the server's own
   read rather than guessing it from the sentence.
+
+### MNA-2 · After a close on this phone, every other screen kept the old business date (4 Nov) — fixed
+
+**What happened:** the close invalidated the cached reads, but each screen takes its day from the
+session's hotels (`useSession().who`), which is not a query: Arrivals would still list the day just
+closed. The web refreshes its session first (`NightAudit.tsx` 97-108: "how this shipped broken
+once"). **How found:** the independent review before the merge. **What was done:** the core's
+session has `refresh()` (re-reads `/api/hotels`), awaited after a close, before the invalidation.
+**The rule:** a write that moves the business date refreshes the person's hotels.
+
+### MNA-3 · The confirm window could turn into a day nobody checked (4 Nov) — fixed
+
+**What happened:** the window drew and sent the live checklist, so a re-read underneath (another
+desk closed the day; a held change sent, which re-reads everything) changed "Close 3 Nov" into
+"Close 4 Nov" with the box still ticked. **How found:** the independent review. **What was done:**
+the window holds the checklist as it stood when Run was tapped, and sends that day; a day closed
+elsewhere comes back as the server's "already closed" with its record. **The rule:** a confirmation
+sends exactly what it showed.

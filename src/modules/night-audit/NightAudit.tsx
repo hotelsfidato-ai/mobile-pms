@@ -5,6 +5,7 @@ import { useRef, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { ApiError, HeldError, type Hotel } from "../../core/api";
 import { DASH, dateLong } from "../../core/format";
+import { useSession } from "../../core/session";
 import { ON_THE_WEBSITE, phoneRoute } from "../../core/menu";
 import { c, face, space, t } from "../../core/theme";
 import { Card, Screen, useRead } from "../../core/ui";
@@ -35,6 +36,7 @@ const MEANS = "Closes the hotel's day: posts one night's room charge for every g
 type Failure = { message: string; record: ClosedDay | null };
 
 export function NightAudit({ hotel, role }: { hotel: Hotel; role: string | null }) {
+  const { refresh } = useSession();
   const code = hotel.code;
   const cache = useQueryClient();
   const refused = whyNotRead(role);
@@ -44,7 +46,10 @@ export function NightAudit({ hotel, role }: { hotel: Hotel; role: string | null 
   const days = useRead(() => (refused ? Promise.resolve([]) : readClosedDays(code)), ["night-audit", code, "runs"]);
   const undos = useRead(() => (refused ? Promise.resolve([]) : readUndos(code)), ["night-audit", code, "undos"]);
 
-  const [confirming, setConfirming] = useState(false);
+  /* The checklist as it stood when Run was tapped: the window draws and sends
+     THAT day, so a re-read underneath (another desk closed it, a held change
+     sent) never turns it into a day nobody checked (the review of 4 Nov, N-2). */
+  const [confirming, setConfirming] = useState<NightAuditState | null>(null);
   const [ticked, setTicked] = useState(false);
   const [reason, setReason] = useState("");
   const [busy, setBusy] = useState(false);
@@ -59,15 +64,17 @@ export function NightAudit({ hotel, role }: { hotel: Hotel; role: string | null 
     if (latch.current) return;
     latch.current = true;
     setBusy(true);
-    setConfirming(false);
+    setConfirming(null);
     setFailure(null);
     setResult(null);
     const sent = runBody(state, reason);
     try {
       const r = await closeDay(code, sent);
       setResult(r);
-      /* The business date has MOVED: every read on this phone was for the
-         old day, the frame's dates too (NightAudit.tsx 98-108). */
+      /* The business date has MOVED: the person's hotels first (every
+         screen takes its day from them), then every read on this phone, which
+         was for the old day (NightAudit.tsx 97-108; N-1). */
+      await refresh();
       await cache.invalidateQueries();
     } catch (e) {
       const status = e instanceof ApiError ? e.status : 0;
@@ -148,7 +155,7 @@ export function NightAudit({ hotel, role }: { hotel: Hotel; role: string | null 
                   label={busy ? "Closing the day…" : "Run night audit"} variant="primary" style={{ alignSelf: "flex-start" }}
                   a11y={data.canRun.allowed ? "Run night audit" : `Run night audit. ${data.canRun.reason ?? ""}`}
                   disabled={!data.canRun.allowed || busy}
-                  onPress={() => { setTicked(false); setReason(""); setConfirming(true); }}
+                  onPress={() => { setTicked(false); setReason(""); setConfirming(data); }}
                 />
               ) : null}
             </Card>
@@ -168,33 +175,34 @@ export function NightAudit({ hotel, role }: { hotel: Hotel; role: string | null 
 
             {result?.ok ? <Closed r={result} /> : null}
 
-            {confirming ? (
-              <Dialog title={`Close ${dateLong(data.businessDate)}?`} onClose={() => setConfirming(false)}>
+            {confirming ? (() => { const shot = confirming; return (
+              <Dialog title={`Close ${dateLong(shot.businessDate)}?`} onClose={() => setConfirming(null)}>
                 <View style={{ gap: 6 }}>
-                  <Fact label="Closing" value={dateLong(data.businessDate)} />
-                  <Fact label="Today at the hotel" value={data.calendarDate ? dateLong(data.calendarDate) : DASH} />
-                  <Fact label="Last audit" value={data.lastCompletedAt ? dateTime(data.lastCompletedAt) : "never"} />
+                  <Fact label="Closing" value={dateLong(shot.businessDate)} />
+                  <Fact label="Today at the hotel" value={shot.calendarDate ? dateLong(shot.calendarDate) : DASH} />
+                  <Fact label="Last audit" value={shot.lastCompletedAt ? dateTime(shot.lastCompletedAt) : "never"} />
                 </View>
-                {data.early ? (
+                {shot.early ? (
                   <Text style={[body, {
                     borderRadius: 8, paddingHorizontal: 12, paddingVertical: 8,
-                    ...(data.early.may === "warning" ? { backgroundColor: c.red50, color: c.red700, ...face[600] } : { backgroundColor: c.yellow50, color: c.yellow800 }),
-                  }]}>{earlyWords(data.early)}</Text>
+                    ...(shot.early.may === "warning" ? { backgroundColor: c.red50, color: c.red700, ...face[600] } : { backgroundColor: c.yellow50, color: c.yellow800 }),
+                  }]}>{earlyWords(shot.early)}</Text>
                 ) : null}
-                {data.early ? (
+                {shot.early ? (
                   <Field label="Why now" required><Area label="Why now" value={reason} onChangeText={setReason} maxLength={500} /></Field>
                 ) : null}
-                <Text style={[body, { color: c.grey700 }]}>{closeWords(data)}</Text>
+                <Text style={[body, { color: c.grey700 }]}>{closeWords(shot)}</Text>
                 <Tick on={ticked} onChange={setTicked} label={TICK} />
                 <View style={{ flexDirection: "row", gap: 8 }}>
-                  <Btn label="Cancel" grow onPress={() => setConfirming(false)} />
+                  <Btn label="Cancel" grow onPress={() => setConfirming(null)} />
                   <Btn
-                    label={`Close ${dayYear(data.businessDate)}`} variant="primary" grow
-                    disabled={!mayConfirm(data, ticked, reason) || busy} onPress={() => void close(data)}
+                    label={`Close ${dayYear(shot.businessDate)}`} variant="primary" grow
+                    disabled={!mayConfirm(shot, ticked, reason) || busy} onPress={() => void close(shot)}
                   />
                 </View>
               </Dialog>
-            ) : null}
+            ); })()
+            : null}
           </>
         )}
 

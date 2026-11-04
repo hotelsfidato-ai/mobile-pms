@@ -26,6 +26,10 @@ interface Session {
   signIn: (email: string, password: string) => Promise<void>;
   signInAs: (uid: string) => Promise<void>;
   signOut: () => void;
+  /** Read the person's hotels again (their business dates): after a night
+      audit closes a day on this phone (the web's session refresh, NightAudit.tsx
+      97-108; the review of 4 Nov, N-1). A failed read keeps what is shown. */
+  refresh: () => Promise<void>;
 }
 
 const SessionContext = createContext<Session | null>(null);
@@ -98,6 +102,11 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     }
   }
 
+  async function refresh() {
+    if (!who) return;
+    try { setWho(await api<HotelsResponse>("/api/hotels")); } catch { /* kept: the screens say their own reads */ }
+  }
+
   async function signOut() {
     const me = currentSubject();
     const kept = (await list().catch(() => [])).filter((e) => e.status === "waiting" && (!e.subject || e.subject === me));
@@ -110,7 +119,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <SessionContext.Provider value={{ who, busy, error, notice, starting, signIn, signInAs, signOut }}>
+    <SessionContext.Provider value={{ who, busy, error, notice, starting, signIn, signInAs, signOut, refresh }}>
       {children}
       {who ? <PasswordDue staffId={who.scope.staffId} email={who.scope.email} /> : null}
     </SessionContext.Provider>
