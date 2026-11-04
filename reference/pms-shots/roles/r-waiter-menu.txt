@@ -1,0 +1,108 @@
+TW
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Tables
+
+The room as it stands. Tap any table to take an order on it - the pad opens here, and nothing reaches the kitchen until you send it.
+
+New parcel
+Close early
+Start here
+
+Your three jobs. Each one opens the screen it happens on.
+
+Got it
+Open a table
+Tap the table - its order pad opens right there.
+On this screen
+Send an order to the kitchen
+Add the dishes on the table's pad, then Send.
+On this screen
+Settle a bill
+Open the order and tap how they pay: cash, card, UPI, or Charge to room.
+
+Kitchen KOTs wait: Virtual Kitchen not seen since 7:35 AM
+
+Bar KOTs wait: Virtual Bar not seen since 7:35 AM
+
+Free
+Running
+In the kitchen
+Bill printed
+Paid - clear it
+Closed unpaid - clear it
+Parcels
+13536 min
+Rahul
+₹966
+A/C
+AC1
+6 seats
+AC2
+Joined to AC3
+5193 min
+AC3
+₹210
+4897 min
+AC4
+₹210
+4430 min
+AC5
+₹105
+AC6
+4 seats
+AC7
+6 seats
+AC8
+4 seats
+13538 min
+AC9
+Closed unpaid
+3 ready
+Clear
+13538 min
+AC10
+Closed unpaid
+Clear
+Non A/C
+N1
+6 seats
+N2
+4 seats
+N3
+4 seats
+875 min
+N4
+₹441
+Clear
+N5
+4 seats
+N6
+4 seats
+Bar
+B1
+6 seats
+13538 min
+B2
+Closed unpaid
+2 ready
+Clear
+B3
+4 seats
+B4
+6 seats
+Navigation
+
+Main application navigation
+
+Fidato Hotels
+FRONT DESK
+Guest requests
+POINT OF SALE
+Tables
+Till
+Terminal
+Close restaurant day
+Find a screen
+Collapse

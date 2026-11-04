@@ -1,0 +1,148 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Booking sources
+
+10 in use · 0 with a commission agreed here
+
+Add a source
+
+The list is the group's
+
+A source added here appears at every property. Agoda is Agoda everywhere, so the source-mix report can add them up without matching names.
+
+The commission is this property's
+
+What you agreed here, and nowhere else. It is copied onto each booking as it is taken, so renegotiating later does not restate last month.
+
+Agoda
+
+KIND
+OTA
+CHANNEL CODE
+AGODA
+COMMISSION HERE
+-
+BOOKINGS HERE
+7
+Commission
+Edit
+
+Booking.com
+
+KIND
+OTA
+CHANNEL CODE
+BDC
+COMMISSION HERE
+-
+BOOKINGS HERE
+0
+Commission
+Edit
+
+Expedia
+
+KIND
+OTA
+CHANNEL CODE
+EXPEDIA
+COMMISSION HERE
+-
+BOOKINGS HERE
+0
+Commission
+Edit
+
+Fidato Hotels
+
+KIND
+Direct
+CHANNEL CODE
+-
+COMMISSION HERE
+-
+BOOKINGS HERE
+5
+Commission
+Edit
+
+go-MMT
+
+KIND
+OTA
+CHANNEL CODE
+GOMMT
+COMMISSION HERE
+-
+BOOKINGS HERE
+0
+Commission
+Edit
+
+Google Ads
+
+KIND
+Direct
+CHANNEL CODE
+-
+COMMISSION HERE
+-
+BOOKINGS HERE
+0
+Commission
+Edit
+
+Meta Ads
+
+KIND
+Direct
+CHANNEL CODE
+-
+COMMISSION HERE
+-
+BOOKINGS HERE
+0
+Commission
+Edit
+
+Walk-in
+
+KIND
+Walk-in
+CHANNEL CODE
+-
+COMMISSION HERE
+-
+BOOKINGS HERE
+32
+Commission
+Edit
+
+Website
+
+KIND
+Direct
+CHANNEL CODE
+-
+COMMISSION HERE
+-
+BOOKINGS HERE
+7
+Commission
+Edit
+
+WhatsApp
+
+KIND
+Direct
+CHANNEL CODE
+-
+COMMISSION HERE
+-
+BOOKINGS HERE
+2
+Commission
+Edit

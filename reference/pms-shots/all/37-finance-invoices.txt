@@ -1,0 +1,12776 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Invoices
+765 ready to bill
+
+Departed stays ready to bill, and every number this property has issued.
+
+E-invoicing (IRN and signed QR) - coming soon
+
+Not required of this group: registering each B2B invoice with the government portal begins above ₹5 crore of annual turnover, and this group is under it. Invoices issued here are complete and valid GST invoices without an IRN. Tell us the year this group crosses ₹5 crore - from the April after that, every B2B invoice needs an IRN before it reaches the guest, and this is where it will appear.
+
+Numbers come from the database, in sequence
+
+The number is allocated and written against the folio in one transaction, so the GST series cannot gain a hole. An issued invoice is never edited - a wrong one is corrected with a credit note carrying its own number, and both remain.
+
+2026-27 - next 5EL/2026-27/00013 · 18 issued in 2026-27.
+
+A5 Test Rane
+
+room 303 · FH-5EL-2610-5047
+
+BILLED TO
+A5 Test Rane
+NIGHTS
+1
+CHARGES
+₹3,699
+TAX
+₹185
+BALANCE
+-
+Issue
+
+A5 Test Wagh
+
+room 302 · FH-5EL-2610-5048
+
+BILLED TO
+A5 Test Wagh
+NIGHTS
+1
+CHARGES
+₹3,699
+TAX
+₹185
+BALANCE
+-
+5EL/2026-27/00004
+
+A5 Test Wagh
+
+room 302 · FH-5EL-2610-5059
+
+BILLED TO
+A5 Test Wagh
+NIGHTS
+1
+CHARGES
+₹3,699
+TAX
+₹185
+BALANCE
+-
+REPORTS-TEST-1
+
+A4 Test Kulkarni
+
+room 305 · FH-5EL-2610-5056
+
+BILLED TO
+A4 Test Kulkarni
+NIGHTS
+1
+CHARGES
+₹380
+TAX
+₹19
+BALANCE
+-
+Issue
+
+A4 Test Kulkarni
+
+room 305 · FH-5EL-2610-5056
+
+BILLED TO
+A4 Test Traders
+NIGHTS
+1
+CHARGES
+₹3,699
+TAX
+₹185
+BALANCE
+-
+Issue
+
+Day Test Kumar
+
+room 302 · FH-5EL-2610-5045
+
+BILLED TO
+Day Test Kumar
+NIGHTS
+1
+CHARGES
+₹3,699
+TAX
+₹185
+BALANCE
+-
+5EL/2026-27/00002
+
+A4 Test Kulkarni
+
+room 305 · FH-5EL-2610-5033
+
+BILLED TO
+A4 Test Kulkarni
+NIGHTS
+2
+CHARGES
+₹7,778
+TAX
+₹389
+BALANCE
+-
+Issue
+
+A5 Test More
+
+room 304 · FH-5EL-2610-5035
+
+BILLED TO
+A5 Test More
+NIGHTS
+2
+CHARGES
+₹3,699
+TAX
+₹185
+BALANCE
+-
+Issue
+
+Tanvi Bhide
+
+room 201 · FH-2608-4858
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹6,747
+TAX
+₹337
+BALANCE
+-
+5EL/2026-27/00003
+
+Sudarshan Kator
+
+room 207 · FH-2608-4865
+
+BILLED TO
+Booking.com
+NIGHTS
+1
+CHARGES
+₹3,060
+TAX
+₹153
+BALANCE
+-
+Issue
+
+A2 Test Kumar
+
+room 301 · FH-5EL-2610-5041
+
+BILLED TO
+A2 Test Kumar
+NIGHTS
+1
+CHARGES
+₹3,699
+TAX
+₹185
+BALANCE
+-
+Issue
+
+Harsha Kamat
+
+room 205 · FH-2608-4860
+
+BILLED TO
+Expedia
+NIGHTS
+1
+CHARGES
+₹3,130
+TAX
+₹156
+BALANCE
+-
+5EL/2026-27/00001
+
+Kapil Ganjoo
+
+room 206 · FH-2608-5002
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹0
+TAX
+₹0
+BALANCE
+-
+Issue
+
+Ananya Bose
+
+room 207 · FH-2608-4861
+
+BILLED TO
+go-MMT
+NIGHTS
+1
+CHARGES
+₹2,817
+TAX
+₹141
+BALANCE
+-
+Issue
+
+A5 Test Deshmukh
+
+room 306 · FH-5EL-2610-5034
+
+BILLED TO
+A5 Test Deshmukh
+NIGHTS
+1
+CHARGES
+₹3,699
+TAX
+₹185
+BALANCE
+-
+Issue
+
+A2 Test Kumar
+
+room 210 · FH-5EL-2610-5040
+
+BILLED TO
+A2 Test Kumar
+NIGHTS
+1
+CHARGES
+₹4,099
+TAX
+₹205
+BALANCE
+-
+Issue
+
+A2 Test Kumar
+
+room 209 · FH-5EL-2610-5039
+
+BILLED TO
+A2 Test Kumar
+NIGHTS
+1
+CHARGES
+₹4,099
+TAX
+₹205
+BALANCE
+-
+Issue
+
+Kalyani Rege
+
+room 301 · FH-2608-5001
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹10,000
+TAX
+₹500
+BALANCE
+₹5,516
+Issue
+
+A5 Test Pawar
+
+room 303 · FH-5EL-2610-5036
+
+BILLED TO
+A5 Test Pawar
+NIGHTS
+0
+CHARGES
+₹2,000
+TAX
+₹100
+BALANCE
+-
+Issue
+
+Ganesh Patil
+
+room 204 · FH-2608-5004
+
+BILLED TO
+go-MMT
+NIGHTS
+2
+CHARGES
+₹5,477
+TAX
+₹238
+BALANCE
+-
+Issue
+
+Rekha Gaikwad
+
+room 201 · FH-2608-4857
+
+BILLED TO
+Rekha Gaikwad
+NIGHTS
+1
+CHARGES
+₹3,705
+TAX
+₹185
+BALANCE
+-
+Issue
+
+Sameer Gokhale
+
+room 202 · FH-2608-5003
+
+BILLED TO
+Sameer Gokhale
+NIGHTS
+0
+CHARGES
+₹1,800
+TAX
+₹90
+BALANCE
+-
+Issue
+
+Suresh Mane
+
+room 202 · FH-2608-4856
+
+BILLED TO
+Agoda
+NIGHTS
+3
+CHARGES
+₹8,719
+TAX
+₹436
+BALANCE
+-
+Issue
+
+Neha Sawant
+
+room 201 · FH-2608-4855
+
+BILLED TO
+Agoda
+NIGHTS
+2
+CHARGES
+₹7,018
+TAX
+₹351
+BALANCE
+-
+Issue
+
+Anjali Pawar
+
+room 203 · FH-2608-4853
+
+BILLED TO
+Agoda
+NIGHTS
+3
+CHARGES
+₹8,030
+TAX
+₹401
+BALANCE
+-
+Issue
+
+Nikhil Joshi
+
+room 205 · FH-2608-4852
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+3
+CHARGES
+₹8,567
+TAX
+₹428
+BALANCE
+-
+Issue
+
+Vivek Thorat
+
+room 201 · FH-2608-4854
+
+BILLED TO
+Vivek Thorat
+NIGHTS
+1
+CHARGES
+₹2,864
+TAX
+₹143
+BALANCE
+-
+Issue
+
+Deepa Rao
+
+room 202 · FH-2608-4851
+
+BILLED TO
+Deepa Rao
+NIGHTS
+3
+CHARGES
+₹11,093
+TAX
+₹555
+BALANCE
+-
+Issue
+
+Sneha Kulkarni
+
+room 204 · FH-2608-4849
+
+BILLED TO
+Sneha Kulkarni
+NIGHTS
+3
+CHARGES
+₹10,034
+TAX
+₹502
+BALANCE
+-
+Issue
+
+Imran Shaikh
+
+room 201 · FH-2608-4850
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹7,053
+TAX
+₹353
+BALANCE
+-
+Issue
+
+Arjun Nair
+
+room 203 · FH-2608-4848
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹7,702
+TAX
+₹385
+BALANCE
+-
+Issue
+
+Priya Menon
+
+room 209 · FH-2608-4843
+
+BILLED TO
+Agoda
+NIGHTS
+3
+CHARGES
+₹8,849
+TAX
+₹442
+BALANCE
+-
+Issue
+
+Meera Iyer
+
+room 201 · FH-2608-4847
+
+BILLED TO
+Meera Iyer
+NIGHTS
+1
+CHARGES
+₹3,199
+TAX
+₹160
+BALANCE
+-
+Issue
+
+Harsha Kamat
+
+room 206 · FH-2608-4840
+
+BILLED TO
+Expedia
+NIGHTS
+3
+CHARGES
+₹10,615
+TAX
+₹531
+BALANCE
+-
+Issue
+
+Shridhar Kamble
+
+room 202 · FH-2608-4844
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹6,591
+TAX
+₹330
+BALANCE
+-
+Issue
+
+Sudarshan Kator
+
+room 205 · FH-2608-4845
+
+BILLED TO
+Expedia
+NIGHTS
+2
+CHARGES
+₹5,380
+TAX
+₹269
+BALANCE
+-
+Issue
+
+Tanvi Bhide
+
+room 204 · FH-2608-4838
+
+BILLED TO
+Tanvi Bhide
+NIGHTS
+2
+CHARGES
+₹6,168
+TAX
+₹308
+BALANCE
+-
+Issue
+
+Rekha Gaikwad
+
+room 203 · FH-2608-4837
+
+BILLED TO
+Rekha Gaikwad
+NIGHTS
+2
+CHARGES
+₹6,362
+TAX
+₹318
+BALANCE
+-
+Issue
+
+Rohit Deshpande
+
+room 208 · FH-2608-4846
+
+BILLED TO
+Rohit Deshpande
+NIGHTS
+1
+CHARGES
+₹3,223
+TAX
+₹161
+BALANCE
+-
+Issue
+
+Ananya Bose
+
+room 207 · FH-2608-4841
+
+BILLED TO
+Ananya Bose
+NIGHTS
+2
+CHARGES
+₹5,877
+TAX
+₹294
+BALANCE
+-
+Issue
+
+Neha Sawant
+
+room 201 · FH-2608-4835
+
+BILLED TO
+Expedia
+NIGHTS
+3
+CHARGES
+₹8,418
+TAX
+₹421
+BALANCE
+-
+Issue
+
+Nikhil Joshi
+
+room 301 · FH-2608-4832
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+3
+CHARGES
+₹10,119
+TAX
+₹506
+BALANCE
+-
+Issue
+
+Vikram Desai
+
+room 208 · FH-2608-4842
+
+BILLED TO
+Expedia
+NIGHTS
+1
+CHARGES
+₹3,228
+TAX
+₹161
+BALANCE
+-
+Issue
+
+Suresh Mane
+
+room 202 · FH-2608-4836
+
+BILLED TO
+Expedia
+NIGHTS
+2
+CHARGES
+₹5,805
+TAX
+₹290
+BALANCE
+-
+Issue
+
+Omkar Shinde
+
+room 205 · FH-2608-4839
+
+BILLED TO
+Booking.com
+NIGHTS
+1
+CHARGES
+₹3,390
+TAX
+₹170
+BALANCE
+-
+Issue
+
+Sneha Kulkarni
+
+room 204 · FH-2608-4829
+
+BILLED TO
+Expedia
+NIGHTS
+2
+CHARGES
+₹6,594
+TAX
+₹330
+BALANCE
+-
+Issue
+
+Harsha Kamat
+
+room 209 · FH-2608-4820
+
+BILLED TO
+Expedia
+NIGHTS
+3
+CHARGES
+₹10,197
+TAX
+₹510
+BALANCE
+-
+Issue
+
+Anjali Pawar
+
+room 306 · FH-2608-4833
+
+BILLED TO
+Booking.com
+NIGHTS
+2
+CHARGES
+₹5,880
+TAX
+₹294
+BALANCE
+-
+Issue
+
+Rohit Deshpande
+
+room 308 · FH-2608-4826
+
+BILLED TO
+go-MMT
+NIGHTS
+3
+CHARGES
+₹8,735
+TAX
+₹437
+BALANCE
+-
+Issue
+
+Priya Menon
+
+room 304 · FH-2608-4823
+
+BILLED TO
+Priya Menon
+NIGHTS
+3
+CHARGES
+₹7,369
+TAX
+₹368
+BALANCE
+-
+Issue
+
+Suresh Mane
+
+room 205 · FH-2608-4816
+
+BILLED TO
+go-MMT
+NIGHTS
+3
+CHARGES
+₹9,876
+TAX
+₹494
+BALANCE
+-
+Issue
+
+Imran Shaikh
+
+room 206 · FH-2608-4830
+
+BILLED TO
+Booking.com
+NIGHTS
+2
+CHARGES
+₹7,760
+TAX
+₹388
+BALANCE
+-
+Issue
+
+Ananya Bose
+
+room 210 · FH-2608-4821
+
+BILLED TO
+Expedia
+NIGHTS
+3
+CHARGES
+₹8,399
+TAX
+₹420
+BALANCE
+-
+Issue
+
+Tanvi Bhide
+
+room 207 · FH-2608-4818
+
+BILLED TO
+go-MMT
+NIGHTS
+2
+CHARGES
+₹5,515
+TAX
+₹276
+BALANCE
+-
+Issue
+
+Kavita Salunkhe
+
+room 303 · FH-2608-5010-303
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+3
+CHARGES
+₹6,200
+TAX
+₹310
+BALANCE
+-
+Issue
+
+Aditya Rane
+
+room 302 · FH-2608-5010-302
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+3
+CHARGES
+₹24,625
+TAX
+₹310
+BALANCE
+₹24,935
+Issue
+
+Arjun Nair
+
+room 203 · FH-2608-4828
+
+BILLED TO
+Booking.com
+NIGHTS
+1
+CHARGES
+₹3,791
+TAX
+₹190
+BALANCE
+-
+Issue
+
+Pramod Jadhav
+
+room 305 · FH-2608-5010-305
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+3
+CHARGES
+₹6,200
+TAX
+₹310
+BALANCE
+-
+Issue
+
+Meera Iyer
+
+room 202 · FH-2608-4827
+
+BILLED TO
+Expedia
+NIGHTS
+1
+CHARGES
+₹2,913
+TAX
+₹146
+BALANCE
+-
+Issue
+
+Anjali Pawar
+
+room 201 · FH-2608-4813
+
+BILLED TO
+Booking.com
+NIGHTS
+2
+CHARGES
+₹6,893
+TAX
+₹345
+BALANCE
+-
+Issue
+
+Vivek Thorat
+
+room 307 · FH-2608-4834
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹3,007
+TAX
+₹150
+BALANCE
+-
+Issue
+
+Deepa Rao
+
+room 208 · FH-2608-4831
+
+BILLED TO
+Deepa Rao
+NIGHTS
+1
+CHARGES
+₹3,721
+TAX
+₹186
+BALANCE
+-
+Issue
+
+Neha Sawant
+
+room 204 · FH-2608-4815
+
+BILLED TO
+go-MMT
+NIGHTS
+1
+CHARGES
+₹3,266
+TAX
+₹163
+BALANCE
+-
+Issue
+
+Shridhar Kamble
+
+room 306 · FH-2608-4824
+
+BILLED TO
+go-MMT
+NIGHTS
+1
+CHARGES
+₹2,434
+TAX
+₹122
+BALANCE
+-
+Issue
+
+Omkar Shinde
+
+room 208 · FH-2608-4819
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹3,669
+TAX
+₹183
+BALANCE
+-
+Issue
+
+Rekha Gaikwad
+
+room 206 · FH-2608-4817
+
+BILLED TO
+Agoda
+NIGHTS
+1
+CHARGES
+₹2,761
+TAX
+₹138
+BALANCE
+-
+Issue
+
+Vikram Desai
+
+room 301 · FH-2608-4822
+
+BILLED TO
+Vikram Desai
+NIGHTS
+1
+CHARGES
+₹2,452
+TAX
+₹123
+BALANCE
+-
+Issue
+
+Nikhil Joshi
+
+room 202 · FH-2608-4812
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹6,055
+TAX
+₹303
+BALANCE
+-
+Issue
+
+Sudarshan Kator
+
+room 307 · FH-2608-4825
+
+BILLED TO
+Agoda
+NIGHTS
+1
+CHARGES
+₹2,561
+TAX
+₹128
+BALANCE
+-
+Issue
+
+Vivek Thorat
+
+room 203 · FH-2608-4814
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹3,054
+TAX
+₹153
+BALANCE
+-
+Issue
+
+Arjun Nair
+
+room 203 · FH-2608-4808
+
+BILLED TO
+Booking.com
+NIGHTS
+3
+CHARGES
+₹10,452
+TAX
+₹523
+BALANCE
+-
+Issue
+
+Meera Iyer
+
+room 201 · FH-2608-4807
+
+BILLED TO
+Agoda
+NIGHTS
+3
+CHARGES
+₹11,628
+TAX
+₹581
+BALANCE
+-
+Issue
+
+Imran Shaikh
+
+room 204 · FH-2608-4810
+
+BILLED TO
+Booking.com
+NIGHTS
+2
+CHARGES
+₹5,743
+TAX
+₹287
+BALANCE
+-
+Issue
+
+Sneha Kulkarni
+
+room 205 · FH-2608-4809
+
+BILLED TO
+Agoda
+NIGHTS
+3
+CHARGES
+₹11,156
+TAX
+₹558
+BALANCE
+-
+Issue
+
+Deepa Rao
+
+room 206 · FH-2608-4811
+
+BILLED TO
+Deepa Rao
+NIGHTS
+2
+CHARGES
+₹5,464
+TAX
+₹273
+BALANCE
+-
+Issue
+
+Sudarshan Kator
+
+room 202 · FH-2608-4805
+
+BILLED TO
+Booking.com
+NIGHTS
+3
+CHARGES
+₹9,812
+TAX
+₹491
+BALANCE
+-
+Issue
+
+Rohit Deshpande
+
+room 204 · FH-2608-4806
+
+BILLED TO
+Expedia
+NIGHTS
+2
+CHARGES
+₹6,344
+TAX
+₹317
+BALANCE
+-
+Issue
+
+Shridhar Kamble
+
+room 203 · FH-2608-4804
+
+BILLED TO
+Agoda
+NIGHTS
+2
+CHARGES
+₹6,271
+TAX
+₹314
+BALANCE
+-
+Issue
+
+Vikram Desai
+
+room 201 · FH-2608-4802
+
+BILLED TO
+Vikram Desai
+NIGHTS
+3
+CHARGES
+₹9,111
+TAX
+₹456
+BALANCE
+-
+Issue
+
+Priya Menon
+
+room 202 · FH-2608-4803
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹7,101
+TAX
+₹355
+BALANCE
+-
+Issue
+
+Ananya Bose
+
+room 201 · FH-2608-4801
+
+BILLED TO
+Booking.com
+NIGHTS
+1
+CHARGES
+₹2,704
+TAX
+₹135
+BALANCE
+-
+Issue
+
+Imran Chatterjee [DH]
+
+room 207 · DH-5EL-0692
+
+BILLED TO
+Agoda
+NIGHTS
+3
+CHARGES
+₹13,406
+TAX
+₹670
+BALANCE
+-
+Issue
+
+Navya Sharma [DH]
+
+room 202 · DH-5EL-0689
+
+BILLED TO
+go-MMT
+NIGHTS
+3
+CHARGES
+₹11,852
+TAX
+₹593
+BALANCE
+-
+Issue
+
+Krishna Gupta [DH]
+
+room 206 · DH-5EL-0693
+
+BILLED TO
+Expedia
+NIGHTS
+2
+CHARGES
+₹8,144
+TAX
+₹407
+BALANCE
+-
+Issue
+
+Arjun Chatterjee [DH]
+
+room 308 · DH-5EL-0690
+
+BILLED TO
+Agoda
+NIGHTS
+3
+CHARGES
+₹12,022
+TAX
+₹601
+BALANCE
+-
+Issue
+
+Sneha Nair [DH]
+
+room 204 · DH-5EL-0694
+
+BILLED TO
+go-MMT
+NIGHTS
+1
+CHARGES
+₹3,575
+TAX
+₹179
+BALANCE
+-
+Issue
+
+Myra Reddy [DH]
+
+room 302 · DH-5EL-0683
+
+BILLED TO
+Expedia
+NIGHTS
+3
+CHARGES
+₹9,216
+TAX
+₹461
+BALANCE
+-
+Issue
+
+Zoya Kulkarni [DH]
+
+room 201 · DH-5EL-0687
+
+BILLED TO
+Zoya Kulkarni [DH]
+NIGHTS
+2
+CHARGES
+₹9,547
+TAX
+₹477
+BALANCE
+-
+Issue
+
+Arjun Sharma [DH]
+
+room 301 · DH-5EL-0686
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹6,993
+TAX
+₹350
+BALANCE
+-
+Issue
+
+Farhan Sheikh [DH]
+
+room 209 · DH-5EL-0691
+
+BILLED TO
+Booking.com
+NIGHTS
+2
+CHARGES
+₹6,724
+TAX
+₹336
+BALANCE
+-
+Issue
+
+Zoya Chatterjee [DH]
+
+room 210 · DH-5EL-0684
+
+BILLED TO
+Expedia
+NIGHTS
+3
+CHARGES
+₹13,663
+TAX
+₹683
+BALANCE
+-
+Issue
+
+Shaurya Khan [DH]
+
+room 205 · DH-5EL-0688
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹3,943
+TAX
+₹197
+BALANCE
+-
+Issue
+
+Rohan Patel [DH]
+
+room 306 · DH-5EL-0678
+
+BILLED TO
+Expedia
+NIGHTS
+3
+CHARGES
+₹11,796
+TAX
+₹590
+BALANCE
+-
+Issue
+
+Rahul Chatterjee [DH]
+
+room 207 · DH-5EL-0685
+
+BILLED TO
+go-MMT
+NIGHTS
+1
+CHARGES
+₹4,531
+TAX
+₹227
+BALANCE
+-
+Issue
+
+Arjun Pillai [DH]
+
+room 202 · DH-5EL-0682
+
+BILLED TO
+go-MMT
+NIGHTS
+1
+CHARGES
+₹3,379
+TAX
+₹169
+BALANCE
+-
+Issue
+
+Riya Mehta [DH]
+
+room 307 · DH-5EL-0670
+
+BILLED TO
+Booking.com
+NIGHTS
+3
+CHARGES
+₹10,959
+TAX
+₹548
+BALANCE
+-
+Issue
+
+Vihaan Khan [DH]
+
+room 303 · DH-5EL-0674
+
+BILLED TO
+Agoda
+NIGHTS
+3
+CHARGES
+₹10,558
+TAX
+₹528
+BALANCE
+-
+Issue
+
+Ishaan Khan [DH]
+
+room 203 · DH-5EL-0681
+
+BILLED TO
+Expedia
+NIGHTS
+1
+CHARGES
+₹4,751
+TAX
+₹238
+BALANCE
+-
+Issue
+
+Aadhya Shah [DH]
+
+room 207 · DH-5EL-0679
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹3,719
+TAX
+₹186
+BALANCE
+-
+Issue
+
+Farhan Menon [DH]
+
+room 205 · DH-5EL-0667
+
+BILLED TO
+Booking.com
+NIGHTS
+3
+CHARGES
+₹12,807
+TAX
+₹640
+BALANCE
+-
+Issue
+
+Aditya Shah [DH]
+
+room 301 · DH-5EL-0672
+
+BILLED TO
+Booking.com
+NIGHTS
+2
+CHARGES
+₹7,313
+TAX
+₹366
+BALANCE
+-
+Issue
+
+Krishna Rao [DH]
+
+room 301 · DH-5EL-0665
+
+BILLED TO
+Expedia
+NIGHTS
+3
+CHARGES
+₹11,376
+TAX
+₹569
+BALANCE
+-
+Issue
+
+Arjun Verma [DH]
+
+room 306 · DH-5EL-0673
+
+BILLED TO
+Expedia
+NIGHTS
+2
+CHARGES
+₹6,624
+TAX
+₹331
+BALANCE
+-
+Issue
+
+Reyansh Verma [DH]
+
+room 209 · DH-5EL-0680
+
+BILLED TO
+Expedia
+NIGHTS
+1
+CHARGES
+₹3,877
+TAX
+₹194
+BALANCE
+-
+Issue
+
+Imran Chatterjee [DH]
+
+room 210 · DH-5EL-0661
+
+BILLED TO
+Booking.com
+NIGHTS
+3
+CHARGES
+₹11,149
+TAX
+₹557
+BALANCE
+-
+Issue
+
+Nisha Sharma [DH]
+
+room 206 · DH-5EL-0676
+
+BILLED TO
+Nisha Sharma [DH]
+NIGHTS
+2
+CHARGES
+₹8,308
+TAX
+₹415
+BALANCE
+-
+Issue
+
+Zoya Joshi [DH]
+
+room 306 · DH-5EL-0664
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+3
+CHARGES
+₹9,947
+TAX
+₹497
+BALANCE
+-
+Issue
+
+Krishna Iyer [DH]
+
+room 301 · DH-5EL-0671
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹6,142
+TAX
+₹307
+BALANCE
+-
+Issue
+
+Meera Chatterjee [DH]
+
+room 207 · DH-5EL-0666
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹6,840
+TAX
+₹342
+BALANCE
+-
+Issue
+
+Vivaan Joshi [DH]
+
+room 306 · DH-5EL-0655
+
+BILLED TO
+Vivaan Joshi [DH]
+NIGHTS
+3
+CHARGES
+₹10,789
+TAX
+₹539
+BALANCE
+-
+Issue
+
+Meera Pillai [DH]
+
+room 205 · DH-5EL-0668
+
+BILLED TO
+Agoda
+NIGHTS
+2
+CHARGES
+₹7,639
+TAX
+₹382
+BALANCE
+-
+Issue
+
+Sara Iyer [DH]
+
+room 305 · DH-5EL-0652
+
+BILLED TO
+Booking.com
+NIGHTS
+3
+CHARGES
+₹11,299
+TAX
+₹565
+BALANCE
+-
+Issue
+
+Ira Kulkarni [DH]
+
+room 204 · DH-5EL-0677
+
+BILLED TO
+Ira Kulkarni [DH]
+NIGHTS
+1
+CHARGES
+₹4,275
+TAX
+₹214
+BALANCE
+-
+Issue
+
+Ishaan Deshmukh [DH]
+
+room 205 · DH-5EL-0675
+
+BILLED TO
+go-MMT
+NIGHTS
+1
+CHARGES
+₹4,127
+TAX
+₹206
+BALANCE
+-
+Issue
+
+Navya Khan [DH]
+
+room 206 · DH-5EL-0660
+
+BILLED TO
+Booking.com
+NIGHTS
+3
+CHARGES
+₹13,901
+TAX
+₹695
+BALANCE
+-
+Issue
+
+Meera Kulkarni [DH]
+
+room 308 · DH-5EL-0662
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹3,434
+TAX
+₹172
+BALANCE
+-
+Issue
+
+Rahul Deshmukh [DH]
+
+room 304 · DH-5EL-0651
+
+BILLED TO
+Booking.com
+NIGHTS
+3
+CHARGES
+₹11,766
+TAX
+₹588
+BALANCE
+-
+Issue
+
+Riya Gupta [DH]
+
+room 303 · DH-5EL-0659
+
+BILLED TO
+Agoda
+NIGHTS
+2
+CHARGES
+₹7,435
+TAX
+₹372
+BALANCE
+-
+Issue
+
+Imran Nair [DH]
+
+room 210 · DH-5EL-0658
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹6,832
+TAX
+₹342
+BALANCE
+-
+Issue
+
+Shaurya Verma [DH]
+
+room 308 · DH-5EL-0654
+
+BILLED TO
+Shaurya Verma [DH]
+NIGHTS
+2
+CHARGES
+₹6,955
+TAX
+₹348
+BALANCE
+-
+Issue
+
+Sneha Menon [DH]
+
+room 205 · DH-5EL-0653
+
+BILLED TO
+Booking.com
+NIGHTS
+2
+CHARGES
+₹7,158
+TAX
+₹358
+BALANCE
+-
+Issue
+
+Rahul Deshmukh [DH]
+
+room 205 · DH-5EL-0644
+
+BILLED TO
+Expedia
+NIGHTS
+3
+CHARGES
+₹12,284
+TAX
+₹614
+BALANCE
+-
+Issue
+
+Anika Nair [DH]
+
+room 203 · DH-5EL-0663
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹4,339
+TAX
+₹217
+BALANCE
+-
+Issue
+
+Diya Joshi [DH]
+
+room 206 · DH-5EL-0657
+
+BILLED TO
+Booking.com
+NIGHTS
+2
+CHARGES
+₹9,164
+TAX
+₹458
+BALANCE
+-
+Issue
+
+Kabir Sharma [DH]
+
+room 304 · DH-5EL-0669
+
+BILLED TO
+Booking.com
+NIGHTS
+1
+CHARGES
+₹3,829
+TAX
+₹191
+BALANCE
+-
+Issue
+
+Rohan Mehta [DH]
+
+room 302 · DH-5EL-0649
+
+BILLED TO
+go-MMT
+NIGHTS
+2
+CHARGES
+₹6,079
+TAX
+₹304
+BALANCE
+-
+Issue
+
+Imran Singh [DH]
+
+room 207 · DH-5EL-0647
+
+BILLED TO
+go-MMT
+NIGHTS
+2
+CHARGES
+₹7,270
+TAX
+₹363
+BALANCE
+-
+Issue
+
+Navya Sheikh [DH]
+
+room 207 · DH-5EL-0643
+
+BILLED TO
+Agoda
+NIGHTS
+2
+CHARGES
+₹7,347
+TAX
+₹367
+BALANCE
+-
+Issue
+
+Ananya Iyer [DH]
+
+room 301 · DH-5EL-0641
+
+BILLED TO
+Agoda
+NIGHTS
+3
+CHARGES
+₹12,987
+TAX
+₹649
+BALANCE
+-
+Issue
+
+Farhan Rao [DH]
+
+room 306 · DH-5EL-0640
+
+BILLED TO
+Agoda
+NIGHTS
+3
+CHARGES
+₹9,116
+TAX
+₹456
+BALANCE
+-
+Issue
+
+Ananya Khan [DH]
+
+room 304 · DH-5EL-0656
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹4,362
+TAX
+₹218
+BALANCE
+-
+Issue
+
+Zoya Rao [DH]
+
+room 302 · DH-5EL-0650
+
+BILLED TO
+Zoya Rao [DH]
+NIGHTS
+2
+CHARGES
+₹7,088
+TAX
+₹354
+BALANCE
+-
+Issue
+
+Meera Sharma [DH]
+
+room 308 · DH-5EL-0648
+
+BILLED TO
+Expedia
+NIGHTS
+1
+CHARGES
+₹4,297
+TAX
+₹215
+BALANCE
+-
+Issue
+
+Tanvi Sheikh [DH]
+
+room 307 · DH-5EL-0645
+
+BILLED TO
+Agoda
+NIGHTS
+1
+CHARGES
+₹3,294
+TAX
+₹165
+BALANCE
+-
+Issue
+
+Sara Rao [DH]
+
+room 207 · DH-5EL-0646
+
+BILLED TO
+Expedia
+NIGHTS
+1
+CHARGES
+₹3,866
+TAX
+₹193
+BALANCE
+-
+Issue
+
+Ananya Sheikh [DH]
+
+room 204 · DH-5EL-0632
+
+BILLED TO
+Agoda
+NIGHTS
+3
+CHARGES
+₹10,450
+TAX
+₹523
+BALANCE
+-
+Issue
+
+Shaurya Nair [DH]
+
+room 203 · DH-5EL-0638
+
+BILLED TO
+Booking.com
+NIGHTS
+1
+CHARGES
+₹4,217
+TAX
+₹211
+BALANCE
+-
+Issue
+
+Farhan Gupta [DH]
+
+room 201 · DH-5EL-0634
+
+BILLED TO
+Farhan Gupta [DH]
+NIGHTS
+3
+CHARGES
+₹10,206
+TAX
+₹510
+BALANCE
+-
+Issue
+
+Meera Deshmukh [DH]
+
+room 209 · DH-5EL-0642
+
+BILLED TO
+Expedia
+NIGHTS
+1
+CHARGES
+₹3,935
+TAX
+₹197
+BALANCE
+-
+Issue
+
+Aarav Reddy [DH]
+
+room 206 · DH-5EL-0633
+
+BILLED TO
+Aarav Reddy [DH]
+NIGHTS
+3
+CHARGES
+₹11,232
+TAX
+₹562
+BALANCE
+-
+Issue
+
+Rohan Kulkarni [DH]
+
+room 302 · DH-5EL-0636
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹8,517
+TAX
+₹426
+BALANCE
+-
+Issue
+
+Ananya Khan [DH]
+
+room 210 · DH-5EL-0639
+
+BILLED TO
+go-MMT
+NIGHTS
+1
+CHARGES
+₹3,503
+TAX
+₹175
+BALANCE
+-
+Issue
+
+Diya Singh [DH]
+
+room 206 · DH-5EL-0626
+
+BILLED TO
+Expedia
+NIGHTS
+3
+CHARGES
+₹11,625
+TAX
+₹581
+BALANCE
+-
+Issue
+
+Sara Gupta [DH]
+
+room 304 · DH-5EL-0630
+
+BILLED TO
+Booking.com
+NIGHTS
+3
+CHARGES
+₹12,896
+TAX
+₹645
+BALANCE
+-
+Issue
+
+Aarav Reddy [DH]
+
+room 208 · DH-5EL-0637
+
+BILLED TO
+Expedia
+NIGHTS
+1
+CHARGES
+₹4,039
+TAX
+₹202
+BALANCE
+-
+Issue
+
+Reyansh Pillai [DH]
+
+room 209 · DH-5EL-0635
+
+BILLED TO
+Reyansh Pillai [DH]
+NIGHTS
+1
+CHARGES
+₹4,541
+TAX
+₹227
+BALANCE
+-
+Issue
+
+Ira Pillai [DH]
+
+room 308 · DH-5EL-0627
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹8,713
+TAX
+₹436
+BALANCE
+-
+Issue
+
+Diya Patel [DH]
+
+room 206 · DH-5EL-0629
+
+BILLED TO
+Expedia
+NIGHTS
+2
+CHARGES
+₹7,426
+TAX
+₹371
+BALANCE
+-
+Issue
+
+Kavya Sheikh [DH]
+
+room 205 · DH-5EL-0631
+
+BILLED TO
+Expedia
+NIGHTS
+2
+CHARGES
+₹9,337
+TAX
+₹467
+BALANCE
+-
+Issue
+
+Vivaan Joshi [DH]
+
+room 308 · DH-5EL-0624
+
+BILLED TO
+Agoda
+NIGHTS
+2
+CHARGES
+₹6,936
+TAX
+₹347
+BALANCE
+-
+Issue
+
+Ananya Sheikh [DH]
+
+room 210 · DH-5EL-0625
+
+BILLED TO
+Expedia
+NIGHTS
+1
+CHARGES
+₹4,509
+TAX
+₹225
+BALANCE
+-
+Issue
+
+Imran Pillai [DH]
+
+room 301 · DH-5EL-0618
+
+BILLED TO
+Agoda
+NIGHTS
+2
+CHARGES
+₹8,303
+TAX
+₹415
+BALANCE
+-
+Issue
+
+Ira Singh [DH]
+
+room 209 · DH-5EL-0628
+
+BILLED TO
+Agoda
+NIGHTS
+1
+CHARGES
+₹3,713
+TAX
+₹186
+BALANCE
+-
+Issue
+
+Aarav Patel [DH]
+
+room 303 · DH-5EL-0614
+
+BILLED TO
+go-MMT
+NIGHTS
+3
+CHARGES
+₹9,132
+TAX
+₹457
+BALANCE
+-
+Issue
+
+Diya Joshi [DH]
+
+room 203 · DH-5EL-0623
+
+BILLED TO
+Booking.com
+NIGHTS
+1
+CHARGES
+₹3,806
+TAX
+₹190
+BALANCE
+-
+Issue
+
+Arjun Bose [DH]
+
+room 202 · DH-5EL-0608
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+3
+CHARGES
+₹14,168
+TAX
+₹708
+BALANCE
+-
+Issue
+
+Ayaan Singh [DH]
+
+room 206 · DH-5EL-0619
+
+BILLED TO
+Booking.com
+NIGHTS
+1
+CHARGES
+₹4,335
+TAX
+₹217
+BALANCE
+-
+Issue
+
+Imran Verma [DH]
+
+room 303 · DH-5EL-0622
+
+BILLED TO
+Booking.com
+NIGHTS
+1
+CHARGES
+₹4,007
+TAX
+₹200
+BALANCE
+-
+Issue
+
+Meera Bose [DH]
+
+room 209 · DH-5EL-0616
+
+BILLED TO
+Meera Bose [DH]
+NIGHTS
+2
+CHARGES
+₹8,034
+TAX
+₹402
+BALANCE
+-
+Issue
+
+Zoya Sharma [DH]
+
+room 208 · DH-5EL-0620
+
+BILLED TO
+Expedia
+NIGHTS
+1
+CHARGES
+₹4,824
+TAX
+₹241
+BALANCE
+-
+Issue
+
+Kabir Sharma [DH]
+
+room 208 · DH-5EL-0621
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹4,113
+TAX
+₹206
+BALANCE
+-
+Issue
+
+Ira Pillai [DH]
+
+room 207 · DH-5EL-0615
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹3,475
+TAX
+₹174
+BALANCE
+-
+Issue
+
+Meera Joshi [DH]
+
+room 307 · DH-5EL-0610
+
+BILLED TO
+Agoda
+NIGHTS
+2
+CHARGES
+₹6,819
+TAX
+₹341
+BALANCE
+-
+Issue
+
+Vivaan Pillai [DH]
+
+room 209 · DH-5EL-0609
+
+BILLED TO
+Booking.com
+NIGHTS
+2
+CHARGES
+₹7,850
+TAX
+₹393
+BALANCE
+-
+Issue
+
+Imran Shah [DH]
+
+room 308 · DH-5EL-0612
+
+BILLED TO
+go-MMT
+NIGHTS
+2
+CHARGES
+₹8,258
+TAX
+₹413
+BALANCE
+-
+Issue
+
+Meera Iyer [DH]
+
+room 209 · DH-5EL-0617
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹3,376
+TAX
+₹169
+BALANCE
+-
+Issue
+
+Reyansh Sheikh [DH]
+
+room 305 · DH-5EL-0599
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+3
+CHARGES
+₹12,651
+TAX
+₹633
+BALANCE
+-
+Issue
+
+Riya Bose [DH]
+
+room 304 · DH-5EL-0602
+
+BILLED TO
+Agoda
+NIGHTS
+2
+CHARGES
+₹6,171
+TAX
+₹309
+BALANCE
+-
+Issue
+
+Aditya Joshi [DH]
+
+room 204 · DH-5EL-0603
+
+BILLED TO
+Aditya Joshi [DH]
+NIGHTS
+2
+CHARGES
+₹9,482
+TAX
+₹474
+BALANCE
+-
+Issue
+
+Arjun Nair [DH]
+
+room 204 · DH-5EL-0611
+
+BILLED TO
+Agoda
+NIGHTS
+1
+CHARGES
+₹3,641
+TAX
+₹182
+BALANCE
+-
+Issue
+
+Aadhya Shah [DH]
+
+room 205 · DH-5EL-0596
+
+BILLED TO
+Expedia
+NIGHTS
+3
+CHARGES
+₹13,502
+TAX
+₹675
+BALANCE
+-
+Issue
+
+Krishna Bose [DH]
+
+room 205 · DH-5EL-0613
+
+BILLED TO
+go-MMT
+NIGHTS
+1
+CHARGES
+₹4,019
+TAX
+₹201
+BALANCE
+-
+Issue
+
+Ayaan Singh [DH]
+
+room 205 · DH-5EL-0592
+
+BILLED TO
+Agoda
+NIGHTS
+3
+CHARGES
+₹14,283
+TAX
+₹714
+BALANCE
+-
+Issue
+
+Shaurya Sheikh [DH]
+
+room 303 · DH-5EL-0601
+
+BILLED TO
+Agoda
+NIGHTS
+1
+CHARGES
+₹3,640
+TAX
+₹182
+BALANCE
+-
+Issue
+
+Sneha Joshi [DH]
+
+room 304 · DH-5EL-0604
+
+BILLED TO
+Sneha Joshi [DH]
+NIGHTS
+1
+CHARGES
+₹3,906
+TAX
+₹195
+BALANCE
+-
+Issue
+
+Nisha Singh [DH]
+
+room 306 · DH-5EL-0597
+
+BILLED TO
+go-MMT
+NIGHTS
+2
+CHARGES
+₹8,223
+TAX
+₹411
+BALANCE
+-
+Issue
+
+Shaurya Reddy [DH]
+
+room 303 · DH-5EL-0591
+
+BILLED TO
+Shaurya Reddy [DH]
+NIGHTS
+3
+CHARGES
+₹12,580
+TAX
+₹629
+BALANCE
+-
+Issue
+
+Rohan Mehta [DH]
+
+room 306 · DH-5EL-0589
+
+BILLED TO
+Booking.com
+NIGHTS
+3
+CHARGES
+₹9,715
+TAX
+₹486
+BALANCE
+-
+Issue
+
+Aadhya Sharma [DH]
+
+room 203 · DH-5EL-0600
+
+BILLED TO
+Agoda
+NIGHTS
+1
+CHARGES
+₹4,063
+TAX
+₹203
+BALANCE
+-
+Issue
+
+Diya Nair [DH]
+
+room 303 · DH-5EL-0587
+
+BILLED TO
+go-MMT
+NIGHTS
+3
+CHARGES
+₹9,742
+TAX
+₹487
+BALANCE
+-
+Issue
+
+Shaurya Joshi [DH]
+
+room 207 · DH-5EL-0606
+
+BILLED TO
+go-MMT
+NIGHTS
+1
+CHARGES
+₹3,884
+TAX
+₹194
+BALANCE
+-
+Issue
+
+Meera Mehta [DH]
+
+room 209 · DH-5EL-0595
+
+BILLED TO
+Agoda
+NIGHTS
+2
+CHARGES
+₹8,124
+TAX
+₹406
+BALANCE
+-
+Issue
+
+Meera Deshmukh [DH]
+
+room 301 · DH-5EL-0607
+
+BILLED TO
+Expedia
+NIGHTS
+1
+CHARGES
+₹3,484
+TAX
+₹174
+BALANCE
+-
+Issue
+
+Kavya Iyer [DH]
+
+room 201 · DH-5EL-0593
+
+BILLED TO
+Kavya Iyer [DH]
+NIGHTS
+2
+CHARGES
+₹8,099
+TAX
+₹405
+BALANCE
+-
+Issue
+
+Navya Gupta [DH]
+
+room 204 · DH-5EL-0605
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹4,360
+TAX
+₹218
+BALANCE
+-
+Issue
+
+Nisha Menon [DH]
+
+room 205 · DH-5EL-0581
+
+BILLED TO
+Expedia
+NIGHTS
+3
+CHARGES
+₹13,732
+TAX
+₹687
+BALANCE
+-
+Issue
+
+Nisha Nair [DH]
+
+room 206 · DH-5EL-0586
+
+BILLED TO
+Expedia
+NIGHTS
+2
+CHARGES
+₹8,490
+TAX
+₹425
+BALANCE
+-
+Issue
+
+Anika Reddy [DH]
+
+room 204 · DH-5EL-0584
+
+BILLED TO
+go-MMT
+NIGHTS
+3
+CHARGES
+₹10,731
+TAX
+₹537
+BALANCE
+-
+Issue
+
+Rohan Mehta [DH]
+
+room 308 · DH-5EL-0598
+
+BILLED TO
+Agoda
+NIGHTS
+1
+CHARGES
+₹3,526
+TAX
+₹176
+BALANCE
+-
+Issue
+
+Vihaan Reddy [DH]
+
+room 205 · DH-5EL-0585
+
+BILLED TO
+Booking.com
+NIGHTS
+3
+CHARGES
+₹11,856
+TAX
+₹593
+BALANCE
+-
+Issue
+
+Sara Khan [DH]
+
+room 305 · DH-5EL-0582
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+3
+CHARGES
+₹12,213
+TAX
+₹611
+BALANCE
+-
+Issue
+
+Rahul Bose [DH]
+
+room 204 · DH-5EL-0594
+
+BILLED TO
+Agoda
+NIGHTS
+1
+CHARGES
+₹4,041
+TAX
+₹202
+BALANCE
+-
+Issue
+
+Tanvi Iyer [DH]
+
+room 205 · DH-5EL-0580
+
+BILLED TO
+Booking.com
+NIGHTS
+2
+CHARGES
+₹8,491
+TAX
+₹425
+BALANCE
+-
+Issue
+
+Vihaan Verma [DH]
+
+room 303 · DH-5EL-0579
+
+BILLED TO
+Booking.com
+NIGHTS
+3
+CHARGES
+₹10,985
+TAX
+₹549
+BALANCE
+-
+Issue
+
+Kabir Pillai [DH]
+
+room 202 · DH-5EL-0588
+
+BILLED TO
+Kabir Pillai [DH]
+NIGHTS
+1
+CHARGES
+₹3,617
+TAX
+₹181
+BALANCE
+-
+Issue
+
+Ayaan Pillai [DH]
+
+room 201 · DH-5EL-0583
+
+BILLED TO
+Agoda
+NIGHTS
+2
+CHARGES
+₹7,736
+TAX
+₹387
+BALANCE
+-
+Issue
+
+Imran Nair [DH]
+
+room 202 · DH-5EL-0577
+
+BILLED TO
+Imran Nair [DH]
+NIGHTS
+3
+CHARGES
+₹13,776
+TAX
+₹689
+BALANCE
+-
+Issue
+
+Sneha Reddy [DH]
+
+room 304 · DH-5EL-0590
+
+BILLED TO
+Agoda
+NIGHTS
+1
+CHARGES
+₹4,124
+TAX
+₹206
+BALANCE
+-
+Issue
+
+Sara Reddy [DH]
+
+room 203 · DH-5EL-0572
+
+BILLED TO
+Agoda
+NIGHTS
+3
+CHARGES
+₹10,500
+TAX
+₹525
+BALANCE
+-
+Issue
+
+Riya Kulkarni [DH]
+
+room 302 · DH-5EL-0571
+
+BILLED TO
+Agoda
+NIGHTS
+2
+CHARGES
+₹6,217
+TAX
+₹311
+BALANCE
+-
+Issue
+
+Zoya Deshmukh [DH]
+
+room 210 · DH-5EL-0575
+
+BILLED TO
+Agoda
+NIGHTS
+1
+CHARGES
+₹4,317
+TAX
+₹216
+BALANCE
+-
+Issue
+
+Shaurya Patel [DH]
+
+room 305 · DH-5EL-0574
+
+BILLED TO
+Expedia
+NIGHTS
+2
+CHARGES
+₹7,273
+TAX
+₹364
+BALANCE
+-
+Issue
+
+Kavya Rao [DH]
+
+room 306 · DH-5EL-0576
+
+BILLED TO
+Booking.com
+NIGHTS
+1
+CHARGES
+₹3,182
+TAX
+₹159
+BALANCE
+-
+Issue
+
+Zoya Sharma [DH]
+
+room 304 · DH-5EL-0578
+
+BILLED TO
+go-MMT
+NIGHTS
+1
+CHARGES
+₹3,288
+TAX
+₹164
+BALANCE
+-
+Issue
+
+Ishaan Shah [DH]
+
+room 303 · DH-5EL-0568
+
+BILLED TO
+Agoda
+NIGHTS
+3
+CHARGES
+₹9,288
+TAX
+₹464
+BALANCE
+-
+Issue
+
+Zoya Menon [DH]
+
+room 307 · DH-5EL-0567
+
+BILLED TO
+Agoda
+NIGHTS
+3
+CHARGES
+₹11,412
+TAX
+₹571
+BALANCE
+-
+Issue
+
+Reyansh Kulkarni [DH]
+
+room 206 · DH-5EL-0573
+
+BILLED TO
+Agoda
+NIGHTS
+1
+CHARGES
+₹4,804
+TAX
+₹240
+BALANCE
+-
+Issue
+
+Ayaan Joshi [DH]
+
+room 302 · DH-5EL-0562
+
+BILLED TO
+Ayaan Joshi [DH]
+NIGHTS
+2
+CHARGES
+₹6,996
+TAX
+₹350
+BALANCE
+-
+Issue
+
+Ira Mehta [DH]
+
+room 203 · DH-5EL-0559
+
+BILLED TO
+Expedia
+NIGHTS
+3
+CHARGES
+₹12,352
+TAX
+₹618
+BALANCE
+-
+Issue
+
+Diya Deshmukh [DH]
+
+room 305 · DH-5EL-0563
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹6,814
+TAX
+₹341
+BALANCE
+-
+Issue
+
+Sneha Menon [DH]
+
+room 210 · DH-5EL-0570
+
+BILLED TO
+Sneha Menon [DH]
+NIGHTS
+1
+CHARGES
+₹3,601
+TAX
+₹180
+BALANCE
+-
+Issue
+
+Anika Sheikh [DH]
+
+room 307 · DH-5EL-0561
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹6,098
+TAX
+₹305
+BALANCE
+-
+Issue
+
+Nisha Khan [DH]
+
+room 306 · DH-5EL-0565
+
+BILLED TO
+Agoda
+NIGHTS
+2
+CHARGES
+₹8,050
+TAX
+₹403
+BALANCE
+-
+Issue
+
+Riya Pillai [DH]
+
+room 306 · DH-5EL-0557
+
+BILLED TO
+Expedia
+NIGHTS
+3
+CHARGES
+₹11,372
+TAX
+₹569
+BALANCE
+-
+Issue
+
+Diya Iyer [DH]
+
+room 204 · DH-5EL-0569
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹4,616
+TAX
+₹231
+BALANCE
+-
+Issue
+
+Ishaan Gupta [DH]
+
+room 210 · DH-5EL-0552
+
+BILLED TO
+Agoda
+NIGHTS
+3
+CHARGES
+₹11,436
+TAX
+₹572
+BALANCE
+-
+Issue
+
+Myra Iyer [DH]
+
+room 206 · DH-5EL-0566
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹4,084
+TAX
+₹204
+BALANCE
+-
+Issue
+
+Diya Iyer [DH]
+
+room 301 · DH-5EL-0550
+
+BILLED TO
+Booking.com
+NIGHTS
+3
+CHARGES
+₹12,150
+TAX
+₹608
+BALANCE
+-
+Issue
+
+Aadhya Singh [DH]
+
+room 302 · DH-5EL-0560
+
+BILLED TO
+Aadhya Singh [DH]
+NIGHTS
+1
+CHARGES
+₹3,473
+TAX
+₹174
+BALANCE
+-
+Issue
+
+Tanvi Menon [DH]
+
+room 301 · DH-5EL-0564
+
+BILLED TO
+Agoda
+NIGHTS
+1
+CHARGES
+₹3,192
+TAX
+₹160
+BALANCE
+-
+Issue
+
+Aarav Khan [DH]
+
+room 307 · DH-5EL-0556
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹3,064
+TAX
+₹153
+BALANCE
+-
+Issue
+
+Meera Gupta [DH]
+
+room 203 · DH-5EL-0541
+
+BILLED TO
+Booking.com
+NIGHTS
+3
+CHARGES
+₹11,719
+TAX
+₹586
+BALANCE
+-
+Issue
+
+Aditya Pillai [DH]
+
+room 301 · DH-5EL-0553
+
+BILLED TO
+go-MMT
+NIGHTS
+2
+CHARGES
+₹6,277
+TAX
+₹314
+BALANCE
+-
+Issue
+
+Zoya Menon [DH]
+
+room 306 · DH-5EL-0554
+
+BILLED TO
+Expedia
+NIGHTS
+2
+CHARGES
+₹8,375
+TAX
+₹419
+BALANCE
+-
+Issue
+
+Imran Joshi [DH]
+
+room 204 · DH-5EL-0555
+
+BILLED TO
+Agoda
+NIGHTS
+1
+CHARGES
+₹4,814
+TAX
+₹241
+BALANCE
+-
+Issue
+
+Ananya Reddy [DH]
+
+room 203 · DH-5EL-0558
+
+BILLED TO
+Ananya Reddy [DH]
+NIGHTS
+1
+CHARGES
+₹4,018
+TAX
+₹201
+BALANCE
+-
+Issue
+
+Vivaan Singh [DH]
+
+room 305 · DH-5EL-0540
+
+BILLED TO
+Booking.com
+NIGHTS
+3
+CHARGES
+₹11,151
+TAX
+₹558
+BALANCE
+-
+Issue
+
+Navya Patel [DH]
+
+room 307 · DH-5EL-0548
+
+BILLED TO
+Expedia
+NIGHTS
+2
+CHARGES
+₹6,324
+TAX
+₹316
+BALANCE
+-
+Issue
+
+Aditya Khan [DH]
+
+room 208 · DH-5EL-0551
+
+BILLED TO
+go-MMT
+NIGHTS
+2
+CHARGES
+₹7,894
+TAX
+₹395
+BALANCE
+-
+Issue
+
+Sara Mehta [DH]
+
+room 302 · DH-5EL-0542
+
+BILLED TO
+Booking.com
+NIGHTS
+3
+CHARGES
+₹11,367
+TAX
+₹568
+BALANCE
+-
+Issue
+
+Navya Verma [DH]
+
+room 307 · DH-5EL-0549
+
+BILLED TO
+Expedia
+NIGHTS
+1
+CHARGES
+₹3,862
+TAX
+₹193
+BALANCE
+-
+Issue
+
+Vihaan Verma [DH]
+
+room 304 · DH-5EL-0535
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+3
+CHARGES
+₹10,892
+TAX
+₹545
+BALANCE
+-
+Issue
+
+Zoya Chatterjee [DH]
+
+room 207 · DH-5EL-0544
+
+BILLED TO
+Agoda
+NIGHTS
+2
+CHARGES
+₹8,062
+TAX
+₹403
+BALANCE
+-
+Issue
+
+Vivaan Sheikh [DH]
+
+room 303 · DH-5EL-0545
+
+BILLED TO
+Agoda
+NIGHTS
+2
+CHARGES
+₹6,636
+TAX
+₹332
+BALANCE
+-
+Issue
+
+Reyansh Reddy [DH]
+
+room 207 · DH-5EL-0547
+
+BILLED TO
+Reyansh Reddy [DH]
+NIGHTS
+2
+CHARGES
+₹8,793
+TAX
+₹440
+BALANCE
+-
+Issue
+
+Kabir Bose [DH]
+
+room 201 · DH-5EL-0529
+
+BILLED TO
+go-MMT
+NIGHTS
+3
+CHARGES
+₹11,989
+TAX
+₹599
+BALANCE
+-
+Issue
+
+Navya Joshi [DH]
+
+room 302 · DH-5EL-0546
+
+BILLED TO
+Booking.com
+NIGHTS
+1
+CHARGES
+₹3,470
+TAX
+₹174
+BALANCE
+-
+Issue
+
+Ishaan Reddy [DH]
+
+room 302 · DH-5EL-0539
+
+BILLED TO
+Ishaan Reddy [DH]
+NIGHTS
+2
+CHARGES
+₹8,376
+TAX
+₹419
+BALANCE
+-
+Issue
+
+Farhan Bose [DH]
+
+room 201 · DH-5EL-0532
+
+BILLED TO
+Farhan Bose [DH]
+NIGHTS
+3
+CHARGES
+₹11,080
+TAX
+₹554
+BALANCE
+-
+Issue
+
+Vivaan Iyer [DH]
+
+room 301 · DH-5EL-0534
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹8,403
+TAX
+₹420
+BALANCE
+-
+Issue
+
+Ananya Reddy [DH]
+
+room 307 · DH-5EL-0536
+
+BILLED TO
+Agoda
+NIGHTS
+2
+CHARGES
+₹7,136
+TAX
+₹357
+BALANCE
+-
+Issue
+
+Krishna Iyer [DH]
+
+room 302 · DH-5EL-0543
+
+BILLED TO
+Booking.com
+NIGHTS
+1
+CHARGES
+₹3,846
+TAX
+₹192
+BALANCE
+-
+Issue
+
+Sara Menon [DH]
+
+room 205 · DH-5EL-0530
+
+BILLED TO
+Expedia
+NIGHTS
+2
+CHARGES
+₹8,478
+TAX
+₹424
+BALANCE
+-
+Issue
+
+Diya Kulkarni [DH]
+
+room 201 · DH-5EL-0527
+
+BILLED TO
+go-MMT
+NIGHTS
+2
+CHARGES
+₹9,040
+TAX
+₹452
+BALANCE
+-
+Issue
+
+Ira Gupta [DH]
+
+room 209 · DH-5EL-0528
+
+BILLED TO
+Ira Gupta [DH]
+NIGHTS
+2
+CHARGES
+₹8,886
+TAX
+₹444
+BALANCE
+-
+Issue
+
+Reyansh Khan [DH]
+
+room 301 · DH-5EL-0524
+
+BILLED TO
+Agoda
+NIGHTS
+3
+CHARGES
+₹10,220
+TAX
+₹511
+BALANCE
+-
+Issue
+
+Diya Patel [DH]
+
+room 201 · DH-5EL-0522
+
+BILLED TO
+Agoda
+NIGHTS
+3
+CHARGES
+₹10,520
+TAX
+₹526
+BALANCE
+-
+Issue
+
+Arjun Menon [DH]
+
+room 202 · DH-5EL-0537
+
+BILLED TO
+Agoda
+NIGHTS
+1
+CHARGES
+₹3,363
+TAX
+₹168
+BALANCE
+-
+Issue
+
+Aarav Nair [DH]
+
+room 202 · DH-5EL-0538
+
+BILLED TO
+go-MMT
+NIGHTS
+1
+CHARGES
+₹4,100
+TAX
+₹205
+BALANCE
+-
+Issue
+
+Arjun Iyer [DH]
+
+room 210 · DH-5EL-0521
+
+BILLED TO
+Booking.com
+NIGHTS
+2
+CHARGES
+₹9,061
+TAX
+₹453
+BALANCE
+-
+Issue
+
+Kabir Iyer [DH]
+
+room 308 · DH-5EL-0533
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹3,066
+TAX
+₹153
+BALANCE
+-
+Issue
+
+Zoya Patel [DH]
+
+room 304 · DH-5EL-0525
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹7,752
+TAX
+₹388
+BALANCE
+-
+Issue
+
+Tanvi Iyer [DH]
+
+room 206 · DH-5EL-0520
+
+BILLED TO
+Booking.com
+NIGHTS
+2
+CHARGES
+₹8,405
+TAX
+₹420
+BALANCE
+-
+Issue
+
+Anika Pillai [DH]
+
+room 201 · DH-5EL-0531
+
+BILLED TO
+Booking.com
+NIGHTS
+1
+CHARGES
+₹4,339
+TAX
+₹217
+BALANCE
+-
+Issue
+
+Vihaan Menon [DH]
+
+room 202 · DH-5EL-0526
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹3,502
+TAX
+₹175
+BALANCE
+-
+Issue
+
+Vivaan Pillai [DH]
+
+room 301 · DH-5EL-0507
+
+BILLED TO
+Booking.com
+NIGHTS
+3
+CHARGES
+₹11,378
+TAX
+₹569
+BALANCE
+-
+Issue
+
+Farhan Reddy [DH]
+
+room 207 · DH-5EL-0514
+
+BILLED TO
+Expedia
+NIGHTS
+2
+CHARGES
+₹6,927
+TAX
+₹346
+BALANCE
+-
+Issue
+
+Reyansh Sharma [DH]
+
+room 206 · DH-5EL-0517
+
+BILLED TO
+Expedia
+NIGHTS
+2
+CHARGES
+₹8,691
+TAX
+₹435
+BALANCE
+-
+Issue
+
+Vihaan Singh [DH]
+
+room 301 · DH-5EL-0519
+
+BILLED TO
+Expedia
+NIGHTS
+2
+CHARGES
+₹8,503
+TAX
+₹425
+BALANCE
+-
+Issue
+
+Ananya Verma [DH]
+
+room 204 · DH-5EL-0518
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹9,067
+TAX
+₹453
+BALANCE
+-
+Issue
+
+Ayaan Kulkarni [DH]
+
+room 306 · DH-5EL-0523
+
+BILLED TO
+Booking.com
+NIGHTS
+1
+CHARGES
+₹3,114
+TAX
+₹156
+BALANCE
+-
+Issue
+
+Aditya Bose [DH]
+
+room 306 · DH-5EL-0506
+
+BILLED TO
+go-MMT
+NIGHTS
+3
+CHARGES
+₹9,155
+TAX
+₹458
+BALANCE
+-
+Issue
+
+Diya Khan [DH]
+
+room 303 · DH-5EL-0513
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹3,327
+TAX
+₹166
+BALANCE
+-
+Issue
+
+Aadhya Kulkarni [DH]
+
+room 205 · DH-5EL-0516
+
+BILLED TO
+Expedia
+NIGHTS
+1
+CHARGES
+₹4,806
+TAX
+₹240
+BALANCE
+-
+Issue
+
+Nisha Reddy [DH]
+
+room 201 · DH-5EL-0515
+
+BILLED TO
+go-MMT
+NIGHTS
+1
+CHARGES
+₹4,277
+TAX
+₹214
+BALANCE
+-
+Issue
+
+Ishaan Pillai [DH]
+
+room 209 · DH-5EL-0500
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+3
+CHARGES
+₹12,460
+TAX
+₹623
+BALANCE
+-
+Issue
+
+Ishaan Deshmukh [DH]
+
+room 208 · DH-5EL-0501
+
+BILLED TO
+go-MMT
+NIGHTS
+3
+CHARGES
+₹14,376
+TAX
+₹719
+BALANCE
+-
+Issue
+
+Kavya Joshi [DH]
+
+room 204 · DH-5EL-0509
+
+BILLED TO
+Booking.com
+NIGHTS
+2
+CHARGES
+₹9,089
+TAX
+₹454
+BALANCE
+-
+Issue
+
+Farhan Sharma [DH]
+
+room 301 · DH-5EL-0512
+
+BILLED TO
+go-MMT
+NIGHTS
+1
+CHARGES
+₹3,117
+TAX
+₹156
+BALANCE
+-
+Issue
+
+Meera Sharma [DH]
+
+room 307 · DH-5EL-0508
+
+BILLED TO
+go-MMT
+NIGHTS
+1
+CHARGES
+₹3,145
+TAX
+₹157
+BALANCE
+-
+Issue
+
+Anika Joshi [DH]
+
+room 202 · DH-5EL-0503
+
+BILLED TO
+Anika Joshi [DH]
+NIGHTS
+2
+CHARGES
+₹7,625
+TAX
+₹381
+BALANCE
+-
+Issue
+
+Tanvi Menon [DH]
+
+room 307 · DH-5EL-0498
+
+BILLED TO
+Expedia
+NIGHTS
+2
+CHARGES
+₹6,782
+TAX
+₹339
+BALANCE
+-
+Issue
+
+Rahul Sheikh [DH]
+
+room 303 · DH-5EL-0505
+
+BILLED TO
+go-MMT
+NIGHTS
+1
+CHARGES
+₹3,805
+TAX
+₹190
+BALANCE
+-
+Issue
+
+Kabir Reddy [DH]
+
+room 305 · DH-5EL-0510
+
+BILLED TO
+Booking.com
+NIGHTS
+1
+CHARGES
+₹4,352
+TAX
+₹218
+BALANCE
+-
+Issue
+
+Kabir Chatterjee [DH]
+
+room 306 · DH-5EL-0511
+
+BILLED TO
+Kabir Chatterjee [DH]
+NIGHTS
+1
+CHARGES
+₹3,677
+TAX
+₹184
+BALANCE
+-
+Issue
+
+Meera Joshi [DH]
+
+room 210 · DH-5EL-0490
+
+BILLED TO
+go-MMT
+NIGHTS
+3
+CHARGES
+₹12,645
+TAX
+₹632
+BALANCE
+-
+Issue
+
+Aadhya Reddy [DH]
+
+room 308 · DH-5EL-0496
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹8,097
+TAX
+₹405
+BALANCE
+-
+Issue
+
+Nisha Gupta [DH]
+
+room 204 · DH-5EL-0502
+
+BILLED TO
+Nisha Gupta [DH]
+NIGHTS
+1
+CHARGES
+₹4,582
+TAX
+₹229
+BALANCE
+-
+Issue
+
+Farhan Patel [DH]
+
+room 204 · DH-5EL-0504
+
+BILLED TO
+Booking.com
+NIGHTS
+1
+CHARGES
+₹3,981
+TAX
+₹199
+BALANCE
+-
+Issue
+
+Navya Deshmukh [DH]
+
+room 208 · DH-5EL-0492
+
+BILLED TO
+Navya Deshmukh [DH]
+NIGHTS
+3
+CHARGES
+₹13,395
+TAX
+₹670
+BALANCE
+-
+Issue
+
+Riya Khan [DH]
+
+room 208 · DH-5EL-0499
+
+BILLED TO
+Riya Khan [DH]
+NIGHTS
+1
+CHARGES
+₹4,228
+TAX
+₹211
+BALANCE
+-
+Issue
+
+Farhan Iyer [DH]
+
+room 303 · DH-5EL-0489
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+3
+CHARGES
+₹9,268
+TAX
+₹463
+BALANCE
+-
+Issue
+
+Imran Sharma [DH]
+
+room 308 · DH-5EL-0493
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+3
+CHARGES
+₹12,957
+TAX
+₹648
+BALANCE
+-
+Issue
+
+Aarav Chatterjee [DH]
+
+room 301 · DH-5EL-0497
+
+BILLED TO
+Aarav Chatterjee [DH]
+NIGHTS
+1
+CHARGES
+₹3,078
+TAX
+₹154
+BALANCE
+-
+Issue
+
+Anika Kulkarni [DH]
+
+room 209 · DH-5EL-0488
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹8,497
+TAX
+₹425
+BALANCE
+-
+Issue
+
+Zoya Joshi [DH]
+
+room 304 · DH-5EL-0480
+
+BILLED TO
+Zoya Joshi [DH]
+NIGHTS
+3
+CHARGES
+₹10,556
+TAX
+₹528
+BALANCE
+-
+Issue
+
+Rahul Patel [DH]
+
+room 204 · DH-5EL-0483
+
+BILLED TO
+Booking.com
+NIGHTS
+3
+CHARGES
+₹11,083
+TAX
+₹554
+BALANCE
+-
+Issue
+
+Aadhya Singh [DH]
+
+room 204 · DH-5EL-0479
+
+BILLED TO
+Booking.com
+NIGHTS
+3
+CHARGES
+₹11,001
+TAX
+₹550
+BALANCE
+-
+Issue
+
+Vihaan Gupta [DH]
+
+room 201 · DH-5EL-0491
+
+BILLED TO
+Booking.com
+NIGHTS
+2
+CHARGES
+₹6,792
+TAX
+₹340
+BALANCE
+-
+Issue
+
+Tanvi Gupta [DH]
+
+room 303 · DH-5EL-0495
+
+BILLED TO
+Expedia
+NIGHTS
+1
+CHARGES
+₹3,656
+TAX
+₹183
+BALANCE
+-
+Issue
+
+Ayaan Bose [DH]
+
+room 207 · DH-5EL-0484
+
+BILLED TO
+Expedia
+NIGHTS
+2
+CHARGES
+₹8,665
+TAX
+₹433
+BALANCE
+-
+Issue
+
+Arjun Nair [DH]
+
+room 207 · DH-5EL-0486
+
+BILLED TO
+Agoda
+NIGHTS
+2
+CHARGES
+₹7,643
+TAX
+₹382
+BALANCE
+-
+Issue
+
+Tanvi Sheikh [DH]
+
+room 210 · DH-5EL-0476
+
+BILLED TO
+Expedia
+NIGHTS
+3
+CHARGES
+₹12,847
+TAX
+₹642
+BALANCE
+-
+Issue
+
+Kabir Sheikh [DH]
+
+room 201 · DH-5EL-0494
+
+BILLED TO
+go-MMT
+NIGHTS
+1
+CHARGES
+₹3,708
+TAX
+₹185
+BALANCE
+-
+Issue
+
+Vihaan Singh [DH]
+
+room 302 · DH-5EL-0481
+
+BILLED TO
+Agoda
+NIGHTS
+2
+CHARGES
+₹6,557
+TAX
+₹328
+BALANCE
+-
+Issue
+
+Farhan Patel [DH]
+
+room 201 · DH-5EL-0485
+
+BILLED TO
+Agoda
+NIGHTS
+2
+CHARGES
+₹8,926
+TAX
+₹446
+BALANCE
+-
+Issue
+
+Reyansh Iyer [DH]
+
+room 201 · DH-5EL-0487
+
+BILLED TO
+go-MMT
+NIGHTS
+2
+CHARGES
+₹8,078
+TAX
+₹404
+BALANCE
+-
+Issue
+
+Shaurya Patel [DH]
+
+room 210 · DH-5EL-0478
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+3
+CHARGES
+₹12,470
+TAX
+₹623
+BALANCE
+-
+Issue
+
+Imran Reddy [DH]
+
+room 205 · DH-5EL-0482
+
+BILLED TO
+Expedia
+NIGHTS
+1
+CHARGES
+₹4,502
+TAX
+₹225
+BALANCE
+-
+Issue
+
+Sneha Rao [DH]
+
+room 205 · DH-5EL-0477
+
+BILLED TO
+Booking.com
+NIGHTS
+2
+CHARGES
+₹9,562
+TAX
+₹478
+BALANCE
+-
+Issue
+
+Reyansh Kulkarni [DH]
+
+room 201 · DH-5EL-0463
+
+BILLED TO
+go-MMT
+NIGHTS
+3
+CHARGES
+₹11,244
+TAX
+₹562
+BALANCE
+-
+Issue
+
+Ayaan Mehta [DH]
+
+room 207 · DH-5EL-0474
+
+BILLED TO
+Expedia
+NIGHTS
+1
+CHARGES
+₹3,862
+TAX
+₹193
+BALANCE
+-
+Issue
+
+Kavya Sharma [DH]
+
+room 207 · DH-5EL-0475
+
+BILLED TO
+Kavya Sharma [DH]
+NIGHTS
+1
+CHARGES
+₹4,744
+TAX
+₹237
+BALANCE
+-
+Issue
+
+Ira Nair [DH]
+
+room 307 · DH-5EL-0473
+
+BILLED TO
+go-MMT
+NIGHTS
+2
+CHARGES
+₹6,427
+TAX
+₹321
+BALANCE
+-
+Issue
+
+Arjun Bose [DH]
+
+room 302 · DH-5EL-0471
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹7,340
+TAX
+₹367
+BALANCE
+-
+Issue
+
+Riya Singh [DH]
+
+room 206 · DH-5EL-0466
+
+BILLED TO
+Agoda
+NIGHTS
+3
+CHARGES
+₹10,323
+TAX
+₹516
+BALANCE
+-
+Issue
+
+Farhan Sharma [DH]
+
+room 201 · DH-5EL-0467
+
+BILLED TO
+Agoda
+NIGHTS
+2
+CHARGES
+₹7,485
+TAX
+₹374
+BALANCE
+-
+Issue
+
+Ishaan Nair [DH]
+
+room 210 · DH-5EL-0470
+
+BILLED TO
+Ishaan Nair [DH]
+NIGHTS
+1
+CHARGES
+₹4,249
+TAX
+₹212
+BALANCE
+-
+5EL/2026-27/00011
+
+Ayaan Joshi [DH]
+
+room 201 · DH-5EL-0457
+
+BILLED TO
+go-MMT
+NIGHTS
+3
+CHARGES
+₹14,251
+TAX
+₹713
+BALANCE
+-
+Issue
+
+Sara Gupta [DH]
+
+room 210 · DH-5EL-0461
+
+BILLED TO
+Agoda
+NIGHTS
+2
+CHARGES
+₹6,900
+TAX
+₹345
+BALANCE
+-
+Issue
+
+Aarav Nair [DH]
+
+room 207 · DH-5EL-0472
+
+BILLED TO
+go-MMT
+NIGHTS
+1
+CHARGES
+₹4,049
+TAX
+₹202
+BALANCE
+-
+Issue
+
+Vivaan Sharma [DH]
+
+room 306 · DH-5EL-0468
+
+BILLED TO
+Expedia
+NIGHTS
+2
+CHARGES
+₹6,385
+TAX
+₹319
+BALANCE
+-
+Issue
+
+Anika Patel [DH]
+
+room 305 · DH-5EL-0459
+
+BILLED TO
+Anika Patel [DH]
+NIGHTS
+3
+CHARGES
+₹11,895
+TAX
+₹595
+BALANCE
+-
+Issue
+
+Vihaan Kulkarni [DH]
+
+room 208 · DH-5EL-0464
+
+BILLED TO
+Booking.com
+NIGHTS
+1
+CHARGES
+₹3,643
+TAX
+₹182
+BALANCE
+-
+Issue
+
+Anika Singh [DH]
+
+room 308 · DH-5EL-0456
+
+BILLED TO
+Expedia
+NIGHTS
+3
+CHARGES
+₹9,196
+TAX
+₹460
+BALANCE
+-
+Issue
+
+Shaurya Joshi [DH]
+
+room 303 · DH-5EL-0449
+
+BILLED TO
+Expedia
+NIGHTS
+3
+CHARGES
+₹9,428
+TAX
+₹471
+BALANCE
+-
+Issue
+
+Imran Pillai [DH]
+
+room 302 · DH-5EL-0465
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹3,463
+TAX
+₹173
+BALANCE
+-
+Issue
+
+Tanvi Rao [DH]
+
+room 203 · DH-5EL-0453
+
+BILLED TO
+Agoda
+NIGHTS
+3
+CHARGES
+₹12,368
+TAX
+₹618
+BALANCE
+-
+Issue
+
+Meera Shah [DH]
+
+room 208 · DH-5EL-0462
+
+BILLED TO
+Booking.com
+NIGHTS
+1
+CHARGES
+₹3,616
+TAX
+₹181
+BALANCE
+-
+Issue
+
+Aarav Rao [DH]
+
+room 204 · DH-5EL-0458
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹9,332
+TAX
+₹467
+BALANCE
+-
+Issue
+
+Sneha Bose [DH]
+
+room 308 · DH-5EL-0469
+
+BILLED TO
+Booking.com
+NIGHTS
+1
+CHARGES
+₹3,568
+TAX
+₹178
+BALANCE
+-
+Issue
+
+Vivaan Sheikh [DH]
+
+room 210 · DH-5EL-0445
+
+BILLED TO
+Vivaan Sheikh [DH]
+NIGHTS
+3
+CHARGES
+₹12,726
+TAX
+₹636
+BALANCE
+-
+Issue
+
+Imran Pillai [DH]
+
+room 303 · DH-5EL-0454
+
+BILLED TO
+Expedia
+NIGHTS
+2
+CHARGES
+₹7,526
+TAX
+₹376
+BALANCE
+-
+Issue
+
+Reyansh Nair [DH]
+
+room 202 · DH-5EL-0460
+
+BILLED TO
+go-MMT
+NIGHTS
+1
+CHARGES
+₹4,090
+TAX
+₹204
+BALANCE
+-
+Issue
+
+Anika Iyer [DH]
+
+room 208 · DH-5EL-0451
+
+BILLED TO
+Booking.com
+NIGHTS
+2
+CHARGES
+₹7,611
+TAX
+₹381
+BALANCE
+-
+Issue
+
+Ayaan Singh [DH]
+
+room 205 · DH-5EL-0448
+
+BILLED TO
+Ayaan Singh [DH]
+NIGHTS
+1
+CHARGES
+₹4,569
+TAX
+₹228
+BALANCE
+-
+5EL/2026-27/00010
+
+Riya Menon [DH]
+
+room 205 · DH-5EL-0444
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹8,101
+TAX
+₹405
+BALANCE
+-
+Issue
+
+Aadhya Patel [DH]
+
+room 308 · DH-5EL-0455
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹4,093
+TAX
+₹205
+BALANCE
+-
+Issue
+
+Rahul Bose [DH]
+
+room 203 · DH-5EL-0441
+
+BILLED TO
+go-MMT
+NIGHTS
+3
+CHARGES
+₹12,702
+TAX
+₹635
+BALANCE
+-
+Issue
+
+Aditya Pillai [DH]
+
+room 301 · DH-5EL-0440
+
+BILLED TO
+go-MMT
+NIGHTS
+3
+CHARGES
+₹12,340
+TAX
+₹617
+BALANCE
+-
+Issue
+
+Aditya Menon [DH]
+
+room 304 · DH-5EL-0450
+
+BILLED TO
+Agoda
+NIGHTS
+1
+CHARGES
+₹3,688
+TAX
+₹184
+BALANCE
+-
+Issue
+
+Aarav Patel [DH]
+
+room 307 · DH-5EL-0446
+
+BILLED TO
+Aarav Patel [DH]
+NIGHTS
+2
+CHARGES
+₹6,822
+TAX
+₹341
+BALANCE
+-
+Issue
+
+Myra Khan [DH]
+
+room 205 · DH-5EL-0452
+
+BILLED TO
+go-MMT
+NIGHTS
+1
+CHARGES
+₹4,517
+TAX
+₹226
+BALANCE
+-
+Issue
+
+Kavya Khan [DH]
+
+room 209 · DH-5EL-0442
+
+BILLED TO
+Booking.com
+NIGHTS
+2
+CHARGES
+₹7,823
+TAX
+₹391
+BALANCE
+-
+Issue
+
+Meera Sharma [DH]
+
+room 203 · DH-5EL-0437
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+3
+CHARGES
+₹13,535
+TAX
+₹677
+BALANCE
+-
+Issue
+
+Kabir Sheikh [DH]
+
+room 201 · DH-5EL-0447
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹4,481
+TAX
+₹224
+BALANCE
+-
+Issue
+
+Kabir Sheikh [DH]
+
+room 303 · DH-5EL-0443
+
+BILLED TO
+go-MMT
+NIGHTS
+1
+CHARGES
+₹4,364
+TAX
+₹218
+BALANCE
+-
+Issue
+
+Meera Gupta [DH]
+
+room 210 · DH-5EL-0434
+
+BILLED TO
+go-MMT
+NIGHTS
+3
+CHARGES
+₹14,397
+TAX
+₹720
+BALANCE
+-
+Issue
+
+Myra Singh [DH]
+
+room 304 · DH-5EL-0438
+
+BILLED TO
+Myra Singh [DH]
+NIGHTS
+2
+CHARGES
+₹6,130
+TAX
+₹306
+BALANCE
+-
+Issue
+
+Navya Mehta [DH]
+
+room 205 · DH-5EL-0432
+
+BILLED TO
+Booking.com
+NIGHTS
+3
+CHARGES
+₹13,447
+TAX
+₹672
+BALANCE
+-
+Issue
+
+Imran Menon [DH]
+
+room 202 · DH-5EL-0439
+
+BILLED TO
+Agoda
+NIGHTS
+1
+CHARGES
+₹4,599
+TAX
+₹230
+BALANCE
+-
+Issue
+
+Sara Shah [DH]
+
+room 303 · DH-5EL-0436
+
+BILLED TO
+Agoda
+NIGHTS
+2
+CHARGES
+₹7,881
+TAX
+₹394
+BALANCE
+-
+Issue
+
+Reyansh Rao [DH]
+
+room 308 · DH-5EL-0431
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹7,919
+TAX
+₹396
+BALANCE
+-
+Issue
+
+Myra Sheikh [DH]
+
+room 307 · DH-5EL-0428
+
+BILLED TO
+Expedia
+NIGHTS
+3
+CHARGES
+₹12,612
+TAX
+₹631
+BALANCE
+-
+Issue
+
+Zoya Kulkarni [DH]
+
+room 307 · DH-5EL-0425
+
+BILLED TO
+Zoya Kulkarni [DH]
+NIGHTS
+3
+CHARGES
+₹12,025
+TAX
+₹601
+BALANCE
+-
+Issue
+
+Aditya Iyer [DH]
+
+room 305 · DH-5EL-0433
+
+BILLED TO
+Agoda
+NIGHTS
+1
+CHARGES
+₹3,530
+TAX
+₹177
+BALANCE
+-
+Issue
+
+Kavya Sheikh [DH]
+
+room 208 · DH-5EL-0435
+
+BILLED TO
+Kavya Sheikh [DH]
+NIGHTS
+1
+CHARGES
+₹3,630
+TAX
+₹182
+BALANCE
+-
+Issue
+
+Shaurya Rao [DH]
+
+room 304 · DH-5EL-0426
+
+BILLED TO
+go-MMT
+NIGHTS
+2
+CHARGES
+₹6,702
+TAX
+₹335
+BALANCE
+-
+Issue
+
+Ananya Gupta [DH]
+
+room 305 · DH-5EL-0429
+
+BILLED TO
+Ananya Gupta [DH]
+NIGHTS
+1
+CHARGES
+₹3,356
+TAX
+₹168
+BALANCE
+-
+Issue
+
+Reyansh Rao [DH]
+
+room 209 · DH-5EL-0421
+
+BILLED TO
+Expedia
+NIGHTS
+3
+CHARGES
+₹12,749
+TAX
+₹637
+BALANCE
+-
+Issue
+
+Aadhya Iyer [DH]
+
+room 304 · DH-5EL-0424
+
+BILLED TO
+Expedia
+NIGHTS
+2
+CHARGES
+₹8,553
+TAX
+₹428
+BALANCE
+-
+Issue
+
+Tanvi Joshi [DH]
+
+room 206 · DH-5EL-0422
+
+BILLED TO
+Agoda
+NIGHTS
+3
+CHARGES
+₹12,592
+TAX
+₹630
+BALANCE
+-
+Issue
+
+Krishna Bose [DH]
+
+room 204 · DH-5EL-0427
+
+BILLED TO
+Krishna Bose [DH]
+NIGHTS
+2
+CHARGES
+₹8,400
+TAX
+₹420
+BALANCE
+-
+Issue
+
+Kavya Sheikh [DH]
+
+room 303 · DH-5EL-0430
+
+BILLED TO
+Expedia
+NIGHTS
+1
+CHARGES
+₹3,530
+TAX
+₹177
+BALANCE
+-
+Issue
+
+Diya Singh [DH]
+
+room 210 · DH-5EL-0423
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹9,606
+TAX
+₹480
+BALANCE
+-
+Issue
+
+Diya Mehta [DH]
+
+room 306 · DH-5EL-0419
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹8,527
+TAX
+₹426
+BALANCE
+-
+Issue
+
+Vivaan Pillai [DH]
+
+room 203 · DH-5EL-0420
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹8,970
+TAX
+₹449
+BALANCE
+-
+Issue
+
+Ayaan Shah [DH]
+
+room 206 · DH-5EL-0414
+
+BILLED TO
+Expedia
+NIGHTS
+3
+CHARGES
+₹11,972
+TAX
+₹599
+BALANCE
+-
+Issue
+
+Sneha Mehta [DH]
+
+room 308 · DH-5EL-0408
+
+BILLED TO
+Sneha Mehta [DH]
+NIGHTS
+3
+CHARGES
+₹11,575
+TAX
+₹579
+BALANCE
+-
+Issue
+
+Kavya Verma [DH]
+
+room 306 · DH-5EL-0416
+
+BILLED TO
+Agoda
+NIGHTS
+2
+CHARGES
+₹7,904
+TAX
+₹395
+BALANCE
+-
+Issue
+
+Aadhya Menon [DH]
+
+room 208 · DH-5EL-0412
+
+BILLED TO
+Agoda
+NIGHTS
+3
+CHARGES
+₹12,349
+TAX
+₹617
+BALANCE
+-
+Issue
+
+Arjun Menon [DH]
+
+room 303 · DH-5EL-0418
+
+BILLED TO
+Agoda
+NIGHTS
+2
+CHARGES
+₹7,627
+TAX
+₹381
+BALANCE
+-
+Issue
+
+Vihaan Rao [DH]
+
+room 301 · DH-5EL-0411
+
+BILLED TO
+Booking.com
+NIGHTS
+3
+CHARGES
+₹10,945
+TAX
+₹547
+BALANCE
+-
+Issue
+
+Aadhya Chatterjee [DH]
+
+room 307 · DH-5EL-0417
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹8,580
+TAX
+₹429
+BALANCE
+-
+Issue
+
+Navya Rao [DH]
+
+room 201 · DH-5EL-0413
+
+BILLED TO
+Agoda
+NIGHTS
+3
+CHARGES
+₹10,778
+TAX
+₹539
+BALANCE
+-
+Issue
+
+Nisha Deshmukh [DH]
+
+room 205 · DH-5EL-0415
+
+BILLED TO
+go-MMT
+NIGHTS
+2
+CHARGES
+₹8,520
+TAX
+₹426
+BALANCE
+-
+Issue
+
+Myra Menon [DH]
+
+room 304 · DH-5EL-0405
+
+BILLED TO
+go-MMT
+NIGHTS
+3
+CHARGES
+₹9,329
+TAX
+₹466
+BALANCE
+-
+Issue
+
+Ira Verma [DH]
+
+room 201 · DH-5EL-0410
+
+BILLED TO
+Booking.com
+NIGHTS
+2
+CHARGES
+₹8,938
+TAX
+₹447
+BALANCE
+-
+Issue
+
+Krishna Iyer [DH]
+
+room 301 · DH-5EL-0407
+
+BILLED TO
+Krishna Iyer [DH]
+NIGHTS
+2
+CHARGES
+₹7,496
+TAX
+₹375
+BALANCE
+-
+Issue
+
+Anika Sharma [DH]
+
+room 305 · DH-5EL-0399
+
+BILLED TO
+Booking.com
+NIGHTS
+2
+CHARGES
+₹6,279
+TAX
+₹314
+BALANCE
+-
+Issue
+
+Zoya Singh [DH]
+
+room 201 · DH-5EL-0406
+
+BILLED TO
+go-MMT
+NIGHTS
+2
+CHARGES
+₹9,583
+TAX
+₹479
+BALANCE
+-
+Issue
+
+Vihaan Mehta [DH]
+
+room 203 · DH-5EL-0409
+
+BILLED TO
+go-MMT
+NIGHTS
+1
+CHARGES
+₹4,804
+TAX
+₹240
+BALANCE
+-
+Issue
+
+Rohan Khan [DH]
+
+room 210 · DH-5EL-0397
+
+BILLED TO
+Rohan Khan [DH]
+NIGHTS
+3
+CHARGES
+₹11,269
+TAX
+₹563
+BALANCE
+-
+Issue
+
+Farhan Kulkarni [DH]
+
+room 205 · DH-5EL-0404
+
+BILLED TO
+Expedia
+NIGHTS
+2
+CHARGES
+₹7,307
+TAX
+₹365
+BALANCE
+-
+Issue
+
+Meera Rao [DH]
+
+room 201 · DH-5EL-0403
+
+BILLED TO
+Meera Rao [DH]
+NIGHTS
+1
+CHARGES
+₹4,726
+TAX
+₹236
+BALANCE
+-
+Issue
+
+Aarav Sheikh [DH]
+
+room 301 · DH-5EL-0401
+
+BILLED TO
+Expedia
+NIGHTS
+1
+CHARGES
+₹3,590
+TAX
+₹180
+BALANCE
+-
+Issue
+
+Rohan Chatterjee [DH]
+
+room 303 · DH-5EL-0392
+
+BILLED TO
+Agoda
+NIGHTS
+3
+CHARGES
+₹12,568
+TAX
+₹628
+BALANCE
+-
+Issue
+
+Navya Sheikh [DH]
+
+room 209 · DH-5EL-0400
+
+BILLED TO
+Agoda
+NIGHTS
+1
+CHARGES
+₹3,850
+TAX
+₹192
+BALANCE
+-
+Issue
+
+Meera Sharma [DH]
+
+room 206 · DH-5EL-0402
+
+BILLED TO
+Agoda
+NIGHTS
+1
+CHARGES
+₹3,605
+TAX
+₹180
+BALANCE
+-
+Issue
+
+Aadhya Nair [DH]
+
+room 302 · DH-5EL-0396
+
+BILLED TO
+Agoda
+NIGHTS
+2
+CHARGES
+₹6,214
+TAX
+₹311
+BALANCE
+-
+Issue
+
+Diya Rao [DH]
+
+room 303 · DH-5EL-0398
+
+BILLED TO
+Diya Rao [DH]
+NIGHTS
+1
+CHARGES
+₹3,122
+TAX
+₹156
+BALANCE
+-
+5EL/2026-27/00012
+
+Aditya Sharma [DH]
+
+room 202 · DH-5EL-0395
+
+BILLED TO
+Booking.com
+NIGHTS
+1
+CHARGES
+₹4,546
+TAX
+₹227
+BALANCE
+-
+Issue
+
+Reyansh Bose [DH]
+
+room 206 · DH-5EL-0393
+
+BILLED TO
+Expedia
+NIGHTS
+2
+CHARGES
+₹8,950
+TAX
+₹448
+BALANCE
+-
+Issue
+
+Sara Chatterjee [DH]
+
+room 306 · DH-5EL-0389
+
+BILLED TO
+Booking.com
+NIGHTS
+3
+CHARGES
+₹10,096
+TAX
+₹505
+BALANCE
+-
+Issue
+
+Ayaan Singh [DH]
+
+room 306 · DH-5EL-0394
+
+BILLED TO
+go-MMT
+NIGHTS
+1
+CHARGES
+₹3,818
+TAX
+₹191
+BALANCE
+-
+Issue
+
+Sneha Chatterjee [DH]
+
+room 308 · DH-5EL-0391
+
+BILLED TO
+Sneha Chatterjee [DH]
+NIGHTS
+2
+CHARGES
+₹6,897
+TAX
+₹345
+BALANCE
+-
+Issue
+
+Tanvi Kulkarni [DH]
+
+room 303 · DH-5EL-0385
+
+BILLED TO
+Expedia
+NIGHTS
+3
+CHARGES
+₹9,189
+TAX
+₹459
+BALANCE
+-
+Issue
+
+Imran Sheikh [DH]
+
+room 207 · DH-5EL-0384
+
+BILLED TO
+Expedia
+NIGHTS
+3
+CHARGES
+₹13,041
+TAX
+₹652
+BALANCE
+-
+Issue
+
+Imran Pillai [DH]
+
+room 307 · DH-5EL-0390
+
+BILLED TO
+Agoda
+NIGHTS
+1
+CHARGES
+₹3,421
+TAX
+₹171
+BALANCE
+-
+Issue
+
+Kabir Sheikh [DH]
+
+room 305 · DH-5EL-0387
+
+BILLED TO
+Booking.com
+NIGHTS
+2
+CHARGES
+₹7,607
+TAX
+₹380
+BALANCE
+-
+Issue
+
+Ishaan Bose [DH]
+
+room 206 · DH-5EL-0388
+
+BILLED TO
+Booking.com
+NIGHTS
+2
+CHARGES
+₹8,634
+TAX
+₹432
+BALANCE
+-
+Issue
+
+Shaurya Verma [DH]
+
+room 306 · DH-5EL-0375
+
+BILLED TO
+Agoda
+NIGHTS
+3
+CHARGES
+₹11,314
+TAX
+₹566
+BALANCE
+-
+Issue
+
+Nisha Kulkarni [DH]
+
+room 202 · DH-5EL-0380
+
+BILLED TO
+Agoda
+NIGHTS
+3
+CHARGES
+₹13,411
+TAX
+₹671
+BALANCE
+-
+Issue
+
+Farhan Singh [DH]
+
+room 305 · DH-5EL-0386
+
+BILLED TO
+Agoda
+NIGHTS
+1
+CHARGES
+₹3,459
+TAX
+₹173
+BALANCE
+-
+Issue
+
+Ishaan Gupta [DH]
+
+room 305 · DH-5EL-0381
+
+BILLED TO
+go-MMT
+NIGHTS
+3
+CHARGES
+₹12,332
+TAX
+₹617
+BALANCE
+-
+Issue
+
+Aadhya Pillai [DH]
+
+room 303 · DH-5EL-0378
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+3
+CHARGES
+₹12,863
+TAX
+₹643
+BALANCE
+-
+Issue
+
+Vivaan Verma [DH]
+
+room 207 · DH-5EL-0382
+
+BILLED TO
+Agoda
+NIGHTS
+2
+CHARGES
+₹9,512
+TAX
+₹476
+BALANCE
+-
+Issue
+
+Shaurya Singh [DH]
+
+room 206 · DH-5EL-0379
+
+BILLED TO
+Expedia
+NIGHTS
+2
+CHARGES
+₹8,630
+TAX
+₹431
+BALANCE
+-
+Issue
+
+Aarav Bose [DH]
+
+room 303 · DH-5EL-0376
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹7,855
+TAX
+₹393
+BALANCE
+-
+Issue
+
+Sneha Sharma [DH]
+
+room 302 · DH-5EL-0374
+
+BILLED TO
+Booking.com
+NIGHTS
+2
+CHARGES
+₹7,472
+TAX
+₹374
+BALANCE
+-
+Issue
+
+Ira Sheikh [DH]
+
+room 201 · DH-5EL-0383
+
+BILLED TO
+go-MMT
+NIGHTS
+1
+CHARGES
+₹3,470
+TAX
+₹174
+BALANCE
+-
+Issue
+
+Sneha Pillai [DH]
+
+room 209 · DH-5EL-0377
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹4,794
+TAX
+₹240
+BALANCE
+-
+Issue
+
+Zoya Sheikh [DH]
+
+room 203 · DH-5EL-0367
+
+BILLED TO
+Zoya Sheikh [DH]
+NIGHTS
+3
+CHARGES
+₹14,074
+TAX
+₹704
+BALANCE
+-
+Issue
+
+Meera Shah [DH]
+
+room 305 · DH-5EL-0373
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹3,601
+TAX
+₹180
+BALANCE
+-
+Issue
+
+Aadhya Reddy [DH]
+
+room 210 · DH-5EL-0362
+
+BILLED TO
+Booking.com
+NIGHTS
+2
+CHARGES
+₹9,233
+TAX
+₹462
+BALANCE
+-
+Issue
+
+Kavya Iyer [DH]
+
+room 205 · DH-5EL-0359
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+3
+CHARGES
+₹12,394
+TAX
+₹620
+BALANCE
+-
+Issue
+
+Rohan Shah [DH]
+
+room 205 · DH-5EL-0372
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹3,757
+TAX
+₹188
+BALANCE
+-
+Issue
+
+Ishaan Rao [DH]
+
+room 307 · DH-5EL-0371
+
+BILLED TO
+Booking.com
+NIGHTS
+1
+CHARGES
+₹3,309
+TAX
+₹165
+BALANCE
+-
+Issue
+
+Aadhya Rao [DH]
+
+room 302 · DH-5EL-0365
+
+BILLED TO
+Booking.com
+NIGHTS
+2
+CHARGES
+₹7,690
+TAX
+₹385
+BALANCE
+-
+Issue
+
+Aadhya Chatterjee [DH]
+
+room 301 · DH-5EL-0370
+
+BILLED TO
+Booking.com
+NIGHTS
+1
+CHARGES
+₹3,087
+TAX
+₹154
+BALANCE
+-
+Issue
+
+Rahul Mehta [DH]
+
+room 210 · DH-5EL-0363
+
+BILLED TO
+Rahul Mehta [DH]
+NIGHTS
+2
+CHARGES
+₹9,575
+TAX
+₹479
+BALANCE
+-
+Issue
+
+Sneha Nair [DH]
+
+room 210 · DH-5EL-0369
+
+BILLED TO
+Sneha Nair [DH]
+NIGHTS
+1
+CHARGES
+₹4,362
+TAX
+₹218
+BALANCE
+-
+Issue
+
+Vivaan Menon [DH]
+
+room 201 · DH-5EL-0368
+
+BILLED TO
+Expedia
+NIGHTS
+1
+CHARGES
+₹4,024
+TAX
+₹201
+BALANCE
+-
+Issue
+
+Ananya Joshi [DH]
+
+room 302 · DH-5EL-0354
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+3
+CHARGES
+₹9,213
+TAX
+₹461
+BALANCE
+-
+Issue
+
+Navya Nair [DH]
+
+room 307 · DH-5EL-0357
+
+BILLED TO
+Expedia
+NIGHTS
+2
+CHARGES
+₹7,180
+TAX
+₹359
+BALANCE
+-
+Issue
+
+Shaurya Bose [DH]
+
+room 301 · DH-5EL-0366
+
+BILLED TO
+go-MMT
+NIGHTS
+1
+CHARGES
+₹3,228
+TAX
+₹161
+BALANCE
+-
+Issue
+
+Meera Patel [DH]
+
+room 301 · DH-5EL-0364
+
+BILLED TO
+Expedia
+NIGHTS
+1
+CHARGES
+₹3,978
+TAX
+₹199
+BALANCE
+-
+Issue
+
+Aadhya Joshi [DH]
+
+room 207 · DH-5EL-0351
+
+BILLED TO
+Booking.com
+NIGHTS
+3
+CHARGES
+₹13,155
+TAX
+₹658
+BALANCE
+-
+Issue
+
+Rahul Bose [DH]
+
+room 204 · DH-5EL-0361
+
+BILLED TO
+Agoda
+NIGHTS
+1
+CHARGES
+₹3,757
+TAX
+₹188
+BALANCE
+-
+Issue
+
+Navya Rao [DH]
+
+room 202 · DH-5EL-0356
+
+BILLED TO
+go-MMT
+NIGHTS
+1
+CHARGES
+₹4,420
+TAX
+₹221
+BALANCE
+-
+Issue
+
+Reyansh Iyer [DH]
+
+room 210 · DH-5EL-0358
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹3,748
+TAX
+₹187
+BALANCE
+-
+Issue
+
+Nisha Joshi [DH]
+
+room 304 · DH-5EL-0355
+
+BILLED TO
+Agoda
+NIGHTS
+2
+CHARGES
+₹6,428
+TAX
+₹321
+BALANCE
+-
+Issue
+
+Kabir Khan [DH]
+
+room 306 · DH-5EL-0353
+
+BILLED TO
+Kabir Khan [DH]
+NIGHTS
+2
+CHARGES
+₹6,686
+TAX
+₹334
+BALANCE
+-
+Issue
+
+Aditya Menon [DH]
+
+room 302 · DH-5EL-0347
+
+BILLED TO
+Agoda
+NIGHTS
+3
+CHARGES
+₹10,417
+TAX
+₹521
+BALANCE
+-
+Issue
+
+Krishna Chatterjee [DH]
+
+room 305 · DH-5EL-0360
+
+BILLED TO
+Expedia
+NIGHTS
+1
+CHARGES
+₹3,767
+TAX
+₹188
+BALANCE
+-
+Issue
+
+Farhan Deshmukh [DH]
+
+room 303 · DH-5EL-0342
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+3
+CHARGES
+₹10,832
+TAX
+₹542
+BALANCE
+-
+Issue
+
+Farhan Singh [DH]
+
+room 305 · DH-5EL-0349
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹6,534
+TAX
+₹327
+BALANCE
+-
+Issue
+
+Myra Rao [DH]
+
+room 307 · DH-5EL-0340
+
+BILLED TO
+Booking.com
+NIGHTS
+3
+CHARGES
+₹12,888
+TAX
+₹644
+BALANCE
+-
+Issue
+
+Sara Nair [DH]
+
+room 209 · DH-5EL-0352
+
+BILLED TO
+Agoda
+NIGHTS
+1
+CHARGES
+₹3,575
+TAX
+₹179
+BALANCE
+-
+Issue
+
+Tanvi Shah [DH]
+
+room 204 · DH-5EL-0348
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹7,395
+TAX
+₹370
+BALANCE
+-
+Issue
+
+Farhan Singh [DH]
+
+room 202 · DH-5EL-0344
+
+BILLED TO
+Booking.com
+NIGHTS
+3
+CHARGES
+₹12,738
+TAX
+₹637
+BALANCE
+-
+Issue
+
+Rohan Mehta [DH]
+
+room 306 · DH-5EL-0350
+
+BILLED TO
+Booking.com
+NIGHTS
+1
+CHARGES
+₹3,939
+TAX
+₹197
+BALANCE
+-
+Issue
+
+Nisha Gupta [DH]
+
+room 301 · DH-5EL-0345
+
+BILLED TO
+Expedia
+NIGHTS
+2
+CHARGES
+₹6,101
+TAX
+₹305
+BALANCE
+-
+Issue
+
+Zoya Rao [DH]
+
+room 205 · DH-5EL-0346
+
+BILLED TO
+go-MMT
+NIGHTS
+1
+CHARGES
+₹4,803
+TAX
+₹240
+BALANCE
+-
+Issue
+
+Aadhya Reddy [DH]
+
+room 208 · DH-5EL-0343
+
+BILLED TO
+Booking.com
+NIGHTS
+2
+CHARGES
+₹6,906
+TAX
+₹345
+BALANCE
+-
+Issue
+
+Ishaan Menon [DH]
+
+room 206 · DH-5EL-0328
+
+BILLED TO
+Booking.com
+NIGHTS
+3
+CHARGES
+₹12,701
+TAX
+₹635
+BALANCE
+-
+Issue
+
+Ananya Iyer [DH]
+
+room 308 · DH-5EL-0331
+
+BILLED TO
+go-MMT
+NIGHTS
+3
+CHARGES
+₹12,468
+TAX
+₹623
+BALANCE
+-
+Issue
+
+Reyansh Sheikh [DH]
+
+room 303 · DH-5EL-0336
+
+BILLED TO
+Expedia
+NIGHTS
+2
+CHARGES
+₹6,756
+TAX
+₹338
+BALANCE
+-
+Issue
+
+Anika Sharma [DH]
+
+room 205 · DH-5EL-0341
+
+BILLED TO
+Expedia
+NIGHTS
+1
+CHARGES
+₹4,671
+TAX
+₹234
+BALANCE
+-
+Issue
+
+Kavya Joshi [DH]
+
+room 301 · DH-5EL-0339
+
+BILLED TO
+Kavya Joshi [DH]
+NIGHTS
+1
+CHARGES
+₹3,136
+TAX
+₹157
+BALANCE
+-
+Issue
+
+Reyansh Chatterjee [DH]
+
+room 208 · DH-5EL-0335
+
+BILLED TO
+go-MMT
+NIGHTS
+2
+CHARGES
+₹7,986
+TAX
+₹399
+BALANCE
+-
+Issue
+
+Rohan Gupta [DH]
+
+room 301 · DH-5EL-0338
+
+BILLED TO
+Agoda
+NIGHTS
+1
+CHARGES
+₹3,309
+TAX
+₹165
+BALANCE
+-
+Issue
+
+Shaurya Reddy [DH]
+
+room 203 · DH-5EL-0332
+
+BILLED TO
+Agoda
+NIGHTS
+2
+CHARGES
+₹7,681
+TAX
+₹384
+BALANCE
+-
+Issue
+
+Rahul Sharma [DH]
+
+room 201 · DH-5EL-0321
+
+BILLED TO
+Agoda
+NIGHTS
+3
+CHARGES
+₹14,067
+TAX
+₹703
+BALANCE
+-
+Issue
+
+Ananya Iyer [DH]
+
+room 302 · DH-5EL-0337
+
+BILLED TO
+Ananya Iyer [DH]
+NIGHTS
+1
+CHARGES
+₹3,229
+TAX
+₹161
+BALANCE
+-
+Issue
+
+Arjun Reddy [DH]
+
+room 307 · DH-5EL-0324
+
+BILLED TO
+Arjun Reddy [DH]
+NIGHTS
+3
+CHARGES
+₹9,714
+TAX
+₹486
+BALANCE
+-
+Issue
+
+Rahul Sharma [DH]
+
+room 206 · DH-5EL-0325
+
+BILLED TO
+Agoda
+NIGHTS
+3
+CHARGES
+₹11,614
+TAX
+₹581
+BALANCE
+-
+Issue
+
+Aarav Verma [DH]
+
+room 303 · DH-5EL-0334
+
+BILLED TO
+go-MMT
+NIGHTS
+1
+CHARGES
+₹3,555
+TAX
+₹178
+BALANCE
+-
+Issue
+
+Vihaan Mehta [DH]
+
+room 201 · DH-5EL-0329
+
+BILLED TO
+Agoda
+NIGHTS
+1
+CHARGES
+₹4,594
+TAX
+₹230
+BALANCE
+-
+Issue
+
+Ayaan Chatterjee [DH]
+
+room 308 · DH-5EL-0317
+
+BILLED TO
+Booking.com
+NIGHTS
+3
+CHARGES
+₹12,012
+TAX
+₹601
+BALANCE
+-
+Issue
+
+Krishna Joshi [DH]
+
+room 204 · DH-5EL-0330
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹4,145
+TAX
+₹207
+BALANCE
+-
+Issue
+
+Nisha Pillai [DH]
+
+room 209 · DH-5EL-0322
+
+BILLED TO
+Expedia
+NIGHTS
+2
+CHARGES
+₹8,202
+TAX
+₹410
+BALANCE
+-
+Issue
+
+Vivaan Sheikh [DH]
+
+room 208 · DH-5EL-0327
+
+BILLED TO
+Booking.com
+NIGHTS
+1
+CHARGES
+₹4,781
+TAX
+₹239
+BALANCE
+-
+Issue
+
+Imran Pillai [DH]
+
+room 303 · DH-5EL-0323
+
+BILLED TO
+Expedia
+NIGHTS
+2
+CHARGES
+₹6,273
+TAX
+₹314
+BALANCE
+-
+Issue
+
+Sara Patel [DH]
+
+room 201 · DH-5EL-0316
+
+BILLED TO
+Expedia
+NIGHTS
+3
+CHARGES
+₹10,463
+TAX
+₹523
+BALANCE
+-
+Issue
+
+Ayaan Reddy [DH]
+
+room 204 · DH-5EL-0333
+
+BILLED TO
+go-MMT
+NIGHTS
+1
+CHARGES
+₹3,828
+TAX
+₹191
+BALANCE
+-
+Issue
+
+Vivaan Nair [DH]
+
+room 302 · DH-5EL-0319
+
+BILLED TO
+Vivaan Nair [DH]
+NIGHTS
+2
+CHARGES
+₹7,540
+TAX
+₹377
+BALANCE
+-
+Issue
+
+Aadhya Shah [DH]
+
+room 305 · DH-5EL-0312
+
+BILLED TO
+Expedia
+NIGHTS
+3
+CHARGES
+₹11,953
+TAX
+₹598
+BALANCE
+-
+Issue
+
+Shaurya Iyer [DH]
+
+room 210 · DH-5EL-0315
+
+BILLED TO
+Shaurya Iyer [DH]
+NIGHTS
+2
+CHARGES
+₹9,386
+TAX
+₹469
+BALANCE
+-
+Issue
+
+Farhan Sheikh [DH]
+
+room 205 · DH-5EL-0326
+
+BILLED TO
+Agoda
+NIGHTS
+1
+CHARGES
+₹4,015
+TAX
+₹201
+BALANCE
+-
+Issue
+
+Diya Nair [DH]
+
+room 208 · DH-5EL-0318
+
+BILLED TO
+Agoda
+NIGHTS
+1
+CHARGES
+₹3,753
+TAX
+₹188
+BALANCE
+-
+Issue
+
+Zoya Bose [DH]
+
+room 304 · DH-5EL-0313
+
+BILLED TO
+Zoya Bose [DH]
+NIGHTS
+2
+CHARGES
+₹7,504
+TAX
+₹375
+BALANCE
+-
+Issue
+
+Farhan Deshmukh [DH]
+
+room 205 · DH-5EL-0320
+
+BILLED TO
+go-MMT
+NIGHTS
+1
+CHARGES
+₹4,814
+TAX
+₹241
+BALANCE
+-
+Issue
+
+Farhan Sheikh [DH]
+
+room 305 · DH-5EL-0314
+
+BILLED TO
+Farhan Sheikh [DH]
+NIGHTS
+1
+CHARGES
+₹3,899
+TAX
+₹195
+BALANCE
+-
+Issue
+
+Myra Shah [DH]
+
+room 205 · DH-5EL-0309
+
+BILLED TO
+Booking.com
+NIGHTS
+1
+CHARGES
+₹3,902
+TAX
+₹195
+BALANCE
+-
+Issue
+
+Nisha Pillai [DH]
+
+room 305 · DH-5EL-0304
+
+BILLED TO
+Nisha Pillai [DH]
+NIGHTS
+2
+CHARGES
+₹6,590
+TAX
+₹330
+BALANCE
+-
+Issue
+
+Aadhya Rao [DH]
+
+room 206 · DH-5EL-0311
+
+BILLED TO
+Agoda
+NIGHTS
+1
+CHARGES
+₹3,949
+TAX
+₹197
+BALANCE
+-
+Issue
+
+Arjun Shah [DH]
+
+room 303 · DH-5EL-0307
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹3,967
+TAX
+₹198
+BALANCE
+-
+Issue
+
+Aarav Verma [DH]
+
+room 205 · DH-5EL-0306
+
+BILLED TO
+Agoda
+NIGHTS
+2
+CHARGES
+₹7,093
+TAX
+₹355
+BALANCE
+-
+Issue
+
+Ayaan Joshi [DH]
+
+room 207 · DH-5EL-0310
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹4,412
+TAX
+₹221
+BALANCE
+-
+Issue
+
+Krishna Bose [DH]
+
+room 306 · DH-5EL-0308
+
+BILLED TO
+Agoda
+NIGHTS
+1
+CHARGES
+₹3,306
+TAX
+₹165
+BALANCE
+-
+Issue
+
+Vivaan Sheikh [DH]
+
+room 301 · DH-5EL-0298
+
+BILLED TO
+go-MMT
+NIGHTS
+3
+CHARGES
+₹9,962
+TAX
+₹498
+BALANCE
+-
+Issue
+
+Reyansh Gupta [DH]
+
+room 303 · DH-5EL-0300
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹7,210
+TAX
+₹361
+BALANCE
+-
+Issue
+
+Sneha Shah [DH]
+
+room 305 · DH-5EL-0294
+
+BILLED TO
+Booking.com
+NIGHTS
+3
+CHARGES
+₹12,077
+TAX
+₹604
+BALANCE
+-
+Issue
+
+Ishaan Mehta [DH]
+
+room 302 · DH-5EL-0305
+
+BILLED TO
+Expedia
+NIGHTS
+1
+CHARGES
+₹3,526
+TAX
+₹176
+BALANCE
+-
+Issue
+
+Zoya Verma [DH]
+
+room 308 · DH-5EL-0290
+
+BILLED TO
+Zoya Verma [DH]
+NIGHTS
+3
+CHARGES
+₹9,511
+TAX
+₹476
+BALANCE
+-
+Issue
+
+Ananya Kulkarni [DH]
+
+room 203 · DH-5EL-0301
+
+BILLED TO
+Ananya Kulkarni [DH]
+NIGHTS
+1
+CHARGES
+₹3,806
+TAX
+₹190
+BALANCE
+-
+Issue
+
+Ira Menon [DH]
+
+room 208 · DH-5EL-0291
+
+BILLED TO
+go-MMT
+NIGHTS
+3
+CHARGES
+₹10,804
+TAX
+₹540
+BALANCE
+-
+Issue
+
+Riya Nair [DH]
+
+room 201 · DH-5EL-0303
+
+BILLED TO
+Riya Nair [DH]
+NIGHTS
+1
+CHARGES
+₹3,944
+TAX
+₹197
+BALANCE
+-
+Issue
+
+Krishna Kulkarni [DH]
+
+room 304 · DH-5EL-0302
+
+BILLED TO
+Booking.com
+NIGHTS
+1
+CHARGES
+₹3,521
+TAX
+₹176
+BALANCE
+-
+Issue
+
+Tanvi Verma [DH]
+
+room 207 · DH-5EL-0293
+
+BILLED TO
+Expedia
+NIGHTS
+3
+CHARGES
+₹10,097
+TAX
+₹505
+BALANCE
+-
+Issue
+
+Anika Patel [DH]
+
+room 207 · DH-5EL-0299
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹7,696
+TAX
+₹385
+BALANCE
+-
+Issue
+
+Navya Rao [DH]
+
+room 305 · DH-5EL-0288
+
+BILLED TO
+Navya Rao [DH]
+NIGHTS
+3
+CHARGES
+₹12,805
+TAX
+₹640
+BALANCE
+-
+Issue
+
+Riya Khan [DH]
+
+room 201 · DH-5EL-0297
+
+BILLED TO
+Agoda
+NIGHTS
+1
+CHARGES
+₹4,148
+TAX
+₹207
+BALANCE
+-
+Issue
+
+Anika Pillai [DH]
+
+room 204 · DH-5EL-0295
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹3,806
+TAX
+₹190
+BALANCE
+-
+Issue
+
+Ayaan Menon [DH]
+
+room 203 · DH-5EL-0287
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+3
+CHARGES
+₹11,791
+TAX
+₹590
+BALANCE
+-
+Issue
+
+Arjun Nair [DH]
+
+room 302 · DH-5EL-0289
+
+BILLED TO
+Expedia
+NIGHTS
+2
+CHARGES
+₹7,306
+TAX
+₹365
+BALANCE
+-
+Issue
+
+Reyansh Verma [DH]
+
+room 210 · DH-5EL-0296
+
+BILLED TO
+Booking.com
+NIGHTS
+1
+CHARGES
+₹4,426
+TAX
+₹221
+BALANCE
+-
+Issue
+
+Aditya Shah [DH]
+
+room 206 · DH-5EL-0282
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹8,097
+TAX
+₹405
+BALANCE
+-
+Issue
+
+Vivaan Nair [DH]
+
+room 206 · DH-5EL-0283
+
+BILLED TO
+go-MMT
+NIGHTS
+2
+CHARGES
+₹8,585
+TAX
+₹429
+BALANCE
+-
+Issue
+
+Arjun Reddy [DH]
+
+room 305 · DH-5EL-0286
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹7,190
+TAX
+₹359
+BALANCE
+-
+Issue
+
+Shaurya Singh [DH]
+
+room 202 · DH-5EL-0280
+
+BILLED TO
+Shaurya Singh [DH]
+NIGHTS
+3
+CHARGES
+₹11,114
+TAX
+₹556
+BALANCE
+-
+Issue
+
+Reyansh Kulkarni [DH]
+
+room 301 · DH-5EL-0285
+
+BILLED TO
+Reyansh Kulkarni [DH]
+NIGHTS
+2
+CHARGES
+₹6,637
+TAX
+₹332
+BALANCE
+-
+Issue
+
+Zoya Sharma [DH]
+
+room 209 · DH-5EL-0284
+
+BILLED TO
+go-MMT
+NIGHTS
+2
+CHARGES
+₹8,598
+TAX
+₹430
+BALANCE
+-
+Issue
+
+Vivaan Shah [DH]
+
+room 303 · DH-5EL-0292
+
+BILLED TO
+Booking.com
+NIGHTS
+1
+CHARGES
+₹3,920
+TAX
+₹196
+BALANCE
+-
+Issue
+
+Riya Khan [DH]
+
+room 206 · DH-5EL-0271
+
+BILLED TO
+Riya Khan [DH]
+NIGHTS
+3
+CHARGES
+₹11,472
+TAX
+₹574
+BALANCE
+-
+Issue
+
+Shaurya Deshmukh [DH]
+
+room 202 · DH-5EL-0270
+
+BILLED TO
+go-MMT
+NIGHTS
+3
+CHARGES
+₹13,303
+TAX
+₹665
+BALANCE
+-
+Issue
+
+Zoya Shah [DH]
+
+room 203 · DH-5EL-0268
+
+BILLED TO
+Agoda
+NIGHTS
+3
+CHARGES
+₹13,461
+TAX
+₹673
+BALANCE
+-
+Issue
+
+Kabir Patel [DH]
+
+room 207 · DH-5EL-0266
+
+BILLED TO
+Kabir Patel [DH]
+NIGHTS
+3
+CHARGES
+₹10,564
+TAX
+₹528
+BALANCE
+-
+Issue
+
+Rahul Pillai [DH]
+
+room 303 · DH-5EL-0281
+
+BILLED TO
+Booking.com
+NIGHTS
+2
+CHARGES
+₹6,722
+TAX
+₹336
+BALANCE
+-
+Issue
+
+Vihaan Joshi [DH]
+
+room 201 · DH-5EL-0275
+
+BILLED TO
+go-MMT
+NIGHTS
+2
+CHARGES
+₹8,035
+TAX
+₹402
+BALANCE
+-
+Issue
+
+Vivaan Nair [DH]
+
+room 202 · DH-5EL-0276
+
+BILLED TO
+Agoda
+NIGHTS
+1
+CHARGES
+₹4,406
+TAX
+₹220
+BALANCE
+-
+Issue
+
+Diya Verma [DH]
+
+room 209 · DH-5EL-0278
+
+BILLED TO
+Expedia
+NIGHTS
+1
+CHARGES
+₹3,719
+TAX
+₹186
+BALANCE
+-
+Issue
+
+Sara Shah [DH]
+
+room 203 · DH-5EL-0265
+
+BILLED TO
+Expedia
+NIGHTS
+3
+CHARGES
+₹13,917
+TAX
+₹696
+BALANCE
+-
+Issue
+
+Tanvi Shah [DH]
+
+room 303 · DH-5EL-0273
+
+BILLED TO
+Agoda
+NIGHTS
+2
+CHARGES
+₹6,596
+TAX
+₹330
+BALANCE
+-
+Issue
+
+Sneha Sheikh [DH]
+
+room 207 · DH-5EL-0269
+
+BILLED TO
+Sneha Sheikh [DH]
+NIGHTS
+2
+CHARGES
+₹8,334
+TAX
+₹417
+BALANCE
+-
+Issue
+
+Sara Menon [DH]
+
+room 307 · DH-5EL-0279
+
+BILLED TO
+Booking.com
+NIGHTS
+1
+CHARGES
+₹3,378
+TAX
+₹169
+BALANCE
+-
+Issue
+
+Nisha Verma [DH]
+
+room 301 · DH-5EL-0262
+
+BILLED TO
+go-MMT
+NIGHTS
+3
+CHARGES
+₹9,514
+TAX
+₹476
+BALANCE
+-
+Issue
+
+Aadhya Sharma [DH]
+
+room 202 · DH-5EL-0277
+
+BILLED TO
+Aadhya Sharma [DH]
+NIGHTS
+1
+CHARGES
+₹4,086
+TAX
+₹204
+BALANCE
+-
+Issue
+
+Ira Khan [DH]
+
+room 307 · DH-5EL-0259
+
+BILLED TO
+Expedia
+NIGHTS
+3
+CHARGES
+₹12,089
+TAX
+₹604
+BALANCE
+-
+Issue
+
+Vivaan Menon [DH]
+
+room 205 · DH-5EL-0256
+
+BILLED TO
+Booking.com
+NIGHTS
+3
+CHARGES
+₹10,414
+TAX
+₹521
+BALANCE
+-
+Issue
+
+Anika Joshi [DH]
+
+room 304 · DH-5EL-0274
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹3,422
+TAX
+₹171
+BALANCE
+-
+Issue
+
+Kabir Pillai [DH]
+
+room 305 · DH-5EL-0263
+
+BILLED TO
+Booking.com
+NIGHTS
+2
+CHARGES
+₹7,820
+TAX
+₹391
+BALANCE
+-
+Issue
+
+Riya Deshmukh [DH]
+
+room 202 · DH-5EL-0272
+
+BILLED TO
+Agoda
+NIGHTS
+1
+CHARGES
+₹4,182
+TAX
+₹209
+BALANCE
+-
+Issue
+
+Aadhya Rao [DH]
+
+room 301 · DH-5EL-0267
+
+BILLED TO
+Agoda
+NIGHTS
+1
+CHARGES
+₹3,643
+TAX
+₹182
+BALANCE
+-
+Issue
+
+Krishna Pillai [DH]
+
+room 304 · DH-5EL-0264
+
+BILLED TO
+Booking.com
+NIGHTS
+2
+CHARGES
+₹7,045
+TAX
+₹352
+BALANCE
+-
+Issue
+
+Kabir Nair [DH]
+
+room 206 · DH-5EL-0260
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹8,283
+TAX
+₹414
+BALANCE
+-
+Issue
+
+Sneha Joshi [DH]
+
+room 209 · DH-5EL-0255
+
+BILLED TO
+Sneha Joshi [DH]
+NIGHTS
+3
+CHARGES
+₹14,168
+TAX
+₹708
+BALANCE
+-
+Issue
+
+Farhan Shah [DH]
+
+room 303 · DH-5EL-0257
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹8,602
+TAX
+₹430
+BALANCE
+-
+Issue
+
+Farhan Verma [DH]
+
+room 207 · DH-5EL-0252
+
+BILLED TO
+Expedia
+NIGHTS
+3
+CHARGES
+₹12,340
+TAX
+₹617
+BALANCE
+-
+Issue
+
+Farhan Gupta [DH]
+
+room 203 · DH-5EL-0258
+
+BILLED TO
+Farhan Gupta [DH]
+NIGHTS
+2
+CHARGES
+₹9,107
+TAX
+₹455
+BALANCE
+-
+Issue
+
+Rahul Patel [DH]
+
+room 305 · DH-5EL-0248
+
+BILLED TO
+Agoda
+NIGHTS
+2
+CHARGES
+₹6,729
+TAX
+₹336
+BALANCE
+-
+Issue
+
+Diya Kulkarni [DH]
+
+room 301 · DH-5EL-0253
+
+BILLED TO
+Agoda
+NIGHTS
+2
+CHARGES
+₹7,141
+TAX
+₹357
+BALANCE
+-
+Issue
+
+Ira Menon [DH]
+
+room 305 · DH-5EL-0261
+
+BILLED TO
+go-MMT
+NIGHTS
+1
+CHARGES
+₹3,570
+TAX
+₹179
+BALANCE
+-
+Issue
+
+Kavya Singh [DH]
+
+room 305 · DH-5EL-0254
+
+BILLED TO
+go-MMT
+NIGHTS
+2
+CHARGES
+₹6,735
+TAX
+₹337
+BALANCE
+-
+Issue
+
+Ayaan Verma [DH]
+
+room 207 · DH-5EL-0245
+
+BILLED TO
+Agoda
+NIGHTS
+3
+CHARGES
+₹10,172
+TAX
+₹509
+BALANCE
+-
+Issue
+
+Kavya Joshi [DH]
+
+room 207 · DH-5EL-0251
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹4,426
+TAX
+₹221
+BALANCE
+-
+Issue
+
+Farhan Rao [DH]
+
+room 308 · DH-5EL-0242
+
+BILLED TO
+Agoda
+NIGHTS
+2
+CHARGES
+₹8,655
+TAX
+₹433
+BALANCE
+-
+Issue
+
+Vivaan Gupta [DH]
+
+room 204 · DH-5EL-0246
+
+BILLED TO
+Booking.com
+NIGHTS
+2
+CHARGES
+₹7,638
+TAX
+₹382
+BALANCE
+-
+Issue
+
+Arjun Verma [DH]
+
+room 206 · DH-5EL-0249
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹3,985
+TAX
+₹199
+BALANCE
+-
+Issue
+
+Arjun Sheikh [DH]
+
+room 208 · DH-5EL-0235
+
+BILLED TO
+go-MMT
+NIGHTS
+3
+CHARGES
+₹13,886
+TAX
+₹694
+BALANCE
+-
+Issue
+
+Diya Verma [DH]
+
+room 306 · DH-5EL-0236
+
+BILLED TO
+Booking.com
+NIGHTS
+3
+CHARGES
+₹12,522
+TAX
+₹626
+BALANCE
+-
+Issue
+
+Myra Khan [DH]
+
+room 205 · DH-5EL-0234
+
+BILLED TO
+go-MMT
+NIGHTS
+3
+CHARGES
+₹10,730
+TAX
+₹536
+BALANCE
+-
+Issue
+
+Vihaan Iyer [DH]
+
+room 303 · DH-5EL-0239
+
+BILLED TO
+Agoda
+NIGHTS
+3
+CHARGES
+₹9,212
+TAX
+₹461
+BALANCE
+-
+Issue
+
+Riya Khan [DH]
+
+room 207 · DH-5EL-0243
+
+BILLED TO
+Riya Khan [DH]
+NIGHTS
+2
+CHARGES
+₹8,084
+TAX
+₹404
+BALANCE
+-
+Issue
+
+Imran Deshmukh [DH]
+
+room 305 · DH-5EL-0250
+
+BILLED TO
+Imran Deshmukh [DH]
+NIGHTS
+1
+CHARGES
+₹3,053
+TAX
+₹153
+BALANCE
+-
+Issue
+
+Kavya Patel [DH]
+
+room 305 · DH-5EL-0238
+
+BILLED TO
+go-MMT
+NIGHTS
+3
+CHARGES
+₹11,802
+TAX
+₹590
+BALANCE
+-
+Issue
+
+Sneha Reddy [DH]
+
+room 308 · DH-5EL-0244
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹3,981
+TAX
+₹199
+BALANCE
+-
+Issue
+
+Ananya Sharma [DH]
+
+room 304 · DH-5EL-0229
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+3
+CHARGES
+₹10,528
+TAX
+₹526
+BALANCE
+-
+Issue
+
+Tanvi Shah [DH]
+
+room 302 · DH-5EL-0237
+
+BILLED TO
+Booking.com
+NIGHTS
+2
+CHARGES
+₹8,147
+TAX
+₹407
+BALANCE
+-
+Issue
+
+Kabir Iyer [DH]
+
+room 203 · DH-5EL-0241
+
+BILLED TO
+Agoda
+NIGHTS
+1
+CHARGES
+₹4,559
+TAX
+₹228
+BALANCE
+-
+Issue
+
+Riya Chatterjee [DH]
+
+room 203 · DH-5EL-0247
+
+BILLED TO
+Expedia
+NIGHTS
+1
+CHARGES
+₹3,828
+TAX
+₹191
+BALANCE
+-
+Issue
+
+Myra Gupta [DH]
+
+room 304 · DH-5EL-0218
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+3
+CHARGES
+₹9,501
+TAX
+₹475
+BALANCE
+-
+Issue
+
+Vivaan Reddy [DH]
+
+room 303 · DH-5EL-0220
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+3
+CHARGES
+₹9,237
+TAX
+₹462
+BALANCE
+-
+Issue
+
+Nisha Bose [DH]
+
+room 206 · DH-5EL-0227
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹7,478
+TAX
+₹374
+BALANCE
+-
+Issue
+
+Ananya Bose [DH]
+
+room 206 · DH-5EL-0233
+
+BILLED TO
+Booking.com
+NIGHTS
+1
+CHARGES
+₹3,915
+TAX
+₹196
+BALANCE
+-
+Issue
+
+Rohan Patel [DH]
+
+room 204 · DH-5EL-0219
+
+BILLED TO
+go-MMT
+NIGHTS
+3
+CHARGES
+₹11,175
+TAX
+₹559
+BALANCE
+-
+Issue
+
+Shaurya Sharma [DH]
+
+room 304 · DH-5EL-0240
+
+BILLED TO
+Shaurya Sharma [DH]
+NIGHTS
+1
+CHARGES
+₹4,073
+TAX
+₹204
+BALANCE
+-
+Issue
+
+Ira Singh [DH]
+
+room 204 · DH-5EL-0223
+
+BILLED TO
+go-MMT
+NIGHTS
+3
+CHARGES
+₹14,302
+TAX
+₹715
+BALANCE
+-
+Issue
+
+Imran Patel [DH]
+
+room 210 · DH-5EL-0228
+
+BILLED TO
+Booking.com
+NIGHTS
+2
+CHARGES
+₹8,767
+TAX
+₹438
+BALANCE
+-
+Issue
+
+Reyansh Khan [DH]
+
+room 205 · DH-5EL-0230
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹8,438
+TAX
+₹422
+BALANCE
+-
+Issue
+
+Sara Singh [DH]
+
+room 206 · DH-5EL-0222
+
+BILLED TO
+Agoda
+NIGHTS
+3
+CHARGES
+₹10,121
+TAX
+₹506
+BALANCE
+-
+Issue
+
+Riya Sharma [DH]
+
+room 301 · DH-5EL-0212
+
+BILLED TO
+Booking.com
+NIGHTS
+3
+CHARGES
+₹10,897
+TAX
+₹545
+BALANCE
+-
+Issue
+
+Sara Patel [DH]
+
+room 203 · DH-5EL-0232
+
+BILLED TO
+Sara Patel [DH]
+NIGHTS
+1
+CHARGES
+₹3,568
+TAX
+₹178
+BALANCE
+-
+Issue
+
+Myra Patel [DH]
+
+room 306 · DH-5EL-0214
+
+BILLED TO
+Expedia
+NIGHTS
+3
+CHARGES
+₹10,306
+TAX
+₹515
+BALANCE
+-
+Issue
+
+Rohan Deshmukh [DH]
+
+room 208 · DH-5EL-0231
+
+BILLED TO
+go-MMT
+NIGHTS
+1
+CHARGES
+₹4,024
+TAX
+₹201
+BALANCE
+-
+Issue
+
+Arjun Pillai [DH]
+
+room 208 · DH-5EL-0226
+
+BILLED TO
+Expedia
+NIGHTS
+2
+CHARGES
+₹6,954
+TAX
+₹348
+BALANCE
+-
+Issue
+
+Ira Chatterjee [DH]
+
+room 204 · DH-5EL-0215
+
+BILLED TO
+Agoda
+NIGHTS
+2
+CHARGES
+₹9,319
+TAX
+₹466
+BALANCE
+-
+Issue
+
+Aarav Khan [DH]
+
+room 303 · DH-5EL-0216
+
+BILLED TO
+go-MMT
+NIGHTS
+2
+CHARGES
+₹6,789
+TAX
+₹339
+BALANCE
+-
+Issue
+
+Aarav Pillai [DH]
+
+room 307 · DH-5EL-0217
+
+BILLED TO
+Aarav Pillai [DH]
+NIGHTS
+2
+CHARGES
+₹8,586
+TAX
+₹429
+BALANCE
+-
+Issue
+
+Sara Singh [DH]
+
+room 305 · DH-5EL-0225
+
+BILLED TO
+Agoda
+NIGHTS
+1
+CHARGES
+₹3,292
+TAX
+₹165
+BALANCE
+-
+Issue
+
+Sneha Verma [DH]
+
+room 303 · DH-5EL-0211
+
+BILLED TO
+Expedia
+NIGHTS
+3
+CHARGES
+₹12,178
+TAX
+₹609
+BALANCE
+-
+Issue
+
+Sneha Reddy [DH]
+
+room 308 · DH-5EL-0224
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹3,504
+TAX
+₹175
+BALANCE
+-
+Issue
+
+Vihaan Pillai [DH]
+
+room 303 · DH-5EL-0221
+
+BILLED TO
+Vihaan Pillai [DH]
+NIGHTS
+1
+CHARGES
+₹4,158
+TAX
+₹208
+BALANCE
+-
+Issue
+
+Nisha Singh [DH]
+
+room 205 · DH-5EL-0208
+
+BILLED TO
+Agoda
+NIGHTS
+2
+CHARGES
+₹7,722
+TAX
+₹386
+BALANCE
+-
+Issue
+
+Krishna Bose [DH]
+
+room 307 · DH-5EL-0209
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹6,790
+TAX
+₹340
+BALANCE
+-
+Issue
+
+Imran Singh [DH]
+
+room 302 · DH-5EL-0204
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+3
+CHARGES
+₹9,192
+TAX
+₹460
+BALANCE
+-
+Issue
+
+Diya Singh [DH]
+
+room 209 · DH-5EL-0206
+
+BILLED TO
+go-MMT
+NIGHTS
+3
+CHARGES
+₹13,456
+TAX
+₹673
+BALANCE
+-
+Issue
+
+Kavya Kulkarni [DH]
+
+room 206 · DH-5EL-0213
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹3,381
+TAX
+₹169
+BALANCE
+-
+Issue
+
+Nisha Iyer [DH]
+
+room 204 · DH-5EL-0207
+
+BILLED TO
+Expedia
+NIGHTS
+2
+CHARGES
+₹9,434
+TAX
+₹472
+BALANCE
+-
+Issue
+
+Meera Sheikh [DH]
+
+room 206 · DH-5EL-0198
+
+BILLED TO
+Expedia
+NIGHTS
+3
+CHARGES
+₹14,025
+TAX
+₹701
+BALANCE
+-
+Issue
+
+Arjun Shah [DH]
+
+room 308 · DH-5EL-0210
+
+BILLED TO
+Expedia
+NIGHTS
+1
+CHARGES
+₹3,082
+TAX
+₹154
+BALANCE
+-
+Issue
+
+Tanvi Nair [DH]
+
+room 308 · DH-5EL-0200
+
+BILLED TO
+Agoda
+NIGHTS
+3
+CHARGES
+₹9,534
+TAX
+₹477
+BALANCE
+-
+Issue
+
+Ishaan Sheikh [DH]
+
+room 209 · DH-5EL-0205
+
+BILLED TO
+go-MMT
+NIGHTS
+2
+CHARGES
+₹9,123
+TAX
+₹456
+BALANCE
+-
+Issue
+
+Myra Singh [DH]
+
+room 307 · DH-5EL-0197
+
+BILLED TO
+Myra Singh [DH]
+NIGHTS
+3
+CHARGES
+₹9,869
+TAX
+₹493
+BALANCE
+-
+Issue
+
+Riya Bose [DH]
+
+room 208 · DH-5EL-0203
+
+BILLED TO
+Agoda
+NIGHTS
+2
+CHARGES
+₹8,955
+TAX
+₹448
+BALANCE
+-
+Issue
+
+Ira Khan [DH]
+
+room 210 · DH-5EL-0202
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹3,610
+TAX
+₹181
+BALANCE
+-
+Issue
+
+Farhan Iyer [DH]
+
+room 206 · DH-5EL-0196
+
+BILLED TO
+Booking.com
+NIGHTS
+2
+CHARGES
+₹7,048
+TAX
+₹352
+BALANCE
+-
+Issue
+
+Kavya Kulkarni [DH]
+
+room 207 · DH-5EL-0194
+
+BILLED TO
+go-MMT
+NIGHTS
+2
+CHARGES
+₹7,308
+TAX
+₹365
+BALANCE
+-
+Issue
+
+Nisha Chatterjee [DH]
+
+room 204 · DH-5EL-0201
+
+BILLED TO
+Expedia
+NIGHTS
+2
+CHARGES
+₹9,381
+TAX
+₹469
+BALANCE
+-
+Issue
+
+Ananya Pillai [DH]
+
+room 304 · DH-5EL-0190
+
+BILLED TO
+Expedia
+NIGHTS
+2
+CHARGES
+₹6,425
+TAX
+₹321
+BALANCE
+-
+Issue
+
+Sara Bose [DH]
+
+room 201 · DH-5EL-0185
+
+BILLED TO
+Booking.com
+NIGHTS
+3
+CHARGES
+₹10,109
+TAX
+₹505
+BALANCE
+-
+Issue
+
+Krishna Bose [DH]
+
+room 210 · DH-5EL-0199
+
+BILLED TO
+Expedia
+NIGHTS
+1
+CHARGES
+₹3,956
+TAX
+₹198
+BALANCE
+-
+Issue
+
+Myra Sheikh [DH]
+
+room 301 · DH-5EL-0186
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+3
+CHARGES
+₹10,639
+TAX
+₹532
+BALANCE
+-
+Issue
+
+Kabir Pillai [DH]
+
+room 307 · DH-5EL-0195
+
+BILLED TO
+go-MMT
+NIGHTS
+1
+CHARGES
+₹4,100
+TAX
+₹205
+BALANCE
+-
+Issue
+
+Tanvi Pillai [DH]
+
+room 209 · DH-5EL-0192
+
+BILLED TO
+Booking.com
+NIGHTS
+1
+CHARGES
+₹4,120
+TAX
+₹206
+BALANCE
+-
+Issue
+
+Sneha Khan [DH]
+
+room 209 · DH-5EL-0193
+
+BILLED TO
+Agoda
+NIGHTS
+1
+CHARGES
+₹3,587
+TAX
+₹179
+BALANCE
+-
+Issue
+
+Myra Chatterjee [DH]
+
+room 301 · DH-5EL-0184
+
+BILLED TO
+Expedia
+NIGHTS
+2
+CHARGES
+₹8,599
+TAX
+₹430
+BALANCE
+-
+Issue
+
+Tanvi Shah [DH]
+
+room 301 · DH-5EL-0191
+
+BILLED TO
+Booking.com
+NIGHTS
+1
+CHARGES
+₹3,439
+TAX
+₹172
+BALANCE
+-
+Issue
+
+Sneha Mehta [DH]
+
+room 203 · DH-5EL-0182
+
+BILLED TO
+Expedia
+NIGHTS
+3
+CHARGES
+₹11,157
+TAX
+₹558
+BALANCE
+-
+Issue
+
+Aarav Nair [DH]
+
+room 206 · DH-5EL-0189
+
+BILLED TO
+Agoda
+NIGHTS
+1
+CHARGES
+₹3,369
+TAX
+₹168
+BALANCE
+-
+Issue
+
+Navya Singh [DH]
+
+room 201 · DH-5EL-0176
+
+BILLED TO
+Navya Singh [DH]
+NIGHTS
+3
+CHARGES
+₹12,563
+TAX
+₹628
+BALANCE
+-
+Issue
+
+Navya Reddy [DH]
+
+room 206 · DH-5EL-0187
+
+BILLED TO
+Agoda
+NIGHTS
+1
+CHARGES
+₹4,182
+TAX
+₹209
+BALANCE
+-
+Issue
+
+Shaurya Reddy [DH]
+
+room 201 · DH-5EL-0188
+
+BILLED TO
+Shaurya Reddy [DH]
+NIGHTS
+1
+CHARGES
+₹3,790
+TAX
+₹190
+BALANCE
+-
+Issue
+
+Vivaan Patel [DH]
+
+room 305 · DH-5EL-0174
+
+BILLED TO
+Vivaan Patel [DH]
+NIGHTS
+3
+CHARGES
+₹9,778
+TAX
+₹489
+BALANCE
+-
+Issue
+
+Rahul Verma [DH]
+
+room 306 · DH-5EL-0180
+
+BILLED TO
+Agoda
+NIGHTS
+2
+CHARGES
+₹7,052
+TAX
+₹353
+BALANCE
+-
+Issue
+
+Tanvi Iyer [DH]
+
+room 303 · DH-5EL-0181
+
+BILLED TO
+go-MMT
+NIGHTS
+2
+CHARGES
+₹6,760
+TAX
+₹338
+BALANCE
+-
+Issue
+
+Vihaan Gupta [DH]
+
+room 203 · DH-5EL-0178
+
+BILLED TO
+Expedia
+NIGHTS
+2
+CHARGES
+₹6,778
+TAX
+₹339
+BALANCE
+-
+Issue
+
+Shaurya Sheikh [DH]
+
+room 205 · DH-5EL-0183
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹3,898
+TAX
+₹195
+BALANCE
+-
+Issue
+
+Meera Sheikh [DH]
+
+room 207 · DH-5EL-0175
+
+BILLED TO
+go-MMT
+NIGHTS
+2
+CHARGES
+₹7,450
+TAX
+₹373
+BALANCE
+-
+Issue
+
+Aditya Sheikh [DH]
+
+room 306 · DH-5EL-0179
+
+BILLED TO
+Booking.com
+NIGHTS
+1
+CHARGES
+₹3,769
+TAX
+₹188
+BALANCE
+-
+Issue
+
+Sneha Bose [DH]
+
+room 308 · DH-5EL-0177
+
+BILLED TO
+Expedia
+NIGHTS
+1
+CHARGES
+₹3,158
+TAX
+₹158
+BALANCE
+-
+Issue
+
+Myra Kulkarni [DH]
+
+room 210 · DH-5EL-0161
+
+BILLED TO
+go-MMT
+NIGHTS
+3
+CHARGES
+₹14,408
+TAX
+₹720
+BALANCE
+-
+Issue
+
+Rohan Mehta [DH]
+
+room 304 · DH-5EL-0168
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹7,653
+TAX
+₹383
+BALANCE
+-
+Issue
+
+Rahul Nair [DH]
+
+room 207 · DH-5EL-0173
+
+BILLED TO
+Expedia
+NIGHTS
+2
+CHARGES
+₹7,348
+TAX
+₹367
+BALANCE
+-
+Issue
+
+Rohan Khan [DH]
+
+room 204 · DH-5EL-0164
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹9,009
+TAX
+₹450
+BALANCE
+-
+Issue
+
+Nisha Patel [DH]
+
+room 307 · DH-5EL-0159
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹8,331
+TAX
+₹417
+BALANCE
+-
+Issue
+
+Ishaan Reddy [DH]
+
+room 302 · DH-5EL-0153
+
+BILLED TO
+Ishaan Reddy [DH]
+NIGHTS
+3
+CHARGES
+₹10,181
+TAX
+₹509
+BALANCE
+-
+Issue
+
+Sneha Verma [DH]
+
+room 308 · DH-5EL-0166
+
+BILLED TO
+Sneha Verma [DH]
+NIGHTS
+2
+CHARGES
+₹8,521
+TAX
+₹426
+BALANCE
+-
+Issue
+
+Vihaan Khan [DH]
+
+room 203 · DH-5EL-0154
+
+BILLED TO
+Expedia
+NIGHTS
+3
+CHARGES
+₹13,838
+TAX
+₹692
+BALANCE
+-
+Issue
+
+Rahul Nair [DH]
+
+room 201 · DH-5EL-0169
+
+BILLED TO
+Expedia
+NIGHTS
+1
+CHARGES
+₹3,495
+TAX
+₹175
+BALANCE
+-
+Issue
+
+Tanvi Joshi [DH]
+
+room 210 · DH-5EL-0170
+
+BILLED TO
+Agoda
+NIGHTS
+1
+CHARGES
+₹4,035
+TAX
+₹202
+BALANCE
+-
+Issue
+
+Ishaan Kulkarni [DH]
+
+room 303 · DH-5EL-0160
+
+BILLED TO
+Agoda
+NIGHTS
+2
+CHARGES
+₹8,556
+TAX
+₹428
+BALANCE
+-
+Issue
+
+Farhan Kulkarni [DH]
+
+room 301 · DH-5EL-0171
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹3,712
+TAX
+₹186
+BALANCE
+-
+Issue
+
+Zoya Kulkarni [DH]
+
+room 201 · DH-5EL-0172
+
+BILLED TO
+Expedia
+NIGHTS
+1
+CHARGES
+₹3,720
+TAX
+₹186
+BALANCE
+-
+Issue
+
+Rahul Sheikh [DH]
+
+room 203 · DH-5EL-0167
+
+BILLED TO
+Booking.com
+NIGHTS
+1
+CHARGES
+₹4,799
+TAX
+₹240
+BALANCE
+-
+Issue
+
+Sneha Deshmukh [DH]
+
+room 206 · DH-5EL-0157
+
+BILLED TO
+Booking.com
+NIGHTS
+3
+CHARGES
+₹13,934
+TAX
+₹697
+BALANCE
+-
+Issue
+
+Ishaan Bose [DH]
+
+room 307 · DH-5EL-0165
+
+BILLED TO
+Agoda
+NIGHTS
+2
+CHARGES
+₹7,335
+TAX
+₹367
+BALANCE
+-
+Issue
+
+Zoya Gupta [DH]
+
+room 210 · DH-5EL-0158
+
+BILLED TO
+Booking.com
+NIGHTS
+1
+CHARGES
+₹4,452
+TAX
+₹223
+BALANCE
+-
+Issue
+
+Tanvi Shah [DH]
+
+room 202 · DH-5EL-0162
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹4,343
+TAX
+₹217
+BALANCE
+-
+Issue
+
+Meera Chatterjee [DH]
+
+room 308 · DH-5EL-0163
+
+BILLED TO
+Agoda
+NIGHTS
+1
+CHARGES
+₹3,191
+TAX
+₹160
+BALANCE
+-
+Issue
+
+Reyansh Joshi [DH]
+
+room 201 · DH-5EL-0156
+
+BILLED TO
+Reyansh Joshi [DH]
+NIGHTS
+2
+CHARGES
+₹7,439
+TAX
+₹372
+BALANCE
+-
+Issue
+
+Shaurya Shah [DH]
+
+room 306 · DH-5EL-0155
+
+BILLED TO
+Expedia
+NIGHTS
+2
+CHARGES
+₹8,424
+TAX
+₹421
+BALANCE
+-
+Issue
+
+Vivaan Kulkarni [DH]
+
+room 308 · DH-5EL-0150
+
+BILLED TO
+go-MMT
+NIGHTS
+3
+CHARGES
+₹12,856
+TAX
+₹643
+BALANCE
+-
+Issue
+
+Vivaan Bose [DH]
+
+room 204 · DH-5EL-0151
+
+BILLED TO
+Vivaan Bose [DH]
+NIGHTS
+3
+CHARGES
+₹10,455
+TAX
+₹523
+BALANCE
+-
+Issue
+
+Rohan Pillai [DH]
+
+room 207 · DH-5EL-0148
+
+BILLED TO
+Agoda
+NIGHTS
+3
+CHARGES
+₹11,596
+TAX
+₹580
+BALANCE
+-
+Issue
+
+Zoya Chatterjee [DH]
+
+room 203 · DH-5EL-0149
+
+BILLED TO
+Booking.com
+NIGHTS
+2
+CHARGES
+₹6,750
+TAX
+₹338
+BALANCE
+-
+Issue
+
+Vivaan Rao [DH]
+
+room 307 · DH-5EL-0146
+
+BILLED TO
+go-MMT
+NIGHTS
+2
+CHARGES
+₹7,273
+TAX
+₹364
+BALANCE
+-
+Issue
+
+Farhan Sharma [DH]
+
+room 209 · DH-5EL-0141
+
+BILLED TO
+Farhan Sharma [DH]
+NIGHTS
+3
+CHARGES
+₹10,915
+TAX
+₹546
+BALANCE
+-
+Issue
+
+Reyansh Gupta [DH]
+
+room 305 · DH-5EL-0137
+
+BILLED TO
+go-MMT
+NIGHTS
+3
+CHARGES
+₹9,179
+TAX
+₹459
+BALANCE
+-
+Issue
+
+Imran Sheikh [DH]
+
+room 304 · DH-5EL-0145
+
+BILLED TO
+Imran Sheikh [DH]
+NIGHTS
+2
+CHARGES
+₹6,436
+TAX
+₹322
+BALANCE
+-
+Issue
+
+Aarav Khan [DH]
+
+room 210 · DH-5EL-0140
+
+BILLED TO
+Aarav Khan [DH]
+NIGHTS
+3
+CHARGES
+₹10,629
+TAX
+₹531
+BALANCE
+-
+Issue
+
+Rohan Khan [DH]
+
+room 209 · DH-5EL-0142
+
+BILLED TO
+go-MMT
+NIGHTS
+3
+CHARGES
+₹11,527
+TAX
+₹576
+BALANCE
+-
+Issue
+
+Navya Iyer [DH]
+
+room 205 · DH-5EL-0152
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹3,641
+TAX
+₹182
+BALANCE
+-
+Issue
+
+Ira Deshmukh [DH]
+
+room 303 · DH-5EL-0147
+
+BILLED TO
+Agoda
+NIGHTS
+2
+CHARGES
+₹8,470
+TAX
+₹423
+BALANCE
+-
+Issue
+
+Ira Shah [DH]
+
+room 307 · DH-5EL-0138
+
+BILLED TO
+go-MMT
+NIGHTS
+2
+CHARGES
+₹6,913
+TAX
+₹346
+BALANCE
+-
+Issue
+
+Ira Verma [DH]
+
+room 301 · DH-5EL-0144
+
+BILLED TO
+Ira Verma [DH]
+NIGHTS
+2
+CHARGES
+₹7,747
+TAX
+₹387
+BALANCE
+-
+Issue
+
+Imran Nair [DH]
+
+room 210 · DH-5EL-0124
+
+BILLED TO
+Expedia
+NIGHTS
+3
+CHARGES
+₹10,817
+TAX
+₹541
+BALANCE
+-
+Issue
+
+Ananya Patel [DH]
+
+room 305 · DH-5EL-0139
+
+BILLED TO
+Expedia
+NIGHTS
+1
+CHARGES
+₹3,310
+TAX
+₹165
+BALANCE
+-
+Issue
+
+Meera Bose [DH]
+
+room 204 · DH-5EL-0129
+
+BILLED TO
+Agoda
+NIGHTS
+2
+CHARGES
+₹7,605
+TAX
+₹380
+BALANCE
+-
+Issue
+
+Meera Pillai [DH]
+
+room 301 · DH-5EL-0143
+
+BILLED TO
+Meera Pillai [DH]
+NIGHTS
+1
+CHARGES
+₹3,848
+TAX
+₹192
+BALANCE
+-
+Issue
+
+Shaurya Chatterjee [DH]
+
+room 210 · DH-5EL-0133
+
+BILLED TO
+Booking.com
+NIGHTS
+1
+CHARGES
+₹4,600
+TAX
+₹230
+BALANCE
+-
+Issue
+
+Anika Sheikh [DH]
+
+room 205 · DH-5EL-0132
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹4,352
+TAX
+₹218
+BALANCE
+-
+Issue
+
+Kavya Shah [DH]
+
+room 303 · DH-5EL-0134
+
+BILLED TO
+go-MMT
+NIGHTS
+1
+CHARGES
+₹3,693
+TAX
+₹185
+BALANCE
+-
+Issue
+
+Ayaan Sheikh [DH]
+
+room 210 · DH-5EL-0123
+
+BILLED TO
+Expedia
+NIGHTS
+3
+CHARGES
+₹13,265
+TAX
+₹663
+BALANCE
+-
+Issue
+
+Ishaan Patel [DH]
+
+room 205 · DH-5EL-0120
+
+BILLED TO
+Ishaan Patel [DH]
+NIGHTS
+3
+CHARGES
+₹11,470
+TAX
+₹573
+BALANCE
+-
+Issue
+
+Ishaan Sharma [DH]
+
+room 208 · DH-5EL-0135
+
+BILLED TO
+Ishaan Sharma [DH]
+NIGHTS
+1
+CHARGES
+₹4,795
+TAX
+₹240
+BALANCE
+-
+Issue
+
+Ira Shah [DH]
+
+room 303 · DH-5EL-0118
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+3
+CHARGES
+₹10,655
+TAX
+₹533
+BALANCE
+-
+Issue
+
+Anika Menon [DH]
+
+room 203 · DH-5EL-0117
+
+BILLED TO
+Agoda
+NIGHTS
+3
+CHARGES
+₹11,501
+TAX
+₹575
+BALANCE
+-
+Issue
+
+Anika Iyer [DH]
+
+room 205 · DH-5EL-0136
+
+BILLED TO
+Booking.com
+NIGHTS
+1
+CHARGES
+₹3,854
+TAX
+₹193
+BALANCE
+-
+Issue
+
+Vivaan Sheikh [DH]
+
+room 202 · DH-5EL-0127
+
+BILLED TO
+Booking.com
+NIGHTS
+2
+CHARGES
+₹7,832
+TAX
+₹392
+BALANCE
+-
+Issue
+
+Myra Kulkarni [DH]
+
+room 301 · DH-5EL-0130
+
+BILLED TO
+go-MMT
+NIGHTS
+1
+CHARGES
+₹3,689
+TAX
+₹184
+BALANCE
+-
+Issue
+
+Navya Nair [DH]
+
+room 205 · DH-5EL-0121
+
+BILLED TO
+Agoda
+NIGHTS
+3
+CHARGES
+₹14,505
+TAX
+₹725
+BALANCE
+-
+Issue
+
+Diya Chatterjee [DH]
+
+room 302 · DH-5EL-0131
+
+BILLED TO
+Agoda
+NIGHTS
+1
+CHARGES
+₹3,107
+TAX
+₹155
+BALANCE
+-
+Issue
+
+Zoya Verma [DH]
+
+room 205 · DH-5EL-0128
+
+BILLED TO
+Zoya Verma [DH]
+NIGHTS
+1
+CHARGES
+₹3,722
+TAX
+₹186
+BALANCE
+-
+Issue
+
+Reyansh Singh [DH]
+
+room 206 · DH-5EL-0115
+
+BILLED TO
+Reyansh Singh [DH]
+NIGHTS
+3
+CHARGES
+₹11,593
+TAX
+₹580
+BALANCE
+-
+Issue
+
+Imran Pillai [DH]
+
+room 307 · DH-5EL-0111
+
+BILLED TO
+Booking.com
+NIGHTS
+3
+CHARGES
+₹10,758
+TAX
+₹538
+BALANCE
+-
+Issue
+
+Vivaan Shah [DH]
+
+room 203 · DH-5EL-0126
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹4,652
+TAX
+₹233
+BALANCE
+-
+Issue
+
+Ananya Mehta [DH]
+
+room 203 · DH-5EL-0122
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹8,901
+TAX
+₹445
+BALANCE
+-
+Issue
+
+Nisha Mehta [DH]
+
+room 308 · DH-5EL-0116
+
+BILLED TO
+Nisha Mehta [DH]
+NIGHTS
+3
+CHARGES
+₹11,459
+TAX
+₹573
+BALANCE
+-
+Issue
+
+Anika Nair [DH]
+
+room 204 · DH-5EL-0125
+
+BILLED TO
+Anika Nair [DH]
+NIGHTS
+1
+CHARGES
+₹4,140
+TAX
+₹207
+BALANCE
+-
+Issue
+
+Rahul Sharma [DH]
+
+room 303 · DH-5EL-0119
+
+BILLED TO
+Expedia
+NIGHTS
+2
+CHARGES
+₹7,583
+TAX
+₹379
+BALANCE
+-
+Issue
+
+Vivaan Reddy [DH]
+
+room 306 · DH-5EL-0114
+
+BILLED TO
+Vivaan Reddy [DH]
+NIGHTS
+3
+CHARGES
+₹11,340
+TAX
+₹567
+BALANCE
+-
+Issue
+
+Aditya Reddy [DH]
+
+room 209 · DH-5EL-0105
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+3
+CHARGES
+₹12,765
+TAX
+₹638
+BALANCE
+-
+Issue
+
+Sara Khan [DH]
+
+room 210 · DH-5EL-0109
+
+BILLED TO
+Booking.com
+NIGHTS
+2
+CHARGES
+₹8,366
+TAX
+₹418
+BALANCE
+-
+Issue
+
+Rahul Joshi [DH]
+
+room 301 · DH-5EL-0110
+
+BILLED TO
+go-MMT
+NIGHTS
+2
+CHARGES
+₹8,432
+TAX
+₹422
+BALANCE
+-
+Issue
+
+Ayaan Menon [DH]
+
+room 203 · DH-5EL-0107
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹9,127
+TAX
+₹456
+BALANCE
+-
+Issue
+
+Zoya Joshi [DH]
+
+room 203 · DH-5EL-0098
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+3
+CHARGES
+₹10,812
+TAX
+₹541
+BALANCE
+-
+Issue
+
+Navya Joshi [DH]
+
+room 303 · DH-5EL-0108
+
+BILLED TO
+Expedia
+NIGHTS
+1
+CHARGES
+₹3,776
+TAX
+₹189
+BALANCE
+-
+Issue
+
+Sara Iyer [DH]
+
+room 305 · DH-5EL-0100
+
+BILLED TO
+go-MMT
+NIGHTS
+3
+CHARGES
+₹12,599
+TAX
+₹630
+BALANCE
+-
+Issue
+
+Rahul Reddy [DH]
+
+room 202 · DH-5EL-0112
+
+BILLED TO
+go-MMT
+NIGHTS
+1
+CHARGES
+₹3,412
+TAX
+₹171
+BALANCE
+-
+Issue
+
+Rahul Bose [DH]
+
+room 208 · DH-5EL-0113
+
+BILLED TO
+Booking.com
+NIGHTS
+1
+CHARGES
+₹4,785
+TAX
+₹239
+BALANCE
+-
+Issue
+
+Ira Chatterjee [DH]
+
+room 301 · DH-5EL-0106
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹6,733
+TAX
+₹337
+BALANCE
+-
+Issue
+
+Vihaan Pillai [DH]
+
+room 303 · DH-5EL-0099
+
+BILLED TO
+Vihaan Pillai [DH]
+NIGHTS
+3
+CHARGES
+₹10,712
+TAX
+₹536
+BALANCE
+-
+Issue
+
+Ananya Joshi [DH]
+
+room 209 · DH-5EL-0095
+
+BILLED TO
+Booking.com
+NIGHTS
+2
+CHARGES
+₹7,106
+TAX
+₹355
+BALANCE
+-
+Issue
+
+Ananya Singh [DH]
+
+room 306 · DH-5EL-0092
+
+BILLED TO
+Expedia
+NIGHTS
+3
+CHARGES
+₹10,535
+TAX
+₹527
+BALANCE
+-
+Issue
+
+Krishna Mehta [DH]
+
+room 202 · DH-5EL-0097
+
+BILLED TO
+Expedia
+NIGHTS
+2
+CHARGES
+₹6,742
+TAX
+₹337
+BALANCE
+-
+Issue
+
+Vivaan Singh [DH]
+
+room 205 · DH-5EL-0104
+
+BILLED TO
+go-MMT
+NIGHTS
+1
+CHARGES
+₹3,884
+TAX
+₹194
+BALANCE
+-
+Issue
+
+Navya Patel [DH]
+
+room 303 · DH-5EL-0103
+
+BILLED TO
+Expedia
+NIGHTS
+2
+CHARGES
+₹8,013
+TAX
+₹401
+BALANCE
+-
+Issue
+
+Zoya Gupta [DH]
+
+room 201 · DH-5EL-0101
+
+BILLED TO
+Agoda
+NIGHTS
+1
+CHARGES
+₹3,471
+TAX
+₹174
+BALANCE
+-
+Issue
+
+Reyansh Reddy [DH]
+
+room 206 · DH-5EL-0102
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹3,956
+TAX
+₹198
+BALANCE
+-
+Issue
+
+Vivaan Pillai [DH]
+
+room 308 · DH-5EL-0090
+
+BILLED TO
+Vivaan Pillai [DH]
+NIGHTS
+3
+CHARGES
+₹12,595
+TAX
+₹630
+BALANCE
+-
+Issue
+
+Kabir Iyer [DH]
+
+room 203 · DH-5EL-0093
+
+BILLED TO
+Expedia
+NIGHTS
+2
+CHARGES
+₹8,733
+TAX
+₹437
+BALANCE
+-
+Issue
+
+Ira Khan [DH]
+
+room 305 · DH-5EL-0094
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹7,555
+TAX
+₹378
+BALANCE
+-
+Issue
+
+Sara Chatterjee [DH]
+
+room 206 · DH-5EL-0096
+
+BILLED TO
+go-MMT
+NIGHTS
+1
+CHARGES
+₹3,564
+TAX
+₹178
+BALANCE
+-
+Issue
+
+Myra Khan [DH]
+
+room 203 · DH-5EL-0084
+
+BILLED TO
+Booking.com
+NIGHTS
+3
+CHARGES
+₹11,953
+TAX
+₹598
+BALANCE
+-
+Issue
+
+Rohan Khan [DH]
+
+room 209 · DH-5EL-0083
+
+BILLED TO
+Expedia
+NIGHTS
+3
+CHARGES
+₹14,195
+TAX
+₹710
+BALANCE
+-
+Issue
+
+Sneha Nair [DH]
+
+room 303 · DH-5EL-0081
+
+BILLED TO
+Sneha Nair [DH]
+NIGHTS
+3
+CHARGES
+₹11,182
+TAX
+₹559
+BALANCE
+-
+Issue
+
+Zoya Verma [DH]
+
+room 308 · DH-5EL-0089
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹6,847
+TAX
+₹342
+BALANCE
+-
+Issue
+
+Vivaan Kulkarni [DH]
+
+room 202 · DH-5EL-0082
+
+BILLED TO
+go-MMT
+NIGHTS
+3
+CHARGES
+₹12,325
+TAX
+₹616
+BALANCE
+-
+Issue
+
+Anika Joshi [DH]
+
+room 201 · DH-5EL-0091
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹7,372
+TAX
+₹369
+BALANCE
+-
+Issue
+
+Zoya Nair [DH]
+
+room 307 · DH-5EL-0088
+
+BILLED TO
+Booking.com
+NIGHTS
+2
+CHARGES
+₹8,311
+TAX
+₹416
+BALANCE
+-
+Issue
+
+Kabir Gupta [DH]
+
+room 201 · DH-5EL-0086
+
+BILLED TO
+go-MMT
+NIGHTS
+1
+CHARGES
+₹3,833
+TAX
+₹192
+BALANCE
+-
+Issue
+
+Kavya Pillai [DH]
+
+room 206 · DH-5EL-0073
+
+BILLED TO
+go-MMT
+NIGHTS
+3
+CHARGES
+₹11,150
+TAX
+₹558
+BALANCE
+-
+Issue
+
+Rahul Bose [DH]
+
+room 208 · DH-5EL-0075
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+3
+CHARGES
+₹10,205
+TAX
+₹510
+BALANCE
+-
+Issue
+
+Vivaan Bose [DH]
+
+room 303 · DH-5EL-0085
+
+BILLED TO
+Booking.com
+NIGHTS
+2
+CHARGES
+₹6,948
+TAX
+₹347
+BALANCE
+-
+Issue
+
+Shaurya Nair [DH]
+
+room 307 · DH-5EL-0087
+
+BILLED TO
+go-MMT
+NIGHTS
+1
+CHARGES
+₹3,257
+TAX
+₹163
+BALANCE
+-
+Issue
+
+Sara Shah [DH]
+
+room 208 · DH-5EL-0077
+
+BILLED TO
+Sara Shah [DH]
+NIGHTS
+3
+CHARGES
+₹13,820
+TAX
+₹691
+BALANCE
+-
+Issue
+
+Rahul Sheikh [DH]
+
+room 308 · DH-5EL-0080
+
+BILLED TO
+Booking.com
+NIGHTS
+2
+CHARGES
+₹8,218
+TAX
+₹411
+BALANCE
+-
+Issue
+
+Aadhya Khan [DH]
+
+room 306 · DH-5EL-0072
+
+BILLED TO
+Expedia
+NIGHTS
+3
+CHARGES
+₹11,279
+TAX
+₹564
+BALANCE
+-
+Issue
+
+Vihaan Singh [DH]
+
+room 206 · DH-5EL-0078
+
+BILLED TO
+Expedia
+NIGHTS
+2
+CHARGES
+₹6,980
+TAX
+₹349
+BALANCE
+-
+Issue
+
+Imran Gupta [DH]
+
+room 301 · DH-5EL-0064
+
+BILLED TO
+Imran Gupta [DH]
+NIGHTS
+3
+CHARGES
+₹10,967
+TAX
+₹548
+BALANCE
+-
+Issue
+
+Rahul Sharma [DH]
+
+room 208 · DH-5EL-0079
+
+BILLED TO
+Agoda
+NIGHTS
+2
+CHARGES
+₹8,259
+TAX
+₹413
+BALANCE
+-
+Issue
+
+Navya Nair [DH]
+
+room 201 · DH-5EL-0076
+
+BILLED TO
+go-MMT
+NIGHTS
+2
+CHARGES
+₹8,271
+TAX
+₹414
+BALANCE
+-
+Issue
+
+Vihaan Sharma [DH]
+
+room 202 · DH-5EL-0068
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+3
+CHARGES
+₹12,636
+TAX
+₹632
+BALANCE
+-
+Issue
+
+Farhan Pillai [DH]
+
+room 301 · DH-5EL-0070
+
+BILLED TO
+Expedia
+NIGHTS
+3
+CHARGES
+₹10,828
+TAX
+₹541
+BALANCE
+-
+Issue
+
+Vivaan Joshi [DH]
+
+room 308 · DH-5EL-0074
+
+BILLED TO
+go-MMT
+NIGHTS
+2
+CHARGES
+₹6,883
+TAX
+₹344
+BALANCE
+-
+Issue
+
+Sara Rao [DH]
+
+room 304 · DH-5EL-0062
+
+BILLED TO
+Booking.com
+NIGHTS
+3
+CHARGES
+₹9,735
+TAX
+₹487
+BALANCE
+-
+Issue
+
+Nisha Patel [DH]
+
+room 302 · DH-5EL-0069
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹8,217
+TAX
+₹411
+BALANCE
+-
+Issue
+
+Ira Patel [DH]
+
+room 205 · DH-5EL-0061
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+3
+CHARGES
+₹14,280
+TAX
+₹714
+BALANCE
+-
+Issue
+
+Farhan Chatterjee [DH]
+
+room 303 · DH-5EL-0067
+
+BILLED TO
+Agoda
+NIGHTS
+2
+CHARGES
+₹6,879
+TAX
+₹344
+BALANCE
+-
+Issue
+
+Zoya Deshmukh [DH]
+
+room 304 · DH-5EL-0065
+
+BILLED TO
+go-MMT
+NIGHTS
+2
+CHARGES
+₹6,679
+TAX
+₹334
+BALANCE
+-
+Issue
+
+Ishaan Khan [DH]
+
+room 208 · DH-5EL-0054
+
+BILLED TO
+go-MMT
+NIGHTS
+3
+CHARGES
+₹10,888
+TAX
+₹544
+BALANCE
+-
+Issue
+
+Ananya Joshi [DH]
+
+room 306 · DH-5EL-0071
+
+BILLED TO
+go-MMT
+NIGHTS
+1
+CHARGES
+₹4,089
+TAX
+₹204
+BALANCE
+-
+Issue
+
+Anika Kulkarni [DH]
+
+room 307 · DH-5EL-0066
+
+BILLED TO
+Booking.com
+NIGHTS
+1
+CHARGES
+₹3,474
+TAX
+₹174
+BALANCE
+-
+Issue
+
+Rohan Sheikh [DH]
+
+room 307 · DH-5EL-0053
+
+BILLED TO
+Booking.com
+NIGHTS
+3
+CHARGES
+₹9,514
+TAX
+₹476
+BALANCE
+-
+Issue
+
+Anika Joshi [DH]
+
+room 203 · DH-5EL-0058
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹4,715
+TAX
+₹236
+BALANCE
+-
+Issue
+
+Navya Kulkarni [DH]
+
+room 201 · DH-5EL-0052
+
+BILLED TO
+Expedia
+NIGHTS
+2
+CHARGES
+₹7,785
+TAX
+₹389
+BALANCE
+-
+Issue
+
+Sneha Shah [DH]
+
+room 308 · DH-5EL-0051
+
+BILLED TO
+go-MMT
+NIGHTS
+2
+CHARGES
+₹6,108
+TAX
+₹305
+BALANCE
+-
+Issue
+
+Ishaan Rao [DH]
+
+room 206 · DH-5EL-0059
+
+BILLED TO
+Ishaan Rao [DH]
+NIGHTS
+1
+CHARGES
+₹3,638
+TAX
+₹182
+BALANCE
+-
+Issue
+
+Vihaan Nair [DH]
+
+room 204 · DH-5EL-0046
+
+BILLED TO
+Vihaan Nair [DH]
+NIGHTS
+3
+CHARGES
+₹14,076
+TAX
+₹704
+BALANCE
+-
+Issue
+
+Navya Mehta [DH]
+
+room 307 · DH-5EL-0063
+
+BILLED TO
+Booking.com
+NIGHTS
+1
+CHARGES
+₹4,348
+TAX
+₹217
+BALANCE
+-
+Issue
+
+Aarav Mehta [DH]
+
+room 304 · DH-5EL-0057
+
+BILLED TO
+Aarav Mehta [DH]
+NIGHTS
+1
+CHARGES
+₹3,732
+TAX
+₹187
+BALANCE
+-
+Issue
+
+Navya Mehta [DH]
+
+room 208 · DH-5EL-0050
+
+BILLED TO
+Agoda
+NIGHTS
+2
+CHARGES
+₹9,463
+TAX
+₹473
+BALANCE
+-
+Issue
+
+Tanvi Shah [DH]
+
+room 303 · DH-5EL-0060
+
+BILLED TO
+Tanvi Shah [DH]
+NIGHTS
+1
+CHARGES
+₹3,256
+TAX
+₹163
+BALANCE
+-
+Issue
+
+Sneha Shah [DH]
+
+room 206 · DH-5EL-0043
+
+BILLED TO
+Expedia
+NIGHTS
+3
+CHARGES
+₹13,240
+TAX
+₹662
+BALANCE
+-
+Issue
+
+Nisha Deshmukh [DH]
+
+room 210 · DH-5EL-0055
+
+BILLED TO
+Booking.com
+NIGHTS
+1
+CHARGES
+₹4,279
+TAX
+₹214
+BALANCE
+-
+Issue
+
+Ayaan Rao [DH]
+
+room 210 · DH-5EL-0047
+
+BILLED TO
+Expedia
+NIGHTS
+2
+CHARGES
+₹8,379
+TAX
+₹419
+BALANCE
+-
+Issue
+
+Zoya Chatterjee [DH]
+
+room 308 · DH-5EL-0056
+
+BILLED TO
+Expedia
+NIGHTS
+1
+CHARGES
+₹3,690
+TAX
+₹184
+BALANCE
+-
+Issue
+
+Nisha Pillai [DH]
+
+room 303 · DH-5EL-0040
+
+BILLED TO
+Nisha Pillai [DH]
+NIGHTS
+2
+CHARGES
+₹6,283
+TAX
+₹314
+BALANCE
+-
+Issue
+
+Aditya Sheikh [DH]
+
+room 202 · DH-5EL-0044
+
+BILLED TO
+Agoda
+NIGHTS
+2
+CHARGES
+₹9,316
+TAX
+₹466
+BALANCE
+-
+Issue
+
+Ira Singh [DH]
+
+room 206 · DH-5EL-0041
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹7,273
+TAX
+₹364
+BALANCE
+-
+Issue
+
+Ananya Verma [DH]
+
+room 205 · DH-5EL-0039
+
+BILLED TO
+Ananya Verma [DH]
+NIGHTS
+3
+CHARGES
+₹14,463
+TAX
+₹723
+BALANCE
+-
+Issue
+
+Nisha Iyer [DH]
+
+room 302 · DH-5EL-0045
+
+BILLED TO
+Expedia
+NIGHTS
+2
+CHARGES
+₹6,071
+TAX
+₹304
+BALANCE
+-
+Issue
+
+Anika Joshi [DH]
+
+room 202 · DH-5EL-0049
+
+BILLED TO
+go-MMT
+NIGHTS
+1
+CHARGES
+₹4,809
+TAX
+₹240
+BALANCE
+-
+Issue
+
+Vivaan Sheikh [DH]
+
+room 306 · DH-5EL-0048
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹4,246
+TAX
+₹212
+BALANCE
+-
+Issue
+
+Ayaan Reddy [DH]
+
+room 207 · DH-5EL-0029
+
+BILLED TO
+go-MMT
+NIGHTS
+3
+CHARGES
+₹12,230
+TAX
+₹611
+BALANCE
+-
+Issue
+
+Vihaan Verma [DH]
+
+room 206 · DH-5EL-0037
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹8,100
+TAX
+₹405
+BALANCE
+-
+Issue
+
+Ira Pillai [DH]
+
+room 301 · DH-5EL-0042
+
+BILLED TO
+go-MMT
+NIGHTS
+1
+CHARGES
+₹3,035
+TAX
+₹152
+BALANCE
+-
+Issue
+
+Aarav Nair [DH]
+
+room 204 · DH-5EL-0028
+
+BILLED TO
+Agoda
+NIGHTS
+3
+CHARGES
+₹11,868
+TAX
+₹593
+BALANCE
+-
+Issue
+
+Imran Bose [DH]
+
+room 307 · DH-5EL-0038
+
+BILLED TO
+Imran Bose [DH]
+NIGHTS
+2
+CHARGES
+₹6,121
+TAX
+₹306
+BALANCE
+-
+Issue
+
+Imran Sheikh [DH]
+
+room 201 · DH-5EL-0036
+
+BILLED TO
+Expedia
+NIGHTS
+2
+CHARGES
+₹8,421
+TAX
+₹421
+BALANCE
+-
+Issue
+
+Imran Nair [DH]
+
+room 201 · DH-5EL-0030
+
+BILLED TO
+Expedia
+NIGHTS
+3
+CHARGES
+₹12,561
+TAX
+₹628
+BALANCE
+-
+Issue
+
+Ishaan Pillai [DH]
+
+room 202 · DH-5EL-0031
+
+BILLED TO
+Ishaan Pillai [DH]
+NIGHTS
+3
+CHARGES
+₹11,364
+TAX
+₹568
+BALANCE
+-
+Issue
+
+Vivaan Khan [DH]
+
+room 307 · DH-5EL-0034
+
+BILLED TO
+Expedia
+NIGHTS
+2
+CHARGES
+₹8,023
+TAX
+₹401
+BALANCE
+-
+Issue
+
+Vihaan Sharma [DH]
+
+room 301 · DH-5EL-0035
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹3,697
+TAX
+₹185
+BALANCE
+-
+Issue
+
+Tanvi Singh [DH]
+
+room 201 · DH-5EL-0020
+
+BILLED TO
+Booking.com
+NIGHTS
+3
+CHARGES
+₹12,220
+TAX
+₹611
+BALANCE
+-
+Issue
+
+Meera Singh [DH]
+
+room 302 · DH-5EL-0027
+
+BILLED TO
+go-MMT
+NIGHTS
+3
+CHARGES
+₹12,770
+TAX
+₹639
+BALANCE
+-
+Issue
+
+Ishaan Reddy [DH]
+
+room 210 · DH-5EL-0033
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹4,259
+TAX
+₹213
+BALANCE
+-
+Issue
+
+Aditya Singh [DH]
+
+room 303 · DH-5EL-0026
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+3
+CHARGES
+₹11,636
+TAX
+₹582
+BALANCE
+-
+Issue
+
+Tanvi Patel [DH]
+
+room 306 · DH-5EL-0022
+
+BILLED TO
+Agoda
+NIGHTS
+2
+CHARGES
+₹6,967
+TAX
+₹348
+BALANCE
+-
+Issue
+
+Diya Deshmukh [DH]
+
+room 304 · DH-5EL-0024
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+2
+CHARGES
+₹7,527
+TAX
+₹376
+BALANCE
+-
+Issue
+
+Riya Menon [DH]
+
+room 301 · DH-5EL-0015
+
+BILLED TO
+go-MMT
+NIGHTS
+3
+CHARGES
+₹9,846
+TAX
+₹492
+BALANCE
+-
+Issue
+
+Myra Menon [DH]
+
+room 210 · DH-5EL-0025
+
+BILLED TO
+Myra Menon [DH]
+NIGHTS
+2
+CHARGES
+₹8,209
+TAX
+₹410
+BALANCE
+-
+Issue
+
+Aarav Khan [DH]
+
+room 205 · DH-5EL-0032
+
+BILLED TO
+Aarav Khan [DH]
+NIGHTS
+1
+CHARGES
+₹3,451
+TAX
+₹173
+BALANCE
+-
+Issue
+
+Imran Singh [DH]
+
+room 303 · DH-5EL-0019
+
+BILLED TO
+Booking.com
+NIGHTS
+2
+CHARGES
+₹7,461
+TAX
+₹373
+BALANCE
+-
+Issue
+
+Rahul Iyer [DH]
+
+room 204 · DH-5EL-0014
+
+BILLED TO
+Agoda
+NIGHTS
+3
+CHARGES
+₹12,849
+TAX
+₹642
+BALANCE
+-
+Issue
+
+Aditya Mehta [DH]
+
+room 209 · DH-5EL-0023
+
+BILLED TO
+Aditya Mehta [DH]
+NIGHTS
+1
+CHARGES
+₹4,647
+TAX
+₹232
+BALANCE
+-
+Issue
+
+Rohan Shah [DH]
+
+room 210 · DH-5EL-0009
+
+BILLED TO
+Booking.com
+NIGHTS
+3
+CHARGES
+₹12,683
+TAX
+₹634
+BALANCE
+-
+Issue
+
+Aadhya Iyer [DH]
+
+room 209 · DH-5EL-0021
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹3,727
+TAX
+₹186
+BALANCE
+-
+Issue
+
+Vivaan Chatterjee [DH]
+
+room 303 · DH-5EL-0018
+
+BILLED TO
+Expedia
+NIGHTS
+2
+CHARGES
+₹8,224
+TAX
+₹411
+BALANCE
+-
+Issue
+
+Vihaan Gupta [DH]
+
+room 301 · DH-5EL-0013
+
+BILLED TO
+Agoda
+NIGHTS
+3
+CHARGES
+₹9,673
+TAX
+₹484
+BALANCE
+-
+Issue
+
+Farhan Kulkarni [DH]
+
+room 207 · DH-5EL-0005
+
+BILLED TO
+go-MMT
+NIGHTS
+3
+CHARGES
+₹11,802
+TAX
+₹590
+BALANCE
+-
+Issue
+
+Rohan Kulkarni [DH]
+
+room 303 · DH-5EL-0007
+
+BILLED TO
+Agoda
+NIGHTS
+3
+CHARGES
+₹11,540
+TAX
+₹577
+BALANCE
+-
+Issue
+
+Aarav Patel [DH]
+
+room 203 · DH-5EL-0016
+
+BILLED TO
+Aarav Patel [DH]
+NIGHTS
+1
+CHARGES
+₹3,808
+TAX
+₹190
+BALANCE
+-
+Issue
+
+Zoya Rao [DH]
+
+room 203 · DH-5EL-0017
+
+BILLED TO
+go-MMT
+NIGHTS
+1
+CHARGES
+₹4,835
+TAX
+₹242
+BALANCE
+-
+Issue
+
+Rohan Kulkarni [DH]
+
+room 206 · DH-5EL-0011
+
+BILLED TO
+Booking.com
+NIGHTS
+1
+CHARGES
+₹3,756
+TAX
+₹188
+BALANCE
+-
+Issue
+
+Kavya Rao [DH]
+
+room 303 · DH-5EL-0012
+
+BILLED TO
+Kavya Rao [DH]
+NIGHTS
+1
+CHARGES
+₹3,953
+TAX
+₹198
+BALANCE
+-
+Issue
+
+Kavya Reddy [DH]
+
+room 207 · DH-5EL-0010
+
+BILLED TO
+Fidato Hotels
+NIGHTS
+1
+CHARGES
+₹4,490
+TAX
+₹225
+BALANCE
+-
+Issue
+
+Sara Patel [DH]
+
+room 307 · DH-5EL-0004
+
+BILLED TO
+Agoda
+NIGHTS
+2
+CHARGES
+₹7,784
+TAX
+₹389
+BALANCE
+-
+Issue
+
+Aadhya Gupta [DH]
+
+room 209 · DH-5EL-0006
+
+BILLED TO
+Expedia
+NIGHTS
+2
+CHARGES
+₹8,325
+TAX
+₹416
+BALANCE
+-
+Issue
+
+Kabir Gupta [DH]
+
+room 205 · DH-5EL-0008
+
+BILLED TO
+Booking.com
+NIGHTS
+1
+CHARGES
+₹3,915
+TAX
+₹196
+BALANCE
+-
+Issue
+
+Ira Rao [DH]
+
+room 305 · DH-5EL-0003
+
+BILLED TO
+go-MMT
+NIGHTS
+2
+CHARGES
+₹7,531
+TAX
+₹377
+BALANCE
+-
+Issue
+
+Reyansh Sheikh [DH]
+
+room 307 · DH-5EL-0002
+
+BILLED TO
+Reyansh Sheikh [DH]
+NIGHTS
+1
+CHARGES
+₹3,104
+TAX
+₹155
+BALANCE
+-
+Issue
+
+Tanvi Singh [DH]
+
+room 308 · DH-5EL-0001
+
+BILLED TO
+Expedia
+NIGHTS
+1
+CHARGES
+₹3,460
+TAX
+₹173
+BALANCE
+-
+Issue
+Issued
+
+Every number allocated at this property, newest first. A credit note sits beside the invoice it cancels.
+
+5EL/2026-27/00012
+BILLED TO
+D27371 Billed Co
+ISSUED
+28 Oct 2026
+TAX
+₹156
+TOTAL
+₹3,278
+issued
+5EL/2026-27/00011
+BILLED TO
+Ishaan Nair [DH]
+ISSUED
+28 Oct 2026
+TAX
+₹212
+TOTAL
+₹4,461
+issued
+5EL/2026-27/00010
+BILLED TO
+Ayaan Singh [DH]
+ISSUED
+28 Oct 2026
+TAX
+₹228
+TOTAL
+₹4,798
+issued
+5EL/2026-27/00009
+
+credit note
+
+BILLED TO
+Acme Traders
+ISSUED
+28 Oct 2026
+TAX
+-₹185
+TOTAL
+-₹3,884
+-
+5EL/2026-27/00008
+BILLED TO
+Acme Traders
+ISSUED
+28 Oct 2026
+TAX
+₹185
+TOTAL
+₹3,884
+credited
+P6MSG-BTN
+BILLED TO
+P6MSG Guest
+ISSUED
+21 Oct 2026
+TAX
+₹50
+TOTAL
+₹1,050
+issued
+5EL/2026-27/00007
+BILLED TO
+P6MSG Guest
+ISSUED
+21 Oct 2026
+TAX
+₹50
+TOTAL
+₹1,050
+issued
+5EL/2026-27/00006
+BILLED TO
+P6MSG Expedia
+ISSUED
+21 Oct 2026
+TAX
+₹50
+TOTAL
+₹1,050
+issued
+P6MSG-CN
+
+credit note
+
+BILLED TO
+P6MSG Guest
+ISSUED
+21 Oct 2026
+TAX
+₹50
+TOTAL
+₹1,050
+-
+P6MSG-CO
+BILLED TO
+P6MSG Guest
+ISSUED
+21 Oct 2026
+TAX
+₹50
+TOTAL
+₹1,050
+issued
+P6MSG-NEW
+BILLED TO
+P6MSG Guest
+ISSUED
+21 Oct 2026
+TAX
+₹50
+TOTAL
+₹1,050
+issued
+P6MSG-CR
+BILLED TO
+P6MSG Guest
+ISSUED
+21 Oct 2026
+TAX
+₹50
+TOTAL
+₹1,050
+credited
+P6MSG-OLD
+BILLED TO
+P6MSG Guest
+ISSUED
+21 Oct 2026
+TAX
+₹50
+TOTAL
+₹1,050
+issued
+REPORTS-TEST-1
+BILLED TO
+-
+ISSUED
+21 Oct 2026
+TAX
+₹500
+TOTAL
+₹10,500
+issued
+5EL/2026-27/00005
+BILLED TO
+A5 Test Wagh
+ISSUED
+20 Oct 2026
+TAX
+₹185
+TOTAL
+₹3,884
+issued
+5EL/2026-27/00004
+BILLED TO
+A5 Test Wagh
+ISSUED
+17 Oct 2026
+TAX
+₹185
+TOTAL
+₹3,884
+issued
+5EL/2026-27/00003
+BILLED TO
+Fidato Hotels
+ISSUED
+17 Oct 2026
+TAX
+₹337
+TOTAL
+₹7,085
+issued
+5EL/2026-27/00002
+BILLED TO
+Day Test Kumar
+ISSUED
+13 Oct 2026
+TAX
+₹185
+TOTAL
+₹3,884
+issued
+5EL/2026-27/00001
+BILLED TO
+Expedia
+ISSUED
+13 Oct 2026
+TAX
+₹156
+TOTAL
+₹3,286
+issued
+GST
+One set of rules, for the front desk and the till
+
+Rooms
+
+5%
+up to the next band
+18%
+above ₹7,500
+
+The night, and everything the front desk adds to it - an early arrival, a late departure, transport.
+
+HSN/SAC 996311
+
+Edit
+
+Restaurant
+
+5%
+on everything
+
+Food and non-alcoholic drink, on any menu category set to it.
+
+HSN/SAC -
+
+Edit
+
+Bar
+
+5%
+on everything
+
+What the bar sells under GST - soft drinks, mocktails, snacks. Alcohol itself is VAT, under its own heading, where the property serves it.
+
+HSN/SAC -
+
+Edit
+
+Banquet
+
+Not set
+
+-
+
+Hall hire and the packages sold with it.
+
+HSN/SAC -
+
+Set it
+
+Spa
+
+Not set
+
+-
+
+Treatments, when they go on the room bill. Its own rate, and its own decision.
+
+HSN/SAC -
+
+Set it
+
+Laundry
+
+Not set
+
+-
+
+A guest's laundry, charged to the room bill. Its own rate - your accountant confirms it.
+
+HSN/SAC -
+
+Set it
+
+Everything else
+
+Not set
+
+-
+
+Anything that belongs under none of the above.
+
+HSN/SAC -
+
+Set it
+
+The till's half: which rate each part of the menu sells under.
+
+A9 Bar
+
+2 items
+
+Not set
+Restaurant
+Bar
+Banquet
+Everything else
+
+Beverages
+
+4 items
+
+Not set
+Restaurant
+Bar
+Banquet
+Everything else
+
+Course Wire Drinks
+
+1 item
+
+Not set
+Restaurant
+Bar
+Banquet
+Everything else
+
+Course Wire Test
+
+2 items
+
+Not set
+Restaurant
+Bar
+Banquet
+Everything else
+
+Desserts
+
+2 items
+
+Not set
+Restaurant
+Bar
+Banquet
+Everything else
+
+Main course
+
+6 items
+
+Not set
+Restaurant
+Bar
+Banquet
+Everything else
+
+Starters
+
+5 items
+
+Not set
+Restaurant
+Bar
+Banquet
+Everything else

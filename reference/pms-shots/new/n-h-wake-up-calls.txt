@@ -1,0 +1,16 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Wake-up calls
+
+Calls to make, on the hotel's clock. Due from fifteen minutes before.
+
+Set a call
+To make
+Done, last 24 h
+
+No calls to make
+
+A call shows here when the desk sets one, or when a guest asks on their own page.

@@ -1,0 +1,67 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Room types
+
+2 room types · 18 rooms, 18 sellable
+
+Import
+Add a room type
+Add a room
+Room types
+Superior
+SUP
+Sleeps
+2
+Rooms
+10
+Edit
+Deluxe
+DLX
+Sleeps
+2, up to 3
+Rooms
+8
+Edit
+Rooms
+
+Drag a room to put the rooms in order.
+
+201
+Superior · Floor 2
+202
+Superior · Floor 2
+203
+Superior · Floor 2
+204
+Superior · Floor 2
+205
+Superior · Floor 2
+206
+Superior · Floor 2
+207
+Superior · Floor 2
+208
+Superior · Floor 2
+209
+Superior · Floor 2
+210
+Superior · Floor 2
+301
+Deluxe · Floor 3
+302
+Deluxe · Floor 3
+303
+Deluxe · Floor 3
+304
+Deluxe · Floor 3
+305
+Deluxe · Floor 3
+306
+Deluxe · Floor 3
+307
+Deluxe · Floor 3
+308
+Deluxe · Floor 3

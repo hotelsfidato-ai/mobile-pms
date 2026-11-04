@@ -1,0 +1,242 @@
+6
+GO
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Properties
+5 Elements Akkalkot
+5EL
+
+Akkalkot, Solapur District, Maharashtra 413216
+
+Add somebody here
+
+Rooms sold today
+
+18
+
+Occupancy
+
+105.88%
+
+Empty
+
+7
+
+In house now
+
+10
+
+Room revenue, month to date
+
+₹1,72,972
+
+Average rate
+
+₹3,326
+
+RevPAR
+
+₹925
+
+Rooms
+
+18
+
+FSSAI licence number
+
+-
+
+Change
+Who works here
+
+Agra Clerk
+
+agra@fidato.in
+
+Reception
+Dashboard
+Rooms
+Calendar
+Set a password for Agra Clerk
+Remove
+
+D27371 HK
+
+d27371-hk@fidato.in
+
+Housekeeping
+Dashboard
+Rooms
+Calendar
+Set a password for D27371 HK
+Remove
+
+RCFIX waiter
+
+rcfix-waiter@fidato.in
+
+Waiter
+Dashboard
+Rooms
+Calendar
+Set a password for RCFIX waiter
+Remove
+
+RPTEST accountant
+
+rp4-accountant@fidato.in
+
+Accountant
+Dashboard
+Rooms
+Calendar
+Set a password for RPTEST accountant
+Remove
+
+RPTEST clerk
+
+rp4-clerk@fidato.in
+
+Reception
+Dashboard
+Rooms
+Calendar
+Set a password for RPTEST clerk
+Remove
+
+Test Accountant
+
+dev-finance@fidato.in
+
+Accountant
+Dashboard
+Rooms
+Calendar
+Set a password for Test Accountant
+Remove
+
+Test Chef
+
+dev-chef@fidato.in
+
+Chef
+Dashboard
+Rooms
+Calendar
+Set a password for Test Chef
+Remove
+
+Test GM
+
+gm@fidato.in
+
+General Manager
+Dashboard
+Rooms
+Calendar
+Set a password for Test GM
+Remove
+
+Test Hotel Manager
+
+dev-hotel-manager@fidato.in
+
+Hotel Manager
+Dashboard
+Rooms
+Calendar
+Set a password for Test Hotel Manager
+Remove
+
+Test Housekeeper
+
+dev-housekeeping@fidato.in
+
+Housekeeping
+Dashboard
+Rooms
+Calendar
+Set a password for Test Housekeeper
+Remove
+
+Test Inventory Manager
+
+dev-stores@fidato.in
+
+Inventory Manager
+Dashboard
+Rooms
+Calendar
+Set a password for Test Inventory Manager
+Remove
+
+Test Kitchen Manager
+
+dev-kitchen@fidato.in
+
+Kitchen Manager
+Dashboard
+Rooms
+Calendar
+Set a password for Test Kitchen Manager
+Remove
+
+Test Reception
+
+desk@fidato.in
+
+Reception
+Dashboard
+Rooms
+Calendar
+Set a password for Test Reception
+Remove
+
+Test Revenue Manager
+
+dev-revenue@fidato.in
+
+Revenue Manager
+Dashboard
+Rooms
+Calendar
+Set a password for Test Revenue Manager
+Remove
+
+Test Waiter
+
+dev-pos@fidato.in
+
+Waiter
+Dashboard
+Rooms
+Calendar
+Set a password for Test Waiter
+Remove
+
+VOIDPAID Manager
+
+No password yet
+
+void-gm@fidato.in
+
+General Manager
+Dashboard
+Rooms
+Calendar
+Set a password for VOIDPAID Manager
+Remove
+
+VOIDPAID Waiter
+
+No password yet
+
+void-waiter@fidato.in
+
+Waiter
+Dashboard
+Rooms
+Calendar
+Set a password for VOIDPAID Waiter
+Remove

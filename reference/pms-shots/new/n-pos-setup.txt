@@ -1,0 +1,562 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Restaurant setup
+
+Name the restaurant, lay out its sections and tables, choose which computer prints which KOT, and see what is left before its first order.
+
+Ready to open
+
+What a first order needs. Each line opens the screen that does it.
+
+Restaurant named
+
+Fidato Restaurant
+
+Tables laid out
+
+20 tables in 3 sections
+
+Dishes on the menu
+
+22 dishes
+
+Open Menu
+
+A GST rate for every dish
+
+Every dish has one
+
+Open Settings
+
+A waiter
+
+3 people with the Waiter role
+
+Open People
+
+Restaurant switched on
+
+On - this screen opens only when it is
+
+The restaurant
+
+Its name is printed on every bill and shown on the till.
+
+Name
+Save name
+Parcels
+
+A packing charge added once to each parcel's bill, taxed as the food. Blank: none.
+
+Packing charge, ₹
+Save
+Owner's allowance
+
+What the owner takes free from the restaurant each month, and the % off a bill above it. The GM, the owner or an Admin settles the owner's bill to it on the Till. Blank: not set.
+
+Free each month, ₹
+% off above it
+
+Set by the owner or an Admin.
+
+This month (2026-10): ₹500.00 used, ₹0.00 left of ₹500.00.
+
+Bill	Day	Free	% off, before tax	Paid
+20261011-128	2026-10-11	₹500.00	₹32.76	₹137.60
+Taxes
+
+The same settings as Settings, Taxes: changed here or there, they are one. Alcohol is switched on or off by the owner or an Admin; the rates by whoever may change them in Settings.
+
+Serves alcohol (VAT)
+Alcohol on the menu, taxed as VAT, not GST: its own rate below, one VAT line on the bill, kept off the GST invoice. Off, no menu section can sell it.
+GST
+One set of rules, for the front desk and the till
+
+Rooms
+
+5%
+up to the next band
+18%
+above ₹7,500
+
+The night, and everything the front desk adds to it - an early arrival, a late departure, transport.
+
+HSN/SAC 996311
+
+Edit
+
+Restaurant
+
+5%
+on everything
+
+Food and non-alcoholic drink, on any menu category set to it.
+
+HSN/SAC -
+
+Edit
+
+Bar
+
+5%
+on everything
+
+What the bar sells under GST - soft drinks, mocktails, snacks. Alcohol itself is VAT, under its own heading, where the property serves it.
+
+HSN/SAC -
+
+Edit
+
+Banquet
+
+Not set
+
+-
+
+Hall hire and the packages sold with it.
+
+HSN/SAC -
+
+Set it
+
+Spa
+
+Not set
+
+-
+
+Treatments, when they go on the room bill. Its own rate, and its own decision.
+
+HSN/SAC -
+
+Set it
+
+Laundry
+
+Not set
+
+-
+
+A guest's laundry, charged to the room bill. Its own rate - your accountant confirms it.
+
+HSN/SAC -
+
+Set it
+
+Everything else
+
+Not set
+
+-
+
+Anything that belongs under none of the above.
+
+HSN/SAC -
+
+Set it
+
+The till's half: which rate each part of the menu sells under.
+
+A9 Bar
+
+2 items
+
+Not set
+Restaurant
+Bar
+Banquet
+Everything else
+
+Beverages
+
+4 items
+
+Not set
+Restaurant
+Bar
+Banquet
+Everything else
+
+Course Wire Drinks
+
+1 item
+
+Not set
+Restaurant
+Bar
+Banquet
+Everything else
+
+Course Wire Test
+
+2 items
+
+Not set
+Restaurant
+Bar
+Banquet
+Everything else
+
+Desserts
+
+2 items
+
+Not set
+Restaurant
+Bar
+Banquet
+Everything else
+
+Main course
+
+6 items
+
+Not set
+Restaurant
+Bar
+Banquet
+Everything else
+
+Starters
+
+5 items
+
+Not set
+Restaurant
+Bar
+Banquet
+Everything else
+Sections and tables
+
+A section is a part of the room - A/C, Non A/C, the bar - and tables sit inside one, four to a row, in the order they are added.
+
+A/C
+
+10 tables
+
+Rename
+Take away
+AC1
+6 seats
+AC2
+4 seats
+AC3
+4 seats
+AC4
+6 seats
+AC5
+4 seats
+AC6
+4 seats
+AC7
+6 seats
+AC8
+4 seats
+AC9
+4 seats
+AC10
+6 seats
+One table
+A numbered run
+Table
+Seats (optional)
+Add table
+Non A/C
+
+6 tables
+
+Rename
+Take away
+N1
+6 seats
+N2
+4 seats
+N3
+4 seats
+N4
+6 seats
+N5
+4 seats
+N6
+4 seats
+One table
+A numbered run
+Table
+Seats (optional)
+Add table
+Bar
+
+4 tables
+
+Rename
+Take away
+B1
+6 seats
+B2
+4 seats
+B3
+4 seats
+B4
+6 seats
+One table
+A numbered run
+Table
+Seats (optional)
+Add table
+New section
+Add section
+KOT section
+
+What each KOT is, which computer prints it, and where each menu section's dishes go. A computer at the hotel prints through its own printer: the website cannot reach a printer by its address.
+
+This computer
+
+Open this on the computer that has the printer - at the bar, in the kitchen - and tick what it prints.
+
+Set up this computer for printing
+
+On the Windows computer the printer is plugged into, install Fidato Printer. It prints each KOT and bill straight away, with no window and no print screen, starts with Windows and keeps the computer awake. In its window, sign in, open this section, name the computer and tick what it prints. Pick the receipt printer from its icon by the clock: Printer.
+
+Download Fidato Printer for Windows
+
+When it runs, Windows may say "Windows protected your PC": press More info, then Run anyway. The other way, with Chrome: download the setup file - it makes a Chrome shortcut that prints, and your receipt printer the default.
+
+This computer's name
+
+For example Bar PC or Kitchen PC.
+
+Prints Kitchen KOTs
+
+Virtual Kitchen prints them now. Ticked here, they move here.
+
+Prints Bar KOTs
+
+Virtual Bar prints them now. Ticked here, they move here.
+
+Prints Tandoor KOTs
+
+Virtual Kitchen prints them now. Ticked here, they move here.
+
+Prints the bills
+
+Virtual Bar prints them now. Ticked here, they move here.
+
+Save
+The KOT's design
+
+How every KOT at this hotel prints. The KOT beside it is the preview, as it will print.
+
+The dishes
+
+Small
+Normal
+Large
+
+The KOT number and table
+
+Small
+Normal
+Large
+
+The paper
+
+80 mm
+58 mm
+
+What it prints
+
+Waiter
+Covers
+Time sent
+The KOT kind (KITCHEN, BAR)
+Notes
+The order number
+A heading line, your own words (blank: none)
+Save the design
+As it was
+
+Fidato Kitchen
+
+27/10/26 13:05
+
+KITCHEN KOT 14
+
+Dine In
+
+Table No: 4
+
+Waiter: Ramesh
+
+Item
+Qty.
+Paneer Tikka
+2
+[Note] Less spicy
+Butter Roti
+4
+
+Restaurant · 20261027-12
+
+KOT kinds
+
+Each prints at the top of its slip - KITCHEN KOT 14, BAR KOT 14. One Send keeps one number.
+
+Add a KOT
+
+Kitchen
+
+Virtual Kitchen · not seen since 7:35 AM · 5 sections
+
+Offline
+Rename
+
+Bar
+
+Virtual Bar · not seen since 7:35 AM · 2 sections
+
+Offline
+Rename
+
+Tandoor
+
+Virtual Kitchen · not seen since 7:35 AM · 0 sections
+
+Offline
+Rename
+Switch off
+Computers that print
+
+An offline computer's KOTs wait for it, the same day, and every till screen says so.
+
+Virtual Kitchen
+
+Prints Kitchen KOTs, Tandoor KOTs
+
+Not seen since 7:35 AM
+
+Virtual Bar
+
+Prints Bar KOTs, bills
+
+Not seen since 7:35 AM
+
+Bar PC
+
+Prints nothing
+
+Not seen since 25 Oct 2026, 7:53 PM
+Remove
+Which section prints where
+
+Filled in from each section's tax heading: Bar and Alcohol to the Bar, the rest to the Kitchen. Change the odd one. Add-ons go with their dish.
+
+Course Wire Drinks
+
+Restaurant
+
+Kitchen (by its heading)
+Kitchen
+Bar
+Tandoor
+
+Course Wire Test
+
+Restaurant
+
+Kitchen (by its heading)
+Kitchen
+Bar
+Tandoor
+
+Starters
+
+Restaurant
+
+Kitchen (by its heading)
+Kitchen
+Bar
+Tandoor
+
+Main course
+
+Restaurant
+
+Kitchen (by its heading)
+Kitchen
+Bar
+Tandoor
+
+Beverages
+
+Restaurant
+
+Kitchen (by its heading)
+Kitchen
+Bar
+Tandoor
+
+Desserts
+
+Restaurant
+
+Kitchen (by its heading)
+Kitchen
+Bar
+Tandoor
+
+A9 Bar
+
+Bar
+
+Bar (by its heading)
+Kitchen
+Bar
+Tandoor
+Table booking hours
+
+When hotel guests may ask for a table from their own page. Somebody at the restaurant confirms each request.
+
+Round C test
+
+Lunch
+
+Such as 12:30-15:00. Empty: no lunch bookings.
+
+Dinner
+
+Such as 19:30-23:00. Empty: no dinner bookings.
+
+Slots: 12:30, 13:00, 13:30, 14:00, 14:30, 19:30, 20:00, 20:30, 21:00, 21:30, 22:00, 22:30
+
+Save hours
+
+Fidato Restaurant
+
+Lunch
+
+Such as 12:30-15:00. Empty: no lunch bookings.
+
+Dinner
+
+Such as 19:30-23:00. Empty: no dinner bookings.
+
+Slots: 12:30, 13:00, 13:30, 14:00, 14:30, 19:30, 20:00, 20:30, 21:00, 21:30, 22:00, 22:30
+
+Save hours
+
+Table Test Restaurant
+
+Lunch
+
+Such as 12:30-15:00. Empty: no lunch bookings.
+
+Dinner
+
+Such as 19:30-23:00. Empty: no dinner bookings.
+
+Slots: 12:30, 13:00, 13:30, 14:00, 14:30, 19:30, 20:00, 20:30, 21:00, 21:30, 22:00, 22:30
+
+Save hours

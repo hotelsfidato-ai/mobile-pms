@@ -1,0 +1,38 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Form III register
+
+1 Oct 2026 to 11 Oct 2026
+
+Print
+CSV
+
+5 Elements Akkalkot
+
+FORM III REGISTER
+
+1 Oct 2026 to 11 Oct 2026
+
+Arrivals in the period 1 awaiting an FRRO number
+
+This system does not file with the FRRO. Filing happens on the government portal; this is the record of what was filed.
+
+GUEST	PASSPORT AND VISA	ARRIVAL	DEPARTURE	PORTAL NUMBERS
+A3 Test Smith
+GB · room 301
+	A1234567
+visa V1234567 · Tourist
+	13 Oct 2026, 20:12
+from London · Tourism
+	In house
+to -
+	not filed
+
+A blank passport is a guest whose document was not captured at check-in. It is shown rather than hidden: the filing cannot be made without it, and a report that looked complete would be worse than one that names the gap. The download carries every Form III field.
+
+Printed 31/10/2026, 07:33:35 pm
+
+Test GM

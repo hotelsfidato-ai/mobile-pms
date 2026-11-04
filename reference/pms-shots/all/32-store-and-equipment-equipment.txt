@@ -1,0 +1,32 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Equipment
+
+1 line in the hotel
+
+Export
+Import
+Add an item
+Where
+Everywhere
+Room 205
+Status
+Any status
+In use
+Under repair
+Retired
+A9 Test Split AC 1.5 ton
+Appliance
+TAG OR COUNT
+EQ-0001
+WHERE
+Room 205
+STATUS
+In use
+COST
+₹38,000
+WARRANTY ENDS
+-

@@ -1,0 +1,49 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Cash deposits
+
+Each day's cash to deposit, what was banked, and who verified it.
+
+Cash to deposit
+
+Per closed day: the closing counts less the float kept, plus what went to the safe.
+
+Saturday, 10 October 2026
+
+Front desk ₹3,286.00
+
+To deposit
+₹3,286.00
+Deposited
+₹0.00
+Difference
+₹3,286.00
+Record deposit
+Explain
+
+Friday, 9 October 2026
+
+Round C test -
+
+To deposit
+-
+Deposited
+₹157.00
+Difference
+-
+Record deposit
+Explain
+Deposits
+
+Newest first. A wrong line is reversed, never edited.
+
+9 Oct 2026's cash · State Bank of India, Akkalkot · slip DAY-1009-01
+
+Deposited 10 Oct 2026 · recorded by Test GM, 13 Oct, 03:04
+
+₹157.00
+Add slip photo
+Reverse

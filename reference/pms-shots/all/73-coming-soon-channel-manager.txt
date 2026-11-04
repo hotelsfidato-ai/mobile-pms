@@ -1,0 +1,49 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Channel manager
+
+The connection between this system and the booking sites, through SU. Nothing is sent or taken until SU is set up and this hotel is switched on.
+
+Bookings from the booking sites
+
+SU has not sent a booking yet.
+
+Rooms left, sent out
+
+Sell a room here and SU tells the booking sites, so the same room is not sold twice.
+
+Prices and closures, sent out
+
+The prices and closures on Rates go to SU as they change. A date with no price goes to SU closed.
+
+Bookings, taken in
+
+A booking site's booking arrives as a booking, and its cancellation cancels it. Anything it cannot read waits for a person, with the reason.
+
+What it still needs before it goes live
+1
+SU's test account, its keys in the server's settings (never in a screen or a chat), and this server's booking address registered with SU.
+2
+SU's certification: SU's test cases, then a live session with SU, before the live account is opened.
+3
+Room types and meal plans matched to SU's ids. A wrong match oversells the wrong room type.
+4
+Each booking site's SU code, picked on Booking sources. A booking from a site with no code waits for a person.
+5
+This hotel switched on in Settings, with the account the connection works as.
+6
+One rate everywhere, or a rate per channel. Still to be decided, and it shapes Rates.
+Booking sites and their SU codes
+Agoda
+AGODA, not one of SU's codes: its bookings wait for a person
+Booking.com
+BDC, not one of SU's codes: its bookings wait for a person
+Expedia
+EXPEDIA, not one of SU's codes: its bookings wait for a person
+go-MMT
+GOMMT, not one of SU's codes: its bookings wait for a person
+
+Codes are picked on Booking sources.
