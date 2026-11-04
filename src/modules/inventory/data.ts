@@ -13,8 +13,9 @@ import type { BaseBody, BreakupDay, Inventory, Pricing, RateDay, RestrictionBody
    rate or room write is refused").
 
    A failed read is a failure, never an empty grid: the web's getInventory
-   answers null on ANY error and the page then says "No room types" (the
-   phone's MINV-1). A property the API does not know is a 404: null here.
+   answers null on ANY error and the page then says "No room types" (a
+   fault of the web's, reported for the PMS). A property the API does not
+   know is a 404: null here, and the phone says "No room types" as the web.
    ══════════════════════════════════════════════════════════════════ */
 
 const H = (code: string) => `/api/hotels/${encodeURIComponent(code)}`;

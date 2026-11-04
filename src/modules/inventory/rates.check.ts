@@ -101,6 +101,9 @@ eq(dateShort("2026-01-05"), "5 Jan 2026", "the web's dateShort");
 const tap = { roomTypeId: "t1", from: "2026-10-11", until: "2026-10-13", text: "4099.50", free: false, clearing: false };
 eq(baseBody(tap), { roomTypeId: "t1", from: "2026-10-11", to: "2026-10-14", price: 4099.5 },
   "the typed figure, and `to` the first day NOT covered");
+/* MINV-1: what a phone can type never becomes NaN, which JSON writes as null - the API's Clear. */
+eq(JSON.stringify(baseBody({ ...tap, text: typedPrice("4,099") })), JSON.stringify({ roomTypeId: "t1", from: "2026-10-11", to: "2026-10-14", price: 4099 }),
+  "a comma never clears the base");
 eq(baseBody({ ...tap, text: "" }), undefined, "empty sends nothing: never a zero, never a clear");
 eq(baseBody({ ...tap, text: "0" }), { roomTypeId: "t1", from: "2026-10-11", to: "2026-10-14", price: 0 },
   "a typed 0 not ticked Free is sent as typed - the server refuses it in its own words");
