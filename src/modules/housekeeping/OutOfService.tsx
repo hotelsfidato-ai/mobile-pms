@@ -6,7 +6,7 @@ import type { Room } from "../../core/types";
 import { api, orNull, send, type Hotel } from "../../core/api";
 import { isOnline } from "../../core/offline";
 import { c, t } from "../../core/theme";
-import { Capsule, ReadFailed, s, useRead } from "../../core/ui";
+import { Capsule, notKnown, ReadFailed, s, useRead, useStuck } from "../../core/ui";
 import {
   addDays, BLOCK_REASONS, blockBody, blockSpan, ended, reasonLabel, statusWord, takenOut, whyNotTake, type BlockForm,
 } from "./block";
@@ -62,16 +62,24 @@ export function OutOfService({ hotel, room: n, role, onBack }: {
   const forbidden = whyNotBlock(role);
   const off = busy || forbidden != null;
   const invalid = whyNotTake(form);
+  /* A second take-out is a second block, and the route reads no key: after
+     an unknown outcome, no more taps until this is closed and the room read
+     again (MHK-3). Put back is safe to repeat. */
+  const once = useStuck();
+  const unknownTake = notKnown("taken out", `room ${n} once this is opened again`);
 
   /* The server's or the phone's refusal is said as it is; on success every
      housekeeping read of this hotel is read again before anything is said. */
-  async function write(run: () => Promise<unknown>, failed: string, ok: Said): Promise<boolean> {
+  async function write(run: () => Promise<unknown>, failed: string, ok: Said, stops = false): Promise<boolean> {
+    if (stops && once.isStuck()) return false;
     setBusy(true);
     setSaid(null);
     try {
       await run();
     } catch (e) {
-      setSaid({ ok: false, title: failed, body: e instanceof Error ? e.message : `${failed}.` });
+      setSaid(stops && once.stop(e)
+        ? { ok: false, title: unknownTake.title, body: notKnown("taken out", `room ${n} once this is opened again`, e).body }
+        : { ok: false, title: failed, body: e instanceof Error ? e.message : `${failed}.` });
       setBusy(false);
       return false;
     }
@@ -86,6 +94,7 @@ export function OutOfService({ hotel, room: n, role, onBack }: {
     () => send("POST", `/api/hotels/${hotel.code}/rooms/${encodeURIComponent(n)}/block`, blockBody(form)),
     "Room not taken out",
     { ok: true, ...takenOut(n, form, hotel.businessDate) },
+    true,
   )) && set({ note: "" });
 
   const putBack = (id: string) => write(
@@ -213,7 +222,7 @@ export function OutOfService({ hotel, room: n, role, onBack }: {
                 <View style={{ alignSelf: "flex-start", paddingHorizontal: 8, paddingVertical: 2, borderRadius: 999, backgroundColor: c.grey100 }}>
                   <Text style={[t.caption, t.tab, { color: c.grey600 }]}>{form.to ? blockSpan(form) : "No end date"}</Text>
                 </View>
-                <Button kind="primary" label="Take out of service" icon={Wrench} disabled={off || invalid != null} onPress={() => void take()} hint={forbidden ?? invalid ?? undefined} />
+                <Button kind="primary" label="Take out of service" icon={Wrench} disabled={off || invalid != null || once.stuck} onPress={() => void take()} hint={forbidden ?? invalid ?? (once.stuck ? unknownTake.line : undefined)} />
                 {forbidden ?? invalid ? <Text style={[t.caption, { color: c.grey600 }]}>{forbidden ?? invalid}</Text> : null}
               </View>
             </>

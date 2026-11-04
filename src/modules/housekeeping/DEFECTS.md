@@ -6,6 +6,22 @@ The web twin's own faults go to the PMS (`docs/api-requests.md`, R-1 to R-9), no
 
 ---
 
+### MHK-3 · A lost reply let a repair, or a take-out, be made twice (4 Nov) — fixed
+
+**What happened.** `send()` mints a key per call, so Raise it tapped again after a lost reply sent
+the same repair under a new key, and the server (which reads the key, 062) made a second; Raise it
+was guarded only by `busy`. Out of service's "Take out of service" stayed live after a lost reply,
+and POST block reads no key: a second tap made a second block. **How found:** applying MEMORY 16
+across the modules (4 Nov). **Done:** Report a repair sends ONE key per form on every try (a
+keeper whose key is fixed, core/keys.ts), latched at the tap; a lost reply says "Not known whether
+it was raised … Raise it again: the server makes it once"; an unknown take-out of the repair's room
+says "not known whether room … was taken out" (a second is refused by the server). Take out of
+service, on an unknown outcome, says "Not known whether it was taken out" and takes no more taps
+until the room is opened again (`useStuck`, `notKnown` in core/ui.tsx). Checked safe to repeat:
+the room's state and its assignment (set a value), Put back, a work order's Start / Done / Cancel
+(refused once closed), Cancel a cost ("already cancelled"). **The rule:** a key the server reads is
+kept for the whole intent; an unknown outcome on a route without one stops the button.
+
 ### MHK-2 · Mine: a person's name looked up by a room's key (15 Oct) — fixed before it ran
 
 **What happened:** in `Rooms.tsx`, `nameOf` first looked a staff id up in the sheet, which is keyed

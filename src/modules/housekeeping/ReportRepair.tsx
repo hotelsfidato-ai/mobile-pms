@@ -1,11 +1,12 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { router } from "expo-router";
 import { CloudOff, Square, SquareCheck } from "lucide-react-native";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
-import { ApiError, HeldError, api, send, type Hotel } from "../../core/api";
+import { ApiError, HeldError, api, currentSubject, outcomeUnknown, send, type Hotel } from "../../core/api";
+import { keyKeeper } from "../../core/keys";
 import { dateLong } from "../../core/format";
-import { isOnline } from "../../core/offline";
+import { isOnline, newKey } from "../../core/offline";
 import { c, space, t } from "../../core/theme";
 import { ReadFailed, s, useRead } from "../../core/ui";
 import {
@@ -24,8 +25,8 @@ import { whyNotBlock } from "./roles";
    as on the web; without one, Room is asked. The foot offers "Out of service
    without a repair", shown only from a room.
    Where the phone differs (MODULE.md): a role the API refuses sees
-   "Raise it" disabled with the API's sentence (difference 1), and the
-   idempotency key goes from the first tap (difference 3, in send()).
+   "Raise it" disabled with the API's sentence (difference 1), and one
+   idempotency key per form, from the first tap to the last try (difference 3, MHK-3).
    Equipment is greyed: its repairs stay on the website for now (M-5).
    ══════════════════════════════════════════════════════════════════ */
 
@@ -53,6 +54,14 @@ export function ReportRepair({ hotel, room, role, onDone }: {
   const [busy, setBusy] = useState(false);
   const [refusal, setRefusal] = useState<string | null>(null);
   const [said, setSaid] = useState<Said | null>(null);
+  const [unknown, setUnknown] = useState(false);
+  /* ONE FORM, ONE REPAIR (MHK-3): POST work-orders reads the idempotency key
+     and answers a repeat with the repair it already made (062). This form
+     sends ONE key on every try, so a try after a lost reply - even with a
+     word changed - is the same repair; latched at the tap (MEMORY 8). */
+  const keys = useRef<ReturnType<typeof keyKeeper> | null>(null);
+  if (!keys.current) { const key = newKey(); keys.current = keyKeeper({ who: currentSubject, make: () => key }); }
+  const latch = useRef(false);
 
   const here = f.room.trim();
   const offered = offerTakeOut(here, read.data?.house);
@@ -62,12 +71,15 @@ export function ReportRepair({ hotel, room, role, onDone }: {
   const blockRefused = whyNotBlock(role);
 
   async function raise() {
+    if (latch.current) return;
+    latch.current = true;
     setBusy(true);
     setRefusal(null);
+    setUnknown(false);
     try {
       let raised: { id: string };
       try {
-        raised = await send<{ id: string }>("POST", `/api/hotels/${code}/work-orders`, workOrderBody(f));
+        raised = await send<{ id: string }>("POST", `/api/hotels/${code}/work-orders`, workOrderBody(f), keys.current!);
       } catch (error) {
         if (!(error instanceof HeldError)) throw error;
         /* Held: never a failure. Taking the room out cannot be held, so it is said out loud. */
@@ -80,10 +92,11 @@ export function ReportRepair({ hotel, room, role, onDone }: {
           await send("POST", `/api/hotels/${code}/rooms/${encodeURIComponent(here)}/block`, blockBody(f, raised.id));
           next.text = `Room ${here} is out of service${f.until ? ` until ${dateLong(f.until)}` : ", no return date set"}.`;
         } catch (error) {
-          /* The repair exists; the room is still on sale. Both said. */
+          /* The repair exists; the room is still on sale. Both said. Not
+             known: a second take-out of this repair is refused by the server. */
           next = {
             tone: "warn",
-            title: `Repair raised - room ${here} was not taken out`,
+            title: outcomeUnknown(error) ? `Repair raised - not known whether room ${here} was taken out` : `Repair raised - room ${here} was not taken out`,
             text: error instanceof ApiError && error.status === 503 ? needsLine(here) : error instanceof Error ? error.message : String(error),
           };
         }
@@ -91,9 +104,12 @@ export function ReportRepair({ hotel, room, role, onDone }: {
       void cache.invalidateQueries({ queryKey: ["housekeeping", code] });
       setSaid(next);
     } catch (error) {
-      /* The server's sentence, kept on the form. */
-      setRefusal(error instanceof Error ? error.message : String(error));
+      /* The server's sentence, kept on the form. Not known: Raise it again
+         sends the same key, so the server makes it once. */
+      setUnknown(outcomeUnknown(error));
+      setRefusal(`${error instanceof Error ? error.message : String(error)}${outcomeUnknown(error) ? " Raise it again: this form sends the same repair, and the server makes it once." : ""}`);
     } finally {
+      latch.current = false;
       setBusy(false);
     }
   }
@@ -184,7 +200,7 @@ export function ReportRepair({ hotel, room, role, onDone }: {
 
       {refusal ? (
         <View style={[s.card, { backgroundColor: c.red50, borderColor: c.red100, gap: 4 }]} accessibilityRole="alert">
-          <Text style={[t.heading, { color: c.red700 }]}>Not raised</Text>
+          <Text style={[t.heading, { color: c.red700 }]}>{unknown ? "Not known whether it was raised" : "Not raised"}</Text>
           <Text style={[t.label, { color: c.grey700 }]}>{refusal}</Text>
         </View>
       ) : null}

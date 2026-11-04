@@ -54,8 +54,9 @@ sentence and a Discard. Held entries belong to the person who made them.
    sentence** (AGENTS rule 1).
 2. **A held assignment**: the web shows "Not assigned" although it was held; the phone says it is
    held.
-3. **The idempotency key is sent from the first tap** (M-5), so a lost reply can never make a
-   second repair; the web sends it only when draining (PMS request R-1).
+3. **The idempotency key is sent from the first tap** (M-5), and since 4 Nov the SAME key on every
+   try from one form (MHK-3), so a lost reply then Raise it again can never make a second repair;
+   the web sends it only when draining (PMS request R-1).
 4. **One count of what waits**: the web's board counts only held room marks; the phone counts every
    held change.
 
