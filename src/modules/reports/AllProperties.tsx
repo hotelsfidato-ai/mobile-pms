@@ -1,5 +1,5 @@
-import { ArrowDown, ArrowUp, Check, Hotel as HotelIcon, TriangleAlert } from "lucide-react-native";
-import type { ReactNode } from "react";
+import { ArrowDown, ArrowUp, Check, ChevronRight, Hotel as HotelIcon, TriangleAlert } from "lucide-react-native";
+import { useState, type ReactNode } from "react";
 import { Pressable, Text, View } from "react-native";
 import { api, orNull, type Hotel } from "../../core/api";
 import { DASH, cash, dateShort, daysBehind, monthStart, pct, yearBack } from "../../core/format";
@@ -20,6 +20,7 @@ import { IconChip, InfoButton, more } from "./kit";
 
 interface Line { hotel: Hotel; today: PeriodStatistics | null; month: PeriodStatistics | null; lastYear: PeriodStatistics | null; waiting: Notification[] }
 
+const WEBSITE = "On the website for now";
 const NOTE = "Every property added up, each on its own business date. Last year is the same month a year back, and counts only the properties that sold a room in it.";
 
 const period = (code: string, from: string, to: string) =>
@@ -62,6 +63,7 @@ export function AllProperties({ hotels, onOpen, onSignOut }: {
       .map((n) => ({ key: `${l.hotel.code}-${n.id}`, title: `${l.hotel.name}: ${n.title}`, body: n.body }))),
   ];
   const loading = read.loading && !read.data;
+  const [asked, setAsked] = useState<string | null>(null);
   const show = (v: string) => (loading ? "…" : v);
 
   return (
@@ -116,13 +118,21 @@ export function AllProperties({ hotels, onOpen, onSignOut }: {
             <Text style={[t.label, { color: c.ink900 }]}>Nothing waiting at any property</Text>
           </View>
         ) : waiting.map((w, i) => (
-          <View key={w.key} style={[{ flexDirection: "row", alignItems: "center", gap: 14, minHeight: 56, paddingVertical: 12 }, i > 0 && { borderTopWidth: 1, borderTopColor: c.grey100 }]}>
+          /* The picture's arrow opens the list behind it, on the website for
+             now: greyed, and a tap says so (the web's D17-8). */
+          <Pressable
+            key={w.key} onPress={() => setAsked(w.key)}
+            accessibilityRole="button" accessibilityState={{ disabled: true }} accessibilityHint={WEBSITE}
+            style={[{ flexDirection: "row", alignItems: "center", gap: 14, minHeight: 56, paddingVertical: 12 }, i > 0 && { borderTopWidth: 1, borderTopColor: c.grey100 }]}
+          >
             <IconChip icon={TriangleAlert} tone="orange" />
             <View style={{ flex: 1, gap: 2 }}>
               <Text style={[t.label, { color: c.ink900 }]}>{w.title}</Text>
               {w.body ? <Text style={t.caption}>{w.body}</Text> : null}
+              {asked === w.key ? <Text style={[t.caption, { color: c.grey600 }]} accessibilityLiveRegion="polite">{WEBSITE}</Text> : null}
             </View>
-          </View>
+            <ChevronRight size={16} color={more.grey400} />
+          </Pressable>
         ))}
       </Card>
 
