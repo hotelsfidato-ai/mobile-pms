@@ -60,15 +60,12 @@ export function WorkOrders({ hotel, role, onBack }: { hotel: Hotel; role: string
   const [raiseSaid, setRaiseSaid] = useState<string | null>(null);
   const [pulled, setPulled] = useState(false);
 
-  /* What this phone holds; once the bar has sent it, the list is read again. */
+  /* What this phone holds. The bar sends it, and re-reads every list when it has. */
   useEffect(() => {
     const read = () => { list().then(setHeld, () => setHeld([])); };
     read();
-    return subscribe(() => {
-      read();
-      void cache.invalidateQueries({ queryKey: ["housekeeping", code, "work-orders"] });
-    });
-  }, [cache, code]);
+    return subscribe(read);
+  }, []);
   useEffect(() => { if (!work.loading) setPulled(false); }, [work.loading]);
   useEffect(() => {
     if (!said) return;
