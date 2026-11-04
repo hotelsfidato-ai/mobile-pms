@@ -34,4 +34,23 @@ for (const role of ["housekeeping", "stores", "kitchen_manager", "chef", "pos", 
   eq(whyNotWakeUps(role) != null && whyNotDesk(role) != null && whyNotClear(role) != null, true, `${role} is not the desk`);
 }
 
+/* The web's menu agrees (4 Nov): the roles each entry's canSee lets in, as
+   the shell's port of the web's navigation gives them (src/core/menu.ts on
+   mobile/shell: guest-services/requestRoles.ts REQUEST_ROLES, nav.ts
+   WAKE_UP_ROLES and LOST_ROLES, online-checkin/nav.ts DESK_ROLES), over
+   every role of api/src/permissions.ts. So the Guest services way in greys
+   exactly what the web's menu leaves out, and opens what it lists. */
+const ROLES = ["owner", "admin", "gm", "hotel_manager", "revenue_manager", "front_desk", "housekeeping",
+  "kitchen_manager", "chef", "pos", "bar", "stores", "finance", "read_only", "automation"];
+const WEB_DESK = ["owner", "admin", "gm", "hotel_manager", "front_desk"];
+const WEB_MENU: Array<[string, (role: string) => string | null, string[]]> = [
+  ["Guest requests", whyNotRequests, [...WEB_DESK, "housekeeping", "stores", "kitchen_manager", "chef", "pos", "bar"]],
+  ["Wake-up calls", whyNotWakeUps, WEB_DESK],
+  ["Lost property", whyNotLost, [...WEB_DESK, "housekeeping"]],
+  ["Online check-in", whyNotDesk, WEB_DESK],
+];
+for (const [entry, why, sees] of WEB_MENU) {
+  for (const role of ROLES) eq(why(role) === null, sees.includes(role), `${entry} for ${role}, as the web's menu`);
+}
+
 console.log("guest services roles: all checks pass");

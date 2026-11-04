@@ -42,7 +42,8 @@ export const CLEAR_REFUSED = "Returning or disposing of lost property is for the
 export const DESK_REFUSED = "Online check-in is handled by reception, the manager, an "
   + "administrator or the owner. Ask one of them.";
 /** A control the phone cannot do yet (it needs a package, or the owner's yes). */
-export const ON_THE_WEBSITE = "On the website for now.";
+/** The app's own words for it (the shell's menu.ts ON_THE_WEBSITE, the brief): no full stop. */
+export const ON_THE_WEBSITE = "On the website for now";
 
 const allow = (ok: boolean, refusal: string) => (ok ? null : refusal);
 
