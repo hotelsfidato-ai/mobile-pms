@@ -5,11 +5,11 @@ import { ApiError, type Hotel } from "../../core/api";
 import { c, space, t } from "../../core/theme";
 import type { Stay } from "../../core/types";
 import { useRead } from "../../core/ui";
-import { CHARGE_CATEGORIES, FROM_LIST, overLimit, rupees, rupeesRound, typed } from "./bill";
+import { CHARGE_CATEGORIES, FROM_LIST, overLimit, rupees, typed } from "./bill";
 import {
   changeRate, openSecondBill, postCharge, readBeforeGst, readChargeList, readCompanies, readRoomRate,
 } from "./data";
-import { Btn, Choice, Field, Input, ReadyReasons, Refused, Sheet, Tick, type Said } from "./Kit";
+import { Btn, Choice, Field, Input, ReadyReasons, Refused, Sheet, Tick, type Said, useOnce } from "./Kit";
 import { mayAllowOverLimit } from "./roles";
 
 /* ══════════════════════════════════════════════════════════════════
@@ -43,6 +43,7 @@ export function AddChargeSheet({ hotel, stay, role, onClose, onDone }: Act & { r
   const rated = useRead(() => readRoomRate(code, value), ["finance", code, "room-rate", value]);
   const rateText = rated.data ? (rated.data.rate === null ? "-" : `${rated.data.rate}%`) : rated.error ? "not loaded" : "…";
 
+  const once = useOnce();
   async function post() {
     setBusy(true);
     setRefused(null);
@@ -72,7 +73,7 @@ export function AddChargeSheet({ hotel, stay, role, onClose, onDone }: Act & { r
       footer={(
         <>
           <Btn kind="ghost" label="Cancel" onPress={onClose} />
-          <Btn kind="primary" label={over && mayAllow ? "Allow, with reason" : "Post charge"} busy={busy} off={!description.trim() || !(value > 0)} onPress={() => void post()} />
+          <Btn kind="primary" label={over && mayAllow ? "Allow, with reason" : "Post charge"} busy={busy} off={!description.trim() || !(value > 0)} onPress={() => void once(post)} />
         </>
       )}
     >
@@ -80,7 +81,7 @@ export function AddChargeSheet({ hotel, stay, role, onClose, onDone }: Act & { r
         <Field label="From the hotel's list">
           <Choice
             label="From the hotel's list" value=""
-            options={listed.data.map((i) => ({ value: i.id, label: `${i.name} · ${rupeesRound(i.rate)}` }))}
+            options={listed.data.map((i) => ({ value: i.id, label: `${i.name} · ${rupees(i.rate)}` }))}
             onPick={(id) => {
               const pick = listed.data?.find((i) => i.id === id);
               if (!pick) return;
@@ -123,6 +124,7 @@ export function SplitSheet({ hotel, stay, onClose, onDone }: Act) {
   const [refused, setRefused] = useState<string | null>(null);
   const list = companies.data ?? [];
 
+  const once = useOnce();
   async function open() {
     setBusy(true);
     setRefused(null);
@@ -142,7 +144,7 @@ export function SplitSheet({ hotel, stay, onClose, onDone }: Act) {
       footer={(
         <>
           <Btn kind="ghost" label="Cancel" onPress={onClose} />
-          <Btn kind="primary" label="Open the second bill" busy={busy} off={!companyId} onPress={() => void open()} />
+          <Btn kind="primary" label="Open the second bill" busy={busy} off={!companyId} onPress={() => void once(open)} />
         </>
       )}
     >
@@ -175,14 +177,19 @@ export function ChangeRateSheet({ hotel, stay, onClose, onDone }: Act) {
   const s = inclusive && value > 0 ? split.data : undefined;
   const notSplit = s && !s.ok ? s.reason : null;
 
+  const once = useOnce();
   async function save() {
     setBusy(true);
     setRefused(null);
     try {
       const res = await changeRate(code, stay.id, { rate: value, reason: reason.trim(), ...(inclusive ? { includesGst: true } : {}) });
-      const n = res.data?.corrected ?? 0;
-      const said = inclusive && s?.ok ? `${rupees(s.pre)} a night before GST` : `${rupeesRound(value)} a night`;
-      onDone({ tone: "ok", title: "Rate changed", text: n === 0 ? `${said}, for every night not yet charged.` : `${said}; ${n} charged ${n === 1 ? "line" : "lines"} corrected.` });
+      /* How many lines it corrected is the server's count; not sent, not said. */
+      const n = res.data?.corrected;
+      const said = inclusive && s?.ok ? `${rupees(s.pre)} a night before GST` : `${rupees(value)} a night`;
+      onDone({
+        tone: "ok", title: "Rate changed",
+        text: n == null ? `${said}.` : n === 0 ? `${said}, for every night not yet charged.` : `${said}; ${n} charged ${n === 1 ? "line" : "lines"} corrected.`,
+      });
     } catch (e) {
       setRefused(e instanceof Error ? e.message : "Rate not changed.");
     } finally {
@@ -193,11 +200,11 @@ export function ChangeRateSheet({ hotel, stay, onClose, onDone }: Act) {
   return (
     <Sheet
       visible onClose={onClose} title="Change the rate"
-      description={`${stay.guest} · now ${stay.isComplimentary ? "complimentary" : `${rupeesRound(stay.offeredTariff)} a night`}`}
+      description={`${stay.guest} · now ${stay.isComplimentary ? "complimentary" : `${rupees(stay.offeredTariff)} a night`}`}
       footer={(
         <>
           <Btn label="Keep it" onPress={onClose} />
-          <Btn kind="primary" label="Change the rate" busy={busy} off={!(value > 0) || !reason.trim() || notSplit !== null || (inclusive && !s)} onPress={() => void save()} />
+          <Btn kind="primary" label="Change the rate" busy={busy} off={!(value > 0) || !reason.trim() || notSplit !== null || (inclusive && !s)} onPress={() => void once(save)} />
         </>
       )}
     >

@@ -3,8 +3,8 @@
    acts refused in the server's words; the server's sentences recognised. */
 import {
   asksCredit, asksLateReason, asksPan, billName, closingWord, dateDay, editable, headline, inSections,
-  chargesToCome, moveTargets, overLimit, rupees, sectionOf, settleIsMain, stillOutstanding, whyNotEditLine, whyNotLeave,
-  whyNotReverseLine, type BillLine, type StayFolio,
+  chargesToCome, moveTargets, overLimit, owedLine, rupees, sectionOf, settleIsMain, startAmount, startBill, stillOutstanding,
+  typedShown, whyNotEditLine, whyNotLeave, whyNotReverseLine, type BillLine, type StayFolio,
 } from "./bill.ts";
 
 const eq = (got: unknown, want: unknown, what: string) => {
@@ -51,12 +51,15 @@ eq(chargesToCome({ ...running, isComplimentary: true }, 2), false, "complimentar
 eq(chargesToCome({ ...running, status: "checked-out" }, 2), false, "gone");
 eq(rupees(null), "-", "a dash, never ₹0");
 eq(rupees(1234567.5), "₹12,34,567.50", "Indian grouping, to the paisa");
+eq(rupees(0), "₹0.00", "a real zero is a figure");
+eq(rupees(7582.5), "₹7,582.50", "the server's paise kept, never rounded (MFIN-4)");
+eq(rupees(Number.NaN), "-", "not a number is a dash");
 eq(dateDay("2026-08-25"), "25 Aug 2026", "the web's date");
 
 /* Check out on the balance (rules.ts canCheckOut). */
-eq(whyNotLeave("in-house", 1890), "₹1,890 is still owed on this bill.", "owing");
-/* Twenty paise blocks it, as the web - whose money() then says "₹0" (MODULE.md, the faults). */
-eq(whyNotLeave("in-house", 0.2), "₹0 is still owed on this bill.", "paise owed");
+eq(whyNotLeave("in-house", 1890), "₹1,890.00 is still owed on this bill.", "owing");
+/* Twenty paise blocks it, as the web - and the phone says twenty paise, where the web's money() says "₹0" (MFIN-4). */
+eq(whyNotLeave("in-house", 0.2), "₹0.20 is still owed on this bill.", "paise owed");
 eq(whyNotLeave("due-out", -10), "This bill is overpaid. Refund the difference first.", "overpaid");
 eq(whyNotLeave("due-out", 0), null, "settled");
 eq(whyNotLeave("in-house", null), null, "no bill owes nothing");
@@ -101,5 +104,21 @@ eq(asksCredit("A payment must be greater than zero."), false, "not credit");
 eq(overLimit("Tata is over its credit limit by ₹12,000.00."), true, "over limit");
 eq(asksLateReason("Check-out was 11:00. A late departure needs a reason and somebody to allow it, and carries a ₹1,000 charge."), true, "late");
 eq(stillOutstanding("₹1,180 is still outstanding. Settle the folio, or transfer it to the city ledger, before checking out."), true, "outstanding");
+
+/* Settle's figures: the server's balance as sent, never clamped (MFIN-4). */
+eq(owedLine(1890.5), "₹1,890.50 outstanding", "owing");
+eq(owedLine(-784), "₹784.00 overpaid", "an overpaid bill is overpaid, not ₹0 outstanding");
+eq(owedLine(0), "₹0.00 settled", "settled is a real zero");
+eq(owedLine(null), "-", "no bill is a dash");
+eq(startAmount(1890.5), "1890.5", "the amount starts at the server's balance");
+eq(startAmount(-784), "", "nothing owed: blank, never 0");
+eq(startAmount(null), "", "no bill: blank");
+eq(typedShown(""), null, "nothing typed is a dash");
+eq(typedShown("abc"), null, "a word is a dash");
+eq(typedShown("1500"), 1500, "typed");
+eq(startBill(folios, null), "f1", "the first that owes");
+eq(startBill(folios, "f2"), "f2", "the open tab");
+eq(startBill([{ ...folios[0]!, balance: 0 }, { ...folios[1]!, balance: -5 }], null), "f1", "none owes: the first");
+eq(startBill([], null), null, "no bill at all");
 
 console.log("finance bill: all checks pass");

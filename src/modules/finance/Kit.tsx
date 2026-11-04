@@ -1,6 +1,6 @@
 import type { LucideIcon } from "lucide-react-native";
 import { Square, SquareCheck } from "lucide-react-native";
-import type { ReactNode } from "react";
+import { useRef, type ReactNode } from "react";
 import {
   ActivityIndicator, KeyboardAvoidingView, Modal, Platform, Pressable, ScrollView, Text, TextInput, View,
   type KeyboardTypeOptions,
@@ -34,6 +34,19 @@ export function Pill({ tone, label }: { tone: Tone; label: string }) {
       <Text style={[t.caption, { color: p.fg }]}>{label}</Text>
     </View>
   );
+}
+
+/** One press, one request (MFIN-1): a write already on its way ignores a
+    second tap, even one landing before `busy` has drawn. The core's `send`
+    mints the idempotency key per call, so a second call would be a second
+    receipt; this keeps it to one call per press. */
+export function useOnce() {
+  const going = useRef(false);
+  return async (write: () => Promise<void>) => {
+    if (going.current) return;
+    going.current = true;
+    try { await write(); } finally { going.current = false; }
+  };
 }
 
 /** A capsule, 44px or more. `why`: refused for this person or this bill -

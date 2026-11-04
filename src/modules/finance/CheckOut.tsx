@@ -5,9 +5,9 @@ import type { Hotel } from "../../core/api";
 import { c, space, t } from "../../core/theme";
 import type { Stay } from "../../core/types";
 import { useRead } from "../../core/ui";
-import { asksLateReason, isForeign, rupeesRound, stillOutstanding, whyNotLeave } from "./bill";
+import { asksLateReason, isForeign, rupees, stillOutstanding, whyNotLeave } from "./bill";
 import { checkOut, readClock } from "./data";
-import { Btn, Field, Input, Refused, Sheet, Tick, type Said } from "./Kit";
+import { Btn, Field, Input, Refused, Sheet, Tick, type Said, useOnce } from "./Kit";
 import { whyNotCheckOut } from "./roles";
 
 /* ══════════════════════════════════════════════════════════════════
@@ -34,7 +34,8 @@ export function CheckOutPanel({ hotel, stay, balance, role, onLeft, onSaid, onRe
   balance: number | null;
   role: string | null;
 }) {
-  const foreign = isForeign(stay.nationality);
+  /* Form III is asked only of a departure still to happen. */
+  const foreign = isForeign(stay.nationality) && stay.status !== "checked-out";
   const [next, setNext] = useState("");
   const [asking, setAsking] = useState(false);
   const [late, setLate] = useState(false);
@@ -43,6 +44,7 @@ export function CheckOutPanel({ hotel, stay, balance, role, onLeft, onSaid, onRe
   const why = whyNotCheckOut(role) ?? whyNotLeave(stay.status, balance);
   const allowed = why === null && (!foreign || Boolean(next.trim()));
 
+  const once = useOnce();
   async function leave() {
     setBusy(true);
     try {
@@ -76,7 +78,7 @@ export function CheckOutPanel({ hotel, stay, balance, role, onLeft, onSaid, onRe
         footer={(
           <>
             <Btn label="Not yet" onPress={() => setAsking(false)} />
-            <Btn kind="primary" label="Check out" busy={busy} onPress={() => void leave()} />
+            <Btn kind="primary" label="Check out" busy={busy} onPress={() => void once(leave)} />
           </>
         )}
       >
@@ -98,6 +100,7 @@ function LateSheet({ hotel, stay, next, onClose, onLeft, onSaid, onReread }: Lea
   const [busy, setBusy] = useState(false);
   const [refused, setRefused] = useState<string | null>(null);
 
+  const once = useOnce();
   async function submit() {
     setBusy(true);
     setRefused(null);
@@ -107,7 +110,7 @@ function LateSheet({ hotel, stay, next, onClose, onLeft, onSaid, onReread }: Lea
       onLeft(`${stay.guest} checked out`, waive && mayWaive
         ? "The late departure is recorded and the charge waived - both are on the stay."
         : charge === null ? "The late departure is recorded. The property does not charge for one."
-        : `${rupeesRound(charge)} added to the folio.`);
+        : `${rupees(charge)} added to the folio.`);
     } catch (e) {
       const said = e instanceof Error ? e.message : "Could not check out.";
       /* THE COMMON OUTCOME, AND NOT A FAILURE: the charge is posted, then the
@@ -131,7 +134,7 @@ function LateSheet({ hotel, stay, next, onClose, onLeft, onSaid, onReread }: Lea
       footer={(
         <>
           <Btn label="Cancel" onPress={onClose} />
-          <Btn kind="primary" label={busy ? "Checking out…" : "Check out"} off={!reason.trim() || busy} onPress={() => void submit()} />
+          <Btn kind="primary" label={busy ? "Checking out…" : "Check out"} off={!reason.trim() || busy} onPress={() => void once(submit)} />
         </>
       )}
     >
@@ -150,14 +153,14 @@ function LateSheet({ hotel, stay, next, onClose, onLeft, onSaid, onReread }: Lea
         <Text style={[t.label, note, { lineHeight: 20 }]}>This property does not charge for a late departure, so nothing will be added. It is still recorded.</Text>
       ) : mayWaive ? (
         <View style={note}>
-          <Tick on={waive} onChange={setWaive} label={`Waive the ${rupeesRound(charge)} charge`} />
+          <Tick on={waive} onChange={setWaive} label={`Waive the ${rupees(charge)} charge`} />
           <View style={{ flexDirection: "row", gap: 8 }}>
             <ShieldCheck size={16} color={c.orange} style={{ marginTop: 2 }} />
             <Text style={[t.label, { flex: 1, lineHeight: 20 }]}>Your decision, recorded against your name. The late departure is still written down - waiving the money does not unwrite the fact.</Text>
           </View>
         </View>
       ) : (
-        <Text style={[t.label, note, { lineHeight: 20 }]}>{rupeesRound(charge)} will be added to the folio. A manager can waive it - that is a decision about money and it is theirs to make.</Text>
+        <Text style={[t.label, note, { lineHeight: 20 }]}>{rupees(charge)} will be added to the folio. A manager can waive it - that is a decision about money and it is theirs to make.</Text>
       )}
 
       <Refused text={refused} />

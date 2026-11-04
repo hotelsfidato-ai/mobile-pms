@@ -9,7 +9,7 @@ import { c, face, space, t } from "../../core/theme";
 import type { Stay } from "../../core/types";
 import { Capsule, Card, Head, ReadFailed, Row, Screen, s, useRead } from "../../core/ui";
 import {
-  billName, chargesToCome, closingWord, dateDay, headline, inSections, rupees, rupeesRound, settleIsMain, whyNotAddTo,
+  billName, chargesToCome, closingWord, dateDay, headline, inSections, rupees, settleIsMain, whyNotAddTo,
   type BillLine, type DeskRules, type StayBill, type StayFolio,
 } from "./bill";
 import { AddChargeSheet, ChangeRateSheet, SplitSheet } from "./BillActs";
@@ -116,6 +116,9 @@ function Bill({ hotel, stay, role, back, onRefresh, onLeft }: {
   /* The tab's own balance, the server's; Everything is the stay's. */
   const closing = only === null ? balance : folios.find((f) => f.id === only)?.balance ?? null;
   const settleOff = split ? !folios.some((f) => f.balance > 0) : (balance ?? 0) <= 0;
+  /* Who may take money, in the API's sentence: it wins over "nothing owed",
+     so a refused role always hears why (AGENTS rule 1). */
+  const mayNotPay = whyNotPay(role);
 
   return (
     <Screen refreshing={read.loading && Boolean(data)} onRefresh={() => { onRefresh(); read.reload(); }}>
@@ -135,11 +138,13 @@ function Bill({ hotel, stay, role, back, onRefresh, onLeft }: {
 
           <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
             <Btn label="Add charge" Icon={Plus} why={whyNotCharge(role) ?? whyNotAddTo(stay.status)} onRefused={refused} onPress={() => setOpen("charge")} />
-            <Btn label="Settle" Icon={Receipt} kind={settleIsMain(stay.status, balance) ? "primary" : "secondary"} why={whyNotPay(role)} off={settleOff} onRefused={refused} onPress={() => setOpen("settle")} />
+            <Btn label="Settle" Icon={Receipt} kind={settleIsMain(stay.status, balance) ? "primary" : "secondary"} why={mayNotPay} off={mayNotPay === null && settleOff} onRefused={refused} onPress={() => setOpen("settle")} />
             <Btn label="Interim bill" Icon={Printer} kind="ghost" off={!data.bill} onPress={() => setOpen("bill")} />
             <Btn label="Split the bill" Icon={SplitIcon} why={whyNotCharge(role)} onRefused={refused} onPress={() => setOpen("split")} />
             <Btn label="Change rate" kind="ghost" why={whyNotEdit(role)} onRefused={refused} onPress={() => setOpen("rate")} />
           </View>
+          {/* Disabled WITH its reason, in sight and not only on a tap. */}
+          {mayNotPay ? <Text style={[t.caption, { color: c.grey700 }]}>{mayNotPay}</Text> : null}
 
           {stay.status === "checked-out" ? <TaxInvoices code={code} stayId={stay.id} role={role} onSaid={setSaid} onDone={done} /> : null}
           <CheckOutPanel hotel={hotel} stay={stay} balance={balance} role={role} onLeft={left} onSaid={setSaid} onReread={reread} />
@@ -149,9 +154,9 @@ function Bill({ hotel, stay, role, back, onRefresh, onLeft }: {
           {open === "rate" ? <ChangeRateSheet hotel={hotel} stay={stay} onClose={() => setOpen(null)} onDone={done} /> : null}
           {open === "settle" ? (
             <SettleSheet
-              hotel={hotel} stayId={stay.id} payer={stay.guest} balance={balance ?? 0} folios={folios} active={only}
+              hotel={hotel} stayId={stay.id} payer={stay.guest} balance={balance} folios={folios} active={only}
               onClose={() => setOpen(null)} onReread={reread}
-              onTaken={(amount, method) => done({ tone: "ok", title: `${rupeesRound(amount)} received`, text: method })}
+              onTaken={(amount, method) => done({ tone: "ok", title: `${rupees(amount)} received`, text: method })}
             />
           ) : null}
           {open === "bill" && data.bill ? <InterimBill bill={data.bill} test={Boolean(hotel.testOf)} onClose={() => setOpen(null)} /> : null}
@@ -170,7 +175,7 @@ function Headline({ stay, balance, toCome }: { stay: Stay; balance: number | nul
     <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "baseline", gap: 16, flexWrap: "wrap" }}>
       <View>
         <Text style={t.label}>{h.label}</Text>
-        <Text style={[t.lead, { fontSize: 26, color: FIGURE[h.tone] }]}>{balance === null ? "-" : rupeesRound(Math.abs(balance))}</Text>
+        <Text style={[t.lead, { fontSize: 26, color: FIGURE[h.tone] }]}>{balance === null ? "-" : rupees(Math.abs(balance))}</Text>
       </View>
       <View style={{ alignItems: "flex-end", gap: 6 }}>
         <Pill tone={h.tone} label={h.pill} />
@@ -187,11 +192,11 @@ function BillStrip({ folios, everything, active, onPick }: { folios: StayFolio[]
     const on = active === id;
     return (
       <Pressable
-        key={key} onPress={() => onPick(id)} accessibilityRole="button" accessibilityState={{ selected: on }} accessibilityLabel={`${label}, ${rupeesRound(balance)}`}
+        key={key} onPress={() => onPick(id)} accessibilityRole="button" accessibilityState={{ selected: on }} accessibilityLabel={`${label}, ${rupees(balance)}`}
         style={{ minHeight: 44, paddingHorizontal: 14, paddingVertical: 6, borderRadius: 8, borderWidth: 1, borderColor: on ? c.orange : c.grey200, backgroundColor: on ? c.orange50 : c.white }}
       >
         <Text style={t.label}>{label}</Text>
-        <Text style={[t.heading, t.tab, face[500]]}>{rupeesRound(balance)}</Text>
+        <Text style={[t.heading, t.tab, face[500]]}>{rupees(balance)}</Text>
       </Pressable>
     );
   };

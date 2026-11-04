@@ -12,14 +12,17 @@
    Here a line is only PLACED, never summed.
    ══════════════════════════════════════════════════════════════════ */
 
-export const DASH = "-";
+import { DASH } from "../../core/format.ts";
 
-/** ₹1,20,000.00 - the web's moneyPrecise, for anything a person is handed. */
+export { DASH };
+
+/** ₹1,20,000.00 - the web's moneyPrecise, Indian grouping, the core's dash
+    for a figure not sent. ONE formatter for every figure on a bill: the
+    core's `cash` (and the web's money()) prints whole rupees, which would
+    round the server's paise away (MFIN-4), so a bill never uses it. The
+    server's figures carry two places at most, so this shows them exactly. */
 const inrPrecise = new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", minimumFractionDigits: 2, maximumFractionDigits: 2 });
-const inr = new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 });
-export const rupees = (n: number | null | undefined) => (n == null ? DASH : inrPrecise.format(n));
-/** ₹1,20,000 - the web's money(), where it prints one (a refusal, a tile). */
-export const rupeesRound = (n: number | null | undefined) => (n == null ? DASH : inr.format(n));
+export const rupees = (n: number | null | undefined) => (n == null || !Number.isFinite(n) ? DASH : inrPrecise.format(n));
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 /** "25 Aug 2026" - the web's dateShort (src/lib/format.ts, "d MMM yyyy"). */
@@ -161,7 +164,8 @@ export function whyNotLeave(status: string, balance: number | null): string | nu
   if (status === "checked-out") return "Already checked out.";
   if (status !== "in-house" && status !== "due-out") return "This guest is not in house.";
   const b = balance ?? 0;
-  if (b > 0) return `${rupeesRound(b)} is still owed on this bill.`;
+  /* To the paisa: the web's money() says "₹0" over twenty paise (MFIN-4). */
+  if (b > 0) return `${rupees(b)} is still owed on this bill.`;
   if (b < 0) return "This bill is overpaid. Refund the difference first.";
   return null;
 }
@@ -227,8 +231,30 @@ const STARTING_WAYS = [
 export const payingWays = (desk?: DeskRules) => desk?.paymentMethods ?? STARTING_WAYS;
 export const firstWay = (desk?: DeskRules) => desk?.defaultPaymentMethod ?? "Cash";
 
-/** A typed amount, the web's `Number(amount) || 0`. */
+/** A typed amount, the web's `Number(amount) || 0`: what is SENT (a blank
+    or a word sends nothing, the button stays off at 0). */
 export const typed = (text: string) => Number(text) || 0;
+/** A typed amount as it is SHOWN: nothing typed is a dash, never ₹0. */
+export const typedShown = (text: string) => (text.trim() === "" || !Number.isFinite(Number(text)) ? null : Number(text));
+
+/* ── Settle's own figures: each the server's, as it sent it ── */
+
+/** A bill's balance in Settle: the server's figure with its word, an overpaid
+    bill as overpaid - never clamped to ₹0 (MFIN-4; picture 36: "neither is
+    hidden or shown as zero"). Null is no bill: a dash. */
+export function owedLine(balance: number | null | undefined): string {
+  if (balance == null) return DASH;
+  const word = balance > 0 ? "outstanding" : balance < 0 ? "overpaid" : "settled";
+  return `${rupees(Math.abs(balance))} ${word}`;
+}
+
+/** What Settle's amount starts at: the server's balance when it owes, else
+    blank for the person to type. Never a figure the phone worked out. */
+export const startAmount = (balance: number | null | undefined) => (balance != null && balance > 0 ? String(balance) : "");
+
+/** Which bill Settle opens on (QA FI-2, FI-3): the open tab, or the first that owes, or the first. */
+export const startBill = (folios: StayFolio[], active: string | null) =>
+  active ?? folios.find((f) => f.balance > 0)?.id ?? folios[0]?.id ?? null;
 
 /** Rule 159 (D25-40): more than ₹1,00,000 in cash at once asks the PAN or
     Form 97. Asked by the method's kind - the server's own test (panFor). */

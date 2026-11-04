@@ -2,9 +2,9 @@ import { useState } from "react";
 import { Text, View } from "react-native";
 import { c, t } from "../../core/theme";
 import { Card, useRead } from "../../core/ui";
-import { rupeesRound, type Billable } from "./bill";
+import { owedLine, type Billable } from "./bill";
 import { issueInvoice, readBillable, readSeries } from "./data";
-import { Btn, Refused, Sheet, type Said } from "./Kit";
+import { Btn, Refused, Sheet, type Said, useOnce } from "./Kit";
 import { whyNotInvoice } from "./roles";
 
 /* ══════════════════════════════════════════════════════════════════
@@ -34,7 +34,8 @@ export function TaxInvoices({ code, stayId, role, onSaid, onDone }: {
         <View key={b.folioId} style={{ flexDirection: "row", alignItems: "center", gap: 12, minHeight: 44 }}>
           <View style={{ flex: 1, gap: 2 }}>
             <Text style={t.heading}>{b.billTo}</Text>
-            <Text style={[t.caption, t.tab]}>{b.balance === 0 ? "-" : rupeesRound(b.balance)}</Text>
+            {/* The server's balance and its word: a settled bill is ₹0.00, a real zero, not a dash (MFIN-4). */}
+            <Text style={[t.caption, t.tab]}>{owedLine(b.balance)}</Text>
           </View>
           {b.invoice ? <Text style={[t.caption, t.tab, { color: c.ink900 }]}>{b.invoice}</Text> : (
             <Btn
@@ -56,6 +57,7 @@ function IssueSheet({ code, row, onClose, onDone }: { code: string; row: Billabl
   const [refused, setRefused] = useState<string | null>(null);
   const next = series.data?.[0]?.next;
 
+  const once = useOnce();
   async function issue() {
     setBusy(true);
     setRefused(null);
@@ -75,7 +77,7 @@ function IssueSheet({ code, row, onClose, onDone }: { code: string; row: Billabl
       footer={(
         <>
           <Btn label="Keep it" onPress={onClose} />
-          <Btn kind="primary" label="Issue the invoice" busy={busy} onPress={() => void issue()} />
+          <Btn kind="primary" label="Issue the invoice" busy={busy} onPress={() => void once(issue)} />
         </>
       )}
     >

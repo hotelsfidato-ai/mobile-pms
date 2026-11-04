@@ -4,7 +4,7 @@ import { Text, View } from "react-native";
 import { c, t } from "../../core/theme";
 import { billName, editable, moveTargets, rupees, typed, whyNotEditLine, whyNotReverseLine, type BillLine, type StayFolio } from "./bill";
 import { editLine, moveLine, reverseLine } from "./data";
-import { Btn, Field, IconBtn, Input, ReadyReasons, Refused, Sheet, type Said } from "./Kit";
+import { Btn, Field, IconBtn, Input, ReadyReasons, Refused, Sheet, type Said, useOnce } from "./Kit";
 import { whyNotChange, whyNotEdit, whyNotReversePayment } from "./roles";
 
 /* ══════════════════════════════════════════════════════════════════
@@ -58,6 +58,7 @@ function ReverseSheet({ code, stayId, line, onClose, onDone }: Act & { line: Bil
   const [busy, setBusy] = useState(false);
   const [refused, setRefused] = useState<string | null>(null);
 
+  const once = useOnce();
   async function reverse() {
     setBusy(true);
     setRefused(null);
@@ -77,7 +78,7 @@ function ReverseSheet({ code, stayId, line, onClose, onDone }: Act & { line: Bil
       footer={(
         <>
           <Btn label="Keep it" onPress={onClose} />
-          <Btn kind="danger" label="Reverse" busy={busy} off={!reason.trim()} onPress={() => void reverse()} />
+          <Btn kind="danger" label="Reverse" busy={busy} off={!reason.trim()} onPress={() => void once(reverse)} />
         </>
       )}
     >
@@ -103,6 +104,7 @@ function EditSheet({ code, stayId, line, onClose, onDone }: Act & { line: BillLi
   const value = typed(price);
   const changed = words.trim() !== line.description || value !== line.amount;
 
+  const once = useOnce();
   async function save() {
     setBusy(true);
     setRefused(null);
@@ -122,7 +124,7 @@ function EditSheet({ code, stayId, line, onClose, onDone }: Act & { line: BillLi
       footer={(
         <>
           <Btn label="Keep it" onPress={onClose} />
-          <Btn kind="primary" label="Correct the charge" busy={busy} off={!reason.trim() || !(value > 0) || !words.trim() || !changed} onPress={() => void save()} />
+          <Btn kind="primary" label="Correct the charge" busy={busy} off={!reason.trim() || !(value > 0) || !words.trim() || !changed} onPress={() => void once(save)} />
         </>
       )}
     >
@@ -145,6 +147,7 @@ function MoveSheet({ code, line, targets, onClose, onDone }: Act & { line: BillL
   const [busy, setBusy] = useState<string | null>(null);
   const [refused, setRefused] = useState<string | null>(null);
 
+  const once = useOnce();
   async function move(toFolioId: string) {
     setBusy(toFolioId);
     setRefused(null);
@@ -161,7 +164,7 @@ function MoveSheet({ code, line, targets, onClose, onDone }: Act & { line: BillL
   return (
     <Sheet visible onClose={onClose} title="Move to" description={line.description} footer={<Btn label="Keep it" onPress={onClose} />}>
       {targets.map((f) => (
-        <Btn key={f.id} wide label={billName(f)} busy={busy === f.id} off={busy !== null} onPress={() => void move(f.id)} />
+        <Btn key={f.id} wide label={billName(f)} busy={busy === f.id} off={busy !== null} onPress={() => void once(() => move(f.id))} />
       ))}
       <Refused text={refused} />
     </Sheet>
