@@ -8,15 +8,15 @@ import {
   KeyboardAvoidingView, Modal, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View,
 } from "react-native";
 import { api, HeldError, send, type Hotel } from "../../core/api";
-import { cash, dateLong } from "../../core/format";
+import { cash, DASH } from "../../core/format";
 import { isOnline, type OutboxEntry } from "../../core/offline";
 import { list, subscribe } from "../../core/outbox";
 import { c, face, space, t } from "../../core/theme";
 import { Capsule, Card, Head, ReadFailed, Screen, useRead } from "../../core/ui";
 import { whyNotRepair } from "./roles";
 import {
-  cancelCostPath, closeBody, closedWords, empty, foot, heldStatus, isClosed, listPath, meta, ON_WEBSITE, orderPath, paise,
-  pills, queued, SAY_WHAT, startBody, startLabel, UPDATE_WHO, whyNotCancel, whyNotRecord, whyNotUpdate,
+  cancelCostPath, closeBody, closedWords, empty, foot, heldStatus, isClosed, listPath, longDay, meta, ON_WEBSITE, orderPath, paise,
+  pills, queued, SAY_WHAT, SENDING, startBody, startLabel, UPDATE_WHO, whyNotCancel, whyNotRecord, whyNotUpdate,
   type RepairCost, type Tone, type View as Which, type WorkOrder, type WorkOrderList,
 } from "./workOrders";
 
@@ -59,6 +59,8 @@ export function WorkOrders({ hotel, role, onBack }: { hotel: Hotel; role: string
   const [said, setSaid] = useState<Said | null>(null);
   const [raiseSaid, setRaiseSaid] = useState<string | null>(null);
   const [pulled, setPulled] = useState(false);
+  /* The order whose Start / Put back is on its way: one tap, one change, one key (MHK-W2). */
+  const [sending, setSending] = useState<string | null>(null);
 
   /* What this phone holds. The bar sends it, and re-reads every list when it has. */
   useEffect(() => {
@@ -76,11 +78,15 @@ export function WorkOrders({ hotel, role, onBack }: { hotel: Hotel; role: string
   const refresh = () => void cache.invalidateQueries({ queryKey: ["housekeeping", code] });
 
   async function start(o: WorkOrder, status: string) {
+    if (sending) return;
+    setSending(o.id);
     try {
       await send("PATCH", orderPath(code, o.id), startBody(status));
       refresh();
     } catch (e) {
       setSaid(e instanceof HeldError ? heldSaid(e) : { title: "Not changed", body: message(e), tone: "bad" });
+    } finally {
+      setSending(null);
     }
   }
 
@@ -117,7 +123,7 @@ export function WorkOrders({ hotel, role, onBack }: { hotel: Hotel; role: string
       const h = heldStatus(held, code, o.id);
       return (
         <OrderCard
-          key={o.id} o={o} status={h ?? o.status} queued={queued(h)} mayUpdate={data.mayUpdate}
+          key={o.id} o={o} status={h ?? o.status} queued={queued(h)} mayUpdate={data.mayUpdate} sending={sending === o.id}
           onStart={(status) => void start(o, status)} onClose={() => setClosing(o)} onCosts={() => setCosting(o.id)}
         />
       );
@@ -204,14 +210,14 @@ const SAID = {
 
 /* ── One repair (the web's OrderCard) ──────────────────────────── */
 
-function OrderCard({ o, status, queued: waiting, mayUpdate, onStart, onClose, onCosts }: {
-  o: WorkOrder; status: string; queued: string | null; mayUpdate: boolean;
+function OrderCard({ o, status, queued: waiting, mayUpdate, sending, onStart, onClose, onCosts }: {
+  o: WorkOrder; status: string; queued: string | null; mayUpdate: boolean; sending: boolean;
   onStart: (status: string) => void; onClose: () => void; onCosts: () => void;
 }) {
   const [said, setSaid] = useState<string | null>(null);
   useEffect(() => setSaid(null), [status]);
   const m = meta(o);
-  const why = whyNotUpdate(mayUpdate, status);
+  const why = whyNotUpdate(mayUpdate, status, sending);
   const costs = o.costs !== undefined;
   const closed = isClosed(o.status);
   return (
@@ -285,7 +291,7 @@ function CloseDialog({ code, order, onClose, onDone }: {
     }
   }
 
-  const why = busy ? "Sending…" : resolution.trim() ? null : SAY_WHAT;
+  const why = busy ? SENDING : resolution.trim() ? null : SAY_WHAT;
   return (
     <Dialog title={order.title} under={order.room ? `Room ${order.room}` : "Not a room"} onClose={onClose}>
       <Field label="What was done" required hint="The line somebody reads the next time this breaks.">
@@ -359,10 +365,10 @@ function CostsDialog({ code, order, mayRecord, onClose }: {
             <View key={k.id} style={{ padding: 12, gap: 6, borderTopWidth: i ? 1 : 0, borderTopColor: c.grey200 }}>
               <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between", alignItems: "baseline", columnGap: 12 }}>
                 <Text style={[t.label, line, t.tab, { color: k.cancelled ? c.grey500 : c.ink900 }, k.cancelled ? { textDecorationLine: "line-through" } : null]}>{paise(k.amount)}</Text>
-                <Text style={[t.label, line, { color: c.grey500 }]}>{dateLong(k.recordedAt)} · {k.recordedBy ?? "-"}</Text>
+                <Text style={[t.label, line, { color: c.grey500 }]}>{longDay(k.recordedAt)} · {k.recordedBy ?? DASH}</Text>
               </View>
               {k.note ? <Text style={[t.label, line]}>{k.note}</Text> : null}
-              {k.cancelled ? <Text style={[t.label, line]}>Cancelled {dateLong(k.cancelled.at)} by {k.cancelled.by ?? "-"}: {k.cancelled.reason}</Text> : null}
+              {k.cancelled ? <Text style={[t.label, line]}>Cancelled {longDay(k.cancelled.at)} by {k.cancelled.by ?? DASH}: {k.cancelled.reason}</Text> : null}
               <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
                 <Btn label="See the proof" Icon={FileText} reason={ON_WEBSITE} onPress={() => undefined} onRefused={(text) => setTapSaid({ at: k.id, text })} />
                 {!k.cancelled && cancelling !== k.id ? (
@@ -379,7 +385,7 @@ function CostsDialog({ code, order, mayRecord, onClose }: {
                   </Field>
                   <View style={{ flexDirection: "row", gap: 8 }}>
                     <Btn label="Keep it" grow reason={null} onPress={() => setCancelling(null)} />
-                    <Btn label="Cancel the cost" grow kind="danger" reason={busy ? "Sending…" : why.trim() ? null : "Why is it cancelled? Say what was wrong with it."}
+                    <Btn label="Cancel the cost" grow kind="danger" reason={busy ? SENDING : why.trim() ? null : "Why is it cancelled? Say what was wrong with it."}
                       onPress={() => void cancel(k)} onRefused={(text) => setTapSaid({ at: k.id, text })} />
                   </View>
                 </View>
