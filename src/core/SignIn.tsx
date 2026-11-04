@@ -19,6 +19,14 @@ import { s } from "./ui";
    Without the public settings the form stands, closed: its fields and
    Sign in off, and a box saying which settings the build lacks and that
    the owner sets them up (./firebase.ts notSetUp).
+
+   PICTURE MATCH (4 Nov): reference/pms-shots holds no picture of the
+   sign-in screen (every shot is taken signed in), so nothing was compared
+   with a picture. The look and the words are the web's src/pages/SignIn.tsx
+   as the 31 Oct helper ported them from the PMS's code; kept as they were.
+   Changed since: the "not set up" line is the web's info box and names the
+   missing settings; "Development only" is theme.ts's yellow800 (readable on
+   white) instead of #ffb600. Read from code only, never seen running.
    ══════════════════════════════════════════════════════════════════ */
 
 /* theme.css's, for this screen only. */
