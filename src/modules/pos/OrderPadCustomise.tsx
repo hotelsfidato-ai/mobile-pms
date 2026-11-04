@@ -4,6 +4,7 @@ import { Pressable, Text, View } from "react-native";
 import { cash } from "../../core/format";
 import { c, face, t } from "../../core/theme";
 import { Capsule } from "../../core/ui";
+import { offNow } from "./floor";
 import { addNumbered, customProblems, lessNumbered, LONGEST_NAME, MOST_OF_A_CUSTOM, nameWithAddons, priceWithAddons } from "./pad";
 import type { CustomAddon, LineAddon, NumberedAddon } from "./types";
 import { Btn, Field, Input, RoundBtn, Sheet, ty, web } from "./TablesKit";
@@ -84,7 +85,7 @@ export function OrderPadCustomise({ dish, base, qty = 1, addons, chosen: initial
       ) : (
         <View style={{ gap: 8 }}>
           {addons.map((a) => {
-            const off = Boolean(a.offUntil && Date.parse(a.offUntil) > Date.now());
+            const off = offNow(a.offUntil);
             const n = chosen.find((x) => x.id === a.id)?.qty ?? 0;
             return (
               <Pressable

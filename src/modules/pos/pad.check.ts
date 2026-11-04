@@ -4,7 +4,7 @@
 import {
   addNumbered, addToSent, batchBody, bump, chooseRule, clearDraft, customiseLine, customProblems, dishReady, draftCount,
   draftKey, draftTotal, draftedTables, drop, footerLine, kotsSent, lessNumbered, menuShown, nameWithAddons, onceMore,
-  oneLinePerDish, pickedIds, priceWithAddons, putLine, saveDraft, sentDishes, toggleSide, typesOf, unitPriceOf,
+  oneLinePerDish, pickedIds, priceWithAddons, putLine, saveDraft, sentDishes, sheetFigure, toggleSide, typesOf, unitPriceOf,
   type DraftLine, type PadLine,
 } from "./pad.ts";
 import type { AddonGroup, MenuCategory, MenuItem, NumberedAddon } from "./types";
@@ -44,6 +44,12 @@ eq(dishReady(bhaaji, {}, new Set()), false, "no variation: Add off");
 eq(dishReady(bhaaji, { 1: "butter" }, new Set()), true, "variation chosen: Add on");
 eq(dishReady(pizza, { 1: "l" }, new Set()), false, "one type of two: Add off");
 eq(pickedIds(pizza, { 1: "l", 2: "cheese" }), { variationId: "l", moreChoiceIds: ["cheese"] }, "the sheet's ids");
+/* MPOS-2: the sheet's figure is a dash until every type is chosen, never ₹0 or the sides alone. */
+eq(sheetFigure(bhaaji, {}, new Set(["s0"]), 2), null, "no variation yet: a dash, not ₹50");
+eq(sheetFigure(bhaaji, { 1: "butter" }, new Set(["s0"]), 2), 850, "Butter + Onions, two");
+eq(sheetFigure(pizza, { 1: "l" }, new Set(), 1), null, "one type of two: still a dash");
+eq(sheetFigure(pizza, { 1: "l", 2: "cheese" }, new Set(), 1), 690, "both types");
+eq(sheetFigure(chicken, {}, new Set(), 3), 1080, "a plain dish asks nothing");
 const needOne = dish("th", "Thali", 250, { addonGroups: [{ ...sides, minSelect: 1, maxSelect: 1 }] });
 eq(dishReady(needOne, {}, new Set()), false, "a required group short: Add off");
 eq(dishReady(needOne, {}, new Set(["s1"])), true, "a required group met");

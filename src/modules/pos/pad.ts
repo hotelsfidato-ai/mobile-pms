@@ -402,6 +402,15 @@ export function pickedIds(item: MenuItem, picked: Readonly<Record<number, string
   return { variationId, moreChoiceIds };
 }
 
+/** The sheet's footer figure: what this many of the dish come to, sides
+    included - a DASH (null) until one of each variation type is chosen,
+    since unitPriceOf prices a missing variation at zero (MPOS-2). */
+export function sheetFigure(item: MenuItem, picked: Readonly<Record<number, string>>, chosen: ReadonlySet<string>, qty: number): number | null {
+  if (!typesOf(item).every((t) => picked[t.typeNo])) return null;
+  const { variationId, moreChoiceIds } = pickedIds(item, picked);
+  return unitPriceOf(item, variationId, chosen, moreChoiceIds) * qty;
+}
+
 /* ── Customise (CustomiseDialog.tsx) ──────────────────────────────── */
 
 export const MOST_OF_ONE = 9;

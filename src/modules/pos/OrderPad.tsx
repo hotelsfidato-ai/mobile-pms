@@ -49,6 +49,9 @@ export function OrderPad({ hotel, role, table, orderId, onClose }: {
   const [side, setSide] = useState<"restaurant" | "bar">("restaurant");
   const [section, setSection] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
+  /* One Send in flight, from the first tap: state reaches the button a render
+     later, and a second tap in between would ring the round twice (MPOS-3). */
+  const inFlight = useRef(false);
   const [asked, setAsked] = useState<string | null>(null);
   /* What Tables left for the pad: a parcel just opened. */
   const [said, setSaid] = useState<Said | null>(takeSaid);
@@ -134,8 +137,9 @@ export function OrderPad({ hotel, role, table, orderId, onClose }: {
   }
 
   async function sendRound() {
-    if (lines.length === 0 || sending) return;
+    if (lines.length === 0 || inFlight.current) return;
     if (ringReason) { setSaid({ title: table, body: ringReason, tone: "bad" }); return; }
+    inFlight.current = true;
     setSending(true);
     setSaid(null);
     /* The table's id, from the floor this phone last read; the name otherwise. */
@@ -167,6 +171,7 @@ export function OrderPad({ hotel, role, table, orderId, onClose }: {
       /* THE ROUND STAYS: the waiter changes that dish and sends again. */
       setSaid({ title: table, body: e instanceof Error ? e.message : String(e), tone: "bad" });
     } finally {
+      inFlight.current = false;
       setSending(false);
     }
   }

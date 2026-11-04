@@ -2,7 +2,8 @@ import { useMemo, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { cash } from "../../core/format";
 import { c, t } from "../../core/theme";
-import { BAR_NOTES, chooseRule, countIn, dishReady, pickedIds, PRESET_NOTES, toggleSide, typesOf, unitPriceOf } from "./pad";
+import { offNow } from "./floor";
+import { BAR_NOTES, chooseRule, countIn, dishReady, pickedIds, PRESET_NOTES, sheetFigure, toggleSide, typesOf } from "./pad";
 import type { MenuItem } from "./types";
 import { Btn, Caps, Input, Sheet, ty, web } from "./TablesKit";
 
@@ -30,7 +31,8 @@ export function DishSheet({ item, bar, onCancel, onAdd }: {
   const types = useMemo(() => (item ? typesOf(item) : []), [item]);
   if (!item) return null;
   const { variationId, moreChoiceIds } = pickedIds(item, picked);
-  const unitPrice = unitPriceOf(item, variationId, chosen, moreChoiceIds);
+  /* A dash until each type is chosen: a missing variation is not ₹0 (MPOS-2). */
+  const figure = sheetFigure(item, picked, chosen, qty);
   const ready = dishReady(item, picked, chosen);
   const q = search.trim().toLowerCase();
 
@@ -42,7 +44,7 @@ export function DishSheet({ item, bar, onCancel, onAdd }: {
         : "Add sides, or a note for the kitchen."}
       footer={(
         <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
-          <Text style={[t.heading, ty.md, t.tab, { flex: 1 }]}>{cash(unitPrice * qty)}</Text>
+          <Text style={[t.heading, ty.md, t.tab, { flex: 1 }]}>{cash(figure)}</Text>
           <Btn label="Cancel" onPress={onCancel} />
           <Btn
             label="Add" primary disabled={!ready}
@@ -89,7 +91,7 @@ export function DishSheet({ item, bar, onCancel, onAdd }: {
                 </Text>
                 <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
                   {shown.map((a) => {
-                    const off = Boolean(a.offUntil && Date.parse(a.offUntil) > Date.now());
+                    const off = offNow(a.offUntil);
                     const on = chosen.has(a.id);
                     /* The group has all it allows: the rest wait until one is taken back. */
                     const full = !on && g.maxSelect !== null && g.maxSelect > 1 && countIn(g, chosen) >= g.maxSelect;
