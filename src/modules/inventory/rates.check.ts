@@ -6,6 +6,7 @@ import {
   nightsMark, occupancyOf, offered, priceOf, rangeOf, restrictionBody, rupees, spanWords, tappedPrice, typedNights,
   typedPrice, typesOf, typesOwnBase, toneOf, windowOf, type Pricing, type PricingCell,
 } from "./rates.ts";
+import { ruleFor } from "../../core/offline.ts";
 
 const eq = (got: unknown, want: unknown, what: string) => {
   if (JSON.stringify(got) !== JSON.stringify(want)) throw new Error(`${what}: got ${JSON.stringify(got)}, want ${JSON.stringify(want)}`);
@@ -109,5 +110,12 @@ eq(baseBody({ ...tap, clearing: true }), { roomTypeId: "t1", from: "2026-10-11",
 eq(restrictionBody({ roomTypeId: "d", from: "2026-10-11", until: "2026-10-13", stopSell: true, closedArrival: false, closedDeparture: true, min: "", max: "5" }),
   { roomTypeId: "d", from: "2026-10-11", to: "2026-10-13", stopSell: true, closedArrival: false, closedDeparture: true, minNights: null, maxNights: 5 },
   "a restriction's range is inclusive; an empty field is no rule, not zero");
+
+/* ── Offline: the web holds no rate write (offline.ts lists none) - each is refused, with its words ── */
+for (const [method, path] of [["PUT", "/api/hotels/5EL/pricing/base"], ["POST", "/api/hotels/5EL/restrictions"]] as const) {
+  const r = ruleFor(path, method, "{}");
+  eq(r.tier, "refuse", `${method} ${path} is refused offline`);
+  eq(r.reason?.startsWith("This cannot be done offline yet."), true, `${path}: the web's sentence for an unlisted write`);
+}
 
 console.log("inventory rates: ok");
