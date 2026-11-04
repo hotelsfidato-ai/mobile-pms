@@ -21,3 +21,16 @@ the picture said; `git log` on the page dated the change. **Done:** All bookings
 owner's later decision, and a phone cannot read every booking ever made); New booking follows the picture
 and front desk's walk-in, which shares its rules (a question for the owner). Both listed in MODULE.md's
 picture match. **Rule:** before matching a picture, date the page's last change against the picture's.
+
+### MRS-3 · A lost reply let New booking make the same booking twice (4 Nov)
+
+**What:** when nothing came back (or the server failed), New booking said "Not booked" and let go
+of its latch; POST bookings reads no idempotency key, so Save tapped again made a second booking. The
+advance's "Not known whether it was taken" sat under "Advance not taken:". **Found:** applying MEMORY 16
+across the modules (4 Nov). **Done:** on `outcomeUnknown(e)` it says "Not known whether it was booked …
+look at All bookings before trying again" and its four buttons take no more taps until the page is
+left (`useStuck`, `notKnown` in core/ui.tsx); the advance says "Not known whether the advance was taken"
+alone (its keeper per booking was already there; the payments route reads the key). Checked safe to
+repeat: Assign room (the server refuses "already in room …"), check in ("Already checked in"), confirm
+a waiting booking, Room type / Floor (a preference). **Rule:** an unknown outcome on a route without a
+key stops the button.

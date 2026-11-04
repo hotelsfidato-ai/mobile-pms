@@ -6,7 +6,7 @@ import { KeyboardAvoidingView, Platform, Pressable, Text, View } from "react-nat
 import { ApiError, HeldError, type Hotel, outcomeUnknown } from "../../core/api";
 import { cash } from "../../core/format";
 import { c, face, space, t } from "../../core/theme";
-import { Card, Screen, useRead } from "../../core/ui";
+import { Card, notKnown, Screen, useRead, useStuck } from "../../core/ui";
 import { Day } from "../housekeeping/DayStepper";
 import {
   allIn, byContract, discountIn, gstinProblem, inclusive, MARKET_SEGMENTS, OTHER, PLANS, priceLine, summary, TITLES, worthAsking,
@@ -49,7 +49,8 @@ interface Done {
   /** By reference: the room kept through assign or the check-in, or why not. */
   assigned: Record<string, { room: string } | { failed: string }>;
   checkedIn: { room: string } | { failed: string } | null;
-  advance: { amount: number } | { failed: string } | null;
+  /** `unknown`: nothing came back, or a 5xx - it may have been taken (MEMORY 16). */
+  advance: { amount: number } | { failed: string; unknown?: boolean } | null;
   waiting: boolean;
   arrivesToday: boolean;
 }
@@ -75,6 +76,10 @@ export function NewBooking({ hotel, role, room: walkRoom, date: walkDate }: { ho
   const [saving, setSaving] = useState(false);
   /* One tap, one booking (MEMORY 8): latched at the tap. */
   const latch = useRef(false);
+  /* POST bookings reads no key: a booking whose outcome is unknown is never
+     made again from here - no more taps until All bookings is looked at (MRS-3). */
+  const once = useStuck();
+  const unknownBooking = notKnown("booked", "All bookings");
 
   const [title, setTitle] = useState(rules?.defaultTitle ?? "");
   const [guestName, setGuestName] = useState("");
@@ -208,7 +213,7 @@ export function NewBooking({ hotel, role, room: walkRoom, date: walkDate }: { ho
   });
 
   const submit = async (now: boolean, overLimitReason?: string) => {
-    if (latch.current) return;
+    if (latch.current || once.isStuck()) return;
     latch.current = true;
     setSaving(true);
     setOverLimit(null);
@@ -240,6 +245,11 @@ export function NewBooking({ hotel, role, room: walkRoom, date: walkDate }: { ho
       setSaving(false);
       /* Over the credit limit: said under the buttons, with the allow. */
       if (e instanceof ApiError && e.needs === "credit-limit") { setOverLimit({ reason: e.message, now }); return; }
+      if (once.stop(e)) {
+        const n = notKnown("booked", "All bookings", e);
+        setToast({ title: n.title, body: n.body, tone: "bad" });
+        return;
+      }
       /* The server's sentence: nothing was written. */
       setToast({ title: "Not booked", body: wordOf(e), tone: "bad" });
       return;
@@ -256,7 +266,9 @@ export function NewBooking({ hotel, role, room: walkRoom, date: walkDate }: { ho
         advanceTaken = { amount: advanceAmount };
       } catch (e) {
         /* Not known whether it was taken: said, so it is never taken twice from the bill (the review of 4 Nov). */
-        advanceTaken = { failed: outcomeUnknown(e) ? `Not known whether it was taken: ${wordOf(e)} Check the booking's bill before taking it again.` : wordOf(e) };
+        advanceTaken = outcomeUnknown(e)
+          ? { failed: `Not known whether the advance was taken: ${wordOf(e)} Check the booking's bill before taking it again.`, unknown: true }
+          : { failed: wordOf(e) };
       }
     }
     /* Check in now: front desk's own check-in, which gives the room itself. */
@@ -525,9 +537,9 @@ export function NewBooking({ hotel, role, room: walkRoom, date: walkDate }: { ho
 
         {/* The three buttons: the one filled is the job the page was opened for. */}
         <View style={{ gap: 8 }}>
-          <Button label="Save booking" kind={walkIn ? "secondary" : "primary"} size="lg" busy={saving} reason={reasonToSave} onPress={() => void submit(false)} />
-          <Button label="Save and assign room" size="lg" busy={saving} reason={reasonToSave ?? reasonToAssign} onPress={() => void submit(false)} />
-          <Button label="Check in now" kind={walkIn ? "primary" : "secondary"} size="lg" busy={saving} reason={reasonToSave ?? reasonToCheckIn} onPress={() => void submit(true)} />
+          <Button label="Save booking" kind={walkIn ? "secondary" : "primary"} size="lg" busy={saving} reason={once.stuck ? unknownBooking.line : reasonToSave} onPress={() => void submit(false)} />
+          <Button label="Save and assign room" size="lg" busy={saving} reason={once.stuck ? unknownBooking.line : reasonToSave ?? reasonToAssign} onPress={() => void submit(false)} />
+          <Button label="Check in now" kind={walkIn ? "primary" : "secondary"} size="lg" busy={saving} reason={once.stuck ? unknownBooking.line : reasonToSave ?? reasonToCheckIn} onPress={() => void submit(true)} />
           <View style={{ gap: 2 }}>
             {reasonToSave ? <Text style={[t.label, body, { color: c.grey600 }]}>{reasonToSave}</Text> : (
               <>
@@ -542,7 +554,7 @@ export function NewBooking({ hotel, role, room: walkRoom, date: walkDate }: { ho
               {keeper ? (
                 <>
                   <Box value={allowReason} label="Why it is allowed" placeholder="Why it is allowed" onChange={setAllowReason} />
-                  <Button label="Allow, with reason" busy={saving} reason={allowReason.trim() ? null : "Say why it is allowed."} onPress={() => void submit(overLimit.now, allowReason.trim())} />
+                  <Button label="Allow, with reason" busy={saving} reason={once.stuck ? unknownBooking.line : allowReason.trim() ? null : "Say why it is allowed."} onPress={() => void submit(overLimit.now, allowReason.trim())} />
                 </>
               ) : <Text style={[t.label, body, { color: c.grey600 }]}>{OVER_LIMIT_WHO}</Text>}
             </View>
@@ -759,7 +771,7 @@ function BookedCard({ hotel, done, onAnother }: { hotel: Hotel; done: Done; onAn
             : <Text style={[t.label, body, { color: c.yellow800 }]}>{`Not checked in: ${done.checkedIn.failed} Check them in from Arrivals.`}</Text>) : null}
           {done.advance ? ("amount" in done.advance
             ? <Text style={[t.label, body, { color: c.grey600 }]}>{`Advance of ${moneyPrecise(done.advance.amount)} taken, held as the guest's credit.`}</Text>
-            : <Text style={[t.label, body, { color: c.yellow800 }]}>{`Advance not taken: ${done.advance.failed} Take it on the bill.`}</Text>) : null}
+            : <Text style={[t.label, body, { color: c.yellow800 }]}>{done.advance.unknown ? done.advance.failed : `Advance not taken: ${done.advance.failed} Take it on the bill.`}</Text>) : null}
           {/* Just checked in: the other adults (D27-382), as at the desk. */}
           {inHouse && lead?.id ? <Companions code={code} stayId={lead.id} today={hotel.businessDate} rules={rulesOf(hotel)} /> : null}
           {waiting ? (
