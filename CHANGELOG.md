@@ -5,6 +5,36 @@ commits.
 
 ---
 
+## 2026-11-04 · the core changes (the owner's yes); Tier 2 blocked in the cloud
+
+**Asked for:** "yes do the core changes then start tier 2".
+
+**Shipped** (branch `mobile/core`, merged into `main` at `4d30a0a`, ALL GATES GREEN on it):
+- **MFIN-1, one key per payment while its outcome is unknown** (`core/keys.ts` + check; `send(…,
+  keeper)`; finance keeps one keeper per stay's bill). The same payment tapped again after a lost
+  reply is made once; a guest paying ₹500 twice is two payments. Shaped by three independent reviews:
+  the first version would have swallowed a deliberate second ₹500 (MEMORY 13), the second cleared a
+  409's key at Settle's own re-read and one stay's read cleared another's; the third was found sound.
+- **MFIN-2:** `ApiError.needs`; Settle, Check out and Add charge take the way through on `needs` or
+  the server's sentence (`bill.ts asks`, checked).
+- One reader for a server time (`core/format.ts` `instant`, `msAt`, `format.check.ts`), replacing
+  three module copies; nine web colours as `theme.ts` tokens (same values); the line under a title at
+  21 px.
+
+**Proved:** each new rule broken once and seen failing (the keeper's eight rules, `asks`, `instant`);
+the gates on every commit. **Not proved:** nothing opened on a screen; no API, so whether the PMS
+honours a reused key on each finance write is the server's (R-13 says finance postings do).
+
+**Left by design (the third review):** inside 30 s of a 409 a deliberate identical payment would get
+the first's stored reply (the bill's next read shows the amount still owed); a same-millisecond read
+counts as after the failure; an invoice's key is cleared only by that stay's bill read.
+
+**Not done:** removing the modules' own Back / Sign out (not asked). **Tier 2 not started:** none of
+its 15 slices has a known API route in the ported code, and the PMS cannot be read from the cloud;
+building it would mean inventing routes (asked of the owner).
+
+---
+
 ## 2026-11-04 · all of Tier 1 merged: the nine branches finished in the cloud (M-12)
 
 **Asked for:** "start all and complete all the pending screens".

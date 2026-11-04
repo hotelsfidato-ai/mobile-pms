@@ -6,7 +6,15 @@
 
 ## 4–5 November 2026 — read this first: the work moves to the cloud (M-12)
 
-**The cloud session, 4 Nov (latest) — read this first.**
+**Later on 4 Nov — the core changes are on `main` (`4d30a0a`, CHANGELOG):** MFIN-1 (one key per
+payment while its outcome is unknown, three reviews), MFIN-2 (`needs`), one time reader, the colour
+tokens, the title's line. **Tier 2 is blocked here:** no Tier 2 slice has a known API route in the
+ported code and the PMS cannot be read from the cloud. **Waiting for the owner:** give this session
+read access to `hotelsfidato-ai/pms` (recommended), or the PC writes each Tier 2 slice's API map
+(routes, shapes, who may, offline tiers) into this repository, or picture-only screens (not
+recommended). Back / Sign out on module screens: still there (not asked).
+
+**The cloud session, 4 Nov — read this first.**
 - **All of Tier 1 is on `main`**: the nine branches are finished, reviewed and merged, each merge gated
   green (CHANGELOG 4 Nov). `docs/STATUS.md`: 28 screens, **13 match their pictures, 3 with
   differences left, 12 with no usable picture**, all by reading code against the pictures.
