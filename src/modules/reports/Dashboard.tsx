@@ -2,7 +2,7 @@ import {
   BedDouble, Building2, Check, ChartColumn, ChevronLeft, ChevronRight, ClipboardList, Landmark, LogIn, LogOut,
   ReceiptText, SprayCan, UserX, Users, Wallet, type LucideIcon,
 } from "lucide-react-native";
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { Pressable, Text, View } from "react-native";
 import type { Room, Stay } from "../../core/types";
 import { orNull, type Hotel } from "../../core/api";
@@ -256,6 +256,8 @@ export function Dashboard({ hotel, onBack, onOpenArrivals, onOpenDueOut, onOpenI
         <MoneyItem
           last icon={UserX} tone={(noShow?.today ?? 0) > 0 ? "orange" : "neutral"} warn={(noShow?.today ?? 0) > 0}
           label="No-shows" value={show(count(noShow?.today))} note={[`Month so far ${count(noShow?.ptd)}`]}
+          /* The picture's arrow opens the No-show report: not on the phone yet, so greyed. */
+          elsewhere
         />
       </Card>
 
@@ -341,15 +343,27 @@ function WorkTile({ icon, chip, label, n, left, state, note, loading, onPress }:
 
 /** A Money row: the chip beside the label and the note, the amount under the
     label on the right; a split bar, when there is one, on a row of its own. */
-function MoneyItem({ icon, tone = "neutral", label, term, value, note, bar, warn, first, last }: {
+function MoneyItem({ icon, tone = "neutral", label, term, value, note, bar, warn, first, last, elsewhere }: {
   icon: LucideIcon; tone?: ChipTone; label: string; term?: TermKey; value: string; note: ReactNode[]; bar?: ReactNode; warn?: boolean; first?: boolean; last?: boolean;
+  /** Its list is on the website only: the arrow is drawn grey and says so. */
+  elsewhere?: boolean;
 }) {
+  const [why, setWhy] = useState(false);
   return (
     <View style={[{ paddingVertical: 12 }, first ? { paddingTop: 0 } : { borderTopWidth: 1, borderTopColor: c.grey100 }, last && { paddingBottom: 0 }]}>
       <View style={{ flexDirection: "row", alignItems: "center", gap: 14 }}>
         <IconChip icon={icon} tone={tone} />
         <View style={{ flex: 1, gap: 2 }}>
-          {term ? <Term name={term} style={t.label}>{label}</Term> : <Text style={t.label}>{label}</Text>}
+          {term ? <Term name={term} style={t.label}>{label}</Term> : elsewhere ? (
+            /* Not `disabled`: the tap is when a person asks why (the web's D17-8). */
+            <Pressable
+              onPress={() => setWhy(true)} accessibilityRole="button" accessibilityLabel={label} accessibilityState={{ disabled: true }} accessibilityHint={WEBSITE}
+              style={{ minHeight: 44, marginVertical: -12, flexDirection: "row", alignItems: "center", gap: 4, alignSelf: "flex-start" }}
+            >
+              <Text style={t.label}>{label}</Text>
+              <ChevronRight size={16} color={more.grey400} />
+            </Pressable>
+          ) : <Text style={t.label}>{label}</Text>}
           <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start", gap: 14 }}>
             <View style={{ flexShrink: 1 }}>
               {note.map((line, i) => (typeof line === "string" ? <Text key={i} style={[t.caption, { lineHeight: 17 }]}>{line}</Text> : line))}
@@ -359,6 +373,7 @@ function MoneyItem({ icon, tone = "neutral", label, term, value, note, bar, warn
         </View>
       </View>
       {bar ? <View style={{ marginLeft: 42, marginTop: 6 }}>{bar}</View> : null}
+      {why ? <Text style={[t.caption, { marginLeft: 42, marginTop: 6 }]} accessibilityLiveRegion="polite">{WEBSITE}</Text> : null}
     </View>
   );
 }
