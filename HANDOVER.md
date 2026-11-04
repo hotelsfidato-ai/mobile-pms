@@ -6,7 +6,18 @@
 
 ## 4–5 November 2026 — read this first: the work moves to the cloud (M-12)
 
-**Later on 4 Nov — the core changes are on `main` (`4d30a0a`, CHANGELOG):** MFIN-1 (one key per
+**Latest, 4 Nov — Tier 2 wave 1 is on `main`** (Approvals, Reservations, Rates, Night audit,
+Laundry; CHANGELOG). The PMS is read from `/home/user/hotelsfidato-ai/pms` in the cloud (public now;
+**`.env.production` and `.env.test` are committed in it: told to the owner, never opened**). Nothing
+opened on a screen: the PC looks at each, and **the night audit's close is not tried on a real day
+before the owner has looked**. Next: wave 2 (Spa, Banquet, Stores, Purchasing, Guests), then wave 3
+(Loyalty, CRS, Reviews, Revenue, Guest messages and connection health). Owner questions from wave 1:
+paise on amounts and prices (recommended, as the bill); Run hidden for revenue and the viewer, as the
+web (D27-305); D27-392 Normal / Company guest in New booking and the walk-in (recommended yes); the
+walk-in replaced by New booking later (recommended); correcting a closed day on the phone later, Opus
+with a second review.
+
+**Earlier on 4 Nov — the core changes are on `main` (`4d30a0a`, CHANGELOG):** MFIN-1 (one key per
 payment while its outcome is unknown, three reviews), MFIN-2 (`needs`), one time reader, the colour
 tokens, the title's line. **Tier 2 is blocked here:** no Tier 2 slice has a known API route in the
 ported code and the PMS cannot be read from the cloud. **Waiting for the owner:** give this session

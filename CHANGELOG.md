@@ -5,6 +5,36 @@ commits.
 
 ---
 
+## 2026-11-04 · Tier 2, wave 1 merged: Approvals, Reservations, Rates, Night audit, Laundry
+
+**Asked for:** "start tier 2" (after giving the PMS repository to the app; it is public, so it is read
+anonymously — `.env.production` and `.env.test` are committed in it: never opened, told to the owner).
+
+**Shipped** (each a new module and routes, built by an Opus helper from today's PMS code and the
+pictures, reviewed and merged by the mobile chat, its menu link added, gates green on each merge):
+- **Approvals** `48cd846` — Waiting / Everything, Approve / Refuse only where the server's row allows,
+  its sentence elsewhere, the amount to the paisa; the frame's `relative()` now reads through
+  `instant()` (MAPR-2).
+- **Rates** `963f46c` — a 14-day price calendar and rooms left; set a base for a day or a range, Free,
+  Clear; stop sell and stay rules. A typed price is sent as typed; NaN can never reach the body
+  (MINV-1: for this API `price: null` means Clear).
+- **Reservations** `becd16b` — the Calendar, All bookings, New booking (the front desk's rules reused
+  by import; the advance through a keeper); the walk-ins record's Open Calendar opens it.
+- **Night audit** `c68ff47` — the checklist, every blocker in the server's words, the web's
+  confirmation, Run only for those who may close. At the merge, from the independent review: the
+  session's hotels are read again after a close (`refresh()`, MNA-2), and the window sends the day it
+  showed (MNA-3).
+- **Laundry** `03f02b5` — dockets, collect a bag, a docket, record what came back, charge to the room.
+  At the merge: a blank count keeps the count recorded (MLDY-1).
+- **The frame's menu** re-checked against today's web by running its own `navigation.ts` (`01ed1a5`):
+  identical; the pictures' extra System entry is the development-only "Design system".
+- `menu.check.ts` fails when a module's first screen has no menu link (MEMORY 15: Laundry's link was
+  lost at a merge with the gates green). MEMORY 14, 15; R-25 to R-29; MFIN-2's values confirmed.
+
+**Not proved:** nothing opened on a screen; no API run; the night audit's close never run.
+
+---
+
 ## 2026-11-04 · the core changes (the owner's yes); Tier 2 blocked in the cloud
 
 **Asked for:** "yes do the core changes then start tier 2".

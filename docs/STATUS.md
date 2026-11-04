@@ -39,15 +39,17 @@ have no usable picture.** Real sign-in is built and waits for the owner's public
 | 8 Guest services | Hub, Requests, Wake-up calls, Lost property, Online check-in, Messages | ✅ `1ef35c3` | 3 of 6 match (only empty states pictured) |
 | core | The frame: top bar, banner, each role's menu, notifications, account menu | ✅ `f908380` | Notifications matches; menus 6 of 11; account menus not pictured |
 
-## Tier 2 — managers on the move (one copy each, started as Tier 1 copies finish)
+## Tier 2 — managers on the move (from today's PMS code, read in the cloud since 4 Nov)
+
+**Wave 1 merged (4 Nov):** 5 slices, 8 screens, each reviewed (night audit and laundry by an independent second look), gates green; nothing opened on a screen.
 
 | Slice | Screen(s) | Copy (when made) |
 |---|---|---|
-| 9 | Approvals and credit-limit allowances | `t2-approvals` |
-| 10 | Reservations: new booking, the calendar | `t2-reservations` |
-| 11 | Rates: quick change | `t2-rates` |
-| 12 | Night audit: the checklist and close (the owner's yes before it closes a real day) | `t2-night-audit` |
-| 13 | Laundry | `t2-laundry` |
+| 9 | Approvals (credit-limit allowances are asked at the write itself, not here) | ✅ merged 4 Nov, `48cd846` · picture 64 matches |
+| 10 | Reservations: Calendar, All bookings, New booking | ✅ merged 4 Nov, `becd16b` · Calendar matches; All bookings and New booking follow today's code (2 Nov), newer than pictures 12 and 14 |
+| 11 | Rates: set a price, close or open a day | ✅ merged 4 Nov, `963f46c` · pictures 27/28 match |
+| 12 | Night audit: the checklist and the close (the owner looks before it closes a real day) | ✅ merged 4 Nov, `c68ff47` · picture 49 with differences (newer code, 2 Nov) |
+| 13 | Laundry: dockets, collect a bag, a docket, charge to the room | ✅ merged 4 Nov, `03f02b5` · picture n-h-laundry matches |
 | 14 | Spa diary | `t2-spa` |
 | 15 | Banquet diary | `t2-banquet` |
 | 16 | Stores: counts and issues | `t2-stores` |
