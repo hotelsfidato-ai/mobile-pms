@@ -246,3 +246,14 @@ export const offersWords = (a: boolean | null) => (a === null ? DASH
     : "No offers are sent: this guest has not said yes.");
 /** "No offers to phone 9876543210". */
 export const noOffersWords = (o: Guest360["noOffers"][number]) => `No offers to ${o.kind === "phone" ? "phone" : "email"} ${o.value}`;
+
+/* ── Where Guest 360's writes go (people.ts), one place for data.ts and
+   the check that holds them refused offline (no /crm path is on the web's
+   list in src/lib/offline.ts) ── */
+const hotelAt = (code: string) => `/api/hotels/${encodeURIComponent(code)}`;
+export const WRITES = {
+  blacklist: (code: string, id: string) => `${hotelAt(code)}/crm/guests/${encodeURIComponent(id)}/blacklist`,
+  noOffers: (code: string) => `${hotelAt(code)}/crm/no-offers`,
+  noOffer: (code: string, id: string) => `${hotelAt(code)}/crm/no-offers/${encodeURIComponent(id)}`,
+  offersYes: (code: string) => `${hotelAt(code)}/crm/offers-yes`,
+};

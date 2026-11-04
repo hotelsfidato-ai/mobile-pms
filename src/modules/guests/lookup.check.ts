@@ -9,6 +9,8 @@ import {
   joinedLine, lastStayWords, noOffersWords, offersWords, overlapTitle, owed, phoneKey, revenueWords, searchReady,
   sentWords, splitOf, stayDates, stayWord, whoLine, type CompanyRecord, type GuestRecord,
 } from "./lookup.ts";
+import { WRITES } from "./lookup.ts";
+import { ruleFor } from "../../core/offline.ts";
 
 const eq = (got: unknown, want: unknown, what: string) => {
   if (JSON.stringify(got) !== JSON.stringify(want)) throw new Error(`${what}: got ${JSON.stringify(got)}, want ${JSON.stringify(want)}`);
@@ -105,5 +107,17 @@ eq(agreed(yes, { phone: "9876543210", email: null, noOffers: [{ id: "n", kind: "
 eq(offersWords(null), "-", "not known: a dash");
 eq(offersWords(false), "No offers are sent: this guest has not said yes.", "the web's words");
 eq(noOffersWords({ id: "n", kind: "email", value: "a@b.in", at: "" }), "No offers to email a@b.in", "one no");
+
+/* ── Offline: every write here is refused with the web's sentence, none held ── */
+const UNLISTED = "This cannot be done offline yet. It has not been checked as safe to hold and send later, and guessing is how a guest gets charged twice.";
+for (const [path, method] of [
+  [WRITES.blacklist("5EL", "g1"), "POST"], [WRITES.blacklist("5EL", "g1"), "DELETE"], [WRITES.noOffers("5EL"), "POST"],
+  [WRITES.noOffer("5EL", "n1"), "DELETE"], [WRITES.offersYes("5EL"), "POST"],
+] as const) {
+  const rule = ruleFor(path, method, "{}");
+  eq([rule.tier, rule.reason], ["refuse", UNLISTED], `${method} ${path}: refused offline, the web's sentence`);
+}
+eq(WRITES.blacklist("5EL", "a/b"), "/api/hotels/5EL/crm/guests/a%2Fb/blacklist", "the id travels encoded");
+eq(ruleFor("/api/hotels/5EL/guests/g1/vip", "POST").tier, "queue", "the web's one held guest write is VIP, which this module does not make");
 
 console.log("guests lookup: all checks pass");
