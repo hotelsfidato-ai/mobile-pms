@@ -1,0 +1,307 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Guest messages
+
+What this system sent guests, and whether it arrived
+
+Nothing is sent yet - Sending is not set up yet. Bills and vouchers print and download as usual; nothing goes by WhatsApp or email until the sending workflow's address, its secret and the WhatsApp number are in the server's settings.
+
+8 bookings no message can reach
+
+These guests will get no confirmation and no reminder. Add an email address to the booking, or tick WhatsApp on it if the guest agrees.
+
+FH-5EL-2610-5054
+A2 Test Joshi
+Arrives 31 Oct 2026
+Not agreed to WhatsApp, and no email address
+FH-5EL-2610-5032
+A10 Test R. Kumar
+Arrives 20 Dec 2026
+Not agreed to WhatsApp, and no email address
+FH-5EL-2610-5060
+D27371 No company
+Arrives 10 Jun 2029
+Not agreed to WhatsApp, and no email address
+FH-5EL-2610-5061
+D27371 With company
+Arrives 10 Jun 2029
+Not agreed to WhatsApp, and no email address
+FH-5EL-2610-5062
+D27371 Returning
+Arrives 10 Jul 2029
+Not agreed to WhatsApp, and no email address
+FH-5EL-2610-5063
+D27371 Returning
+Arrives 11 Jul 2029
+Not agreed to WhatsApp, and no email address
+FH-5EL-2610-5064
+D27371 Returning
+Arrives 12 Jul 2029
+Not agreed to WhatsApp, and no email address
+FH-5EL-2610-5065
+D27371 Returning
+Arrives 13 Jul 2029
+Not agreed to WhatsApp, and no email address
+28 Oct 2026
+WHAT
+Their sign-in code
+BOOKING
+FH-2608-4862
+TO
+card.guest@example.com
+STATE
+Delivered to the sender
+SENT BY
+The system
+WHAT CAME BACK
+The receiver took it (200).
+28 Oct 2026
+WHAT
+Their sign-in code
+BOOKING
+FH-2608-4862
+TO
+9876500022
+STATE
+Delivered to the sender
+SENT BY
+The system
+WHAT CAME BACK
+The receiver took it (200).
+28 Oct 2026
+WHAT
+Their sign-in code
+BOOKING
+FH-2608-4862
+TO
+9876500022
+STATE
+Delivered to the sender
+SENT BY
+The system
+WHAT CAME BACK
+The receiver took it (200).
+28 Oct 2026
+WHAT
+Their sign-in code
+BOOKING
+FH-2608-4862
+TO
+9876500022
+STATE
+Delivered to the sender
+SENT BY
+The system
+WHAT CAME BACK
+The receiver took it (200).
+28 Oct 2026
+WHAT
+Their sign-in code
+BOOKING
+FH-2608-4862
+TO
+9876500022
+STATE
+Delivered to the sender
+SENT BY
+The system
+WHAT CAME BACK
+The receiver took it (200).
+28 Oct 2026
+WHAT
+Their sign-in code
+BOOKING
+FH-2608-4862
+TO
+9876500022
+STATE
+Delivered to the sender
+SENT BY
+The system
+WHAT CAME BACK
+The receiver took it (200).
+28 Oct 2026
+WHAT
+Their sign-in code
+BOOKING
+FH-2608-4862
+TO
+9876500022
+STATE
+Delivered to the sender
+SENT BY
+The system
+WHAT CAME BACK
+The receiver took it (200).
+28 Oct 2026
+WHAT
+Their sign-in code
+BOOKING
+FH-2608-4862
+TO
+9876500022
+STATE
+Delivered to the sender
+SENT BY
+The system
+WHAT CAME BACK
+The receiver took it (200).
+21 Oct 2026
+WHAT
+Booking voucher
+BOOKING
+P6MSG-1
+TO
+9876501234
+STATE
+Did not go
+SENT BY
+The system
+WHAT CAME BACK
+Could not reach the receiver. fetch failed
+21 Oct 2026
+WHAT
+Booking confirmation
+BOOKING
+P6MSG-1
+TO
+p6msg.guest@example.test
+STATE
+Did not go
+SENT BY
+The system
+WHAT CAME BACK
+Could not reach the receiver. fetch failed
+21 Oct 2026
+WHAT
+Booking voucher
+BOOKING
+P6MSG-1
+TO
+9876501234
+STATE
+Did not go
+SENT BY
+The system
+WHAT CAME BACK
+Could not reach the receiver. fetch failed
+21 Oct 2026
+WHAT
+Booking confirmation
+BOOKING
+P6MSG-1
+TO
+p6msg.guest@example.test
+STATE
+Did not go
+SENT BY
+The system
+WHAT CAME BACK
+Could not reach the receiver. fetch failed
+21 Oct 2026
+WHAT
+Booking voucher
+BOOKING
+P6MSG-1
+TO
+9876501234
+STATE
+Did not go
+SENT BY
+The system
+WHAT CAME BACK
+Could not reach the receiver. fetch failed
+21 Oct 2026
+WHAT
+Booking confirmation
+BOOKING
+P6MSG-1
+TO
+p6msg.guest@example.test
+STATE
+Did not go
+SENT BY
+The system
+WHAT CAME BACK
+Could not reach the receiver. fetch failed
+14 Oct 2026
+WHAT
+Booking voucher
+BOOKING
+FH-5EL-2610-5051
+TO
+98765 00201
+STATE
+Delivered to the sender
+SENT BY
+The system
+WHAT CAME BACK
+The receiver took it (200).
+13 Oct 2026
+WHAT
+Their sign-in code
+BOOKING
+FH-5EL-2610-5049
+TO
+98765 00302
+STATE
+Delivered to the sender
+SENT BY
+The system
+WHAT CAME BACK
+The receiver took it (200).
+13 Oct 2026
+WHAT
+Their sign-in code
+BOOKING
+FH-5EL-2610-5049
+TO
+98765 00302
+STATE
+Delivered to the sender
+SENT BY
+The system
+WHAT CAME BACK
+The receiver took it (200).
+13 Oct 2026
+WHAT
+Booking voucher
+BOOKING
+FH-5EL-2610-5031
+TO
+9000000010
+STATE
+Delivered to the sender
+SENT BY
+The system
+WHAT CAME BACK
+The receiver took it (200).
+13 Oct 2026
+WHAT
+Booking confirmation
+BOOKING
+FH-5EL-2610-5031
+TO
+a10.test@example.com
+STATE
+Delivered to the sender
+SENT BY
+The system
+WHAT CAME BACK
+The receiver took it (200).
+13 Oct 2026
+WHAT
+Booking voucher
+BOOKING
+FH-5EL-2610-5037
+TO
+98765 00201
+STATE
+Delivered to the sender
+SENT BY
+The system
+WHAT CAME BACK
+The receiver took it (200).

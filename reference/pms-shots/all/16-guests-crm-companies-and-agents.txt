@@ -1,0 +1,195 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Companies and agents
+
+Where the business came from, and what each channel is worth.
+
+Add company
+
+Through an agent
+
+₹39,88,166
+
+65% of the revenue
+
+Direct
+
+₹11,66,241
+
+19% of the revenue
+
+Owed to the property
+
+₹68,818
+
+Across every source that owes anything
+
+Travel agents
+4
+Booked through a channel, and charged a commission for it.
+₹39,88,166 · 514 bookings
+Agoda
+BOOKINGS
+141
+ROOM NIGHTS
+276
+REVENUE
+₹10,43,507
+COMMISSION
+-
+OWED
+₹14,079
+Edit
+Expedia
+BOOKINGS
+129
+ROOM NIGHTS
+263
+REVENUE
+₹10,42,053
+COMMISSION
+-
+OWED
+-
+Edit
+Booking.com
+BOOKINGS
+124
+ROOM NIGHTS
+246
+REVENUE
+₹9,76,071
+COMMISSION
+-
+OWED
+₹2,653
+Edit
+go-MMT
+BOOKINGS
+120
+ROOM NIGHTS
+238
+REVENUE
+₹9,26,536
+COMMISSION
+-
+OWED
+₹7,582
+Edit
+Direct
+2
+Straight to the property. No commission on any of it.
+₹11,66,241 · 174 bookings
+Fidato Hotels
+BOOKINGS
+142
+ROOM NIGHTS
+263
+REVENUE
+₹10,17,401
+COMMISSION
+-
+OWED
+₹31,501
+Edit
+Walk-in
+BOOKINGS
+32
+ROOM NIGHTS
+50
+REVENUE
+₹1,48,840
+COMMISSION
+-
+OWED
+₹7,649
+Corporate accounts
+7
+A firm booking for its own people, settled on the city ledger.
+₹9,59,446 · 127 bookings
+Walk-In
+BOOKINGS
+117
+ROOM NIGHTS
+232
+REVENUE
+₹9,46,324
+COMMISSION
+-
+OWED
+-
+WhatsApp
+BOOKINGS
+2
+ROOM NIGHTS
+3
+REVENUE
+₹7,768
+COMMISSION
+-
+OWED
+-
+Website
+BOOKINGS
+7
+ROOM NIGHTS
+12
+REVENUE
+₹4,304
+COMMISSION
+-
+OWED
+₹4,304
+P6MSG Expedia
+BOOKINGS
+1
+ROOM NIGHTS
+1
+REVENUE
+₹1,050
+COMMISSION
+-
+OWED
+₹1,050
+Edit
+A4 Test Traders
+BOOKINGS
+0
+ROOM NIGHTS
+0
+REVENUE
+-
+COMMISSION
+-
+OWED
+-
+Edit
+D27371 Billed Co
+BOOKINGS
+0
+ROOM NIGHTS
+0
+REVENUE
+-
+COMMISSION
+-
+OWED
+-
+Edit
+P6MSG Co
+BOOKINGS
+0
+ROOM NIGHTS
+0
+REVENUE
+-
+COMMISSION
+-
+OWED
+-
+Edit
+
+Commission is charged outside this system today and prints as a dash rather than a zero. It fills once a channel manager is connected.

@@ -1,0 +1,41 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Places and suppliers
+
+Where stock is kept and equipment stands, and who it comes from.
+
+Places
+Add a place
+Bar counter
+KIND
+Store - stock is kept here
+STATE
+In use
+Bar store
+KIND
+Store - stock is kept here
+STATE
+In use
+Kitchen store
+KIND
+Store - stock is kept here
+STATE
+In use
+Main store
+KIND
+Store - stock is kept here
+STATE
+In use
+Suppliers
+Add a supplier
+A9 Test Kirana Bros
+A9 Test Ramesh
+PHONE
+90000 00009
+GSTIN
+-
+STATE
+In use

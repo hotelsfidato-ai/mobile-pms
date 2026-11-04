@@ -1,0 +1,20 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Guest requests
+
+What guests in house have asked for, and who is doing it.
+
+New request
+Open
+Done, last 24 h
+All
+Housekeeping
+Something broken
+Food and drink
+
+Nothing waiting
+
+A request shows here when a guest asks on their own page, or when somebody raises one with New request.

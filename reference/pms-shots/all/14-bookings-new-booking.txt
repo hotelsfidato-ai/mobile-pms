@@ -1,0 +1,137 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+New booking
+
+One guest, one set of nights. Save it, give it a room, or check them in.
+
+Guest
+Salutation
+None
+Mr
+Ms
+Mrs
+Dr
+Full name*
+Phone
+
+Needed for online check-in and WhatsApp.
+
+Email
+Company name
+GSTIN
+
+With a GSTIN, the tax invoice is made out to the company. The guest still pays.
+
+Company address
+Guest agreed to WhatsApp
+Ask them. Unticked, messages go by email if there is one, else not at all.
+Stay
+Another room
+Arrival
+Departure
+
+1 night
+
+Booking source*
+Choose one…
+Agoda
+Booking.com
+Expedia
+Fidato Hotels
+go-MMT
+Google Ads
+Meta Ads
+Walk-in
+Website
+WhatsApp
+
+How it reached us. It cannot be filled in later.
+
+Room type
+Deluxe
+Superior
+Meal plan
+EP · Room only
+CP · Room + breakfast
+MAP · Room + breakfast + one meal
+AP · Room + all meals
+AI · Everything charged to the room
+Rooms
+Adults
+Children
+Rate
+
+Empty uses the calendar.
+
+Rate includes GST
+Room
+Assign later
+Room 301 · A3 Test Smith is in this room.
+Room 302 · Not cleaned yet.
+Room 303 · A5 Test Rane is in this room.
+Room 304 · Not cleaned yet.
+Room 305 · A4 Test Kulkarni is in this room.
+Room 306 · inspected
+Room 307 · A3 Test Gokhale is in this room.
+
+Optional. A room picked is kept.
+
+Complimentary
+0 left · this books more than that
+₹3,699.00 a night + ₹184.95 tax (5%) · 1 night
+ID
+
+Recorded by Check in now. Save booking keeps only the nationality.
+
+Nationality
+
+Two letters, IN for India. Anything else puts the stay on the Form III register.
+
+Document
+Not recorded
+Passport
+Aadhaar
+Driving licence
+Voter ID
+Other
+Number
+Reason for skipping*
+Advance
+
+Held as the guest's credit until the nights are charged.
+
+Amount
+Paid by
+Cash
+UPI
+Credit Card
+Debit Card
+More about the guest
+Booking details
+Company
+Special request
+Notes
+The booking
+Nights
+1
+Rooms
+1
+1 × Deluxe
+₹3,699
+Room charges
+₹3,699.00
+GST
+₹184.95
+Due
+₹3,883.95
+
+As the bill will carry it. Nothing is paid at booking.
+
+Save booking
+Save and assign room
+Check in now
+
+Type the guest's name.

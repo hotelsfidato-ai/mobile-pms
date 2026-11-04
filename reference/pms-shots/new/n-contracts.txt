@@ -1,0 +1,91 @@
+6
+GO
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Contracts
+
+Companies and agents, and the rates each has agreed with this hotel.
+
+Add company
+A4 Test Traders
+GSTIN
+-
+CITY
+Solapur
+CREDIT
+Allowed · 30 days · -
+CONTRACT HERE
+-
+Agoda
+GSTIN
+-
+CITY
+-
+CREDIT
+No
+CONTRACT HERE
+-
+Booking.com
+GSTIN
+-
+CITY
+-
+CREDIT
+No
+CONTRACT HERE
+-
+D27371 Billed Co
+GSTIN
+29ABCDE1234F1ZW
+CITY
+Bengaluru
+CREDIT
+No
+CONTRACT HERE
+-
+Expedia
+GSTIN
+-
+CITY
+-
+CREDIT
+No
+CONTRACT HERE
+-
+Fidato Hotels
+GSTIN
+-
+CITY
+-
+CREDIT
+No
+CONTRACT HERE
+-
+go-MMT
+GSTIN
+-
+CITY
+-
+CREDIT
+Allowed · - · -
+CONTRACT HERE
+-
+P6MSG Co
+GSTIN
+-
+CITY
+-
+CREDIT
+No
+CONTRACT HERE
+-
+P6MSG Expedia
+GSTIN
+-
+CITY
+-
+CREDIT
+No
+CONTRACT HERE
+-

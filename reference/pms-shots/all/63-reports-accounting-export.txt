@@ -1,0 +1,463 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Accounting export
+
+Your month in the form your accountant takes. It reads the same figures the reports print and changes nothing.
+
+Export
+What to export
+From
+
+This day is included.
+
+To
+
+This day is included too.
+
+Format
+Day book (CSV)
+One row a day: sales, the tax on them and what was received. Every accounting package opens it.
+Day book (Excel)
+The same columns and figures as the CSV, as an Excel workbook.
+Tally Prime (XML)
+Sales, receipt, payment and journal vouchers for days the night audit has closed.
+Tally ERP 9 (XML)
+The same vouchers in the older Tally's format.
+Tally ledger names
+
+Type each name exactly as it is in this hotel's Tally. No name is suggested, and none is made here.
+
+Room rent
+
+Room charges, night by night
+
+Food charged to a room
+
+Food on a bill, from the desk or the restaurant
+
+Other services
+
+Laundry, the spa, late check-out and the other extras
+
+Restaurant sales
+
+What the restaurant took in cash, by card or UPI
+
+CGST
+
+Half the GST on everything sold
+
+SGST
+
+The other half
+
+Discount given
+
+Discounts on bills
+
+Round off
+
+Restaurant bills rounded to the rupee
+
+What guests owe
+
+Charges on bills, until they are paid
+
+What companies owe
+
+Bills moved to a company or booking site
+
+Owner's allowance
+
+The free part of a bill on the owner's allowance
+
+Cash
+
+Money received this way
+
+Card
+
+Money received this way
+
+UPI
+
+Money received this way
+
+Bank transfer
+
+Money received this way
+
+Cheque
+
+Money received this way
+
+Save ledger names
+
+The night audit has not run for 9 of these days, from 1 Oct 2026. Their figures are here and may still change. Today is 11 Oct 2026 at this property.
+
+1 Oct 2026
+ROOM REVENUE
+₹12,093.61
+ROOM TAX
+₹604.67
+FOOD CHARGED TO A ROOM
+₹0.00
+OTHER EXTRAS
+₹0.00
+EXTRA TAX
+₹0.00
+RESTAURANT
+₹0.00
+RESTAURANT TAX
+₹0.00
+DISCOUNT
+₹0.00
+ALCOHOL
+₹0.00
+VAT
+₹0.00
+SALES
+₹12,093.61
+GST
+₹604.67
+RECEIPTS
+₹17,940.74
+RECEIVED FROM COMPANIES
+₹0.00
+NIGHT AUDIT
+Not run
+2 Oct 2026
+ROOM REVENUE
+₹9,091.88
+ROOM TAX
+₹454.59
+FOOD CHARGED TO A ROOM
+₹0.00
+OTHER EXTRAS
+₹0.00
+EXTRA TAX
+₹0.00
+RESTAURANT
+₹0.00
+RESTAURANT TAX
+₹0.00
+DISCOUNT
+₹0.00
+ALCOHOL
+₹0.00
+VAT
+₹0.00
+SALES
+₹9,091.88
+GST
+₹454.59
+RECEIPTS
+₹23,649.83
+RECEIVED FROM COMPANIES
+₹0.00
+NIGHT AUDIT
+Not run
+3 Oct 2026
+ROOM REVENUE
+₹6,415.34
+ROOM TAX
+₹320.77
+FOOD CHARGED TO A ROOM
+₹0.00
+OTHER EXTRAS
+₹0.00
+EXTRA TAX
+₹0.00
+RESTAURANT
+₹0.00
+RESTAURANT TAX
+₹0.00
+DISCOUNT
+₹0.00
+ALCOHOL
+₹0.00
+VAT
+₹0.00
+SALES
+₹6,415.34
+GST
+₹320.77
+RECEIPTS
+₹8,431.10
+RECEIVED FROM COMPANIES
+₹0.00
+NIGHT AUDIT
+Not run
+4 Oct 2026
+ROOM REVENUE
+₹2,906.39
+ROOM TAX
+₹145.32
+FOOD CHARGED TO A ROOM
+₹0.00
+OTHER EXTRAS
+₹0.00
+EXTRA TAX
+₹0.00
+RESTAURANT
+₹0.00
+RESTAURANT TAX
+₹0.00
+DISCOUNT
+₹0.00
+ALCOHOL
+₹0.00
+VAT
+₹0.00
+SALES
+₹2,906.39
+GST
+₹145.32
+RECEIPTS
+₹7,368.80
+RECEIVED FROM COMPANIES
+₹0.00
+NIGHT AUDIT
+Not run
+5 Oct 2026
+ROOM REVENUE
+₹0.00
+ROOM TAX
+₹0.00
+FOOD CHARGED TO A ROOM
+₹0.00
+OTHER EXTRAS
+₹0.00
+EXTRA TAX
+₹0.00
+RESTAURANT
+₹0.00
+RESTAURANT TAX
+₹0.00
+DISCOUNT
+₹0.00
+ALCOHOL
+₹0.00
+VAT
+₹0.00
+SALES
+₹0.00
+GST
+₹0.00
+RECEIPTS
+₹9,155.13
+RECEIVED FROM COMPANIES
+₹0.00
+NIGHT AUDIT
+Not run
+6 Oct 2026
+ROOM REVENUE
+₹0.00
+ROOM TAX
+₹0.00
+FOOD CHARGED TO A ROOM
+₹0.00
+OTHER EXTRAS
+₹0.00
+EXTRA TAX
+₹0.00
+RESTAURANT
+₹0.00
+RESTAURANT TAX
+₹0.00
+DISCOUNT
+₹0.00
+ALCOHOL
+₹0.00
+VAT
+₹0.00
+SALES
+₹0.00
+GST
+₹0.00
+RECEIPTS
+₹0.00
+RECEIVED FROM COMPANIES
+₹0.00
+NIGHT AUDIT
+Not run
+7 Oct 2026
+ROOM REVENUE
+₹2,381.00
+ROOM TAX
+₹119.05
+FOOD CHARGED TO A ROOM
+₹0.00
+OTHER EXTRAS
+₹681.00
+EXTRA TAX
+₹34.05
+RESTAURANT
+₹0.00
+RESTAURANT TAX
+₹0.00
+DISCOUNT
+₹0.00
+ALCOHOL
+₹0.00
+VAT
+₹0.00
+SALES
+₹3,062.00
+GST
+₹153.10
+RECEIPTS
+₹0.00
+RECEIVED FROM COMPANIES
+₹0.00
+NIGHT AUDIT
+Not run
+8 Oct 2026
+ROOM REVENUE
+₹10,085.84
+ROOM TAX
+₹504.29
+FOOD CHARGED TO A ROOM
+₹0.00
+OTHER EXTRAS
+₹0.00
+EXTRA TAX
+₹0.00
+RESTAURANT
+₹0.00
+RESTAURANT TAX
+₹0.00
+DISCOUNT
+₹0.00
+ALCOHOL
+₹0.00
+VAT
+₹0.00
+SALES
+₹10,085.84
+GST
+₹504.29
+RECEIPTS
+₹0.00
+RECEIVED FROM COMPANIES
+₹0.00
+NIGHT AUDIT
+Not run
+9 Oct 2026
+ROOM REVENUE
+₹42,628.90
+ROOM TAX
+₹2,131.46
+FOOD CHARGED TO A ROOM
+₹180.00
+OTHER EXTRAS
+₹200.00
+EXTRA TAX
+₹19.00
+RESTAURANT
+₹5,590.00
+RESTAURANT TAX
+₹279.50
+DISCOUNT
+₹0.00
+ALCOHOL
+₹0.00
+VAT
+₹0.00
+SALES
+₹48,598.90
+GST
+₹2,429.96
+RECEIPTS
+₹18,579.23
+RECEIVED FROM COMPANIES
+₹0.00
+NIGHT AUDIT
+Closed
+10 Oct 2026
+ROOM REVENUE
+₹29,365.27
+ROOM TAX
+₹1,468.26
+FOOD CHARGED TO A ROOM
+₹370.00
+OTHER EXTRAS
+₹0.00
+EXTRA TAX
+₹18.50
+RESTAURANT
+₹440.00
+RESTAURANT TAX
+₹22.00
+DISCOUNT
+₹0.00
+ALCOHOL
+₹0.00
+VAT
+₹0.00
+SALES
+₹30,175.27
+GST
+₹1,508.76
+RECEIPTS
+₹30,387.40
+RECEIVED FROM COMPANIES
+₹0.00
+NIGHT AUDIT
+Closed
+11 Oct 2026
+ROOM REVENUE
+₹58,003.61
+ROOM TAX
+₹2,900.18
+FOOD CHARGED TO A ROOM
+₹680.00
+OTHER EXTRAS
+₹400.00
+EXTRA TAX
+₹54.00
+RESTAURANT
+₹10,047.24
+RESTAURANT TAX
+₹512.76
+DISCOUNT
+₹0.00
+ALCOHOL
+₹0.00
+VAT
+₹0.00
+SALES
+₹69,130.85
+GST
+₹3,466.94
+RECEIPTS
+₹38,782.28
+RECEIVED FROM COMPANIES
+₹0.00
+NIGHT AUDIT
+Not run
+
+This counts what was charged and received each day. The Lodging tax report counts the bills that were issued, so a stay still in house appears here and not there.
+
+Food charged to a room is food on a bill: charged at the desk, or a restaurant bill charged to a room or a function. Other extras are laundry, the spa, drinks that are not alcohol, late check-out and the rest. What the restaurant took itself is under Restaurant.
+
+Sales
+
+₹1,91,560.08
+
+Tax
+
+₹9,588.40
+
+Receipts
+
+₹1,54,294.51
+
+Received from companies
+
+₹0.00
+
+Apart from sales

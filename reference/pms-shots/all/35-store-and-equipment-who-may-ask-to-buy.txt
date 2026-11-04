@@ -1,0 +1,97 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Purchasing
+Who may ask to buy
+Who may ask to buy
+
+The roles at this property that may raise a purchase request. It takes effect at once - nothing has to be released for it. The general manager still approves every purchase, whoever asked.
+
+Back to purchasing
+Changing this is for the owner or an administrator. What it says today is below.
+
+Accountant
+
+Cannot raise a request
+
+-
+
+Admin
+
+Can raise a request
+
+Yes
+
+Bar
+
+Cannot raise a request
+
+-
+
+Chef
+
+Cannot raise a request
+
+-
+
+General Manager
+
+Can raise a request
+
+Yes
+
+Hotel Manager
+
+Cannot raise a request
+
+-
+
+Housekeeping
+
+Cannot raise a request
+
+-
+
+Inventory Manager
+
+Can raise a request
+
+Yes
+
+Kitchen Manager
+
+Cannot raise a request
+
+-
+
+Owner
+
+Can raise a request
+
+Yes
+
+Reception
+
+Cannot raise a request
+
+-
+
+Revenue Manager
+
+Cannot raise a request
+
+-
+
+Viewer
+
+Cannot raise a request
+
+-
+
+Waiter
+
+Cannot raise a request
+
+-
