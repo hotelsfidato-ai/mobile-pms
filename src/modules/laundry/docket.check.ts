@@ -2,6 +2,7 @@
    The laundry's rules on a phone (docket.ts), on data where a wrong rule
    gives a different answer (MEMORY 11). */
 import { DASH } from "../../core/format.ts";
+import { ruleFor } from "../../core/offline.ts";
 import {
   backWords, byState, clockOf, collectBody, collectedDay, dayOf, itemWords, lineParts, mayCancel, mayCharge, mayReturn,
   returnBody, rupees, stayChoices, stayWords, stillOutWords, unpricedWords, whoseWords, type Docket,
@@ -102,5 +103,13 @@ eq(returnBody(lines, { l1: "2.5", l2: "1" }), { problem: "A count is a whole num
 eq(returnBody(lines, { l1: "4", l2: "3" }), { problem: "Only 2 bed sheet went out." }, "more back than went");
 eq(backWords(0), "Everything is back.", "done");
 eq(backWords(3), "3 still out.", "still out");
+
+/* ── Offline: the web holds none of the laundry's writes (src/lib/offline.ts
+   lists no laundry path; its "Room charge" is the till's settle only), so
+   each is refused with the web's sentence and never queued. ── */
+for (const path of ["/dockets", "/dockets/d1/return", "/dockets/d1/cancel", "/dockets/d1/charge"]) {
+  const rule = ruleFor(`/api/hotels/5EL/laundry${path}`, "POST", "{}");
+  eq([rule.tier, rule.reason?.startsWith("This cannot be done offline yet.")], ["refuse", true], `offline ${path}`);
+}
 
 console.log("laundry docket: all checks pass");
