@@ -38,9 +38,5 @@ export const whyNotSetUp = (role: string | null) => allow(LIST_KEEPERS, role, LI
 /** The property has the spa switched off: every route answers this, 403 (moduleGate). */
 export const SWITCHED_OFF = "This property has no spa. Turn it on in the property's settings if that is wrong.";
 
-/** The web's card for a role that may only look (SpaDiary.tsx 147-154, rule 6). */
-export const ONLY_LOOKS = "Your role sees the diary and does not book. Taking or cancelling a treatment is reception's, "
-  + "the manager's, an administrator's or the owner's — ask one of them.";
-
 /** The app's words for a control the phone does not have yet (the core's menu.ts ON_THE_WEBSITE). */
 export const ON_THE_WEBSITE = "On the website for now";

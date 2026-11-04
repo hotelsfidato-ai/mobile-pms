@@ -6,7 +6,7 @@ import { keyKeeper } from "../../core/keys.ts";
 import { ruleFor } from "../../core/offline.ts";
 import {
   actsOf, bandWords, bookBody, chargeKeys, chargedWords, clockDate, clockTime, countLine, rupees, shiftDay,
-  stayChoices, stayWords, treatmentWords, whatAndWhen, type SpaAppointment, type SpaDiary,
+  stayChoices, stayWords, timeWords, treatmentWords, whatAndWhen, type SpaAppointment, type SpaDiary,
 } from "./diary.ts";
 
 const eq = (got: unknown, want: unknown, what: string) => {
@@ -95,6 +95,12 @@ eq(bookBody("2026-10-12", { ...f, treatmentId: "", therapistId: "" }), { problem
 eq(bookBody("2026-10-12", { ...f, therapistId: "", time: "" }), { problem: "Which therapist?" }, "then the therapist");
 eq(bookBody("2026-10-12", { ...f, time: "" }), { problem: "What time?" }, "then the time");
 eq(bookBody("2026-10-12", { ...f, time: "25:00" }), { problem: "What time?" }, "a time that is not one is not sent");
+
+/* MSPA-1: a typed time is said back as it will be booked, so the morning is seen. */
+eq(timeWords("2026-10-11", "4:00"), "At 4:00 AM on 11 Oct 2026.", "4:00 is the morning, and says so");
+eq(timeWords("2026-10-11", "16:00"), "At 4:00 PM on 11 Oct 2026.", "16:00 is the afternoon");
+eq(timeWords("2026-10-11", "1630"), "At 4:30 PM on 11 Oct 2026.", "1630 read as 16:30");
+eq(timeWords("2026-10-11", "4 pm"), "Type the time as 16:00, on the 24-hour clock.", "words it cannot read: how to type one");
 
 /* ── Offline: no spa path is on the web's list, so every write is refused, never held ── */
 for (const [path, label] of [

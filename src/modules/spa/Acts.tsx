@@ -4,10 +4,9 @@ import { useRef, useState } from "react";
 import { Text } from "react-native";
 import { c, face, t } from "../../core/theme";
 import { useRead } from "../../core/ui";
-import { timeOf } from "../guest-services/rules";
 import { Btn, body, Dialog, Field, Foot, InDialog, Input, Loading, Select, saidOf, type Said } from "../guest-services/kit";
 import { book, cancel, charge, isRefused, readStays, readTherapists, readTreatments } from "./data";
-import { bookBody, chargedWords, clockDate, rupees, stayWords, treatmentWords, whatAndWhen, type SpaAppointment } from "./diary";
+import { bookBody, chargedWords, clockDate, rupees, stayWords, timeWords, treatmentWords, whatAndWhen, type SpaAppointment } from "./diary";
 
 /* ══════════════════════════════════════════════════════════════════
    THE DIARY'S THREE DIALOGS — the web's BookDialog, CancelDialog and
@@ -116,7 +115,9 @@ export function Book({ code, day, onClose, onDone }: { code: string; day: string
       <Field label="What time">
         <Input label="What time" icon={Clock} value={time} onChangeText={setTime} maxLength={5} placeholder="--:--" keyboardType="numbers-and-punctuation" />
       </Field>
-      {time && !timeOf(time) ? <Text style={t.caption}>Type the time as 16:00, on the 24-hour clock.</Text> : null}
+      {/* The phone's own: a typed time is said back as the diary will show it, so "4:00" is seen to be the
+          morning before it is booked (MSPA-1; the web's time input shows AM / PM itself). */}
+      {time ? <Text style={t.caption}>{timeWords(day, time)}</Text> : null}
 
       <InDialog said={said} />
       <Foot>

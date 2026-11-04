@@ -175,6 +175,14 @@ export function bookBody(
   return { body: { stayId: f.stayId, treatmentId: f.treatmentId, therapistId: f.therapistId, startsAt: `${day}T${at}` } };
 }
 
+/** Under the typed time, the phone's own (MSPA-1): what will be booked, as
+    the diary will show it - "4:00" typed is "At 4:00 AM on 11 Oct 2026.",
+    seen to be the morning before it is sent; else how to type one. */
+export function timeWords(day: string, typed: string): string {
+  const at = timeOf(typed);
+  return at ? `At ${clockTime(`${day}T${at}`)} on ${clockDate(day)}.` : "Type the time as 16:00, on the 24-hour clock.";
+}
+
 /* ── Figures ──────────────────────────────────────────────────────── */
 
 const whole = new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 });
