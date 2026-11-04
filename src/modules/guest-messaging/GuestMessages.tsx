@@ -133,7 +133,7 @@ function Sent({ m, last }: { m: SentMessage; last: boolean }) {
       <Text style={[body, { color: c.ink900, ...face[600] }]}>{dayShort(m.sentAt)}</Text>
       <View style={{ marginTop: 6, gap: 4 }}>
         <Line label="What"><Text style={[body, { color: c.ink900, ...face[600] }]}>{m.kindLabel}</Text></Line>
-        <Line label="Booking"><Text style={[body, t.tab, { color: c.ink900 }]}>{bookingOf(m)}</Text></Line>
+        <Line label="Booking"><Text style={[body, { color: c.ink900 }]}>{bookingOf(m)}</Text></Line>
         <Line label="To">
           <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
             <Icon size={14} color={c.grey400} accessibilityLabel={m.channel === "email" ? "Email" : "Telephone"} />
