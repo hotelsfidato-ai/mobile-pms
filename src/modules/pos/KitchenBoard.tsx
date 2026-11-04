@@ -11,7 +11,7 @@ import { c, face, space, t } from "../../core/theme";
 import { Capsule, ReadFailed, useRead } from "../../core/ui";
 import {
   alarm, byTable, clock, COLUMNS, columnOf, dish, EMPTY_COLUMN, estimate, heldMove, kindShown, maySetUpKots, movePath,
-  ofKind, plusLine, printingKinds, statusOf, waited, waitNow, where, whyNotMove, working,
+  inColumn, ofKind, plusLine, printingKinds, statusOf, waited, waitNow, where, whyNotMove, working,
   type Column, type KitchenLine, type KotKind, type KotSetup,
 } from "./kitchen";
 import { whyNotRing } from "./roles";
@@ -150,7 +150,7 @@ export function KitchenBoard({ hotel, role, startHere, tableView, onView, onCons
   if (!data) {
     /* POS-4: nothing loaded is not nothing ordered - no columns until the first answer. */
     body = (
-      <View style={{ flex: 1, justifyContent: "center", padding: space.side, backgroundColor: c.grey50 }}>
+      <View style={{ flexGrow: 1, justifyContent: "center", padding: space.side, paddingVertical: 40, backgroundColor: c.grey50 }}>
         {!board.error ? <Text style={[t.heading, { ...face[500], color: c.grey500, textAlign: "center" }]}>Loading the kitchen board…</Text>
           : offline ? (
             <View style={{ borderRadius: 12, borderWidth: 1, backgroundColor: c.yellow50, borderColor: c.yellow100, padding: space.cardX, gap: 8 }}>
@@ -164,11 +164,11 @@ export function KitchenBoard({ hotel, role, startHere, tableView, onView, onCons
   } else if (tableView) {
     const cards = byTable(lines);
     body = cards.length === 0 ? (
-      <ScrollView style={{ flex: 1, backgroundColor: c.grey50 }} contentContainerStyle={{ flexGrow: 1, justifyContent: "center" }} refreshControl={refreshControl}>
+      <View style={{ flexGrow: 1, justifyContent: "center", paddingVertical: 40, backgroundColor: c.grey50 }}>
         <Text style={[t.heading, { ...face[500], color: c.grey500, textAlign: "center" }]}>Nothing with the kitchen.</Text>
-      </ScrollView>
+      </View>
     ) : (
-      <ScrollView style={{ flex: 1, backgroundColor: c.grey50 }} contentContainerStyle={{ padding: 12, gap: 12 }} refreshControl={refreshControl}>
+      <View style={{ flexGrow: 1, padding: 12, gap: 12, backgroundColor: c.grey50 }}>
         {cards.map((card) => {
           const a = alarm(card.wait);
           return (
@@ -191,14 +191,16 @@ export function KitchenBoard({ hotel, role, startHere, tableView, onView, onCons
             </View>
           );
         })}
-      </ScrollView>
+      </View>
     );
   } else {
-    /* By stage: the web's two columns side by side, each its own scroll. */
+    /* By stage: the web's two columns side by side. At phone width the web's
+       page is one long scroll and the columns grow with it (the picture is
+       18000 px tall, both columns running down it), so here too. */
     body = (
-      <View style={{ flex: 1, flexDirection: "row", gap: 1, backgroundColor: c.grey300 }}>
+      <View style={{ flexGrow: 1, flexDirection: "row", gap: 1, backgroundColor: c.grey300 }}>
         {COLUMNS.map((col) => {
-          const mine = lines.filter((l) => l.status === col.key);
+          const mine = inColumn(lines, col.key);
           return (
             <View key={col.key} style={{ flex: 1, minWidth: 0, backgroundColor: c.grey50 }}>
               <View style={{ flexDirection: "row", alignItems: "center", gap: 8, paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: c.grey200, backgroundColor: c.white }}>
@@ -207,11 +209,11 @@ export function KitchenBoard({ hotel, role, startHere, tableView, onView, onCons
                   <Text style={[t.caption, t.tab, { ...face[600], color: c.grey600 }]}>{mine.length}</Text>
                 </View>
               </View>
-              <ScrollView contentContainerStyle={{ padding: 12, gap: 12, flexGrow: 1 }} refreshControl={refreshControl}>
+              <View style={{ padding: 12, gap: 12 }}>
                 {mine.length === 0
-                  ? <Text style={[t.label, { color: c.grey500, textAlign: "center", paddingTop: 40 }]}>{EMPTY_COLUMN[col.key]}</Text>
+                  ? <Text style={[t.label, { color: c.grey500, textAlign: "center", paddingTop: 40, paddingBottom: 40 }]}>{EMPTY_COLUMN[col.key]}</Text>
                   : mine.map((l) => ticket(l, col))}
-              </ScrollView>
+              </View>
             </View>
           );
         })}
@@ -260,24 +262,26 @@ export function KitchenBoard({ hotel, role, startHere, tableView, onView, onCons
         </ScrollView>
       </View>
 
-      <KotLines kinds={kinds} role={role} now={new Date(now)} onSetUp={() => setSaid({ title: "On the website for now", tone: "held" })} />
+      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }} refreshControl={refreshControl}>
+        <KotLines kinds={kinds} role={role} now={new Date(now)} onSetUp={() => setSaid({ title: "On the website for now", tone: "held" })} />
 
-      {/* A read that failed while the board was up: the tickets stay, and say they are not current. */}
-      {data && board.error ? (
-        <View accessibilityRole="alert" style={{ marginHorizontal: space.side, marginTop: 12, flexDirection: "row", flexWrap: "wrap", alignItems: "center", columnGap: 12, rowGap: 4, borderRadius: 10, borderWidth: 1, borderColor: c.yellow100, backgroundColor: c.yellow50, paddingHorizontal: 14, paddingVertical: 8 }}>
-          <AlertTriangle size={16} color={c.yellow800} />
-          <Text style={[t.label, { flex: 1, minWidth: 160, color: c.yellow800 }]}>
-            Not up to date: {offline ? "no connection" : board.error.replace(/\.$/, "")}. Showing what loaded at {clock(new Date(data.at))}.
-          </Text>
-          <Pressable onPress={refresh} accessibilityRole="button" accessibilityLabel="Try again" style={{ minHeight: 44, justifyContent: "center" }}>
-            <Text style={[t.label, { color: c.yellow800, textDecorationLine: "underline" }]}>Try again</Text>
-          </Pressable>
-        </View>
-      ) : null}
+        {/* A read that failed while the board was up: the tickets stay, and say they are not current. */}
+        {data && board.error ? (
+          <View accessibilityRole="alert" style={{ marginHorizontal: space.side, marginTop: 12, flexDirection: "row", flexWrap: "wrap", alignItems: "center", columnGap: 12, rowGap: 4, borderRadius: 10, borderWidth: 1, borderColor: c.yellow100, backgroundColor: c.yellow50, paddingHorizontal: 14, paddingVertical: 8 }}>
+            <AlertTriangle size={16} color={c.yellow800} />
+            <Text style={[t.label, { flex: 1, minWidth: 160, color: c.yellow800 }]}>
+              Not up to date: {offline ? "no connection" : board.error.replace(/\.$/, "")}. Showing what loaded at {clock(new Date(data.at))}.
+            </Text>
+            <Pressable onPress={refresh} accessibilityRole="button" accessibilityLabel="Try again" style={{ minHeight: 44, justifyContent: "center" }}>
+              <Text style={[t.label, { color: c.yellow800, textDecorationLine: "underline" }]}>Try again</Text>
+            </Pressable>
+          </View>
+        ) : null}
 
-      {startHere && !putAway ? <StartHere onGotIt={() => void gotIt()} /> : null}
+        {startHere && !putAway ? <StartHere onGotIt={() => void gotIt()} /> : null}
 
-      <View style={{ flex: 1 }}>{body}</View>
+        <View style={{ flexGrow: 1 }}>{body}</View>
+      </ScrollView>
 
       {said ? (
         <Pressable
