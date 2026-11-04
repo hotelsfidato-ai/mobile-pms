@@ -105,7 +105,7 @@ export function WakeUpCalls({ hotel, role, onBack }: { hotel: Hotel; role: strin
                         {w.status === "asked"
                           ? <Btn label="Confirm" a11y={`Confirm the call for room ${w.room ?? ""}`} disabled={busy} onPress={() => void act(w, "confirm")} />
                           : <Btn label="Done" a11y={`Done: the call for room ${w.room ?? ""}`} icon={Check} disabled={busy} onPress={() => void act(w, "done")} />}
-                        <Btn label="Cancel it" a11y={`Cancel the call for room ${w.room ?? ""}`} variant="ghost" onPress={() => setCancelling(w)} />
+                        <Btn label="Cancel it" a11y={`Cancel the call for room ${w.room ?? ""}`} variant="ghost" disabled={busy} onPress={() => setCancelling(w)} />
                       </View>
                     ) : null}
                   </Box>
