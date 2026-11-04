@@ -1,0 +1,38 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Online payments
+Parked
+
+Taking money from guests online, by card and UPI, rather than only recording money that has already arrived.
+
+What it will do
+
+A deposit to hold a room
+
+A guest pays part of the stay when booking, and it lands on the booking's bill.
+
+A link to pay
+
+A payment link sent to a guest or a company, settled straight onto the bill it belongs to.
+
+Refunds and no-shows
+
+A refund returned the way it came, and a card held against a guest who never arrives.
+
+What it needs before it can be built
+1
+The owner's go-ahead. Online payments were parked by the owner on 8 September.
+2
+The payment gateway (Razorpay, PayU and CCAvenue are the usual choices in India) and its merchant account.
+3
+The account keys, kept in the server's settings, never on a screen or in a message.
+Where it stands today
+
+Payments are recorded: cash, card and UPI taken at the desk or the till are written against a bill. Nothing here takes money online.
+
+It will work with: Folios, Cashiering, Guest messages.
+
+Nothing on this page works yet. It says what will be built and what it needs, so nobody has to wonder whether they missed a screen. Only Owner, Admin and General Manager see the Coming soon pages.

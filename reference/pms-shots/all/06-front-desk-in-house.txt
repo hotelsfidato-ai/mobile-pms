@@ -1,0 +1,183 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+In house
+10 rooms
+
+Guests checked in now, on Sunday, 11 October 2026.
+
+In house now10
+Due out1
+10 of 10
+202
+In house
+
+Vikram Desai
+
+FH-2608-4862
+
+Type
+Superior
+Plan
+Room Only
+Arrival
+10 Oct 2026
+Departure
+13 Oct 2026
+Balance
+₹3,776
+203
+Due out
+
+Omkar Shinde
+
+FH-2608-4859
+
+Type
+Superior
+Plan
+CP
+Arrival
+9 Oct 2026
+Departure
+11 Oct 2026
+Balance
+₹7,582
+204
+In house
+
+A3 Test Desai
+
+FH-5EL-2610-5049
+
+Type
+Superior
+Plan
+EP
+Arrival
+11 Oct 2026
+Departure
+13 Oct 2026
+Balance
+₹4,304
+205
+In house
+
+Priya Menon
+
+FH-2608-4863
+
+Type
+Superior
+Plan
+MAP
+Arrival
+10 Oct 2026
+Departure
+13 Oct 2026
+Balance
+₹2,653
+206
+In house
+
+Shridhar Kamble
+
+FH-2608-4864
+
+Type
+Superior
+Plan
+CP
+Arrival
+10 Oct 2026
+Departure
+13 Oct 2026
+Balance
+₹3,765
+209
+In house
+
+A3 Test Iyer
+
+FH-5EL-2610-5050
+
+Type
+Superior
+Plan
+EP
+Arrival
+11 Oct 2026
+Departure
+13 Oct 2026
+Balance
+₹4,304
+301
+In house
+
+A3 Test Smith
+
+FH-5EL-2610-5046
+
+Type
+Deluxe
+Plan
+EP
+Arrival
+11 Oct 2026
+Departure
+13 Oct 2026
+Balance
+₹0
+303
+In house
+
+A5 Test Rane
+
+FH-5EL-2610-5058
+
+Type
+Deluxe
+Plan
+EP
+Arrival
+11 Oct 2026
+Departure
+13 Oct 2026
+Balance
+₹0
+305
+In house
+
+A4 Test Kulkarni
+
+FH-5EL-2610-5057
+
+Type
+Deluxe
+Plan
+EP
+Arrival
+11 Oct 2026
+Departure
+13 Oct 2026
+Balance
+₹0
+307
+In house
+
+A3 Test Gokhale
+
+FH-5EL-2610-5055
+
+Type
+Deluxe
+Plan
+CP
+Arrival
+11 Oct 2026
+Departure
+13 Oct 2026
+Balance
+₹3,884

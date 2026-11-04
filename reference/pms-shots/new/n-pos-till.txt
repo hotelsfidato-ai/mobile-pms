@@ -1,0 +1,216 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Till
+19 open
+
+Open an order, add to it, settle it. Charges reach a guest's bill the same way an outside point of sale would.
+
+Kitchen KOTs wait: Virtual Kitchen not seen since 7:35 AM
+Set up
+
+Bar KOTs wait: Virtual Bar not seen since 7:35 AM
+Set up
+
+Start an order
+
+A table number, or where the food is going. It prints on the kitchen copy.
+
+Open
+New parcel
+Open orders
+
+20261011-136 · T4
+
+1 item · 12:23
+
+₹672
+
+20261011-135 · AC5
+
+1 item · 19:06
+
+₹105
+
+20261011-134 · AC4
+
+1 item · 11:19
+
+₹210
+
+20261011-132 · AC3
+
+2 items · 06:23
+
+₹210
+
+20261011-129 · Bar 1
+
+3 items · 20:08
+
+₹1,386
+
+20261011-126 · Table GM-1
+
+0 items · 18:46
+
+₹0
+
+20261011-125 · APP 3
+
+6 items · 14:11
+
+₹1,481
+
+20261011-124 · APP 2
+
+1 item · 14:11
+
+₹126
+
+20261011-123 · APP 1
+
+1 item · 14:11
+
+₹378
+
+20261011-122 · APP TEST 2
+
+6 items · 13:57
+
+₹1,481
+
+20261011-121 · APP TEST 1
+
+1 item · 13:57
+
+₹378
+
+20261011-120 · KOT TEST 2
+
+7 items · 12:14
+
+₹1,754
+
+20261011-119 · KOT TEST 1
+
+1 item · 12:14
+
+₹378
+
+20261011-118 · Parcel · Rahul
+
+3 items · 11:20
+
+₹966
+
+20261011-112 · TIMING-WIRE
+
+1 item · 11:18
+
+₹294
+
+20261011-103 · COURSE-WIRE
+
+3 items · 11:18
+
+₹420
+
+20261011-102 · Room 203
+
+1 item · 11:18
+
+₹42
+
+20261011-101 · Room 203
+
+3 items · 11:18
+
+₹530
+
+20261011-89
+
+0 items · 11:17
+
+₹0
+Settled today
+
+20261011-138 · N4
+
+3 items · 06:21 · upi
+
+₹441
+
+20261011-137 · N4
+
+3 items · 05:02 · upi
+
+₹441
+
+20261011-131 · N5
+
+2 items · 14:49
+
+NC
+
+20261011-130 · N5
+
+2 items · 14:48
+
+NC
+
+20261011-128 · Table 7
+
+1 item · 18:55 · split
+
+₹638
+
+20261011-127 · Table GM-2
+
+1 item · 18:49 · card
+
+₹336
+
+20261011-117 · DISCWHO gm
+
+1 item · 11:19
+
+₹302
+
+20261011-116 · DISCWHO refused
+
+1 item · 11:19
+
+₹336
+
+20261011-115 · AC10
+
+3 items · 11:18
+
+₹530
+
+20261011-114 · AC9
+
+3 items · 11:18
+
+₹530
+
+20261011-113 · B2
+
+3 items · 11:18
+
+₹530
+
+20261011-111 · SAMEDISH
+
+2 items · 11:18
+
+₹1,339
+An earlier day's bill
+
+To print a paid bill again: pick its day, or type its number. It prints as BILL · DUPLICATE.
+
+Day
+Bill number

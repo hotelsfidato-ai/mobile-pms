@@ -1,0 +1,118 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Set up this hotel
+
+5 Elements Akkalkot. 18 steps from a new hotel to its first booking. A step ticks itself when the system can see it is done.
+
+Must be done before the first booking
+4 of 5 done
+
+These five are what the hotel needs before it can sell a room and bill it correctly.
+
+1
+Step 1:
+Hotel profile
+To do
+What it is
+The hotel's name, GSTIN, address, phone and email.
+Why it matters
+They print on every bill and booking voucher, and the GSTIN is what makes a tax invoice valid.
+What is missing
+Still missing: a real GSTIN (the one set is a dummy).
+Open Profile
+Next
+Later
+Remind me
+Step 2:
+Taxes
+The GST added to room charges, by price slab.
+Done
+Step 3:
+Room types
+The kinds of room you sell, such as Deluxe or Suite, and how many guests each one takes.
+Done
+Step 4:
+Rooms
+Each room by its number and type. Add a room can add several at once.
+Done
+Step 5:
+Prices
+The nightly price of every room type.
+Done
+Before opening
+1 of 8 done
+
+The hotel can take a booking without these, but should not open its doors until they are done.
+
+6
+Step 6:
+Payment methods and bank details
+How guests can pay at this hotel, and the bank account that transfers go to.
+To do
+7
+Step 7:
+Front desk times and rules
+Check-in and check-out times, and the rules reception works by on a new booking.
+To do
+8
+Step 8:
+Cancellation terms
+What a cancellation or a no-show costs at this hotel.
+To do
+9
+Step 9:
+Charges, discounts and commission
+The extra charges a booking may add, the discounts staff may give, and what each booking source takes.
+To do
+10
+Step 10:
+Booking sources
+Where bookings come from: walk-ins, phone calls, the website, and each travel site or agent.
+To do
+Step 11:
+People and roles
+The people who work at this hotel, the role each one has, and the password they sign in with.
+Done
+12
+Step 12:
+Guest messages and daily reports
+The messages guests get by themselves, and the report emailed after each night audit.
+To do
+13
+Step 13:
+Modules
+The parts of the system this hotel uses, such as the restaurant and the banquet hall.
+To do
+Optional
+0 of 4 done
+
+Worth doing, and nothing waits on them.
+
+14
+Step 14:
+Logo, photos and highlights
+The hotel's logo, its photos, and the short texts guests read about it.
+To do
+15
+Step 15:
+Group and house policies
+The house rules guests are asked to follow, the texts they read about parking, families and reservation terms, and the group's name and office details.
+To do
+16
+Step 16:
+The lists
+The short lists staff pick from: market segments, reservation types, reasons, holidays, ID types and VIP levels.
+To do
+17
+Step 17:
+Connections
+The links to outside systems: the channel manager, CRS bookings and other integrations, and whether each one is working.
+To do
+18
+Step 18:
+Ready to go live
+A summary of what is done and what is still waiting.
+Not ready yet

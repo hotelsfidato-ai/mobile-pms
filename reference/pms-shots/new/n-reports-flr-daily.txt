@@ -1,0 +1,40 @@
+9
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+FORM F.L.R.-1A / 2A / 3A
+
+11 Oct 2026
+
+Print
+PDF
+Excel
+CSV
+
+5 Elements Akkalkot
+
+FORM F.L.R.-1A / 2A / 3A
+
+11 Oct 2026
+
+Date 11/10/2026
+
+NAME OF THE BRAND	T.P. NO.	OPENING BALANCE	RECEIPTS	SALES	CLOSING BALANCE
+2000	1000	750	500	375	180	90	60	50	2000	1000	750	500	375	180	90	60	50	2000	1000	750	500	375	180	90	60	50	2000	1000	750	500	375	180	90	60	50
+Whisky
+A9 Imperial Blue	TP 88123	-	-	0	-	-	0	-	-	-	-	-	6	-	-	60	-	-	-	-	-	1	-	-	5	-	-	-	-	-	5	-	-	55	-	-	-
+Total		-	-	0	-	-	0	-	-	-	-	-	6	-	-	60	-	-	-	-	-	1	-	-	5	-	-	-	-	-	5	-	-	55	-	-	-
+NAME OF THE BRAND	T.P. NO.	OPENING BALANCE	RECEIPTS	SALES	CLOSING BALANCE
+1500	1000	650	500	330	275	1500	1000	650	500	330	275	1500	1000	650	500	330	275	1500	1000	650	500	330	275
+Beer (fermented, strong)
+A9 Kingfisher Strong	TP 77210, TP 88123	-	-	0	-	-	-	-	-	72	-	-	-	-	-	10	-	-	-	-	-	62	-	-	-
+Total		-	-	0	-	-	-	-	-	72	-	-	-	-	-	10	-	-	-	-	-	62	-	-	-
+
+* Whole bottles, the Bar store and the Bar counter together. A NIP poured as pegs counts as sold the day it is opened.
+
+* Sales = opening + receipts - breakages - closing. T.P. No.: the transport permit on the day's bar bills.
+
+Printed 31/10/2026, 08:22:32 pm
+
+Test GM

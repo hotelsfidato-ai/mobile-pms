@@ -393,7 +393,7 @@ function Tile({ hotel, table: tb, closed, busy, drafted, ringReason, onRefused, 
               onPress={() => (ringReason ? onRefused("Not cleared", ringReason) : onClear())} disabled={ringReason != null} hint={ringReason ?? undefined} />
           ) : offer.actions === "print-open" && tb.orderId ? (
             <View style={{ flexDirection: "row", gap: 8, marginTop: 8, alignItems: "center" }}>
-              <PrintBill hotel={hotel} orderId={tb.orderId} onPrinted={onPrinted} />
+              <PrintBill hotel={hotel} orderId={tb.orderId} onPrinted={onPrinted} round />
               {eye}
             </View>
           ) : null}

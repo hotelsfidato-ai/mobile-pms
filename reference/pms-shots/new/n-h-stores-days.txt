@@ -1,0 +1,162 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Store
+
+Monday, 28 September 2026 to Sunday, 11 October 2026
+
+Shelf
+Days
+Reports
+Category
+Outlet
+Store
+All stores
+Main store
+Kitchen store
+Bar store
+Bar counter
+Below level
+1
+Run out
+1
+Received today
+4
+Issued today
+5
+Wasted today
+2
+Awaiting delivery
+0
+Not valued
+0
+Not counted in 30 days
+5
+ITEM
+MON
+28
+TUE
+29
+WED
+30
+THU
+01
+FRI
+02
+SAT
+03
+SUN
+04
+MON
+05
+TUE
+06
+WED
+07
+THU
+08
+FRI
+09
+SAT
+10
+SUN
+11
+Bar
+A9 Imperial Blue 180 ml
+bottle
++60
+-4.834
+A9 Imperial Blue 750 ml
+bottle
++6
+-1
+A9 Kingfisher Strong 650 ml
+bottle
++72
+-10
+Kitchen
+A9 Test Basmati rice
+kg
++75
+-11
++25
+A9 Test LPG cylinder 19 kg
+cylinder
++4
+-1
+A9 Test Tea cup
+piece
++24
+-2
+Butter
+kg
+-0.05
+Paneer
+kg
++0.3
+-0.6
+Toor dal
+kg
+-0.08
+Received ₹
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+14.5k
+-
+25.9k
+Issued ₹
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+2.6k
+-
+-
+Wasted ₹
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+Occupied rooms
+7
+5
+5
+4
+3
+2
+1
+0
+0
+1
+3
+11
+9
+18

@@ -1,0 +1,408 @@
+6
+GO
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Activity
+
+Every change made here: who, when, which record and what changed. A guest's details read 'changed'.
+
+This hotel
+Across the group
+By
+Anybody
+Group Owner
+RCFIX waiter
+RPTEST clerk
+Test GM
+Test Housekeeper
+Test Inventory Manager
+Test Reception
+Kind
+Everything
+Approval rules
+Approvals
+Attachments
+Daily report emails
+Equipment items
+Bill
+Form III
+Guest message settings
+Module switch
+Hotel settings
+Invoice numbers
+Invoice
+Night audit
+Payment methods
+Payment
+Pos menu items
+Pos numbered addons
+Purchase requesters
+Purchase requests
+Booking
+Room given
+Room type
+Room
+Access
+Adult in the room
+Stock items
+Stock levels
+Stock movements
+Tally ledger names
+Tax rules
+Tax sac
+Work order
+From
+To
+Newer
+Older
+31 Oct 2026, 6:32 PM
+WHO
+-
+WHICH RECORD
+Added · Access
+WHAT CHANGED
+-
+31 Oct 2026, 7:24 AM
+WHO
+Test Reception
+WHICH RECORD
+Removed · Form III
+WHAT CHANGED
+-
+31 Oct 2026, 7:24 AM
+WHO
+Test Reception
+WHICH RECORD
+Removed · Adult in the room
+WHAT CHANGED
+-
+31 Oct 2026, 7:24 AM
+WHO
+Test Reception
+WHICH RECORD
+Added · Form III
+WHAT CHANGED
+-
+31 Oct 2026, 7:24 AM
+WHO
+Test Reception
+WHICH RECORD
+Added · Adult in the room
+WHAT CHANGED
+-
+31 Oct 2026, 6:21 AM
+WHO
+Test GM
+WHICH RECORD
+Added · Stock movements Bill 20261011-138 KOT 59
+WHAT CHANGED
+-
+31 Oct 2026, 6:21 AM
+WHO
+Test GM
+WHICH RECORD
+Added · Stock movements Bill 20261011-138 KOT 59
+WHAT CHANGED
+-
+31 Oct 2026, 5:33 AM
+WHO
+Test Reception
+WHICH RECORD
+Added · Adult in the room
+WHAT CHANGED
+-
+31 Oct 2026, 5:21 AM
+WHO
+Group Owner
+WHICH RECORD
+Added · Tally ledger names Cheque A/c
+WHAT CHANGED
+-
+31 Oct 2026, 5:21 AM
+WHO
+Group Owner
+WHICH RECORD
+Added · Tally ledger names Bank transfer A/c
+WHAT CHANGED
+-
+31 Oct 2026, 5:21 AM
+WHO
+Group Owner
+WHICH RECORD
+Added · Tally ledger names UPI A/c
+WHAT CHANGED
+-
+31 Oct 2026, 5:21 AM
+WHO
+Group Owner
+WHICH RECORD
+Added · Tally ledger names Card A/c
+WHAT CHANGED
+-
+31 Oct 2026, 5:21 AM
+WHO
+Group Owner
+WHICH RECORD
+Added · Tally ledger names Cash A/c
+WHAT CHANGED
+-
+31 Oct 2026, 5:21 AM
+WHO
+Group Owner
+WHICH RECORD
+Added · Tally ledger names Owner's allowance A/c
+WHAT CHANGED
+-
+31 Oct 2026, 5:21 AM
+WHO
+Group Owner
+WHICH RECORD
+Added · Tally ledger names What companies owe A/c
+WHAT CHANGED
+-
+31 Oct 2026, 5:21 AM
+WHO
+Group Owner
+WHICH RECORD
+Added · Tally ledger names What guests owe A/c
+WHAT CHANGED
+-
+31 Oct 2026, 5:21 AM
+WHO
+Group Owner
+WHICH RECORD
+Added · Tally ledger names Round off A/c
+WHAT CHANGED
+-
+31 Oct 2026, 5:21 AM
+WHO
+Group Owner
+WHICH RECORD
+Added · Tally ledger names Discount given A/c
+WHAT CHANGED
+-
+31 Oct 2026, 5:21 AM
+WHO
+Group Owner
+WHICH RECORD
+Added · Tally ledger names SGST A/c
+WHAT CHANGED
+-
+31 Oct 2026, 5:17 AM
+WHO
+Group Owner
+WHICH RECORD
+Removed · Tally ledger names Cheque A/c
+WHAT CHANGED
+-
+31 Oct 2026, 5:17 AM
+WHO
+Group Owner
+WHICH RECORD
+Removed · Tally ledger names Bank transfer A/c
+WHAT CHANGED
+-
+31 Oct 2026, 5:17 AM
+WHO
+Group Owner
+WHICH RECORD
+Removed · Tally ledger names UPI A/c
+WHAT CHANGED
+-
+31 Oct 2026, 5:17 AM
+WHO
+Group Owner
+WHICH RECORD
+Removed · Tally ledger names Card A/c
+WHAT CHANGED
+-
+31 Oct 2026, 5:17 AM
+WHO
+Group Owner
+WHICH RECORD
+Removed · Tally ledger names Cash A/c
+WHAT CHANGED
+-
+31 Oct 2026, 5:17 AM
+WHO
+Group Owner
+WHICH RECORD
+Removed · Tally ledger names Owner's allowance A/c
+WHAT CHANGED
+-
+31 Oct 2026, 5:17 AM
+WHO
+Group Owner
+WHICH RECORD
+Removed · Tally ledger names What companies owe A/c
+WHAT CHANGED
+-
+31 Oct 2026, 5:17 AM
+WHO
+Group Owner
+WHICH RECORD
+Removed · Tally ledger names What guests owe A/c
+WHAT CHANGED
+-
+31 Oct 2026, 5:17 AM
+WHO
+Group Owner
+WHICH RECORD
+Removed · Tally ledger names Round off A/c
+WHAT CHANGED
+-
+31 Oct 2026, 5:17 AM
+WHO
+Group Owner
+WHICH RECORD
+Removed · Tally ledger names Discount given A/c
+WHAT CHANGED
+-
+31 Oct 2026, 5:17 AM
+WHO
+Group Owner
+WHICH RECORD
+Removed · Tally ledger names SGST A/c
+WHAT CHANGED
+-
+31 Oct 2026, 5:12 AM
+WHO
+Group Owner
+WHICH RECORD
+Added · Tally ledger names Cheque A/c
+WHAT CHANGED
+-
+31 Oct 2026, 5:12 AM
+WHO
+Group Owner
+WHICH RECORD
+Added · Tally ledger names Bank transfer A/c
+WHAT CHANGED
+-
+31 Oct 2026, 5:12 AM
+WHO
+Group Owner
+WHICH RECORD
+Added · Tally ledger names UPI A/c
+WHAT CHANGED
+-
+31 Oct 2026, 5:12 AM
+WHO
+Group Owner
+WHICH RECORD
+Added · Tally ledger names Card A/c
+WHAT CHANGED
+-
+31 Oct 2026, 5:12 AM
+WHO
+Group Owner
+WHICH RECORD
+Added · Tally ledger names Cash A/c
+WHAT CHANGED
+-
+31 Oct 2026, 5:12 AM
+WHO
+Group Owner
+WHICH RECORD
+Added · Tally ledger names Owner's allowance A/c
+WHAT CHANGED
+-
+31 Oct 2026, 5:12 AM
+WHO
+Group Owner
+WHICH RECORD
+Added · Tally ledger names What companies owe A/c
+WHAT CHANGED
+-
+31 Oct 2026, 5:12 AM
+WHO
+Group Owner
+WHICH RECORD
+Added · Tally ledger names What guests owe A/c
+WHAT CHANGED
+-
+31 Oct 2026, 5:12 AM
+WHO
+Group Owner
+WHICH RECORD
+Added · Tally ledger names Round off A/c
+WHAT CHANGED
+-
+31 Oct 2026, 5:12 AM
+WHO
+Group Owner
+WHICH RECORD
+Added · Tally ledger names Discount given A/c
+WHAT CHANGED
+-
+31 Oct 2026, 5:12 AM
+WHO
+Group Owner
+WHICH RECORD
+Added · Tally ledger names SGST A/c
+WHAT CHANGED
+-
+31 Oct 2026, 5:05 AM
+WHO
+Group Owner
+WHICH RECORD
+Removed · Tally ledger names Cheque A/c
+WHAT CHANGED
+-
+31 Oct 2026, 5:05 AM
+WHO
+Group Owner
+WHICH RECORD
+Removed · Tally ledger names Bank transfer A/c
+WHAT CHANGED
+-
+31 Oct 2026, 5:05 AM
+WHO
+Group Owner
+WHICH RECORD
+Removed · Tally ledger names UPI A/c
+WHAT CHANGED
+-
+31 Oct 2026, 5:05 AM
+WHO
+Group Owner
+WHICH RECORD
+Removed · Tally ledger names Card A/c
+WHAT CHANGED
+-
+31 Oct 2026, 5:05 AM
+WHO
+Group Owner
+WHICH RECORD
+Removed · Tally ledger names Cash A/c
+WHAT CHANGED
+-
+31 Oct 2026, 5:05 AM
+WHO
+Group Owner
+WHICH RECORD
+Removed · Tally ledger names Owner's allowance A/c
+WHAT CHANGED
+-
+31 Oct 2026, 5:05 AM
+WHO
+Group Owner
+WHICH RECORD
+Removed · Tally ledger names What companies owe A/c
+WHAT CHANGED
+-
+31 Oct 2026, 5:05 AM
+WHO
+Group Owner
+WHICH RECORD
+Removed · Tally ledger names What guests owe A/c
+WHAT CHANGED
+-
+31 Oct 2026, 5:05 AM
+WHO
+Group Owner
+WHICH RECORD
+Removed · Tally ledger names Round off A/c
+WHAT CHANGED
+-

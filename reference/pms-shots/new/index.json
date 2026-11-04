@@ -1,0 +1,531 @@
+[
+ {
+  "name": "n-admin-activity",
+  "to": "/admin/activity",
+  "as": "dev-owner",
+  "path": "/settings/people/activity",
+  "title": "Activity",
+  "height": 7649,
+  "ok": true
+ },
+ {
+  "name": "n-admin-configuration",
+  "to": "/admin/configuration",
+  "as": "dev-owner",
+  "path": "/settings/rates/taxes",
+  "title": "Taxes",
+  "height": 2398,
+  "ok": true
+ },
+ {
+  "name": "n-admin-properties",
+  "to": "/admin/properties",
+  "as": "dev-owner",
+  "path": "/properties",
+  "title": "Properties",
+  "height": 2627,
+  "ok": true
+ },
+ {
+  "name": "n-admin-sign-ins",
+  "to": "/admin/sign-ins",
+  "as": "dev-owner",
+  "path": "/settings/people/devices",
+  "title": "Sign-ins and devices",
+  "height": 844,
+  "ok": true
+ },
+ {
+  "name": "n-admin-system-health",
+  "to": "/admin/system-health",
+  "as": "dev-owner",
+  "path": "/admin/system-health",
+  "title": "System health",
+  "height": 6350,
+  "ok": true
+ },
+ {
+  "name": "n-all-properties",
+  "to": "/all-properties",
+  "as": "dev-owner",
+  "path": "/all-properties",
+  "title": "All properties",
+  "height": 2586,
+  "ok": true
+ },
+ {
+  "name": "n-contracts",
+  "to": "/contracts",
+  "as": "dev-owner",
+  "path": "/contracts",
+  "title": "Contracts",
+  "height": 1640,
+  "ok": true
+ },
+ {
+  "name": "n-h-banquet",
+  "to": "/h/5EL/banquet",
+  "as": "dev-gm",
+  "path": "/h/5EL/banquet",
+  "title": "Diary",
+  "height": 844,
+  "ok": true
+ },
+ {
+  "name": "n-h-banquet-setup",
+  "to": "/h/5EL/banquet/setup",
+  "as": "dev-gm",
+  "path": "/h/5EL/banquet/setup",
+  "title": "Halls and packages",
+  "height": 844,
+  "ok": true
+ },
+ {
+  "name": "n-h-cash-deposits",
+  "to": "/h/5EL/cash-deposits",
+  "as": "dev-gm",
+  "path": "/h/5EL/cash-deposits",
+  "title": "Cash deposits",
+  "height": 1026,
+  "ok": true
+ },
+ {
+  "name": "n-h-crs-bookings",
+  "to": "/h/5EL/crs-bookings",
+  "as": "dev-gm",
+  "path": "/h/5EL/crs-bookings",
+  "title": "CRS bookings",
+  "height": 844,
+  "ok": true
+ },
+ {
+  "name": "n-h-inventory",
+  "to": "/h/5EL/inventory",
+  "as": "dev-gm",
+  "path": "/h/5EL/inventory",
+  "title": "Inventory",
+  "height": 1200,
+  "ok": true
+ },
+ {
+  "name": "n-h-laundry",
+  "to": "/h/5EL/laundry",
+  "as": "dev-gm",
+  "path": "/h/5EL/laundry",
+  "title": "Dockets",
+  "height": 844,
+  "ok": true
+ },
+ {
+  "name": "n-h-laundry-price-list",
+  "to": "/h/5EL/laundry/price-list",
+  "as": "dev-gm",
+  "path": "/h/5EL/laundry/price-list",
+  "title": "Laundry price list",
+  "height": 881,
+  "ok": true
+ },
+ {
+  "name": "n-h-leads",
+  "to": "/h/5EL/leads",
+  "as": "dev-gm",
+  "path": "/h/5EL/leads",
+  "title": "Leads and WhatsApp",
+  "height": 844,
+  "ok": true
+ },
+ {
+  "name": "n-h-lost-property",
+  "to": "/h/5EL/lost-property",
+  "as": "dev-gm",
+  "path": "/h/5EL/lost-property",
+  "title": "Lost property",
+  "height": 844,
+  "ok": true
+ },
+ {
+  "name": "n-h-loyalty",
+  "to": "/h/5EL/loyalty",
+  "as": "dev-gm",
+  "path": "/h/5EL/loyalty",
+  "title": "Loyalty",
+  "height": 2473,
+  "ok": true
+ },
+ {
+  "name": "n-h-marketing",
+  "to": "/h/5EL/marketing",
+  "as": "dev-gm",
+  "path": "/h/5EL/marketing",
+  "title": "Marketing",
+  "height": 1409,
+  "ok": true
+ },
+ {
+  "name": "n-h-requests",
+  "to": "/h/5EL/requests",
+  "as": "dev-gm",
+  "path": "/h/5EL/requests",
+  "title": "Guest requests",
+  "height": 844,
+  "ok": true
+ },
+ {
+  "name": "n-h-setup",
+  "to": "/h/5EL/setup",
+  "as": "dev-gm",
+  "path": "/settings/property/set-up-this-hotel?step=profile",
+  "title": "Set up this hotel",
+  "height": 2699,
+  "ok": true
+ },
+ {
+  "name": "n-h-spa",
+  "to": "/h/5EL/spa",
+  "as": "dev-gm",
+  "path": "/h/5EL/spa",
+  "title": "Spa diary",
+  "height": 844,
+  "ok": true
+ },
+ {
+  "name": "n-h-spa-setup",
+  "to": "/h/5EL/spa/setup",
+  "as": "dev-gm",
+  "path": "/h/5EL/spa/setup",
+  "title": "Treatments and therapists",
+  "height": 844,
+  "ok": true
+ },
+ {
+  "name": "n-h-stores-days",
+  "to": "/h/5EL/stores/days",
+  "as": "dev-gm",
+  "path": "/h/5EL/stores/days",
+  "title": "Store",
+  "height": 1224,
+  "ok": true
+ },
+ {
+  "name": "n-h-supplier-dues",
+  "to": "/h/5EL/supplier-dues",
+  "as": "dev-gm",
+  "path": "/h/5EL/supplier-dues",
+  "title": "Supplier dues",
+  "height": 844,
+  "ok": true
+ },
+ {
+  "name": "n-h-wake-up-calls",
+  "to": "/h/5EL/wake-up-calls",
+  "as": "dev-gm",
+  "path": "/h/5EL/wake-up-calls",
+  "title": "Wake-up calls",
+  "height": 844,
+  "ok": true
+ },
+ {
+  "name": "n-pos-bar-stock",
+  "to": "/pos/5EL/bar-stock",
+  "as": "dev-gm",
+  "path": "/pos/5EL/bar-stock",
+  "title": "Bar stock",
+  "height": 1148,
+  "ok": true
+ },
+ {
+  "name": "n-pos-bill-history",
+  "to": "/pos/5EL/bill-history",
+  "as": "dev-gm",
+  "path": "/pos/5EL/bill-history",
+  "title": "Bill history",
+  "height": 9000,
+  "ok": true
+ },
+ {
+  "name": "n-pos-day-end",
+  "to": "/pos/5EL/day-end",
+  "as": "dev-gm",
+  "path": "/pos/5EL/day-end",
+  "title": "Close restaurant day",
+  "height": 3877,
+  "ok": true
+ },
+ {
+  "name": "n-pos-kitchen",
+  "to": "/pos/5EL/kitchen",
+  "as": "dev-gm",
+  "path": "/pos/5EL/kitchen",
+  "title": "Kitchen",
+  "height": 9000,
+  "ok": true
+ },
+ {
+  "name": "n-pos-kitchen-stock",
+  "to": "/pos/5EL/kitchen-stock",
+  "as": "dev-gm",
+  "path": "/pos/5EL/kitchen-stock",
+  "title": "This page is not part of your role",
+  "height": 844,
+  "ok": true
+ },
+ {
+  "name": "n-pos-menu",
+  "to": "/pos/5EL/menu",
+  "as": "dev-gm",
+  "path": "/pos/5EL/menu",
+  "title": "Menu",
+  "height": 8505,
+  "ok": true
+ },
+ {
+  "name": "n-pos-room-charges",
+  "to": "/pos/5EL/room-charges",
+  "as": "dev-gm",
+  "path": "/pos/5EL/room-charges",
+  "title": "Charges to rooms",
+  "height": 3106,
+  "ok": true
+ },
+ {
+  "name": "n-pos-setup",
+  "to": "/pos/5EL/setup",
+  "as": "dev-gm",
+  "path": "/pos/5EL/setup",
+  "title": "Restaurant setup",
+  "height": 9000,
+  "ok": true
+ },
+ {
+  "name": "n-pos-table-bookings",
+  "to": "/pos/5EL/table-bookings",
+  "as": "dev-gm",
+  "path": "/pos/5EL/table-bookings",
+  "title": "Table bookings",
+  "height": 844,
+  "ok": true
+ },
+ {
+  "name": "n-pos-tables",
+  "to": "/pos/5EL/tables",
+  "as": "dev-gm",
+  "path": "/pos/5EL/tables",
+  "title": "Tables",
+  "height": 2247,
+  "ok": true
+ },
+ {
+  "name": "n-pos-terminal",
+  "to": "/pos/5EL/terminal",
+  "as": "dev-gm",
+  "path": "/pos/5EL/terminal",
+  "title": "Terminal",
+  "height": 844,
+  "ok": true
+ },
+ {
+  "name": "n-pos-till",
+  "to": "/pos/5EL/till",
+  "as": "dev-gm",
+  "path": "/pos/5EL/till",
+  "title": "Till",
+  "height": 2929,
+  "ok": true
+ },
+ {
+  "name": "n-properties",
+  "to": "/properties/5EL",
+  "as": "dev-owner",
+  "path": "/properties/5EL",
+  "title": "5 Elements Akkalkot",
+  "height": 3249,
+  "ok": true
+ },
+ {
+  "name": "n-reports-bar-stock",
+  "to": "/reports/bar-stock",
+  "as": "dev-gm",
+  "path": "/reports/bar-stock",
+  "title": "Bar stock",
+  "height": 3151,
+  "ok": true
+ },
+ {
+  "name": "n-reports-equipment",
+  "to": "/reports/equipment",
+  "as": "dev-gm",
+  "path": "/reports/equipment",
+  "title": "Equipment report",
+  "height": 1112,
+  "ok": true
+ },
+ {
+  "name": "n-reports-flr-daily",
+  "to": "/reports/flr-daily",
+  "as": "dev-gm",
+  "path": "/reports/flr-daily",
+  "title": "FORM F.L.R.-1A / 2A / 3A",
+  "height": 1030,
+  "ok": true
+ },
+ {
+  "name": "n-reports-flr-monthly",
+  "to": "/reports/flr-monthly",
+  "as": "dev-gm",
+  "path": "/reports/flr-monthly",
+  "title": "FORM F.L.R.-3",
+  "height": 2422,
+  "ok": true
+ },
+ {
+  "name": "n-reports-petty-cash",
+  "to": "/reports/petty-cash",
+  "as": "dev-gm",
+  "path": "/reports/petty-cash",
+  "title": "Petty cash",
+  "height": 1441,
+  "ok": true
+ },
+ {
+  "name": "n-reports-stock-consumption",
+  "to": "/reports/stock-consumption",
+  "as": "dev-gm",
+  "path": "/reports/stock-consumption",
+  "title": "Consumption",
+  "height": 1932,
+  "ok": true
+ },
+ {
+  "name": "n-reports-stock-count-differences",
+  "to": "/reports/stock-count-differences",
+  "as": "dev-gm",
+  "ok": false,
+  "error": "Runtime.evaluate: no answer in 30 s"
+ },
+ {
+  "name": "n-reports-stock-cover",
+  "to": "/reports/stock-cover",
+  "as": "dev-gm",
+  "ok": false,
+  "error": "Emulation.setDeviceMetricsOverride: no answer in 30 s"
+ },
+ {
+  "name": "n-reports-stock-dead",
+  "to": "/reports/stock-dead",
+  "as": "dev-gm",
+  "ok": false,
+  "error": "Emulation.setDeviceMetricsOverride: no answer in 30 s"
+ },
+ {
+  "name": "n-reports-stock-movements",
+  "to": "/reports/stock-movements",
+  "as": "dev-gm",
+  "ok": false,
+  "error": "Emulation.setDeviceMetricsOverride: no answer in 30 s"
+ },
+ {
+  "name": "n-reports-stock-on-hand",
+  "to": "/reports/stock-on-hand",
+  "as": "dev-gm",
+  "ok": false,
+  "error": "Emulation.setDeviceMetricsOverride: no answer in 30 s"
+ },
+ {
+  "name": "n-reports-stock-wastage",
+  "to": "/reports/stock-wastage",
+  "as": "dev-gm",
+  "ok": false,
+  "error": "Emulation.setDeviceMetricsOverride: no answer in 30 s"
+ },
+ {
+  "name": "n-reports-store",
+  "to": "/reports/store",
+  "as": "dev-gm",
+  "ok": false,
+  "error": "Emulation.setDeviceMetricsOverride: no answer in 30 s"
+ },
+ {
+  "name": "n-reports-supplier-dues",
+  "to": "/reports/supplier-dues",
+  "as": "dev-gm",
+  "ok": false,
+  "error": "Emulation.setDeviceMetricsOverride: no answer in 30 s"
+ },
+ {
+  "name": "n-reports-supplier-spend",
+  "to": "/reports/supplier-spend",
+  "as": "dev-gm",
+  "ok": false,
+  "error": "Emulation.setDeviceMetricsOverride: no answer in 30 s"
+ },
+ {
+  "name": "n-reports-supplier-statement",
+  "to": "/reports/supplier-statement",
+  "as": "dev-gm",
+  "ok": false,
+  "error": "Emulation.setDeviceMetricsOverride: no answer in 30 s"
+ },
+ {
+  "name": "n-reports-tds",
+  "to": "/reports/tds",
+  "as": "dev-gm",
+  "ok": false,
+  "error": "Emulation.setDeviceMetricsOverride: no answer in 30 s"
+ },
+ {
+  "name": "n-reports-voids",
+  "to": "/reports/voids",
+  "as": "dev-gm",
+  "ok": false,
+  "error": "Emulation.setDeviceMetricsOverride: no answer in 30 s"
+ },
+ {
+  "name": "n-settings",
+  "to": "/settings",
+  "as": "dev-owner",
+  "ok": false,
+  "error": "Page.addScriptToEvaluateOnNewDocument: no answer in 30 s"
+ },
+ {
+  "name": "n-settings-people-activity",
+  "to": "/settings/people/activity",
+  "as": "dev-gm",
+  "ok": false,
+  "error": "Emulation.setDeviceMetricsOverride: no answer in 30 s"
+ },
+ {
+  "name": "n-settings-people-audit-log",
+  "to": "/settings/people/audit-log",
+  "as": "dev-gm",
+  "ok": false,
+  "error": "Emulation.setDeviceMetricsOverride: no answer in 30 s"
+ },
+ {
+  "name": "n-settings-people-devices",
+  "to": "/settings/people/devices",
+  "as": "dev-gm",
+  "ok": false,
+  "error": "Emulation.setDeviceMetricsOverride: no answer in 30 s"
+ },
+ {
+  "name": "n-settings-people-roles",
+  "to": "/settings/people/roles",
+  "as": "dev-gm",
+  "ok": false,
+  "error": "Emulation.setDeviceMetricsOverride: no answer in 30 s"
+ },
+ {
+  "name": "n-settings-rates-taxes",
+  "to": "/settings/rates/taxes",
+  "as": "dev-gm",
+  "ok": false,
+  "error": "Emulation.setDeviceMetricsOverride: no answer in 30 s"
+ },
+ {
+  "name": "n-settings-rooms-room-types",
+  "to": "/settings/rooms/room-types",
+  "as": "dev-gm",
+  "ok": false,
+  "error": "Emulation.setDeviceMetricsOverride: no answer in 30 s"
+ }
+]

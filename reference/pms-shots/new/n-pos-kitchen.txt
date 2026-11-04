@@ -1,0 +1,728 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Kitchen
+
+84 dishes working
+LIVE
+
+By stage
+By table
+All
+Kitchen
+Bar
+Tandoor
+Console
+
+Kitchen KOTs wait: Virtual Kitchen not seen since 7:35 AM
+Set up
+
+Bar KOTs wait: Virtual Bar not seen since 7:35 AM
+Set up
+
+Ordered
+70
+
+N5 · 20261011-9
+
+2 × Butter Roti
+
+14961m 14s
+- est
+Start
+
+N5 · 20261011-11
+
+1 × Paneer Tikka
+
+14941m 42s
+- est
+Start
+
+N5 · 20261011-11
+
+2 × Masala Chai
+
+14941m 42s
+- est
+Start
+
+N5 · 20261011-11
+
+1 × Dal Tadka
+
+14941m 42s
+- est
+Start
+
+N5 · 20261011-11
+
+1 × Butter Roti
+
+14941m 42s
+- est
+Start
+
+N5 · 20261011-12
+
+1 × Dal Tadka
+
+14940m 28s
+- est
+Start
+
+N5 · 20261011-12
+
+1 × Butter Roti
+
+14940m 28s
+- est
+Start
+
+N3 · 20261011-16
+
+1 × Masala Chai
+
+14887m 32s
+- est
+Start
+
+N3 · 20261011-16
+
+1 × Dal Tadka
+
+14887m 32s
+- est
+Start
+
+N3 · 20261011-16
+
+1 × Masala Chai
+
+14887m 32s
+- est
+Start
+
+VOIDPAID WAITER · 20261011-91
+
+1 × Paneer Tikka
+
+13495m 41s
+- est
+Start
+
+VOIDPAID NO REASON · 20261011-92
+
+1 × Paneer Tikka
+
+13495m 40s
+- est
+Start
+
+VOIDPAID CASH · 20261011-93
+
+1 × Paneer Tikka
+
+13495m 40s
+- est
+Start
+
+VOIDPAID UPI · 20261011-94
+
+1 × Paneer Tikka
+
+13495m 39s
+- est
+Start
+
+VOIDPAID ROOM · 20261011-95
+
+1 × Paneer Tikka
+
+13495m 39s
+- est
+Start
+
+VOIDPAID YESTERDAY · 20261011-96
+
+1 × Paneer Tikka
+
+13495m 39s
+- est
+Start
+
+VOIDPAID REPORT · 20261011-97
+
+1 × Paneer Tikka
+
+13495m 38s
+- est
+Start
+
+VOIDPAID CLOSED · 20261011-98
+
+1 × Paneer Tikka
+
+13495m 38s
+- est
+Start
+
+ROOMHOLD-1 · 20261011-99
+
+2 × Veg Manchurian
+
+13495m 34s
+- est
+Start
+
+ROOMHOLD-2 · 20261011-100
+
+1 × Veg Manchurian
+
+13495m 34s
+- est
+Start
+
+ROOM 203 · 20261011-101
+
+1 × Sides: Onions
+
+13495m 30s
+- est
+Start
+
+ROOM 203 · 20261011-101
+
+2 × Butter Roti
+
+No chilli please
+
+13495m 30s
+- est
+Start
+
+ROOM 203 · 20261011-101
+
+1 × Bhaaji Pau (Butter)
+
+13495m 30s
+- est
+Start
+
+ROOM 203 · 20261011-102
+
+1 × Butter Roti
+
+13495m 30s
+- est
+Start
+
+COURSE-WIRE · 20261011-103
+
+2 × Wire Starter
+
+13495m 26s
+- est
+Start
+
+COURSE-WIRE · 20261011-103
+
+1 × Wire Drink
+
+13495m 26s
+- est
+Start
+
+COURSE-WIRE · 20261011-103
+
+1 × Wire Main
+
+13495m 26s
+- est
+Start
+
+PARCEL · RAHUL · 20261011-118
+
+2 × Chicken 65
+
+13493m 25s
+- est
+Start
+
+KOT TEST 1 · 20261011-119
+
+1 × Chicken 65
+
+13438m 54s
+- est
+Start
+
+KOT TEST 2 · 20261011-120
+
+1 × Butter Roti
+
+13438m 53s
+- est
+Start
+
+KOT TEST 2 · 20261011-120
+
+1 × Jeera Rice
+
+13438m 53s
+- est
+Start
+
+KOT TEST 2 · 20261011-120
+
+1 × Paneer Tikka
+
+13438m 53s
+- est
+Start
+
+KOT TEST 2 · 20261011-120
+
+1 × Papad Masala
+
+13438m 53s
+- est
+Start
+
+KOT TEST 2 · 20261011-120
+
+1 × Dal Tadka
+
+13438m 53s
+- est
+Start
+
+KOT TEST 2 · 20261011-120
+
+1 × Chicken Curry
+
+13438m 53s
+- est
+Start
+
+KOT TEST 2 · 20261011-120
+
+1 × Chicken 65
+
+13438m 53s
+- est
+Start
+
+PARCEL · RAHUL · 20261011-118
+
+2 × Papad Masala
+
+13438m 10s
+- est
+Start
+
+APP TEST 1 · 20261011-121
+
+1 × Chicken 65
+
+13335m 49s
+- est
+Start
+
+APP TEST 2 · 20261011-122
+
+1 × Chicken Curry
+
+13335m 49s
+- est
+Start
+
+APP TEST 2 · 20261011-122
+
+1 × Veg Manchurian
+
+13335m 49s
+- est
+Start
+
+APP TEST 2 · 20261011-122
+
+1 × Papad Masala
+
+13335m 49s
+- est
+Start
+
+APP TEST 2 · 20261011-122
+
+1 × Butter Roti
+
+13335m 49s
+- est
+Start
+
+APP TEST 2 · 20261011-122
+
+1 × Paneer Tikka
+
+13335m 49s
+- est
+Start
+
+APP TEST 2 · 20261011-122
+
+1 × Dal Tadka
+
+13335m 49s
+- est
+Start
+
+APP 1 · 20261011-123
+
+1 × Chicken 65
+
+13322m 00s
+- est
+Start
+
+APP 2 · 20261011-124
+
+1 × Fresh Lime Soda
+
+13322m 00s
+- est
+Start
+
+APP 3 · 20261011-125
+
+1 × Papad Masala
+
+13321m 59s
+- est
+Start
+
+APP 3 · 20261011-125
+
+1 × Paneer Tikka
+
+13321m 59s
+- est
+Start
+
+APP 3 · 20261011-125
+
+1 × Veg Manchurian
+
+13321m 59s
+- est
+Start
+
+APP 3 · 20261011-125
+
+1 × Dal Tadka
+
+13321m 59s
+- est
+Start
+
+APP 3 · 20261011-125
+
+1 × Chicken Curry
+
+13321m 59s
+- est
+Start
+
+APP 3 · 20261011-125
+
+1 × Butter Roti
+
+13321m 59s
+- est
+Start
+
+CANCELLED
+
+2 × Paneer Tikka
+
+20261011-126 · stop cooking this
+
+Why: Guest changed their mind (asked, approved)
+
+TABLE GM-2 · 20261011-127
+
+1 × Paneer Tikka
+
+8724m 00s
+- est
+Start
+
+TABLE 7 · 20261011-128
+
+2 × Paneer Tikka
+
+8718m 18s
+- est
+Start
+
+BAR 1 · 20261011-129
+
+2 × A9 Imperial Blue (60 ml)
+
+8643m 44s
+- est
+Start
+
+BAR 1 · 20261011-129
+
+2 × A9 Kingfisher Strong (650 ml)
+
+8643m 44s
+- est
+Start
+
+BAR 1 · 20261011-129
+
+1 × A9 Imperial Blue (30 ml)
+
+8643m 44s
+- est
+Start
+
+N5 · 20261011-130
+
+1 × Dal Tadka
+
+7524m 50s
+- est
+Start
+
+N5 · 20261011-130
+
+1 × Butter Roti
+
+7524m 50s
+- est
+Start
+
+N5 · 20261011-131
+
+1 × Butter Roti
+
+7523m 52s
+- est
+Start
+
+N5 · 20261011-131
+
+1 × Dal Tadka
+
+7523m 52s
+- est
+Start
+
+CANCELLED
+
+1 × Dal Tadka
+
+20261011-136 · stop cooking this
+
+Why: guest changed their mind
+
+T4 · 20261011-136
+
+2 × Paneer Tikka
+
+3350m 04s
+- est
+Start
+
+N4 · 20261011-137
+
+1 × Paneer Tikka
+
+910m 48s
+- est
+Start
+
+N4 · 20261011-137
+
+1 × Masala Chai
+
+910m 48s
+- est
+Start
+
+N4 · 20261011-137
+
+1 × + Extra papad
+
+for Paneer Tikka
+
+910m 48s
+- est
+Start
+
+N4 · 20261011-138
+
+1 × Masala Chai
+
+832m 22s
+- est
+Start
+
+N4 · 20261011-138
+
+1 × Paneer Tikka
+
+832m 22s
+- est
+Start
+
+N4 · 20261011-138
+
+1 × + Extra papad
+
+for Paneer Tikka
+
+832m 22s
+- est
+Start
+On the fire
+16
+
+N4 · 20261011-2
+
+1 × Paneer Tikka
+
+23657m 46s
+- est
+Ready
+
+N4 · 20261011-2
+
+1 × Masala Chai
+
+23657m 46s
+- est
+Ready
+
+N4 · 20261011-2
+
+1 × + Extra papad
+
+for Paneer Tikka
+
+23657m 46s
+- est
+Ready
+
+N4 · 20261011-3
+
+1 × Paneer Tikka
+
+16204m 41s
+- est
+Ready
+
+N4 · 20261011-3
+
+1 × + Extra papad
+
+for Paneer Tikka
+
+16204m 41s
+- est
+Ready
+
+N4 · 20261011-3
+
+1 × Masala Chai
+
+16204m 41s
+- est
+Ready
+
+N4 · 20261011-4
+
+1 × Masala Chai
+
+16201m 10s
+- est
+Ready
+
+N4 · 20261011-4
+
+1 × + Extra papad
+
+for Paneer Tikka
+
+16201m 10s
+- est
+Ready
+
+N4 · 20261011-4
+
+1 × Paneer Tikka
+
+16201m 10s
+- est
+Ready
+
+N5 · 20261011-5
+
+1 × Dal Tadka
+
+16200m 34s
+- est
+Ready
+
+N5 · 20261011-5
+
+2 × Butter Roti
+
+16200m 34s
+- est
+Ready
+
+N5 · 20261011-6
+
+2 × Paneer Tikka
+
+14969m 21s
+- est
+Ready
+
+N5 · 20261011-6
+
+1 × Masala Chai
+
+14969m 21s
+- est
+Ready
+
+N6 · 20261011-7
+
+1 × Masala Chai
+
+14966m 21s
+- est
+Ready
+
+N6 · 20261011-7
+
+2 × Paneer Tikka
+
+14966m 21s
+- est
+Ready
+
+N5 · 20261011-9
+
+1 × Dal Tadka
+
+14961m 14s
+- est
+Ready

@@ -1,0 +1,70 @@
+8
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Bar stock
+
+11 Oct 2026
+
+Print
+PDF
+Excel
+CSV
+
+5 Elements Akkalkot
+
+BAR STOCK
+
+11 Oct 2026
+
+As On Date 11/10/2026
+
+DRINK	OPENING	FROM THE STORE	SOLD	OTHER MOVES	COUNT CORRECTIONS	CLOSING	COUNTED	MORNING DIFFERENCE
+Bar counter, by drink (full bottles + ml)
+A9 Imperial Blue 180 ml	0	10	150 ml	0	0	9 + 30 ml	-	-
+A9 Kingfisher Strong 650 ml	0	12	2	0	0	10	-	-
+DRINK	OPENING	PURCHASED	TO THE COUNTER	OTHER MOVES	COUNT CORRECTIONS	CLOSING	COUNTED	MORNING DIFFERENCE
+Bar store, by drink (full bottles + ml)
+A9 Imperial Blue 180 ml	0	60	10	0	-60 ml	46	56	-
+A9 Imperial Blue 750 ml	0	6	0	0	-630 ml	5	5	-
+A9 Kingfisher Strong 650 ml	0	72	12	0	-1	52	64	-
+DRINK	ASKED	DECISION	ASKED BY	DECIDED BY
+The counter's asks of the store made on this day, decided
+A9 Imperial Blue 180 ml	10	Approved, moved	Test Inventory Manager	Test GM
+A9 Kingfisher Strong 650 ml	12	Approved, moved	Test Inventory Manager	Test GM
+DISH	SOLD	TAKEN FROM	TOOK
+Sold, by dish
+A9 Imperial Blue (30 ml)	4	A9 Imperial Blue 180 ml	120 ml
+A9 Imperial Blue (60 ml)	4	A9 Imperial Blue 180 ml	1 + 60 ml
+A9 Imperial Blue (60 ml)	2	A9 Imperial Blue 750 ml	120 ml
+A9 Imperial Blue (90 ml)	1	A9 Imperial Blue 180 ml	90 ml
+A9 Imperial Blue (NIP)	2	A9 Imperial Blue 180 ml	2
+A9 Kingfisher Strong (650 ml)	9	A9 Kingfisher Strong 650 ml	9
+Dal Tadka	1	Butter	0.01
+Dal Tadka	1	Toor dal	0.08
+Paneer Tikka	4	Butter	0.04
+Paneer Tikka	4	Paneer	0.6
+DISH	SOLD
+Sold, but nothing set up for the dish
+A9 Imperial Blue (NIP)	1
+These took nothing off the stock: set what each takes in Bar stock, Set up.
+DISH	QUANTITY	REASON
+Struck after the bar had them (they stay off the stock, as poured)
+No drink was struck after the bar had it.
+SUPPLIER	BILL	DRINKS	TOTAL
+Bar bills recorded
+Shah Wines	A9 Test 101	2	₹6,480.00
+A9 Amit Traders	A9-2041	2	₹13,915.50
+A9 Bharat Wines	A9 Test 102	1	₹3,797.00
+Total		5	₹24,192.50
+
+* Sold is what the sending of each line took off the bar counter (Bar stock, Set up: what each dish takes).
+
+* Morning difference: the bar manager's morning count against the book - after the night's closing count, nothing should have moved.
+
+* Full bottles + ml: "3 + 420 ml" is three full bottles and 420 ml of the next.
+
+Printed 31/10/2026, 08:20:50 pm
+
+Test GM

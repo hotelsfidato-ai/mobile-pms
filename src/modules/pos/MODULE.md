@@ -121,3 +121,48 @@ Clear and Got it are drawn 32 px high as in the picture, their touch kept at 44 
 (the dish sheet's ₹0 before a variation), MPOS-3 (a second tap ringing a round twice).
 **Open for the owner:** a dish marked off until a time (`offUntil`) is not shown as off on the pad's
 menu — only `isActive` is (as ported); the web's rule cannot be read from here.
+
+## Kitchen (the pass, slice 6; the kitchen helper)
+
+| | |
+|---|---|
+| Screen | The pass: `app/pos/[code]/kitchen.tsx` → `/pos/5EL/kitchen` (`?by=table` for By table), `src/modules/pos/KitchenBoard.tsx`; the chef's and the kitchen manager's landing (the web's WORKING_HOME, `2d086c3`); the GM reaches Tables from its Console |
+| Web twin | `src/modules/pos/pages/Kitchen.tsx`, `components/KotStation.tsx` (the KOT printer lines), `components/app/StartHere.tsx` (the chef's card) |
+| Reads | `GET /api/hotels/:code/kitchen` (every 6 s while on screen and the app in front: the web's rate with its stream down) · `GET /api/hotels/:code/till/kot-setup` (every 30 s); keys `["pos", code, "kitchen", "board" \| "kot-setup"]` |
+| Writes | `POST /api/hotels/:code/kitchen/lines/:id/preparing` (Start) and `…/ready` (Ready), through `send()` (its key from the first tap); `PUT /api/me/preferences` (Got it on Start here). Served / Taken is the waiter's (Tables, the order), not the pass's: a Ready dish leaves the board |
+| Rules | `kitchen.ts` + `kitchen.check.ts`: who moves (roleGate PASS and its sentence), the two columns and their empty words, the wait ticking from the read, red at 10 min and yellow at 5, the estimate's dash, by table and its courses, the kind filter, a column's count (struck dishes counted, not working), the printer lines' words, a held move |
+| Offline | Start and Ready are held (`offline.ts` "Kitchen", queue): "Saved on this phone", "Queued: Start" on the ticket, a second tap refused with "Start is held on this phone, waiting to sync." |
+| States | loading "Loading the kitchen board…" · failed (ReadFailed) · offline before a first read "No connection" · a failed re-read keeps the tickets with "Not up to date: … Showing what loaded at …" · empty columns "Nothing ordered yet." / "Nothing on the fire." · By table "Nothing with the kitchen." |
+| Accessibility | Start / Ready 56 px, the choices and Set up 44 px, Console 48 px; every button labelled; a refused button is grey and says why when tapped |
+
+### Picture match (4 Nov)
+
+Compared by reading the code against the pictures (`reference/pms-shots/all/45-point-of-sale-kitchen`,
+`new/n-pos-kitchen`, `roles/r-chef-home`, `roles/r-kitchen-manager-home`, each `.png` and `.txt`);
+**never seen running**.
+
+**The pass — matches, with these differences left:**
+1. **"LIVE" (green) is "not live" (amber) on the phone.** The web has a live stream; the phone only
+   reads every 6 s, so saying LIVE would be untrue. Question for the owner (keep until the stream
+   is built).
+2. **Set up is grey, the picture's red.** It goes to Restaurant setup, which is not on the phone:
+   drawn disabled, saying "On the website for now". Shown, as the web, for the owner, an
+   administrator, the GM and the kitchen manager; not for the chef (the chef's picture has none).
+3. **Back / Sign out in the header** when the chef or kitchen manager lands here: the pictures
+   have no such button because the web's account menu is in its top bar. Until the shell's frame
+   (top bar, account menu) is merged, it is the only way out; to be taken off then.
+4. **The top bar and the business-date banner** (the pictures' first lines) are the shell's frame,
+   not this screen.
+5. **The header stays at the top while the board scrolls.** The picture is one long page (fixed in
+   MPOS-K1); whether the web's header stays at the top cannot be told from a full-length picture.
+6. **The cancelled card, By table, the chef's Start here and a held ticket** are not in the pictures
+   (the cancelled card is in the words only, below the picture's 18000 px; the test chef had put
+   Start here away): drawn from the ported code; the cancelled card's words match the `.txt`.
+7. **A ticket without a table** reads its order type ("take away · …"): the words show
+   "PARCEL · RAHUL · …" and "ROOM 203 · …", which may come from the table field or from fields the
+   ported `KitchenLine` does not carry. Not checked against the API here; nothing invented.
+
+**Kitchen stock** (`new/n-pos-kitchen-stock`): a different screen (the GM's "This page is not part
+of your role" for Kitchen stock), not part of the pass: **not built**, not in this lane.
+
+1 of 1 screens built here matches its pictures apart from the differences above.

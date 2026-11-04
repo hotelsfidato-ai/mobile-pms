@@ -1,0 +1,92 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Loyalty
+
+No programme name yet · no earn rate set: stays earn nothing
+
+Loyalty is off at this hotel: nobody joins, earns or uses points here. The owner or an administrator turns it on in Settings, under Modules.
+
+In house
+202
+GUEST
+Vikram Desai
+POINTS
+Not a member
+Join
+203
+GUEST
+Omkar Shinde
+POINTS
+Not a member
+Join
+204
+GUEST
+A3 Test Desai
+POINTS
+Not a member
+Join
+205
+GUEST
+Priya Menon
+POINTS
+Not a member
+Join
+206
+GUEST
+Shridhar Kamble
+POINTS
+Not a member
+Join
+209
+GUEST
+A3 Test Iyer
+POINTS
+Not a member
+Join
+301
+GUEST
+A3 Test Smith
+POINTS
+Not a member
+Join
+303
+GUEST
+A5 Test Rane
+POINTS
+Not a member
+Join
+305
+GUEST
+A4 Test Kulkarni
+POINTS
+Not a member
+Join
+307
+GUEST
+A3 Test Gokhale
+POINTS
+Not a member
+Join
+The rules
+
+For every hotel of the group.
+
+Programme name
+
+The words a guest agrees to use it.
+
+Points per ₹100
+
+Before GST. Empty: stays earn nothing.
+
+Save the rules
+Points by hotel
+
+Earned and used in the month, 1 point = ₹1.
+
+No points that month
+
+Points earned or used at any hotel appear here.

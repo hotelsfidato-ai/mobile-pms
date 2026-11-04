@@ -1,0 +1,69 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Profile
+
+The name, address and numbers the hotel prints, and where it is.
+
+Before 5 Elements Akkalkot can take a guest
+8 of 10 settled
+
+One thing must be settled first - until then a booking, a bill or the night audit will refuse and say so.
+
+Set up this hotel, step by step
+A real GSTIN
+Cancellation terms · not blocking
+Profile
+
+The name, address, GSTIN, phone and email print on this property's invoices.
+
+Edit
+Name
+5 Elements Akkalkot
+Property type
+-
+Stars
+-
+Address
+Akkalkot, Solapur District, Maharashtra 413216
+Address line 2
+-
+City
+Akkalkot
+State
+MH
+PIN code
+-
+Map point
+-
+Phone
++91 2181 220 555
+Reservations phone
+-
+Reservations contact
+-
+Email
+akkalkot@fidatohotels.com
+Website
+-
+GSTIN
+27AAAAA0000A1Z5
+PAN
+-
+
+FSSAI licence number
+
+-
+
+Change
+More registration numbers
+
+Up to four, each with its own name. Kept here; not printed on bills.
+
+None.
+
+Add
+Save
+No map point yet: it is set with the profile's latitude and longitude.

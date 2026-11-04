@@ -1,0 +1,83 @@
+6
+GO
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Sign-ins and devices
+
+When each person signed in, and on what device. Kept 90 days.
+
+Whose
+Pick a person
+Group Owner
+Jaison Rozario
+Test Admin
+Agra Clerk
+BARBILL Bar Manager
+BARBILL Keeper
+BARBILL Manager
+BARBILL Waiter
+BARROLE bar
+BARROLE pos
+BARSTK Bar Manager
+BARSTK Manager
+BARSTK Waiter
+CUSTOM waiter
+D27371 HK
+DISCWHO Bar
+DISCWHO Manager
+DISCWHO Waiter
+GUESTBEHIND Desk
+GUESTBEHIND Housekeeping
+K2 waiter
+KOTSEC chef
+KOTSEC kitchen_manager
+NCBILL Manager
+NCBILL Waiter
+P6MSG p6msg-desk
+P6MSG p6msg-gm
+P6MSG p6msg-outsider
+PARCELT Manager
+PARCELT Waiter
+PMS2TEST admin
+PMS2TEST bar
+PMS2TEST chef
+PMS2TEST finance
+PMS2TEST front_desk
+PMS2TEST gm
+PMS2TEST gm-elsewhere
+PMS2TEST hotel_manager
+PMS2TEST housekeeping
+PMS2TEST kitchen_manager
+PMS2TEST owner
+PMS2TEST pos
+PMS2TEST read_only
+PMS2TEST revenue_manager
+PMS2TEST stores
+POS test outlet
+Pune Clerk
+RCFIX waiter
+REPRINT bar
+REPRINT chef
+REPRINT pos
+RPTEST accountant
+RPTEST clerk
+STK3A hotel_manager
+STK3A kitchen_manager
+STK3A revenue_manager
+STK3A stores
+TILLTEST Manager
+Test Accountant
+Test Chef
+Test GM
+Test Hotel Manager
+Test Housekeeper
+Test Inventory Manager
+Test Kitchen Manager
+Test Reception
+Test Revenue Manager
+Test Waiter
+VOIDPAID Manager
+VOIDPAID Waiter
+WTRTEST till
+WTRTEST waiter

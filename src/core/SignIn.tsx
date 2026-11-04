@@ -14,19 +14,24 @@ import { Card, s } from "./ui";
    against the mobile chat's own local API and its demo data.
    ══════════════════════════════════════════════════════════════════ */
 
-/* The web's development sign-ins (src/lib/devIdentities.ts, the same
-   labels): the owner's figures (slice 1), then housekeeping and the desk
-   that marks rooms but may not raise a room repair (slice 2). Behind `__DEV__`
+/* The web's development sign-ins (src/lib/devIdentities.ts: the same
+   people, labels and order), one per role, for every slice; and the waiter
+   the web lacks (R-10). Behind `__DEV__`
    so a release build carries not even their names (MCORE-1). */
 const PEOPLE = __DEV__ ? [
   { uid: "dev-owner", label: "Owner", detail: "every property · group admin" },
   { uid: "dev-gm", label: "General Manager", detail: "5 Elements Akkalkot · GM" },
-  { uid: "dev-hotel-manager", label: "Hotel Manager", detail: "5 Elements Akkalkot" },
-  { uid: "dev-finance", label: "Accountant", detail: "5 Elements Akkalkot · money" },
-  { uid: "dev-housekeeping", label: "Housekeeping", detail: "5 Elements Akkalkot · rooms" },
   { uid: "dev-desk", label: "Reception", detail: "5 Elements Akkalkot · front desk" },
-  /* The waiter (slice 3, M-9): made in this app's own demo database; the web
-     has none yet (R-10). */
+  { uid: "dev-admin", label: "Admin", detail: "every property · administrator" },
+  { uid: "dev-hotel-manager", label: "Hotel Manager", detail: "5 Elements Akkalkot" },
+  { uid: "dev-revenue", label: "Revenue Manager", detail: "5 Elements Akkalkot · rates" },
+  { uid: "dev-housekeeping", label: "Housekeeping", detail: "5 Elements Akkalkot · rooms" },
+  { uid: "dev-stores", label: "Inventory Manager", detail: "5 Elements Akkalkot · store" },
+  { uid: "dev-kitchen", label: "Kitchen Manager", detail: "5 Elements Akkalkot · the pass" },
+  { uid: "dev-chef", label: "Chef", detail: "5 Elements Akkalkot · the pass" },
+  { uid: "dev-finance", label: "Accountant", detail: "5 Elements Akkalkot · money" },
+  /* The waiter (slice 3, M-9): made in this app's own demo database
+     (scripts/dev-pos.sql); the web has none yet (R-10). */
   { uid: "dev-pos", label: "Waiter", detail: "5 Elements Akkalkot · the restaurant" },
 ] : [];
 

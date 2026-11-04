@@ -1,0 +1,249 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Users
+
+Who can reach what. Access follows the role, and the role follows the permission matrix.
+
+AC
+
+Agra Clerk
+
+agra@fidato.in
+
+ROLE
+Reception
+PROPERTIES
+5 Elements Akkalkot
+STATUS
+Active
+LAST SEEN
+-
+DH
+
+D27371 HK
+
+d27371-hk@fidato.in
+
+ROLE
+Housekeeping
+PROPERTIES
+5 Elements Akkalkot
+STATUS
+Active
+LAST SEEN
+-
+RW
+
+RCFIX waiter
+
+rcfix-waiter@fidato.in
+
+ROLE
+Waiter
+PROPERTIES
+5 Elements Akkalkot
+STATUS
+Active
+LAST SEEN
+-
+RA
+
+RPTEST accountant
+
+rp4-accountant@fidato.in
+
+ROLE
+Accountant
+PROPERTIES
+5 Elements Akkalkot
+STATUS
+Active
+LAST SEEN
+-
+RC
+
+RPTEST clerk
+
+rp4-clerk@fidato.in
+
+ROLE
+Reception
+PROPERTIES
+5 Elements Akkalkot
+STATUS
+Active
+LAST SEEN
+-
+TA
+
+Test Accountant
+
+dev-finance@fidato.in
+
+ROLE
+Accountant
+PROPERTIES
+5 Elements Akkalkot
+STATUS
+Active
+LAST SEEN
+-
+TC
+
+Test Chef
+
+dev-chef@fidato.in
+
+ROLE
+Chef
+PROPERTIES
+5 Elements Akkalkot
+STATUS
+Active
+LAST SEEN
+-
+TG
+
+Test GM
+
+gm@fidato.in
+
+ROLE
+General Manager
+PROPERTIES
+5 Elements Akkalkot
+STATUS
+Active
+LAST SEEN
+-
+TH
+
+Test Hotel Manager
+
+dev-hotel-manager@fidato.in
+
+ROLE
+Hotel Manager
+PROPERTIES
+5 Elements Akkalkot
+STATUS
+Active
+LAST SEEN
+-
+TH
+
+Test Housekeeper
+
+dev-housekeeping@fidato.in
+
+ROLE
+Housekeeping
+PROPERTIES
+5 Elements Akkalkot
+STATUS
+Active
+LAST SEEN
+-
+TI
+
+Test Inventory Manager
+
+dev-stores@fidato.in
+
+ROLE
+Inventory Manager
+PROPERTIES
+5 Elements Akkalkot
+STATUS
+Active
+LAST SEEN
+-
+TK
+
+Test Kitchen Manager
+
+dev-kitchen@fidato.in
+
+ROLE
+Kitchen Manager
+PROPERTIES
+5 Elements Akkalkot
+STATUS
+Active
+LAST SEEN
+-
+TR
+
+Test Reception
+
+desk@fidato.in
+
+ROLE
+Reception
+PROPERTIES
+5 Elements Akkalkot
+STATUS
+Active
+LAST SEEN
+-
+TR
+
+Test Revenue Manager
+
+dev-revenue@fidato.in
+
+ROLE
+Revenue Manager
+PROPERTIES
+5 Elements Akkalkot
+STATUS
+Active
+LAST SEEN
+-
+TW
+
+Test Waiter
+
+dev-pos@fidato.in
+
+ROLE
+Waiter
+PROPERTIES
+5 Elements Akkalkot
+STATUS
+Active
+LAST SEEN
+-
+VM
+
+VOIDPAID Manager
+
+void-gm@fidato.in
+
+ROLE
+General Manager
+PROPERTIES
+5 Elements Akkalkot
+STATUS
+Active
+LAST SEEN
+-
+VW
+
+VOIDPAID Waiter
+
+void-waiter@fidato.in
+
+ROLE
+Waiter
+PROPERTIES
+5 Elements Akkalkot
+STATUS
+Active
+LAST SEEN
+-
+
+These are real accounts, read from the database. What you can see of them follows your role: a group administrator sees everybody, and anyone else sees themselves and the people rostered at their own properties. Password sign-in still needs a Firebase service account; the accounts and their property grants do not.

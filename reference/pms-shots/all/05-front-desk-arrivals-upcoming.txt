@@ -1,0 +1,203 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Arrivals
+10 expected
+
+Expected between Monday, 12 October 2026 and Sunday, 25 October 2026.
+
+Today17
+Upcoming10
+10 of 10
+201
+Due in
+
+Deepa Rao
+
+FH-2608-4871
+
+Type
+Superior
+Plan
+Room Only
+Source
+Walk-in
+Departure
+14 Oct 2026
+Nights
+1
+Rate
+₹2,592
+202
+Due in
+
+Nikhil Joshi
+
+FH-2608-4872
+
+Type
+Superior
+Plan
+MAP
+Source
+Expedia
+Departure
+15 Oct 2026
+Nights
+2
+Rate
+₹2,770
+201
+Due in
+
+Anjali Pawar
+
+FH-2608-4873
+
+Type
+Superior
+Plan
+MAP
+Source
+Walk-in
+Departure
+16 Oct 2026
+Nights
+2
+Rate
+₹2,734
+307
+Due in
+
+Farida Contractor
+
+FH-2608-5020
+
+Type
+Deluxe
+Plan
+CP
+Source
+Booking.com
+Departure
+17 Oct 2026
+Nights
+3
+Rate
+₹2,900
+-
+Due in
+
+A2 Test Sharma
+
+FH-5EL-2610-5038
+
+Type
+Deluxe
+Plan
+EP
+Source
+Fidato Hotels
+Departure
+22 Oct 2026
+Nights
+2
+Rate
+₹3,699
+-
+Due in
+
+A2 Test Sharma
+
+FH-5EL-2610-5037
+
+Type
+Deluxe
+Plan
+EP
+Source
+Fidato Hotels
+Departure
+23 Oct 2026
+Nights
+3
+Rate
+₹3,699
+-
+Due in
+
+A2 Test Sharma
+
+FH-5EL-2610-5051
+
+Type
+Deluxe
+Plan
+EP
+Source
+Fidato Hotels
+Departure
+24 Oct 2026
+Nights
+2
+Rate
+₹3,699
+-
+Due in
+
+P6MSG Guest
+
+P6MSG-1
+
+Type
+Superior
+Plan
+EP
+Source
+Fidato Hotels
+Departure
+26 Oct 2026
+Nights
+2
+Rate
+₹1,000
+-
+Due in
+
+A2 Test Mehta
+
+FH-5EL-2610-5042
+
+Type
+Deluxe
+Plan
+EP
+Source
+Website
+Departure
+26 Oct 2026
+Nights
+2
+Rate
+₹3,699
+-
+Due in
+
+A2 Test Mehta
+
+FH-5EL-2610-5043
+
+Type
+Deluxe
+Plan
+EP
+Source
+Website
+Departure
+26 Oct 2026
+Nights
+2
+Rate
+₹3,699

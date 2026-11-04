@@ -4,7 +4,54 @@
 
 ---
 
-## 15 October 2026 — read this first
+## 4–5 November 2026 — read this first: the work moves to the cloud (M-12)
+
+**The cloud session, 4 Nov (latest):** step 1 done — `npm ci` and `bash scripts/gates.sh` ALL
+GATES GREEN on `main` `dafdea8`, the script unchanged (its logs and Metro cache land in
+`/home/user/.local/`, outside the repository). **The PMS's code cannot be read from the cloud**
+(clone and attach both refused): screens are built from `reference/pms-shots/` alone, never
+inventing a route, field, rule or figure. The 9 branches each type-check, pass their own checks
+and merge into `main` without a conflict (probed, not yet gated or reviewed). **Next:**
+`mobile/pos-tables`, once the owner says yes. Nothing was opened on a screen.
+
+**Where it is now**
+- The app's own repository: **`hotelsfidato-ai/mobile-pms`** (public, the owner's choice). `main` is
+  the PMS worktree's `mobile/` folder with its history. The PMS itself is not here and stays
+  private: never push to it, never copy its code into this repository.
+- Screens and slices: `docs/STATUS.md` (31 Oct). **On `main`, merged:** Sign in (development), All
+  properties, Dashboard, Rooms, Report a repair, Out of service, the order (with paying and printing).
+- **Unfinished, one branch each**, pushed as the helpers left them (never gated, not reviewed):
+  `mobile/pos-tables` (Tables, the pad) · `mobile/front-desk` (Arrivals, In house, Walk-in,
+  Check-in) · `mobile/folio` (a stay's bill, payments, check-out) · `mobile/kitchen` ·
+  `mobile/maintenance` (work orders) · `mobile/guest-services` · `mobile/shell` (the frame: top bar,
+  business-date banner, each role's menu, notifications, account menu) · `mobile/signin` (real
+  Firebase sign-in, M-10; the owner's public settings still to come) · `mobile/align` (slices 1–2
+  re-matched to the pictures). `folio`, `maintenance` and `shell` end with a "WIP" commit: what the
+  helper had not saved when it stopped on 31 Oct. A branch's last commits say where it stopped.
+- **The spec (M-11):** `reference/pms-shots/` — 158 pictures of today's PMS at 390 px, each with its
+  words (`all/` 81 screens by menu, `new/` 44 addresses added since, `roles/` each role's home, menu
+  and account menu), on demo data. `reference/helper-rules-31oct.md`: the rules every slice is built
+  by (its paths are the PC's).
+
+**What the cloud cannot do** (it needs the PC): run the PMS's API or database, open a screen with
+data, take a new picture (`capture.mjs` needs the PMS website), give the owner the phone link, an
+Expo build (M-8: the owner's yes per build). The web's code each screen ports is in the private
+`hotelsfidato-ai/pms`: if it cannot be read, say so and build from the pictures and their words,
+never inventing a route, a field or a rule.
+
+**What next, in order**
+1. `npm ci`, then `bash scripts/gates.sh` on `main`: proves the gates run in the cloud.
+2. Finish each unfinished branch to its pictures, gates green on it, reviewed (Opus for money,
+   rights and the offline path), merged into `main` — as AGENTS.md says the mobile chat does.
+3. Then Tier 2 (`docs/STATUS.md`).
+
+**Unchanged:** no decision without the owner's yes; no new package without it; never a `.env`; a
+dash, never a zero; the API decides; nothing goes to the PMS repository; no deploy, no store
+upload, no Expo build. Every mistake in `MEMORY.md`, every defect in its module's `DEFECTS.md`.
+
+---
+
+## 15 October 2026
 
 **Where it stands**
 - A **separate system** (M-2), rebuilt natively for phones with React Native + Expo (M-3). Rules:
@@ -24,11 +71,20 @@
 - **Left on the machine:** the scratch databases `fidato_mobile_hk`, `_hk2`, `_hk3` (the helpers'
   test writes); drop them through `D:\fidato pms\.local\dbq.sh` when no longer wanted.
 
-**Who holds what**
+**Who holds what** (memory is short: a helper starts its own API and Expo only under `../.local/mobile-preview.lock`, one at a time, and stops both when it releases it)
 
 | Module / core | Held by | Since |
 |---|---|---|
 | everything (core, reports, housekeeping) | the mobile chat | 15 Oct |
+| pos: Tables and the order pad | Opus helper "tables": `.claude/worktrees/pos-tables`, `mobile/pos-tables`; Expo 8082, API 8861 (pid 28236) on `fidato_mobile_hk` | 15 Oct |
+| pos: the order | Opus helper "order": `.claude/worktrees/pos-order`, `mobile/pos-order`; Expo 8083, API 8862 (pid 27776) on `fidato_mobile_hk2` | 15 Oct |
+| pos: paying and printing | Opus helper "pay": `.claude/worktrees/pos-pay`, `mobile/pos-pay`; Expo 8084, API 8863 (pid 33524) on `fidato_mobile_hk3` | 15 Oct |
+| front-desk (slice 4a: arrivals, check-in, in house, walk-ins) | Opus helper "desk": `.claude/worktrees/front-desk`, `mobile/front-desk`; Expo 8085, API 8864 on `fidato_mobile_desk` | 15 Oct |
+| finance (slice 4b: a stay's bill, payments, check-out) | Opus helper "folio": `.claude/worktrees/folio`, `mobile/folio`; Expo 8086, API 8865 on `fidato_mobile_folio` | 15 Oct |
+| pos: the kitchen (slice 6) | Opus helper "kitchen": `.claude/worktrees/kitchen`, `mobile/kitchen`; Expo 8087, API 8866 on `fidato_mobile_kitchen` | 15 Oct |
+| housekeeping: work orders (slice 7, maintenance) | Opus helper "maintenance": `.claude/worktrees/maintenance`, `mobile/maintenance`; Expo 8088, API 8867 on `fidato_mobile_maint` | 15 Oct |
+| guest-services (slice 8) | Opus helper "guest services": `.claude/worktrees/guest-services`, `mobile/guest-services`; Expo 8089, API 8868 on `fidato_mobile_gs` | 15 Oct |
+| core: real sign-in (slice 5, M-10) | Opus helper "signin": `.claude/worktrees/signin`, `mobile/signin` (may edit the core's sign-in files only); Expo 8090, API 8869 on `fidato_mobile_signin` | 17 Oct |
 
 **Next, in order**
 1. The build route is decided (M-8): Expo's cloud for both platforms, only `mobile/` uploaded, the
