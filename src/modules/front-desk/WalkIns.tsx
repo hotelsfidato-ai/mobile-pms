@@ -45,7 +45,7 @@ export function WalkIns({ hotel }: { hotel: Hotel }) {
           Click any empty cell on the chart. The room and the night are already chosen by the time the form opens, which is the order the question actually arrives in at a front desk.
         </Text>
         <View style={{ flexDirection: "row" }}>
-          <TextLink label="Open Calendar" Icon={ArrowRight} onPress={() => router.push(`/front-desk/${code}/take-walk-in`)} />
+          <TextLink label="Open Calendar" Icon={ArrowRight} onPress={() => router.push(`/reservations/${code}/calendar`)} />
         </View>
       </Card>
 
