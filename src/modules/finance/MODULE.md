@@ -15,10 +15,12 @@ Payments, Cashiering, Company accounts) are not built here.
 
 | Screen | Route → file | Web twin |
 |---|---|---|
-| A stay's bill | `app/folio/[code]/[stayId].tsx` → `Folio.tsx` | the Bill tab of the stay panel |
+| A stay's bill | `app/folio/[code]/[id].tsx` → `Folio.tsx` | the Bill tab of the stay panel |
 
-Opened by the desk's lists (slice 4a) with `/folio/<code>/<stayId>`. After check-out: `router.back()`,
-or `/front-desk/<code>/in-house` with no history.
+Opened by the desk's lists and the stay (slice 4a: Due out's rows, the stay's Bill tab and "Settle and
+check out") with `/folio/<code>/<stay id>`. The parameter is `[id]`, lower case, for the gate (MFIN-3).
+Back and check-out: `router.back()` (to the stay or Due out), or `/front-desk/<code>/in-house` with no
+history. The stay itself is the front desk's screen; this one never draws it.
 
 ## What the server gives, what the phone shows
 
@@ -57,6 +59,12 @@ Each is the web adding a figure itself, which the brief forbids:
    Received in the ledger are the server's own.
 7. **A bill's tab** shows that bill's lines and its balance; the stay's totals only on Everything.
 
+8. **Every figure to the paisa** (₹7,582.50), where the web's money() prints whole rupees on the
+   headline, the tabs, Settle and the "still owed" sentence: the phone never rounds a figure the
+   server sent (MFIN-4). The web's moneyPrecise, which its paper uses, is the one formatter here.
+9. **Settle shows the server's balance as sent**: an overpaid bill says "₹784.00 overpaid", never
+   "₹0 outstanding"; the amount starts at the balance only when it owes, else blank (MFIN-4).
+
 Other differences: a control the API would refuse is grey with the API's sentence, where the web
 hides it (AGENTS rule 1); Rule 159 asks by the method's kind, the server's own test, not the word
 "Cash"; a select is a row of capsules (no picker package); the interim bill prints the hotel's name,
@@ -65,6 +73,8 @@ not the group's logo; a departed stay offers its tax invoice here (the web does 
 ## Writes and offline
 
 All refused offline by the web's tiers (`core/offline.ts`), said in the web's words; nothing is held.
+Every path is in `writes.ts`, and `writes.check.ts` proves each is refused with its sentence. Every
+write's button goes through `useOnce` (Kit.tsx): one press, one request (MFIN-1).
 
 | Write | Endpoint | Who (API) | Offline |
 |---|---|---|---|
@@ -82,11 +92,36 @@ Every accepted write re-reads `["finance", code]` and `["front-desk", code]`.
 
 `roles.ts` (`roles.check.ts`): who may, in the API's sentences. `bill.ts` (`bill.check.ts`): where a
 line sits; the headline; `whyNotLeave` (`canCheckOut`); a line's acts in the server's words; the
-PAN above ₹1,00,000; the server's sentences recognised (MFIN-2). `paper.ts` (`paper.check.ts`): the
-interim bill as HTML for `expo-print`.
+PAN above ₹1,00,000; the server's sentences recognised (MFIN-2); the one formatter, to the paisa;
+Settle's figures as sent (`owedLine`, `startAmount`, `startBill`, `typedShown`). `writes.ts`
+(`writes.check.ts`): every write refused offline in the web's sentence. `paper.ts`
+(`paper.check.ts`): the interim bill as HTML for `expo-print`.
 
 ## States
 
 Loading "Reading the bill…" · failed, the server's sentence and Try again · no connection, its own
 words · empty "Nothing posted to this folio yet." · no bill yet, a dash · refused (a role without
 bills), the API's sentence and no read.
+
+## Money: where each rule is enforced
+
+| Rule | Where |
+|---|---|
+| Every line, tax, total, balance is the server's; nothing summed | `bill.ts` `inSections` (places lines, a section has no total: checked); `paper.ts` `totalRows` (the server's rows); `Folio.tsx` `Ledger` (Total charges, Received, the closing row: `bill.total`, `bill.paid`, `/folio` `.balance`) |
+| Never rounded | `bill.ts` `rupees` (two places, the only formatter on a bill; checked at ₹7,582.50 and ₹0.20) |
+| A dash for a figure not sent, a real zero a figure | `bill.ts` `rupees(null/NaN)`, `owedLine(null)`, `typedShown("")` (checked); `Issue.tsx` (₹0.00 settled, not a dash) |
+| Never clamped | `bill.ts` `owedLine`, `startAmount`; `Settle.tsx` `owedOn` (checked: an overpaid bill is overpaid) |
+| Refused offline in the web's sentence | `writes.ts` + `writes.check.ts`; `data.ts` sends only through the core's `send()` |
+| One press, one request | `Kit.tsx` `useOnce`, on every write's button (Settle, check out, the late departure, add charge, second bill, change rate, reverse, edit, move, issue) |
+| Who may, in the API's words, disabled with its reason | `roles.ts` (checked); `Folio.tsx` (Settle's refusal wins over "nothing owed", and is printed under the buttons); `CheckOut.tsx` (the reason under Check out) |
+
+## Picture match (4 Nov)
+
+Compared by reading the code against the pictures and their words, **never seen running**.
+
+| Screen | Pictures | Result |
+|---|---|---|
+| A stay's bill (`/folio/<code>/<id>`) | **None shows it.** `all/36-finance-folios` (the Finance list of folios), `38-finance-payments` (every receipt of the hotel), `39-finance-cashiering` (the drawer) are Finance pages this lane does not build (Scope); a word search of all 158 pictures finds no Bill tab, Settle or check-out sheet. `06`/`07` (In house, Due out) show how it is reached. | **No picture to match: kept to the ported code.** What the pictures do say, the screen does: 07's "Check-out stays disabled with its reason until each balance clears" (`CheckOut.tsx`: the button grey, the reason under it); 07's "Settle from the Bill tab" (Settle is the main button while money is owed); 36's "A positive balance is owed by the guest; a negative one is owed to them. Both are real and both print - neither is hidden or shown as zero" (`owedLine`, MFIN-4). Differences left: the pictures' figures are whole rupees (₹7,582), the bill's are to the paisa (₹7,582.50) - on purpose (difference 8). |
+
+0 of 1 screens matched to a picture: the one screen has none. Asked of the mobile chat: a capture of
+the stay panel's Bill tab, Settle and the check-out sheet (in house, due out, split, checked out).
