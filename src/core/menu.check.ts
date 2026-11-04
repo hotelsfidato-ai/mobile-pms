@@ -142,8 +142,9 @@ eq(phoneRoute("/h/5EL/lost-property", "5EL"), "/guest-services/5EL/lost-property
 eq(phoneRoute("/h/5EL/online-checkin", "5EL"), "/guest-services/5EL/online-checkin");
 eq(phoneRoute("/h/5EL/guest-messages", "5EL"), null); // the phone's Messages is only its card
 eq(phoneRoute("/h/5EL/approvals", "5EL"), "/approvals/5EL");
+eq(phoneRoute("/h/5EL/laundry", "5EL"), "/laundry/5EL");
 /* Only the routes the merged app has (the brief's route map). */
-const MERGED = /^\/(hotel\/[^/]+|all|approvals\/[^/]+|notifications\/[^/]+|housekeeping\/[^/]+(\/(repair|out-of-service|work-orders))?|pos\/[^/]+\/(tables|pad|kitchen|order\/[^/]+)|front-desk\/[^/]+(\/(in-house|walk-ins|walk-in|take-walk-in|stay\/[^/]+|check-in\/[^/]+))?|folio\/[^/]+\/[^/]+|guest-services\/[^/]+(\/(requests|wake-up-calls|lost-property|online-checkin|messages))?)(\?.*)?$/;
+const MERGED = /^\/(hotel\/[^/]+|all|approvals\/[^/]+|laundry\/[^/]+(\/[^/]+)?|notifications\/[^/]+|housekeeping\/[^/]+(\/(repair|out-of-service|work-orders))?|pos\/[^/]+\/(tables|pad|kitchen|order\/[^/]+)|front-desk\/[^/]+(\/(in-house|walk-ins|walk-in|take-walk-in|stay\/[^/]+|check-in\/[^/]+))?|folio\/[^/]+\/[^/]+|guest-services\/[^/]+(\/(requests|wake-up-calls|lost-property|online-checkin|messages))?)(\?.*)?$/;
 for (const role of ROLES) {
   for (const item of flatNavigationFor(role, "5EL", ALL_ON)) {
     const route = phoneRoute(item.to, "5EL");
