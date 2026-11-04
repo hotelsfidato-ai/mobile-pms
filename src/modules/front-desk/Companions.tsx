@@ -1,10 +1,10 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { Camera } from "lucide-react-native";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Text, View } from "react-native";
 import { HeldError } from "../../core/api";
 import { c, t } from "../../core/theme";
-import { useRead } from "../../core/ui";
+import { notKnown, useRead, useStuck } from "../../core/ui";
 import { addCompanion, readCompanions, readDesk, removeCompanion, said, saveCompanion, type Companion } from "./data";
 import { deskGuestId, guestIdState, ID_TYPES, noGuestId, particularsPayload, sameVisit, type GuestId, type Particulars } from "./guestId";
 import { GuestIdFields } from "./GuestIdFields";
@@ -130,6 +130,11 @@ function AdultSheet({ code, stayId, today, rules, person, nationality, leadVisit
   } : deskGuestId(rules, nationality)));
   const [busy, setBusy] = useState(false);
   const [bad, setBad] = useState<Said | null>(null);
+  /* Adding twice is two people on the stay, and the route reads no key: one
+     tap, and none after an unknown outcome until the stay is seen (MFD-8).
+     Edit sets the same details again: safe to repeat. */
+  const latch = useRef(false);
+  const once = useStuck();
   const s = guestIdState(id, today);
   const wrong = !name.trim() ? "A guest has a name." : s.wrong;
 
@@ -140,14 +145,18 @@ function AdultSheet({ code, stayId, today, rules, person, nationality, leadVisit
       identity: { ...p.identity, ...(s.captured ? { idType: id.idType, idNumber: id.idNumber.trim() } : {}) },
       ...(s.foreign ? { visit: p.visit } : {}),
     };
+    if (latch.current || once.isStuck()) return;
+    latch.current = true;
     setBusy(true);
     try {
       await (person ? saveCompanion(code, stayId, person.guestId, input) : addCompanion(code, stayId, input));
       onDone({ title: person ? "Saved" : "Added", body: name.trim(), tone: "ok" });
     } catch (e) {
       setBusy(false);
-      setBad(e instanceof HeldError ? { title: "Saved on this phone", body: e.message, tone: "held" } : { title: "Not saved", body: said(e), tone: "bad" });
-    }
+      setBad(e instanceof HeldError ? { title: "Saved on this phone", body: e.message, tone: "held" }
+        : !person && once.stop(e) ? { ...notKnown("added", "the stay's guests", e), tone: "bad" }
+        : { title: "Not saved", body: said(e), tone: "bad" });
+    } finally { latch.current = false; }
   };
 
   return (
@@ -158,7 +167,7 @@ function AdultSheet({ code, stayId, today, rules, person, nationality, leadVisit
         <View style={{ gap: 6 }}>
           <View style={{ flexDirection: "row", gap: 8, justifyContent: "flex-end" }}>
             <Button label="Cancel" size="lg" onPress={() => onDone(null)} />
-            <Button label="Save" kind="primary" size="lg" busy={busy} reason={wrong} onPress={() => void save()} />
+            <Button label="Save" kind="primary" size="lg" busy={busy} reason={once.stuck ? notKnown("added", "the stay's guests").line : wrong} onPress={() => void save()} />
           </View>
           {wrong ? <Text style={t.caption}>{wrong}</Text> : null}
         </View>

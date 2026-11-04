@@ -1,4 +1,5 @@
-import { api, ApiError, orNull, send, type Hotel } from "../../core/api";
+import { api, ApiError, currentSubject, orNull, send, type Hotel } from "../../core/api";
+import { keyKeeper, type KeyKeeper } from "../../core/keys";
 import type { Room, Stay } from "../../core/types";
 import type { Promotion, Split, Tariff } from "./booking";
 import { arrivals, assignable, dueOut, emptyRooms, footOf, inHouse, upcoming, walkIns } from "./desk";
@@ -216,8 +217,17 @@ export const readReturning = (code: string, phone: string, email: string) =>
 export interface Booked { ok: true; groupId: string | null; guest: string; bookings: Array<{ id?: string; reference: string; roomType: string; rate: number }>; status?: string }
 /** Refused offline by the web's tiers (not a held write): the walk-in waits for the line. */
 export const createBooking = (code: string, input: object) => send<Booked>("POST", `/api/hotels/${code}/bookings`, input);
+/** One keeper per booking's bill (MFIN-1, core/keys.ts), as reservations' New
+    booking: the server reads the advance's key (finance postings), so the same
+    advance sent again while its outcome is unknown is made once. */
+const keepers = new Map<string, KeyKeeper>();
+const keysOf = (code: string, id: string) => {
+  let k = keepers.get(`${code}/${id}`);
+  if (!k) { k = keyKeeper({ who: currentSubject }); keepers.set(`${code}/${id}`, k); }
+  return k;
+};
 /** The advance, held as credit (D27-4). A payment: refused offline. */
-export const takeAdvance = (code: string, id: string, input: object) => send("POST", `/api/hotels/${code}/stays/${id}/payments`, input);
+export const takeAdvance = (code: string, id: string, input: object) => send("POST", `/api/hotels/${code}/stays/${id}/payments`, input, keysOf(code, id));
 
 /** The tiles a walk-in can start from (Rooms' empty ones). */
 export async function readEmpty(code: string, date: string) {

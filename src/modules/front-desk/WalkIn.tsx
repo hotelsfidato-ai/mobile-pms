@@ -1,12 +1,12 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { router, type Href } from "expo-router";
 import { AlertTriangle, Plus, UserCheck } from "lucide-react-native";
-import { useState, type ReactNode } from "react";
+import { useRef, useState, type ReactNode } from "react";
 import { KeyboardAvoidingView, Platform, Text, View } from "react-native";
-import { ApiError, HeldError, type Hotel } from "../../core/api";
+import { ApiError, HeldError, outcomeUnknown, type Hotel } from "../../core/api";
 import { cash, dateLong } from "../../core/format";
 import { c, face, space, t } from "../../core/theme";
-import { Card, Screen, useRead } from "../../core/ui";
+import { Card, notKnown, Screen, useRead, useStuck } from "../../core/ui";
 import { Day } from "../housekeeping/DayStepper";
 import {
   allIn, assignReason, byContract, checkInReason, discountIn, gstinProblem, inclusive, MARKET_SEGMENTS, OTHER, PLANS, priceLine, saveReason, summary, TITLES, worthAsking,
@@ -40,7 +40,8 @@ interface Done {
   /** Kept through assign, or why not. */
   assigned: { room: string } | { failed: string } | null;
   checkedIn: { room: string } | { failed: string } | null;
-  advance: { amount: number } | { failed: string } | null;
+  /** `unknown`: nothing came back, or a 5xx - it may have been taken (MEMORY 16). */
+  advance: { amount: number } | { failed: string; unknown: boolean } | null;
   waiting: boolean;
 }
 
@@ -56,6 +57,11 @@ export function WalkIn({ hotel, role, room: walkRoom, onClose }: { hotel: Hotel;
   const [toast, setToast] = useState<Said | null>(null);
   const [done, setDone] = useState<Done | null>(null);
   const [saving, setSaving] = useState(false);
+  /* One tap, one booking (MEMORY 8); a booking whose outcome is unknown is
+     never made again from here - POST bookings reads no key (MFD-8). */
+  const latch = useRef(false);
+  const once = useStuck();
+  const unknownBooking = notKnown("booked", "Arrivals");
 
   const [title, setTitle] = useState(rules?.defaultTitle ?? "");
   const [guestName, setGuestName] = useState("");
@@ -187,6 +193,8 @@ export function WalkIn({ hotel, role, room: walkRoom, onClose }: { hotel: Hotel;
     });
 
   const submit = async (now: boolean) => {
+    if (latch.current || once.isStuck()) return;
+    latch.current = true;
     setSaving(true);
     let made: Made;
     try {
@@ -216,8 +224,16 @@ export function WalkIn({ hotel, role, room: walkRoom, onClose }: { hotel: Hotel;
         }],
       });
     } catch (e) {
-      /* The server's sentence: nothing was written. */
+      latch.current = false;
       setSaving(false);
+      /* Nothing came back, or the server failed: it may be booked. No more
+         taps until Arrivals is looked at (MEMORY 16). */
+      if (once.stop(e)) {
+        const n = notKnown("booked", "Arrivals", e);
+        setToast({ title: n.title, body: n.body, tone: "bad" });
+        return;
+      }
+      /* The server's sentence: nothing was written. */
       setToast({ title: "Not booked", body: wordOf(e), tone: "bad" });
       return;
     }
@@ -233,7 +249,7 @@ export function WalkIn({ hotel, role, room: walkRoom, onClose }: { hotel: Hotel;
       try {
         await takeAdvance(code, lead.id, { method: advanceBy, amount: advanceAmount, businessDate: today, heldAsCredit: true });
         advanceTaken = { amount: advanceAmount };
-      } catch (e) { advanceTaken = { failed: wordOf(e) }; }
+      } catch (e) { advanceTaken = { failed: wordOf(e), unknown: outcomeUnknown(e) }; }
     }
     if (now && lead?.id) {
       try {
@@ -251,6 +267,7 @@ export function WalkIn({ hotel, role, room: walkRoom, onClose }: { hotel: Hotel;
         assigned = { room: a.room };
       } catch (e) { assigned = { failed: wordOf(e) }; }
     }
+    latch.current = false;
     setSaving(false);
     void cache.invalidateQueries();
     setDone({ made, assigned, checkedIn, advance: advanceTaken, waiting });
@@ -487,9 +504,9 @@ export function WalkIn({ hotel, role, room: walkRoom, onClose }: { hotel: Hotel;
 
         {/* The three buttons: the one filled is the job the page was opened for. */}
         <View style={{ gap: 8 }}>
-          <Button label="Save booking" size="lg" busy={saving} reason={reasonToSave} onPress={() => void submit(false)} />
-          <Button label="Save and assign room" size="lg" busy={saving} reason={reasonToSave ?? reasonToAssign} onPress={() => void submit(false)} />
-          <Button label="Check in now" kind="primary" size="lg" busy={saving} reason={reasonToSave ?? reasonToCheckIn} onPress={() => void submit(true)} />
+          <Button label="Save booking" size="lg" busy={saving} reason={once.stuck ? unknownBooking.line : reasonToSave} onPress={() => void submit(false)} />
+          <Button label="Save and assign room" size="lg" busy={saving} reason={once.stuck ? unknownBooking.line : reasonToSave ?? reasonToAssign} onPress={() => void submit(false)} />
+          <Button label="Check in now" kind="primary" size="lg" busy={saving} reason={once.stuck ? unknownBooking.line : reasonToSave ?? reasonToCheckIn} onPress={() => void submit(true)} />
           <View style={{ gap: 2 }}>
             {reasonToSave ? <Text style={[t.label, body, { color: c.grey600 }]}>{reasonToSave}</Text> : (
               <>
@@ -637,7 +654,9 @@ function BookedCard({ hotel, done, onAnother }: { hotel: Hotel; done: Done; onAn
           : <Text style={[t.label, body, { color: c.yellow800 }]}>{`Not checked in: ${done.checkedIn.failed} Check them in from Arrivals.`}</Text>) : null}
         {done.advance ? ("amount" in done.advance
           ? <Text style={[t.label, body, { color: c.grey600 }]}>{`Advance of ${moneyPrecise(done.advance.amount)} taken, held as the guest's credit.`}</Text>
-          : <Text style={[t.label, body, { color: c.yellow800 }]}>{`Advance not taken: ${done.advance.failed} Take it on the bill.`}</Text>) : null}
+          : <Text style={[t.label, body, { color: c.yellow800 }]}>{done.advance.unknown
+            ? `Not known whether the advance was taken: ${done.advance.failed} Look at the bill before taking it again.`
+            : `Advance not taken: ${done.advance.failed} Take it on the bill.`}</Text>) : null}
         {/* A walk-in just checked in: the other adults (D27-382), as at the desk. */}
         {inHouse && lead?.id ? <Companions code={code} stayId={lead.id} today={hotel.businessDate} rules={rulesOf(hotel)} /> : null}
         {done.waiting ? <Text style={[t.label, body, { color: c.grey600 }]}>The room is held. Nothing is sent to the guest until the booking is confirmed.</Text> : null}

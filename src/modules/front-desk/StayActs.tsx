@@ -2,12 +2,12 @@ import { useQueryClient } from "@tanstack/react-query";
 import {
   ArrowLeftRight, Ban, BedDouble, CalendarRange, Check, ChevronDown, DoorOpen, FileText, Gift, IndianRupee, Plus, Repeat, X, type LucideIcon,
 } from "lucide-react-native";
-import { useState, type ReactNode } from "react";
+import { useRef, useState, type ReactNode } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { HeldError, type Hotel } from "../../core/api";
 import { cash } from "../../core/format";
 import { c, t } from "../../core/theme";
-import { useRead } from "../../core/ui";
+import { notKnown, useRead, useStuck } from "../../core/ui";
 import { Day } from "../housekeeping/DayStepper";
 import {
   addStayInclusion, amendStay, cancelConfirmed, cancelPreview, cancelWaiting, confirmWaiting, exchangeRooms, moveRoom, readExchangeable, readInclusions,
@@ -249,19 +249,28 @@ function Exchange({ code, stay, businessDate, onClose, onDone }: { code: string;
   const [bad, setBad] = useState<Said | null>(null);
   const list = others.data ?? [];
   const chosen = list.find((o) => o.id === withId);
+  /* A second exchange swaps them back, and the route reads no key: one tap,
+     and none after an unknown outcome until the stay is seen (MFD-8). */
+  const latch = useRef(false);
+  const once = useStuck();
 
   const submit = async () => {
+    if (latch.current || once.isStuck()) return;
+    latch.current = true;
     setBusy(true);
     try {
       const r = await exchangeRooms(code, stay.id, { withStayId: withId, from, reason: reason.trim() });
       onDone({ title: "Rooms exchanged", body: `${stay.guest} moves to ${r.to}, ${chosen?.guest ?? "the other guest"} to ${r.from}, from ${day(from)}.`, tone: "ok" });
-    } catch (e) { setBusy(false); setBad({ title: "Not exchanged", body: said(e), tone: "bad" }); }
+    } catch (e) {
+      setBusy(false);
+      setBad(once.stop(e) ? { ...notKnown("exchanged", `both stays' rooms`, e), tone: "bad" } : { title: "Not exchanged", body: said(e), tone: "bad" });
+    } finally { latch.current = false; }
   };
 
   return (
     <FormSheet
       title={`Exchange ${stay.guest}'s room`} description={`${stay.reference} · currently in ${stay.roomNumber}`} onClose={onClose} said={bad} onSaid={setBad}
-      foot={<Foot onCancel={onClose}><Button label="Exchange" kind="primary" size="lg" Icon={ArrowLeftRight} busy={busy} reason={withId && reason.trim() ? null : ""} onPress={() => void submit()} /></Foot>}
+      foot={<Foot onCancel={onClose}><Button label="Exchange" kind="primary" size="lg" Icon={ArrowLeftRight} busy={busy} reason={once.stuck ? notKnown("exchanged", "both stays' rooms").line : withId && reason.trim() ? null : ""} onPress={() => void submit()} /></Foot>}
     >
       {list.length === 0 ? (
         <View style={{ gap: 6, paddingVertical: 24 }}>
@@ -316,14 +325,24 @@ function Inclusions({ code, stay, onClose }: { code: string; stay: DeskStay; onC
   const [busy, setBusy] = useState(false);
   const [bad, setBad] = useState<Said | null>(null);
   const refresh = () => { void cache.invalidateQueries({ queryKey: key }); };
+  /* A second add is a second line, and the route reads no key: one tap, and
+     none after an unknown outcome until this is closed (MFD-8). */
+  const latch = useRef(false);
+  const once = useStuck();
 
   const add = async () => {
+    if (latch.current || once.isStuck()) return;
+    latch.current = true;
     setBusy(true);
     try {
       await addStayInclusion(code, stay.id, { ...(pick ? { inclusionId: pick } : { name: name.trim() }), quantity: Number(qty) || 1 });
       setAdding(false); setPick(""); setName(""); setQty("1");
       refresh();
-    } catch (e) { setBad({ title: "Not added", body: said(e), tone: "bad" }); }
+    } catch (e) {
+      if (once.stop(e)) { setBad({ ...notKnown("added", "this list once it is opened again", e), tone: "bad" }); refresh(); }
+      else setBad({ title: "Not added", body: said(e), tone: "bad" });
+    }
+    latch.current = false;
     setBusy(false);
   };
   const drop = async (lineId: string) => {
@@ -377,7 +396,7 @@ function Inclusions({ code, stay, onClose }: { code: string; stay: DeskStay; onC
           ) : null}
           <Field label="How many"><Box value={qty} label="How many" keyboard="number-pad" onChange={setQty} /></Field>
           <View style={{ flexDirection: "row", gap: 8 }}>
-            <Button label={busy ? "Adding…" : "Add"} kind="primary" reason={pick || name.trim() ? null : ""} busy={busy} onPress={() => void add()} />
+            <Button label={busy ? "Adding…" : "Add"} kind="primary" reason={once.stuck ? notKnown("added", "this list once it is opened again").line : pick || name.trim() ? null : ""} busy={busy} onPress={() => void add()} />
             <Button label="Cancel" onPress={() => setAdding(false)} />
           </View>
         </View>

@@ -69,3 +69,18 @@ The stay's "Agreed to WhatsApp" went grey for a role the API refuses (`customer`
 nothing when tapped. Found on 4 Nov checking every greyed control for its sentence. **Done:** `Tick`
 takes the API's `reason` and says it when tapped (and to a screen reader as its hint), as `Button`
 and `MarkLink` do. **The rule:** a greyed control without its sentence is a hidden one.
+
+## MFD-8 · A booking, an exchange or an added line could be made twice from one intent
+
+When nothing came back (or the server failed), the walk-in said "Not booked" and kept its three
+buttons live; an exchange, an added inclusion and an added adult kept theirs too (and none was
+latched at the tap). POST bookings, exchange, inclusions and companions read no idempotency key, so
+a second tap made a second booking, swapped the rooms back, or wrote a second line or person. The
+walk-in's advance said "Advance not taken" when it may have been. Found on 4 Nov applying MEMORY 16
+across the modules. **Done:** each is latched at the tap; on `outcomeUnknown(e)` it says "Not known
+whether it was booked / exchanged / added: look at … before trying again" and takes no more taps
+until it is closed (`useStuck`, `notKnown` in core/ui.tsx); the advance says "Not known whether the
+advance was taken … look at the bill" and has a keeper per stay (the payments route reads the key),
+as reservations' New booking. Checked safe to repeat (the server refuses a second or sets a value):
+check-in, assign, move, unassign, void, confirm, cancel, amend, WhatsApp, VIP, edit an adult, remove
+a line or an adult. **The rule:** an unknown outcome on a route without a key stops the button.
