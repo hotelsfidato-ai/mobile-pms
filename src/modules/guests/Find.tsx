@@ -69,7 +69,7 @@ export function Find({ hotel, role }: { hotel: Hotel; role: string | null }) {
                 <Box>
                   {guests.map((g, i) => (
                     <Pressable
-                      key={g.id} onPress={() => router.push(`/guests/${code}/guest/${g.id}`)} accessibilityRole="button"
+                      key={g.id} onPress={() => router.push(`/guests/${code}/find/${g.id}`)} accessibilityRole="button"
                       accessibilityLabel={`${g.name}${g.isBlacklisted ? ", blacklisted" : ""}, ${stayedWords(g.visits)}`}
                       style={({ pressed }) => ({
                         minHeight: 56, flexDirection: "row", alignItems: "center", gap: 12, paddingHorizontal: space.cardX, paddingVertical: 12,

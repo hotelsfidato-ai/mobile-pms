@@ -1,6 +1,6 @@
 import { Redirect, useLocalSearchParams } from "expo-router";
-import { roleAt, useSession } from "../../../src/core/session";
-import { Find } from "../../../src/modules/guests/Find";
+import { roleAt, useSession } from "../../../../src/core/session";
+import { Find } from "../../../../src/modules/guests/Find";
 
 /* Guest 360's search (the web's /crm/guests), from one property. */
 export default function FindRoute() {
