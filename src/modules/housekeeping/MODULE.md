@@ -124,3 +124,43 @@ room that is free and not already out; an end date at least the day after From (
 
 `dev-housekeeping` (housekeeping, the one housekeeper), `dev-gm`, `dev-desk` (front desk: may mark
 rooms, may not raise a room repair), `dev-finance` (may not mark), `dev-stores`.
+
+## Picture match (4 Nov)
+
+Compared by reading the code against each picture at full size (780 px wide, cut in pieces), section by
+section; **never seen running** (no Expo, no API in the cloud session). The top bar, the banner and the
+menus are the shell's (mobile/shell); the "Back" / "Sign out" capsules standing in for them are not
+counted. Work orders are the maintenance helper's (its own section).
+
+| Screen | Picture(s) | Result |
+|---|---|---|
+| Rooms (the board, title "Housekeeping") | `all/10-front-desk-housekeeping`, `roles/r-housekeeping-home` (the same body) | **MATCHES**, with the differences below |
+| Report a repair | none in the set (`all/`, `new/`, `roles/` hold no picture of the form; `all/11-front-desk-work-orders` shows the Work orders list only) | **NOT COMPARED**: built to the web's RepairFlow as ported on 31 Oct |
+| Out of service | none in the set | **NOT COMPARED**: built to the web's OutOfOrderFlow as ported |
+
+Checked against the board's picture, all found as drawn: the title and its line; the green "Online"
+pill; the navy Empty rooms with its white ring, "3/7"-style figure (the "/7" dimmed) and "clean", the
+Clean and Inspected gauges; the six counts in two columns (Needs cleaning warm orange while some wait,
+Due out warm yellow and flat, Out of service's figure orange, an arrow on each count that jumps); the
+sheet chips (All rooms first and navy, a chip per person on the roster, Unassigned last); the groups in
+the web's order, each with its tinted pill and dot; a card per room (number, type, Due out pill, the bed
+for a room with a guest, the guest or the floor, "Who is cleaning room N", Clean · Inspected · Repair,
+the yellow card for Due out); Out of service's card with Put back only.
+
+**Differences left, each with its reason:**
+
+1. **The sheet chips are 44 px high** (the picture's are about 35 px): the touch-target rule (AGENTS).
+2. **Who is cleaning a room opens a sheet from the bottom**, not the website's native select (a phone
+   has no select).
+3. **Put back opens Out of service** (what holds the room out, each with Put back) rather than putting
+   the room back at once: the owner's 17 September, kept from 15 Oct.
+4. **`all/02-home-rooms` is not this board**: it is the website's Rooms grid (`/h/:code/stay`, the Home
+   menu's "Rooms": Calendar · Rooms, Room type · Floor, Assign room, Sellable / Empty / In house, a
+   tile per room by type). The phone has no such screen and none is in this lane (no new route):
+   a question for the owner.
+5. **The two forms** cannot be matched: no picture of them was taken. A capture of Report a repair
+   (from a room's Repair) and of Out of service is needed before they can be called matched.
+
+The writes are unchanged on 4 Nov: M-5 (the key from the first tap, Out of service online only) and
+M-7 (the day stepper, Mine first for a housekeeper, ended blocks without Put back, the end a night
+after From).

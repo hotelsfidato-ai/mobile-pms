@@ -21,8 +21,11 @@ Sign in (development), who is signed in and the routes are the core's (`src/core
 `src/core/session.tsx`, `app/`: `/all`, `/hotel/[code]`). The top bar, the menu and the business-date
 banner are the shell's (M-11); the "All" and "Sign out" capsules stand in for them until it lands.
 
-**Left on the website for now:** the quick reports and the No-shows report (greyed, "On the website
-for now"), the Calendar behind Nights ahead, the lists behind "Needs you".
+**Left on the website for now:** the quick reports, the No-shows report and the lists behind "Needs
+you" (each greyed with its arrow; a tap says "On the website for now"), the Calendar behind Nights
+ahead. **The work tiles open their lists** (4 Nov): Arrivals `/front-desk/:code`, Due out
+`/front-desk/:code/in-house?view=due-out`, In house `/front-desk/:code/in-house` (mobile/front-desk's
+routes, resolved once it is merged), Needs cleaning `/housekeeping/:code`.
 
 ## Reads (all through `src/core/api.ts`; read only, nothing queued offline)
 
@@ -66,3 +69,40 @@ as last read; pull down to read again."
 node --experimental-strip-types src/modules/reports/figures.check.ts                 # the counting rules
 node --experimental-strip-types src/modules/reports/figures.live.ts http://127.0.0.1:8860 dev-owner   # what the screens will show, from a running API
 ```
+
+## Picture match (4 Nov)
+
+Compared by reading the code against each picture at full size (780 px wide, cut in pieces), section by
+section; **never seen running** (no Expo, no API in the cloud session). The top bar, the business-date
+banner and the menus are the shell's (mobile/shell), so the "All" and "Sign out" capsules standing in
+for them are not counted as differences.
+
+| Screen | Picture(s) | Result |
+|---|---|---|
+| Dashboard | `all/01-home-dashboard`, `roles/r-gm-home`, `r-hotel-manager-home` (and `r-reception-home`, `r-accountant-home`, `r-revenue-home`: the same body) | **MATCHES**, with the differences below |
+| All properties | `new/n-all-properties`, `roles/r-owner-home` | **MATCHES**, with the differences below |
+
+**Closed on 4 Nov:** the arrows on Arrivals, Due out and In house (they now open the front desk's
+lists; before, only Needs cleaning opened anything and the other three had no arrow); the No-shows
+arrow; the arrow on every "Needs you" row.
+
+**Differences left, each with its reason:**
+
+1. **Quick reports, the No-shows report and the "Needs you" lists are greyed** (the picture's are live
+   white capsules and arrows): none of those screens is on the phone; a tap says "On the website for now".
+   A notification carries no address in the ported type (`Notification`: id, title, body,
+   actionRequired), so a row cannot be sent to its screen without inventing one.
+2. **The Occupancy by day axis writes "100%" whole**; the website cuts it to ".00%" at phone width (the
+   website's fault, already noted in `Charts.tsx`).
+3. **The Dashboard is not the first screen of a GM, hotel manager, reception, accountant or revenue
+   manager** (their pictures `roles/r-*-home` are the Dashboard; the phone sends everybody but
+   housekeeping, the waiter and the kitchen to All properties). The landing is `app/index.tsx`, the
+   core: asked of the mobile chat (MRP-1).
+4. **The revenue manager's Due out** says "1 still to leave" (the picture `r-revenue-home` agrees: the
+   due-out read is refused to that role, and no money figure is drawn). Listed only because it differs
+   from the GM's picture by design.
+5. **Figures and colours** come from the server and `core/theme.ts` + `kit.tsx`'s `more` (copied from
+   the web's `theme.css`), not from the pictures: the pictures' figures are demo data.
+
+Not compared (no picture of them): the read-failed, offline and empty states, the (i) notes and the
+tapped chart readings.
