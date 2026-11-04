@@ -4,8 +4,14 @@
    whole and in the web's order (M-11). Change it in the PMS first, then
    here; menu.check.ts pins every role's list as the web gives it.
 
-   Left out on purpose: `devOnly` entries (a production build has none) and
-   `keywords` (Find a screen is on the website for now).
+   Re-checked entry by entry against today's PMS on 4 Nov (SHELL.md): every
+   role's menu, space, full reach and landing the same as the web's own
+   functions give them.
+
+   Left out on purpose: `devOnly` entries (a production build has none: the
+   web's "Design system" in System and its admin "Console") and `keywords`
+   (Find a screen is on the website for now). The role pictures were taken
+   on a development build, so their folded System counts Design system too.
 
    Below the port: which of those screens the phone has (PHONE_ROUTES, the
    one table to add to), a property's landing, and two small words of the
@@ -327,6 +333,8 @@ const ENTRIES: readonly Entry[] = [
   { section: "system", order: 10,
     workingMenus: ["front_desk", "pos", "bar", "chef", "kitchen_manager", "housekeeping", "stores"],
     label: "Notifications", to: "/notifications", icon: "Bell", resource: "notification", matchPrefix: true },
+  /* In the home group after the Dashboard since 25 Oct (D27-363), in
+     nobody's working menu (the web's note). */
   { section: "home", order: 15,
     label: "Approvals", to: "/h/:code/approvals", icon: "CheckCircle2",
     resource: "notification", canSee: decidesSomething },
