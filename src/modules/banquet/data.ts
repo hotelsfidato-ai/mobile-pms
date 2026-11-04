@@ -8,10 +8,10 @@ import type { CourseInput, Diary, Fn, RegisterInput, Setup, Window } from "./rul
    nothing is priced, totalled or decided here.
 
    THE READS THROW (the web's BQ-3): a failed read must never draw "this
-   property has no banquet hall" or "No such function". A 403 is the server
-   saying no - banquet switched off here, or the role gate - and comes back
-   as `{ refused }` with its sentence, so the screen shows that and nothing
-   else.
+   property has no banquet hall" or "No such function". A 4xx is the server
+   saying no - banquet switched off here (403), the role gate (403), no such
+   function (404) - and comes back as `{ refused }` with its sentence, as the
+   web's readProblem reads it, so the screen shows that and nothing else.
 
    WRITES go through `send`, the web's tiers (core offline.ts): an ENQUIRY
    (POST /banquet/events) is held offline and sent later with the key it
@@ -33,7 +33,7 @@ async function read<T>(path: string): Promise<T | Refused> {
   try {
     return await api<T>(path);
   } catch (e) {
-    if (e instanceof ApiError && e.status === 403) return { refused: e.message };
+    if (e instanceof ApiError && e.status >= 400 && e.status < 500) return { refused: e.message };
     throw e;
   }
 }
