@@ -67,6 +67,27 @@ reaches the outbox.
 The web's dates are "d MMM yyyy" (`rules.ts`): the core's `dateShort` is "d MMM", which is the web's
 `dateCompact`, though its comment says otherwise.
 
+## Picture match (4 Nov)
+
+Compared by reading the code against each picture (`reference/pms-shots/`, 390 px wide, taken at 2x,
+so 780 px in the file), measured on the file; never seen running. Two differences are the phone's
+on every screen here and are not repeated below: (a) the web's top bar and the business-date line
+are the shell's (mobile/shell), and a **Back** capsule sits beside each title, so the line under the
+title wraps a little earlier than the picture's; (b) a **segmented control is 44 px a choice** (50 with
+its track), the picture's 30 (36): touch targets of 44 px or more (AGENTS).
+
+| Screen | Picture | Result |
+|---|---|---|
+| Guest services (the way in) | `all/76-coming-soon-guest-services` | **No picture to match.** The web's old coming-soon address now opens the Dashboard (its words are the Dashboard's): guest services is live there and has no page of its own, only menu entries. The way in lists them in the menu's order (Online check-in, Guest requests, Wake-up calls, Lost property; Guest messages from Guests & CRM), and greys exactly what the web's menu leaves out for a role (`roles.check.ts`, against the web's nav lists as the shell ported them). |
+| Guest requests | `new/n-h-requests` | **Matches** (the empty Open view, as the desk): title and line, New request (orange 600, 44 tall, a plus), Open / Done, last 24 h, the team filter All / Housekeeping / Something broken / Food and drink scrolling inside itself and cut at the page's edge, the empty state's icon, words and the 84 px above it. The cards, the dialogs and the Done view are not pictured: built from the ported code. |
+| Wake-up calls | `new/n-h-wake-up-calls` | **Matches** (the empty To make view): Set a call, To make / Done, last 24 h, "No calls to make" and its line. Cards and dialogs not pictured. |
+| Lost property | `new/n-h-lost-property` | **Matches** (the empty Kept view): Log an item, Kept / Returned or disposed, "Nothing kept" and its line. Cards and dialogs not pictured. |
+| Online check-in | `all/09-front-desk-online-check-in` | **Cannot be compared: the picture is blank** (a grey page; its `.txt` is empty: the page had not drawn when it was taken). Built from the ported code alone. Ask for it to be taken again, with a guest's details waiting. Grey, on the website for now: printing every card, a room's card and the hotel's card (needs `qrcode`); Show and Remove the ID photo, and the kept list's own buttons (their words are not in the ported code, so the list carries the line instead). |
+| Messages from guests | `all/17-guests-crm-guest-messages` | **Does not match: a different part.** The picture is the web's Guest messages page: what the system sent guests ("Nothing is sent yet" note, "N bookings no message can reach", each message's What / Booking / To / State / Sent by / What came back). None of that is on the phone: no ported code holds its route or shape (Tier 2, PLAN § 3). The messages TO the desk, which this screen is, are a card on that page that draws nothing when there are none, so the picture does not show it. |
+
+**3 of 6 screens match their pictures** (with the two differences above); one has no picture of its
+own, one a blank picture, one a picture of a part the phone does not have.
+
 ## Test people (development, `x-dev-staff-id`, hotel 5EL)
 
 `dev-desk`, `dev-gm`: everything. `dev-housekeeping`: requests (housekeeping, something broken), lost
