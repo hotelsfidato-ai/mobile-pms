@@ -102,8 +102,6 @@ web, and the card reads again.
   company: On the website for now".
 - **Edit guest** (Guest 360): `EditGuestFlow`, a form of its own (title, name, phone, email,
   nationality, address); front desk greys it the same way on the stay.
-- **Loyalty** (Guest 360's MemberCard, the loyalty module's: points, statement, Adjust, Leave): a card
-  saying so.
 - **Undo a join** and the **Possible same person** list (`/crm/same-person`, picture 20): merging two
   guests and taking a join apart stay on the website (the brief). No phone route, no menu link.
 
@@ -151,3 +149,6 @@ pictured; one stays on the website.
   filters on the device.
 - A Guests row's `id` is the name's key, not a guest record, so the list cannot open Guest 360 for a
   manager.
+
+**4 Nov, at the loyalty merge:** Guest 360 shows the loyalty module's MemberCard (points, statement,
+Adjust with a reason, Leave), as the web's Guest 360 does; it is no longer left on the website.

@@ -5,6 +5,32 @@ commits.
 
 ---
 
+## 2026-11-04 · Tier 2, wave 2 merged: Spa, Banquet, Stores, Purchasing, Guests
+
+**Shipped** (each built by an Opus helper from today's PMS code, reviewed and merged by the mobile
+chat with its menu link; gates green on each merge):
+- **Purchasing** `41487bf` — the list, an order, Ask to buy, agree a price, send, record the
+  delivery; decided in the app's Approvals (one place, no second Approve).
+- **Guests** `693bafc` — Guests, Companies and agents, Guest 360 with its blacklist and offers
+  marks (owner, admin, GM only; no ID photo anywhere, DPDP).
+- **Banquet** `4c157c8` — the Diary, register, a function with every act. The independent review
+  found an advance that could be taken twice after a lost reply (MBQ-1): fixed with a core rule,
+  `outcomeUnknown(e)` — on nothing-came-back or a 5xx a money form empties its amount and says "Not
+  known whether it was taken"; where the server reads no key the dialog stops taking taps (MEMORY
+  16). Applied at once to finance's Settle and Add charge, the booking's advance, Register (now a
+  keeper, MBQ-2), courses (MBQ-3), purchasing (MPUR-2).
+- **Spa** `2557f33` — the day by therapist, book (the typed time said back, MSPA-1), cancel, charge to
+  the room; Book stops on an unknown outcome (MSPA-2).
+- **Stores** `cf04894` — the Shelf, receive / issue / waste / move / count / history, Inventory, Bar
+  stock and Kitchen stock; the Inventory Manager lands on the Store; every write dialog stops on an
+  unknown outcome (MST-3).
+- A resolver for the menu files' merge conflicts (main's file plus exactly the branch's lines);
+  the brief lets each helper add its own menu link (the gate needs it); R-30.
+
+**Not proved:** nothing opened on a screen; no API run.
+
+---
+
 ## 2026-11-04 · Tier 2, wave 1 merged: Approvals, Reservations, Rates, Night audit, Laundry
 
 **Asked for:** "start tier 2" (after giving the PMS repository to the app; it is public, so it is read

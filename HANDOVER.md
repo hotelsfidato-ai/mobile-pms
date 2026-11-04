@@ -6,7 +6,7 @@
 
 ## 4–5 November 2026 — read this first: the work moves to the cloud (M-12)
 
-**Latest, 4 Nov — Tier 2 wave 1 is on `main`** (Approvals, Reservations, Rates, Night audit,
+**Latest, 4 Nov — Tier 2 waves 1 and 2 are on `main`** (wave 2: Spa, Banquet, Stores, Purchasing, Guests; the `outcomeUnknown` rule, MEMORY 16). Wave 3 (Loyalty, CRS, Reviews, Revenue, Guest messages) and a sweep bringing the rule to the older modules are building. **Before:** Tier 2 wave 1 (Approvals, Reservations, Rates, Night audit,
 Laundry; CHANGELOG). The PMS is read from `/home/user/hotelsfidato-ai/pms` in the cloud (public now;
 **`.env.production` and `.env.test` are committed in it: told to the owner, never opened**). Nothing
 opened on a screen: the PC looks at each, and **the night audit's close is not tried on a real day
