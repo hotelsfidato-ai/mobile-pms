@@ -27,3 +27,10 @@ typedPrice`: digits, one point, two places), empty sends nothing, and `rates.che
 "₹4,099.505" becomes 4099.50 and that an empty field never becomes a zero or a clear. **The rule:**
 a figure typed on a phone is filtered to what can be sent before it is a number; `NaN` must never
 reach a JSON body, where it is `null`.
+
+### MINV-3 · An unknown outcome on a base price or a restriction: checked, safe (4 Nov) — no change
+
+Checked applying MEMORY 16 across the modules: PUT pricing/base sets the price for the dates
+(`app.set_base_price`), POST restrictions upserts each date (`on conflict … do update`), so a second
+tap after a lost reply sets the same values again. **The rule:** a write that sets a value needs no
+stop.
