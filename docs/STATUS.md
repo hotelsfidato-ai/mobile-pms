@@ -41,7 +41,7 @@ have no usable picture.** Real sign-in is built and waits for the owner's public
 
 ## Tier 2 — managers on the move (from today's PMS code, read in the cloud since 4 Nov)
 
-**Wave 1 merged (4 Nov):** 5 slices, 8 screens, each reviewed (night audit and laundry by an independent second look), gates green; nothing opened on a screen.
+**Waves 1 and 2 merged (4 Nov):** 10 slices, each reviewed (night audit, laundry and banquet by an independent second look), gates green; nothing opened on a screen. Wave 3 (19-23) building.
 
 | Slice | Screen(s) | Copy (when made) |
 |---|---|---|
@@ -50,11 +50,11 @@ have no usable picture.** Real sign-in is built and waits for the owner's public
 | 11 | Rates: set a price, close or open a day | ✅ merged 4 Nov, `963f46c` · pictures 27/28 match |
 | 12 | Night audit: the checklist and the close (the owner looks before it closes a real day) | ✅ merged 4 Nov, `c68ff47` · picture 49 with differences (newer code, 2 Nov) |
 | 13 | Laundry: dockets, collect a bag, a docket, charge to the room | ✅ merged 4 Nov, `03f02b5` · picture n-h-laundry matches |
-| 14 | Spa diary | `t2-spa` |
-| 15 | Banquet diary | `t2-banquet` |
-| 16 | Stores: counts and issues | `t2-stores` |
-| 17 | Purchasing: approve, receive | `t2-purchasing` |
-| 18 | Guests and companies: look up | `t2-guests` |
+| 14 | Spa diary: the day by therapist, book, cancel, charge to the room | ✅ merged 4 Nov, `2557f33` · picture n-h-spa matches |
+| 15 | Banquet diary: register, a function, confirm, price, courses, advance, bill, settle, invoice | ✅ merged 4 Nov, `4c157c8` · picture n-h-banquet matches |
+| 16 | Stores: the shelf, receive, issue, move, count, history; Inventory, Bar stock, Kitchen stock | ✅ merged 4 Nov, `cf04894` · pictures 31, n-h-inventory, n-pos-bar-stock match |
+| 17 | Purchasing: ask, price, order, receive (decided in Approvals) | ✅ merged 4 Nov, `41487bf` · picture 34 matches |
+| 18 | Guests, Companies and agents, Guest 360 (blacklist and offers marks) | ✅ merged 4 Nov, `693bafc` · pictures 15, 16, 19 match |
 | 19 | Loyalty: look up | `t2-loyalty` |
 | 20 | CRS bookings | `t2-crs` |
 | 21 | Reviews | `t2-reviews` |

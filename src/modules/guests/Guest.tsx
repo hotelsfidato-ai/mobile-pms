@@ -10,6 +10,7 @@ import { Pill } from "../front-desk/kit";
 import { Back, body, Box, Btn, Empty, Field, Input, Loading, NotYours, saidOf, Stale, Toast, type Said } from "../guest-services/kit";
 import { dayOf, rupees } from "../laundry/docket";
 import { LoadFailed } from "../laundry/kit";
+import { MemberCard } from "../loyalty/MemberCard";
 import {
   blacklist, clearBlacklist, clearNoOffers, isRefused, readGuest360, readOffersYes, recordNoOffers, recordOffersYes,
 } from "./data";
@@ -143,9 +144,8 @@ export function Guest({ hotel, role, id, onBack }: { hotel: Hotel; role: string 
         </Panel>
 
         {/* The loyalty module's MemberCard (D27-179): its points, statement, Adjust and Leave. */}
-        <Panel title="Loyalty">
-          <Text style={[body, { color: c.grey600 }]}>{`The member card, its points and statement: ${ON_THE_WEBSITE}.`}</Text>
-        </Panel>
+        {/* The member card, as on the web's Guest 360 (MemberCard.tsx; mobile/t2-loyalty, 4 Nov). */}
+        <MemberCard code={code} guestId={id} />
 
         <Panel title="What was sent to them">
           {g.sent.length === 0 ? (
