@@ -41,7 +41,7 @@ have no usable picture.** Real sign-in is built and waits for the owner's public
 
 ## Tier 2 — managers on the move (from today's PMS code, read in the cloud since 4 Nov)
 
-**Waves 1 and 2 merged (4 Nov):** 10 slices, each reviewed (night audit, laundry and banquet by an independent second look), gates green; nothing opened on a screen. Wave 3 (19-23) building.
+**All of Tier 2 merged (4 Nov):** 15 slices, each reviewed (night audit, laundry and banquet by an independent second look), gates green on every merge; 15 of 15 pictured first screens match their pictures (by reading); nothing opened on a screen. A sweep brought the unknown-outcome rule (MEMORY 16) to every Tier 1 module (`fa07f58`).
 
 | Slice | Screen(s) | Copy (when made) |
 |---|---|---|
@@ -55,11 +55,11 @@ have no usable picture.** Real sign-in is built and waits for the owner's public
 | 16 | Stores: the shelf, receive, issue, move, count, history; Inventory, Bar stock, Kitchen stock | ✅ merged 4 Nov, `cf04894` · pictures 31, n-h-inventory, n-pos-bar-stock match |
 | 17 | Purchasing: ask, price, order, receive (decided in Approvals) | ✅ merged 4 Nov, `41487bf` · picture 34 matches |
 | 18 | Guests, Companies and agents, Guest 360 (blacklist and offers marks) | ✅ merged 4 Nov, `693bafc` · pictures 15, 16, 19 match |
-| 19 | Loyalty: look up | `t2-loyalty` |
-| 20 | CRS bookings | `t2-crs` |
-| 21 | Reviews | `t2-reviews` |
-| 22 | Revenue view and rivals' prices | `t2-revenue` |
-| 23 | Guest messages and connection health (view) | `t2-messages` |
+| 19 | Loyalty: in house, join, use points, leave, the rules, points by hotel; the member card on Guest 360 | ✅ merged 4 Nov, `022a53b` · picture n-h-loyalty matches |
+| 20 | CRS bookings: each booking and what it became, Done; the connection card (owner, admin) | ✅ merged 4 Nov, `e8a7c62` · picture n-h-crs-bookings matches |
+| 21 | Reviews: the review link, the departures, ask by WhatsApp or email (the web has no scores or replies) | ✅ merged 4 Nov, `724a8f3` · picture 18 matches |
+| 22 | Revenue outlook with the rivals' prices, read only | ✅ merged 4 Nov, `50434bd` · picture 30 matches |
+| 23 | Guest messages (what was sent) and Connection health, read only | ✅ merged 4 Nov, `2eb44cf` · picture 17 matches; health not pictured |
 
 **Tier 3, desk set-up (kept on the website unless the owner says otherwise):** people and roles,
 properties, the Settings console, accounting export, marketing lists, the channel manager set-up,

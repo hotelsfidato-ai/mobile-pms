@@ -6,7 +6,13 @@
 
 ## 4–5 November 2026 — read this first: the work moves to the cloud (M-12)
 
-**Latest, 4 Nov — Tier 2 waves 1 and 2 are on `main`** (wave 2: Spa, Banquet, Stores, Purchasing, Guests; the `outcomeUnknown` rule, MEMORY 16). Wave 3 (Loyalty, CRS, Reviews, Revenue, Guest messages) and a sweep bringing the rule to the older modules are building. **Before:** Tier 2 wave 1 (Approvals, Reservations, Rates, Night audit,
+**Latest, 4 Nov (end of the cloud session's day) — Tier 1 and Tier 2 are on `main`** (`fa07f58`
+and these notes): Tier 1's 28 screens and Tier 2's 15 slices, every merge gated green, money and rights reviewed (three
+independent second looks), the unknown-outcome rule everywhere (MEMORY 16). **Nothing has been
+opened on a screen.** Next, on the PC: open every screen with each role on the phone or at 375 × 812
+(warm both bundles, MEMORY 1), the held path included; the night audit's close only after the
+owner has looked. Then Tier 3 is the owner's call (kept on the website unless the owner says
+otherwise). Owner questions are listed below and in each module's MODULE.md. **Before that:** Tier 2 waves 1 and 2 (wave 2: Spa, Banquet, Stores, Purchasing, Guests; the `outcomeUnknown` rule, MEMORY 16). Wave 3 (Loyalty, CRS, Reviews, Revenue, Guest messages) and a sweep bringing the rule to the older modules are building. **Before:** Tier 2 wave 1 (Approvals, Reservations, Rates, Night audit,
 Laundry; CHANGELOG). The PMS is read from `/home/user/hotelsfidato-ai/pms` in the cloud (public now;
 **`.env.production` and `.env.test` are committed in it: told to the owner, never opened**). Nothing
 opened on a screen: the PC looks at each, and **the night audit's close is not tried on a real day

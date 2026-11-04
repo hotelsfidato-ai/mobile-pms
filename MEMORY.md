@@ -5,6 +5,16 @@ module's `DEFECTS.md` instead. Read the newest first.
 
 ---
 
+### 17 · Three small traps of 4 Nov's cloud work
+
+- **A push in the same command as a commit** lost the commit when the permission check refused
+  the command. Commit and push in separate commands.
+- **A node check of a server time passes while the phone shows NaN:** make `Date.parse` ISO-only
+  inside the check, as Hermes is (MCRS-1, the menu check's `isoOnly`; extends MEMORY 7).
+- **A route that reads the key is defeated by a key per call:** a form whose server de-duplicates
+  sends one key for the whole form (housekeeping `formKeeper`); a dialog's "until read again" needs
+  its close to really read again (MGS-3).
+
 ### 16 · Letting a key go on a re-read assumes the person sees the record (4 Nov)
 
 The keeper forgets a payment's key once its record is read again — written for Settle, which also

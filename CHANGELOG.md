@@ -5,6 +5,31 @@ commits.
 
 ---
 
+## 2026-11-04 · Tier 2 finished: wave 3, and one rule for every write whose outcome is unknown
+
+**Shipped** (merged into `main`, gates green on each merge):
+- **Guest messages and Connection health** `2eb44cf` — what the system sent guests, the
+  connections' health; read only.
+- **Reviews** `724a8f3` — the web has no scores or replies (D18-14): the review link and asking a
+  departed guest by WhatsApp or email, buttons off after an unknown outcome until read again.
+- **Loyalty** `022a53b` — in house, join, use points (a keeper), leave, the rules, points by hotel;
+  the member card now on Guest 360, as the web.
+- **CRS bookings** `e8a7c62` — each booking, what it became, Done; the connection card.
+- **Revenue outlook** `50434bd` — this month on the books, what to consider with rivals' prices, the
+  dates worth a look with their pickup; read only.
+- **The sweep** `fa07f58` — `useStuck()` and `notKnown()` in the core's `ui.tsx`; every write in the
+  Tier 1 modules checked against the PMS for whether its route reads a key: front desk (walk-in,
+  its advance with a keeper, exchange, inclusions, companions), pos (Send, Open the parcel, extras),
+  housekeeping (Report a repair: one key per form, the server makes it once; Take out of service),
+  guest services, laundry's Collect, reservations' booking — each stops after an unknown outcome;
+  the rest checked safe (the server refuses a second or the write sets a value). MFD-8, MPOS-4,
+  MHK-3, MGS-3, MLDY-2, MRS-3; MAPR-4, MINV-3, MNA-4 checked.
+- The menu resolver learned to drop a pin the branch removed; MEMORY 17; R-31.
+
+**Not proved:** nothing opened on a screen; no API run; the night audit's close never run.
+
+---
+
 ## 2026-11-04 · Tier 2, wave 2 merged: Spa, Banquet, Stores, Purchasing, Guests
 
 **Shipped** (each built by an Opus helper from today's PMS code, reviewed and merged by the mobile
