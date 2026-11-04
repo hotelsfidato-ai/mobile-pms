@@ -141,9 +141,9 @@ eq(phoneRoute("/h/5EL/wake-up-calls", "5EL"), "/guest-services/5EL/wake-up-calls
 eq(phoneRoute("/h/5EL/lost-property", "5EL"), "/guest-services/5EL/lost-property");
 eq(phoneRoute("/h/5EL/online-checkin", "5EL"), "/guest-services/5EL/online-checkin");
 eq(phoneRoute("/h/5EL/guest-messages", "5EL"), null); // the phone's Messages is only its card
-eq(phoneRoute("/h/5EL/approvals", "5EL"), null);
+eq(phoneRoute("/h/5EL/approvals", "5EL"), "/approvals/5EL");
 /* Only the routes the merged app has (the brief's route map). */
-const MERGED = /^\/(hotel\/[^/]+|all|notifications\/[^/]+|housekeeping\/[^/]+(\/(repair|out-of-service|work-orders))?|pos\/[^/]+\/(tables|pad|kitchen|order\/[^/]+)|front-desk\/[^/]+(\/(in-house|walk-ins|walk-in|take-walk-in|stay\/[^/]+|check-in\/[^/]+))?|folio\/[^/]+\/[^/]+|guest-services\/[^/]+(\/(requests|wake-up-calls|lost-property|online-checkin|messages))?)(\?.*)?$/;
+const MERGED = /^\/(hotel\/[^/]+|all|approvals\/[^/]+|notifications\/[^/]+|housekeeping\/[^/]+(\/(repair|out-of-service|work-orders))?|pos\/[^/]+\/(tables|pad|kitchen|order\/[^/]+)|front-desk\/[^/]+(\/(in-house|walk-ins|walk-in|take-walk-in|stay\/[^/]+|check-in\/[^/]+))?|folio\/[^/]+\/[^/]+|guest-services\/[^/]+(\/(requests|wake-up-calls|lost-property|online-checkin|messages))?)(\?.*)?$/;
 for (const role of ROLES) {
   for (const item of flatNavigationFor(role, "5EL", ALL_ON)) {
     const route = phoneRoute(item.to, "5EL");
@@ -214,5 +214,12 @@ eq(ago(600 * 1_440), "over 1 year ago");
 eq(ago(690 * 1_440), "almost 2 years ago");
 eq(relative(new Date(now + 120 * 60_000).toISOString(), now), "in about 2 hours");
 eq(relative("nonsense", now), "-");
+/* Postgres's own text, read as a phone's engine reads it: Date.parse takes ISO only (MAPR-2, MEMORY 7). */
+const isoOnly = <T,>(fn: () => T): T => {
+  const real = Date.parse;
+  Date.parse = (text: string) => (/^\d{4}-\d{2}-\d{2}T/.test(text) ? real(text) : NaN);
+  try { return fn(); } finally { Date.parse = real; }
+};
+eq(isoOnly(() => relative("2026-10-31 17:25:00.123456+05:30", now)), "5 minutes ago");
 
 console.log("menu: all checks pass");

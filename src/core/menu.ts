@@ -20,6 +20,8 @@
    Pure: no React Native here, so `menu.check.ts` runs under node.
    ══════════════════════════════════════════════════════════════════ */
 
+import { instant } from "./format.ts";
+
 /* ── api/src/permissions.ts ──────────────────────────────────────── */
 
 export const ROLES = [
@@ -906,6 +908,8 @@ export const PHONE_ROUTES: Readonly<Record<string, string>> = {
      phone's hub (the hub has no web twin; its MODULE.md). Guest messages
      stays on the website: the phone's Messages is only its card. */
   "/h/:code/requests": "/guest-services/:code/requests",
+  /* mobile/t2-approvals (4 Nov) */
+  "/h/:code/approvals": "/approvals/:code",
   "/h/:code/wake-up-calls": "/guest-services/:code/wake-up-calls",
   "/h/:code/lost-property": "/guest-services/:code/lost-property",
   "/h/:code/online-checkin": "/guest-services/:code/online-checkin",
@@ -951,7 +955,8 @@ export const initials = (name: string) =>
 
 /** src/lib/format.ts relative: date-fns's formatDistanceToNow with its suffix. */
 export function relative(at: string, now = Date.now()): string {
-  const then = Date.parse(at);
+  /* Through the core's reader: Postgres's text reads NaN on a phone (MAPR-2, MEMORY 7). */
+  const then = Date.parse(instant(at));
   if (Number.isNaN(then)) return "-";
   const minutes = Math.round(Math.abs(now - then) / 60_000);
   const n = (count: number, one: string) => `${count} ${one}${count === 1 ? "" : "s"}`;
