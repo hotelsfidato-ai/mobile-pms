@@ -1,0 +1,18 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+TERMINAL SETUP
+
+Terminal
+
+Which outlet is this terminal in? Asked once. This screen is meant to stay open on a fixed terminal, so the answer is remembered on this device rather than on the person signed into it.
+
+Round C test
+RCFIX
+Fidato Restaurant
+REST
+Table Test Restaurant
+TBTEST
+← Back to the console

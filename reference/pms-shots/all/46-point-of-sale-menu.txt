@@ -1,0 +1,426 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Menu
+22 items
+
+What the outlets sell, and what each item is taxed at.
+
+Import sides
+Import the menu
+Dishes
+Add-ons
+
+These prices are yours
+
+Nothing here was shipped with the system. A price changed today applies to the next order - bills already printed keep the price they were sold at.
+
+Add a part of the menu
+
+Starters, Main course, Beverages - whatever the card is organised by.
+
+Add
+Course Wire Drinks
+Any
+-
+Restaurant
+Bar
+Banquet
+Everything else
+Wire Drink
+5%
+₹100.00
+MRP -
+Any
+-
+Add variation
+Out of stock
+Take off
+Free
+0%
+5%
+12%
+18%
+Add
+Course Wire Test
+1
+-
+Restaurant
+Bar
+Banquet
+Everything else
+Wire Main
+5%
+₹100.00
+MRP -
+2
+-
+Add variation
+Out of stock
+Take off
+Wire Starter
+5%
+₹100.00
+MRP -
+1*
+-
+Add variation
+Out of stock
+Take off
+Free
+0%
+5%
+12%
+18%
+Add
+Starters
+Any
+-
+Restaurant
+Bar
+Banquet
+Everything else
+Bhaaji Pau
+5%
+-
+Any
+-
+Change variations
+Out of stock
+Take off
+
+VARIATIONOil ₹300.00 (MRP -) · Butter ₹400.00 (MRP -)
+
+SIDES
+
+Onions
+₹25.00
+Out of stock
+Coriander Chutney
+₹25.00
+Out of stock
+Curd
+₹25.00
+Out of stock
+Pudina Chutney
+₹25.00
+Out of stock
+Chicken 65
+5%
+₹360.00
+MRP -
+Any
+-
+Add variation
+Out of stock
+Take off
+Paneer Tikka
+5%
+₹320.00
+MRP ₹350.00
+Any
+-
+Add variation
+Out of stock
+Take off
+Papad Masala
+5%
+₹90.00
+MRP -
+Any
+-
+Add variation
+Out of stock
+Take off
+Veg Manchurian
+5%
+₹280.00
+MRP -
+Any
+-
+Add variation
+Out of stock
+Take off
+Free
+0%
+5%
+12%
+18%
+Add
+Main course
+Any
+-
+Restaurant
+Bar
+Banquet
+Everything else
+Butter Roti
+5%
+₹40.00
+MRP -
+Any
+-
+Add variation
+Out of stock
+Take off
+Chicken Curry
+5%
+₹420.00
+MRP -
+Any
+-
+Add variation
+Out of stock
+Take off
+Dal Tadka
+5%
+₹260.00
+MRP ₹280.00
+Any
+-
+Add variation
+Out of stock
+Take off
+Jeera Rice
+5%
+₹180.00
+MRP -
+Any
+-
+Add variation
+Out of stock
+Take off
+Paneer Butter Masala
+5%
+₹340.00
+MRP -
+Any
+-
+Add variation
+Out of stock
+Take off
+Veg Biryani
+5%
+₹310.00
+MRP -
+Any
+-
+Add variation
+Out of stock
+Take off
+Free
+0%
+5%
+12%
+18%
+Add
+Beverages
+Any
+-
+Restaurant
+Bar
+Banquet
+Everything else
+Cold Coffee
+5%
+₹160.00
+MRP -
+Any
+-
+Add variation
+Out of stock
+Take off
+Fresh Lime Soda
+5%
+₹120.00
+MRP -
+Any
+-
+Add variation
+Out of stock
+Take off
+Masala Chai
+5%
+₹60.00
+MRP -
+Any
+-
+Add variation
+Out of stock
+Take off
+Packaged Water 1L
+18%
+₹40.00
+MRP -
+Any
+-
+Add variation
+Out of stock
+Take off
+Free
+0%
+5%
+12%
+18%
+Add
+Desserts
+Any
+-
+Restaurant
+Bar
+Banquet
+Everything else
+Gulab Jamun
+5%
+₹140.00
+MRP -
+Any
+-
+Add variation
+Out of stock
+Take off
+Ice Cream
+5%
+₹120.00
+MRP -
+Any
+-
+Add variation
+Out of stock
+Take off
+Free
+0%
+5%
+12%
+18%
+Add
+A9 Bar
+Any
+-
+Restaurant
+Bar
+Banquet
+Everything else
+A9 Imperial Blue
+5%
+-
+Any
+-
+Change variations
+Out of stock
+Take off
+
+VARIATION30 ml ₹160.00 (MRP -) · 60 ml ₹310.00 (MRP -) · 90 ml ₹460.00 (MRP -) · NIP ₹900.00 (MRP -)
+
+A9 Kingfisher Strong
+5%
+-
+Any
+-
+Change variations
+Out of stock
+Take off
+
+VARIATION650 ml ₹270.00 (MRP -)
+
+Free
+0%
+5%
+12%
+18%
+Add
+Sides
+Add a group of sides
+
+MENUTEST BreadChoose 1 to 2
+
+Edit
+Dishes
+
+Not on any dish yet.
+
+Naan
+₹45.00
+Change
+Remove
+Kulcha
+₹50.00
+Change
+Remove
+Add option
+
+MENUTEST JainAny number, or none
+
+Edit
+Dishes
+
+Not on any dish yet.
+
+Jain
+₹10.00
+Change
+Remove
+Add option
+
+MENUTEST PreferencesAny number, or none
+
+Edit
+Dishes
+
+Not on any dish yet.
+
+No onion
+Free
+Change
+Remove
+Add option
+
+MENUTEST RaitaChoose up to 1
+
+Edit
+Dishes
+
+Not on any dish yet.
+
+Plain
+₹30.00
+Change
+Remove
+Boondi
+₹40.00
+Change
+Remove
+Add option
+
+SidesChoose up to 4
+
+Edit
+Dishes
+
+On Bhaaji Pau
+
+Onions
+₹25.00
+Change
+Remove
+Coriander Chutney
+₹25.00
+Change
+Remove
+Curd
+₹25.00
+Change
+Remove
+Pudina Chutney
+₹25.00
+Change
+Remove
+Add option
+Promotions
+Add a promotion
+
+A biller may take up to 10% off a bill by hand. Anything larger is one of these, applied by code - so it is the same concession every time, and the month-end report can count what it cost.
+
+None set up. Until there is one, a discount above the cap is refused at the till.

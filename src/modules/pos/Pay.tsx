@@ -352,7 +352,9 @@ function CashIdFields({ value, onChange }: { value: CashId; onChange: (next: Cas
 
 /** Print the bill: queued for the bill-printer computer (POST bill-print),
     else from the phone (expo-print, M-9). */
-export function PrintBill({ hotel, orderId, onPrinted }: { hotel: Hotel; orderId: string; onPrinted?: () => void }) {
+/** `round`: a table's tile draws it as the picture's 44 px round printer
+    (all/42-point-of-sale-tables), beside the Eye; the order screen as a button. */
+export function PrintBill({ hotel, orderId, onPrinted, round }: { hotel: Hotel; orderId: string; onPrinted?: () => void; round?: boolean }) {
   const code = hotel.code;
   const cache = useQueryClient();
   const session = useSession();
@@ -411,8 +413,23 @@ export function PrintBill({ hotel, orderId, onPrinted }: { hotel: Hotel; orderId
 
   return (
     <View style={{ gap: 8 }}>
-      <Btn label="Print the bill" icon={Printer} busy={busy && ask == null} disabled={busy || why != null} onPress={() => void print()} />
-      {why ? <Text style={[t.caption, { color: c.grey600 }]}>{why}</Text> : null}
+      {round ? (
+        <Pressable
+          /* Refused: the API's sentence, said when tapped (rule 1), as the tile's own buttons. */
+          onPress={() => (why ? setSaid({ tone: "warn", title: "Not printed", text: why }) : void print())} disabled={busy}
+          accessibilityRole="button" accessibilityLabel="Print the bill" accessibilityHint={why ?? undefined}
+          accessibilityState={{ disabled: busy || why != null, busy: busy && ask == null }}
+          style={({ pressed }) => ({
+            width: 44, height: 44, borderRadius: 22, borderWidth: 1, borderColor: c.grey300, alignItems: "center", justifyContent: "center",
+            backgroundColor: pressed ? c.grey50 : c.white, opacity: why != null ? 0.4 : 1,
+          })}
+        >
+          {busy && ask == null ? <ActivityIndicator size="small" color={c.grey600} /> : <Printer size={16} color={c.grey600} />}
+        </Pressable>
+      ) : (
+        <Btn label="Print the bill" icon={Printer} busy={busy && ask == null} disabled={busy || why != null} onPress={() => void print()} />
+      )}
+      {why && !round ? <Text style={[t.caption, { color: c.grey600 }]}>{why}</Text> : null}
       {said ? <Notice said={said} /> : null}
       <Sheet
         open={ask != null} title={ask?.title ?? ""} body={ask?.body} busy={busy}

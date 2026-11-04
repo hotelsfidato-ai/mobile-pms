@@ -1,0 +1,84 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Tables
+
+The room as it stands. Tap any table to take an order on it - the pad opens here, and nothing reaches the kitchen until you send it.
+
+New parcel
+Close early
+
+Kitchen KOTs wait: Virtual Kitchen not seen since 7:35 AM
+Set up
+
+Bar KOTs wait: Virtual Bar not seen since 7:35 AM
+Set up
+
+Free
+Running
+In the kitchen
+Bill printed
+Paid - clear it
+Closed unpaid - clear it
+Parcels
+13440 min
+Rahul
+₹966
+A/C
+AC1
+6 seats
+AC2
+Joined to AC3
+5096 min
+AC3
+₹210
+4801 min
+AC4
+₹210
+4334 min
+AC5
+₹105
+AC6
+4 seats
+AC7
+6 seats
+AC8
+4 seats
+13441 min
+AC9
+Closed unpaid
+3 ready
+Clear
+13441 min
+AC10
+Closed unpaid
+Clear
+Non A/C
+N1
+6 seats
+N2
+4 seats
+N3
+4 seats
+779 min
+N4
+₹441
+Clear
+N5
+4 seats
+N6
+4 seats
+Bar
+B1
+6 seats
+13441 min
+B2
+Closed unpaid
+2 ready
+Clear
+B3
+4 seats
+B4
+6 seats

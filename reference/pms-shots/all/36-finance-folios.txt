@@ -1,0 +1,211 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Folios
+12 open
+
+Open folios. A charge is never edited - a wrong posting is reversed, and the reversal is its own line.
+
+Outstanding
+
+₹68,818
+
+12 folios owing
+
+Overpaid
+
+₹0
+
+Nothing to refund
+
+Net position
+
+₹68,818
+
+Owed to the property, less refunds
+
+12 of 12
+-
+Due in
+
+P6MSG Guest
+
+P6MSG-OTA
+
+Type
+Superior
+Arrival
+11 Oct 2026
+Departure
+12 Oct 2026
+Balance
+₹1,050
+-
+Due in
+
+P6MSG Guest
+
+P6MSG-OWN
+
+Type
+Superior
+Arrival
+11 Oct 2026
+Departure
+12 Oct 2026
+Balance
+₹1,050
+205
+In house
+
+Priya Menon
+
+FH-2608-4863
+
+Type
+Superior
+Arrival
+10 Oct 2026
+Departure
+13 Oct 2026
+Balance
+₹2,653
+206
+In house
+
+Shridhar Kamble
+
+FH-2608-4864
+
+Type
+Superior
+Arrival
+10 Oct 2026
+Departure
+13 Oct 2026
+Balance
+₹3,765
+202
+In house
+
+Vikram Desai
+
+FH-2608-4862
+
+Type
+Superior
+Arrival
+10 Oct 2026
+Departure
+13 Oct 2026
+Balance
+₹3,776
+307
+In house
+
+A3 Test Gokhale
+
+FH-5EL-2610-5055
+
+Type
+Deluxe
+Arrival
+11 Oct 2026
+Departure
+13 Oct 2026
+Balance
+₹3,884
+209
+In house
+
+A3 Test Iyer
+
+FH-5EL-2610-5050
+
+Type
+Superior
+Arrival
+11 Oct 2026
+Departure
+13 Oct 2026
+Balance
+₹4,304
+204
+In house
+
+A3 Test Desai
+
+FH-5EL-2610-5049
+
+Type
+Superior
+Arrival
+11 Oct 2026
+Departure
+13 Oct 2026
+Balance
+₹4,304
+301
+Checked out
+
+Kalyani Rege
+
+FH-2608-5001
+
+Type
+Deluxe
+Arrival
+8 Oct 2026
+Departure
+9 Oct 2026
+Balance
+₹5,516
+204
+No show
+
+Lata Bhosale
+
+FH-2608-5005
+
+Type
+Superior
+Arrival
+9 Oct 2026
+Departure
+11 Oct 2026
+Balance
+₹6,000
+203
+Due out
+
+Omkar Shinde
+
+FH-2608-4859
+
+Type
+Superior
+Arrival
+9 Oct 2026
+Departure
+11 Oct 2026
+Balance
+₹7,582
+302
+Checked out
+
+Aditya Rane
+
+FH-2608-5010
+
+Type
+Deluxe
+Arrival
+22 Sep 2026
+Departure
+25 Sep 2026
+Balance
+₹24,935
+
+A positive balance is owed by the guest; a negative one is owed to them. Both are real and both print - neither is hidden or shown as zero.
