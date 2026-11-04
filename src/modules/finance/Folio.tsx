@@ -142,9 +142,7 @@ function Bill({ hotel, stay, role, back, onRefresh, onLeft }: {
           </View>
 
           {stay.status === "checked-out" ? <TaxInvoices code={code} stayId={stay.id} role={role} onSaid={setSaid} onDone={done} /> : null}
-          {stay.status === "checked-out" ? null : (
-            <CheckOutPanel hotel={hotel} stay={stay} balance={balance} role={role} onLeft={left} onSaid={setSaid} onReread={reread} />
-          )}
+          <CheckOutPanel hotel={hotel} stay={stay} balance={balance} role={role} onLeft={left} onSaid={setSaid} onReread={reread} />
 
           {open === "charge" ? <AddChargeSheet hotel={hotel} stay={stay} role={role} onClose={() => setOpen(null)} onDone={done} /> : null}
           {open === "split" ? <SplitSheet hotel={hotel} stay={stay} onClose={() => setOpen(null)} onDone={done} /> : null}
