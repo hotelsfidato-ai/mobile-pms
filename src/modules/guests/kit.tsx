@@ -1,6 +1,6 @@
-import type { LucideIcon } from "lucide-react-native";
+import { Search, type LucideIcon } from "lucide-react-native";
 import type { ReactNode } from "react";
-import { Text, View } from "react-native";
+import { Text, TextInput, View } from "react-native";
 import { initials } from "../../core/menu";
 import { c, face, space, t } from "../../core/theme";
 import { body } from "../guest-services/kit";
@@ -71,6 +71,30 @@ export function Panel({ title, action, children, flush }: { title: string; actio
         {action}
       </View>
       <View style={flush ? undefined : { paddingHorizontal: space.cardX, paddingVertical: space.cardY, gap: 8 }}>{children}</View>
+    </View>
+  );
+}
+
+/** Input.tsx SearchInput: a 44 px box, the glass inside it on the left, 16 px type. */
+export function SearchBox({ value, onChangeText, placeholder, label }: { value: string; onChangeText: (v: string) => void; placeholder: string; label: string }) {
+  return (
+    <View style={{ justifyContent: "center" }}>
+      <View pointerEvents="none" style={{ position: "absolute", left: 12 }}><Search size={16} color={c.grey500} /></View>
+      <TextInput
+        value={value} onChangeText={onChangeText} placeholder={placeholder} accessibilityLabel={label} autoFocus
+        autoCorrect={false} autoCapitalize="none" returnKeyType="search" placeholderTextColor={c.grey400}
+        style={{ minHeight: 44, paddingLeft: 36, paddingRight: 12, borderRadius: 10, borderWidth: 1, borderColor: c.grey300, backgroundColor: c.white, fontSize: 16, color: c.ink900, ...face[500] }}
+      />
+    </View>
+  );
+}
+
+/** Guest 360's figures as rows: the label left, the value right, a hairline between. */
+export function FigureLine({ label, value, first }: { label: string; value: string; first?: boolean }) {
+  return (
+    <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "baseline", gap: 16, paddingVertical: 8, borderTopWidth: first ? 0 : 1, borderTopColor: c.grey100 }}>
+      <Text style={[body, { color: c.grey600 }]}>{label}</Text>
+      <Text style={[body, t.tab, { color: c.ink900 }]}>{value}</Text>
     </View>
   );
 }
