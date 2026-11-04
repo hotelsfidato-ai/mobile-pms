@@ -32,3 +32,16 @@ export function daysBehind(h: { today?: string; businessDate?: string }): number
   if (!h.today || !h.businessDate || h.businessDate >= h.today) return 0;
   return Math.round((Date.parse(`${h.today}T00:00:00Z`) - Date.parse(`${h.businessDate}T00:00:00Z`)) / 86_400_000);
 }
+
+/** A server time as a phone's engine reads it. The API sends some times in
+    Postgres's own text ("2026-10-31 07:35:58.215147+05:30"): a browser and
+    node read that, Hermes reads only ISO and answers NaN (MPOS-1, MGS-2,
+    MEMORY 7, PMS R-18). Every server time goes through this before `Date`. */
+export const instant = (text: string) =>
+  text.replace(" ", "T").replace(/(\.\d{3})\d+/, "$1").replace(/([+-]\d\d)$/, "$1:00");
+/** A server time as milliseconds; null when there is none or it cannot be read. */
+export function msAt(text: string | null | undefined): number | null {
+  if (!text) return null;
+  const ms = Date.parse(instant(text));
+  return Number.isNaN(ms) ? null : ms;
+}

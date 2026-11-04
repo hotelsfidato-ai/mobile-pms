@@ -1,4 +1,5 @@
 import type { OutboxEntry } from "../../core/offline.ts";
+import { instant } from "../../core/format.ts";
 
 /* ══════════════════════════════════════════════════════════════════
    THE PASS'S RULES — the web's Kitchen screen, ported, so a phone and the
@@ -181,10 +182,8 @@ export function clock(at: Date): string {
   const h = at.getHours();
   return `${h % 12 || 12}:${String(at.getMinutes()).padStart(2, "0")} ${h < 12 ? "AM" : "PM"}`;
 }
-/** The API sends Postgres's own text ("2026-10-31 07:35:58.215147+05:30"):
-    a browser reads it, a phone's engine (Hermes) reads only ISO. */
-export const instant = (text: string) =>
-  text.replace(" ", "T").replace(/(\.\d{3})\d+/, "$1").replace(/([+-]\d\d)$/, "$1:00");
+/** The API sends Postgres's own text: the core's reader (format.ts, MPOS-1). */
+export { instant };
 
 /** KotStation.tsx since: the time today, else "16 Oct 2026, 4:05 PM" (dateTime). */
 export function since(iso: string | null, now: Date): string {

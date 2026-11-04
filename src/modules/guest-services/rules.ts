@@ -11,6 +11,7 @@
    ══════════════════════════════════════════════════════════════════ */
 
 import type { Team } from "./roles.ts";
+import { instant } from "../../core/format.ts";
 
 /* ── Dates, as the web writes them ─────────────────────────────── */
 
@@ -18,11 +19,9 @@ const MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct
 /** A day ("2026-10-17") is that day on the phone's clock; a moment is read
     on the phone's clock, as the web's browser does. ponytail: the web reads
     a bare day as UTC midnight - the same day in India, where it runs. */
-/** A server moment in Postgres's own text ("2026-10-31 07:35:58.215147+05:30") as ISO, which is all
-    a phone's engine (Hermes) reads - node and a browser read both (MPOS-1; the same as pos/floor.ts
-    `instant`). */
-export const instant = (text: string) =>
-  text.replace(" ", "T").replace(/(\.\d{3})\d+/, "$1").replace(/([+-]\d\d)$/, "$1:00");
+/** A server moment in Postgres's own text, as a phone's engine reads it: the
+    core's reader (format.ts; MGS-2, MPOS-1). */
+export { instant };
 const toDate = (v: string) =>
   /^\d{4}-\d{2}-\d{2}$/.test(v) ? new Date(Number(v.slice(0, 4)), Number(v.slice(5, 7)) - 1, Number(v.slice(8))) : new Date(instant(v));
 

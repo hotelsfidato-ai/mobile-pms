@@ -1,5 +1,6 @@
 import { c } from "../../core/theme.ts";
 import type { Floor, FloorTable, TableState } from "./types";
+import { instant, msAt as at } from "../../core/format.ts";
 
 /* ══════════════════════════════════════════════════════════════════
    TABLES' RULES — ported from the web (one folder up):
@@ -112,18 +113,9 @@ export const openLabel = (table: Tile) =>
   table.parcel ? `Open ${table.parcel}'s parcel`
     : table.state === "joined" ? `Open the bill ${table.label} is joined to` : `Open ${table.label}`;
 
-/** The API can send Postgres's own text for a time ("2026-10-31
-    07:35:58.215147+05:30"): a browser reads it, a phone's engine (Hermes)
-    reads only ISO and gets NaN (MPOS-1). The kitchen helper's `instant`
-    (kitchen.ts, read back from the API on 31 Oct), the same rule. */
-export const instant = (text: string) =>
-  text.replace(" ", "T").replace(/(\.\d{3})\d+/, "$1").replace(/([+-]\d\d)$/, "$1:00");
-/** A server time as milliseconds; null when there is none or it cannot be read. */
-export function at(text: string | null | undefined): number | null {
-  if (!text) return null;
-  const ms = Date.parse(instant(text));
-  return Number.isNaN(ms) ? null : ms;
-}
+/** A server time as a phone's engine reads it: the core's (format.ts, MPOS-1),
+    under the names this module's screens and check use. */
+export { instant, at };
 
 /** Closed now, and the time it reopens ("04:30 pm", the web's en-IN). */
 export function closure(outlet: Floor["outlet"], now = Date.now()): { closed: boolean; reopens: string | null } {
