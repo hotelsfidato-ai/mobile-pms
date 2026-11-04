@@ -1,0 +1,20 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Table bookings
+
+Hotel guests ask for a table from their own page. Confirm each one, or decline it with a reason they will read.
+
+Waiting
+
+Nothing is waiting for an answer.
+
+Today
+
+No table booked for today.
+
+Upcoming
+
+Nothing booked after today.

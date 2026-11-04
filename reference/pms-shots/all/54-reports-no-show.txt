@@ -1,0 +1,30 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+No show
+
+11 Oct 2026
+
+Print
+PDF
+Excel
+CSV
+
+5 Elements Akkalkot
+
+NO SHOW
+
+11 Oct 2026
+
+As On Date 11/10/2026
+
+BOOKING	GUEST	ROOM TYPE	ARRIVAL	DEPARTURE	PAX	SOURCE	RATE
+No show
+FH-2608-4866	Rohit Deshpande	Superior	11/10/2026	13/10/2026	3	go-MMT	₹3,433.68
+FH-2608-4867	Meera Iyer	Superior	11/10/2026	14/10/2026	2	go-MMT	₹2,939.30
+
+Printed 31/10/2026, 07:28:14 pm
+
+Test GM

@@ -1,0 +1,37 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+City ledger
+
+11 Oct 2026
+
+Print
+PDF
+Excel
+CSV
+Ignore zero balance account
+
+5 Elements Akkalkot
+
+CITY LEDGER
+
+11 Oct 2026
+
+Date From 11/10/2026 To 11/10/2026 Ignore zero balance account Yes
+
+ACCOUNT NAME	CONTACT PERSON	PHONE	OPENING BALANCE	DEBIT	CREDIT	CLOSING BALANCE
+City Ledger - Summary
+A4 Test Traders	A4 Test Contact	-	₹0.00	₹7,767.90	₹0.00	₹7,767.90
+Total			₹0.00	₹7,767.90	₹0.00	₹7,767.90
+
+* Debit is the bills transferred to the account (settled "Bill to company") in the period.
+
+* Credit is what the account paid, recorded on Company accounts, by the date it reached the hotel.
+
+* Opening Balance is everything sent less everything paid before the period; Closing Balance is Opening + Debit - Credit.
+
+Printed 31/10/2026, 07:27:30 pm
+
+Test GM

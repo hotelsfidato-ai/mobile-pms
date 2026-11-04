@@ -1,0 +1,35 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Due out
+1 room
+
+Departing Sunday, 11 October 2026. Check-out unlocks when the bill reaches zero.
+
+In house now10
+Due out1
+
+1 departure still owing ₹7,582
+
+Settle from the Bill tab. Check-out stays disabled with its reason until each balance clears.
+
+1 of 1
+203
+Due out
+
+Omkar Shinde
+
+FH-2608-4859
+
+Type
+Superior
+Plan
+CP
+Arrival
+9 Oct 2026
+Departure
+11 Oct 2026
+Balance
+₹7,582

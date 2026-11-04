@@ -1,0 +1,731 @@
+[
+ {
+  "name": "01-home-dashboard",
+  "to": "/",
+  "as": "dev-gm",
+  "path": "/",
+  "title": "Dashboard",
+  "height": 2681,
+  "ok": true
+ },
+ {
+  "name": "02-home-rooms",
+  "to": "/h/5EL/stay",
+  "as": "dev-gm",
+  "path": "/h/5EL/stay",
+  "title": "Rooms",
+  "height": 1468,
+  "ok": true
+ },
+ {
+  "name": "03-home-calendar",
+  "to": "/h/5EL/calendar",
+  "as": "dev-gm",
+  "path": "/h/5EL/calendar",
+  "title": "Calendar",
+  "height": 1445,
+  "ok": true
+ },
+ {
+  "name": "04-front-desk-arrivals",
+  "to": "/h/5EL/arrivals",
+  "as": "dev-gm",
+  "path": "/h/5EL/arrivals",
+  "title": "Arrivals",
+  "height": 4886,
+  "ok": true
+ },
+ {
+  "name": "05-front-desk-arrivals-upcoming",
+  "to": "/h/5EL/arrivals/upcoming",
+  "as": "dev-gm",
+  "path": "/h/5EL/arrivals/upcoming",
+  "title": "Arrivals",
+  "height": 3017,
+  "ok": true
+ },
+ {
+  "name": "06-front-desk-in-house",
+  "to": "/h/5EL/in-house",
+  "as": "dev-gm",
+  "path": "/h/5EL/in-house",
+  "title": "In house",
+  "height": 2746,
+  "ok": true
+ },
+ {
+  "name": "07-front-desk-in-house-due-out",
+  "to": "/h/5EL/in-house/due-out",
+  "as": "dev-gm",
+  "path": "/h/5EL/in-house/due-out",
+  "title": "Due out",
+  "height": 844,
+  "ok": true
+ },
+ {
+  "name": "08-front-desk-walk-ins",
+  "to": "/h/5EL/walk-ins",
+  "as": "dev-gm",
+  "path": "/h/5EL/walk-ins",
+  "title": "Walk-ins",
+  "height": 9000,
+  "ok": true
+ },
+ {
+  "name": "09-front-desk-online-check-in",
+  "to": "/h/5EL/online-checkin",
+  "as": "dev-gm",
+  "path": "/h/5EL/online-checkin",
+  "title": "",
+  "height": 844,
+  "ok": true
+ },
+ {
+  "name": "10-front-desk-housekeeping",
+  "to": "/h/5EL/housekeeping",
+  "as": "dev-gm",
+  "path": "/h/5EL/housekeeping",
+  "title": "Housekeeping",
+  "height": 4505,
+  "ok": true
+ },
+ {
+  "name": "11-front-desk-work-orders",
+  "to": "/h/5EL/work-orders",
+  "as": "dev-gm",
+  "path": "/h/5EL/work-orders",
+  "title": "Work orders",
+  "height": 844,
+  "ok": true
+ },
+ {
+  "name": "12-bookings-all-bookings",
+  "to": "/h/5EL/reservations",
+  "as": "dev-gm",
+  "path": "/h/5EL/reservations",
+  "title": "All bookings",
+  "height": 9000,
+  "ok": true
+ },
+ {
+  "name": "13-bookings-groups",
+  "to": "/h/5EL/groups",
+  "as": "dev-gm",
+  "path": "/h/5EL/groups",
+  "title": "Groups",
+  "height": 844,
+  "ok": true
+ },
+ {
+  "name": "14-bookings-new-booking",
+  "to": "/h/5EL/book",
+  "as": "dev-gm",
+  "path": "/h/5EL/book",
+  "title": "New booking",
+  "height": 3632,
+  "ok": true
+ },
+ {
+  "name": "15-guests-crm-guests",
+  "to": "/guests",
+  "as": "dev-gm",
+  "path": "/guests",
+  "title": "Guests",
+  "height": 9000,
+  "ok": true
+ },
+ {
+  "name": "16-guests-crm-companies-and-agents",
+  "to": "/companies",
+  "as": "dev-gm",
+  "path": "/companies",
+  "title": "Companies and agents",
+  "height": 3727,
+  "ok": true
+ },
+ {
+  "name": "17-guests-crm-guest-messages",
+  "to": "/h/5EL/guest-messages",
+  "as": "dev-gm",
+  "path": "/h/5EL/guest-messages",
+  "title": "Guest messages",
+  "height": 5440,
+  "ok": true
+ },
+ {
+  "name": "18-guests-crm-reviews",
+  "to": "/h/5EL/reviews",
+  "as": "dev-gm",
+  "path": "/h/5EL/reviews",
+  "title": "Reviews",
+  "height": 5198,
+  "ok": true
+ },
+ {
+  "name": "19-guests-crm-guest-360",
+  "to": "/crm/guests",
+  "as": "dev-gm",
+  "path": "/crm/guests",
+  "title": "Guest 360",
+  "height": 844,
+  "ok": true
+ },
+ {
+  "name": "20-guests-crm-possible-same-person",
+  "to": "/crm/same-person",
+  "as": "dev-gm",
+  "path": "/crm/same-person",
+  "title": "Possible same person",
+  "height": 6185,
+  "ok": true
+ },
+ {
+  "name": "21-across-properties-properties",
+  "to": "/properties",
+  "as": "dev-gm",
+  "path": "/properties",
+  "title": "Properties",
+  "height": 844,
+  "ok": true
+ },
+ {
+  "name": "22-across-properties-people",
+  "to": "/people",
+  "as": "dev-gm",
+  "path": "/people",
+  "title": "People",
+  "height": 3000,
+  "ok": true
+ },
+ {
+  "name": "23-configuration-room-types",
+  "to": "/h/5EL/room-types",
+  "as": "dev-gm",
+  "path": "/settings/rooms/room-types",
+  "title": "Room types",
+  "height": 2303,
+  "ok": true
+ },
+ {
+  "name": "24-configuration-rate-plans",
+  "to": "/h/5EL/rate-plans",
+  "as": "dev-gm",
+  "path": "/h/5EL/rates",
+  "title": "Rates",
+  "height": 2174,
+  "ok": true
+ },
+ {
+  "name": "25-configuration-cancellation-terms",
+  "to": "/h/5EL/cancellation-terms",
+  "as": "dev-gm",
+  "path": "/h/5EL/cancellation-terms",
+  "title": "Cancellation terms",
+  "height": 844,
+  "ok": true
+ },
+ {
+  "name": "26-configuration-booking-sources",
+  "to": "/h/5EL/booking-sources",
+  "as": "dev-gm",
+  "path": "/h/5EL/booking-sources",
+  "title": "Booking sources",
+  "height": 2453,
+  "ok": true
+ },
+ {
+  "name": "27-rooms-and-rates-pricing",
+  "to": "/h/5EL/pricing",
+  "as": "dev-gm",
+  "path": "/h/5EL/rates",
+  "title": "Rates",
+  "height": 2174,
+  "ok": true
+ },
+ {
+  "name": "28-rooms-and-rates-rate-calendar",
+  "to": "/h/5EL/grids",
+  "as": "dev-gm",
+  "path": "/h/5EL/rates",
+  "title": "Rates",
+  "height": 2174,
+  "ok": true
+ },
+ {
+  "name": "29-rooms-and-rates-rate-performance",
+  "to": "/h/5EL/rates",
+  "as": "dev-gm",
+  "path": "/h/5EL/rates",
+  "title": "Rates",
+  "height": 2174,
+  "ok": true
+ },
+ {
+  "name": "30-rooms-and-rates-revenue-outlook",
+  "to": "/h/5EL/revenue-outlook",
+  "as": "dev-gm",
+  "path": "/h/5EL/revenue-outlook",
+  "title": "Revenue outlook",
+  "height": 4718,
+  "ok": true
+ },
+ {
+  "name": "31-store-and-equipment-store",
+  "to": "/h/5EL/stores",
+  "as": "dev-gm",
+  "path": "/h/5EL/stores",
+  "title": "Store",
+  "height": 3318,
+  "ok": true
+ },
+ {
+  "name": "32-store-and-equipment-equipment",
+  "to": "/h/5EL/equipment",
+  "as": "dev-gm",
+  "path": "/h/5EL/equipment",
+  "title": "Equipment",
+  "height": 844,
+  "ok": true
+ },
+ {
+  "name": "33-store-and-equipment-places-and-suppliers",
+  "to": "/h/5EL/places",
+  "as": "dev-gm",
+  "path": "/h/5EL/places",
+  "title": "Places and suppliers",
+  "height": 922,
+  "ok": true
+ },
+ {
+  "name": "34-store-and-equipment-purchasing",
+  "to": "/h/5EL/purchasing",
+  "as": "dev-gm",
+  "path": "/h/5EL/purchasing",
+  "title": "Purchasing",
+  "height": 1718,
+  "ok": true
+ },
+ {
+  "name": "35-store-and-equipment-who-may-ask-to-buy",
+  "to": "/h/5EL/purchasing/who-may-ask",
+  "as": "dev-gm",
+  "path": "/h/5EL/purchasing/who-may-ask",
+  "title": "Who may ask to buy",
+  "height": 1375,
+  "ok": true
+ },
+ {
+  "name": "36-finance-folios",
+  "to": "/h/5EL/folios",
+  "as": "dev-gm",
+  "path": "/h/5EL/folios",
+  "title": "Folios",
+  "height": 3363,
+  "ok": true
+ },
+ {
+  "name": "37-finance-invoices",
+  "to": "/h/5EL/invoices",
+  "as": "dev-gm",
+  "path": "/h/5EL/invoices",
+  "title": "Invoices",
+  "height": 9000,
+  "ok": true
+ },
+ {
+  "name": "38-finance-payments",
+  "to": "/h/5EL/payments",
+  "as": "dev-gm",
+  "path": "/h/5EL/payments",
+  "title": "Payments",
+  "height": 9000,
+  "ok": true
+ },
+ {
+  "name": "39-finance-cashiering",
+  "to": "/h/5EL/cashiering",
+  "as": "dev-gm",
+  "path": "/h/5EL/cashiering",
+  "title": "Cashiering",
+  "height": 1088,
+  "ok": true
+ },
+ {
+  "name": "40-finance-company-accounts",
+  "to": "/h/5EL/city-ledger",
+  "as": "dev-gm",
+  "path": "/h/5EL/city-ledger",
+  "title": "Company accounts",
+  "height": 844,
+  "ok": true
+ },
+ {
+  "name": "41-finance-form-c",
+  "to": "/h/5EL/form-c",
+  "as": "dev-gm",
+  "path": "/h/5EL/form-c",
+  "title": "Form III",
+  "height": 901,
+  "ok": true
+ },
+ {
+  "name": "42-point-of-sale-tables",
+  "to": "/h/5EL/floor",
+  "as": "dev-gm",
+  "path": "/pos/5EL/tables",
+  "title": "Tables",
+  "height": 2247,
+  "ok": true
+ },
+ {
+  "name": "43-point-of-sale-till",
+  "to": "/h/5EL/till",
+  "as": "dev-gm",
+  "path": "/pos/5EL/till",
+  "title": "Till",
+  "height": 2929,
+  "ok": true
+ },
+ {
+  "name": "44-point-of-sale-terminal",
+  "to": "/h/5EL/till/terminal",
+  "as": "dev-gm",
+  "path": "/pos/5EL/terminal",
+  "title": "Terminal",
+  "height": 844,
+  "ok": true
+ },
+ {
+  "name": "45-point-of-sale-kitchen",
+  "to": "/h/5EL/kitchen",
+  "as": "dev-gm",
+  "path": "/pos/5EL/kitchen",
+  "title": "Kitchen",
+  "height": 9000,
+  "ok": true
+ },
+ {
+  "name": "46-point-of-sale-menu",
+  "to": "/h/5EL/menu",
+  "as": "dev-gm",
+  "path": "/pos/5EL/menu",
+  "title": "Menu",
+  "height": 8505,
+  "ok": true
+ },
+ {
+  "name": "47-point-of-sale-close-restaurant-day",
+  "to": "/h/5EL/till/day-end",
+  "as": "dev-gm",
+  "path": "/pos/5EL/day-end",
+  "title": "Close restaurant day",
+  "height": 3877,
+  "ok": true
+ },
+ {
+  "name": "48-point-of-sale-charges-to-rooms",
+  "to": "/h/5EL/pos",
+  "as": "dev-gm",
+  "path": "/pos/5EL/room-charges",
+  "title": "Charges to rooms",
+  "height": 3106,
+  "ok": true
+ },
+ {
+  "name": "49-reports-night-audit",
+  "to": "/h/5EL/night-audit",
+  "as": "dev-gm",
+  "path": "/h/5EL/night-audit",
+  "title": "Night audit",
+  "height": 2156,
+  "ok": true
+ },
+ {
+  "name": "50-reports-all-reports",
+  "to": "/reports",
+  "as": "dev-gm",
+  "path": "/reports",
+  "title": "All reports",
+  "height": 5251,
+  "ok": true
+ },
+ {
+  "name": "51-reports-manager-report",
+  "to": "/reports/manager",
+  "as": "dev-gm",
+  "path": "/reports/manager",
+  "title": "Manager report",
+  "height": 6324,
+  "ok": true
+ },
+ {
+  "name": "52-reports-night-audit-report",
+  "to": "/reports/night-audit",
+  "as": "dev-gm",
+  "path": "/reports/night-audit",
+  "title": "Night audit report",
+  "height": 8191,
+  "ok": true
+ },
+ {
+  "name": "53-reports-city-ledger",
+  "to": "/reports/city-ledger",
+  "as": "dev-gm",
+  "path": "/reports/city-ledger",
+  "title": "City ledger",
+  "height": 919,
+  "ok": true
+ },
+ {
+  "name": "54-reports-no-show",
+  "to": "/reports/no-show",
+  "as": "dev-gm",
+  "path": "/reports/no-show",
+  "title": "No show",
+  "height": 844,
+  "ok": true
+ },
+ {
+  "name": "55-reports-monthly-occupancy",
+  "to": "/reports/monthly-occupancy",
+  "as": "dev-gm",
+  "path": "/reports/monthly-occupancy",
+  "title": "Monthly occupancy",
+  "height": 1055,
+  "ok": true
+ },
+ {
+  "name": "56-reports-monthly-statistics",
+  "to": "/reports/monthly-stats",
+  "as": "dev-gm",
+  "path": "/reports/monthly-stats",
+  "title": "Monthly statistics",
+  "height": 2323,
+  "ok": true
+ },
+ {
+  "name": "57-reports-yearly-statistics",
+  "to": "/reports/yearly-stats",
+  "as": "dev-gm",
+  "path": "/reports/yearly-stats",
+  "title": "Yearly statistics",
+  "height": 1313,
+  "ok": true
+ },
+ {
+  "name": "58-reports-lodging-tax",
+  "to": "/reports/lodging-tax",
+  "as": "dev-gm",
+  "path": "/reports/lodging-tax",
+  "title": "Lodging tax",
+  "height": 1062,
+  "ok": true
+ },
+ {
+  "name": "59-reports-gst-sales-register",
+  "to": "/reports/gst-sales",
+  "as": "dev-gm",
+  "path": "/reports/gst-sales",
+  "title": "GST sales register",
+  "height": 1769,
+  "ok": true
+ },
+ {
+  "name": "60-reports-form-f-c-form",
+  "to": "/reports/c-form",
+  "as": "dev-gm",
+  "path": "/reports/c-form",
+  "title": "Form III register",
+  "height": 932,
+  "ok": true
+ },
+ {
+  "name": "61-reports-guest-ledger",
+  "to": "/reports/guest-ledger",
+  "as": "dev-gm",
+  "path": "/reports/guest-ledger",
+  "title": "Guest ledger",
+  "height": 4180,
+  "ok": true
+ },
+ {
+  "name": "62-reports-cashier-shift",
+  "to": "/reports/cashier-shift",
+  "as": "dev-gm",
+  "path": "/reports/cashier-shift",
+  "title": "Cashier shift",
+  "height": 936,
+  "ok": true
+ },
+ {
+  "name": "63-reports-accounting-export",
+  "to": "/reports/accounting",
+  "as": "dev-gm",
+  "path": "/reports/accounting",
+  "title": "Accounting export",
+  "height": 8374,
+  "ok": true
+ },
+ {
+  "name": "64-system-approvals",
+  "to": "/h/5EL/approvals",
+  "as": "dev-gm",
+  "path": "/h/5EL/approvals",
+  "title": "Approvals",
+  "height": 1336,
+  "ok": true
+ },
+ {
+  "name": "65-system-notifications",
+  "to": "/notifications",
+  "as": "dev-gm",
+  "path": "/notifications",
+  "title": "Notifications",
+  "height": 1089,
+  "ok": true
+ },
+ {
+  "name": "66-system-administration",
+  "to": "/admin/users",
+  "as": "dev-gm",
+  "path": "/admin/users",
+  "title": "Users",
+  "height": 3256,
+  "ok": true
+ },
+ {
+  "name": "67-system-administration-roles-and-permissions",
+  "to": "/admin/roles",
+  "as": "dev-gm",
+  "path": "/settings/property/profile",
+  "title": "Profile",
+  "height": 1734,
+  "ok": true
+ },
+ {
+  "name": "68-system-administration-integrations",
+  "to": "/admin/integrations",
+  "as": "dev-gm",
+  "path": "/admin/integrations",
+  "title": "This page is not part of your role",
+  "height": 844,
+  "ok": true
+ },
+ {
+  "name": "69-system-administration-audit-log",
+  "to": "/admin/audit-log",
+  "as": "dev-gm",
+  "path": "/settings/people/audit-log",
+  "title": "Audit log",
+  "height": 9000,
+  "ok": true
+ },
+ {
+  "name": "70-system-administration-settings",
+  "to": "/admin/settings",
+  "as": "dev-gm",
+  "path": "/settings/property/profile",
+  "title": "Profile",
+  "height": 1734,
+  "ok": true
+ },
+ {
+  "name": "71-system-administration-console",
+  "to": "/admin/console",
+  "as": "dev-gm",
+  "path": "/admin/console",
+  "title": "This page is not part of your role",
+  "height": 844,
+  "ok": true
+ },
+ {
+  "name": "72-coming-soon-booking-engine",
+  "to": "/coming-soon/booking-engine",
+  "as": "dev-gm",
+  "path": "/",
+  "title": "Dashboard",
+  "height": 2681,
+  "ok": true
+ },
+ {
+  "name": "73-coming-soon-channel-manager",
+  "to": "/h/5EL/channels",
+  "as": "dev-gm",
+  "path": "/h/5EL/channels",
+  "title": "Channel manager",
+  "height": 1648,
+  "ok": true
+ },
+ {
+  "name": "74-coming-soon-contracts",
+  "to": "/coming-soon/contracts",
+  "as": "dev-gm",
+  "path": "/",
+  "title": "Dashboard",
+  "height": 2681,
+  "ok": true
+ },
+ {
+  "name": "75-coming-soon-fidato-crs",
+  "to": "/coming-soon/crs",
+  "as": "dev-gm",
+  "path": "/",
+  "title": "Dashboard",
+  "height": 2681,
+  "ok": true
+ },
+ {
+  "name": "76-coming-soon-guest-services",
+  "to": "/coming-soon/guest-services",
+  "as": "dev-gm",
+  "path": "/",
+  "title": "Dashboard",
+  "height": 2681,
+  "ok": true
+ },
+ {
+  "name": "77-coming-soon-leads-and-whatsapp",
+  "to": "/coming-soon/leads",
+  "as": "dev-gm",
+  "path": "/",
+  "title": "Dashboard",
+  "height": 2681,
+  "ok": true
+ },
+ {
+  "name": "78-coming-soon-loyalty",
+  "to": "/coming-soon/loyalty",
+  "as": "dev-gm",
+  "path": "/",
+  "title": "Dashboard",
+  "height": 2681,
+  "ok": true
+ },
+ {
+  "name": "79-coming-soon-marketing",
+  "to": "/coming-soon/marketing",
+  "as": "dev-gm",
+  "path": "/",
+  "title": "Dashboard",
+  "height": 2681,
+  "ok": true
+ },
+ {
+  "name": "80-coming-soon-online-payments",
+  "to": "/coming-soon/payments",
+  "as": "dev-gm",
+  "path": "/coming-soon/payments",
+  "title": "Online payments",
+  "height": 1368,
+  "ok": true
+ },
+ {
+  "name": "81-coming-soon-room-systems",
+  "to": "/coming-soon/room-systems",
+  "as": "dev-gm",
+  "path": "/coming-soon/room-systems",
+  "title": "Room systems",
+  "height": 1357,
+  "ok": true
+ }
+]

@@ -1,0 +1,188 @@
+9
+GO
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+All properties
+
+3 properties · each on its own business date
+
+The group today
+Last year: 0 of 3 properties
+Occupancy
+51.43%
+Month so far
+11.85%
+Month last year
+-
+Average rate (ARR)
+₹3,222
+Month so far
+₹3,326
+Month last year
+-
+RevPAR
+₹1,657
+Month so far
+₹394
+Month last year
+-
+Room revenue
+₹58,004
+Month so far
+₹1,72,972
+vs last year
+-
+Needs you
+5 Elements Akkalkot: business date 11 Oct, 20 days behind today (31 Oct)
+Close the days in Night audit
+Practice Hotel Nashik: business date 14 Oct, 17 days behind today (31 Oct)
+Close the days in Night audit
+Stock Reports Test: business date 21 Oct, 10 days behind today (31 Oct)
+Close the days in Night audit
+5 Elements Akkalkot: 5 arrivals not yet checked in
+Arjun Nair · room 210, Sneha Kulkarni · room 207, Imran Shaikh · room 208 and 2 more
+5 Elements Akkalkot: ₹7,582 outstanding on room 203
+Omkar Shinde is due out today. Settle the folio before the room releases.
+5 Elements Akkalkot: 3 guest messages waiting
+Written to the front desk from the guest's own page. Read it and mark it handled.
+5 Elements Akkalkot: 3 guest requests waiting
+Nobody has taken them yet. Take one on Guest requests and mark it done.
+5 Elements Akkalkot: Crockery in Main store: never counted
+Crockery and cutlery is counted every month. On the Store, Count a store, then choose Main store.
+5 Elements Akkalkot: 1 wake-up call due
+Call the room, then mark it done on Wake-up calls.
+5 Elements Akkalkot: 3 requests waiting for your approval
+A void, a discount, an NC, a paid-out or a purchase sent to you. Approve or reject each, with a reason.
+Practice Hotel Nashik: Setup: Logo, photos and highlights
+You asked to be reminded today.
+Stock Reports Test: Crockery in Main store: never counted
+Crockery and cutlery is counted every month. On the Store, Count a store, then choose Main store.
+5 Elements Akkalkot
+11 Oct 2026
+OCCUPANCY
+105.88%
+27.81%
+AVERAGE RATE (ARR)
+₹3,222
+₹3,326
+REVPAR
+₹3,412
+₹925
+ROOM REVENUE
+₹58,004
+₹1,72,972
+VS LAST YEAR
+-
+No last year yet
+Practice Hotel Nashik
+14 Oct 2026
+OCCUPANCY
+0%
+0%
+AVERAGE RATE (ARR)
+-
+-
+REVPAR
+₹0
+₹0
+ROOM REVENUE
+₹0
+₹0
+VS LAST YEAR
+-
+No last year yet
+Stock Reports Test
+21 Oct 2026
+OCCUPANCY
+0%
+0%
+AVERAGE RATE (ARR)
+-
+-
+REVPAR
+₹0
+₹0
+ROOM REVENUE
+₹0
+₹0
+VS LAST YEAR
+-
+No last year yet
+Navigation
+
+Main application navigation
+
+Fidato Hotels
+Front office
+Restaurant
+Settings
+Dashboard
+Approvals
+Rooms
+Calendar
+FRONT DESK
+Arrivals
+In house
+Walk-ins
+Online check-in
+Housekeeping
+Work orders
+Guest requests
+Wake-up calls
+Lost property
+BOOKINGS
+All bookings
+Groups
+CRS bookings
+New booking
+GUESTS & CRM
+Guests
+Companies and agents
+Guest messages
+Reviews
+Guest 360
+Possible same person
+SALES AND MARKETING
+3
+ACROSS PROPERTIES
+All properties
+Properties
+People
+PROPERTY SETUP
+Cancellation terms
+Booking sources
+ROOMS AND RATES
+Rates
+Revenue outlook
+DISTRIBUTION
+2
+STORE AND EQUIPMENT
+Store
+Inventory
+Equipment
+Places and suppliers
+Purchasing
+FINANCE
+Folios
+Invoices
+Payments
+Cashiering
+Cash deposits
+Company accounts
+Form III
+Supplier dues
+Online payments
+Not built yet
+BANQUET
+2
+LAUNDRY
+2
+SPA
+2
+REPORTS
+3
+SYSTEM
+4
+Find a screen
+Collapse

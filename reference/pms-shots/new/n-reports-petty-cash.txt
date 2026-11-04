@@ -1,0 +1,47 @@
+9
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Petty cash
+
+1 Oct 2026 to 11 Oct 2026
+
+Print
+PDF
+Excel
+CSV
+
+5 Elements Akkalkot
+
+PETTY CASH
+
+1 Oct 2026 to 11 Oct 2026
+
+From 01/10/2026 To 11/10/2026
+
+DATE	WHERE	CATEGORY	WHAT IT WAS FOR	AMOUNT	RECORDED BY	APPROVAL	PHOTO
+Expenses, by day
+11/10/2026
+11/10/2026	Fidato Restaurant	Kitchen	Milk for the kitchen	₹180.00	Test GM	Approved	-
+11/10/2026	Fidato Restaurant	Maintenance	Plumber for the wash area	₹450.00	Test GM	Waiting	-
+Total, 11/10/2026				₹180.00			
+Total				₹180.00			
+CATEGORY	EXPENSES	COUNTED	WAITING FOR A YES	REFUSED
+By category
+Kitchen	1	₹180.00	-	-
+Housekeeping	0	-	-	-
+Maintenance	1	-	₹450.00	-
+Office	0	-	-	-
+Other	0	-	-	-
+Total	2	₹180.00	₹450.00	-
+
+* A total counts an expense once it is approved, as the drawer and the tin count it; one recorded before approvals began counts as it is. One waiting for a yes or refused is listed and not added.
+
+* The restaurant's expenses by their business day; the front desk's by the business day the drawer opened on.
+
+* A dash for the category is an expense recorded before categories began (27 October 2026).
+
+Printed 31/10/2026, 08:23:44 pm
+
+Test GM

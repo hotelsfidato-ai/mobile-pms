@@ -1,0 +1,49 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Yearly statistics
+
+2026
+
+Print
+PDF
+Excel
+CSV
+
+5 Elements Akkalkot
+
+YEARLY STATISTICS
+
+2026
+
+Year 2026
+
+MONTH	AVAILABLE ROOMS	NIGHT SOLD	COMPLIMENTARY	OCC %	ADR	REV PAR	PAX	ROOM CHARGES	EXTRA CHARGES	TAX	RECEIPT	EXPENSE
+Year 2026
+January	0	0	0	0.00%	₹0.00	₹0.00	0	₹0.00	₹0.00	₹0.00	₹0.00	-
+February	0	0	0	0.00%	₹0.00	₹0.00	0	₹0.00	₹0.00	₹0.00	₹0.00	-
+March	374	0	0	0.00%	₹0.00	₹16.04	0	₹6,000.02	₹0.00	₹300.00	₹0.00	-
+April	510	0	0	0.00%	₹0.00	₹0.00	0	₹0.00	₹0.00	₹0.00	₹0.00	-
+May	527	189	0	35.86%	₹3,907.75	₹1,401.45	290	₹7,38,564.56	₹0.00	₹36,928.29	₹6,78,642.59	-
+June	510	382	0	74.90%	₹3,863.47	₹2,893.81	563	₹14,75,844.77	₹0.00	₹73,792.23	₹15,47,316.00	-
+July	527	323	0	61.29%	₹3,915.05	₹2,399.55	508	₹12,64,561.55	₹0.00	₹63,228.02	₹13,39,584.66	-
+August	527	370	0	70.21%	₹3,886.10	₹2,728.38	557	₹14,37,857.28	₹0.00	₹71,892.85	₹15,46,620.25	-
+September	516	211	0	40.89%	₹3,436.36	₹1,405.18	347	₹7,25,071.83	₹18,500.00	₹37,178.70	₹7,70,808.55	-
+October	527	90	1	17.27%	₹3,313.88	₹572.23	154	₹3,01,563.01	₹2,511.00	₹15,203.69	₹1,54,294.51	-
+November	510	0	0	0.00%	₹0.00	₹0.00	0	₹0.00	₹0.00	₹0.00	₹0.00	-
+December	527	2	0	0.38%	₹3,500.00	₹13.28	3	₹7,000.00	₹0.00	₹350.00	₹0.00	-
+Grand Total	5,055	1,567	1	31.02%	₹3,798.76	₹1,178.33	2,422	₹59,56,463.02	₹21,011.00	₹2,98,873.78	₹60,37,266.56	-
+
+* Occupancy and ADR count rooms sold as this hotel's switches say (Settings, Front desk rules): a complimentary room counts as sold; a day use is not counted.
+
+* A night's room charge is shown on that night. Nights not yet posted, from the business date on, are at the booking's rate.
+
+* Expense is not recorded in this system and shows "-".
+
+* Available rooms are counted from 10/03/2026, the day this property first traded. Earlier days show nothing.
+
+Printed 31/10/2026, 07:31:00 pm
+
+Test GM

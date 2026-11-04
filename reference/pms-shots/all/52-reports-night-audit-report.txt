@@ -1,0 +1,182 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Night audit report
+
+As on 11 Oct 2026
+
+Print
+PDF
+Excel
+CSV
+
+5 Elements Akkalkot
+
+NIGHT AUDIT REPORT
+
+As on 11 Oct 2026
+
+As On Date 11/10/2026
+
+ROOM	BOOKING	GUEST	SOURCE	COMPANY	RENT DATE	RATE TYPE	NRML. TARIFF	OFRD. TARIFF	TOTAL TAX	TOTAL RENT	VAR %	CHECKIN BY
+Room Charges
+210 - Superior	FH-2608-4868	Arjun Nair	Expedia	Expedia	11/10/2026	CP	₹4,099.00	₹2,647.57	₹132.38	₹2,779.95	-35.41%	-
+207 - Superior	FH-2608-4869	Sneha Kulkarni	go-MMT	go-MMT	11/10/2026	EP	₹4,099.00	₹3,169.54	₹158.48	₹3,328.02	-22.68%	-
+208 - Superior	FH-2608-4870	Imran Shaikh	Agoda	Agoda	11/10/2026	EP	₹4,099.00	₹3,377.69	₹168.88	₹3,546.57	-17.60%	-
+206 - Superior	FH-2608-4864	Shridhar Kamble	Walk-in	-	11/10/2026	CP	₹4,099.00	₹3,216.02	₹160.80	₹3,376.82	-21.54%	Test Reception
+301 - Deluxe	FH-5EL-2610-5046	A3 Test Smith	WhatsApp	-	11/10/2026	EP	₹3,699.00	₹3,699.00	₹184.95	₹3,883.95	0.00%	Test Reception
+307 - Deluxe	FH-5EL-2610-5055	A3 Test Gokhale	Walk-in	-	11/10/2026	CP	₹3,699.00	₹3,699.00	₹184.95	₹3,883.95	0.00%	Test Reception
+303 - Deluxe	FH-5EL-2610-5047	A5 Test Rane	Walk-in	-	11/10/2026	EP	₹3,699.00	₹3,699.00	₹184.95	₹3,883.95	0.00%	Test Reception
+305 - Deluxe	FH-5EL-2610-5056	A4 Test Kulkarni	Walk-in	-	11/10/2026	EP	₹3,699.00	₹3,699.00	₹184.95	₹3,883.95	0.00%	Test Reception
+302 - Deluxe	FH-5EL-2610-5048	A5 Test Wagh	Walk-in	-	11/10/2026	EP	₹3,699.00	₹3,699.00	₹184.95	₹3,883.95	0.00%	Test Reception
+305 - Deluxe	FH-5EL-2610-5057	A4 Test Kulkarni	Walk-in	-	11/10/2026	EP	₹3,699.00	₹3,699.00	₹184.95	₹3,883.95	0.00%	Test Reception
+204 - Superior	FH-5EL-2610-5049	A3 Test Desai	Website	-	11/10/2026	EP	₹4,099.00	₹4,099.00	₹204.95	₹4,303.95	0.00%	Test Reception
+303 - Deluxe	FH-5EL-2610-5058	A5 Test Rane	Walk-in	-	11/10/2026	EP	₹3,699.00	₹3,699.00	₹184.95	₹3,883.95	0.00%	Test Reception
+209 - Superior	FH-5EL-2610-5050	A3 Test Iyer	Agoda	-	11/10/2026	EP	₹4,099.00	₹4,099.00	₹204.95	₹4,303.95	0.00%	Test Reception
+302 - Deluxe	FH-5EL-2610-5059	A5 Test Wagh	Walk-in	-	11/10/2026	EP	₹3,699.00	₹3,699.00	₹184.95	₹3,883.95	0.00%	Test Reception
+202 - Superior	FH-2608-4862	Vikram Desai	Agoda	Agoda	11/10/2026	RO	₹4,099.00	₹3,275.89	₹163.79	₹3,439.68	-20.08%	Test Reception
+205 - Superior	FH-2608-4863	Priya Menon	Booking.com	Booking.com	11/10/2026	MAP	₹4,099.00	₹2,526.90	₹126.35	₹2,653.25	-38.35%	Test Reception
+Superior	P6MSG-OTA	P6MSG Guest	P6MSG Expedia	P6MSG Expedia	11/10/2026	-	₹4,099.00	₹1,000.00	₹50.00	₹1,050.00	-75.60%	-
+Superior	P6MSG-OWN	P6MSG Guest	Fidato Hotels	-	11/10/2026	-	₹4,099.00	₹1,000.00	₹50.00	₹1,050.00	-75.60%	-
+Total (18)							₹70,582.00	₹58,003.61	₹2,900.18	₹60,903.79	-17.82%	
+Complimentary
+No room was given free on this night.
+ROOM	GUEST	INVOICE NO	ARRIVAL	DEPARTURE	NIGHTS	ROOM CHARGES	EXTRA CHARGES	DISCOUNT	TAX	REFUND	PAYMENT	BALANCE
+Checked Out
+201 - Superior	Tanvi Bhide	5EL/2026-27/00003	09/10/2026 12:31:52 AM	17/10/2026 10:51:07 AM	2	₹6,747.32	₹0.00	₹0.00	₹337.37	₹0.00	₹7,084.69	₹0.00
+207 - Superior	Sudarshan Kator	-	13/10/2026 03:44:20 AM	17/10/2026 10:48:24 AM	1	₹3,059.94	₹0.00	₹0.00	₹153.00	₹0.00	₹3,212.94	₹0.00
+302 - Deluxe	Day Test Kumar	5EL/2026-27/00002	13/10/2026 02:36:16 AM	13/10/2026 02:49:29 AM	1	₹3,699.00	₹0.00	₹0.00	₹184.95	₹0.00	₹3,883.95	₹0.00
+304 - Deluxe	A5 Test More	-	09/10/2026 05:57:33 PM	13/10/2026 03:46:15 AM	2	₹3,699.00	₹0.00	₹0.00	₹184.95	₹0.00	₹3,883.95	₹0.00
+305 - Deluxe	A4 Test Kulkarni	-	09/10/2026 05:57:23 PM	20/10/2026 12:07:33 AM	2	₹7,398.00	₹380.00	₹0.00	₹388.90	₹0.00	₹8,166.90	₹0.00
+Total (5)					8	₹24,603.26	₹380.00	₹0.00	₹1,249.17	₹0.00	₹26,232.43	₹0.00
+A balance may be negative: the guest paid more than the bill came to.
+SALES TYPE	ROOM CHARGES	EXTRA CHARGES	ROOM TAX	EXTRA TAX	DISCOUNT	ADJUSTMENT	TOTAL SALES
+Daily Sales
+Room Sales	₹58,003.61	₹1,080.00	₹2,900.18	₹54.00	₹0.00	₹0.00	₹62,037.79
+Direct Room Sales	₹0.00	₹0.00	₹0.00	₹0.00	₹0.00	₹0.00	₹0.00
+Cancellation Sales	-	-	-	-	-	-	-
+No Show Sales	₹0.00	₹0.00	₹0.00	₹0.00	₹0.00	₹0.00	₹0.00
+Day Use Sales	₹0.00	₹0.00	₹0.00	₹0.00	₹0.00	₹0.00	₹0.00
+Late Checkout Sales	₹0.00	₹0.00	₹0.00	₹0.00	₹0.00	₹0.00	₹0.00
+Incidental Sales	₹0.00	₹0.00	₹0.00	₹0.00	₹0.00	₹0.00	₹0.00
+Total	₹58,003.61	₹1,080.00	₹2,900.18	₹54.00	₹0.00	₹0.00	₹62,037.79
+DATE	RECEIPT	REFERENCE	AMOUNT	USER	ENTERED ON	REMARK
+Receipt - Detail
+Cash
+11/10/2026	2277	Front desk FH-5EL-2610-5057, Room 305	₹399.00	Test Reception	20/10/2026 12:19:00 AM	-
+11/10/2026	2337	Front desk FH-2608-4859, Room 203	₹100.00	Group Owner	28/10/2026 08:37:03 PM	-
+		Total	₹499.00			
+UPI
+11/10/2026	2245	Front desk FH-5EL-2610-5047, Room 303	₹3,883.95	Test Reception	13/10/2026 07:08:30 PM	-
+11/10/2026	2247	Front desk FH-5EL-2610-5048, Room 302	₹3,883.95	Test Reception	13/10/2026 07:46:20 PM	-
+11/10/2026	2251	Front desk FH-5EL-2610-5046, Room 301	₹3,883.95	Test Reception	13/10/2026 08:39:04 PM	-
+11/10/2026	2252	Front desk FH-5EL-2610-5033, Room 305	₹8,166.90	Test Reception	13/10/2026 09:05:30 PM	-
+11/10/2026	2253	Front desk FH-2608-4865, Room 207	₹3,212.94	Test Reception	17/10/2026 10:48:06 AM	-
+11/10/2026	2254	Front desk FH-2608-4858, Room 201	₹7,084.69	Test Reception	17/10/2026 10:50:52 AM	-
+11/10/2026	2266	Front desk FH-5EL-2610-5056, Room 305	₹399.00	Test Reception	20/10/2026 12:15:58 AM	-
+11/10/2026	2279	Front desk FH-5EL-2610-5058, Room 303	₹3,883.95	Test Reception	20/10/2026 12:38:44 AM	-
+11/10/2026	2281	Front desk FH-5EL-2610-5059, Room 302	₹3,883.95	Test Reception	20/10/2026 12:39:45 AM	-
+		Total	₹38,283.28			
+		Grand Total	₹38,782.28			
+USER	AMOUNT
+Receipt - Summary by user
+Test Reception	₹38,682.28
+Group Owner	₹100.00
+Total	₹38,782.28
+PAY METHOD	AMOUNT
+Receipt - Summary by payment method
+Cash	₹499.00
+UPI	₹38,283.28
+Total	₹38,782.28
+ROOM	BOOKING	GUEST	CHARGE DATE	VOUCHER NO	CHARGE	UNIT PRICE	UNIT (Q'TY)	AMOUNT	ENTERED ON	REMARK
+Misc. Charges
+305	FH-5EL-2610-5056	A4 Test Kulkarni	11/10/2026	2258	Two coffees, room service	₹189.00	1	₹189.00	20/10/2026 12:10:24 AM	-
+305	FH-5EL-2610-5056	A4 Test Kulkarni	11/10/2026	2262	Laundry, 3 shirts	₹210.00	1	₹210.00	20/10/2026 12:11:40 AM	-
+305	FH-5EL-2610-5057	A4 Test Kulkarni	11/10/2026	2269	Two coffees, room service	₹189.00	1	₹189.00	20/10/2026 12:16:53 AM	-
+305	FH-5EL-2610-5057	A4 Test Kulkarni	11/10/2026	2273	Laundry, 3 shirts	₹210.00	1	₹210.00	20/10/2026 12:18:09 AM	-
+202	FH-2608-4862	Vikram Desai	11/10/2026	2301	Fidato Restaurant - 20261011-29 (18%)	₹47.20	1	₹47.20	22/10/2026 11:15:15 AM	Outlet: Fidato Restaurant, Order 20261011-29
+202	FH-2608-4862	Vikram Desai	11/10/2026	2302	Fidato Restaurant - 20261011-29 (5%)	₹672.00	1	₹672.00	22/10/2026 11:15:15 AM	Outlet: Fidato Restaurant, Order 20261011-29
+202	FH-2608-4862	Vikram Desai	11/10/2026	2303	Fidato Restaurant - 20261011-30	₹336.00	1	₹336.00	22/10/2026 11:15:17 AM	Outlet: Fidato Restaurant, Order 20261011-30
+202	FH-2608-4862	Vikram Desai	11/10/2026	2304	Fidato Restaurant - 20261011-31	₹336.00	1	₹336.00	22/10/2026 11:15:18 AM	Outlet: Fidato Restaurant, Order 20261011-31
+202	FH-2608-4862	Vikram Desai	11/10/2026	2305	Fidato Restaurant - 20261011-54 (18%)	₹42.48	1	₹42.48	22/10/2026 11:15:42 AM	Outlet: Fidato Restaurant, Order 20261011-54
+202	FH-2608-4862	Vikram Desai	11/10/2026	2306	Fidato Restaurant - 20261011-54 (5%)	₹302.40	1	₹302.40	22/10/2026 11:15:42 AM	Outlet: Fidato Restaurant, Order 20261011-54
+202	FH-2608-4862	Vikram Desai	11/10/2026	2307	Reversal - till test	-₹47.20	1	-₹47.20	22/10/2026 11:16:20 AM	-
+202	FH-2608-4862	Vikram Desai	11/10/2026	2308	Reversal - till test	-₹672.00	1	-₹672.00	22/10/2026 11:16:20 AM	-
+202	FH-2608-4862	Vikram Desai	11/10/2026	2309	Reversal - till test	-₹336.00	1	-₹336.00	22/10/2026 11:16:20 AM	-
+202	FH-2608-4862	Vikram Desai	11/10/2026	2310	Reversal - till test	-₹336.00	1	-₹336.00	22/10/2026 11:16:20 AM	-
+202	FH-2608-4862	Vikram Desai	11/10/2026	2311	Reversal - till test	-₹42.48	1	-₹42.48	22/10/2026 11:16:20 AM	-
+202	FH-2608-4862	Vikram Desai	11/10/2026	2312	Reversal - till test	-₹302.40	1	-₹302.40	22/10/2026 11:16:20 AM	-
+202	FH-2608-4862	Vikram Desai	11/10/2026	2330	Fidato Restaurant - 20261011-95	₹336.00	1	₹336.00	22/10/2026 11:17:55 AM	Outlet: Fidato Restaurant, Order 20261011-95
+202	FH-2608-4862	Vikram Desai	11/10/2026	2331	Fidato Restaurant - 20261011-99	₹588.00	1	₹588.00	22/10/2026 11:18:00 AM	Outlet: Fidato Restaurant, Order 20261011-99
+202	FH-2608-4862	Vikram Desai	11/10/2026	2332	Fidato Restaurant - 20261011-100	₹294.00	1	₹294.00	22/10/2026 11:18:00 AM	Outlet: Fidato Restaurant, Order 20261011-100
+202	FH-2608-4862	Vikram Desai	11/10/2026	2333	Reversal - room charge test	-₹588.00	1	-₹588.00	22/10/2026 11:18:01 AM	-
+202	FH-2608-4862	Vikram Desai	11/10/2026	2334	Reversal - room charge test	-₹294.00	1	-₹294.00	22/10/2026 11:18:01 AM	-
+Total (21)						-	21	₹1,134.00		
+DATE	TOTAL ROOMS	OCCUPIED	DUE OUT	VACANT	DEPARTED	RESERVE	BLOCKED
+Room Status
+11/10/2026	18	13	1	4	5	5	1
+STATUS	ROOMS	ADULT	CHILD
+Pax Status
+Arrived	10	18	0
+Checked Out	5	7	0
+Stayover	3	3	1
+RATE TYPE	ADULT	CHILD
+Pax Analysis
+-	2	0
+CP	5	1
+EP	19	0
+MAP	1	0
+RO	1	1
+OUTLETS	POS SALES	CHARGES	TAX	ITEM DISCOUNT	ORDER DISCOUNT	ROUND OFF	TIPS	TOTAL	PAYMENTS	POSTING
+POS Summary
+Fidato Restaurant	₹12,420.00	-	₹637.84	-	-₹68.76	-₹0.20	-	₹12,988.88	₹9,534.80	₹3,454.08
+Round C test	₹500.00	-	₹25.00	-	₹0.00	₹0.50	-	₹525.50	₹525.50	₹0.00
+Total	₹12,920.00	-	₹662.84	-	-₹68.76	₹0.30	-	₹13,514.38	₹10,060.30	₹3,454.08
+Charges, item discounts and tips are not recorded in this system and show "-".
+PAY METHOD	OUTLET	AMOUNT
+POS Payment Summary
+allowance
+-	Fidato Restaurant	₹500.00
+	Total	₹500.00
+Card
+-	Fidato Restaurant	₹1,291.20
+-	Round C test	₹430.50
+	Total	₹1,721.70
+Cash
+-	Fidato Restaurant	₹5,901.00
+-	Round C test	₹95.00
+	Total	₹5,996.00
+Room Posting
+-	Fidato Restaurant	₹2,954.08
+	Total	₹2,954.08
+UPI
+-	Fidato Restaurant	₹2,342.60
+	Total	₹2,342.60
+BILL	OUTLET	PAID BY	AMOUNT	VOIDED BY	AT	REASON	REFUND REFERENCE
+POS Bills Voided
+20261011-93	Fidato Restaurant	cash	₹336.00	VOIDPAID Manager	11:17	Billed to the wrong table	-
+20261011-94	Fidato Restaurant	upi	₹336.00	VOIDPAID Manager	11:17	Paid twice	UPI 4471 2209
+20261011-97	Fidato Restaurant	cash	₹336.00	VOIDPAID Manager	11:17	Guest complaint	-
+BILL	OUTLET	TABLE	GIVEN BY	AT	REASON
+POS Bills No Charge (NC)
+20261011-6	Fidato Restaurant	N5	Test GM	10:45	Owner's guestsOwner's guests
+20261011-7	Fidato Restaurant	N6	Test GM	10:48	Staff meal
+20261011-11	Fidato Restaurant	N5	Test GM	11:11	Owner's guests
+20261011-12	Fidato Restaurant	N5	Test GM	11:13	Owner's guests
+20261011-16	Fidato Restaurant	N3	-	21:20	adw
+20261011-130	Fidato Restaurant	N5	Test GM	14:48	Owner's guests
+20261011-131	Fidato Restaurant	N5	Test GM	14:49	Owner's guests
+
+* Var % is the discount off the rack rate. A room type with no rack rate shows "-".
+
+* A night's room charge is shown on the night it pays for, whatever day it was posted (the owner, 17 September).
+
+* A bill transferred to a company is not a receipt; it is on the Manager report as Charges Raised.
+
+* A "-" means the figure is not held in this system. It is not a zero.
+
+Printed 31/10/2026, 07:26:47 pm
+
+Test GM

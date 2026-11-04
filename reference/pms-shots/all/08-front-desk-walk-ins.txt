@@ -1,0 +1,624 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Walk-ins
+32 on record
+
+Guests taken at the desk without a booking. 7 today, Sunday, 11 October 2026.
+
+Take a walk-in from the Calendar
+
+Click any empty cell on the chart. The room and the night are already chosen by the time the form opens, which is the order the question actually arrives in at a front desk.
+
+Open Calendar
+32 of 32
+201
+Due in
+
+Anjali Pawar
+
+FH-2608-4873
+
+Type
+Superior
+Plan
+MAP
+Arrival
+14 Oct 2026
+Departure
+16 Oct 2026
+Nights
+2
+Rate
+₹2,734
+201
+Due in
+
+Deepa Rao
+
+FH-2608-4871
+
+Type
+Superior
+Plan
+Room Only
+Arrival
+13 Oct 2026
+Departure
+14 Oct 2026
+Nights
+1
+Rate
+₹2,592
+302
+Checked out
+
+A5 Test Wagh
+
+FH-5EL-2610-5048
+
+Type
+Deluxe
+Plan
+EP
+Arrival
+11 Oct 2026
+Departure
+12 Oct 2026
+Nights
+1
+Rate
+₹3,699
+302
+Checked out
+
+A5 Test Wagh
+
+FH-5EL-2610-5059
+
+Type
+Deluxe
+Plan
+EP
+Arrival
+11 Oct 2026
+Departure
+12 Oct 2026
+Nights
+1
+Rate
+₹3,699
+303
+In house
+
+A5 Test Rane
+
+FH-5EL-2610-5058
+
+Type
+Deluxe
+Plan
+EP
+Arrival
+11 Oct 2026
+Departure
+13 Oct 2026
+Nights
+2
+Rate
+₹3,699
+303
+Checked out
+
+A5 Test Rane
+
+FH-5EL-2610-5047
+
+Type
+Deluxe
+Plan
+EP
+Arrival
+11 Oct 2026
+Departure
+12 Oct 2026
+Nights
+1
+Rate
+₹3,699
+305
+In house
+
+A4 Test Kulkarni
+
+FH-5EL-2610-5057
+
+Type
+Deluxe
+Plan
+EP
+Arrival
+11 Oct 2026
+Departure
+13 Oct 2026
+Nights
+2
+Rate
+₹3,699
+305
+Checked out
+
+A4 Test Kulkarni
+
+FH-5EL-2610-5056
+
+Type
+Deluxe
+Plan
+EP
+Arrival
+11 Oct 2026
+Departure
+12 Oct 2026
+Nights
+1
+Rate
+₹3,699
+307
+In house
+
+A3 Test Gokhale
+
+FH-5EL-2610-5055
+
+Type
+Deluxe
+Plan
+CP
+Arrival
+11 Oct 2026
+Departure
+13 Oct 2026
+Nights
+2
+Rate
+₹3,699
+206
+In house
+
+Shridhar Kamble
+
+FH-2608-4864
+
+Type
+Superior
+Plan
+CP
+Arrival
+10 Oct 2026
+Departure
+13 Oct 2026
+Nights
+3
+Rate
+₹3,216
+202
+Checked out
+
+Sameer Gokhale
+
+FH-2608-5003
+
+Type
+Superior
+Plan
+Room Only
+Arrival
+9 Oct 2026
+Departure
+9 Oct 2026
+Nights
+Day use
+Rate
+₹1,800
+209
+Checked out
+
+A2 Test Kumar
+
+FH-5EL-2610-5039
+
+Type
+Superior
+Plan
+EP
+Arrival
+9 Oct 2026
+Departure
+10 Oct 2026
+Nights
+1
+Rate
+₹4,099
+210
+Checked out
+
+A2 Test Kumar
+
+FH-5EL-2610-5040
+
+Type
+Superior
+Plan
+EP
+Arrival
+9 Oct 2026
+Departure
+10 Oct 2026
+Nights
+1
+Rate
+₹4,099
+301
+Checked out
+
+A2 Test Kumar
+
+FH-5EL-2610-5041
+
+Type
+Deluxe
+Plan
+EP
+Arrival
+9 Oct 2026
+Departure
+10 Oct 2026
+Nights
+1
+Rate
+₹3,699
+303
+Checked out
+
+A5 Test Pawar
+
+FH-5EL-2610-5036
+
+Type
+Deluxe
+Plan
+EP
+Arrival
+9 Oct 2026
+Departure
+9 Oct 2026
+Nights
+Day use
+Rate
+₹2,000
+304
+Checked out
+
+A5 Test More
+
+FH-5EL-2610-5035
+
+Type
+Deluxe
+Plan
+EP
+Arrival
+9 Oct 2026
+Departure
+11 Oct 2026
+Nights
+2
+Rate
+₹3,699
+305
+Checked out
+
+A4 Test Kulkarni
+
+FH-5EL-2610-5033
+
+Type
+Deluxe
+Plan
+EP
+Arrival
+9 Oct 2026
+Departure
+11 Oct 2026
+Nights
+2
+Rate
+₹3,699
+306
+Checked out
+
+A5 Test Deshmukh
+
+FH-5EL-2610-5034
+
+Type
+Deluxe
+Plan
+EP
+Arrival
+9 Oct 2026
+Departure
+10 Oct 2026
+Nights
+1
+Rate
+₹3,699
+201
+Checked out
+
+Rekha Gaikwad
+
+FH-2608-4857
+
+Type
+Superior
+Plan
+Room Only
+Arrival
+8 Oct 2026
+Departure
+9 Oct 2026
+Nights
+1
+Rate
+₹3,705
+201
+Checked out
+
+Vivek Thorat
+
+FH-2608-4854
+
+Type
+Superior
+Plan
+EP
+Arrival
+1 Oct 2026
+Departure
+2 Oct 2026
+Nights
+1
+Rate
+₹2,864
+202
+Checked out
+
+Deepa Rao
+
+FH-2608-4851
+
+Type
+Superior
+Plan
+EP
+Arrival
+29 Sep 2026
+Departure
+2 Oct 2026
+Nights
+3
+Rate
+₹3,698
+201
+Checked out
+
+Meera Iyer
+
+FH-2608-4847
+
+Type
+Superior
+Plan
+EP
+Arrival
+28 Sep 2026
+Departure
+29 Sep 2026
+Nights
+1
+Rate
+₹3,199
+204
+Checked out
+
+Sneha Kulkarni
+
+FH-2608-4849
+
+Type
+Superior
+Plan
+EP
+Arrival
+28 Sep 2026
+Departure
+1 Oct 2026
+Nights
+3
+Rate
+₹3,345
+208
+Checked out
+
+Rohit Deshpande
+
+FH-2608-4846
+
+Type
+Superior
+Plan
+CP
+Arrival
+27 Sep 2026
+Departure
+28 Sep 2026
+Nights
+1
+Rate
+₹3,223
+203
+Checked out
+
+Rekha Gaikwad
+
+FH-2608-4837
+
+Type
+Superior
+Plan
+CP
+Arrival
+26 Sep 2026
+Departure
+28 Sep 2026
+Nights
+2
+Rate
+₹3,181
+204
+Checked out
+
+Tanvi Bhide
+
+FH-2608-4838
+
+Type
+Superior
+Plan
+CP
+Arrival
+26 Sep 2026
+Departure
+28 Sep 2026
+Nights
+2
+Rate
+₹3,084
+207
+Checked out
+
+Ananya Bose
+
+FH-2608-4841
+
+Type
+Superior
+Plan
+Room Only
+Arrival
+26 Sep 2026
+Departure
+28 Sep 2026
+Nights
+2
+Rate
+₹2,939
+208
+Checked out
+
+Deepa Rao
+
+FH-2608-4831
+
+Type
+Superior
+Plan
+EP
+Arrival
+24 Sep 2026
+Departure
+25 Sep 2026
+Nights
+1
+Rate
+₹3,721
+301
+Checked out
+
+Vikram Desai
+
+FH-2608-4822
+
+Type
+Deluxe
+Plan
+EP
+Arrival
+23 Sep 2026
+Departure
+24 Sep 2026
+Nights
+1
+Rate
+₹2,452
+304
+Checked out
+
+Priya Menon
+
+FH-2608-4823
+
+Type
+Deluxe
+Plan
+Room Only
+Arrival
+23 Sep 2026
+Departure
+26 Sep 2026
+Nights
+3
+Rate
+₹2,456
+206
+Checked out
+
+Deepa Rao
+
+FH-2608-4811
+
+Type
+Superior
+Plan
+MAP
+Arrival
+21 Sep 2026
+Departure
+23 Sep 2026
+Nights
+2
+Rate
+₹2,732
+201
+Checked out
+
+Vikram Desai
+
+FH-2608-4802
+
+Type
+Superior
+Plan
+CP
+Arrival
+17 Sep 2026
+Departure
+20 Sep 2026
+Nights
+3
+Rate
+₹3,037

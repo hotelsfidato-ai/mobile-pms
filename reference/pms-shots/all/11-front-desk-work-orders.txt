@@ -1,0 +1,18 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Work orders
+
+What needs fixing. Most of it does not take a room out of service.
+
+Raise one
+Open 0
+Closed 1
+
+Nothing outstanding
+
+1 closed and kept - "how many times have we fixed this room" needs them.
+
+1 closed order is kept on the record. A table holding only open work cannot answer how many times a room has been fixed this year.
