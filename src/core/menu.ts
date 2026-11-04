@@ -906,7 +906,7 @@ export const PHONE_ROUTES: Readonly<Record<string, string>> = {
   "/h/:code/walk-ins": "/front-desk/:code/walk-ins",
   /* mobile/guest-services: each web screen to its own twin, not to the
      phone's hub (the hub has no web twin; its MODULE.md). Guest messages
-     stays on the website: the phone's Messages is only its card. */
+     (what the system sent guests) is its own screen since 4 Nov (mobile/t2-messages). */
   "/h/:code/requests": "/guest-services/:code/requests",
   /* mobile/t2-approvals (4 Nov) */
   "/h/:code/approvals": "/approvals/:code",
