@@ -1,6 +1,8 @@
 /* Run: node --experimental-strip-types mobile/src/core/menu.check.ts
-   Every role's menu in every space it has, as the web's own sidebarFor gave
-   it on 31 Oct (pms-ref, modules all on), and the phone's own rules. */
+   Every role's menu in every space it has, as the web's own sidebarFor gives
+   it today (re-run on today's PMS on 4 Nov, a production build, modules all
+   on: unchanged since 31 Oct), every role's whole reach, and the phone's own
+   rules. */
 import {
   ROLES, activeRoute, asRole, coversTheFrame, flatNavigationFor, hiddenCount, initials, landing, mayReach, navigationFor,
   phoneRoute, relative, sidebarFor, spaceOf, spacesFor, workingHomeFor, type Role, type Space,
@@ -80,6 +82,21 @@ for (const role of ROLES) {
   for (const [space, want] of Object.entries(WEB[role])) eq(shown(role, space as Space), want);
 }
 
+/* Every screen each role may reach, listed or not (the web's flatNavigationFor,
+   4 Nov): Find a screen's list and what mayReach asks. */
+eq(Object.fromEntries(ROLES.map((role) => [role, flatNavigationFor(role, "5EL", ALL_ON).length])), {
+  owner: 144, admin: 144, gm: 138, hotel_manager: 87, revenue_manager: 32, front_desk: 67, housekeeping: 25,
+  kitchen_manager: 25, chef: 8, pos: 18, bar: 19, stores: 22, finance: 78, read_only: 71, automation: 1,
+});
+/* devOnly is left out: the pictures' extra System entry (a dev build's) reaches nobody here. */
+for (const role of ROLES) {
+  eq(flatNavigationFor(role, "5EL", ALL_ON).some((i) => i.to === "/design-system" || i.to === "/admin/console"), false);
+}
+/* Approvals: in the home group after the Dashboard (D27-363), for whoever decides
+   something; the Inventory Manager reaches it but it is not in their working menu. */
+eq(sidebarFor("gm", "5EL", ALL_ON, "front")[0]!.items.map((i) => i.label).slice(0, 2), ["Dashboard", "Approvals"]);
+eq(ROLES.filter((role) => mayReach(role, "/h/:code/approvals")), ["owner", "admin", "gm", "hotel_manager", "stores"]);
+
 /* A property's switches (navigationFor): off only when the answer says off. */
 eq(spacesFor("front_desk", "5EL", OFF("reception_pos")), ["front"]);
 eq(spacesFor("gm", "5EL", OFF("reception_pos")), ["front", "pos", "settings"]); // reception's switch alone
@@ -124,9 +141,9 @@ eq(phoneRoute("/h/5EL/wake-up-calls", "5EL"), "/guest-services/5EL/wake-up-calls
 eq(phoneRoute("/h/5EL/lost-property", "5EL"), "/guest-services/5EL/lost-property");
 eq(phoneRoute("/h/5EL/online-checkin", "5EL"), "/guest-services/5EL/online-checkin");
 eq(phoneRoute("/h/5EL/guest-messages", "5EL"), null); // the phone's Messages is only its card
-eq(phoneRoute("/h/5EL/approvals", "5EL"), null);
+eq(phoneRoute("/h/5EL/approvals", "5EL"), "/approvals/5EL");
 /* Only the routes the merged app has (the brief's route map). */
-const MERGED = /^\/(hotel\/[^/]+|all|notifications\/[^/]+|housekeeping\/[^/]+(\/(repair|out-of-service|work-orders))?|pos\/[^/]+\/(tables|pad|kitchen|order\/[^/]+)|front-desk\/[^/]+(\/(in-house|walk-ins|walk-in|take-walk-in|stay\/[^/]+|check-in\/[^/]+))?|folio\/[^/]+\/[^/]+|guest-services\/[^/]+(\/(requests|wake-up-calls|lost-property|online-checkin|messages))?)(\?.*)?$/;
+const MERGED = /^\/(hotel\/[^/]+|all|approvals\/[^/]+|notifications\/[^/]+|housekeeping\/[^/]+(\/(repair|out-of-service|work-orders))?|pos\/[^/]+\/(tables|pad|kitchen|order\/[^/]+)|front-desk\/[^/]+(\/(in-house|walk-ins|walk-in|take-walk-in|stay\/[^/]+|check-in\/[^/]+))?|folio\/[^/]+\/[^/]+|guest-services\/[^/]+(\/(requests|wake-up-calls|lost-property|online-checkin|messages))?)(\?.*)?$/;
 for (const role of ROLES) {
   for (const item of flatNavigationFor(role, "5EL", ALL_ON)) {
     const route = phoneRoute(item.to, "5EL");
@@ -197,5 +214,12 @@ eq(ago(600 * 1_440), "over 1 year ago");
 eq(ago(690 * 1_440), "almost 2 years ago");
 eq(relative(new Date(now + 120 * 60_000).toISOString(), now), "in about 2 hours");
 eq(relative("nonsense", now), "-");
+/* Postgres's own text, read as a phone's engine reads it: Date.parse takes ISO only (MAPR-2, MEMORY 7). */
+const isoOnly = <T,>(fn: () => T): T => {
+  const real = Date.parse;
+  Date.parse = (text: string) => (/^\d{4}-\d{2}-\d{2}T/.test(text) ? real(text) : NaN);
+  try { return fn(); } finally { Date.parse = real; }
+};
+eq(isoOnly(() => relative("2026-10-31 17:25:00.123456+05:30", now)), "5 minutes ago");
 
 console.log("menu: all checks pass");
