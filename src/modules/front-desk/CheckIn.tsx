@@ -5,9 +5,8 @@ import { useState, type ReactNode } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { ApiError, HeldError, type Hotel } from "../../core/api";
 import { cash } from "../../core/format";
-import { isOnline } from "../../core/offline";
 import { c, face, t } from "../../core/theme";
-import { ReadFailed, useRead } from "../../core/ui";
+import { useRead } from "../../core/ui";
 import { Companions, IdPhoto } from "./Companions";
 import {
   checkIn, readAssignable, readDesk, readEarly, readExpress, readStay, readTaxRate, rulesOf, said, type DeskStay,
@@ -21,7 +20,7 @@ import { body, Box, Button, Field, leaveNote, Pick, Pill, Tick, Toast, Toggle, t
 import type { Tone } from "./desk";
 import { whyNotCheckIn } from "./roles";
 import { Panel } from "./Stay";
-import { Blacklist } from "./StayList";
+import { Blacklist, NotRead } from "./StayList";
 
 /* ══════════════════════════════════════════════════════════════════
    CHECK IN — the web's one page under one Check in (src/modules/front-desk/
@@ -40,8 +39,8 @@ export function CheckInScreen({ hotel, role, id, onClose }: { hotel: Hotel; role
     return (
       <Panel title="Check in" onClose={onClose}>
         {read.loading ? <Text style={t.label}>Reading the stay…</Text>
-          : read.error ? <ReadFailed what="the stay" error={read.error} onRetry={read.reload} />
-            : <Text style={t.label}>{!isOnline() ? "No connection. This stay has not been read on this phone yet." : "This stay is not on the property's list."}</Text>}
+          : read.error ? <NotRead what="the stay" error={read.error} onRetry={read.reload} />
+            : <Text style={t.label}>This stay is not on the property's list.</Text>}
       </Panel>
     );
   }
@@ -173,7 +172,7 @@ function Form({ hotel, role, stay, onClose }: { hotel: Hotel; role: string | nul
               <Explained title="Room">
                 Only a clean or inspected room can take a guest; the rest are shown with the reason. A room of a different type is an upgrade: the booked rate stays.
               </Explained>
-              {rooms.error && !rooms.data ? <ReadFailed what="the rooms" error={rooms.error} onRetry={rooms.reload} /> : null}
+              {rooms.error && !rooms.data ? <NotRead what="the rooms" error={rooms.error} onRetry={rooms.reload} plural /> : null}
               {!rooms.data && !rooms.error ? <Text style={t.label}>Reading the rooms…</Text> : null}
               {/* The web's list scrolls at 240 px. */}
               <ScrollView style={{ maxHeight: 240 }} nestedScrollEnabled contentContainerStyle={{ gap: 8 }}>

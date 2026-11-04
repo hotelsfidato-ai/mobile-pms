@@ -52,3 +52,13 @@ The check-in's (i) beside Room and ID was 28 px tall, and the stay's phone and e
 Found reading every `minHeight` under 44 on 4 Nov. **Done:** the (i) row is 44 px; the links keep
 their line and gain a 10 px reach on every side (`hitSlop`). **The rule:** every tap is 44 px, by
 size or by reach.
+
+## MFD-6 · The offline words could never show
+
+The stay and Check in asked "did the read fail?" before "is there a line?", so with no connection a
+first read always fell into "Could not read the stay" and the offline sentence under it was dead
+code; Take a walk-in had no offline state at all. Found on 4 Nov checking the four states of every
+screen. **Done:** one `NotRead` (StayList.tsx): offline it says "No connection … has not been read
+on this phone yet", online the server's words; the lists, the stay, Check in's rooms and Take a
+walk-in use it, and Take a walk-in keeps its last tiles with `Kept`. **The rule:** a failed read
+asks about the line first.

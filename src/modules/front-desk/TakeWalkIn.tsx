@@ -5,10 +5,11 @@ import { Pressable, Text, View } from "react-native";
 import type { Hotel } from "../../core/api";
 import { dateLong } from "../../core/format";
 import { c, face, t } from "../../core/theme";
-import { Card, ReadFailed, Screen, useRead } from "../../core/ui";
+import { Card, Screen, useRead } from "../../core/ui";
 import { readEmpty } from "./data";
 import { body, Empty, PageHead, Pill } from "./kit";
 import { whyNotBook } from "./roles";
+import { Kept, NotRead } from "./StayList";
 
 /* ══════════════════════════════════════════════════════════════════
    TAKE A WALK-IN — the phone's way to the web's empty room. On the web a
@@ -31,7 +32,8 @@ export function TakeWalkIn({ hotel, role }: { hotel: Hotel; role: string | null 
     <Screen refreshing={pulled && read.loading} onRefresh={() => { setPulled(true); read.reload(); }}>
       <PageHead title="Take a walk-in" description={`The empty rooms tonight, ${dateLong(date)}. The room and the night are already chosen by the time the form opens.`} />
       {refused ? <Text style={[t.label, body, { color: c.grey600 }]}>{refused}</Text> : null}
-      {!read.data ? (read.error ? <ReadFailed what="the rooms" error={read.error} onRetry={read.reload} /> : <Text style={t.label}>Reading the rooms…</Text>)
+      <Kept error={read.data ? read.error : undefined} what="the rooms" />
+      {!read.data ? (read.error ? <NotRead what="the rooms" error={read.error} onRetry={read.reload} plural /> : <Text style={t.label}>Reading the rooms…</Text>)
         : read.data.length === 0 ? <Card><Empty title="No empty rooms tonight" line="Every room has a guest, an arrival, or is out of service." Icon={Inbox} /></Card>
           : (
             <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>

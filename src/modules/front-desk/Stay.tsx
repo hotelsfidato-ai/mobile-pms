@@ -5,16 +5,15 @@ import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { KeyboardAvoidingView, Linking, Platform, Pressable, ScrollView, Text, View } from "react-native";
 import { HeldError, type Hotel } from "../../core/api";
 import { cash } from "../../core/format";
-import { isOnline } from "../../core/offline";
 import { c, face, space, t } from "../../core/theme";
-import { ReadFailed, useRead } from "../../core/ui";
+import { useRead } from "../../core/ui";
 import { Companions, IdPhoto } from "./Companions";
 import { readFoot, readGuestMarks, readStay, readVipLevels, rulesOf, said, setVip, setWhatsapp, type DeskStay } from "./data";
 import { day, foreignNationality, footOf, guestsWords, statusOf, stayedWords, whyNotYet } from "./desk";
 import { body, Button, MarkLink, Pill, Sheet, Tick, Toast, takeNote, WEBSITE, type Said } from "./kit";
 import { maySettle, seesBills, whyNotCheckIn, whyNotGuest } from "./roles";
 import { MoreOptions } from "./StayActs";
-import { isHeldCheckIn, useHeld } from "./StayList";
+import { isHeldCheckIn, NotRead, useHeld } from "./StayList";
 
 /* ══════════════════════════════════════════════════════════════════
    THE STAY — the web's stay panel (src/modules/front-desk/flows/
@@ -48,8 +47,8 @@ export function StayScreen({ hotel, role, id, offer, onClose }: {
     return (
       <Panel title="" onClose={onClose}>
         {read.loading ? <Text style={t.label}>Reading the stay…</Text>
-          : read.error ? <ReadFailed what="the stay" error={read.error} onRetry={read.reload} />
-            : <Text style={t.label}>{!isOnline() ? "No connection. This stay has not been read on this phone yet." : "This stay is not on the property's list."}</Text>}
+          : read.error ? <NotRead what="the stay" error={read.error} onRetry={read.reload} />
+            : <Text style={t.label}>This stay is not on the property's list.</Text>}
       </Panel>
     );
   }

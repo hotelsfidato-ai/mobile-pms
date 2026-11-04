@@ -112,18 +112,7 @@ export function StayList({ code, rows, read, columns, emptyTitle, emptyLine, wha
 
   let list: ReactNode;
   if (!rows) {
-    list = read.error ? (
-      !isOnline() ? (
-        <Card style={{ backgroundColor: c.yellow50, borderColor: c.yellow100, gap: 8 }}>
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-            <CloudOff size={16} color={c.yellow800} />
-            <Text style={[t.heading, { color: c.yellow800 }]}>No connection</Text>
-          </View>
-          <Text style={[t.label, { color: c.grey700 }]}>{`${what[0]!.toUpperCase()}${what.slice(1)} have not been read on this phone yet. They show once the line is back.`}</Text>
-          <View style={{ flexDirection: "row" }}><Capsule label="Try again" onPress={read.reload} /></View>
-        </Card>
-      ) : <ReadFailed what={what} error={read.error} onRetry={read.reload} />
-    ) : <Text style={t.label}>{`Reading ${what}…`}</Text>;
+    list = read.error ? <NotRead what={what} error={read.error} onRetry={read.reload} plural /> : <Text style={t.label}>{`Reading ${what}…`}</Text>;
   } else if (rows.length === 0) {
     list = <Card><Empty title={emptyTitle} line={emptyLine} Icon={Inbox} /></Card>;
   } else if (filtered.length === 0) {
@@ -154,6 +143,21 @@ export function StayList({ code, rows, read, columns, emptyTitle, emptyLine, wha
       </View>
       {list}
     </View>
+  );
+}
+
+/** A first read that failed: offline it is the line, said as such; online the server's words. */
+export function NotRead({ what, error, onRetry, plural }: { what: string; error: string; onRetry: () => void; plural?: boolean }) {
+  if (isOnline()) return <ReadFailed what={what} error={error} onRetry={onRetry} />;
+  return (
+    <Card style={{ backgroundColor: c.yellow50, borderColor: c.yellow100, gap: 8 }}>
+      <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+        <CloudOff size={16} color={c.yellow800} />
+        <Text style={[t.heading, { color: c.yellow800 }]}>No connection</Text>
+      </View>
+      <Text style={[t.label, { color: c.grey700 }]}>{`${what[0]!.toUpperCase()}${what.slice(1)} ${plural ? "have" : "has"} not been read on this phone yet. ${plural ? "They show" : "It shows"} once the line is back.`}</Text>
+      <View style={{ flexDirection: "row" }}><Capsule label="Try again" onPress={onRetry} /></View>
+    </Card>
   );
 }
 
