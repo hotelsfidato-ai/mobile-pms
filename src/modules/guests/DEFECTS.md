@@ -18,13 +18,13 @@ the rule (no rounding to the paisa) left the check green, because `100.1 × 100`
 exact in floating point and the formatter's two decimals hid the rest. The check would have passed a
 sum that drifts.
 
-**How it was found** — breaking the rule on purpose right after the rules' first commit (`73d128e`; BRIEF step 5).
-Two breaks stayed green.
+**How it was found** — breaking the rule on purpose before the rules were first committed (BRIEF
+step 5): two breaks stayed green.
 
 **What was done** — the test data was changed to figures the server can send whose float sum is wrong
 (₹10.10 + ₹20.20 is 30.299999999999997 as floats); the check compares the figure, not only its
 words, and now fails when the sum is made in rupees (`through an agent: got 30.299999999999997`).
-Committed with the Guests screen (`1efd2cb`).
+Fixed before the rules' first commit (`73d128e`).
 
 **The rule** — MEMORY 11 again: before trusting a check on money arithmetic, break it and see it fail;
 pick numbers whose float arithmetic really goes wrong, and compare the number as well as the text.
