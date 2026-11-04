@@ -79,3 +79,45 @@ R-10 no `pos` test person · R-11 the printed bill's tax on a discounted bill ·
 table id fails as a 500 when the table already runs (a held one would stop the drain) · R-13 no
 idempotency on any till write, so a round resent after a lost reply goes in twice · R-14 a room
 charge held offline says the check-in sentence.
+
+## Tables and the order pad — picture match (4 Nov, the tables helper)
+
+Compared by **reading the code against the pictures** (`reference/pms-shots/`, 390 px, demo data),
+section by section. **Nothing was opened on a screen** in the cloud session: no phone, no preview.
+
+| Screen | Route, files | Picture(s) | Result |
+|---|---|---|---|
+| Tables | `app/pos/[code]/tables.tsx`; `Tables.tsx`, `TablesKit.tsx`, `floor.ts` (+ check) | `all/42-point-of-sale-tables`, `new/n-pos-tables` (the same screen), `roles/r-waiter-home` (the waiter: Start here, no "Set up") | **Matches, three differences left** (below) |
+| The order pad, with a dish's sheet and Customise | `app/pos/[code]/pad.tsx`; `OrderPad.tsx`, `DishSheet.tsx`, `OrderPadCustomise.tsx`, `pad.ts` (+ check) | **none in the set** — no capture opens a pad, a dish or Customise (`all/43`, `new/n-pos-till` are the Till's order list, not the pad) | **Not compared**: built from the web's code as ported on 15 and 31 Oct; its shared pieces (buttons, inputs, the dialog card, the KOT lines) are the ones Tables matches |
+
+**Tables, section by section (all/42, r-waiter-home):** the title and its sentence (word for word);
+New parcel (lg, the bag) and Close early (md, the door) in one row; the waiter's Start here card
+(the compass on orange-50, "Got it", three jobs with their icons, "On this screen" on the first two)
+between the buttons and the KOT lines; the red KOT lines ("Kitchen KOTs wait: Virtual Kitchen not
+seen since 7:35 AM") with "Set up" only for those who may set KOTs up (the waiter has none, as in
+r-waiter-home); the key in the web's six words and swatches; Parcels above the room, a parcel's tile
+named by its customer ("Rahul"); sections A/C, Non A/C, Bar, two tiles across; a free tile (the
+name in grey-700, "6 seats", the chevron), a running one ("5096 min", the name, "₹210", the
+chevron, then the print and the Eye as 44 px rounds), a joined one ("Joined to AC3", the Eye
+alone), closed unpaid ("Closed unpaid", "3 ready" in the success pill, Clear; with no ready dish
+the words fall to the foot, as AC10), paid ("₹441", Clear, no chevron). Colours are `theme.ts`
+tokens, and `theme.css` values where the phone's theme has none yet (success, yellow, grey-400).
+Clear and Got it are drawn 32 px high as in the picture, their touch kept at 44 px.
+
+**Differences left on Tables, each with its reason:**
+1. **The print button on a running tile.** The picture draws a 44 px round printer beside the Eye.
+   `PrintBill` is `Pay.tsx`'s (the pay helper's, on `main`; a stub that draws nothing on this
+   branch): on `main` it draws the labelled "Print the bill" button and its refusal line, too wide
+   for a tile. Needs `round` on `PrintBill` (the exact diff is in the helper's report) and `round`
+   passed from `Tables.tsx`'s tile.
+2. **"Settle a bill" in Start here has a chevron on the web** — it links to the web's Till, which
+   the phone does not have; the phone reaches the order from its table's Eye. Drawn as told, not
+   linked, without the chevron.
+3. **The frame** (the top bar, the business-date banner, the account menu) belongs to the shell
+   helper. Until it is merged Tables keeps its own "Sign out" (a waiter lands here with nothing
+   behind it) or "Back"; the picture has neither on the page.
+
+**Fixed on 4 Nov:** MPOS-1 (a server time in Postgres's text, read by the phone's engine), MPOS-2
+(the dish sheet's ₹0 before a variation), MPOS-3 (a second tap ringing a round twice).
+**Open for the owner:** a dish marked off until a time (`offUntil`) is not shown as off on the pad's
+menu — only `isActive` is (as ported); the web's rule cannot be read from here.
