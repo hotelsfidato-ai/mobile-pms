@@ -1,0 +1,38 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Room systems
+Built; waiting for the hotel's lock system
+
+Door locks, room phones, minibars and TVs connected to the rooms and the bill.
+
+What it will do
+
+Key cards at check-in
+
+Cut for the room assigned, and cancelled at check-out.
+
+Calls on the bill
+
+Calls from a room charged to the stay without anyone typing them.
+
+Minibar and TV
+
+Minibar use charged to the room, and the TV greeting the guest by name.
+
+What it needs before it can be built
+1
+Which hotel wants which, and the brands installed. Onity, Salto and Hafele are common locks.
+2
+The makers' connection documents.
+3
+Possibly a small computer at the hotel, when a maker's system cannot be reached over the internet.
+Where it stands today
+
+Key cards are built and tested against a stand-in lock, and switched off: nothing reaches a door until the hotel's lock system is connected. The desk's Post a charge list has no telephone or minibar line.
+
+It will work with: Rooms, Folios.
+
+Nothing on this page works yet. It says what will be built and what it needs, so nobody has to wonder whether they missed a screen. Only Owner, Admin and General Manager see the Coming soon pages.

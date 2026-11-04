@@ -1,0 +1,8290 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Guests
+456 guests
+
+Grouped by name from every stay. Repeat guests rise to the top.
+
+21 names have stays that overlap
+
+One person cannot be in two rooms on the same night, so either these are two people sharing a name or something was entered twice. Shown, not merged - a wrong merge is far harder to undo than a visible duplicate.
+
+IP
+
+Imran Pillai [DH]
+
+STAYS
+6
+NIGHTS
+11
+LAST STAY
+
+28 Aug 2026
+
+BOOKED VIA
+Agoda, Booking.com, Expedia, Fidato Hotels
+TOTAL SPEND
+₹41,731
+BALANCE
+-
+TS
+
+Tanvi Shah [DH]
+
+STAYS
+6
+NIGHTS
+9
+LAST STAY
+
+13 Jul 2026
+
+BOOKED VIA
+Agoda, Booking.com, Fidato Hotels, Walk-In
+TOTAL SPEND
+₹34,835
+BALANCE
+-
+VS
+
+Vivaan Sheikh [DH]
+
+STAYS
+6
+NIGHTS
+12
+LAST STAY
+
+16 Aug 2026
+
+BOOKED VIA
+Agoda, Booking.com, Fidato Hotels, Walk-In, go-MMT
+TOTAL SPEND
+₹48,492
+BALANCE
+-
+AJ
+
+Anika Joshi [DH]
+
+STAYS
+5
+NIGHTS
+7
+LAST STAY
+
+10 Aug 2026
+
+BOOKED VIA
+Fidato Hotels, Walk-In, go-MMT
+TOTAL SPEND
+₹29,340
+BALANCE
+-
+KB
+
+Krishna Bose [DH]
+
+STAYS
+5
+NIGHTS
+7
+LAST STAY
+
+25 Aug 2026
+
+BOOKED VIA
+Agoda, Expedia, Fidato Hotels, Walk-In, go-MMT
+TOTAL SPEND
+₹27,794
+BALANCE
+-
+RB
+
+Rahul Bose [DH]
+
+STAYS
+5
+NIGHTS
+9
+LAST STAY
+
+23 Aug 2026
+
+BOOKED VIA
+Agoda, Booking.com, Fidato Hotels, go-MMT
+TOTAL SPEND
+₹37,264
+BALANCE
+-
+RM
+
+Rohan Mehta [DH]
+
+overlapping stays
+
+STAYS
+5
+NIGHTS
+9
+LAST STAY
+
+2 Sep 2026
+
+BOOKED VIA
+Agoda, Booking.com, Fidato Hotels, go-MMT
+TOTAL SPEND
+₹32,459
+BALANCE
+-
+AT
+
+A2 Test Mehta
+
+overlapping stays
+
+STAYS
+4
+NIGHTS
+8
+LAST STAY
+
+first visit
+
+back 24 Oct 2026
+
+BOOKED VIA
+Website
+TOTAL SPEND
+₹0
+BALANCE
+-
+AK
+
+Aarav Khan [DH]
+
+STAYS
+4
+NIGHTS
+7
+LAST STAY
+
+17 Aug 2026
+
+BOOKED VIA
+Fidato Hotels, Walk-In, go-MMT
+TOTAL SPEND
+₹25,129
+BALANCE
+-
+AN
+
+Aarav Nair [DH]
+
+STAYS
+4
+NIGHTS
+6
+LAST STAY
+
+14 Aug 2026
+
+BOOKED VIA
+Agoda, go-MMT
+TOTAL SPEND
+₹24,555
+BALANCE
+-
+AB
+
+Ananya Bose
+
+STAYS
+4
+NIGHTS
+7
+LAST STAY
+
+10 Oct 2026
+
+BOOKED VIA
+Booking.com, Expedia, Walk-in, go-MMT
+TOTAL SPEND
+₹20,786
+BALANCE
+-
+AP
+
+Anjali Pawar
+
+overlapping stays
+
+STAYS
+4
+NIGHTS
+9
+LAST STAY
+
+3 Oct 2026
+
+back 14 Oct 2026
+
+BOOKED VIA
+Agoda, Booking.com, Walk-in
+TOTAL SPEND
+₹21,842
+BALANCE
+-
+AN
+
+Arjun Nair
+
+STAYS
+4
+NIGHTS
+7
+LAST STAY
+
+30 Sep 2026
+
+BOOKED VIA
+Booking.com, Expedia, Fidato Hotels
+TOTAL SPEND
+₹23,043
+BALANCE
+-
+AS
+
+Ayaan Singh [DH]
+
+STAYS
+4
+NIGHTS
+6
+LAST STAY
+
+27 Aug 2026
+
+BOOKED VIA
+Agoda, Booking.com, Walk-In, go-MMT
+TOTAL SPEND
+₹28,354
+BALANCE
+-
+DR
+
+D27371 Returning
+
+STAYS
+4
+NIGHTS
+4
+LAST STAY
+
+first visit
+
+back 10 Jul 2029
+
+BOOKED VIA
+Agoda
+TOTAL SPEND
+₹0
+BALANCE
+-
+DR
+
+Deepa Rao
+
+STAYS
+4
+NIGHTS
+7
+LAST STAY
+
+2 Oct 2026
+
+back 13 Oct 2026
+
+BOOKED VIA
+Walk-in
+TOTAL SPEND
+₹21,291
+BALANCE
+-
+IN
+
+Imran Nair [DH]
+
+STAYS
+4
+NIGHTS
+11
+LAST STAY
+
+3 Sep 2026
+
+BOOKED VIA
+Expedia, Fidato Hotels, Walk-In
+TOTAL SPEND
+₹46,186
+BALANCE
+-
+IS
+
+Imran Shaikh
+
+STAYS
+4
+NIGHTS
+9
+LAST STAY
+
+1 Oct 2026
+
+BOOKED VIA
+Agoda, Booking.com, Fidato Hotels
+TOTAL SPEND
+₹21,584
+BALANCE
+-
+KS
+
+Kabir Sheikh [DH]
+
+overlapping stays
+
+STAYS
+4
+NIGHTS
+5
+LAST STAY
+
+7 Aug 2026
+
+BOOKED VIA
+Booking.com, Fidato Hotels, go-MMT
+TOTAL SPEND
+₹21,169
+BALANCE
+-
+MS
+
+Meera Sharma [DH]
+
+STAYS
+4
+NIGHTS
+6
+LAST STAY
+
+1 Sep 2026
+
+BOOKED VIA
+Agoda, Expedia, Fidato Hotels, go-MMT
+TOTAL SPEND
+₹25,810
+BALANCE
+-
+NJ
+
+Nikhil Joshi
+
+STAYS
+4
+NIGHTS
+10
+LAST STAY
+
+2 Oct 2026
+
+back 13 Oct 2026
+
+BOOKED VIA
+Expedia, Fidato Hotels
+TOTAL SPEND
+₹25,978
+BALANCE
+-
+PM
+
+Priya Menon
+
+STAYS
+4
+NIGHTS
+11
+LAST STAY
+
+29 Sep 2026
+
+BOOKED VIA
+Agoda, Booking.com, Fidato Hotels, Walk-in
+TOTAL SPEND
+₹27,139
+BALANCE
+₹2,653
+RS
+
+Rahul Sharma [DH]
+
+overlapping stays
+
+STAYS
+4
+NIGHTS
+10
+LAST STAY
+
+10 Jul 2026
+
+BOOKED VIA
+Agoda, Expedia
+TOTAL SPEND
+₹43,600
+BALANCE
+-
+RK
+
+Riya Khan [DH]
+
+STAYS
+4
+NIGHTS
+7
+LAST STAY
+
+9 Aug 2026
+
+BOOKED VIA
+Agoda, Walk-In
+TOTAL SPEND
+₹29,328
+BALANCE
+-
+RK
+
+Rohan Khan [DH]
+
+STAYS
+4
+NIGHTS
+11
+LAST STAY
+
+24 Jul 2026
+
+BOOKED VIA
+Expedia, Fidato Hotels, Walk-In, go-MMT
+TOTAL SPEND
+₹48,300
+BALANCE
+-
+SK
+
+Shridhar Kamble
+
+STAYS
+4
+NIGHTS
+8
+LAST STAY
+
+29 Sep 2026
+
+BOOKED VIA
+Agoda, Fidato Hotels, Walk-in, go-MMT
+TOTAL SPEND
+₹19,826
+BALANCE
+₹3,765
+SK
+
+Sneha Kulkarni
+
+STAYS
+4
+NIGHTS
+11
+LAST STAY
+
+1 Oct 2026
+
+BOOKED VIA
+Agoda, Expedia, Walk-in, go-MMT
+TOTAL SPEND
+₹29,173
+BALANCE
+-
+SK
+
+Sudarshan Kator
+
+STAYS
+4
+NIGHTS
+7
+LAST STAY
+
+11 Oct 2026
+
+BOOKED VIA
+Agoda, Booking.com, Expedia
+TOTAL SPEND
+₹21,853
+BALANCE
+-
+VD
+
+Vikram Desai
+
+STAYS
+4
+NIGHTS
+8
+LAST STAY
+
+27 Sep 2026
+
+BOOKED VIA
+Agoda, Expedia, Walk-in
+TOTAL SPEND
+₹19,306
+BALANCE
+₹3,776
+VP
+
+Vivaan Pillai [DH]
+
+STAYS
+4
+NIGHTS
+10
+LAST STAY
+
+26 Aug 2026
+
+BOOKED VIA
+Booking.com, Fidato Hotels, Walk-In
+TOTAL SPEND
+₹42,833
+BALANCE
+-
+ZC
+
+Zoya Chatterjee [DH]
+
+STAYS
+4
+NIGHTS
+8
+LAST STAY
+
+8 Sep 2026
+
+BOOKED VIA
+Agoda, Booking.com, Expedia
+TOTAL SPEND
+₹33,773
+BALANCE
+-
+AT
+
+A2 Test Kumar
+
+overlapping stays
+
+STAYS
+3
+NIGHTS
+3
+LAST STAY
+
+10 Oct 2026
+
+BOOKED VIA
+Walk-in
+TOTAL SPEND
+₹12,492
+BALANCE
+-
+AT
+
+A2 Test Sharma
+
+overlapping stays
+
+STAYS
+3
+NIGHTS
+7
+LAST STAY
+
+first visit
+
+back 20 Oct 2026
+
+BOOKED VIA
+Fidato Hotels
+TOTAL SPEND
+₹0
+BALANCE
+-
+AT
+
+A4 Test Kulkarni
+
+overlapping stays
+
+STAYS
+3
+NIGHTS
+5
+LAST STAY
+
+11 Oct 2026
+
+BOOKED VIA
+Walk-in
+TOTAL SPEND
+₹16,733
+BALANCE
+-
+AR
+
+Aadhya Rao [DH]
+
+STAYS
+3
+NIGHTS
+4
+LAST STAY
+
+16 Jul 2026
+
+BOOKED VIA
+Agoda, Booking.com
+TOTAL SPEND
+₹16,047
+BALANCE
+-
+AR
+
+Aadhya Reddy [DH]
+
+STAYS
+3
+NIGHTS
+6
+LAST STAY
+
+9 Aug 2026
+
+BOOKED VIA
+Booking.com, Fidato Hotels
+TOTAL SPEND
+₹25,448
+BALANCE
+-
+AS
+
+Aadhya Shah [DH]
+
+STAYS
+3
+NIGHTS
+7
+LAST STAY
+
+5 Sep 2026
+
+BOOKED VIA
+Expedia, Fidato Hotels
+TOTAL SPEND
+₹30,633
+BALANCE
+-
+AP
+
+Aarav Patel [DH]
+
+STAYS
+3
+NIGHTS
+6
+LAST STAY
+
+28 Aug 2026
+
+BOOKED VIA
+Walk-In, go-MMT
+TOTAL SPEND
+₹20,751
+BALANCE
+-
+AI
+
+Ananya Iyer [DH]
+
+overlapping stays
+
+STAYS
+3
+NIGHTS
+7
+LAST STAY
+
+2 Sep 2026
+
+BOOKED VIA
+Agoda, Walk-In, go-MMT
+TOTAL SPEND
+₹30,117
+BALANCE
+-
+AJ
+
+Ananya Joshi [DH]
+
+STAYS
+3
+NIGHTS
+6
+LAST STAY
+
+15 Jul 2026
+
+BOOKED VIA
+Booking.com, Fidato Hotels, go-MMT
+TOTAL SPEND
+₹21,428
+BALANCE
+-
+AN
+
+Arjun Nair [DH]
+
+STAYS
+3
+NIGHTS
+5
+LAST STAY
+
+25 Aug 2026
+
+BOOKED VIA
+Agoda, Expedia
+TOTAL SPEND
+₹19,520
+BALANCE
+-
+AJ
+
+Ayaan Joshi [DH]
+
+STAYS
+3
+NIGHTS
+6
+LAST STAY
+
+19 Aug 2026
+
+BOOKED VIA
+Fidato Hotels, Walk-In, go-MMT
+TOTAL SPEND
+₹26,941
+BALANCE
+-
+DS
+
+Diya Singh [DH]
+
+STAYS
+3
+NIGHTS
+8
+LAST STAY
+
+30 Aug 2026
+
+BOOKED VIA
+Expedia, Fidato Hotels, go-MMT
+TOTAL SPEND
+₹36,422
+BALANCE
+-
+FK
+
+Farhan Kulkarni [DH]
+
+STAYS
+3
+NIGHTS
+6
+LAST STAY
+
+24 Jul 2026
+
+BOOKED VIA
+Expedia, Fidato Hotels, go-MMT
+TOTAL SPEND
+₹23,962
+BALANCE
+-
+FS
+
+Farhan Sharma [DH]
+
+STAYS
+3
+NIGHTS
+6
+LAST STAY
+
+11 Aug 2026
+
+BOOKED VIA
+Agoda, Walk-In, go-MMT
+TOTAL SPEND
+₹22,593
+BALANCE
+-
+FS
+
+Farhan Sheikh [DH]
+
+STAYS
+3
+NIGHTS
+4
+LAST STAY
+
+8 Sep 2026
+
+BOOKED VIA
+Agoda, Booking.com, Walk-In
+TOTAL SPEND
+₹15,370
+BALANCE
+-
+FS
+
+Farhan Singh [DH]
+
+overlapping stays
+
+STAYS
+3
+NIGHTS
+6
+LAST STAY
+
+19 Jul 2026
+
+BOOKED VIA
+Agoda, Booking.com, Fidato Hotels
+TOTAL SPEND
+₹23,868
+BALANCE
+-
+HK
+
+Harsha Kamat
+
+STAYS
+3
+NIGHTS
+7
+LAST STAY
+
+10 Oct 2026
+
+BOOKED VIA
+Expedia
+TOTAL SPEND
+₹25,138
+BALANCE
+-
+IS
+
+Imran Sheikh [DH]
+
+STAYS
+3
+NIGHTS
+7
+LAST STAY
+
+20 Jul 2026
+
+BOOKED VIA
+Expedia, Walk-In
+TOTAL SPEND
+₹29,293
+BALANCE
+-
+IS
+
+Imran Singh [DH]
+
+STAYS
+3
+NIGHTS
+7
+LAST STAY
+
+2 Sep 2026
+
+BOOKED VIA
+Booking.com, Fidato Hotels, go-MMT
+TOTAL SPEND
+₹25,118
+BALANCE
+-
+IK
+
+Ira Khan [DH]
+
+STAYS
+3
+NIGHTS
+6
+LAST STAY
+
+29 Jun 2026
+
+BOOKED VIA
+Expedia, Fidato Hotels
+TOTAL SPEND
+₹24,417
+BALANCE
+-
+IP
+
+Ira Pillai [DH]
+
+STAYS
+3
+NIGHTS
+4
+LAST STAY
+
+29 Aug 2026
+
+BOOKED VIA
+Fidato Hotels, go-MMT
+TOTAL SPEND
+₹15,984
+BALANCE
+-
+IS
+
+Ira Singh [DH]
+
+STAYS
+3
+NIGHTS
+6
+LAST STAY
+
+28 Aug 2026
+
+BOOKED VIA
+Agoda, Fidato Hotels, go-MMT
+TOTAL SPEND
+₹26,552
+BALANCE
+-
+IR
+
+Ishaan Reddy [DH]
+
+STAYS
+3
+NIGHTS
+6
+LAST STAY
+
+15 Aug 2026
+
+BOOKED VIA
+Fidato Hotels, Walk-In
+TOTAL SPEND
+₹23,957
+BALANCE
+-
+KI
+
+Kabir Iyer [DH]
+
+STAYS
+3
+NIGHTS
+4
+LAST STAY
+
+13 Aug 2026
+
+BOOKED VIA
+Agoda, Expedia, Fidato Hotels
+TOTAL SPEND
+₹17,176
+BALANCE
+-
+KP
+
+Kabir Pillai [DH]
+
+STAYS
+3
+NIGHTS
+4
+LAST STAY
+
+22 Aug 2026
+
+BOOKED VIA
+Booking.com, Walk-In, go-MMT
+TOTAL SPEND
+₹16,315
+BALANCE
+-
+KJ
+
+Kavya Joshi [DH]
+
+STAYS
+3
+NIGHTS
+4
+LAST STAY
+
+11 Aug 2026
+
+BOOKED VIA
+Booking.com, Fidato Hotels, Walk-In
+TOTAL SPEND
+₹17,483
+BALANCE
+-
+KS
+
+Kavya Sheikh [DH]
+
+STAYS
+3
+NIGHTS
+4
+LAST STAY
+
+29 Aug 2026
+
+BOOKED VIA
+Expedia, Walk-In
+TOTAL SPEND
+₹17,322
+BALANCE
+-
+KI
+
+Krishna Iyer [DH]
+
+STAYS
+3
+NIGHTS
+5
+LAST STAY
+
+5 Sep 2026
+
+BOOKED VIA
+Booking.com, Fidato Hotels, Walk-In
+TOTAL SPEND
+₹18,358
+BALANCE
+-
+MI
+
+Meera Iyer
+
+STAYS
+3
+NIGHTS
+5
+LAST STAY
+
+29 Sep 2026
+
+BOOKED VIA
+Agoda, Expedia, Walk-in, go-MMT
+TOTAL SPEND
+₹18,627
+BALANCE
+-
+MK
+
+Myra Khan [DH]
+
+STAYS
+3
+NIGHTS
+7
+LAST STAY
+
+1 Aug 2026
+
+BOOKED VIA
+Booking.com, go-MMT
+TOTAL SPEND
+₹28,561
+BALANCE
+-
+NM
+
+Navya Mehta [DH]
+
+overlapping stays
+
+STAYS
+3
+NIGHTS
+6
+LAST STAY
+
+31 Jul 2026
+
+BOOKED VIA
+Agoda, Booking.com
+TOTAL SPEND
+₹28,621
+BALANCE
+-
+NN
+
+Navya Nair [DH]
+
+STAYS
+3
+NIGHTS
+7
+LAST STAY
+
+15 Jul 2026
+
+BOOKED VIA
+Agoda, Expedia, go-MMT
+TOTAL SPEND
+₹31,454
+BALANCE
+-
+NR
+
+Navya Rao [DH]
+
+STAYS
+3
+NIGHTS
+7
+LAST STAY
+
+26 Jul 2026
+
+BOOKED VIA
+Agoda, Walk-In, go-MMT
+TOTAL SPEND
+₹29,403
+BALANCE
+-
+NS
+
+Neha Sawant
+
+STAYS
+3
+NIGHTS
+6
+LAST STAY
+
+4 Oct 2026
+
+BOOKED VIA
+Agoda, Expedia, go-MMT
+TOTAL SPEND
+₹19,637
+BALANCE
+-
+NP
+
+Nisha Pillai [DH]
+
+STAYS
+3
+NIGHTS
+6
+LAST STAY
+
+9 Jul 2026
+
+BOOKED VIA
+Expedia, Walk-In
+TOTAL SPEND
+₹22,129
+BALANCE
+-
+OS
+
+Omkar Shinde
+
+STAYS
+3
+NIGHTS
+4
+LAST STAY
+
+11 Oct 2026
+
+BOOKED VIA
+Booking.com, Fidato Hotels, go-MMT
+TOTAL SPEND
+₹15,094
+BALANCE
+₹7,582
+PG
+
+P6MSG Guest
+
+overlapping stays
+
+STAYS
+3
+NIGHTS
+4
+LAST STAY
+
+first visit
+
+back 24 Oct 2026
+
+BOOKED VIA
+Fidato Hotels, P6MSG Expedia
+TOTAL SPEND
+₹2,100
+BALANCE
+₹2,100
+RS
+
+Rahul Sheikh [DH]
+
+STAYS
+3
+NIGHTS
+4
+LAST STAY
+
+10 Aug 2026
+
+BOOKED VIA
+Booking.com, go-MMT
+TOTAL SPEND
+₹17,663
+BALANCE
+-
+RG
+
+Rekha Gaikwad
+
+STAYS
+3
+NIGHTS
+4
+LAST STAY
+
+9 Oct 2026
+
+BOOKED VIA
+Agoda, Walk-in
+TOTAL SPEND
+₹13,469
+BALANCE
+-
+RK
+
+Reyansh Kulkarni [DH]
+
+STAYS
+3
+NIGHTS
+6
+LAST STAY
+
+19 Aug 2026
+
+BOOKED VIA
+Agoda, Walk-In, go-MMT
+TOTAL SPEND
+₹23,819
+BALANCE
+-
+RS
+
+Reyansh Sheikh [DH]
+
+STAYS
+3
+NIGHTS
+6
+LAST STAY
+
+25 Aug 2026
+
+BOOKED VIA
+Expedia, Fidato Hotels, Walk-In
+TOTAL SPEND
+₹23,637
+BALANCE
+-
+RK
+
+Rohan Kulkarni [DH]
+
+overlapping stays
+
+STAYS
+3
+NIGHTS
+6
+LAST STAY
+
+31 Aug 2026
+
+BOOKED VIA
+Agoda, Booking.com, Fidato Hotels
+TOTAL SPEND
+₹25,004
+BALANCE
+-
+RD
+
+Rohit Deshpande
+
+STAYS
+3
+NIGHTS
+6
+LAST STAY
+
+28 Sep 2026
+
+BOOKED VIA
+Expedia, Walk-in, go-MMT
+TOTAL SPEND
+₹19,217
+BALANCE
+-
+SP
+
+Sara Patel [DH]
+
+STAYS
+3
+NIGHTS
+6
+LAST STAY
+
+9 Jul 2026
+
+BOOKED VIA
+Agoda, Expedia, Walk-In
+TOTAL SPEND
+₹22,906
+BALANCE
+-
+SS
+
+Sara Shah [DH]
+
+STAYS
+3
+NIGHTS
+8
+LAST STAY
+
+30 Jul 2026
+
+BOOKED VIA
+Agoda, Expedia, Walk-In
+TOTAL SPEND
+₹37,399
+BALANCE
+-
+SR
+
+Shaurya Reddy [DH]
+
+STAYS
+3
+NIGHTS
+6
+LAST STAY
+
+24 Aug 2026
+
+BOOKED VIA
+Agoda, Walk-In
+TOTAL SPEND
+₹25,254
+BALANCE
+-
+SN
+
+Sneha Nair [DH]
+
+STAYS
+3
+NIGHTS
+5
+LAST STAY
+
+8 Sep 2026
+
+BOOKED VIA
+Walk-In, go-MMT
+TOTAL SPEND
+₹20,076
+BALANCE
+-
+SR
+
+Sneha Reddy [DH]
+
+STAYS
+3
+NIGHTS
+3
+LAST STAY
+
+22 Aug 2026
+
+BOOKED VIA
+Agoda, Fidato Hotels
+TOTAL SPEND
+₹12,189
+BALANCE
+-
+SS
+
+Sneha Shah [DH]
+
+overlapping stays
+
+STAYS
+3
+NIGHTS
+8
+LAST STAY
+
+5 Jul 2026
+
+BOOKED VIA
+Booking.com, Expedia, go-MMT
+TOTAL SPEND
+₹32,996
+BALANCE
+-
+SM
+
+Suresh Mane
+
+overlapping stays
+
+STAYS
+3
+NIGHTS
+8
+LAST STAY
+
+5 Oct 2026
+
+BOOKED VIA
+Agoda, Expedia, go-MMT
+TOTAL SPEND
+₹25,620
+BALANCE
+-
+TB
+
+Tanvi Bhide
+
+STAYS
+3
+NIGHTS
+6
+LAST STAY
+
+11 Oct 2026
+
+BOOKED VIA
+Fidato Hotels, Walk-in, go-MMT
+TOTAL SPEND
+₹19,351
+BALANCE
+-
+TI
+
+Tanvi Iyer [DH]
+
+STAYS
+3
+NIGHTS
+6
+LAST STAY
+
+22 Aug 2026
+
+BOOKED VIA
+Booking.com, go-MMT
+TOTAL SPEND
+₹24,838
+BALANCE
+-
+VG
+
+Vihaan Gupta [DH]
+
+STAYS
+3
+NIGHTS
+7
+LAST STAY
+
+8 Aug 2026
+
+BOOKED VIA
+Agoda, Booking.com, Expedia
+TOTAL SPEND
+₹24,405
+BALANCE
+-
+VS
+
+Vihaan Singh [DH]
+
+STAYS
+3
+NIGHTS
+6
+LAST STAY
+
+12 Aug 2026
+
+BOOKED VIA
+Agoda, Expedia
+TOTAL SPEND
+₹23,142
+BALANCE
+-
+VV
+
+Vihaan Verma [DH]
+
+STAYS
+3
+NIGHTS
+8
+LAST STAY
+
+22 Aug 2026
+
+BOOKED VIA
+Booking.com, Fidato Hotels
+TOTAL SPEND
+₹31,476
+BALANCE
+-
+VJ
+
+Vivaan Joshi [DH]
+
+STAYS
+3
+NIGHTS
+7
+LAST STAY
+
+4 Sep 2026
+
+BOOKED VIA
+Agoda, Walk-In, go-MMT
+TOTAL SPEND
+₹25,838
+BALANCE
+-
+VN
+
+Vivaan Nair [DH]
+
+STAYS
+3
+NIGHTS
+5
+LAST STAY
+
+8 Jul 2026
+
+BOOKED VIA
+Agoda, Walk-In, go-MMT
+TOTAL SPEND
+₹21,558
+BALANCE
+-
+VT
+
+Vivek Thorat
+
+STAYS
+3
+NIGHTS
+3
+LAST STAY
+
+2 Oct 2026
+
+BOOKED VIA
+Fidato Hotels, Walk-in
+TOTAL SPEND
+₹9,371
+BALANCE
+-
+ZJ
+
+Zoya Joshi [DH]
+
+STAYS
+3
+NIGHTS
+9
+LAST STAY
+
+5 Sep 2026
+
+BOOKED VIA
+Fidato Hotels, Walk-In
+TOTAL SPEND
+₹32,881
+BALANCE
+-
+ZK
+
+Zoya Kulkarni [DH]
+
+STAYS
+3
+NIGHTS
+6
+LAST STAY
+
+8 Sep 2026
+
+BOOKED VIA
+Expedia, Walk-In
+TOTAL SPEND
+₹26,556
+BALANCE
+-
+ZR
+
+Zoya Rao [DH]
+
+STAYS
+3
+NIGHTS
+4
+LAST STAY
+
+2 Sep 2026
+
+BOOKED VIA
+Walk-In, go-MMT
+TOTAL SPEND
+₹17,562
+BALANCE
+-
+ZS
+
+Zoya Sharma [DH]
+
+STAYS
+3
+NIGHTS
+4
+LAST STAY
+
+27 Aug 2026
+
+BOOKED VIA
+Expedia, go-MMT
+TOTAL SPEND
+₹17,545
+BALANCE
+-
+ZV
+
+Zoya Verma [DH]
+
+STAYS
+3
+NIGHTS
+6
+LAST STAY
+
+4 Jul 2026
+
+BOOKED VIA
+Fidato Hotels, Walk-In
+TOTAL SPEND
+₹21,084
+BALANCE
+-
+AT
+
+A5 Test Rane
+
+overlapping stays
+
+STAYS
+2
+NIGHTS
+3
+LAST STAY
+
+first visit
+
+BOOKED VIA
+Walk-in
+TOTAL SPEND
+₹7,768
+BALANCE
+-
+AT
+
+A5 Test Wagh
+
+overlapping stays
+
+STAYS
+2
+NIGHTS
+2
+LAST STAY
+
+first visit
+
+BOOKED VIA
+Walk-in
+TOTAL SPEND
+₹7,768
+BALANCE
+-
+AC
+
+Aadhya Chatterjee [DH]
+
+STAYS
+2
+NIGHTS
+3
+LAST STAY
+
+26 Jul 2026
+
+BOOKED VIA
+Booking.com, Fidato Hotels
+TOTAL SPEND
+₹12,250
+BALANCE
+-
+AI
+
+Aadhya Iyer [DH]
+
+STAYS
+2
+NIGHTS
+3
+LAST STAY
+
+28 Jul 2026
+
+BOOKED VIA
+Expedia, Fidato Hotels
+TOTAL SPEND
+₹12,894
+BALANCE
+-
+AS
+
+Aadhya Sharma [DH]
+
+STAYS
+2
+NIGHTS
+2
+LAST STAY
+
+24 Aug 2026
+
+BOOKED VIA
+Agoda, Walk-In
+TOTAL SPEND
+₹8,556
+BALANCE
+-
+AS
+
+Aadhya Singh [DH]
+
+STAYS
+2
+NIGHTS
+4
+LAST STAY
+
+18 Aug 2026
+
+BOOKED VIA
+Booking.com, Walk-In
+TOTAL SPEND
+₹15,197
+BALANCE
+-
+AR
+
+Aarav Reddy [DH]
+
+overlapping stays
+
+STAYS
+2
+NIGHTS
+4
+LAST STAY
+
+31 Aug 2026
+
+BOOKED VIA
+Expedia, Walk-In
+TOTAL SPEND
+₹16,035
+BALANCE
+-
+AV
+
+Aarav Verma [DH]
+
+STAYS
+2
+NIGHTS
+3
+LAST STAY
+
+9 Jul 2026
+
+BOOKED VIA
+Agoda, go-MMT
+TOTAL SPEND
+₹11,181
+BALANCE
+-
+AM
+
+Aditya Menon [DH]
+
+STAYS
+2
+NIGHTS
+4
+LAST STAY
+
+1 Aug 2026
+
+BOOKED VIA
+Agoda
+TOTAL SPEND
+₹14,810
+BALANCE
+-
+AP
+
+Aditya Pillai [DH]
+
+STAYS
+2
+NIGHTS
+5
+LAST STAY
+
+17 Aug 2026
+
+BOOKED VIA
+go-MMT
+TOTAL SPEND
+₹19,548
+BALANCE
+-
+AS
+
+Aditya Shah [DH]
+
+STAYS
+2
+NIGHTS
+4
+LAST STAY
+
+5 Sep 2026
+
+BOOKED VIA
+Booking.com, Fidato Hotels
+TOTAL SPEND
+₹16,180
+BALANCE
+-
+AS
+
+Aditya Sheikh [DH]
+
+STAYS
+2
+NIGHTS
+3
+LAST STAY
+
+15 Jun 2026
+
+BOOKED VIA
+Agoda, Booking.com
+TOTAL SPEND
+₹13,740
+BALANCE
+-
+AK
+
+Ananya Khan [DH]
+
+STAYS
+2
+NIGHTS
+2
+LAST STAY
+
+2 Sep 2026
+
+BOOKED VIA
+Fidato Hotels, go-MMT
+TOTAL SPEND
+₹8,259
+BALANCE
+-
+AR
+
+Ananya Reddy [DH]
+
+STAYS
+2
+NIGHTS
+3
+LAST STAY
+
+17 Aug 2026
+
+BOOKED VIA
+Agoda, Walk-In
+TOTAL SPEND
+₹11,712
+BALANCE
+-
+AS
+
+Ananya Sheikh [DH]
+
+STAYS
+2
+NIGHTS
+4
+LAST STAY
+
+31 Aug 2026
+
+BOOKED VIA
+Agoda, Expedia
+TOTAL SPEND
+₹15,708
+BALANCE
+-
+AV
+
+Ananya Verma [DH]
+
+STAYS
+2
+NIGHTS
+5
+LAST STAY
+
+12 Aug 2026
+
+BOOKED VIA
+Fidato Hotels, Walk-In
+TOTAL SPEND
+₹24,707
+BALANCE
+-
+AI
+
+Anika Iyer [DH]
+
+STAYS
+2
+NIGHTS
+3
+LAST STAY
+
+2 Aug 2026
+
+BOOKED VIA
+Booking.com
+TOTAL SPEND
+₹12,039
+BALANCE
+-
+AK
+
+Anika Kulkarni [DH]
+
+STAYS
+2
+NIGHTS
+3
+LAST STAY
+
+8 Aug 2026
+
+BOOKED VIA
+Booking.com, Fidato Hotels
+TOTAL SPEND
+₹12,569
+BALANCE
+-
+AN
+
+Anika Nair [DH]
+
+STAYS
+2
+NIGHTS
+2
+LAST STAY
+
+3 Sep 2026
+
+BOOKED VIA
+Fidato Hotels, Walk-In
+TOTAL SPEND
+₹8,903
+BALANCE
+-
+AP
+
+Anika Patel [DH]
+
+STAYS
+2
+NIGHTS
+5
+LAST STAY
+
+4 Aug 2026
+
+BOOKED VIA
+Fidato Hotels, Walk-In
+TOTAL SPEND
+₹20,570
+BALANCE
+-
+AP
+
+Anika Pillai [DH]
+
+STAYS
+2
+NIGHTS
+2
+LAST STAY
+
+13 Aug 2026
+
+BOOKED VIA
+Booking.com, Fidato Hotels
+TOTAL SPEND
+₹8,553
+BALANCE
+-
+AS
+
+Anika Sharma [DH]
+
+STAYS
+2
+NIGHTS
+3
+LAST STAY
+
+24 Jul 2026
+
+BOOKED VIA
+Booking.com, Expedia
+TOTAL SPEND
+₹11,497
+BALANCE
+-
+AS
+
+Anika Sheikh [DH]
+
+STAYS
+2
+NIGHTS
+3
+LAST STAY
+
+19 Aug 2026
+
+BOOKED VIA
+Fidato Hotels
+TOTAL SPEND
+₹10,973
+BALANCE
+-
+AB
+
+Arjun Bose [DH]
+
+STAYS
+2
+NIGHTS
+5
+LAST STAY
+
+27 Aug 2026
+
+BOOKED VIA
+Fidato Hotels
+TOTAL SPEND
+₹22,583
+BALANCE
+-
+AM
+
+Arjun Menon [DH]
+
+STAYS
+2
+NIGHTS
+3
+LAST STAY
+
+14 Aug 2026
+
+BOOKED VIA
+Agoda
+TOTAL SPEND
+₹11,540
+BALANCE
+-
+AP
+
+Arjun Pillai [DH]
+
+STAYS
+2
+NIGHTS
+3
+LAST STAY
+
+6 Sep 2026
+
+BOOKED VIA
+Expedia, go-MMT
+TOTAL SPEND
+₹10,850
+BALANCE
+-
+AR
+
+Arjun Reddy [DH]
+
+STAYS
+2
+NIGHTS
+5
+LAST STAY
+
+10 Jul 2026
+
+BOOKED VIA
+Fidato Hotels, Walk-In
+TOTAL SPEND
+₹17,748
+BALANCE
+-
+AS
+
+Arjun Shah [DH]
+
+STAYS
+2
+NIGHTS
+2
+LAST STAY
+
+6 Jul 2026
+
+BOOKED VIA
+Expedia, Fidato Hotels
+TOTAL SPEND
+₹7,401
+BALANCE
+-
+AV
+
+Arjun Verma [DH]
+
+STAYS
+2
+NIGHTS
+3
+LAST STAY
+
+5 Sep 2026
+
+BOOKED VIA
+Expedia, Fidato Hotels
+TOTAL SPEND
+₹11,140
+BALANCE
+-
+AM
+
+Ayaan Menon [DH]
+
+STAYS
+2
+NIGHTS
+5
+LAST STAY
+
+3 Jul 2026
+
+BOOKED VIA
+Fidato Hotels
+TOTAL SPEND
+₹21,964
+BALANCE
+-
+AR
+
+Ayaan Reddy [DH]
+
+STAYS
+2
+NIGHTS
+4
+LAST STAY
+
+9 Jul 2026
+
+BOOKED VIA
+go-MMT
+TOTAL SPEND
+₹16,861
+BALANCE
+-
+DD
+
+Diya Deshmukh [DH]
+
+STAYS
+2
+NIGHTS
+4
+LAST STAY
+
+19 Aug 2026
+
+BOOKED VIA
+Fidato Hotels
+TOTAL SPEND
+₹15,057
+BALANCE
+-
+DI
+
+Diya Iyer [DH]
+
+STAYS
+2
+NIGHTS
+4
+LAST STAY
+
+19 Aug 2026
+
+BOOKED VIA
+Booking.com, Fidato Hotels
+TOTAL SPEND
+₹17,604
+BALANCE
+-
+DJ
+
+Diya Joshi [DH]
+
+STAYS
+2
+NIGHTS
+3
+LAST STAY
+
+3 Sep 2026
+
+BOOKED VIA
+Booking.com
+TOTAL SPEND
+₹13,618
+BALANCE
+-
+DK
+
+Diya Kulkarni [DH]
+
+STAYS
+2
+NIGHTS
+4
+LAST STAY
+
+14 Aug 2026
+
+BOOKED VIA
+Agoda, go-MMT
+TOTAL SPEND
+₹16,990
+BALANCE
+-
+DN
+
+Diya Nair [DH]
+
+STAYS
+2
+NIGHTS
+4
+LAST STAY
+
+24 Aug 2026
+
+BOOKED VIA
+Agoda, go-MMT
+TOTAL SPEND
+₹14,170
+BALANCE
+-
+DP
+
+Diya Patel [DH]
+
+STAYS
+2
+NIGHTS
+5
+LAST STAY
+
+29 Aug 2026
+
+BOOKED VIA
+Agoda, Expedia
+TOTAL SPEND
+₹18,843
+BALANCE
+-
+DV
+
+Diya Verma [DH]
+
+STAYS
+2
+NIGHTS
+4
+LAST STAY
+
+30 Jun 2026
+
+BOOKED VIA
+Booking.com, Expedia
+TOTAL SPEND
+₹17,053
+BALANCE
+-
+FD
+
+Farhan Deshmukh [DH]
+
+STAYS
+2
+NIGHTS
+4
+LAST STAY
+
+13 Jul 2026
+
+BOOKED VIA
+Fidato Hotels, go-MMT
+TOTAL SPEND
+₹16,428
+BALANCE
+-
+FG
+
+Farhan Gupta [DH]
+
+STAYS
+2
+NIGHTS
+5
+LAST STAY
+
+31 Aug 2026
+
+BOOKED VIA
+Walk-In
+TOTAL SPEND
+₹20,279
+BALANCE
+-
+FI
+
+Farhan Iyer [DH]
+
+STAYS
+2
+NIGHTS
+5
+LAST STAY
+
+9 Aug 2026
+
+BOOKED VIA
+Booking.com, Fidato Hotels
+TOTAL SPEND
+₹17,131
+BALANCE
+-
+FP
+
+Farhan Patel [DH]
+
+STAYS
+2
+NIGHTS
+3
+LAST STAY
+
+9 Aug 2026
+
+BOOKED VIA
+Agoda, Booking.com
+TOTAL SPEND
+₹13,552
+BALANCE
+-
+FR
+
+Farhan Rao [DH]
+
+STAYS
+2
+NIGHTS
+5
+LAST STAY
+
+2 Sep 2026
+
+BOOKED VIA
+Agoda
+TOTAL SPEND
+₹18,660
+BALANCE
+-
+IC
+
+Imran Chatterjee [DH]
+
+STAYS
+2
+NIGHTS
+6
+LAST STAY
+
+10 Sep 2026
+
+BOOKED VIA
+Agoda, Booking.com
+TOTAL SPEND
+₹25,783
+BALANCE
+-
+IC
+
+Ira Chatterjee [DH]
+
+STAYS
+2
+NIGHTS
+4
+LAST STAY
+
+22 Jun 2026
+
+BOOKED VIA
+Agoda, Fidato Hotels
+TOTAL SPEND
+₹16,855
+BALANCE
+-
+IM
+
+Ira Menon [DH]
+
+STAYS
+2
+NIGHTS
+4
+LAST STAY
+
+4 Jul 2026
+
+BOOKED VIA
+go-MMT
+TOTAL SPEND
+₹15,092
+BALANCE
+-
+IS
+
+Ira Shah [DH]
+
+STAYS
+2
+NIGHTS
+5
+LAST STAY
+
+9 Jun 2026
+
+BOOKED VIA
+Fidato Hotels, go-MMT
+TOTAL SPEND
+₹18,447
+BALANCE
+-
+IV
+
+Ira Verma [DH]
+
+STAYS
+2
+NIGHTS
+4
+LAST STAY
+
+25 Jul 2026
+
+BOOKED VIA
+Booking.com, Walk-In
+TOTAL SPEND
+₹17,520
+BALANCE
+-
+IB
+
+Ishaan Bose [DH]
+
+STAYS
+2
+NIGHTS
+4
+LAST STAY
+
+20 Jul 2026
+
+BOOKED VIA
+Agoda, Booking.com
+TOTAL SPEND
+₹16,767
+BALANCE
+-
+ID
+
+Ishaan Deshmukh [DH]
+
+STAYS
+2
+NIGHTS
+4
+LAST STAY
+
+4 Sep 2026
+
+BOOKED VIA
+go-MMT
+TOTAL SPEND
+₹19,428
+BALANCE
+-
+IG
+
+Ishaan Gupta [DH]
+
+STAYS
+2
+NIGHTS
+6
+LAST STAY
+
+18 Aug 2026
+
+BOOKED VIA
+Agoda, go-MMT
+TOTAL SPEND
+₹24,956
+BALANCE
+-
+IK
+
+Ishaan Khan [DH]
+
+STAYS
+2
+NIGHTS
+4
+LAST STAY
+
+5 Sep 2026
+
+BOOKED VIA
+Expedia, go-MMT
+TOTAL SPEND
+₹16,421
+BALANCE
+-
+IP
+
+Ishaan Pillai [DH]
+
+STAYS
+2
+NIGHTS
+6
+LAST STAY
+
+11 Aug 2026
+
+BOOKED VIA
+Fidato Hotels, Walk-In
+TOTAL SPEND
+₹25,015
+BALANCE
+-
+IR
+
+Ishaan Rao [DH]
+
+STAYS
+2
+NIGHTS
+2
+LAST STAY
+
+16 Jul 2026
+
+BOOKED VIA
+Booking.com, Walk-In
+TOTAL SPEND
+₹7,295
+BALANCE
+-
+KG
+
+Kabir Gupta [DH]
+
+STAYS
+2
+NIGHTS
+2
+LAST STAY
+
+31 May 2026
+
+BOOKED VIA
+Booking.com, go-MMT
+TOTAL SPEND
+₹8,136
+BALANCE
+-
+KS
+
+Kabir Sharma [DH]
+
+STAYS
+2
+NIGHTS
+2
+LAST STAY
+
+3 Sep 2026
+
+BOOKED VIA
+Booking.com, Fidato Hotels
+TOTAL SPEND
+₹8,339
+BALANCE
+-
+KI
+
+Kavya Iyer [DH]
+
+STAYS
+2
+NIGHTS
+5
+LAST STAY
+
+24 Aug 2026
+
+BOOKED VIA
+Fidato Hotels, Walk-In
+TOTAL SPEND
+₹21,517
+BALANCE
+-
+KK
+
+Kavya Kulkarni [DH]
+
+STAYS
+2
+NIGHTS
+3
+LAST STAY
+
+21 Jun 2026
+
+BOOKED VIA
+Fidato Hotels, go-MMT
+TOTAL SPEND
+₹11,223
+BALANCE
+-
+KR
+
+Kavya Rao [DH]
+
+STAYS
+2
+NIGHTS
+2
+LAST STAY
+
+20 Aug 2026
+
+BOOKED VIA
+Booking.com, Walk-In
+TOTAL SPEND
+₹7,492
+BALANCE
+-
+MB
+
+Meera Bose [DH]
+
+STAYS
+2
+NIGHTS
+4
+LAST STAY
+
+27 Aug 2026
+
+BOOKED VIA
+Agoda, Walk-In
+TOTAL SPEND
+₹16,420
+BALANCE
+-
+MC
+
+Meera Chatterjee [DH]
+
+STAYS
+2
+NIGHTS
+3
+LAST STAY
+
+4 Sep 2026
+
+BOOKED VIA
+Agoda, Fidato Hotels
+TOTAL SPEND
+₹10,533
+BALANCE
+-
+MD
+
+Meera Deshmukh [DH]
+
+STAYS
+2
+NIGHTS
+2
+LAST STAY
+
+31 Aug 2026
+
+BOOKED VIA
+Expedia
+TOTAL SPEND
+₹7,790
+BALANCE
+-
+MG
+
+Meera Gupta [DH]
+
+STAYS
+2
+NIGHTS
+6
+LAST STAY
+
+17 Aug 2026
+
+BOOKED VIA
+Booking.com, go-MMT
+TOTAL SPEND
+₹27,422
+BALANCE
+-
+MJ
+
+Meera Joshi [DH]
+
+STAYS
+2
+NIGHTS
+5
+LAST STAY
+
+26 Aug 2026
+
+BOOKED VIA
+Agoda, go-MMT
+TOTAL SPEND
+₹20,437
+BALANCE
+-
+MP
+
+Meera Pillai [DH]
+
+STAYS
+2
+NIGHTS
+3
+LAST STAY
+
+4 Sep 2026
+
+BOOKED VIA
+Agoda, Walk-In
+TOTAL SPEND
+₹12,061
+BALANCE
+-
+MS
+
+Meera Shah [DH]
+
+STAYS
+2
+NIGHTS
+2
+LAST STAY
+
+3 Aug 2026
+
+BOOKED VIA
+Booking.com, Fidato Hotels
+TOTAL SPEND
+₹7,578
+BALANCE
+-
+MS
+
+Meera Sheikh [DH]
+
+STAYS
+2
+NIGHTS
+5
+LAST STAY
+
+20 Jun 2026
+
+BOOKED VIA
+Expedia, go-MMT
+TOTAL SPEND
+₹22,549
+BALANCE
+-
+MK
+
+Myra Kulkarni [DH]
+
+STAYS
+2
+NIGHTS
+4
+LAST STAY
+
+14 Jun 2026
+
+BOOKED VIA
+go-MMT
+TOTAL SPEND
+₹19,002
+BALANCE
+-
+MM
+
+Myra Menon [DH]
+
+STAYS
+2
+NIGHTS
+5
+LAST STAY
+
+25 Jul 2026
+
+BOOKED VIA
+Walk-In, go-MMT
+TOTAL SPEND
+₹18,415
+BALANCE
+-
+MS
+
+Myra Sheikh [DH]
+
+STAYS
+2
+NIGHTS
+6
+LAST STAY
+
+30 Jul 2026
+
+BOOKED VIA
+Expedia, Fidato Hotels
+TOTAL SPEND
+₹24,414
+BALANCE
+-
+MS
+
+Myra Singh [DH]
+
+STAYS
+2
+NIGHTS
+5
+LAST STAY
+
+31 Jul 2026
+
+BOOKED VIA
+Walk-In
+TOTAL SPEND
+₹16,798
+BALANCE
+-
+NJ
+
+Navya Joshi [DH]
+
+STAYS
+2
+NIGHTS
+2
+LAST STAY
+
+15 Aug 2026
+
+BOOKED VIA
+Booking.com, Expedia
+TOTAL SPEND
+₹7,608
+BALANCE
+-
+NP
+
+Navya Patel [DH]
+
+STAYS
+2
+NIGHTS
+4
+LAST STAY
+
+17 Aug 2026
+
+BOOKED VIA
+Expedia
+TOTAL SPEND
+₹15,054
+BALANCE
+-
+NS
+
+Navya Sheikh [DH]
+
+STAYS
+2
+NIGHTS
+3
+LAST STAY
+
+2 Sep 2026
+
+BOOKED VIA
+Agoda
+TOTAL SPEND
+₹11,757
+BALANCE
+-
+ND
+
+Nisha Deshmukh [DH]
+
+STAYS
+2
+NIGHTS
+3
+LAST STAY
+
+25 Jul 2026
+
+BOOKED VIA
+Booking.com, go-MMT
+TOTAL SPEND
+₹13,439
+BALANCE
+-
+NG
+
+Nisha Gupta [DH]
+
+STAYS
+2
+NIGHTS
+3
+LAST STAY
+
+9 Aug 2026
+
+BOOKED VIA
+Expedia, Walk-In
+TOTAL SPEND
+₹11,217
+BALANCE
+-
+NI
+
+Nisha Iyer [DH]
+
+STAYS
+2
+NIGHTS
+4
+LAST STAY
+
+20 Jun 2026
+
+BOOKED VIA
+Expedia
+TOTAL SPEND
+₹16,280
+BALANCE
+-
+NP
+
+Nisha Patel [DH]
+
+STAYS
+2
+NIGHTS
+4
+LAST STAY
+
+13 Jun 2026
+
+BOOKED VIA
+Fidato Hotels
+TOTAL SPEND
+₹17,375
+BALANCE
+-
+NS
+
+Nisha Singh [DH]
+
+STAYS
+2
+NIGHTS
+4
+LAST STAY
+
+24 Aug 2026
+
+BOOKED VIA
+Agoda, go-MMT
+TOTAL SPEND
+₹16,742
+BALANCE
+-
+RD
+
+Rahul Deshmukh [DH]
+
+overlapping stays
+
+STAYS
+2
+NIGHTS
+6
+LAST STAY
+
+3 Sep 2026
+
+BOOKED VIA
+Booking.com, Expedia
+TOTAL SPEND
+₹25,252
+BALANCE
+-
+RN
+
+Rahul Nair [DH]
+
+overlapping stays
+
+STAYS
+2
+NIGHTS
+3
+LAST STAY
+
+14 Jun 2026
+
+BOOKED VIA
+Expedia
+TOTAL SPEND
+₹11,385
+BALANCE
+-
+RP
+
+Rahul Patel [DH]
+
+STAYS
+2
+NIGHTS
+5
+LAST STAY
+
+8 Aug 2026
+
+BOOKED VIA
+Agoda, Booking.com
+TOTAL SPEND
+₹18,703
+BALANCE
+-
+RG
+
+Reyansh Gupta [DH]
+
+STAYS
+2
+NIGHTS
+5
+LAST STAY
+
+5 Jul 2026
+
+BOOKED VIA
+Fidato Hotels, go-MMT
+TOTAL SPEND
+₹17,209
+BALANCE
+-
+RI
+
+Reyansh Iyer [DH]
+
+STAYS
+2
+NIGHTS
+3
+LAST STAY
+
+7 Aug 2026
+
+BOOKED VIA
+Fidato Hotels, go-MMT
+TOTAL SPEND
+₹12,417
+BALANCE
+-
+RK
+
+Reyansh Khan [DH]
+
+STAYS
+2
+NIGHTS
+5
+LAST STAY
+
+14 Aug 2026
+
+BOOKED VIA
+Agoda, Fidato Hotels
+TOTAL SPEND
+₹19,591
+BALANCE
+-
+RR
+
+Reyansh Rao [DH]
+
+STAYS
+2
+NIGHTS
+5
+LAST STAY
+
+30 Jul 2026
+
+BOOKED VIA
+Expedia, Fidato Hotels
+TOTAL SPEND
+₹21,701
+BALANCE
+-
+RR
+
+Reyansh Reddy [DH]
+
+STAYS
+2
+NIGHTS
+3
+LAST STAY
+
+16 Aug 2026
+
+BOOKED VIA
+Fidato Hotels, Walk-In
+TOTAL SPEND
+₹13,386
+BALANCE
+-
+RV
+
+Reyansh Verma [DH]
+
+STAYS
+2
+NIGHTS
+2
+LAST STAY
+
+5 Sep 2026
+
+BOOKED VIA
+Booking.com, Expedia
+TOTAL SPEND
+₹8,719
+BALANCE
+-
+RB
+
+Riya Bose [DH]
+
+STAYS
+2
+NIGHTS
+4
+LAST STAY
+
+25 Aug 2026
+
+BOOKED VIA
+Agoda
+TOTAL SPEND
+₹15,883
+BALANCE
+-
+RM
+
+Riya Menon [DH]
+
+STAYS
+2
+NIGHTS
+5
+LAST STAY
+
+1 Aug 2026
+
+BOOKED VIA
+Fidato Hotels, go-MMT
+TOTAL SPEND
+₹18,844
+BALANCE
+-
+RP
+
+Rohan Patel [DH]
+
+STAYS
+2
+NIGHTS
+6
+LAST STAY
+
+6 Sep 2026
+
+BOOKED VIA
+Expedia, go-MMT
+TOTAL SPEND
+₹24,119
+BALANCE
+-
+RS
+
+Rohan Shah [DH]
+
+STAYS
+2
+NIGHTS
+4
+LAST STAY
+
+16 Jul 2026
+
+BOOKED VIA
+Booking.com, Fidato Hotels
+TOTAL SPEND
+₹17,262
+BALANCE
+-
+SC
+
+Sara Chatterjee [DH]
+
+STAYS
+2
+NIGHTS
+4
+LAST STAY
+
+22 Jul 2026
+
+BOOKED VIA
+Booking.com, go-MMT
+TOTAL SPEND
+₹14,343
+BALANCE
+-
+SG
+
+Sara Gupta [DH]
+
+STAYS
+2
+NIGHTS
+5
+LAST STAY
+
+30 Aug 2026
+
+BOOKED VIA
+Agoda, Booking.com
+TOTAL SPEND
+₹20,785
+BALANCE
+-
+SI
+
+Sara Iyer [DH]
+
+STAYS
+2
+NIGHTS
+6
+LAST STAY
+
+4 Sep 2026
+
+BOOKED VIA
+Booking.com, go-MMT
+TOTAL SPEND
+₹25,093
+BALANCE
+-
+SK
+
+Sara Khan [DH]
+
+STAYS
+2
+NIGHTS
+5
+LAST STAY
+
+23 Aug 2026
+
+BOOKED VIA
+Booking.com, Fidato Hotels
+TOTAL SPEND
+₹21,607
+BALANCE
+-
+SM
+
+Sara Menon [DH]
+
+STAYS
+2
+NIGHTS
+3
+LAST STAY
+
+14 Aug 2026
+
+BOOKED VIA
+Booking.com, Expedia
+TOTAL SPEND
+₹12,448
+BALANCE
+-
+SR
+
+Sara Rao [DH]
+
+STAYS
+2
+NIGHTS
+4
+LAST STAY
+
+1 Sep 2026
+
+BOOKED VIA
+Booking.com, Expedia
+TOTAL SPEND
+₹14,281
+BALANCE
+-
+SS
+
+Sara Singh [DH]
+
+overlapping stays
+
+STAYS
+2
+NIGHTS
+4
+LAST STAY
+
+24 Jun 2026
+
+BOOKED VIA
+Agoda
+TOTAL SPEND
+₹14,084
+BALANCE
+-
+SJ
+
+Shaurya Joshi [DH]
+
+STAYS
+2
+NIGHTS
+4
+LAST STAY
+
+24 Aug 2026
+
+BOOKED VIA
+Expedia, go-MMT
+TOTAL SPEND
+₹13,977
+BALANCE
+-
+SN
+
+Shaurya Nair [DH]
+
+STAYS
+2
+NIGHTS
+2
+LAST STAY
+
+31 Aug 2026
+
+BOOKED VIA
+Booking.com, go-MMT
+TOTAL SPEND
+₹7,847
+BALANCE
+-
+SP
+
+Shaurya Patel [DH]
+
+STAYS
+2
+NIGHTS
+5
+LAST STAY
+
+20 Aug 2026
+
+BOOKED VIA
+Expedia, Fidato Hotels
+TOTAL SPEND
+₹20,730
+BALANCE
+-
+SS
+
+Shaurya Sheikh [DH]
+
+STAYS
+2
+NIGHTS
+2
+LAST STAY
+
+24 Aug 2026
+
+BOOKED VIA
+Agoda, Fidato Hotels
+TOTAL SPEND
+₹7,915
+BALANCE
+-
+SS
+
+Shaurya Singh [DH]
+
+STAYS
+2
+NIGHTS
+5
+LAST STAY
+
+18 Jul 2026
+
+BOOKED VIA
+Expedia, Walk-In
+TOTAL SPEND
+₹20,730
+BALANCE
+-
+SV
+
+Shaurya Verma [DH]
+
+STAYS
+2
+NIGHTS
+5
+LAST STAY
+
+3 Sep 2026
+
+BOOKED VIA
+Agoda, Walk-In
+TOTAL SPEND
+₹19,182
+BALANCE
+-
+SB
+
+Sneha Bose [DH]
+
+STAYS
+2
+NIGHTS
+2
+LAST STAY
+
+3 Aug 2026
+
+BOOKED VIA
+Booking.com, Expedia
+TOTAL SPEND
+₹7,062
+BALANCE
+-
+SJ
+
+Sneha Joshi [DH]
+
+STAYS
+2
+NIGHTS
+4
+LAST STAY
+
+24 Aug 2026
+
+BOOKED VIA
+Walk-In
+TOTAL SPEND
+₹18,978
+BALANCE
+-
+SM
+
+Sneha Mehta [DH]
+
+STAYS
+2
+NIGHTS
+6
+LAST STAY
+
+26 Jul 2026
+
+BOOKED VIA
+Expedia, Walk-In
+TOTAL SPEND
+₹23,869
+BALANCE
+-
+SM
+
+Sneha Menon [DH]
+
+STAYS
+2
+NIGHTS
+3
+LAST STAY
+
+3 Sep 2026
+
+BOOKED VIA
+Booking.com, Walk-In
+TOTAL SPEND
+₹11,297
+BALANCE
+-
+SV
+
+Sneha Verma [DH]
+
+STAYS
+2
+NIGHTS
+5
+LAST STAY
+
+22 Jun 2026
+
+BOOKED VIA
+Expedia, Walk-In
+TOTAL SPEND
+₹21,733
+BALANCE
+-
+TJ
+
+Tanvi Joshi [DH]
+
+STAYS
+2
+NIGHTS
+4
+LAST STAY
+
+28 Jul 2026
+
+BOOKED VIA
+Agoda
+TOTAL SPEND
+₹17,458
+BALANCE
+-
+TM
+
+Tanvi Menon [DH]
+
+STAYS
+2
+NIGHTS
+3
+LAST STAY
+
+18 Aug 2026
+
+BOOKED VIA
+Agoda, Expedia
+TOTAL SPEND
+₹10,472
+BALANCE
+-
+TS
+
+Tanvi Sheikh [DH]
+
+STAYS
+2
+NIGHTS
+4
+LAST STAY
+
+1 Sep 2026
+
+BOOKED VIA
+Agoda, Expedia
+TOTAL SPEND
+₹16,948
+BALANCE
+-
+TS
+
+Tanvi Singh [DH]
+
+STAYS
+2
+NIGHTS
+4
+LAST STAY
+
+23 May 2026
+
+BOOKED VIA
+Booking.com, Expedia
+TOTAL SPEND
+₹16,464
+BALANCE
+-
+VK
+
+Vihaan Khan [DH]
+
+STAYS
+2
+NIGHTS
+6
+LAST STAY
+
+6 Sep 2026
+
+BOOKED VIA
+Agoda, Expedia
+TOTAL SPEND
+₹25,616
+BALANCE
+-
+VM
+
+Vihaan Mehta [DH]
+
+STAYS
+2
+NIGHTS
+2
+LAST STAY
+
+24 Jul 2026
+
+BOOKED VIA
+Agoda, go-MMT
+TOTAL SPEND
+₹9,868
+BALANCE
+-
+VP
+
+Vihaan Pillai [DH]
+
+STAYS
+2
+NIGHTS
+4
+LAST STAY
+
+22 Jun 2026
+
+BOOKED VIA
+Walk-In
+TOTAL SPEND
+₹15,614
+BALANCE
+-
+VS
+
+Vihaan Sharma [DH]
+
+STAYS
+2
+NIGHTS
+4
+LAST STAY
+
+30 May 2026
+
+BOOKED VIA
+Fidato Hotels
+TOTAL SPEND
+₹17,150
+BALANCE
+-
+VB
+
+Vivaan Bose [DH]
+
+STAYS
+2
+NIGHTS
+5
+LAST STAY
+
+12 Jun 2026
+
+BOOKED VIA
+Booking.com, Walk-In
+TOTAL SPEND
+₹18,272
+BALANCE
+-
+VK
+
+Vivaan Kulkarni [DH]
+
+STAYS
+2
+NIGHTS
+6
+LAST STAY
+
+12 Jun 2026
+
+BOOKED VIA
+go-MMT
+TOTAL SPEND
+₹26,440
+BALANCE
+-
+VM
+
+Vivaan Menon [DH]
+
+STAYS
+2
+NIGHTS
+4
+LAST STAY
+
+16 Jul 2026
+
+BOOKED VIA
+Booking.com, Expedia
+TOTAL SPEND
+₹15,159
+BALANCE
+-
+VR
+
+Vivaan Reddy [DH]
+
+STAYS
+2
+NIGHTS
+6
+LAST STAY
+
+24 Jun 2026
+
+BOOKED VIA
+Fidato Hotels, Walk-In
+TOTAL SPEND
+₹21,606
+BALANCE
+-
+VS
+
+Vivaan Shah [DH]
+
+STAYS
+2
+NIGHTS
+2
+LAST STAY
+
+2 Jul 2026
+
+BOOKED VIA
+Booking.com, Fidato Hotels
+TOTAL SPEND
+₹9,000
+BALANCE
+-
+VS
+
+Vivaan Singh [DH]
+
+STAYS
+2
+NIGHTS
+4
+LAST STAY
+
+17 Aug 2026
+
+BOOKED VIA
+Booking.com, go-MMT
+TOTAL SPEND
+₹15,786
+BALANCE
+-
+ZD
+
+Zoya Deshmukh [DH]
+
+STAYS
+2
+NIGHTS
+3
+LAST STAY
+
+20 Aug 2026
+
+BOOKED VIA
+Agoda, go-MMT
+TOTAL SPEND
+₹11,546
+BALANCE
+-
+ZG
+
+Zoya Gupta [DH]
+
+STAYS
+2
+NIGHTS
+2
+LAST STAY
+
+12 Jun 2026
+
+BOOKED VIA
+Agoda, Booking.com
+TOTAL SPEND
+₹8,319
+BALANCE
+-
+ZM
+
+Zoya Menon [DH]
+
+STAYS
+2
+NIGHTS
+5
+LAST STAY
+
+20 Aug 2026
+
+BOOKED VIA
+Agoda, Expedia
+TOTAL SPEND
+₹20,776
+BALANCE
+-
+AT
+
+A10 Test R. Kumar
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+first visit
+
+back 20 Dec 2026
+
+BOOKED VIA
+Website
+TOTAL SPEND
+₹0
+BALANCE
+-
+AT
+
+A10 Test Ravi Kumar
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+first visit
+
+back 14 Dec 2026
+
+BOOKED VIA
+Website
+TOTAL SPEND
+₹0
+BALANCE
+-
+AT
+
+A2 Test Joshi
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+first visit
+
+back 31 Oct 2026
+
+BOOKED VIA
+Fidato Hotels
+TOTAL SPEND
+₹0
+BALANCE
+-
+AT
+
+A3 Test Desai
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+first visit
+
+BOOKED VIA
+Website
+TOTAL SPEND
+₹4,304
+BALANCE
+₹4,304
+AT
+
+A3 Test Gokhale
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+first visit
+
+BOOKED VIA
+Walk-in
+TOTAL SPEND
+₹3,884
+BALANCE
+₹3,884
+AT
+
+A3 Test Iyer
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+first visit
+
+BOOKED VIA
+Agoda
+TOTAL SPEND
+₹4,304
+BALANCE
+₹4,304
+AT
+
+A3 Test Smith
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+first visit
+
+BOOKED VIA
+WhatsApp
+TOTAL SPEND
+₹3,884
+BALANCE
+-
+AT
+
+A5 Test Deshmukh
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+10 Oct 2026
+
+BOOKED VIA
+Walk-in
+TOTAL SPEND
+₹3,884
+BALANCE
+-
+AT
+
+A5 Test More
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+11 Oct 2026
+
+BOOKED VIA
+Walk-in
+TOTAL SPEND
+₹3,884
+BALANCE
+-
+AT
+
+A5 Test Pawar
+
+STAYS
+1
+NIGHTS
+0
+LAST STAY
+
+9 Oct 2026
+
+BOOKED VIA
+Walk-in
+TOTAL SPEND
+₹2,100
+BALANCE
+-
+AG
+
+Aadhya Gupta [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+19 May 2026
+
+BOOKED VIA
+Expedia
+TOTAL SPEND
+₹8,741
+BALANCE
+-
+AJ
+
+Aadhya Joshi [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+15 Jul 2026
+
+BOOKED VIA
+Booking.com
+TOTAL SPEND
+₹13,812
+BALANCE
+-
+AK
+
+Aadhya Khan [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+30 May 2026
+
+BOOKED VIA
+Expedia
+TOTAL SPEND
+₹11,843
+BALANCE
+-
+AK
+
+Aadhya Kulkarni [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+11 Aug 2026
+
+BOOKED VIA
+Expedia
+TOTAL SPEND
+₹5,046
+BALANCE
+-
+AM
+
+Aadhya Menon [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+26 Jul 2026
+
+BOOKED VIA
+Agoda
+TOTAL SPEND
+₹12,967
+BALANCE
+-
+AN
+
+Aadhya Nair [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+23 Jul 2026
+
+BOOKED VIA
+Agoda
+TOTAL SPEND
+₹6,525
+BALANCE
+-
+AP
+
+Aadhya Patel [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+1 Aug 2026
+
+BOOKED VIA
+Fidato Hotels
+TOTAL SPEND
+₹4,298
+BALANCE
+-
+AP
+
+Aadhya Pillai [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+19 Jul 2026
+
+BOOKED VIA
+Fidato Hotels
+TOTAL SPEND
+₹13,507
+BALANCE
+-
+AB
+
+Aarav Bose [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+18 Jul 2026
+
+BOOKED VIA
+Fidato Hotels
+TOTAL SPEND
+₹8,247
+BALANCE
+-
+AC
+
+Aarav Chatterjee [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+8 Aug 2026
+
+BOOKED VIA
+Walk-In
+TOTAL SPEND
+₹3,231
+BALANCE
+-
+AM
+
+Aarav Mehta [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+27 May 2026
+
+BOOKED VIA
+Walk-In
+TOTAL SPEND
+₹3,918
+BALANCE
+-
+AP
+
+Aarav Pillai [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+22 Jun 2026
+
+BOOKED VIA
+Walk-In
+TOTAL SPEND
+₹9,015
+BALANCE
+-
+AR
+
+Aarav Rao [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+3 Aug 2026
+
+BOOKED VIA
+Fidato Hotels
+TOTAL SPEND
+₹9,799
+BALANCE
+-
+AS
+
+Aarav Sheikh [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+23 Jul 2026
+
+BOOKED VIA
+Expedia
+TOTAL SPEND
+₹3,770
+BALANCE
+-
+AB
+
+Aditya Bose [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+12 Aug 2026
+
+BOOKED VIA
+go-MMT
+TOTAL SPEND
+₹9,613
+BALANCE
+-
+AI
+
+Aditya Iyer [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+29 Jul 2026
+
+BOOKED VIA
+Agoda
+TOTAL SPEND
+₹3,706
+BALANCE
+-
+AJ
+
+Aditya Joshi [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+25 Aug 2026
+
+BOOKED VIA
+Walk-In
+TOTAL SPEND
+₹9,957
+BALANCE
+-
+AK
+
+Aditya Khan [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+17 Aug 2026
+
+BOOKED VIA
+go-MMT
+TOTAL SPEND
+₹8,289
+BALANCE
+-
+AM
+
+Aditya Mehta [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+21 May 2026
+
+BOOKED VIA
+Walk-In
+TOTAL SPEND
+₹4,879
+BALANCE
+-
+AR
+
+Aditya Rane
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+25 Sep 2026
+
+BOOKED VIA
+Fidato Hotels
+TOTAL SPEND
+₹24,935
+BALANCE
+₹24,935
+AR
+
+Aditya Reddy [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+5 Jun 2026
+
+BOOKED VIA
+Fidato Hotels
+TOTAL SPEND
+₹13,404
+BALANCE
+-
+AS
+
+Aditya Sharma [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+22 Jul 2026
+
+BOOKED VIA
+Booking.com
+TOTAL SPEND
+₹4,773
+BALANCE
+-
+AS
+
+Aditya Singh [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+23 May 2026
+
+BOOKED VIA
+Fidato Hotels
+TOTAL SPEND
+₹12,217
+BALANCE
+-
+AB
+
+Ananya Bose [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+24 Jun 2026
+
+BOOKED VIA
+Booking.com
+TOTAL SPEND
+₹4,111
+BALANCE
+-
+AG
+
+Ananya Gupta [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+28 Jul 2026
+
+BOOKED VIA
+Walk-In
+TOTAL SPEND
+₹3,523
+BALANCE
+-
+AK
+
+Ananya Kulkarni [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+4 Jul 2026
+
+BOOKED VIA
+Walk-In
+TOTAL SPEND
+₹3,996
+BALANCE
+-
+AM
+
+Ananya Mehta [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+6 Jun 2026
+
+BOOKED VIA
+Fidato Hotels
+TOTAL SPEND
+₹9,346
+BALANCE
+-
+AP
+
+Ananya Patel [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+8 Jun 2026
+
+BOOKED VIA
+Expedia
+TOTAL SPEND
+₹3,475
+BALANCE
+-
+AP
+
+Ananya Pillai [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+18 Jun 2026
+
+BOOKED VIA
+Expedia
+TOTAL SPEND
+₹6,747
+BALANCE
+-
+AS
+
+Ananya Sharma [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+25 Jun 2026
+
+BOOKED VIA
+Fidato Hotels
+TOTAL SPEND
+₹11,054
+BALANCE
+-
+AS
+
+Ananya Singh [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+3 Jun 2026
+
+BOOKED VIA
+Expedia
+TOTAL SPEND
+₹11,062
+BALANCE
+-
+AM
+
+Anika Menon [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+7 Jun 2026
+
+BOOKED VIA
+Agoda
+TOTAL SPEND
+₹12,077
+BALANCE
+-
+AR
+
+Anika Reddy [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+23 Aug 2026
+
+BOOKED VIA
+go-MMT
+TOTAL SPEND
+₹11,268
+BALANCE
+-
+AS
+
+Anika Singh [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+3 Aug 2026
+
+BOOKED VIA
+Expedia
+TOTAL SPEND
+₹9,655
+BALANCE
+-
+AC
+
+Arjun Chatterjee [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+9 Sep 2026
+
+BOOKED VIA
+Agoda
+TOTAL SPEND
+₹12,623
+BALANCE
+-
+AI
+
+Arjun Iyer [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+13 Aug 2026
+
+BOOKED VIA
+Booking.com
+TOTAL SPEND
+₹9,514
+BALANCE
+-
+AS
+
+Arjun Sharma [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+8 Sep 2026
+
+BOOKED VIA
+Fidato Hotels
+TOTAL SPEND
+₹7,343
+BALANCE
+-
+AS
+
+Arjun Sheikh [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+26 Jun 2026
+
+BOOKED VIA
+go-MMT
+TOTAL SPEND
+₹14,580
+BALANCE
+-
+AB
+
+Ayaan Bose [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+7 Aug 2026
+
+BOOKED VIA
+Expedia
+TOTAL SPEND
+₹9,098
+BALANCE
+-
+AC
+
+Ayaan Chatterjee [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+9 Jul 2026
+
+BOOKED VIA
+Booking.com
+TOTAL SPEND
+₹12,613
+BALANCE
+-
+AK
+
+Ayaan Kulkarni [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+12 Aug 2026
+
+BOOKED VIA
+Booking.com
+TOTAL SPEND
+₹3,269
+BALANCE
+-
+AM
+
+Ayaan Mehta [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+5 Aug 2026
+
+BOOKED VIA
+Expedia
+TOTAL SPEND
+₹4,056
+BALANCE
+-
+AP
+
+Ayaan Pillai [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+22 Aug 2026
+
+BOOKED VIA
+Agoda
+TOTAL SPEND
+₹8,123
+BALANCE
+-
+AR
+
+Ayaan Rao [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+26 May 2026
+
+BOOKED VIA
+Expedia
+TOTAL SPEND
+₹8,798
+BALANCE
+-
+AS
+
+Ayaan Shah [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+26 Jul 2026
+
+BOOKED VIA
+Expedia
+TOTAL SPEND
+₹12,571
+BALANCE
+-
+AS
+
+Ayaan Sheikh [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+7 Jun 2026
+
+BOOKED VIA
+Expedia
+TOTAL SPEND
+₹13,928
+BALANCE
+-
+AV
+
+Ayaan Verma [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+27 Jun 2026
+
+BOOKED VIA
+Agoda
+TOTAL SPEND
+₹10,680
+BALANCE
+-
+DN
+
+D27371 No company
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+first visit
+
+back 10 Jun 2029
+
+BOOKED VIA
+Agoda
+TOTAL SPEND
+₹0
+BALANCE
+-
+DW
+
+D27371 With company
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+first visit
+
+back 10 Jun 2029
+
+BOOKED VIA
+Agoda
+TOTAL SPEND
+₹0
+BALANCE
+-
+DT
+
+Day Test Kumar
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+11 Oct 2026
+
+BOOKED VIA
+WhatsApp
+TOTAL SPEND
+₹3,884
+BALANCE
+-
+DC
+
+Diya Chatterjee [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+7 Jun 2026
+
+BOOKED VIA
+Agoda
+TOTAL SPEND
+₹3,263
+BALANCE
+-
+DK
+
+Diya Khan [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+11 Aug 2026
+
+BOOKED VIA
+Fidato Hotels
+TOTAL SPEND
+₹3,494
+BALANCE
+-
+DM
+
+Diya Mehta [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+27 Jul 2026
+
+BOOKED VIA
+Fidato Hotels
+TOTAL SPEND
+₹8,953
+BALANCE
+-
+DR
+
+Diya Rao [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+22 Jul 2026
+
+BOOKED VIA
+Walk-In
+TOTAL SPEND
+₹3,278
+BALANCE
+-
+FB
+
+Farhan Bose [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+15 Aug 2026
+
+BOOKED VIA
+Walk-In
+TOTAL SPEND
+₹11,634
+BALANCE
+-
+FC
+
+Farhan Chatterjee [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+29 May 2026
+
+BOOKED VIA
+Agoda
+TOTAL SPEND
+₹7,223
+BALANCE
+-
+FM
+
+Farhan Menon [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+5 Sep 2026
+
+BOOKED VIA
+Booking.com
+TOTAL SPEND
+₹13,447
+BALANCE
+-
+FP
+
+Farhan Pillai [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+30 May 2026
+
+BOOKED VIA
+Expedia
+TOTAL SPEND
+₹11,370
+BALANCE
+-
+FR
+
+Farhan Reddy [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+12 Aug 2026
+
+BOOKED VIA
+Expedia
+TOTAL SPEND
+₹7,274
+BALANCE
+-
+FS
+
+Farhan Shah [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+28 Jun 2026
+
+BOOKED VIA
+Fidato Hotels
+TOTAL SPEND
+₹9,032
+BALANCE
+-
+FV
+
+Farhan Verma [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+28 Jun 2026
+
+BOOKED VIA
+Expedia
+TOTAL SPEND
+₹12,957
+BALANCE
+-
+FC
+
+Farida Contractor
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+first visit
+
+back 14 Oct 2026
+
+BOOKED VIA
+Booking.com
+TOTAL SPEND
+₹0
+BALANCE
+-
+GP
+
+Ganesh Patil
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+9 Oct 2026
+
+BOOKED VIA
+go-MMT
+TOTAL SPEND
+₹5,715
+BALANCE
+-
+IB
+
+Imran Bose [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+24 May 2026
+
+BOOKED VIA
+Walk-In
+TOTAL SPEND
+₹6,427
+BALANCE
+-
+ID
+
+Imran Deshmukh [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+26 Jun 2026
+
+BOOKED VIA
+Walk-In
+TOTAL SPEND
+₹3,206
+BALANCE
+-
+IG
+
+Imran Gupta [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+30 May 2026
+
+BOOKED VIA
+Walk-In
+TOTAL SPEND
+₹11,516
+BALANCE
+-
+IJ
+
+Imran Joshi [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+17 Aug 2026
+
+BOOKED VIA
+Agoda
+TOTAL SPEND
+₹5,054
+BALANCE
+-
+IM
+
+Imran Menon [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+30 Jul 2026
+
+BOOKED VIA
+Agoda
+TOTAL SPEND
+₹4,829
+BALANCE
+-
+IP
+
+Imran Patel [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+24 Jun 2026
+
+BOOKED VIA
+Booking.com
+TOTAL SPEND
+₹9,206
+BALANCE
+-
+IR
+
+Imran Reddy [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+6 Aug 2026
+
+BOOKED VIA
+Expedia
+TOTAL SPEND
+₹4,727
+BALANCE
+-
+IS
+
+Imran Shah [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+26 Aug 2026
+
+BOOKED VIA
+go-MMT
+TOTAL SPEND
+₹8,671
+BALANCE
+-
+IS
+
+Imran Sharma [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+9 Aug 2026
+
+BOOKED VIA
+Fidato Hotels
+TOTAL SPEND
+₹13,605
+BALANCE
+-
+IV
+
+Imran Verma [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+27 Aug 2026
+
+BOOKED VIA
+Booking.com
+TOTAL SPEND
+₹4,207
+BALANCE
+-
+ID
+
+Ira Deshmukh [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+10 Jun 2026
+
+BOOKED VIA
+Agoda
+TOTAL SPEND
+₹8,893
+BALANCE
+-
+IG
+
+Ira Gupta [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+14 Aug 2026
+
+BOOKED VIA
+Walk-In
+TOTAL SPEND
+₹9,331
+BALANCE
+-
+IK
+
+Ira Kulkarni [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+4 Sep 2026
+
+BOOKED VIA
+Walk-In
+TOTAL SPEND
+₹4,489
+BALANCE
+-
+IM
+
+Ira Mehta [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+19 Aug 2026
+
+BOOKED VIA
+Expedia
+TOTAL SPEND
+₹12,969
+BALANCE
+-
+IN
+
+Ira Nair [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+5 Aug 2026
+
+BOOKED VIA
+go-MMT
+TOTAL SPEND
+₹6,749
+BALANCE
+-
+IP
+
+Ira Patel [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+29 May 2026
+
+BOOKED VIA
+Fidato Hotels
+TOTAL SPEND
+₹14,994
+BALANCE
+-
+IR
+
+Ira Rao [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+18 May 2026
+
+BOOKED VIA
+go-MMT
+TOTAL SPEND
+₹7,907
+BALANCE
+-
+IS
+
+Ira Sheikh [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+18 Jul 2026
+
+BOOKED VIA
+go-MMT
+TOTAL SPEND
+₹3,644
+BALANCE
+-
+IK
+
+Ishaan Kulkarni [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+13 Jun 2026
+
+BOOKED VIA
+Agoda
+TOTAL SPEND
+₹8,984
+BALANCE
+-
+IM
+
+Ishaan Mehta [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+5 Jul 2026
+
+BOOKED VIA
+Expedia
+TOTAL SPEND
+₹3,702
+BALANCE
+-
+IM
+
+Ishaan Menon [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+11 Jul 2026
+
+BOOKED VIA
+Booking.com
+TOTAL SPEND
+₹13,337
+BALANCE
+-
+IN
+
+Ishaan Nair [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+4 Aug 2026
+
+BOOKED VIA
+Walk-In
+TOTAL SPEND
+₹4,461
+BALANCE
+-
+IP
+
+Ishaan Patel [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+7 Jun 2026
+
+BOOKED VIA
+Walk-In
+TOTAL SPEND
+₹12,043
+BALANCE
+-
+IS
+
+Ishaan Shah [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+20 Aug 2026
+
+BOOKED VIA
+Agoda
+TOTAL SPEND
+₹9,753
+BALANCE
+-
+IS
+
+Ishaan Sharma [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+7 Jun 2026
+
+BOOKED VIA
+Walk-In
+TOTAL SPEND
+₹5,035
+BALANCE
+-
+IS
+
+Ishaan Sheikh [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+20 Jun 2026
+
+BOOKED VIA
+go-MMT
+TOTAL SPEND
+₹9,579
+BALANCE
+-
+KB
+
+Kabir Bose [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+15 Aug 2026
+
+BOOKED VIA
+go-MMT
+TOTAL SPEND
+₹12,588
+BALANCE
+-
+KC
+
+Kabir Chatterjee [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+10 Aug 2026
+
+BOOKED VIA
+Walk-In
+TOTAL SPEND
+₹3,861
+BALANCE
+-
+KK
+
+Kabir Khan [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+14 Jul 2026
+
+BOOKED VIA
+Walk-In
+TOTAL SPEND
+₹7,021
+BALANCE
+-
+KN
+
+Kabir Nair [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+28 Jun 2026
+
+BOOKED VIA
+Fidato Hotels
+TOTAL SPEND
+₹8,697
+BALANCE
+-
+KP
+
+Kabir Patel [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+1 Jul 2026
+
+BOOKED VIA
+Walk-In
+TOTAL SPEND
+₹11,092
+BALANCE
+-
+KR
+
+Kabir Reddy [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+10 Aug 2026
+
+BOOKED VIA
+Booking.com
+TOTAL SPEND
+₹4,569
+BALANCE
+-
+KR
+
+Kalyani Rege
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+9 Oct 2026
+
+BOOKED VIA
+Fidato Hotels
+TOTAL SPEND
+₹10,500
+BALANCE
+₹5,516
+KG
+
+Kapil Ganjoo
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+10 Oct 2026
+
+BOOKED VIA
+Fidato Hotels
+TOTAL SPEND
+₹0
+BALANCE
+-
+KS
+
+Kavita Salunkhe
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+25 Sep 2026
+
+BOOKED VIA
+Fidato Hotels
+TOTAL SPEND
+₹6,510
+BALANCE
+-
+KK
+
+Kavya Khan [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+31 Jul 2026
+
+BOOKED VIA
+Booking.com
+TOTAL SPEND
+₹8,214
+BALANCE
+-
+KP
+
+Kavya Patel [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+26 Jun 2026
+
+BOOKED VIA
+go-MMT
+TOTAL SPEND
+₹12,392
+BALANCE
+-
+KP
+
+Kavya Pillai [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+31 May 2026
+
+BOOKED VIA
+go-MMT
+TOTAL SPEND
+₹11,708
+BALANCE
+-
+KR
+
+Kavya Reddy [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+19 May 2026
+
+BOOKED VIA
+Fidato Hotels
+TOTAL SPEND
+₹4,715
+BALANCE
+-
+KS
+
+Kavya Shah [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+7 Jun 2026
+
+BOOKED VIA
+go-MMT
+TOTAL SPEND
+₹3,878
+BALANCE
+-
+KS
+
+Kavya Sharma [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+5 Aug 2026
+
+BOOKED VIA
+Walk-In
+TOTAL SPEND
+₹4,982
+BALANCE
+-
+KS
+
+Kavya Singh [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+27 Jun 2026
+
+BOOKED VIA
+go-MMT
+TOTAL SPEND
+₹7,072
+BALANCE
+-
+KV
+
+Kavya Verma [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+26 Jul 2026
+
+BOOKED VIA
+Agoda
+TOTAL SPEND
+₹8,299
+BALANCE
+-
+KC
+
+Krishna Chatterjee [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+14 Jul 2026
+
+BOOKED VIA
+Expedia
+TOTAL SPEND
+₹3,955
+BALANCE
+-
+KG
+
+Krishna Gupta [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+9 Sep 2026
+
+BOOKED VIA
+Expedia
+TOTAL SPEND
+₹8,551
+BALANCE
+-
+KJ
+
+Krishna Joshi [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+9 Jul 2026
+
+BOOKED VIA
+Fidato Hotels
+TOTAL SPEND
+₹4,352
+BALANCE
+-
+KK
+
+Krishna Kulkarni [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+4 Jul 2026
+
+BOOKED VIA
+Booking.com
+TOTAL SPEND
+₹3,697
+BALANCE
+-
+KM
+
+Krishna Mehta [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+3 Jun 2026
+
+BOOKED VIA
+Expedia
+TOTAL SPEND
+₹7,079
+BALANCE
+-
+KP
+
+Krishna Pillai [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+29 Jun 2026
+
+BOOKED VIA
+Booking.com
+TOTAL SPEND
+₹7,397
+BALANCE
+-
+KR
+
+Krishna Rao [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+5 Sep 2026
+
+BOOKED VIA
+Expedia
+TOTAL SPEND
+₹11,945
+BALANCE
+-
+MI
+
+Meera Iyer [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+26 Aug 2026
+
+BOOKED VIA
+Fidato Hotels
+TOTAL SPEND
+₹3,545
+BALANCE
+-
+MK
+
+Meera Kulkarni [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+3 Sep 2026
+
+BOOKED VIA
+Fidato Hotels
+TOTAL SPEND
+₹3,605
+BALANCE
+-
+MM
+
+Meera Mehta [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+24 Aug 2026
+
+BOOKED VIA
+Agoda
+TOTAL SPEND
+₹8,531
+BALANCE
+-
+MP
+
+Meera Patel [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+15 Jul 2026
+
+BOOKED VIA
+Expedia
+TOTAL SPEND
+₹4,177
+BALANCE
+-
+MR
+
+Meera Rao [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+23 Jul 2026
+
+BOOKED VIA
+Walk-In
+TOTAL SPEND
+₹4,962
+BALANCE
+-
+MS
+
+Meera Singh [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+23 May 2026
+
+BOOKED VIA
+go-MMT
+TOTAL SPEND
+₹13,409
+BALANCE
+-
+MC
+
+Myra Chatterjee [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+17 Jun 2026
+
+BOOKED VIA
+Expedia
+TOTAL SPEND
+₹9,029
+BALANCE
+-
+MG
+
+Myra Gupta [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+24 Jun 2026
+
+BOOKED VIA
+Fidato Hotels
+TOTAL SPEND
+₹9,976
+BALANCE
+-
+MI
+
+Myra Iyer [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+18 Aug 2026
+
+BOOKED VIA
+Fidato Hotels
+TOTAL SPEND
+₹4,289
+BALANCE
+-
+MP
+
+Myra Patel [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+23 Jun 2026
+
+BOOKED VIA
+Expedia
+TOTAL SPEND
+₹10,821
+BALANCE
+-
+MR
+
+Myra Rao [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+13 Jul 2026
+
+BOOKED VIA
+Booking.com
+TOTAL SPEND
+₹13,532
+BALANCE
+-
+MR
+
+Myra Reddy [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+8 Sep 2026
+
+BOOKED VIA
+Expedia
+TOTAL SPEND
+₹9,677
+BALANCE
+-
+MS
+
+Myra Shah [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+6 Jul 2026
+
+BOOKED VIA
+Booking.com
+TOTAL SPEND
+₹4,097
+BALANCE
+-
+ND
+
+Navya Deshmukh [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+9 Aug 2026
+
+BOOKED VIA
+Walk-In
+TOTAL SPEND
+₹14,065
+BALANCE
+-
+NG
+
+Navya Gupta [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+24 Aug 2026
+
+BOOKED VIA
+Fidato Hotels
+TOTAL SPEND
+₹4,578
+BALANCE
+-
+NI
+
+Navya Iyer [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+10 Jun 2026
+
+BOOKED VIA
+Fidato Hotels
+TOTAL SPEND
+₹3,823
+BALANCE
+-
+NK
+
+Navya Khan [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+4 Sep 2026
+
+BOOKED VIA
+Booking.com
+TOTAL SPEND
+₹14,596
+BALANCE
+-
+NK
+
+Navya Kulkarni [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+27 May 2026
+
+BOOKED VIA
+Expedia
+TOTAL SPEND
+₹8,174
+BALANCE
+-
+NR
+
+Navya Reddy [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+16 Jun 2026
+
+BOOKED VIA
+Agoda
+TOTAL SPEND
+₹4,391
+BALANCE
+-
+NS
+
+Navya Sharma [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+9 Sep 2026
+
+BOOKED VIA
+go-MMT
+TOTAL SPEND
+₹12,444
+BALANCE
+-
+NS
+
+Navya Singh [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+16 Jun 2026
+
+BOOKED VIA
+Walk-In
+TOTAL SPEND
+₹13,191
+BALANCE
+-
+NV
+
+Navya Verma [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+16 Aug 2026
+
+BOOKED VIA
+Expedia
+TOTAL SPEND
+₹4,055
+BALANCE
+-
+NB
+
+Nisha Bose [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+24 Jun 2026
+
+BOOKED VIA
+Fidato Hotels
+TOTAL SPEND
+₹7,852
+BALANCE
+-
+NC
+
+Nisha Chatterjee [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+19 Jun 2026
+
+BOOKED VIA
+Expedia
+TOTAL SPEND
+₹9,850
+BALANCE
+-
+NJ
+
+Nisha Joshi [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+14 Jul 2026
+
+BOOKED VIA
+Agoda
+TOTAL SPEND
+₹6,750
+BALANCE
+-
+NK
+
+Nisha Khan [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+19 Aug 2026
+
+BOOKED VIA
+Agoda
+TOTAL SPEND
+₹8,453
+BALANCE
+-
+NK
+
+Nisha Kulkarni [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+19 Jul 2026
+
+BOOKED VIA
+Agoda
+TOTAL SPEND
+₹14,081
+BALANCE
+-
+NM
+
+Nisha Mehta [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+6 Jun 2026
+
+BOOKED VIA
+Walk-In
+TOTAL SPEND
+₹12,032
+BALANCE
+-
+NM
+
+Nisha Menon [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+23 Aug 2026
+
+BOOKED VIA
+Expedia
+TOTAL SPEND
+₹14,418
+BALANCE
+-
+NN
+
+Nisha Nair [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+23 Aug 2026
+
+BOOKED VIA
+Expedia
+TOTAL SPEND
+₹8,915
+BALANCE
+-
+NR
+
+Nisha Reddy [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+11 Aug 2026
+
+BOOKED VIA
+go-MMT
+TOTAL SPEND
+₹4,491
+BALANCE
+-
+NS
+
+Nisha Sharma [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+5 Sep 2026
+
+BOOKED VIA
+Walk-In
+TOTAL SPEND
+₹8,723
+BALANCE
+-
+NV
+
+Nisha Verma [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+30 Jun 2026
+
+BOOKED VIA
+go-MMT
+TOTAL SPEND
+₹9,990
+BALANCE
+-
+PJ
+
+Pramod Jadhav
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+25 Sep 2026
+
+BOOKED VIA
+Fidato Hotels
+TOTAL SPEND
+₹6,510
+BALANCE
+-
+RC
+
+Rahul Chatterjee [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+6 Sep 2026
+
+BOOKED VIA
+go-MMT
+TOTAL SPEND
+₹4,757
+BALANCE
+-
+RI
+
+Rahul Iyer [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+21 May 2026
+
+BOOKED VIA
+Agoda
+TOTAL SPEND
+₹13,491
+BALANCE
+-
+RJ
+
+Rahul Joshi [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+5 Jun 2026
+
+BOOKED VIA
+go-MMT
+TOTAL SPEND
+₹8,853
+BALANCE
+-
+RM
+
+Rahul Mehta [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+16 Jul 2026
+
+BOOKED VIA
+Walk-In
+TOTAL SPEND
+₹10,054
+BALANCE
+-
+RP
+
+Rahul Pillai [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+1 Jul 2026
+
+BOOKED VIA
+Booking.com
+TOTAL SPEND
+₹7,058
+BALANCE
+-
+RR
+
+Rahul Reddy [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+4 Jun 2026
+
+BOOKED VIA
+go-MMT
+TOTAL SPEND
+₹3,583
+BALANCE
+-
+RV
+
+Rahul Verma [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+16 Jun 2026
+
+BOOKED VIA
+Agoda
+TOTAL SPEND
+₹7,405
+BALANCE
+-
+RB
+
+Reyansh Bose [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+22 Jul 2026
+
+BOOKED VIA
+Expedia
+TOTAL SPEND
+₹9,398
+BALANCE
+-
+RC
+
+Reyansh Chatterjee [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+10 Jul 2026
+
+BOOKED VIA
+go-MMT
+TOTAL SPEND
+₹8,385
+BALANCE
+-
+RJ
+
+Reyansh Joshi [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+12 Jun 2026
+
+BOOKED VIA
+Walk-In
+TOTAL SPEND
+₹7,811
+BALANCE
+-
+RN
+
+Reyansh Nair [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+2 Aug 2026
+
+BOOKED VIA
+go-MMT
+TOTAL SPEND
+₹4,294
+BALANCE
+-
+RP
+
+Reyansh Pillai [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+30 Aug 2026
+
+BOOKED VIA
+Walk-In
+TOTAL SPEND
+₹4,768
+BALANCE
+-
+RS
+
+Reyansh Sharma [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+12 Aug 2026
+
+BOOKED VIA
+Expedia
+TOTAL SPEND
+₹9,125
+BALANCE
+-
+RS
+
+Reyansh Singh [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+6 Jun 2026
+
+BOOKED VIA
+Walk-In
+TOTAL SPEND
+₹12,172
+BALANCE
+-
+RC
+
+Riya Chatterjee [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+25 Jun 2026
+
+BOOKED VIA
+Expedia
+TOTAL SPEND
+₹4,019
+BALANCE
+-
+RD
+
+Riya Deshmukh [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+29 Jun 2026
+
+BOOKED VIA
+Agoda
+TOTAL SPEND
+₹4,391
+BALANCE
+-
+RG
+
+Riya Gupta [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+3 Sep 2026
+
+BOOKED VIA
+Agoda
+TOTAL SPEND
+₹7,807
+BALANCE
+-
+RK
+
+Riya Kulkarni [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+20 Aug 2026
+
+BOOKED VIA
+Agoda
+TOTAL SPEND
+₹6,528
+BALANCE
+-
+RM
+
+Riya Mehta [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+6 Sep 2026
+
+BOOKED VIA
+Booking.com
+TOTAL SPEND
+₹11,507
+BALANCE
+-
+RN
+
+Riya Nair [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+4 Jul 2026
+
+BOOKED VIA
+Walk-In
+TOTAL SPEND
+₹4,141
+BALANCE
+-
+RP
+
+Riya Pillai [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+19 Aug 2026
+
+BOOKED VIA
+Expedia
+TOTAL SPEND
+₹11,941
+BALANCE
+-
+RS
+
+Riya Sharma [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+23 Jun 2026
+
+BOOKED VIA
+Booking.com
+TOTAL SPEND
+₹11,442
+BALANCE
+-
+RS
+
+Riya Singh [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+5 Aug 2026
+
+BOOKED VIA
+Agoda
+TOTAL SPEND
+₹10,839
+BALANCE
+-
+RC
+
+Rohan Chatterjee [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+23 Jul 2026
+
+BOOKED VIA
+Agoda
+TOTAL SPEND
+₹13,197
+BALANCE
+-
+RD
+
+Rohan Deshmukh [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+23 Jun 2026
+
+BOOKED VIA
+go-MMT
+TOTAL SPEND
+₹4,225
+BALANCE
+-
+RG
+
+Rohan Gupta [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+10 Jul 2026
+
+BOOKED VIA
+Agoda
+TOTAL SPEND
+₹3,475
+BALANCE
+-
+RP
+
+Rohan Pillai [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+11 Jun 2026
+
+BOOKED VIA
+Agoda
+TOTAL SPEND
+₹12,176
+BALANCE
+-
+RS
+
+Rohan Sheikh [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+28 May 2026
+
+BOOKED VIA
+Booking.com
+TOTAL SPEND
+₹9,990
+BALANCE
+-
+SG
+
+Sameer Gokhale
+
+STAYS
+1
+NIGHTS
+0
+LAST STAY
+
+9 Oct 2026
+
+BOOKED VIA
+Walk-in
+TOTAL SPEND
+₹1,890
+BALANCE
+-
+SB
+
+Sara Bose [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+18 Jun 2026
+
+BOOKED VIA
+Booking.com
+TOTAL SPEND
+₹10,615
+BALANCE
+-
+SM
+
+Sara Mehta [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+17 Aug 2026
+
+BOOKED VIA
+Booking.com
+TOTAL SPEND
+₹11,935
+BALANCE
+-
+SN
+
+Sara Nair [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+13 Jul 2026
+
+BOOKED VIA
+Agoda
+TOTAL SPEND
+₹3,754
+BALANCE
+-
+SR
+
+Sara Reddy [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+21 Aug 2026
+
+BOOKED VIA
+Agoda
+TOTAL SPEND
+₹11,025
+BALANCE
+-
+SB
+
+Shaurya Bose [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+15 Jul 2026
+
+BOOKED VIA
+go-MMT
+TOTAL SPEND
+₹3,389
+BALANCE
+-
+SC
+
+Shaurya Chatterjee [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+7 Jun 2026
+
+BOOKED VIA
+Booking.com
+TOTAL SPEND
+₹4,830
+BALANCE
+-
+SD
+
+Shaurya Deshmukh [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+1 Jul 2026
+
+BOOKED VIA
+go-MMT
+TOTAL SPEND
+₹13,968
+BALANCE
+-
+SI
+
+Shaurya Iyer [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+8 Jul 2026
+
+BOOKED VIA
+Walk-In
+TOTAL SPEND
+₹9,855
+BALANCE
+-
+SK
+
+Shaurya Khan [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+7 Sep 2026
+
+BOOKED VIA
+Fidato Hotels
+TOTAL SPEND
+₹4,140
+BALANCE
+-
+SR
+
+Shaurya Rao [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+28 Jul 2026
+
+BOOKED VIA
+go-MMT
+TOTAL SPEND
+₹7,037
+BALANCE
+-
+SS
+
+Shaurya Shah [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+12 Jun 2026
+
+BOOKED VIA
+Expedia
+TOTAL SPEND
+₹8,845
+BALANCE
+-
+SS
+
+Shaurya Sharma [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+24 Jun 2026
+
+BOOKED VIA
+Walk-In
+TOTAL SPEND
+₹4,277
+BALANCE
+-
+SC
+
+Sneha Chatterjee [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+21 Jul 2026
+
+BOOKED VIA
+Walk-In
+TOTAL SPEND
+₹7,242
+BALANCE
+-
+SD
+
+Sneha Deshmukh [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+13 Jun 2026
+
+BOOKED VIA
+Booking.com
+TOTAL SPEND
+₹14,631
+BALANCE
+-
+SK
+
+Sneha Khan [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+17 Jun 2026
+
+BOOKED VIA
+Agoda
+TOTAL SPEND
+₹3,766
+BALANCE
+-
+SP
+
+Sneha Pillai [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+17 Jul 2026
+
+BOOKED VIA
+Fidato Hotels
+TOTAL SPEND
+₹5,034
+BALANCE
+-
+SR
+
+Sneha Rao [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+6 Aug 2026
+
+BOOKED VIA
+Booking.com
+TOTAL SPEND
+₹10,040
+BALANCE
+-
+SS
+
+Sneha Sharma [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+18 Jul 2026
+
+BOOKED VIA
+Booking.com
+TOTAL SPEND
+₹7,845
+BALANCE
+-
+SS
+
+Sneha Sheikh [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+30 Jun 2026
+
+BOOKED VIA
+Walk-In
+TOTAL SPEND
+₹8,751
+BALANCE
+-
+TG
+
+Tanvi Gupta [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+8 Aug 2026
+
+BOOKED VIA
+Expedia
+TOTAL SPEND
+₹3,839
+BALANCE
+-
+TK
+
+Tanvi Kulkarni [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+21 Jul 2026
+
+BOOKED VIA
+Expedia
+TOTAL SPEND
+₹9,648
+BALANCE
+-
+TN
+
+Tanvi Nair [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+20 Jun 2026
+
+BOOKED VIA
+Agoda
+TOTAL SPEND
+₹10,011
+BALANCE
+-
+TP
+
+Tanvi Patel [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+22 May 2026
+
+BOOKED VIA
+Agoda
+TOTAL SPEND
+₹7,315
+BALANCE
+-
+TP
+
+Tanvi Pillai [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+17 Jun 2026
+
+BOOKED VIA
+Booking.com
+TOTAL SPEND
+₹4,326
+BALANCE
+-
+TR
+
+Tanvi Rao [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+3 Aug 2026
+
+BOOKED VIA
+Agoda
+TOTAL SPEND
+₹12,987
+BALANCE
+-
+TV
+
+Tanvi Verma [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+4 Jul 2026
+
+BOOKED VIA
+Expedia
+TOTAL SPEND
+₹10,602
+BALANCE
+-
+VI
+
+Vihaan Iyer [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+26 Jun 2026
+
+BOOKED VIA
+Agoda
+TOTAL SPEND
+₹9,673
+BALANCE
+-
+VJ
+
+Vihaan Joshi [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+1 Jul 2026
+
+BOOKED VIA
+go-MMT
+TOTAL SPEND
+₹8,437
+BALANCE
+-
+VK
+
+Vihaan Kulkarni [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+3 Aug 2026
+
+BOOKED VIA
+Booking.com
+TOTAL SPEND
+₹3,825
+BALANCE
+-
+VM
+
+Vihaan Menon [DH]
+
+STAYS
+1
+NIGHTS
+1
+LAST STAY
+
+13 Aug 2026
+
+BOOKED VIA
+Fidato Hotels
+TOTAL SPEND
+₹3,678
+BALANCE
+-
+VN
+
+Vihaan Nair [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+27 May 2026
+
+BOOKED VIA
+Walk-In
+TOTAL SPEND
+₹14,780
+BALANCE
+-
+VR
+
+Vihaan Rao [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+26 Jul 2026
+
+BOOKED VIA
+Booking.com
+TOTAL SPEND
+₹11,492
+BALANCE
+-
+VR
+
+Vihaan Reddy [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+23 Aug 2026
+
+BOOKED VIA
+Booking.com
+TOTAL SPEND
+₹12,448
+BALANCE
+-
+VC
+
+Vivaan Chatterjee [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+21 May 2026
+
+BOOKED VIA
+Expedia
+TOTAL SPEND
+₹8,635
+BALANCE
+-
+VG
+
+Vivaan Gupta [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+26 Jun 2026
+
+BOOKED VIA
+Booking.com
+TOTAL SPEND
+₹8,020
+BALANCE
+-
+VI
+
+Vivaan Iyer [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+15 Aug 2026
+
+BOOKED VIA
+Fidato Hotels
+TOTAL SPEND
+₹8,823
+BALANCE
+-
+VK
+
+Vivaan Khan [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+24 May 2026
+
+BOOKED VIA
+Expedia
+TOTAL SPEND
+₹8,424
+BALANCE
+-
+VP
+
+Vivaan Patel [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+16 Jun 2026
+
+BOOKED VIA
+Walk-In
+TOTAL SPEND
+₹10,266
+BALANCE
+-
+VR
+
+Vivaan Rao [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+10 Jun 2026
+
+BOOKED VIA
+go-MMT
+TOTAL SPEND
+₹7,636
+BALANCE
+-
+VS
+
+Vivaan Sharma [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+4 Aug 2026
+
+BOOKED VIA
+Expedia
+TOTAL SPEND
+₹6,704
+BALANCE
+-
+VV
+
+Vivaan Verma [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+19 Jul 2026
+
+BOOKED VIA
+Agoda
+TOTAL SPEND
+₹9,988
+BALANCE
+-
+ZB
+
+Zoya Bose [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+7 Jul 2026
+
+BOOKED VIA
+Walk-In
+TOTAL SPEND
+₹7,879
+BALANCE
+-
+ZN
+
+Zoya Nair [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+1 Jun 2026
+
+BOOKED VIA
+Booking.com
+TOTAL SPEND
+₹8,727
+BALANCE
+-
+ZP
+
+Zoya Patel [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+13 Aug 2026
+
+BOOKED VIA
+Fidato Hotels
+TOTAL SPEND
+₹8,140
+BALANCE
+-
+ZS
+
+Zoya Shah [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+1 Jul 2026
+
+BOOKED VIA
+Agoda
+TOTAL SPEND
+₹14,134
+BALANCE
+-
+ZS
+
+Zoya Sheikh [DH]
+
+STAYS
+1
+NIGHTS
+3
+LAST STAY
+
+17 Jul 2026
+
+BOOKED VIA
+Walk-In
+TOTAL SPEND
+₹14,778
+BALANCE
+-
+ZS
+
+Zoya Singh [DH]
+
+STAYS
+1
+NIGHTS
+2
+LAST STAY
+
+24 Jul 2026
+
+BOOKED VIA
+go-MMT
+TOTAL SPEND
+₹10,062
+BALANCE
+-
+LB
+
+Lata Bhosale
+
+STAYS
+0
+NIGHTS
+0
+LAST STAY
+
+11 Oct 2026
+
+BOOKED VIA
+Agoda
+TOTAL SPEND
+₹6,000
+BALANCE
+₹6,000
+RC
+
+Ritu Chavan
+
+STAYS
+0
+NIGHTS
+0
+LAST STAY
+
+first visit
+
+BOOKED VIA
+Expedia
+TOTAL SPEND
+₹0
+BALANCE
+-

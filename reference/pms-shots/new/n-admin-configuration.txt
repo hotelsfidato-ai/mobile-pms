@@ -1,0 +1,166 @@
+6
+GO
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Taxes
+
+5 Elements Akkalkot
+
+GST
+One set of rules, for the front desk and the till
+
+Rooms
+
+5%
+up to the next band
+18%
+above ₹7,500
+
+The night, and everything the front desk adds to it - an early arrival, a late departure, transport.
+
+HSN/SAC 996311
+
+Edit
+
+Restaurant
+
+5%
+on everything
+
+Food and non-alcoholic drink, on any menu category set to it.
+
+HSN/SAC -
+
+Edit
+
+Bar
+
+5%
+on everything
+
+What the bar sells under GST - soft drinks, mocktails, snacks. Alcohol itself is VAT, under its own heading, where the property serves it.
+
+HSN/SAC -
+
+Edit
+
+Banquet
+
+Not set
+
+-
+
+Hall hire and the packages sold with it.
+
+HSN/SAC -
+
+Set it
+
+Spa
+
+Not set
+
+-
+
+Treatments, when they go on the room bill. Its own rate, and its own decision.
+
+HSN/SAC -
+
+Set it
+
+Laundry
+
+Not set
+
+-
+
+A guest's laundry, charged to the room bill. Its own rate - your accountant confirms it.
+
+HSN/SAC -
+
+Set it
+
+Everything else
+
+Not set
+
+-
+
+Anything that belongs under none of the above.
+
+HSN/SAC -
+
+Set it
+
+The till's half: which rate each part of the menu sells under.
+
+A9 Bar
+
+2 items
+
+Not set
+Restaurant
+Bar
+Banquet
+Everything else
+
+Beverages
+
+4 items
+
+Not set
+Restaurant
+Bar
+Banquet
+Everything else
+
+Course Wire Drinks
+
+1 item
+
+Not set
+Restaurant
+Bar
+Banquet
+Everything else
+
+Course Wire Test
+
+2 items
+
+Not set
+Restaurant
+Bar
+Banquet
+Everything else
+
+Desserts
+
+2 items
+
+Not set
+Restaurant
+Bar
+Banquet
+Everything else
+
+Main course
+
+6 items
+
+Not set
+Restaurant
+Bar
+Banquet
+Everything else
+
+Starters
+
+5 items
+
+Not set
+Restaurant
+Bar
+Banquet
+Everything else

@@ -1,0 +1,43 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Dockets
+
+Every bag that has gone out - a guest's and the hotel's own - and what has come back.
+
+Price list
+Collect a bag
+Everything
+Guests' bags
+The hotel's linen
+
+2 bags are still out.
+
+LD-0002
+WHOSE
+The hotel's own linen
+STATE
+Out
+PIECES
+20
+STILL OUT
+20
+TOTAL
+-
+COLLECTED
+13 Oct 2026
+LD-0001
+WHOSE
+Priya Menon · Room 205
+STATE
+Out
+PIECES
+4
+STILL OUT
+4
+TOTAL
+₹430
+COLLECTED
+13 Oct 2026

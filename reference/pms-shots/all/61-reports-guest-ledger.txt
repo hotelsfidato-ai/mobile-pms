@@ -1,0 +1,71 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Guest ledger
+
+1 Oct 2026 to 11 Oct 2026
+
+Print
+CSV
+
+5 Elements Akkalkot
+
+GUEST LEDGER
+
+1 Oct 2026 to 11 Oct 2026
+
+Date From 1 Oct 2026 To 11 Oct 2026 Folios that moved in the window
+
+GUEST	ROOM	OPENING	CHARGES	RECEIVED	CLOSING
+Sneha KulkarniFH-2608-4849	204	₹10,535	₹0	₹10,535	₹0
+Deepa RaoFH-2608-4851	202	₹11,647	₹0	₹11,647	₹0
+Imran ShaikhFH-2608-4850	201	₹7,405	₹0	₹7,405	₹0
+Nikhil JoshiFH-2608-4852	205	₹8,996	₹0	₹8,996	₹0
+Anjali PawarFH-2608-4853	203	₹8,431	₹0	₹8,431	₹0
+Vivek ThoratFH-2608-4854	201	₹0	₹3,007	₹3,007	₹0
+Neha SawantFH-2608-4855	201	₹0	₹7,369	₹7,369	₹0
+Suresh ManeFH-2608-4856	202	₹0	₹9,155	₹9,155	₹0
+Ganesh PatilFH-2608-5004	204	₹0	₹5,715	₹5,715	₹0
+Kalyani RegeFH-2608-5001	301	₹6,300	₹4,200	₹4,984	₹5,516
+Rekha GaikwadFH-2608-4857	201	₹0	₹3,890	₹3,890	₹0
+A2 Test KumarFH-5EL-2610-5039	209	₹0	₹4,304	₹4,304	₹0
+A2 Test KumarFH-5EL-2610-5041	301	₹0	₹3,884	₹3,884	₹0
+A2 Test KumarFH-5EL-2610-5040	210	₹0	₹4,304	₹4,304	₹0
+A4 Test KulkarniFH-5EL-2610-5033	305	₹0	₹8,167	₹8,167	₹0
+A5 Test DeshmukhFH-5EL-2610-5034	306	₹0	₹3,884	₹3,884	₹0
+A5 Test MoreFH-5EL-2610-5035	304	₹0	₹3,884	₹3,884	₹0
+A5 Test PawarFH-5EL-2610-5036	303	₹0	₹2,100	₹2,100	₹0
+Ananya BoseFH-2608-4861	207	₹0	₹2,957	₹2,957	₹0
+Harsha KamatFH-2608-4860	205	₹0	₹3,286	₹3,286	₹0
+Lata BhosaleFH-2608-5005	204	₹0	₹6,000	₹0	₹6,000
+Omkar ShindeFH-2608-4859	203	₹0	₹7,682	₹100	₹7,582
+Sameer GokhaleFH-2608-5003	202	₹0	₹1,890	₹1,890	₹0
+Tanvi BhideFH-2608-4858	201	₹0	₹7,085	₹7,085	₹0
+Day Test KumarFH-5EL-2610-5045	302	₹0	₹3,884	₹3,884	₹0
+Priya MenonFH-2608-4863	205	₹0	₹2,653	₹0	₹2,653
+Shridhar KambleFH-2608-4864	206	₹0	₹3,765	₹0	₹3,765
+Sudarshan KatorFH-2608-4865	207	₹0	₹3,213	₹3,213	₹0
+Vikram DesaiFH-2608-4862	202	₹0	₹3,776	₹0	₹3,776
+A3 Test DesaiFH-5EL-2610-5049	204	₹0	₹4,304	₹0	₹4,304
+A3 Test GokhaleFH-5EL-2610-5055	307	₹0	₹3,884	₹0	₹3,884
+A3 Test IyerFH-5EL-2610-5050	209	₹0	₹4,304	₹0	₹4,304
+A3 Test SmithFH-5EL-2610-5046	301	₹0	₹3,884	₹3,884	₹0
+A4 Test KulkarniFH-5EL-2610-5057	305	₹0	₹399	₹399	₹0
+A4 Test KulkarniFH-5EL-2610-5056	305	₹0	₹399	₹399	₹0
+A4 Test KulkarniFH-5EL-2610-5056	305	₹0	₹3,884	₹3,884	₹0
+A4 Test KulkarniFH-5EL-2610-5057	305	₹0	₹3,884	₹3,884	₹0
+A5 Test RaneFH-5EL-2610-5047	303	₹0	₹3,884	₹3,884	₹0
+A5 Test RaneFH-5EL-2610-5058	303	₹0	₹3,884	₹3,884	₹0
+A5 Test WaghFH-5EL-2610-5059	302	₹0	₹3,884	₹3,884	₹0
+A5 Test WaghFH-5EL-2610-5048	302	₹0	₹3,884	₹3,884	₹0
+P6MSG GuestP6MSG-OTA	-	₹0	₹1,050	₹0	₹1,050
+P6MSG GuestP6MSG-OWN	-	₹0	₹1,050	₹0	₹1,050
+Total	₹53,315	₹1,52,631	₹1,62,062	₹43,883
+
+Opening is the folio balance strictly before the window; closing includes everything up to and including the last day. A reversed charge and its reversal are both excluded — counting the pair would show two movements that net to nothing.
+
+Printed 31/10/2026, 07:34:26 pm
+
+Test GM

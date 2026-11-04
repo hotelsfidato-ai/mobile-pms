@@ -1,0 +1,278 @@
+6
+GO
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+System health
+
+What the server is doing, from its own records. Nothing here leaves the server, and no guest is named. Counts are written every minute.
+
+Server up for
+
+1 h 15 min
+
+Version
+7d8224d7
+Started
+31 Oct 2026, 6:39 PM
+
+Database
+
+41 MB
+
+Connections in use
+0 of 5
+Waiting for one
+0
+
+Disk free
+
+686.0 GB
+
+Of
+931.5 GB
+Free
+74%
+
+Last backup
+
+-
+
+No nightly backup has run on this server.
+
+Requests
+
+Every request to the server, its result and how quickly it was answered.
+
+Last hour
+Last day
+Last week
+
+Requests
+
+8,929
+
+Server errors
+
+0
+
+95 in 100 answered
+
+within 2.5 s
+
+Hotels
+
+Each hotel's business date and its last night audit. A day left open loses its room nights.
+
+5 Elements Akkalkot
+BUSINESS DATE
+11 Oct 2026
+LAST NIGHT AUDIT
+13 Oct 2026, 3:54 AM
+DAY
+Behind by 20 days
+Practice Hotel Nashik
+BUSINESS DATE
+14 Oct 2026
+LAST NIGHT AUDIT
+-
+DAY
+Behind by 17 days
+Stock Reports Test
+BUSINESS DATE
+21 Oct 2026
+LAST NIGHT AUDIT
+-
+DAY
+Behind by 10 days
+Slowest routes
+
+The last day, slowest on average first.
+
+GET /api/hotels/:code/guests
+REQUESTS
+1
+AVERAGE
+14.736 s
+SLOWEST
+14.736 s
+GET /api/hotels/:code/reports/yearly-statistics
+REQUESTS
+1
+AVERAGE
+6.821 s
+SLOWEST
+6.821 s
+GET /api/hotels/:code/reports/manager
+REQUESTS
+36
+AVERAGE
+3.564 s
+SLOWEST
+21.401 s
+POST /api/hotels/:code/till/orders/batch
+REQUESTS
+2
+AVERAGE
+1.839 s
+SLOWEST
+3.222 s
+GET /api/hotels/:code/house-now
+REQUESTS
+31
+AVERAGE
+1.427 s
+SLOWEST
+4.074 s
+Leads app reads
+
+What this system read from the leads app, by Google's day: midnight to midnight Pacific time, 12:30 pm in India (1:30 pm in winter). The app's free allowance is 50,000 a day, shared with the app itself; this system stops at its own limit.
+
+Limit - a day
+
+Nothing read from the leads app in the last week.
+
+Errors and slow queries
+
+The last week. An error is named by its kind, never by what it said, so no guest's details are kept.
+
+select app.record_telemetry($?::jsonb, $?::jsonb)
+WHERE
+Slow query, up to 2.972 s
+TIMES
+4
+LAST
+31 Oct 2026, 7:50 PM
+with live as ( select fp.*, f.reservation_id as bill_stay from folio_postings fp join folios f on f.id = fp.folio_id whe
+WHERE
+Slow query, up to 3.203 s
+TIMES
+19
+LAST
+31 Oct 2026, 7:50 PM
+with days as ( select d::date as date from generate_series($?::date, $?::date, interval ?) d ), bd as (select app.busine
+WHERE
+Slow query, up to 20.696 s
+TIMES
+131
+LAST
+31 Oct 2026, 7:49 PM
+with rack as ( select rt.id, (select p.price from app.price_for(rt.id, ?, app.business_date($?)) p) as price from room_t
+WHERE
+Slow query, up to 16.447 s
+TIMES
+11
+LAST
+31 Oct 2026, 7:49 PM
+select number, in_house, out_of_order, empty from app.house_now($?)
+WHERE
+Slow query, up to 3.927 s
+TIMES
+13
+LAST
+31 Oct 2026, 7:49 PM
+select fp.id::text, fp.business_date::text, fp.created_at::text as at, g.full_name as guest, (select rm.number from room
+WHERE
+Slow query, up to 1 s
+TIMES
+1
+LAST
+31 Oct 2026, 7:16 PM
+with live as ( select fp.* from folio_postings fp where fp.hotel_id = $? and fp.reverses_id is null and not exists ( sel
+WHERE
+Slow query, up to 1.245 s
+TIMES
+1
+LAST
+31 Oct 2026, 7:16 PM
+with mine as ( select r.*, g.full_name, lower(trim(g.full_name)) as key, app.booking_source_label(bs.name, co.name, r.so
+WHERE
+Slow query, up to 14.58 s
+TIMES
+1
+LAST
+31 Oct 2026, 6:59 PM
+select r.number, rt.name as type, r.floor, r.housekeeping_status, rt.max_occupancy, (select p.price from app.price_for(r
+WHERE
+Slow query, up to 13.047 s
+TIMES
+9
+LAST
+31 Oct 2026, 6:47 PM
+select set_config(?, coalesce(app.current_user_id()::text, $?), true), set_config(?, $?, true)
+WHERE
+Slow query, up to 3.114 s
+TIMES
+4
+LAST
+31 Oct 2026, 6:44 PM
+select l.order_id::text as order_id, l.kot_no, k.id::text as kind_id, k.name as kind_name, o.table_ref, min(l.kot_sent_a
+WHERE
+Slow query, up to 11.682 s
+TIMES
+334
+LAST
+31 Oct 2026, 7:34 AM
+select rm.id::text, rm.number, (select l.created_at from guest_links l where l.room_id = rm.id and l.revoked_at is null)
+WHERE
+Slow query, up to 2.819 s
+TIMES
+2
+LAST
+31 Oct 2026, 5:36 AM
+select r.id::text as reservation_id, app.folio_for_room_charge(r.id)::text as folio_id, coalesce(a.number, ?) as room, r
+WHERE
+Slow query, up to 4.316 s
+TIMES
+1
+LAST
+31 Oct 2026, 5:33 AM
+select b.id::text, b.order_id::text, b.heading, o.table_ref from pos_bill_prints b join pos_orders o on o.id = b.order_i
+WHERE
+Slow query, up to 5.047 s
+TIMES
+1
+LAST
+31 Oct 2026, 5:28 AM
+select app.module_enabled($?, ?) as enabled
+WHERE
+Slow query, up to 5.548 s
+TIMES
+1
+LAST
+31 Oct 2026, 5:28 AM
+select to_char(fp.business_date, ?) as date, case when fp.source_type = ? or fp.tax_scheme = ? or exists (select ? from
+WHERE
+Slow query, up to 6.528 s
+TIMES
+1
+LAST
+31 Oct 2026, 5:28 AM
+update pos_order_lines set kot_status = ?, kot_sent_at = now(), kot_no = $? where order_id = $? and not voided and kot_s
+WHERE
+Slow query, up to 2.666 s
+TIMES
+1
+LAST
+31 Oct 2026, 5:02 AM
+select to_char(least( (select min(r.check_in) from reservations r where r.hotel_id = $? and r.status in (?,?,?,?)), (sel
+WHERE
+Slow query, up to 1.419 s
+TIMES
+1
+LAST
+31 Oct 2026, 4:41 AM
+select id from hotels where code = $?
+WHERE
+Slow query, up to 7.907 s
+TIMES
+1
+LAST
+31 Oct 2026, 4:24 AM
+select id, email, full_name, is_group_admin from staff where id = app.current_user_id()
+WHERE
+Slow query, up to 2.24 s
+TIMES
+3
+LAST
+28 Oct 2026, 10:50 PM

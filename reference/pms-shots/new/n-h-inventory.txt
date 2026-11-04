@@ -1,0 +1,42 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Inventory
+
+The bar's day: what came, what was sold, what is left, and the count.
+
+Bar stock report
+Bar
+Restaurant
+Today's sheet
+Requests
+Bills
+Set up
+One request from the counter waits for the GM or the Inventory Manager.
+Open requests
+Day
+Bar counter
+Bar store
+Closing count
+Morning count
+FLR-1A/2A/3A
+FLR-3
+Save the closing count
+
+Bar counter: the closing count, before the night audit. Type each drink you count; a blank line is not counted.
+
+The bar did not open today
+PRODUCTS	OPENING	RECD	TOTAL	SELL	CLOSING	RATE	AMOUNT	COUNTED	DIFFERENCE	MORNING
+NIP	ML	NIP	ML	NIP	30	60	90	ML	NIP	ML
+A9 Bar	
+A9 Imperial Blue 180 ml	0		10	10			1	2		150	9	30	₹900	₹780	
+	-	-
+A9 Kingfisher Strong 650 ml	0		12	12		2					10		₹270	₹540	
+	-	-
+Not on the menu	
+A9 Imperial Blue 750 ml	0			0							0		-	-	
+	-	-
+
+Amount, all drinks: ₹1,320

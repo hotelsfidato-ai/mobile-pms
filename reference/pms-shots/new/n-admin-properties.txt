@@ -1,0 +1,142 @@
+6
+GO
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Properties
+
+3 open
+
+5 Elements Akkalkot
+
+5EL
+
+Akkalkot, Solapur District, Maharashtra 413216
+
+All rooms
+18
+Types
+Superior · Deluxe
+GSTIN
+27AAAAA0000A1Z5
+GST on rooms
+5% up to ₹7,500 · 18% above ₹7,500
+GST on restaurant
+5%
+GST on bar
+5%
+GST on banquet
+-
+GST on spa
+-
+GST on laundry
+-
+GST on everything else
+-
+
+10 bookings checked in - it cannot be closed until they check out.
+
+Open
+Calendar
+Edit
+Close
+
+Test hotel
+
+5 Elements Akkalkot
+TEST
+5ELT
+Open
+Reset
+Re-copy setup
+
+Practice Hotel Nashik
+
+PHN
+
+12 Practice Road, Nashik
+
+All rooms
+18
+Types
+Standard · Deluxe
+GSTIN
+27AAAAA0000A1Z5
+GST on rooms
+5% up to ₹7,500 · 18% above ₹7,500
+GST on restaurant
+-
+GST on bar
+-
+GST on banquet
+-
+GST on spa
+-
+GST on laundry
+-
+GST on everything else
+-
+Open
+Calendar
+Edit
+Close
+
+Test hotel
+
+A practice copy of this hotel's whole setup, with no guests or money.
+
+Make a test hotel
+
+Stock Reports Test
+
+STK
+
+Nowhere, India
+
+All rooms
+-
+Types
+Standard · Deluxe · Executive · Suite
+GSTIN
+-
+GST on rooms
+-
+GST on restaurant
+-
+GST on bar
+-
+GST on banquet
+-
+GST on spa
+-
+GST on laundry
+-
+GST on everything else
+-
+Open
+Calendar
+Edit
+Close
+
+Test hotel
+
+A practice copy of this hotel's whole setup, with no guests or money.
+
+Make a test hotel
+
+Add a property
+
+Code
+2–8 letters or digits. It appears in every URL and every invoice number, and it cannot be changed later.
+Name
+City
+State
+GSTIN
+
+Provisioning key
+
+Creating a property makes the hotel and its invoice series; its room types and rooms are added in Set up this hotel. Being signed in as an administrator is not enough on its own.
+
+Create the property
+
+Creating a property makes the hotel and its invoice series; add its room types and rooms in Set up this hotel. The code appears in every URL and every invoice number and cannot be changed afterwards.

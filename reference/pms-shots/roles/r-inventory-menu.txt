@@ -1,0 +1,247 @@
+6
+TI
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Store
+
+9 items · ₹34,857 on the shelf, 3 not yet valued
+
+Shelf
+Days
+Reports
+Import
+Count a store
+Add an item
+Store
+All stores
+Main store
+Kitchen store
+Bar store
+Bar counter
+Below level
+1
+Run out
+1
+Received today
+4
+Issued today
+5
+Wasted today
+2
+Awaiting delivery
+0
+Not valued
+0
+Not counted in 30 days
+5
+Bar
+3
+
+A9 Imperial Blue 180 ml
+
+No level set · last moved 11 Oct 2026 · counted 11 Oct 2026
+
+On hand
+
+55 + 30 ml bottle
+
+Worth
+
+₹9,195
+
+₹167/bottle average
+
+Receive
+Issue
+More
+
+Main - · Kitchen - · Bar 46 · Bar counter 9 + 30 ml
+
+A9 Imperial Blue 750 ml
+
+No level set · last moved 11 Oct 2026 · counted 11 Oct 2026
+
+On hand
+
+5 bottle
+
+Worth
+
+₹2,600
+
+₹520/bottle average
+
+Receive
+Issue
+More
+
+Main - · Kitchen - · Bar 5 · Bar counter -
+
+A9 Kingfisher Strong 650 ml
+
+No level set · last moved 11 Oct 2026 · counted 11 Oct 2026
+
+On hand
+
+62 bottle
+
+Worth
+
+₹9,302
+
+₹150/bottle average
+
+Receive
+Issue
+More
+
+Main - · Kitchen - · Bar 52 · Bar counter 10
+
+Kitchen
+6
+
+A9 Test Basmati rice
+
+Low
+
+Warn at Main 20 · Kitchen 4 · last moved 11 Oct 2026 · counted 9 Oct 2026
+
+On hand
+
+89 kg
+
+Worth
+
+₹7,220
+
+₹81/kg average
+
+Receive
+Issue
+More
+
+Kitchen store: 4 kg, level 4
+
+Main 85 · Kitchen 4 · Bar - · Bar counter -
+
+A9 Test LPG cylinder 19 kg
+
+No level set · last moved 9 Oct 2026
+
+Full
+
+3 cylinder
+
+Empty
+
+0 cylinder
+
+Worth
+
+₹5,550
+
+₹1,850/cylinder average
+
+Receive
+Issue
+More
+
+Main 3 · Kitchen - · Bar - · Bar counter -
+
+On deposit 4 · ₹1,700 each · ₹6,800 held · 1 in use at the kitchen
+
+A9 Test Tea cup
+
+No level set · last moved 9 Oct 2026
+
+On hand
+
+22 piece
+
+Worth
+
+₹990
+
+₹45/piece average
+
+Receive
+Issue
+More
+
+Main 22 · Kitchen - · Bar - · Bar counter -
+
+Butter
+
+No level set · last moved 11 Oct 2026
+
+On hand
+
+-0.05 kg
+
+Worth
+
+-
+
+Receive
+Issue
+More
+
+Main - · Kitchen -0.05 · Bar - · Bar counter -
+
+Nothing on hand to issue - receive a delivery first.
+
+Paneer
+
+No level set · last moved 11 Oct 2026 · counted 11 Oct 2026
+
+On hand
+
+-0.3 kg
+
+Worth
+
+-
+
+Receive
+Issue
+More
+
+Main - · Kitchen -0.3 · Bar - · Bar counter -
+
+Nothing on hand to issue - receive a delivery first.
+
+Toor dal
+
+No level set · last moved 11 Oct 2026
+
+On hand
+
+-0.08 kg
+
+Worth
+
+-
+
+Receive
+Issue
+More
+
+Main - · Kitchen -0.08 · Bar - · Bar counter -
+
+Nothing on hand to issue - receive a delivery first.
+
+Navigation
+
+Main application navigation
+
+Fidato Hotels
+STORE AND EQUIPMENT
+Store
+Inventory
+Equipment
+Purchasing
+SYSTEM
+1
+Find a screen
+Collapse

@@ -1,0 +1,11823 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Payments
+
+Every receipt against a folio, newest first. Reversed receipts stay on the list.
+
+Cash
+
+₹22,25,055
+
+290 receipts
+
+UPI
+
+₹19,96,119
+
+263 receipts
+
+Credit Card
+
+₹18,16,093
+
+223 receipts
+
+City Ledger
+
+₹7,768
+
+2 receipts
+
+Total received
+
+₹60,45,034
+
+Reversals excluded
+
+28 Oct 2026, 8:37 PM
+GUEST
+
+Omkar Shinde
+
+room 203 · FH-2608-4859
+
+METHOD
+Cash
+NARRATION
+Received - Cash
+TAKEN BY
+Group Owner
+AMOUNT
+₹100
+28 Oct 2026, 8:36 PM
+GUEST
+
+Vikram Desai
+
+room 202 · FH-2608-4862
+
+METHOD
+UPI
+Reversed
+NARRATION
+Received - UPI
+TAKEN BY
+GUESTBEHIND Desk
+AMOUNT
+₹1
+21 Oct 2026, 2:48 PM
+GUEST
+
+Omkar Shinde
+
+room 203 · FH-2608-4859
+
+METHOD
+City Ledger
+Reversed
+NARRATION
+Transferred to city ledger
+TAKEN BY
+Group Owner
+AMOUNT
+₹1,235
+21 Oct 2026, 2:48 PM
+GUEST
+
+Omkar Shinde
+
+room 203 · FH-2608-4859
+
+METHOD
+UPI
+Reversed
+NARRATION
+Received - UPI
+TAKEN BY
+RPTEST clerk
+AMOUNT
+₹11
+21 Oct 2026, 2:48 PM
+GUEST
+
+Meera Iyer
+
+room 203 · FH-2608-4867
+
+METHOD
+UPI
+Reversed
+NARRATION
+Received - UPI
+TAKEN BY
+Group Owner
+AMOUNT
+₹1,500
+21 Oct 2026, 2:46 PM
+GUEST
+
+Omkar Shinde
+
+room 203 · FH-2608-4859
+
+METHOD
+City Ledger
+Reversed
+NARRATION
+Transferred to city ledger
+TAKEN BY
+Group Owner
+AMOUNT
+₹1,235
+21 Oct 2026, 2:46 PM
+GUEST
+
+Omkar Shinde
+
+room 203 · FH-2608-4859
+
+METHOD
+UPI
+Reversed
+NARRATION
+Received - UPI
+TAKEN BY
+RPTEST clerk
+AMOUNT
+₹11
+21 Oct 2026, 2:46 PM
+GUEST
+
+Rohit Deshpande
+
+room 201 · FH-2608-4866
+
+METHOD
+UPI
+Reversed
+NARRATION
+Received - UPI
+TAKEN BY
+Group Owner
+AMOUNT
+₹1,500
+20 Oct 2026, 12:39 AM
+GUEST
+
+A5 Test Wagh
+
+room 302 · FH-5EL-2610-5059
+
+METHOD
+UPI
+NARRATION
+Received - UPI
+TAKEN BY
+Test Reception
+AMOUNT
+₹3,884
+20 Oct 2026, 12:38 AM
+GUEST
+
+A5 Test Rane
+
+room 303 · FH-5EL-2610-5058
+
+METHOD
+UPI
+NARRATION
+Received - UPI
+TAKEN BY
+Test Reception
+AMOUNT
+₹3,884
+20 Oct 2026, 12:19 AM
+GUEST
+
+A4 Test Kulkarni
+
+room 305 · FH-5EL-2610-5057
+
+METHOD
+Cash
+NARRATION
+Received - Cash
+TAKEN BY
+Test Reception
+AMOUNT
+₹399
+20 Oct 2026, 12:18 AM
+GUEST
+
+A4 Test Kulkarni
+
+room 305 · FH-5EL-2610-5057
+
+METHOD
+City Ledger
+NARRATION
+Transferred to city ledger
+TAKEN BY
+Test Reception
+AMOUNT
+₹3,884
+20 Oct 2026, 12:15 AM
+GUEST
+
+A4 Test Kulkarni
+
+room 305 · FH-5EL-2610-5056
+
+METHOD
+UPI
+NARRATION
+Received - UPI
+TAKEN BY
+Test Reception
+AMOUNT
+₹399
+20 Oct 2026, 12:13 AM
+GUEST
+
+A4 Test Kulkarni
+
+room 305 · FH-5EL-2610-5056
+
+METHOD
+City Ledger
+NARRATION
+Transferred to city ledger
+TAKEN BY
+Test Reception
+AMOUNT
+₹3,884
+17 Oct 2026, 10:50 AM
+GUEST
+
+Tanvi Bhide
+
+room 201 · FH-2608-4858
+
+METHOD
+UPI
+NARRATION
+Received - UPI
+TAKEN BY
+Test Reception
+AMOUNT
+₹7,085
+17 Oct 2026, 10:48 AM
+GUEST
+
+Sudarshan Kator
+
+room 207 · FH-2608-4865
+
+METHOD
+UPI
+NARRATION
+Received - UPI
+TAKEN BY
+Test Reception
+AMOUNT
+₹3,213
+13 Oct 2026, 9:05 PM
+GUEST
+
+A4 Test Kulkarni
+
+room 305 · FH-5EL-2610-5033
+
+METHOD
+UPI
+NARRATION
+Received - UPI
+TAKEN BY
+Test Reception
+AMOUNT
+₹8,167
+13 Oct 2026, 8:39 PM
+GUEST
+
+A3 Test Smith
+
+room 301 · FH-5EL-2610-5046
+
+METHOD
+UPI
+NARRATION
+Received - UPI
+TAKEN BY
+Test Reception
+AMOUNT
+₹3,884
+13 Oct 2026, 7:46 PM
+GUEST
+
+A5 Test Wagh
+
+room 302 · FH-5EL-2610-5048
+
+METHOD
+UPI
+NARRATION
+Received - UPI
+TAKEN BY
+Test Reception
+AMOUNT
+₹3,884
+13 Oct 2026, 7:08 PM
+GUEST
+
+A5 Test Rane
+
+room 303 · FH-5EL-2610-5047
+
+METHOD
+UPI
+NARRATION
+Received - UPI
+TAKEN BY
+Test Reception
+AMOUNT
+₹3,884
+13 Oct 2026, 3:46 AM
+GUEST
+
+A5 Test More
+
+room 304 · FH-5EL-2610-5035
+
+METHOD
+UPI
+NARRATION
+Received - UPI
+TAKEN BY
+Test Reception
+AMOUNT
+₹3,884
+13 Oct 2026, 3:29 AM
+GUEST
+
+Ananya Bose
+
+room 207 · FH-2608-4861
+
+METHOD
+UPI
+NARRATION
+Received - UPI
+TAKEN BY
+Test Reception
+AMOUNT
+₹2,957
+13 Oct 2026, 2:55 AM
+GUEST
+
+A2 Test Kumar
+
+room 301 · FH-5EL-2610-5041
+
+METHOD
+UPI
+NARRATION
+Received - UPI
+TAKEN BY
+Test Reception
+AMOUNT
+₹3,884
+13 Oct 2026, 2:54 AM
+GUEST
+
+A2 Test Kumar
+
+room 210 · FH-5EL-2610-5040
+
+METHOD
+UPI
+NARRATION
+Received - UPI
+TAKEN BY
+Test Reception
+AMOUNT
+₹4,304
+13 Oct 2026, 2:54 AM
+GUEST
+
+A2 Test Kumar
+
+room 209 · FH-5EL-2610-5039
+
+METHOD
+UPI
+NARRATION
+Received - UPI
+TAKEN BY
+Test Reception
+AMOUNT
+₹4,304
+13 Oct 2026, 2:53 AM
+GUEST
+
+A5 Test Deshmukh
+
+room 306 · FH-5EL-2610-5034
+
+METHOD
+UPI
+NARRATION
+Received - UPI
+TAKEN BY
+Test Reception
+AMOUNT
+₹3,884
+13 Oct 2026, 2:49 AM
+GUEST
+
+Day Test Kumar
+
+room 302 · FH-5EL-2610-5045
+
+METHOD
+UPI
+NARRATION
+Received - UPI
+TAKEN BY
+Test Reception
+AMOUNT
+₹3,884
+13 Oct 2026, 2:46 AM
+GUEST
+
+Harsha Kamat
+
+room 205 · FH-2608-4860
+
+METHOD
+Cash
+NARRATION
+Received - Cash
+TAKEN BY
+Test Reception
+AMOUNT
+₹3,286
+13 Oct 2026, 2:20 AM
+GUEST
+
+A5 Test Pawar
+
+room 303 · FH-5EL-2610-5036
+
+METHOD
+UPI
+NARRATION
+Received - UPI
+TAKEN BY
+Test Reception
+AMOUNT
+₹2,100
+13 Oct 2026, 2:19 AM
+GUEST
+
+Ganesh Patil
+
+room 204 · FH-2608-5004
+
+METHOD
+UPI
+NARRATION
+Received - UPI
+TAKEN BY
+Test Reception
+AMOUNT
+₹5,715
+13 Oct 2026, 2:18 AM
+GUEST
+
+Sameer Gokhale
+
+room 202 · FH-2608-5003
+
+METHOD
+UPI
+NARRATION
+Received - UPI
+TAKEN BY
+Test Reception
+AMOUNT
+₹1,890
+13 Oct 2026, 2:18 AM
+GUEST
+
+Rekha Gaikwad
+
+room 201 · FH-2608-4857
+
+METHOD
+UPI
+NARRATION
+Received - UPI
+TAKEN BY
+Test Reception
+AMOUNT
+₹3,890
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sneha Nair [DH]
+
+room 204 · DH-5EL-0694
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹3,754
+9 Oct 2026, 12:31 AM
+GUEST
+
+Krishna Gupta [DH]
+
+room 206 · DH-5EL-0693
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹8,551
+9 Oct 2026, 12:31 AM
+GUEST
+
+Imran Chatterjee [DH]
+
+room 207 · DH-5EL-0692
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹14,077
+9 Oct 2026, 12:31 AM
+GUEST
+
+Farhan Sheikh [DH]
+
+room 209 · DH-5EL-0691
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹7,061
+9 Oct 2026, 12:31 AM
+GUEST
+
+Arjun Chatterjee [DH]
+
+room 308 · DH-5EL-0690
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹12,623
+9 Oct 2026, 12:31 AM
+GUEST
+
+Navya Sharma [DH]
+
+room 202 · DH-5EL-0689
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹12,444
+9 Oct 2026, 12:31 AM
+GUEST
+
+Shaurya Khan [DH]
+
+room 205 · DH-5EL-0688
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹4,140
+9 Oct 2026, 12:31 AM
+GUEST
+
+Zoya Kulkarni [DH]
+
+room 201 · DH-5EL-0687
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹10,024
+9 Oct 2026, 12:31 AM
+GUEST
+
+Arjun Sharma [DH]
+
+room 301 · DH-5EL-0686
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹7,343
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rahul Chatterjee [DH]
+
+room 207 · DH-5EL-0685
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹4,757
+9 Oct 2026, 12:31 AM
+GUEST
+
+Zoya Chatterjee [DH]
+
+room 210 · DH-5EL-0684
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹14,346
+9 Oct 2026, 12:31 AM
+GUEST
+
+Myra Reddy [DH]
+
+room 302 · DH-5EL-0683
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹9,677
+9 Oct 2026, 12:31 AM
+GUEST
+
+Arjun Pillai [DH]
+
+room 202 · DH-5EL-0682
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹3,548
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ishaan Khan [DH]
+
+room 203 · DH-5EL-0681
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹4,989
+9 Oct 2026, 12:31 AM
+GUEST
+
+Reyansh Verma [DH]
+
+room 209 · DH-5EL-0680
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹4,071
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aadhya Shah [DH]
+
+room 207 · DH-5EL-0679
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹3,905
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rohan Patel [DH]
+
+room 306 · DH-5EL-0678
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹12,386
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ira Kulkarni [DH]
+
+room 204 · DH-5EL-0677
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹4,489
+9 Oct 2026, 12:31 AM
+GUEST
+
+Nisha Sharma [DH]
+
+room 206 · DH-5EL-0676
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹8,723
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ishaan Deshmukh [DH]
+
+room 205 · DH-5EL-0675
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹4,333
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vihaan Khan [DH]
+
+room 303 · DH-5EL-0674
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹11,085
+9 Oct 2026, 12:31 AM
+GUEST
+
+Arjun Verma [DH]
+
+room 306 · DH-5EL-0673
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹6,955
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aditya Shah [DH]
+
+room 301 · DH-5EL-0672
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹7,678
+9 Oct 2026, 12:31 AM
+GUEST
+
+Krishna Iyer [DH]
+
+room 301 · DH-5EL-0671
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹6,449
+9 Oct 2026, 12:31 AM
+GUEST
+
+Riya Mehta [DH]
+
+room 307 · DH-5EL-0670
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹11,507
+9 Oct 2026, 12:31 AM
+GUEST
+
+Kabir Sharma [DH]
+
+room 304 · DH-5EL-0669
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹4,020
+9 Oct 2026, 12:31 AM
+GUEST
+
+Meera Pillai [DH]
+
+room 205 · DH-5EL-0668
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹8,021
+9 Oct 2026, 12:31 AM
+GUEST
+
+Farhan Menon [DH]
+
+room 205 · DH-5EL-0667
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹13,447
+9 Oct 2026, 12:31 AM
+GUEST
+
+Meera Chatterjee [DH]
+
+room 207 · DH-5EL-0666
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹7,182
+9 Oct 2026, 12:31 AM
+GUEST
+
+Krishna Rao [DH]
+
+room 301 · DH-5EL-0665
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹11,945
+9 Oct 2026, 12:31 AM
+GUEST
+
+Zoya Joshi [DH]
+
+room 306 · DH-5EL-0664
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹10,444
+9 Oct 2026, 12:31 AM
+GUEST
+
+Anika Nair [DH]
+
+room 203 · DH-5EL-0663
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹4,556
+9 Oct 2026, 12:31 AM
+GUEST
+
+Meera Kulkarni [DH]
+
+room 308 · DH-5EL-0662
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹3,605
+9 Oct 2026, 12:31 AM
+GUEST
+
+Imran Chatterjee [DH]
+
+room 210 · DH-5EL-0661
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹11,706
+9 Oct 2026, 12:31 AM
+GUEST
+
+Navya Khan [DH]
+
+room 206 · DH-5EL-0660
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹14,596
+9 Oct 2026, 12:31 AM
+GUEST
+
+Riya Gupta [DH]
+
+room 303 · DH-5EL-0659
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹7,807
+9 Oct 2026, 12:31 AM
+GUEST
+
+Imran Nair [DH]
+
+room 210 · DH-5EL-0658
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹7,174
+9 Oct 2026, 12:31 AM
+GUEST
+
+Diya Joshi [DH]
+
+room 206 · DH-5EL-0657
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹9,622
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ananya Khan [DH]
+
+room 304 · DH-5EL-0656
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹4,580
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vivaan Joshi [DH]
+
+room 306 · DH-5EL-0655
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹11,328
+9 Oct 2026, 12:31 AM
+GUEST
+
+Shaurya Verma [DH]
+
+room 308 · DH-5EL-0654
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹7,302
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sneha Menon [DH]
+
+room 205 · DH-5EL-0653
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹7,516
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sara Iyer [DH]
+
+room 305 · DH-5EL-0652
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹11,864
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rahul Deshmukh [DH]
+
+room 304 · DH-5EL-0651
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹12,354
+9 Oct 2026, 12:31 AM
+GUEST
+
+Zoya Rao [DH]
+
+room 302 · DH-5EL-0650
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹7,442
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rohan Mehta [DH]
+
+room 302 · DH-5EL-0649
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹6,383
+9 Oct 2026, 12:31 AM
+GUEST
+
+Meera Sharma [DH]
+
+room 308 · DH-5EL-0648
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹4,512
+9 Oct 2026, 12:31 AM
+GUEST
+
+Imran Singh [DH]
+
+room 207 · DH-5EL-0647
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹7,633
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sara Rao [DH]
+
+room 207 · DH-5EL-0646
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹4,059
+9 Oct 2026, 12:31 AM
+GUEST
+
+Tanvi Sheikh [DH]
+
+room 307 · DH-5EL-0645
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹3,459
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rahul Deshmukh [DH]
+
+room 205 · DH-5EL-0644
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹12,898
+9 Oct 2026, 12:31 AM
+GUEST
+
+Navya Sheikh [DH]
+
+room 207 · DH-5EL-0643
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹7,715
+9 Oct 2026, 12:31 AM
+GUEST
+
+Meera Deshmukh [DH]
+
+room 209 · DH-5EL-0642
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹4,132
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ananya Iyer [DH]
+
+room 301 · DH-5EL-0641
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹13,636
+9 Oct 2026, 12:31 AM
+GUEST
+
+Farhan Rao [DH]
+
+room 306 · DH-5EL-0640
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹9,572
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ananya Khan [DH]
+
+room 210 · DH-5EL-0639
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹3,678
+9 Oct 2026, 12:31 AM
+GUEST
+
+Shaurya Nair [DH]
+
+room 203 · DH-5EL-0638
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹4,428
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aarav Reddy [DH]
+
+room 208 · DH-5EL-0637
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹4,241
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rohan Kulkarni [DH]
+
+room 302 · DH-5EL-0636
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹8,943
+9 Oct 2026, 12:31 AM
+GUEST
+
+Reyansh Pillai [DH]
+
+room 209 · DH-5EL-0635
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹4,768
+9 Oct 2026, 12:31 AM
+GUEST
+
+Farhan Gupta [DH]
+
+room 201 · DH-5EL-0634
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹10,716
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aarav Reddy [DH]
+
+room 206 · DH-5EL-0633
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹11,793
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ananya Sheikh [DH]
+
+room 204 · DH-5EL-0632
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹10,973
+9 Oct 2026, 12:31 AM
+GUEST
+
+Kavya Sheikh [DH]
+
+room 205 · DH-5EL-0631
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹9,804
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sara Gupta [DH]
+
+room 304 · DH-5EL-0630
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹13,540
+9 Oct 2026, 12:31 AM
+GUEST
+
+Diya Patel [DH]
+
+room 206 · DH-5EL-0629
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹7,797
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ira Singh [DH]
+
+room 209 · DH-5EL-0628
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹3,898
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ira Pillai [DH]
+
+room 308 · DH-5EL-0627
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹9,149
+9 Oct 2026, 12:31 AM
+GUEST
+
+Diya Singh [DH]
+
+room 206 · DH-5EL-0626
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹12,206
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ananya Sheikh [DH]
+
+room 210 · DH-5EL-0625
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹4,735
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vivaan Joshi [DH]
+
+room 308 · DH-5EL-0624
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹7,283
+9 Oct 2026, 12:31 AM
+GUEST
+
+Diya Joshi [DH]
+
+room 203 · DH-5EL-0623
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹3,996
+9 Oct 2026, 12:31 AM
+GUEST
+
+Imran Verma [DH]
+
+room 303 · DH-5EL-0622
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹4,207
+9 Oct 2026, 12:31 AM
+GUEST
+
+Kabir Sharma [DH]
+
+room 208 · DH-5EL-0621
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹4,319
+9 Oct 2026, 12:31 AM
+GUEST
+
+Zoya Sharma [DH]
+
+room 208 · DH-5EL-0620
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹5,065
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ayaan Singh [DH]
+
+room 206 · DH-5EL-0619
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹4,551
+9 Oct 2026, 12:31 AM
+GUEST
+
+Imran Pillai [DH]
+
+room 301 · DH-5EL-0618
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹8,718
+9 Oct 2026, 12:31 AM
+GUEST
+
+Meera Iyer [DH]
+
+room 209 · DH-5EL-0617
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹3,545
+9 Oct 2026, 12:31 AM
+GUEST
+
+Meera Bose [DH]
+
+room 209 · DH-5EL-0616
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹8,435
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ira Pillai [DH]
+
+room 207 · DH-5EL-0615
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹3,649
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aarav Patel [DH]
+
+room 303 · DH-5EL-0614
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹9,589
+9 Oct 2026, 12:31 AM
+GUEST
+
+Krishna Bose [DH]
+
+room 205 · DH-5EL-0613
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹4,220
+9 Oct 2026, 12:31 AM
+GUEST
+
+Imran Shah [DH]
+
+room 308 · DH-5EL-0612
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹8,671
+9 Oct 2026, 12:31 AM
+GUEST
+
+Arjun Nair [DH]
+
+room 204 · DH-5EL-0611
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹3,823
+9 Oct 2026, 12:31 AM
+GUEST
+
+Meera Joshi [DH]
+
+room 307 · DH-5EL-0610
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹7,160
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vivaan Pillai [DH]
+
+room 209 · DH-5EL-0609
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹8,243
+9 Oct 2026, 12:31 AM
+GUEST
+
+Arjun Bose [DH]
+
+room 202 · DH-5EL-0608
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹14,876
+9 Oct 2026, 12:31 AM
+GUEST
+
+Meera Deshmukh [DH]
+
+room 301 · DH-5EL-0607
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹3,658
+9 Oct 2026, 12:31 AM
+GUEST
+
+Shaurya Joshi [DH]
+
+room 207 · DH-5EL-0606
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹4,078
+9 Oct 2026, 12:31 AM
+GUEST
+
+Navya Gupta [DH]
+
+room 204 · DH-5EL-0605
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹4,578
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sneha Joshi [DH]
+
+room 304 · DH-5EL-0604
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹4,102
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aditya Joshi [DH]
+
+room 204 · DH-5EL-0603
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹9,957
+9 Oct 2026, 12:31 AM
+GUEST
+
+Riya Bose [DH]
+
+room 304 · DH-5EL-0602
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹6,480
+9 Oct 2026, 12:31 AM
+GUEST
+
+Shaurya Sheikh [DH]
+
+room 303 · DH-5EL-0601
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹3,822
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aadhya Sharma [DH]
+
+room 203 · DH-5EL-0600
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹4,266
+9 Oct 2026, 12:31 AM
+GUEST
+
+Reyansh Sheikh [DH]
+
+room 305 · DH-5EL-0599
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹13,284
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rohan Mehta [DH]
+
+room 308 · DH-5EL-0598
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹3,702
+9 Oct 2026, 12:31 AM
+GUEST
+
+Nisha Singh [DH]
+
+room 306 · DH-5EL-0597
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹8,634
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aadhya Shah [DH]
+
+room 205 · DH-5EL-0596
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹14,177
+9 Oct 2026, 12:31 AM
+GUEST
+
+Meera Mehta [DH]
+
+room 209 · DH-5EL-0595
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹8,531
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rahul Bose [DH]
+
+room 204 · DH-5EL-0594
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹4,243
+9 Oct 2026, 12:31 AM
+GUEST
+
+Kavya Iyer [DH]
+
+room 201 · DH-5EL-0593
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹8,504
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ayaan Singh [DH]
+
+room 205 · DH-5EL-0592
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹14,997
+9 Oct 2026, 12:31 AM
+GUEST
+
+Shaurya Reddy [DH]
+
+room 303 · DH-5EL-0591
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹13,209
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sneha Reddy [DH]
+
+room 304 · DH-5EL-0590
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹4,330
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rohan Mehta [DH]
+
+room 306 · DH-5EL-0589
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹10,201
+9 Oct 2026, 12:31 AM
+GUEST
+
+Kabir Pillai [DH]
+
+room 202 · DH-5EL-0588
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹3,798
+9 Oct 2026, 12:31 AM
+GUEST
+
+Diya Nair [DH]
+
+room 303 · DH-5EL-0587
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹10,229
+9 Oct 2026, 12:31 AM
+GUEST
+
+Nisha Nair [DH]
+
+room 206 · DH-5EL-0586
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹8,915
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vihaan Reddy [DH]
+
+room 205 · DH-5EL-0585
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹12,448
+9 Oct 2026, 12:31 AM
+GUEST
+
+Anika Reddy [DH]
+
+room 204 · DH-5EL-0584
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹11,268
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ayaan Pillai [DH]
+
+room 201 · DH-5EL-0583
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹8,123
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sara Khan [DH]
+
+room 305 · DH-5EL-0582
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹12,823
+9 Oct 2026, 12:31 AM
+GUEST
+
+Nisha Menon [DH]
+
+room 205 · DH-5EL-0581
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹14,418
+9 Oct 2026, 12:31 AM
+GUEST
+
+Tanvi Iyer [DH]
+
+room 205 · DH-5EL-0580
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹8,915
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vihaan Verma [DH]
+
+room 303 · DH-5EL-0579
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹11,534
+9 Oct 2026, 12:31 AM
+GUEST
+
+Zoya Sharma [DH]
+
+room 304 · DH-5EL-0578
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹3,453
+9 Oct 2026, 12:31 AM
+GUEST
+
+Imran Nair [DH]
+
+room 202 · DH-5EL-0577
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹14,465
+9 Oct 2026, 12:31 AM
+GUEST
+
+Kavya Rao [DH]
+
+room 306 · DH-5EL-0576
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹3,341
+9 Oct 2026, 12:31 AM
+GUEST
+
+Zoya Deshmukh [DH]
+
+room 210 · DH-5EL-0575
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹4,533
+9 Oct 2026, 12:31 AM
+GUEST
+
+Shaurya Patel [DH]
+
+room 305 · DH-5EL-0574
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹7,636
+9 Oct 2026, 12:31 AM
+GUEST
+
+Reyansh Kulkarni [DH]
+
+room 206 · DH-5EL-0573
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹5,044
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sara Reddy [DH]
+
+room 203 · DH-5EL-0572
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹11,025
+9 Oct 2026, 12:31 AM
+GUEST
+
+Riya Kulkarni [DH]
+
+room 302 · DH-5EL-0571
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹6,528
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sneha Menon [DH]
+
+room 210 · DH-5EL-0570
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹3,781
+9 Oct 2026, 12:31 AM
+GUEST
+
+Diya Iyer [DH]
+
+room 204 · DH-5EL-0569
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹4,847
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ishaan Shah [DH]
+
+room 303 · DH-5EL-0568
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹9,753
+9 Oct 2026, 12:31 AM
+GUEST
+
+Zoya Menon [DH]
+
+room 307 · DH-5EL-0567
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹11,983
+9 Oct 2026, 12:31 AM
+GUEST
+
+Myra Iyer [DH]
+
+room 206 · DH-5EL-0566
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹4,289
+9 Oct 2026, 12:31 AM
+GUEST
+
+Nisha Khan [DH]
+
+room 306 · DH-5EL-0565
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹8,453
+9 Oct 2026, 12:31 AM
+GUEST
+
+Tanvi Menon [DH]
+
+room 301 · DH-5EL-0564
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹3,352
+9 Oct 2026, 12:31 AM
+GUEST
+
+Diya Deshmukh [DH]
+
+room 305 · DH-5EL-0563
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹7,154
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ayaan Joshi [DH]
+
+room 302 · DH-5EL-0562
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹7,346
+9 Oct 2026, 12:31 AM
+GUEST
+
+Anika Sheikh [DH]
+
+room 307 · DH-5EL-0561
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹6,403
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aadhya Singh [DH]
+
+room 302 · DH-5EL-0560
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹3,646
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ira Mehta [DH]
+
+room 203 · DH-5EL-0559
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹12,969
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ananya Reddy [DH]
+
+room 203 · DH-5EL-0558
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹4,219
+9 Oct 2026, 12:31 AM
+GUEST
+
+Riya Pillai [DH]
+
+room 306 · DH-5EL-0557
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹11,941
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aarav Khan [DH]
+
+room 307 · DH-5EL-0556
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹3,218
+9 Oct 2026, 12:31 AM
+GUEST
+
+Imran Joshi [DH]
+
+room 204 · DH-5EL-0555
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹5,054
+9 Oct 2026, 12:31 AM
+GUEST
+
+Zoya Menon [DH]
+
+room 306 · DH-5EL-0554
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹8,793
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aditya Pillai [DH]
+
+room 301 · DH-5EL-0553
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹6,591
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ishaan Gupta [DH]
+
+room 210 · DH-5EL-0552
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹12,008
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aditya Khan [DH]
+
+room 208 · DH-5EL-0551
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹8,289
+9 Oct 2026, 12:31 AM
+GUEST
+
+Diya Iyer [DH]
+
+room 301 · DH-5EL-0550
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹12,757
+9 Oct 2026, 12:31 AM
+GUEST
+
+Navya Verma [DH]
+
+room 307 · DH-5EL-0549
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹4,055
+9 Oct 2026, 12:31 AM
+GUEST
+
+Navya Patel [DH]
+
+room 307 · DH-5EL-0548
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹6,640
+9 Oct 2026, 12:31 AM
+GUEST
+
+Reyansh Reddy [DH]
+
+room 207 · DH-5EL-0547
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹9,232
+9 Oct 2026, 12:31 AM
+GUEST
+
+Navya Joshi [DH]
+
+room 302 · DH-5EL-0546
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹3,644
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vivaan Sheikh [DH]
+
+room 303 · DH-5EL-0545
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹6,968
+9 Oct 2026, 12:31 AM
+GUEST
+
+Zoya Chatterjee [DH]
+
+room 207 · DH-5EL-0544
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹8,465
+9 Oct 2026, 12:31 AM
+GUEST
+
+Krishna Iyer [DH]
+
+room 302 · DH-5EL-0543
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹4,038
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sara Mehta [DH]
+
+room 302 · DH-5EL-0542
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹11,935
+9 Oct 2026, 12:31 AM
+GUEST
+
+Meera Gupta [DH]
+
+room 203 · DH-5EL-0541
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹12,305
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vivaan Singh [DH]
+
+room 305 · DH-5EL-0540
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹11,708
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ishaan Reddy [DH]
+
+room 302 · DH-5EL-0539
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹8,795
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aarav Nair [DH]
+
+room 202 · DH-5EL-0538
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹4,305
+9 Oct 2026, 12:31 AM
+GUEST
+
+Arjun Menon [DH]
+
+room 202 · DH-5EL-0537
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹3,531
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ananya Reddy [DH]
+
+room 307 · DH-5EL-0536
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹7,493
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vihaan Verma [DH]
+
+room 304 · DH-5EL-0535
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹11,437
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vivaan Iyer [DH]
+
+room 301 · DH-5EL-0534
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹8,823
+9 Oct 2026, 12:31 AM
+GUEST
+
+Kabir Iyer [DH]
+
+room 308 · DH-5EL-0533
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹3,219
+9 Oct 2026, 12:31 AM
+GUEST
+
+Farhan Bose [DH]
+
+room 201 · DH-5EL-0532
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹11,634
+9 Oct 2026, 12:31 AM
+GUEST
+
+Anika Pillai [DH]
+
+room 201 · DH-5EL-0531
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹4,556
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sara Menon [DH]
+
+room 205 · DH-5EL-0530
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹8,901
+9 Oct 2026, 12:31 AM
+GUEST
+
+Kabir Bose [DH]
+
+room 201 · DH-5EL-0529
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹12,588
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ira Gupta [DH]
+
+room 209 · DH-5EL-0528
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹9,331
+9 Oct 2026, 12:31 AM
+GUEST
+
+Diya Kulkarni [DH]
+
+room 201 · DH-5EL-0527
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹9,492
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vihaan Menon [DH]
+
+room 202 · DH-5EL-0526
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹3,678
+9 Oct 2026, 12:31 AM
+GUEST
+
+Zoya Patel [DH]
+
+room 304 · DH-5EL-0525
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹8,140
+9 Oct 2026, 12:31 AM
+GUEST
+
+Reyansh Khan [DH]
+
+room 301 · DH-5EL-0524
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹10,731
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ayaan Kulkarni [DH]
+
+room 306 · DH-5EL-0523
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹3,269
+9 Oct 2026, 12:31 AM
+GUEST
+
+Diya Patel [DH]
+
+room 201 · DH-5EL-0522
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹11,046
+9 Oct 2026, 12:31 AM
+GUEST
+
+Arjun Iyer [DH]
+
+room 210 · DH-5EL-0521
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹9,514
+9 Oct 2026, 12:31 AM
+GUEST
+
+Tanvi Iyer [DH]
+
+room 206 · DH-5EL-0520
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹8,825
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vihaan Singh [DH]
+
+room 301 · DH-5EL-0519
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹8,928
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ananya Verma [DH]
+
+room 204 · DH-5EL-0518
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹9,521
+9 Oct 2026, 12:31 AM
+GUEST
+
+Reyansh Sharma [DH]
+
+room 206 · DH-5EL-0517
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹9,125
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aadhya Kulkarni [DH]
+
+room 205 · DH-5EL-0516
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹5,046
+9 Oct 2026, 12:31 AM
+GUEST
+
+Nisha Reddy [DH]
+
+room 201 · DH-5EL-0515
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹4,491
+9 Oct 2026, 12:31 AM
+GUEST
+
+Farhan Reddy [DH]
+
+room 207 · DH-5EL-0514
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹7,274
+9 Oct 2026, 12:31 AM
+GUEST
+
+Diya Khan [DH]
+
+room 303 · DH-5EL-0513
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹3,494
+9 Oct 2026, 12:31 AM
+GUEST
+
+Farhan Sharma [DH]
+
+room 301 · DH-5EL-0512
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹3,272
+9 Oct 2026, 12:31 AM
+GUEST
+
+Kabir Chatterjee [DH]
+
+room 306 · DH-5EL-0511
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹3,861
+9 Oct 2026, 12:31 AM
+GUEST
+
+Kabir Reddy [DH]
+
+room 305 · DH-5EL-0510
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹4,569
+9 Oct 2026, 12:31 AM
+GUEST
+
+Kavya Joshi [DH]
+
+room 204 · DH-5EL-0509
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹9,543
+9 Oct 2026, 12:31 AM
+GUEST
+
+Meera Sharma [DH]
+
+room 307 · DH-5EL-0508
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹3,302
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vivaan Pillai [DH]
+
+room 301 · DH-5EL-0507
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹11,947
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aditya Bose [DH]
+
+room 306 · DH-5EL-0506
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹9,613
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rahul Sheikh [DH]
+
+room 303 · DH-5EL-0505
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹3,995
+9 Oct 2026, 12:31 AM
+GUEST
+
+Farhan Patel [DH]
+
+room 204 · DH-5EL-0504
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹4,180
+9 Oct 2026, 12:31 AM
+GUEST
+
+Anika Joshi [DH]
+
+room 202 · DH-5EL-0503
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹8,007
+9 Oct 2026, 12:31 AM
+GUEST
+
+Nisha Gupta [DH]
+
+room 204 · DH-5EL-0502
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹4,811
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ishaan Deshmukh [DH]
+
+room 208 · DH-5EL-0501
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹15,095
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ishaan Pillai [DH]
+
+room 209 · DH-5EL-0500
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹13,083
+9 Oct 2026, 12:31 AM
+GUEST
+
+Riya Khan [DH]
+
+room 208 · DH-5EL-0499
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹4,440
+9 Oct 2026, 12:31 AM
+GUEST
+
+Tanvi Menon [DH]
+
+room 307 · DH-5EL-0498
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹7,121
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aarav Chatterjee [DH]
+
+room 301 · DH-5EL-0497
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹3,231
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aadhya Reddy [DH]
+
+room 308 · DH-5EL-0496
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹8,501
+9 Oct 2026, 12:31 AM
+GUEST
+
+Tanvi Gupta [DH]
+
+room 303 · DH-5EL-0495
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹3,839
+9 Oct 2026, 12:31 AM
+GUEST
+
+Kabir Sheikh [DH]
+
+room 201 · DH-5EL-0494
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹3,894
+9 Oct 2026, 12:31 AM
+GUEST
+
+Imran Sharma [DH]
+
+room 308 · DH-5EL-0493
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹13,605
+9 Oct 2026, 12:31 AM
+GUEST
+
+Navya Deshmukh [DH]
+
+room 208 · DH-5EL-0492
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹14,065
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vihaan Gupta [DH]
+
+room 201 · DH-5EL-0491
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹7,132
+9 Oct 2026, 12:31 AM
+GUEST
+
+Meera Joshi [DH]
+
+room 210 · DH-5EL-0490
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹13,277
+9 Oct 2026, 12:31 AM
+GUEST
+
+Farhan Iyer [DH]
+
+room 303 · DH-5EL-0489
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹9,731
+9 Oct 2026, 12:31 AM
+GUEST
+
+Anika Kulkarni [DH]
+
+room 209 · DH-5EL-0488
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹8,921
+9 Oct 2026, 12:31 AM
+GUEST
+
+Reyansh Iyer [DH]
+
+room 201 · DH-5EL-0487
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹8,482
+9 Oct 2026, 12:31 AM
+GUEST
+
+Arjun Nair [DH]
+
+room 207 · DH-5EL-0486
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹8,026
+9 Oct 2026, 12:31 AM
+GUEST
+
+Farhan Patel [DH]
+
+room 201 · DH-5EL-0485
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹9,372
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ayaan Bose [DH]
+
+room 207 · DH-5EL-0484
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹9,098
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rahul Patel [DH]
+
+room 204 · DH-5EL-0483
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹11,638
+9 Oct 2026, 12:31 AM
+GUEST
+
+Imran Reddy [DH]
+
+room 205 · DH-5EL-0482
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹4,727
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vihaan Singh [DH]
+
+room 302 · DH-5EL-0481
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹6,885
+9 Oct 2026, 12:31 AM
+GUEST
+
+Zoya Joshi [DH]
+
+room 304 · DH-5EL-0480
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹11,084
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aadhya Singh [DH]
+
+room 204 · DH-5EL-0479
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹11,551
+9 Oct 2026, 12:31 AM
+GUEST
+
+Shaurya Patel [DH]
+
+room 210 · DH-5EL-0478
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹13,093
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sneha Rao [DH]
+
+room 205 · DH-5EL-0477
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹10,040
+9 Oct 2026, 12:31 AM
+GUEST
+
+Tanvi Sheikh [DH]
+
+room 210 · DH-5EL-0476
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹13,489
+9 Oct 2026, 12:31 AM
+GUEST
+
+Kavya Sharma [DH]
+
+room 207 · DH-5EL-0475
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹4,982
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ayaan Mehta [DH]
+
+room 207 · DH-5EL-0474
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹4,056
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ira Nair [DH]
+
+room 307 · DH-5EL-0473
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹6,749
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aarav Nair [DH]
+
+room 207 · DH-5EL-0472
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹4,251
+9 Oct 2026, 12:31 AM
+GUEST
+
+Arjun Bose [DH]
+
+room 302 · DH-5EL-0471
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹7,707
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ishaan Nair [DH]
+
+room 210 · DH-5EL-0470
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹4,461
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sneha Bose [DH]
+
+room 308 · DH-5EL-0469
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹3,746
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vivaan Sharma [DH]
+
+room 306 · DH-5EL-0468
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹6,704
+9 Oct 2026, 12:31 AM
+GUEST
+
+Farhan Sharma [DH]
+
+room 201 · DH-5EL-0467
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹7,860
+9 Oct 2026, 12:31 AM
+GUEST
+
+Riya Singh [DH]
+
+room 206 · DH-5EL-0466
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹10,839
+9 Oct 2026, 12:31 AM
+GUEST
+
+Imran Pillai [DH]
+
+room 302 · DH-5EL-0465
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹3,636
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vihaan Kulkarni [DH]
+
+room 208 · DH-5EL-0464
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹3,825
+9 Oct 2026, 12:31 AM
+GUEST
+
+Reyansh Kulkarni [DH]
+
+room 201 · DH-5EL-0463
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹11,806
+9 Oct 2026, 12:31 AM
+GUEST
+
+Meera Shah [DH]
+
+room 208 · DH-5EL-0462
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹3,797
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sara Gupta [DH]
+
+room 210 · DH-5EL-0461
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹7,245
+9 Oct 2026, 12:31 AM
+GUEST
+
+Reyansh Nair [DH]
+
+room 202 · DH-5EL-0460
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹4,294
+9 Oct 2026, 12:31 AM
+GUEST
+
+Anika Patel [DH]
+
+room 305 · DH-5EL-0459
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹12,489
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aarav Rao [DH]
+
+room 204 · DH-5EL-0458
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹9,799
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ayaan Joshi [DH]
+
+room 201 · DH-5EL-0457
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹14,963
+9 Oct 2026, 12:31 AM
+GUEST
+
+Anika Singh [DH]
+
+room 308 · DH-5EL-0456
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹9,655
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aadhya Patel [DH]
+
+room 308 · DH-5EL-0455
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹4,298
+9 Oct 2026, 12:31 AM
+GUEST
+
+Imran Pillai [DH]
+
+room 303 · DH-5EL-0454
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹7,902
+9 Oct 2026, 12:31 AM
+GUEST
+
+Tanvi Rao [DH]
+
+room 203 · DH-5EL-0453
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹12,987
+9 Oct 2026, 12:31 AM
+GUEST
+
+Myra Khan [DH]
+
+room 205 · DH-5EL-0452
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹4,743
+9 Oct 2026, 12:31 AM
+GUEST
+
+Anika Iyer [DH]
+
+room 208 · DH-5EL-0451
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹7,992
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aditya Menon [DH]
+
+room 304 · DH-5EL-0450
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹3,872
+9 Oct 2026, 12:31 AM
+GUEST
+
+Shaurya Joshi [DH]
+
+room 303 · DH-5EL-0449
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹9,900
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ayaan Singh [DH]
+
+room 205 · DH-5EL-0448
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹4,798
+9 Oct 2026, 12:31 AM
+GUEST
+
+Kabir Sheikh [DH]
+
+room 201 · DH-5EL-0447
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹4,705
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aarav Patel [DH]
+
+room 307 · DH-5EL-0446
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹7,163
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vivaan Sheikh [DH]
+
+room 210 · DH-5EL-0445
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹13,362
+9 Oct 2026, 12:31 AM
+GUEST
+
+Riya Menon [DH]
+
+room 205 · DH-5EL-0444
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹8,506
+9 Oct 2026, 12:31 AM
+GUEST
+
+Kabir Sheikh [DH]
+
+room 303 · DH-5EL-0443
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹4,582
+9 Oct 2026, 12:31 AM
+GUEST
+
+Kavya Khan [DH]
+
+room 209 · DH-5EL-0442
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹8,214
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rahul Bose [DH]
+
+room 203 · DH-5EL-0441
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹13,337
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aditya Pillai [DH]
+
+room 301 · DH-5EL-0440
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹12,957
+9 Oct 2026, 12:31 AM
+GUEST
+
+Imran Menon [DH]
+
+room 202 · DH-5EL-0439
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹4,829
+9 Oct 2026, 12:31 AM
+GUEST
+
+Myra Singh [DH]
+
+room 304 · DH-5EL-0438
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹6,436
+9 Oct 2026, 12:31 AM
+GUEST
+
+Meera Sharma [DH]
+
+room 203 · DH-5EL-0437
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹14,212
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sara Shah [DH]
+
+room 303 · DH-5EL-0436
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹8,275
+9 Oct 2026, 12:31 AM
+GUEST
+
+Kavya Sheikh [DH]
+
+room 208 · DH-5EL-0435
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹3,811
+9 Oct 2026, 12:31 AM
+GUEST
+
+Meera Gupta [DH]
+
+room 210 · DH-5EL-0434
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹15,117
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aditya Iyer [DH]
+
+room 305 · DH-5EL-0433
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹3,706
+9 Oct 2026, 12:31 AM
+GUEST
+
+Navya Mehta [DH]
+
+room 205 · DH-5EL-0432
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹14,119
+9 Oct 2026, 12:31 AM
+GUEST
+
+Reyansh Rao [DH]
+
+room 308 · DH-5EL-0431
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹8,315
+9 Oct 2026, 12:31 AM
+GUEST
+
+Kavya Sheikh [DH]
+
+room 303 · DH-5EL-0430
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹3,707
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ananya Gupta [DH]
+
+room 305 · DH-5EL-0429
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹3,523
+9 Oct 2026, 12:31 AM
+GUEST
+
+Myra Sheikh [DH]
+
+room 307 · DH-5EL-0428
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹13,243
+9 Oct 2026, 12:31 AM
+GUEST
+
+Krishna Bose [DH]
+
+room 204 · DH-5EL-0427
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹8,820
+9 Oct 2026, 12:31 AM
+GUEST
+
+Shaurya Rao [DH]
+
+room 304 · DH-5EL-0426
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹7,037
+9 Oct 2026, 12:31 AM
+GUEST
+
+Zoya Kulkarni [DH]
+
+room 307 · DH-5EL-0425
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹12,626
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aadhya Iyer [DH]
+
+room 304 · DH-5EL-0424
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹8,981
+9 Oct 2026, 12:31 AM
+GUEST
+
+Diya Singh [DH]
+
+room 210 · DH-5EL-0423
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹10,087
+9 Oct 2026, 12:31 AM
+GUEST
+
+Tanvi Joshi [DH]
+
+room 206 · DH-5EL-0422
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹13,221
+9 Oct 2026, 12:31 AM
+GUEST
+
+Reyansh Rao [DH]
+
+room 209 · DH-5EL-0421
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹13,386
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vivaan Pillai [DH]
+
+room 203 · DH-5EL-0420
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹9,419
+9 Oct 2026, 12:31 AM
+GUEST
+
+Diya Mehta [DH]
+
+room 306 · DH-5EL-0419
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹8,953
+9 Oct 2026, 12:31 AM
+GUEST
+
+Arjun Menon [DH]
+
+room 303 · DH-5EL-0418
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹8,009
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aadhya Chatterjee [DH]
+
+room 307 · DH-5EL-0417
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹9,009
+9 Oct 2026, 12:31 AM
+GUEST
+
+Kavya Verma [DH]
+
+room 306 · DH-5EL-0416
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹8,299
+9 Oct 2026, 12:31 AM
+GUEST
+
+Nisha Deshmukh [DH]
+
+room 205 · DH-5EL-0415
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹8,946
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ayaan Shah [DH]
+
+room 206 · DH-5EL-0414
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹12,571
+9 Oct 2026, 12:31 AM
+GUEST
+
+Navya Rao [DH]
+
+room 201 · DH-5EL-0413
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹11,317
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aadhya Menon [DH]
+
+room 208 · DH-5EL-0412
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹12,967
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vihaan Rao [DH]
+
+room 301 · DH-5EL-0411
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹11,492
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ira Verma [DH]
+
+room 201 · DH-5EL-0410
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹9,385
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vihaan Mehta [DH]
+
+room 203 · DH-5EL-0409
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹5,044
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sneha Mehta [DH]
+
+room 308 · DH-5EL-0408
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹12,154
+9 Oct 2026, 12:31 AM
+GUEST
+
+Krishna Iyer [DH]
+
+room 301 · DH-5EL-0407
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹7,871
+9 Oct 2026, 12:31 AM
+GUEST
+
+Zoya Singh [DH]
+
+room 201 · DH-5EL-0406
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹10,062
+9 Oct 2026, 12:31 AM
+GUEST
+
+Myra Menon [DH]
+
+room 304 · DH-5EL-0405
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹9,795
+9 Oct 2026, 12:31 AM
+GUEST
+
+Farhan Kulkarni [DH]
+
+room 205 · DH-5EL-0404
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹7,672
+9 Oct 2026, 12:31 AM
+GUEST
+
+Meera Rao [DH]
+
+room 201 · DH-5EL-0403
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹4,962
+9 Oct 2026, 12:31 AM
+GUEST
+
+Meera Sharma [DH]
+
+room 206 · DH-5EL-0402
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹3,785
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aarav Sheikh [DH]
+
+room 301 · DH-5EL-0401
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹3,770
+9 Oct 2026, 12:31 AM
+GUEST
+
+Navya Sheikh [DH]
+
+room 209 · DH-5EL-0400
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹4,042
+9 Oct 2026, 12:31 AM
+GUEST
+
+Anika Sharma [DH]
+
+room 305 · DH-5EL-0399
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹6,593
+9 Oct 2026, 12:31 AM
+GUEST
+
+Diya Rao [DH]
+
+room 303 · DH-5EL-0398
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹3,278
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rohan Khan [DH]
+
+room 210 · DH-5EL-0397
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹11,832
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aadhya Nair [DH]
+
+room 302 · DH-5EL-0396
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹6,525
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aditya Sharma [DH]
+
+room 202 · DH-5EL-0395
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹4,773
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ayaan Singh [DH]
+
+room 306 · DH-5EL-0394
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹4,009
+9 Oct 2026, 12:31 AM
+GUEST
+
+Reyansh Bose [DH]
+
+room 206 · DH-5EL-0393
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹9,398
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rohan Chatterjee [DH]
+
+room 303 · DH-5EL-0392
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹13,197
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sneha Chatterjee [DH]
+
+room 308 · DH-5EL-0391
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹7,242
+9 Oct 2026, 12:31 AM
+GUEST
+
+Imran Pillai [DH]
+
+room 307 · DH-5EL-0390
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹3,592
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sara Chatterjee [DH]
+
+room 306 · DH-5EL-0389
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹10,601
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ishaan Bose [DH]
+
+room 206 · DH-5EL-0388
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹9,066
+9 Oct 2026, 12:31 AM
+GUEST
+
+Kabir Sheikh [DH]
+
+room 305 · DH-5EL-0387
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹7,988
+9 Oct 2026, 12:31 AM
+GUEST
+
+Farhan Singh [DH]
+
+room 305 · DH-5EL-0386
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹3,632
+9 Oct 2026, 12:31 AM
+GUEST
+
+Tanvi Kulkarni [DH]
+
+room 303 · DH-5EL-0385
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹9,648
+9 Oct 2026, 12:31 AM
+GUEST
+
+Imran Sheikh [DH]
+
+room 207 · DH-5EL-0384
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹13,693
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ira Sheikh [DH]
+
+room 201 · DH-5EL-0383
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹3,644
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vivaan Verma [DH]
+
+room 207 · DH-5EL-0382
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹9,988
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ishaan Gupta [DH]
+
+room 305 · DH-5EL-0381
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹12,948
+9 Oct 2026, 12:31 AM
+GUEST
+
+Nisha Kulkarni [DH]
+
+room 202 · DH-5EL-0380
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹14,081
+9 Oct 2026, 12:31 AM
+GUEST
+
+Shaurya Singh [DH]
+
+room 206 · DH-5EL-0379
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹9,061
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aadhya Pillai [DH]
+
+room 303 · DH-5EL-0378
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹13,507
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sneha Pillai [DH]
+
+room 209 · DH-5EL-0377
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹5,034
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aarav Bose [DH]
+
+room 303 · DH-5EL-0376
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹8,247
+9 Oct 2026, 12:31 AM
+GUEST
+
+Shaurya Verma [DH]
+
+room 306 · DH-5EL-0375
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹11,879
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sneha Sharma [DH]
+
+room 302 · DH-5EL-0374
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹7,845
+9 Oct 2026, 12:31 AM
+GUEST
+
+Meera Shah [DH]
+
+room 305 · DH-5EL-0373
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹3,781
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rohan Shah [DH]
+
+room 205 · DH-5EL-0372
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹3,945
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ishaan Rao [DH]
+
+room 307 · DH-5EL-0371
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹3,475
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aadhya Chatterjee [DH]
+
+room 301 · DH-5EL-0370
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹3,241
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sneha Nair [DH]
+
+room 210 · DH-5EL-0369
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹4,581
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vivaan Menon [DH]
+
+room 201 · DH-5EL-0368
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹4,225
+9 Oct 2026, 12:31 AM
+GUEST
+
+Zoya Sheikh [DH]
+
+room 203 · DH-5EL-0367
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹14,778
+9 Oct 2026, 12:31 AM
+GUEST
+
+Shaurya Bose [DH]
+
+room 301 · DH-5EL-0366
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹3,389
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aadhya Rao [DH]
+
+room 302 · DH-5EL-0365
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹8,075
+9 Oct 2026, 12:31 AM
+GUEST
+
+Meera Patel [DH]
+
+room 301 · DH-5EL-0364
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹4,177
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rahul Mehta [DH]
+
+room 210 · DH-5EL-0363
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹10,054
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aadhya Reddy [DH]
+
+room 210 · DH-5EL-0362
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹9,695
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rahul Bose [DH]
+
+room 204 · DH-5EL-0361
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹3,945
+9 Oct 2026, 12:31 AM
+GUEST
+
+Krishna Chatterjee [DH]
+
+room 305 · DH-5EL-0360
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹3,955
+9 Oct 2026, 12:31 AM
+GUEST
+
+Kavya Iyer [DH]
+
+room 205 · DH-5EL-0359
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹13,014
+9 Oct 2026, 12:31 AM
+GUEST
+
+Reyansh Iyer [DH]
+
+room 210 · DH-5EL-0358
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹3,935
+9 Oct 2026, 12:31 AM
+GUEST
+
+Navya Nair [DH]
+
+room 307 · DH-5EL-0357
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹7,539
+9 Oct 2026, 12:31 AM
+GUEST
+
+Navya Rao [DH]
+
+room 202 · DH-5EL-0356
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹4,641
+9 Oct 2026, 12:31 AM
+GUEST
+
+Nisha Joshi [DH]
+
+room 304 · DH-5EL-0355
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹6,750
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ananya Joshi [DH]
+
+room 302 · DH-5EL-0354
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹9,673
+9 Oct 2026, 12:31 AM
+GUEST
+
+Kabir Khan [DH]
+
+room 306 · DH-5EL-0353
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹7,021
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sara Nair [DH]
+
+room 209 · DH-5EL-0352
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹3,754
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aadhya Joshi [DH]
+
+room 207 · DH-5EL-0351
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹13,812
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rohan Mehta [DH]
+
+room 306 · DH-5EL-0350
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹4,136
+9 Oct 2026, 12:31 AM
+GUEST
+
+Farhan Singh [DH]
+
+room 305 · DH-5EL-0349
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹6,861
+9 Oct 2026, 12:31 AM
+GUEST
+
+Tanvi Shah [DH]
+
+room 204 · DH-5EL-0348
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹7,765
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aditya Menon [DH]
+
+room 302 · DH-5EL-0347
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹10,938
+9 Oct 2026, 12:31 AM
+GUEST
+
+Zoya Rao [DH]
+
+room 205 · DH-5EL-0346
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹5,044
+9 Oct 2026, 12:31 AM
+GUEST
+
+Nisha Gupta [DH]
+
+room 301 · DH-5EL-0345
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹6,406
+9 Oct 2026, 12:31 AM
+GUEST
+
+Farhan Singh [DH]
+
+room 202 · DH-5EL-0344
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹13,375
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aadhya Reddy [DH]
+
+room 208 · DH-5EL-0343
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹7,251
+9 Oct 2026, 12:31 AM
+GUEST
+
+Farhan Deshmukh [DH]
+
+room 303 · DH-5EL-0342
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹11,374
+9 Oct 2026, 12:31 AM
+GUEST
+
+Anika Sharma [DH]
+
+room 205 · DH-5EL-0341
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹4,905
+9 Oct 2026, 12:31 AM
+GUEST
+
+Myra Rao [DH]
+
+room 307 · DH-5EL-0340
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹13,532
+9 Oct 2026, 12:31 AM
+GUEST
+
+Kavya Joshi [DH]
+
+room 301 · DH-5EL-0339
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹3,293
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rohan Gupta [DH]
+
+room 301 · DH-5EL-0338
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹3,475
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ananya Iyer [DH]
+
+room 302 · DH-5EL-0337
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹3,390
+9 Oct 2026, 12:31 AM
+GUEST
+
+Reyansh Sheikh [DH]
+
+room 303 · DH-5EL-0336
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹7,094
+9 Oct 2026, 12:31 AM
+GUEST
+
+Reyansh Chatterjee [DH]
+
+room 208 · DH-5EL-0335
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹8,385
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aarav Verma [DH]
+
+room 303 · DH-5EL-0334
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹3,733
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ayaan Reddy [DH]
+
+room 204 · DH-5EL-0333
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹4,020
+9 Oct 2026, 12:31 AM
+GUEST
+
+Shaurya Reddy [DH]
+
+room 203 · DH-5EL-0332
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹8,065
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ananya Iyer [DH]
+
+room 308 · DH-5EL-0331
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹13,091
+9 Oct 2026, 12:31 AM
+GUEST
+
+Krishna Joshi [DH]
+
+room 204 · DH-5EL-0330
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹4,352
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vihaan Mehta [DH]
+
+room 201 · DH-5EL-0329
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹4,824
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ishaan Menon [DH]
+
+room 206 · DH-5EL-0328
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹13,337
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vivaan Sheikh [DH]
+
+room 208 · DH-5EL-0327
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹5,020
+9 Oct 2026, 12:31 AM
+GUEST
+
+Farhan Sheikh [DH]
+
+room 205 · DH-5EL-0326
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹4,216
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rahul Sharma [DH]
+
+room 206 · DH-5EL-0325
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹12,195
+9 Oct 2026, 12:31 AM
+GUEST
+
+Arjun Reddy [DH]
+
+room 307 · DH-5EL-0324
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹10,199
+9 Oct 2026, 12:31 AM
+GUEST
+
+Imran Pillai [DH]
+
+room 303 · DH-5EL-0323
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹6,587
+9 Oct 2026, 12:31 AM
+GUEST
+
+Nisha Pillai [DH]
+
+room 209 · DH-5EL-0322
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹8,612
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rahul Sharma [DH]
+
+room 201 · DH-5EL-0321
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹14,770
+9 Oct 2026, 12:31 AM
+GUEST
+
+Farhan Deshmukh [DH]
+
+room 205 · DH-5EL-0320
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹5,054
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vivaan Nair [DH]
+
+room 302 · DH-5EL-0319
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹7,917
+9 Oct 2026, 12:31 AM
+GUEST
+
+Diya Nair [DH]
+
+room 208 · DH-5EL-0318
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹3,941
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ayaan Chatterjee [DH]
+
+room 308 · DH-5EL-0317
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹12,613
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sara Patel [DH]
+
+room 201 · DH-5EL-0316
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹10,986
+9 Oct 2026, 12:31 AM
+GUEST
+
+Shaurya Iyer [DH]
+
+room 210 · DH-5EL-0315
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹9,855
+9 Oct 2026, 12:31 AM
+GUEST
+
+Farhan Sheikh [DH]
+
+room 305 · DH-5EL-0314
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹4,094
+9 Oct 2026, 12:31 AM
+GUEST
+
+Zoya Bose [DH]
+
+room 304 · DH-5EL-0313
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹7,879
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aadhya Shah [DH]
+
+room 305 · DH-5EL-0312
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹12,551
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aadhya Rao [DH]
+
+room 206 · DH-5EL-0311
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹4,147
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ayaan Joshi [DH]
+
+room 207 · DH-5EL-0310
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹4,633
+9 Oct 2026, 12:31 AM
+GUEST
+
+Myra Shah [DH]
+
+room 205 · DH-5EL-0309
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹4,097
+9 Oct 2026, 12:31 AM
+GUEST
+
+Krishna Bose [DH]
+
+room 306 · DH-5EL-0308
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹3,471
+9 Oct 2026, 12:31 AM
+GUEST
+
+Arjun Shah [DH]
+
+room 303 · DH-5EL-0307
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹4,165
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aarav Verma [DH]
+
+room 205 · DH-5EL-0306
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹7,447
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ishaan Mehta [DH]
+
+room 302 · DH-5EL-0305
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹3,702
+9 Oct 2026, 12:31 AM
+GUEST
+
+Nisha Pillai [DH]
+
+room 305 · DH-5EL-0304
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹6,919
+9 Oct 2026, 12:31 AM
+GUEST
+
+Riya Nair [DH]
+
+room 201 · DH-5EL-0303
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹4,141
+9 Oct 2026, 12:31 AM
+GUEST
+
+Krishna Kulkarni [DH]
+
+room 304 · DH-5EL-0302
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹3,697
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ananya Kulkarni [DH]
+
+room 203 · DH-5EL-0301
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹3,996
+9 Oct 2026, 12:31 AM
+GUEST
+
+Reyansh Gupta [DH]
+
+room 303 · DH-5EL-0300
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹7,571
+9 Oct 2026, 12:31 AM
+GUEST
+
+Anika Patel [DH]
+
+room 207 · DH-5EL-0299
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹8,081
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vivaan Sheikh [DH]
+
+room 301 · DH-5EL-0298
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹10,460
+9 Oct 2026, 12:31 AM
+GUEST
+
+Riya Khan [DH]
+
+room 201 · DH-5EL-0297
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹4,355
+9 Oct 2026, 12:31 AM
+GUEST
+
+Reyansh Verma [DH]
+
+room 210 · DH-5EL-0296
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹4,647
+9 Oct 2026, 12:31 AM
+GUEST
+
+Anika Pillai [DH]
+
+room 204 · DH-5EL-0295
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹3,996
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sneha Shah [DH]
+
+room 305 · DH-5EL-0294
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹12,681
+9 Oct 2026, 12:31 AM
+GUEST
+
+Tanvi Verma [DH]
+
+room 207 · DH-5EL-0293
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹10,602
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vivaan Shah [DH]
+
+room 303 · DH-5EL-0292
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹4,116
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ira Menon [DH]
+
+room 208 · DH-5EL-0291
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹11,344
+9 Oct 2026, 12:31 AM
+GUEST
+
+Zoya Verma [DH]
+
+room 308 · DH-5EL-0290
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹9,987
+9 Oct 2026, 12:31 AM
+GUEST
+
+Arjun Nair [DH]
+
+room 302 · DH-5EL-0289
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹7,671
+9 Oct 2026, 12:31 AM
+GUEST
+
+Navya Rao [DH]
+
+room 305 · DH-5EL-0288
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹13,445
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ayaan Menon [DH]
+
+room 203 · DH-5EL-0287
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹12,380
+9 Oct 2026, 12:31 AM
+GUEST
+
+Arjun Reddy [DH]
+
+room 305 · DH-5EL-0286
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹7,549
+9 Oct 2026, 12:31 AM
+GUEST
+
+Reyansh Kulkarni [DH]
+
+room 301 · DH-5EL-0285
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹6,969
+9 Oct 2026, 12:31 AM
+GUEST
+
+Zoya Sharma [DH]
+
+room 209 · DH-5EL-0284
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹9,028
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vivaan Nair [DH]
+
+room 206 · DH-5EL-0283
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹9,014
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aditya Shah [DH]
+
+room 206 · DH-5EL-0282
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹8,502
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rahul Pillai [DH]
+
+room 303 · DH-5EL-0281
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹7,058
+9 Oct 2026, 12:31 AM
+GUEST
+
+Shaurya Singh [DH]
+
+room 202 · DH-5EL-0280
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹11,669
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sara Menon [DH]
+
+room 307 · DH-5EL-0279
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹3,546
+9 Oct 2026, 12:31 AM
+GUEST
+
+Diya Verma [DH]
+
+room 209 · DH-5EL-0278
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹3,905
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aadhya Sharma [DH]
+
+room 202 · DH-5EL-0277
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹4,290
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vivaan Nair [DH]
+
+room 202 · DH-5EL-0276
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹4,627
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vihaan Joshi [DH]
+
+room 201 · DH-5EL-0275
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹8,437
+9 Oct 2026, 12:31 AM
+GUEST
+
+Anika Joshi [DH]
+
+room 304 · DH-5EL-0274
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹3,593
+9 Oct 2026, 12:31 AM
+GUEST
+
+Tanvi Shah [DH]
+
+room 303 · DH-5EL-0273
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹6,925
+9 Oct 2026, 12:31 AM
+GUEST
+
+Riya Deshmukh [DH]
+
+room 202 · DH-5EL-0272
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹4,391
+9 Oct 2026, 12:31 AM
+GUEST
+
+Riya Khan [DH]
+
+room 206 · DH-5EL-0271
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹12,045
+9 Oct 2026, 12:31 AM
+GUEST
+
+Shaurya Deshmukh [DH]
+
+room 202 · DH-5EL-0270
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹13,968
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sneha Sheikh [DH]
+
+room 207 · DH-5EL-0269
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹8,751
+9 Oct 2026, 12:31 AM
+GUEST
+
+Zoya Shah [DH]
+
+room 203 · DH-5EL-0268
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹14,134
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aadhya Rao [DH]
+
+room 301 · DH-5EL-0267
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹3,825
+9 Oct 2026, 12:31 AM
+GUEST
+
+Kabir Patel [DH]
+
+room 207 · DH-5EL-0266
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹11,092
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sara Shah [DH]
+
+room 203 · DH-5EL-0265
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹14,612
+9 Oct 2026, 12:31 AM
+GUEST
+
+Krishna Pillai [DH]
+
+room 304 · DH-5EL-0264
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹7,397
+9 Oct 2026, 12:31 AM
+GUEST
+
+Kabir Pillai [DH]
+
+room 305 · DH-5EL-0263
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹8,211
+9 Oct 2026, 12:31 AM
+GUEST
+
+Nisha Verma [DH]
+
+room 301 · DH-5EL-0262
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹9,990
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ira Menon [DH]
+
+room 305 · DH-5EL-0261
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹3,749
+9 Oct 2026, 12:31 AM
+GUEST
+
+Kabir Nair [DH]
+
+room 206 · DH-5EL-0260
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹8,697
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ira Khan [DH]
+
+room 307 · DH-5EL-0259
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹12,694
+9 Oct 2026, 12:31 AM
+GUEST
+
+Farhan Gupta [DH]
+
+room 203 · DH-5EL-0258
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹9,562
+9 Oct 2026, 12:31 AM
+GUEST
+
+Farhan Shah [DH]
+
+room 303 · DH-5EL-0257
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹9,032
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vivaan Menon [DH]
+
+room 205 · DH-5EL-0256
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹10,934
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sneha Joshi [DH]
+
+room 209 · DH-5EL-0255
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹14,876
+9 Oct 2026, 12:31 AM
+GUEST
+
+Kavya Singh [DH]
+
+room 305 · DH-5EL-0254
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹7,072
+9 Oct 2026, 12:31 AM
+GUEST
+
+Diya Kulkarni [DH]
+
+room 301 · DH-5EL-0253
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹7,498
+9 Oct 2026, 12:31 AM
+GUEST
+
+Farhan Verma [DH]
+
+room 207 · DH-5EL-0252
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹12,957
+9 Oct 2026, 12:31 AM
+GUEST
+
+Kavya Joshi [DH]
+
+room 207 · DH-5EL-0251
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹4,647
+9 Oct 2026, 12:31 AM
+GUEST
+
+Imran Deshmukh [DH]
+
+room 305 · DH-5EL-0250
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹3,206
+9 Oct 2026, 12:31 AM
+GUEST
+
+Arjun Verma [DH]
+
+room 206 · DH-5EL-0249
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹4,185
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rahul Patel [DH]
+
+room 305 · DH-5EL-0248
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹7,065
+9 Oct 2026, 12:31 AM
+GUEST
+
+Riya Chatterjee [DH]
+
+room 203 · DH-5EL-0247
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹4,019
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vivaan Gupta [DH]
+
+room 204 · DH-5EL-0246
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹8,020
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ayaan Verma [DH]
+
+room 207 · DH-5EL-0245
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹10,680
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sneha Reddy [DH]
+
+room 308 · DH-5EL-0244
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹4,180
+9 Oct 2026, 12:31 AM
+GUEST
+
+Riya Khan [DH]
+
+room 207 · DH-5EL-0243
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹8,488
+9 Oct 2026, 12:31 AM
+GUEST
+
+Farhan Rao [DH]
+
+room 308 · DH-5EL-0242
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹9,088
+9 Oct 2026, 12:31 AM
+GUEST
+
+Kabir Iyer [DH]
+
+room 203 · DH-5EL-0241
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹4,787
+9 Oct 2026, 12:31 AM
+GUEST
+
+Shaurya Sharma [DH]
+
+room 304 · DH-5EL-0240
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹4,277
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vihaan Iyer [DH]
+
+room 303 · DH-5EL-0239
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹9,673
+9 Oct 2026, 12:31 AM
+GUEST
+
+Kavya Patel [DH]
+
+room 305 · DH-5EL-0238
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹12,392
+9 Oct 2026, 12:31 AM
+GUEST
+
+Tanvi Shah [DH]
+
+room 302 · DH-5EL-0237
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹8,554
+9 Oct 2026, 12:31 AM
+GUEST
+
+Diya Verma [DH]
+
+room 306 · DH-5EL-0236
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹13,149
+9 Oct 2026, 12:31 AM
+GUEST
+
+Arjun Sheikh [DH]
+
+room 208 · DH-5EL-0235
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹14,580
+9 Oct 2026, 12:31 AM
+GUEST
+
+Myra Khan [DH]
+
+room 205 · DH-5EL-0234
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹11,267
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ananya Bose [DH]
+
+room 206 · DH-5EL-0233
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹4,111
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sara Patel [DH]
+
+room 203 · DH-5EL-0232
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹3,746
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rohan Deshmukh [DH]
+
+room 208 · DH-5EL-0231
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹4,225
+9 Oct 2026, 12:31 AM
+GUEST
+
+Reyansh Khan [DH]
+
+room 205 · DH-5EL-0230
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹8,860
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ananya Sharma [DH]
+
+room 304 · DH-5EL-0229
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹11,054
+9 Oct 2026, 12:31 AM
+GUEST
+
+Imran Patel [DH]
+
+room 210 · DH-5EL-0228
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹9,206
+9 Oct 2026, 12:31 AM
+GUEST
+
+Nisha Bose [DH]
+
+room 206 · DH-5EL-0227
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹7,852
+9 Oct 2026, 12:31 AM
+GUEST
+
+Arjun Pillai [DH]
+
+room 208 · DH-5EL-0226
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹7,302
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sara Singh [DH]
+
+room 305 · DH-5EL-0225
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹3,457
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sneha Reddy [DH]
+
+room 308 · DH-5EL-0224
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹3,679
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ira Singh [DH]
+
+room 204 · DH-5EL-0223
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹15,017
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sara Singh [DH]
+
+room 206 · DH-5EL-0222
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹10,627
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vihaan Pillai [DH]
+
+room 303 · DH-5EL-0221
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹4,366
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vivaan Reddy [DH]
+
+room 303 · DH-5EL-0220
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹9,699
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rohan Patel [DH]
+
+room 204 · DH-5EL-0219
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹11,734
+9 Oct 2026, 12:31 AM
+GUEST
+
+Myra Gupta [DH]
+
+room 304 · DH-5EL-0218
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹9,976
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aarav Pillai [DH]
+
+room 307 · DH-5EL-0217
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹9,015
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aarav Khan [DH]
+
+room 303 · DH-5EL-0216
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹7,128
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ira Chatterjee [DH]
+
+room 204 · DH-5EL-0215
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹9,785
+9 Oct 2026, 12:31 AM
+GUEST
+
+Myra Patel [DH]
+
+room 306 · DH-5EL-0214
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹10,821
+9 Oct 2026, 12:31 AM
+GUEST
+
+Kavya Kulkarni [DH]
+
+room 206 · DH-5EL-0213
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹3,550
+9 Oct 2026, 12:31 AM
+GUEST
+
+Riya Sharma [DH]
+
+room 301 · DH-5EL-0212
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹11,442
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sneha Verma [DH]
+
+room 303 · DH-5EL-0211
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹12,787
+9 Oct 2026, 12:31 AM
+GUEST
+
+Arjun Shah [DH]
+
+room 308 · DH-5EL-0210
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹3,236
+9 Oct 2026, 12:31 AM
+GUEST
+
+Krishna Bose [DH]
+
+room 307 · DH-5EL-0209
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹7,130
+9 Oct 2026, 12:31 AM
+GUEST
+
+Nisha Singh [DH]
+
+room 205 · DH-5EL-0208
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹8,108
+9 Oct 2026, 12:31 AM
+GUEST
+
+Nisha Iyer [DH]
+
+room 204 · DH-5EL-0207
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹9,905
+9 Oct 2026, 12:31 AM
+GUEST
+
+Diya Singh [DH]
+
+room 209 · DH-5EL-0206
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹14,129
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ishaan Sheikh [DH]
+
+room 209 · DH-5EL-0205
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹9,579
+9 Oct 2026, 12:31 AM
+GUEST
+
+Imran Singh [DH]
+
+room 302 · DH-5EL-0204
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹9,651
+9 Oct 2026, 12:31 AM
+GUEST
+
+Riya Bose [DH]
+
+room 208 · DH-5EL-0203
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹9,403
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ira Khan [DH]
+
+room 210 · DH-5EL-0202
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹3,791
+9 Oct 2026, 12:31 AM
+GUEST
+
+Nisha Chatterjee [DH]
+
+room 204 · DH-5EL-0201
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹9,850
+9 Oct 2026, 12:31 AM
+GUEST
+
+Tanvi Nair [DH]
+
+room 308 · DH-5EL-0200
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹10,011
+9 Oct 2026, 12:31 AM
+GUEST
+
+Krishna Bose [DH]
+
+room 210 · DH-5EL-0199
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹4,154
+9 Oct 2026, 12:31 AM
+GUEST
+
+Meera Sheikh [DH]
+
+room 206 · DH-5EL-0198
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹14,726
+9 Oct 2026, 12:31 AM
+GUEST
+
+Myra Singh [DH]
+
+room 307 · DH-5EL-0197
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹10,362
+9 Oct 2026, 12:31 AM
+GUEST
+
+Farhan Iyer [DH]
+
+room 206 · DH-5EL-0196
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹7,400
+9 Oct 2026, 12:31 AM
+GUEST
+
+Kabir Pillai [DH]
+
+room 307 · DH-5EL-0195
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹4,305
+9 Oct 2026, 12:31 AM
+GUEST
+
+Kavya Kulkarni [DH]
+
+room 207 · DH-5EL-0194
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹7,673
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sneha Khan [DH]
+
+room 209 · DH-5EL-0193
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹3,766
+9 Oct 2026, 12:31 AM
+GUEST
+
+Tanvi Pillai [DH]
+
+room 209 · DH-5EL-0192
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹4,326
+9 Oct 2026, 12:31 AM
+GUEST
+
+Tanvi Shah [DH]
+
+room 301 · DH-5EL-0191
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹3,611
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ananya Pillai [DH]
+
+room 304 · DH-5EL-0190
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹6,747
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aarav Nair [DH]
+
+room 206 · DH-5EL-0189
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹3,537
+9 Oct 2026, 12:31 AM
+GUEST
+
+Shaurya Reddy [DH]
+
+room 201 · DH-5EL-0188
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹3,980
+9 Oct 2026, 12:31 AM
+GUEST
+
+Navya Reddy [DH]
+
+room 206 · DH-5EL-0187
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹4,391
+9 Oct 2026, 12:31 AM
+GUEST
+
+Myra Sheikh [DH]
+
+room 301 · DH-5EL-0186
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹11,171
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sara Bose [DH]
+
+room 201 · DH-5EL-0185
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹10,615
+9 Oct 2026, 12:31 AM
+GUEST
+
+Myra Chatterjee [DH]
+
+room 301 · DH-5EL-0184
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹9,029
+9 Oct 2026, 12:31 AM
+GUEST
+
+Shaurya Sheikh [DH]
+
+room 205 · DH-5EL-0183
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹4,093
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sneha Mehta [DH]
+
+room 203 · DH-5EL-0182
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹11,715
+9 Oct 2026, 12:31 AM
+GUEST
+
+Tanvi Iyer [DH]
+
+room 303 · DH-5EL-0181
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹7,098
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rahul Verma [DH]
+
+room 306 · DH-5EL-0180
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹7,405
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aditya Sheikh [DH]
+
+room 306 · DH-5EL-0179
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹3,958
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vihaan Gupta [DH]
+
+room 203 · DH-5EL-0178
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹7,117
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sneha Bose [DH]
+
+room 308 · DH-5EL-0177
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹3,315
+9 Oct 2026, 12:31 AM
+GUEST
+
+Navya Singh [DH]
+
+room 201 · DH-5EL-0176
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹13,191
+9 Oct 2026, 12:31 AM
+GUEST
+
+Meera Sheikh [DH]
+
+room 207 · DH-5EL-0175
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹7,823
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vivaan Patel [DH]
+
+room 305 · DH-5EL-0174
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹10,266
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rahul Nair [DH]
+
+room 207 · DH-5EL-0173
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹7,715
+9 Oct 2026, 12:31 AM
+GUEST
+
+Zoya Kulkarni [DH]
+
+room 201 · DH-5EL-0172
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹3,906
+9 Oct 2026, 12:31 AM
+GUEST
+
+Farhan Kulkarni [DH]
+
+room 301 · DH-5EL-0171
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹3,898
+9 Oct 2026, 12:31 AM
+GUEST
+
+Tanvi Joshi [DH]
+
+room 210 · DH-5EL-0170
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹4,237
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rahul Nair [DH]
+
+room 201 · DH-5EL-0169
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹3,670
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rohan Mehta [DH]
+
+room 304 · DH-5EL-0168
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹8,036
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rahul Sheikh [DH]
+
+room 203 · DH-5EL-0167
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹5,039
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sneha Verma [DH]
+
+room 308 · DH-5EL-0166
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹8,947
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ishaan Bose [DH]
+
+room 307 · DH-5EL-0165
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹7,702
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rohan Khan [DH]
+
+room 204 · DH-5EL-0164
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹9,460
+9 Oct 2026, 12:31 AM
+GUEST
+
+Meera Chatterjee [DH]
+
+room 308 · DH-5EL-0163
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹3,350
+9 Oct 2026, 12:31 AM
+GUEST
+
+Tanvi Shah [DH]
+
+room 202 · DH-5EL-0162
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹4,561
+9 Oct 2026, 12:31 AM
+GUEST
+
+Myra Kulkarni [DH]
+
+room 210 · DH-5EL-0161
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹15,128
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ishaan Kulkarni [DH]
+
+room 303 · DH-5EL-0160
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹8,984
+9 Oct 2026, 12:31 AM
+GUEST
+
+Nisha Patel [DH]
+
+room 307 · DH-5EL-0159
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹8,747
+9 Oct 2026, 12:31 AM
+GUEST
+
+Zoya Gupta [DH]
+
+room 210 · DH-5EL-0158
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹4,675
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sneha Deshmukh [DH]
+
+room 206 · DH-5EL-0157
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹14,631
+9 Oct 2026, 12:31 AM
+GUEST
+
+Reyansh Joshi [DH]
+
+room 201 · DH-5EL-0156
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹7,811
+9 Oct 2026, 12:31 AM
+GUEST
+
+Shaurya Shah [DH]
+
+room 306 · DH-5EL-0155
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹8,845
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vihaan Khan [DH]
+
+room 203 · DH-5EL-0154
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹14,530
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ishaan Reddy [DH]
+
+room 302 · DH-5EL-0153
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹10,690
+9 Oct 2026, 12:31 AM
+GUEST
+
+Navya Iyer [DH]
+
+room 205 · DH-5EL-0152
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹3,823
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vivaan Bose [DH]
+
+room 204 · DH-5EL-0151
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹10,977
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vivaan Kulkarni [DH]
+
+room 308 · DH-5EL-0150
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹13,498
+9 Oct 2026, 12:31 AM
+GUEST
+
+Zoya Chatterjee [DH]
+
+room 203 · DH-5EL-0149
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹7,088
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rohan Pillai [DH]
+
+room 207 · DH-5EL-0148
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹12,176
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ira Deshmukh [DH]
+
+room 303 · DH-5EL-0147
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹8,893
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vivaan Rao [DH]
+
+room 307 · DH-5EL-0146
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹7,636
+9 Oct 2026, 12:31 AM
+GUEST
+
+Imran Sheikh [DH]
+
+room 304 · DH-5EL-0145
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹6,758
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ira Verma [DH]
+
+room 301 · DH-5EL-0144
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹8,134
+9 Oct 2026, 12:31 AM
+GUEST
+
+Meera Pillai [DH]
+
+room 301 · DH-5EL-0143
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹4,040
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rohan Khan [DH]
+
+room 209 · DH-5EL-0142
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹12,103
+9 Oct 2026, 12:31 AM
+GUEST
+
+Farhan Sharma [DH]
+
+room 209 · DH-5EL-0141
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹11,461
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aarav Khan [DH]
+
+room 210 · DH-5EL-0140
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹11,160
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ananya Patel [DH]
+
+room 305 · DH-5EL-0139
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹3,475
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ira Shah [DH]
+
+room 307 · DH-5EL-0138
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹7,259
+9 Oct 2026, 12:31 AM
+GUEST
+
+Reyansh Gupta [DH]
+
+room 305 · DH-5EL-0137
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹9,638
+9 Oct 2026, 12:31 AM
+GUEST
+
+Anika Iyer [DH]
+
+room 205 · DH-5EL-0136
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹4,047
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ishaan Sharma [DH]
+
+room 208 · DH-5EL-0135
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹5,035
+9 Oct 2026, 12:31 AM
+GUEST
+
+Kavya Shah [DH]
+
+room 303 · DH-5EL-0134
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹3,878
+9 Oct 2026, 12:31 AM
+GUEST
+
+Shaurya Chatterjee [DH]
+
+room 210 · DH-5EL-0133
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹4,830
+9 Oct 2026, 12:31 AM
+GUEST
+
+Anika Sheikh [DH]
+
+room 205 · DH-5EL-0132
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹4,569
+9 Oct 2026, 12:31 AM
+GUEST
+
+Diya Chatterjee [DH]
+
+room 302 · DH-5EL-0131
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹3,263
+9 Oct 2026, 12:31 AM
+GUEST
+
+Myra Kulkarni [DH]
+
+room 301 · DH-5EL-0130
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹3,874
+9 Oct 2026, 12:31 AM
+GUEST
+
+Meera Bose [DH]
+
+room 204 · DH-5EL-0129
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹7,985
+9 Oct 2026, 12:31 AM
+GUEST
+
+Zoya Verma [DH]
+
+room 205 · DH-5EL-0128
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹3,908
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vivaan Sheikh [DH]
+
+room 202 · DH-5EL-0127
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹8,223
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vivaan Shah [DH]
+
+room 203 · DH-5EL-0126
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹4,885
+9 Oct 2026, 12:31 AM
+GUEST
+
+Anika Nair [DH]
+
+room 204 · DH-5EL-0125
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹4,347
+9 Oct 2026, 12:31 AM
+GUEST
+
+Imran Nair [DH]
+
+room 210 · DH-5EL-0124
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹11,358
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ayaan Sheikh [DH]
+
+room 210 · DH-5EL-0123
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹13,928
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ananya Mehta [DH]
+
+room 203 · DH-5EL-0122
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹9,346
+9 Oct 2026, 12:31 AM
+GUEST
+
+Navya Nair [DH]
+
+room 205 · DH-5EL-0121
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹15,230
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ishaan Patel [DH]
+
+room 205 · DH-5EL-0120
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹12,043
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rahul Sharma [DH]
+
+room 303 · DH-5EL-0119
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹7,963
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ira Shah [DH]
+
+room 303 · DH-5EL-0118
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹11,188
+9 Oct 2026, 12:31 AM
+GUEST
+
+Anika Menon [DH]
+
+room 203 · DH-5EL-0117
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹12,077
+9 Oct 2026, 12:31 AM
+GUEST
+
+Nisha Mehta [DH]
+
+room 308 · DH-5EL-0116
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹12,032
+9 Oct 2026, 12:31 AM
+GUEST
+
+Reyansh Singh [DH]
+
+room 206 · DH-5EL-0115
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹12,172
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vivaan Reddy [DH]
+
+room 306 · DH-5EL-0114
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹11,907
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rahul Bose [DH]
+
+room 208 · DH-5EL-0113
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹5,024
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rahul Reddy [DH]
+
+room 202 · DH-5EL-0112
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹3,583
+9 Oct 2026, 12:31 AM
+GUEST
+
+Imran Pillai [DH]
+
+room 307 · DH-5EL-0111
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹11,296
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rahul Joshi [DH]
+
+room 301 · DH-5EL-0110
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹8,853
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sara Khan [DH]
+
+room 210 · DH-5EL-0109
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹8,784
+9 Oct 2026, 12:31 AM
+GUEST
+
+Navya Joshi [DH]
+
+room 303 · DH-5EL-0108
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹3,965
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ayaan Menon [DH]
+
+room 203 · DH-5EL-0107
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹9,584
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ira Chatterjee [DH]
+
+room 301 · DH-5EL-0106
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹7,070
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aditya Reddy [DH]
+
+room 209 · DH-5EL-0105
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹13,404
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vivaan Singh [DH]
+
+room 205 · DH-5EL-0104
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹4,078
+9 Oct 2026, 12:31 AM
+GUEST
+
+Navya Patel [DH]
+
+room 303 · DH-5EL-0103
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹8,414
+9 Oct 2026, 12:31 AM
+GUEST
+
+Reyansh Reddy [DH]
+
+room 206 · DH-5EL-0102
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹4,154
+9 Oct 2026, 12:31 AM
+GUEST
+
+Zoya Gupta [DH]
+
+room 201 · DH-5EL-0101
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹3,645
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sara Iyer [DH]
+
+room 305 · DH-5EL-0100
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹13,229
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vihaan Pillai [DH]
+
+room 303 · DH-5EL-0099
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹11,248
+9 Oct 2026, 12:31 AM
+GUEST
+
+Zoya Joshi [DH]
+
+room 203 · DH-5EL-0098
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹11,353
+9 Oct 2026, 12:31 AM
+GUEST
+
+Krishna Mehta [DH]
+
+room 202 · DH-5EL-0097
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹7,079
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sara Chatterjee [DH]
+
+room 206 · DH-5EL-0096
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹3,742
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ananya Joshi [DH]
+
+room 209 · DH-5EL-0095
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹7,461
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ira Khan [DH]
+
+room 305 · DH-5EL-0094
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹7,933
+9 Oct 2026, 12:31 AM
+GUEST
+
+Kabir Iyer [DH]
+
+room 203 · DH-5EL-0093
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹9,170
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ananya Singh [DH]
+
+room 306 · DH-5EL-0092
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹11,062
+9 Oct 2026, 12:31 AM
+GUEST
+
+Anika Joshi [DH]
+
+room 201 · DH-5EL-0091
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹7,741
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vivaan Pillai [DH]
+
+room 308 · DH-5EL-0090
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹13,225
+9 Oct 2026, 12:31 AM
+GUEST
+
+Zoya Verma [DH]
+
+room 308 · DH-5EL-0089
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹7,190
+9 Oct 2026, 12:31 AM
+GUEST
+
+Zoya Nair [DH]
+
+room 307 · DH-5EL-0088
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹8,727
+9 Oct 2026, 12:31 AM
+GUEST
+
+Shaurya Nair [DH]
+
+room 307 · DH-5EL-0087
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹3,420
+9 Oct 2026, 12:31 AM
+GUEST
+
+Kabir Gupta [DH]
+
+room 201 · DH-5EL-0086
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹4,025
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vivaan Bose [DH]
+
+room 303 · DH-5EL-0085
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹7,295
+9 Oct 2026, 12:31 AM
+GUEST
+
+Myra Khan [DH]
+
+room 203 · DH-5EL-0084
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹12,551
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rohan Khan [DH]
+
+room 209 · DH-5EL-0083
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹14,905
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vivaan Kulkarni [DH]
+
+room 202 · DH-5EL-0082
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹12,942
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sneha Nair [DH]
+
+room 303 · DH-5EL-0081
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹11,741
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rahul Sheikh [DH]
+
+room 308 · DH-5EL-0080
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹8,629
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rahul Sharma [DH]
+
+room 208 · DH-5EL-0079
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹8,672
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vihaan Singh [DH]
+
+room 206 · DH-5EL-0078
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹7,329
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sara Shah [DH]
+
+room 208 · DH-5EL-0077
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹14,511
+9 Oct 2026, 12:31 AM
+GUEST
+
+Navya Nair [DH]
+
+room 201 · DH-5EL-0076
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹8,685
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rahul Bose [DH]
+
+room 208 · DH-5EL-0075
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹10,715
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vivaan Joshi [DH]
+
+room 308 · DH-5EL-0074
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹7,227
+9 Oct 2026, 12:31 AM
+GUEST
+
+Kavya Pillai [DH]
+
+room 206 · DH-5EL-0073
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹11,708
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aadhya Khan [DH]
+
+room 306 · DH-5EL-0072
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹11,843
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ananya Joshi [DH]
+
+room 306 · DH-5EL-0071
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹4,293
+9 Oct 2026, 12:31 AM
+GUEST
+
+Farhan Pillai [DH]
+
+room 301 · DH-5EL-0070
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹11,370
+9 Oct 2026, 12:31 AM
+GUEST
+
+Nisha Patel [DH]
+
+room 302 · DH-5EL-0069
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹8,627
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vihaan Sharma [DH]
+
+room 202 · DH-5EL-0068
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹13,268
+9 Oct 2026, 12:31 AM
+GUEST
+
+Farhan Chatterjee [DH]
+
+room 303 · DH-5EL-0067
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹7,223
+9 Oct 2026, 12:31 AM
+GUEST
+
+Anika Kulkarni [DH]
+
+room 307 · DH-5EL-0066
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹3,647
+9 Oct 2026, 12:31 AM
+GUEST
+
+Zoya Deshmukh [DH]
+
+room 304 · DH-5EL-0065
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹7,013
+9 Oct 2026, 12:31 AM
+GUEST
+
+Imran Gupta [DH]
+
+room 301 · DH-5EL-0064
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹11,516
+9 Oct 2026, 12:31 AM
+GUEST
+
+Navya Mehta [DH]
+
+room 307 · DH-5EL-0063
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹4,565
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sara Rao [DH]
+
+room 304 · DH-5EL-0062
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹10,221
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ira Patel [DH]
+
+room 205 · DH-5EL-0061
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹14,994
+9 Oct 2026, 12:31 AM
+GUEST
+
+Tanvi Shah [DH]
+
+room 303 · DH-5EL-0060
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹3,419
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ishaan Rao [DH]
+
+room 206 · DH-5EL-0059
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹3,820
+9 Oct 2026, 12:31 AM
+GUEST
+
+Anika Joshi [DH]
+
+room 203 · DH-5EL-0058
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹4,951
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aarav Mehta [DH]
+
+room 304 · DH-5EL-0057
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹3,918
+9 Oct 2026, 12:31 AM
+GUEST
+
+Zoya Chatterjee [DH]
+
+room 308 · DH-5EL-0056
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹3,874
+9 Oct 2026, 12:31 AM
+GUEST
+
+Nisha Deshmukh [DH]
+
+room 210 · DH-5EL-0055
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹4,493
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ishaan Khan [DH]
+
+room 208 · DH-5EL-0054
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹11,432
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rohan Sheikh [DH]
+
+room 307 · DH-5EL-0053
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹9,990
+9 Oct 2026, 12:31 AM
+GUEST
+
+Navya Kulkarni [DH]
+
+room 201 · DH-5EL-0052
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹8,174
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sneha Shah [DH]
+
+room 308 · DH-5EL-0051
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹6,413
+9 Oct 2026, 12:31 AM
+GUEST
+
+Navya Mehta [DH]
+
+room 208 · DH-5EL-0050
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹9,936
+9 Oct 2026, 12:31 AM
+GUEST
+
+Anika Joshi [DH]
+
+room 202 · DH-5EL-0049
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹5,050
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vivaan Sheikh [DH]
+
+room 306 · DH-5EL-0048
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹4,458
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ayaan Rao [DH]
+
+room 210 · DH-5EL-0047
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹8,798
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vihaan Nair [DH]
+
+room 204 · DH-5EL-0046
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹14,780
+9 Oct 2026, 12:31 AM
+GUEST
+
+Nisha Iyer [DH]
+
+room 302 · DH-5EL-0045
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹6,375
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aditya Sheikh [DH]
+
+room 202 · DH-5EL-0044
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹9,782
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sneha Shah [DH]
+
+room 206 · DH-5EL-0043
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹13,902
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ira Pillai [DH]
+
+room 301 · DH-5EL-0042
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹3,187
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ira Singh [DH]
+
+room 206 · DH-5EL-0041
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹7,636
+9 Oct 2026, 12:31 AM
+GUEST
+
+Nisha Pillai [DH]
+
+room 303 · DH-5EL-0040
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹6,597
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ananya Verma [DH]
+
+room 205 · DH-5EL-0039
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹15,186
+9 Oct 2026, 12:31 AM
+GUEST
+
+Imran Bose [DH]
+
+room 307 · DH-5EL-0038
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹6,427
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vihaan Verma [DH]
+
+room 206 · DH-5EL-0037
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹8,505
+9 Oct 2026, 12:31 AM
+GUEST
+
+Imran Sheikh [DH]
+
+room 201 · DH-5EL-0036
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹8,842
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vihaan Sharma [DH]
+
+room 301 · DH-5EL-0035
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹3,882
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vivaan Khan [DH]
+
+room 307 · DH-5EL-0034
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹8,424
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ishaan Reddy [DH]
+
+room 210 · DH-5EL-0033
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹4,472
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aarav Khan [DH]
+
+room 205 · DH-5EL-0032
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹3,623
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ishaan Pillai [DH]
+
+room 202 · DH-5EL-0031
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹11,932
+9 Oct 2026, 12:31 AM
+GUEST
+
+Imran Nair [DH]
+
+room 201 · DH-5EL-0030
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹13,189
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ayaan Reddy [DH]
+
+room 207 · DH-5EL-0029
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹12,841
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aarav Nair [DH]
+
+room 204 · DH-5EL-0028
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹12,461
+9 Oct 2026, 12:31 AM
+GUEST
+
+Meera Singh [DH]
+
+room 302 · DH-5EL-0027
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹13,409
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aditya Singh [DH]
+
+room 303 · DH-5EL-0026
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹12,217
+9 Oct 2026, 12:31 AM
+GUEST
+
+Myra Menon [DH]
+
+room 210 · DH-5EL-0025
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹8,620
+9 Oct 2026, 12:31 AM
+GUEST
+
+Diya Deshmukh [DH]
+
+room 304 · DH-5EL-0024
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹7,903
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aditya Mehta [DH]
+
+room 209 · DH-5EL-0023
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹4,879
+9 Oct 2026, 12:31 AM
+GUEST
+
+Tanvi Patel [DH]
+
+room 306 · DH-5EL-0022
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹7,315
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aadhya Iyer [DH]
+
+room 209 · DH-5EL-0021
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹3,913
+9 Oct 2026, 12:31 AM
+GUEST
+
+Tanvi Singh [DH]
+
+room 201 · DH-5EL-0020
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹12,831
+9 Oct 2026, 12:31 AM
+GUEST
+
+Imran Singh [DH]
+
+room 303 · DH-5EL-0019
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹7,834
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vivaan Chatterjee [DH]
+
+room 303 · DH-5EL-0018
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹8,635
+9 Oct 2026, 12:31 AM
+GUEST
+
+Zoya Rao [DH]
+
+room 203 · DH-5EL-0017
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹5,077
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aarav Patel [DH]
+
+room 203 · DH-5EL-0016
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹3,999
+9 Oct 2026, 12:31 AM
+GUEST
+
+Riya Menon [DH]
+
+room 301 · DH-5EL-0015
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹10,338
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rahul Iyer [DH]
+
+room 204 · DH-5EL-0014
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹13,491
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vihaan Gupta [DH]
+
+room 301 · DH-5EL-0013
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹10,157
+9 Oct 2026, 12:31 AM
+GUEST
+
+Kavya Rao [DH]
+
+room 303 · DH-5EL-0012
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹4,150
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rohan Kulkarni [DH]
+
+room 206 · DH-5EL-0011
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹3,944
+9 Oct 2026, 12:31 AM
+GUEST
+
+Kavya Reddy [DH]
+
+room 207 · DH-5EL-0010
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹4,715
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rohan Shah [DH]
+
+room 210 · DH-5EL-0009
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹13,317
+9 Oct 2026, 12:31 AM
+GUEST
+
+Kabir Gupta [DH]
+
+room 205 · DH-5EL-0008
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹4,111
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rohan Kulkarni [DH]
+
+room 303 · DH-5EL-0007
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹12,117
+9 Oct 2026, 12:31 AM
+GUEST
+
+Aadhya Gupta [DH]
+
+room 209 · DH-5EL-0006
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹8,741
+9 Oct 2026, 12:31 AM
+GUEST
+
+Farhan Kulkarni [DH]
+
+room 207 · DH-5EL-0005
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹12,392
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sara Patel [DH]
+
+room 307 · DH-5EL-0004
+
+METHOD
+Cash
+NARRATION
+Cash
+TAKEN BY
+-
+AMOUNT
+₹8,173
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ira Rao [DH]
+
+room 305 · DH-5EL-0003
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹7,907
+9 Oct 2026, 12:31 AM
+GUEST
+
+Reyansh Sheikh [DH]
+
+room 307 · DH-5EL-0002
+
+METHOD
+Credit Card
+NARRATION
+Card
+TAKEN BY
+-
+AMOUNT
+₹3,259
+9 Oct 2026, 12:31 AM
+GUEST
+
+Tanvi Singh [DH]
+
+room 308 · DH-5EL-0001
+
+METHOD
+UPI
+NARRATION
+UPI
+TAKEN BY
+-
+AMOUNT
+₹3,633
+9 Oct 2026, 12:31 AM
+GUEST
+
+Suresh Mane
+
+room 202 · FH-2608-4856
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹9,155
+9 Oct 2026, 12:31 AM
+GUEST
+
+Neha Sawant
+
+room 201 · FH-2608-4855
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹7,369
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vivek Thorat
+
+room 201 · FH-2608-4854
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹3,007
+9 Oct 2026, 12:31 AM
+GUEST
+
+Anjali Pawar
+
+room 203 · FH-2608-4853
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹8,431
+9 Oct 2026, 12:31 AM
+GUEST
+
+Nikhil Joshi
+
+room 205 · FH-2608-4852
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹8,996
+9 Oct 2026, 12:31 AM
+GUEST
+
+Deepa Rao
+
+room 202 · FH-2608-4851
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹11,647
+9 Oct 2026, 12:31 AM
+GUEST
+
+Imran Shaikh
+
+room 201 · FH-2608-4850
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹7,405
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sneha Kulkarni
+
+room 204 · FH-2608-4849
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹10,535
+9 Oct 2026, 12:31 AM
+GUEST
+
+Arjun Nair
+
+room 203 · FH-2608-4848
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹8,087
+9 Oct 2026, 12:31 AM
+GUEST
+
+Meera Iyer
+
+room 201 · FH-2608-4847
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹3,359
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rohit Deshpande
+
+room 208 · FH-2608-4846
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹3,384
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sudarshan Kator
+
+room 205 · FH-2608-4845
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹5,649
+9 Oct 2026, 12:31 AM
+GUEST
+
+Shridhar Kamble
+
+room 202 · FH-2608-4844
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹6,921
+9 Oct 2026, 12:31 AM
+GUEST
+
+Priya Menon
+
+room 209 · FH-2608-4843
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹9,292
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vikram Desai
+
+room 208 · FH-2608-4842
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹3,389
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ananya Bose
+
+room 207 · FH-2608-4841
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹6,171
+9 Oct 2026, 12:31 AM
+GUEST
+
+Harsha Kamat
+
+room 206 · FH-2608-4840
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹11,146
+9 Oct 2026, 12:31 AM
+GUEST
+
+Omkar Shinde
+
+room 205 · FH-2608-4839
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹3,560
+9 Oct 2026, 12:31 AM
+GUEST
+
+Tanvi Bhide
+
+room 204 · FH-2608-4838
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹6,476
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rekha Gaikwad
+
+room 203 · FH-2608-4837
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹6,680
+9 Oct 2026, 12:31 AM
+GUEST
+
+Suresh Mane
+
+room 202 · FH-2608-4836
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹6,095
+9 Oct 2026, 12:31 AM
+GUEST
+
+Neha Sawant
+
+room 201 · FH-2608-4835
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹8,839
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vivek Thorat
+
+room 307 · FH-2608-4834
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹3,157
+9 Oct 2026, 12:31 AM
+GUEST
+
+Anjali Pawar
+
+room 306 · FH-2608-4833
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹6,174
+9 Oct 2026, 12:31 AM
+GUEST
+
+Nikhil Joshi
+
+room 301 · FH-2608-4832
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹10,625
+9 Oct 2026, 12:31 AM
+GUEST
+
+Deepa Rao
+
+room 208 · FH-2608-4831
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹3,907
+9 Oct 2026, 12:31 AM
+GUEST
+
+Imran Shaikh
+
+room 206 · FH-2608-4830
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹8,148
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sneha Kulkarni
+
+room 204 · FH-2608-4829
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹6,923
+9 Oct 2026, 12:31 AM
+GUEST
+
+Arjun Nair
+
+room 203 · FH-2608-4828
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹3,981
+9 Oct 2026, 12:31 AM
+GUEST
+
+Meera Iyer
+
+room 202 · FH-2608-4827
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹3,058
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rohit Deshpande
+
+room 308 · FH-2608-4826
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹9,172
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sudarshan Kator
+
+room 307 · FH-2608-4825
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹2,689
+9 Oct 2026, 12:31 AM
+GUEST
+
+Shridhar Kamble
+
+room 306 · FH-2608-4824
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹2,555
+9 Oct 2026, 12:31 AM
+GUEST
+
+Priya Menon
+
+room 304 · FH-2608-4823
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹7,737
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vikram Desai
+
+room 301 · FH-2608-4822
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹2,575
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ananya Bose
+
+room 210 · FH-2608-4821
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹8,819
+9 Oct 2026, 12:31 AM
+GUEST
+
+Harsha Kamat
+
+room 209 · FH-2608-4820
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹10,707
+9 Oct 2026, 12:31 AM
+GUEST
+
+Omkar Shinde
+
+room 208 · FH-2608-4819
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹3,853
+9 Oct 2026, 12:31 AM
+GUEST
+
+Tanvi Bhide
+
+room 207 · FH-2608-4818
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹5,790
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rekha Gaikwad
+
+room 206 · FH-2608-4817
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹2,899
+9 Oct 2026, 12:31 AM
+GUEST
+
+Suresh Mane
+
+room 205 · FH-2608-4816
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹10,370
+9 Oct 2026, 12:31 AM
+GUEST
+
+Neha Sawant
+
+room 204 · FH-2608-4815
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹3,430
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vivek Thorat
+
+room 203 · FH-2608-4814
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹3,207
+9 Oct 2026, 12:31 AM
+GUEST
+
+Anjali Pawar
+
+room 201 · FH-2608-4813
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹7,237
+9 Oct 2026, 12:31 AM
+GUEST
+
+Nikhil Joshi
+
+room 202 · FH-2608-4812
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹6,357
+9 Oct 2026, 12:31 AM
+GUEST
+
+Deepa Rao
+
+room 206 · FH-2608-4811
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹5,737
+9 Oct 2026, 12:31 AM
+GUEST
+
+Imran Shaikh
+
+room 204 · FH-2608-4810
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹6,031
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sneha Kulkarni
+
+room 205 · FH-2608-4809
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹11,714
+9 Oct 2026, 12:31 AM
+GUEST
+
+Arjun Nair
+
+room 203 · FH-2608-4808
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹10,975
+9 Oct 2026, 12:31 AM
+GUEST
+
+Meera Iyer
+
+room 201 · FH-2608-4807
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹12,210
+9 Oct 2026, 12:31 AM
+GUEST
+
+Rohit Deshpande
+
+room 204 · FH-2608-4806
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹6,661
+9 Oct 2026, 12:31 AM
+GUEST
+
+Sudarshan Kator
+
+room 202 · FH-2608-4805
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹10,302
+9 Oct 2026, 12:31 AM
+GUEST
+
+Shridhar Kamble
+
+room 203 · FH-2608-4804
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹6,584
+9 Oct 2026, 12:31 AM
+GUEST
+
+Priya Menon
+
+room 202 · FH-2608-4803
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹7,456
+9 Oct 2026, 12:31 AM
+GUEST
+
+Vikram Desai
+
+room 201 · FH-2608-4802
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹9,567
+9 Oct 2026, 12:31 AM
+GUEST
+
+Ananya Bose
+
+room 201 · FH-2608-4801
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹2,839
+9 Oct 2026, 12:31 AM
+GUEST
+
+Pramod Jadhav
+
+room 305 · FH-2608-5010-305
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹6,510
+9 Oct 2026, 12:31 AM
+GUEST
+
+Kavita Salunkhe
+
+room 303 · FH-2608-5010-303
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹6,510
+9 Oct 2026, 12:31 AM
+GUEST
+
+Kalyani Rege
+
+room 301 · FH-2608-5001
+
+METHOD
+Cash
+NARRATION
+Settlement
+TAKEN BY
+-
+AMOUNT
+₹4,984
+
+7 receipts are marked Reversed. The ledger is append-only, so a reversal is its own line and the original stays where it was - a receipt that disappeared is a receipt somebody would go looking for.

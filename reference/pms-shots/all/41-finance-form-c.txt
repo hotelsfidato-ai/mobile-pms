@@ -1,0 +1,34 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Form III
+1 overdue
+
+Foreign guests reported to the FRRO: arrival and departure, each within 24 hours (Form III, earlier called Form C).
+
+This system does not file with the FRRO
+
+Filing happens on the government portal, where the guest's photo is taken. This is a register: it names who owes a filing and records the number the portal gives back - one for each person in the room. The number is required - a register with no evidence reads as compliance and is not.
+
+Adults not recorded in house, each may be a foreigner: room 203 (2 adults, 1 recorded), room 204 (2 adults, 1 recorded), room 209 (2 adults, 1 recorded), room 303 (2 adults, 1 recorded), room 307 (2 adults, 1 recorded). Add them on the stay.
+
+A3 Test Smith
+
+GB · room 301 · 2 in the room
+
+2 adults, 1 recorded
+
+PASSPORT
+A1234567
+ARRIVAL
+
+13 Oct 2026, 20:12
+
+overdue by 14 Oct 2026, 20:12
+
+Record number
+DEPARTURE
+In house
+Complete details
