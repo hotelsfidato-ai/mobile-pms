@@ -1,3 +1,4 @@
+import { outcomeUnknown } from "../../core/api";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ChevronLeft, ChevronRight, FileText, Plus } from "lucide-react-native";
 import { useRef, useState } from "react";
@@ -13,7 +14,7 @@ import {
   approveRequest, askTheStore, isRefused, markBarClosed, readBarDrinks, readBarRequests, readBarSheet, readKitchenSheet,
   readModules, rejectRequest, saveBarCount, saveKitchenCount, undoBarClosed,
 } from "./data";
-import { GroupHead } from "./kit";
+import { GroupHead, unknownSaid } from "./kit";
 import { ON_THE_WEBSITE, whyNotSee, whyNotSeeBar } from "./roles";
 import { dayText, rupees as rupeeOf } from "./shelf";
 import {
@@ -158,6 +159,7 @@ function KitchenSheetCard({ code, role, onSaid }: { code: string; role: string |
   const [draft, setDraft] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
   const latch = useRef(false);
+  const stuck = useRef(false);
   const [said, setSaid] = useState<Said | null>(null);
 
   if (refused) return <NotYours title="Kitchen stock" sentence={refused} />;
@@ -193,9 +195,10 @@ function KitchenSheetCard({ code, role, onSaid }: { code: string; role: string |
       void cache.invalidateQueries({ queryKey: ["stores", code] });
       onSaid({ title: "The closing count is saved", body: countSaidWords(res), tone: "ok" });
     } catch (e) {
-      setSaid(saidOf("Not saved", e));
+      if (outcomeUnknown(e)) { stuck.current = true; setSaid(unknownSaid("Not saved", e)); }
+      else setSaid(saidOf("Not saved", e));
     } finally {
-      latch.current = false;
+      latch.current = stuck.current;
       setBusy(false);
     }
   }
@@ -297,6 +300,7 @@ function BarSheetCard({ code, role, onSaid, onRequests }: { code: string; role: 
   const [draft, setDraft] = useState<Draft>({});
   const [busy, setBusy] = useState(false);
   const latch = useRef(false);
+  const stuck = useRef(false);
   const [said, setSaid] = useState<Said | null>(null);
   const [closing, setClosing] = useState<string | null>(null);
 
@@ -327,9 +331,10 @@ function BarSheetCard({ code, role, onSaid, onRequests }: { code: string; role: 
       onSaid(await act());
       void cache.invalidateQueries({ queryKey: ["stores", code] });
     } catch (e) {
-      setSaid(saidOf(title, e));
+      if (outcomeUnknown(e)) { stuck.current = true; setSaid(unknownSaid(title, e)); }
+      else setSaid(saidOf(title, e));
     } finally {
-      latch.current = false;
+      latch.current = stuck.current;
       setBusy(false);
     }
   }
@@ -490,6 +495,7 @@ function Requests({ code, role, onSaid }: { code: string; role: string | null; o
   const [note, setNote] = useState("");
   const [busy, setBusy] = useState<string | null>(null);
   const latch = useRef(false);
+  const stuck = useRef(false);
   const [rejecting, setRejecting] = useState<{ id: string; note: string } | null>(null);
   const [said, setSaid] = useState<Said | null>(null);
 
@@ -516,9 +522,10 @@ function Requests({ code, role, onSaid }: { code: string; role: string | null; o
       onSaid(await act());
       void cache.invalidateQueries({ queryKey: ["stores", code] });
     } catch (e) {
-      setSaid(saidOf(title, e));
+      if (outcomeUnknown(e)) { stuck.current = true; setSaid(unknownSaid(title, e)); }
+      else setSaid(saidOf(title, e));
     } finally {
-      latch.current = false;
+      latch.current = stuck.current;
       setBusy(null);
     }
   }

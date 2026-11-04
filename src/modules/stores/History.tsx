@@ -1,3 +1,5 @@
+import { unknownSaid } from "./kit";
+import { outcomeUnknown } from "../../core/api";
 import { useQueryClient } from "@tanstack/react-query";
 import { Undo2 } from "lucide-react-native";
 import { useRef, useState } from "react";
@@ -32,6 +34,7 @@ export function ItemHistory({ hotel, role, id, onBack }: { hotel: Hotel; role: s
   const [asking, setAsking] = useState<StockMovement | null>(null);
   const [busy, setBusy] = useState(false);
   const latch = useRef(false);
+  const stuck = useRef(false);
   const [said, setSaid] = useState<Said | null>(null);
   const [inDialog, setInDialog] = useState<Said | null>(null);
   const [pulled, setPulled] = useState(false);
@@ -61,9 +64,10 @@ export function ItemHistory({ hotel, role, id, onBack }: { hotel: Hotel; role: s
       setAsking(null);
       setSaid({ title: "Undone", body: "Both rows stay on the history - the store's past is what somebody reads when the count is wrong.", tone: "ok" });
     } catch (e) {
-      setInDialog(saidOf("Not undone", e));
+      if (outcomeUnknown(e)) { stuck.current = true; setInDialog(unknownSaid("Not undone", e)); }
+      else setInDialog(saidOf("Not undone", e));
     } finally {
-      latch.current = false;
+      latch.current = stuck.current;
       setBusy(false);
     }
   }

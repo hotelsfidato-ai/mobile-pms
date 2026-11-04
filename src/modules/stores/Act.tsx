@@ -1,3 +1,5 @@
+import { unknownSaid } from "./kit";
+import { outcomeUnknown } from "../../core/api";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRef, useState } from "react";
 import { Pressable, Text, View } from "react-native";
@@ -57,6 +59,7 @@ export function Act({ code, list, item, kind, startStoreId, onClose, onDone }: {
   const set = (patch: Partial<MoveDraft>) => setD((x) => ({ ...x, ...patch }));
   const [busy, setBusy] = useState(false);
   const latch = useRef(false);
+  const stuck = useRef(false);
   const [said, setSaid] = useState<Said | null>(null);
 
   const store = offered.find((s) => s.id === d.storeId) ?? null;
@@ -79,9 +82,10 @@ export function Act({ code, list, item, kind, startStoreId, onClose, onDone }: {
       const w = movedWords(kind, d.qty, item, res);
       onDone({ title: w.title, body: w.body, tone: "ok" });
     } catch (e) {
-      setSaid(saidOf("Not recorded", e));
+      if (outcomeUnknown(e)) { stuck.current = true; setSaid(unknownSaid("Not recorded", e)); }
+      else setSaid(saidOf("Not recorded", e));
     } finally {
-      latch.current = false;
+      latch.current = stuck.current;
       setBusy(false);
     }
   }
@@ -217,6 +221,7 @@ export function Transfer({ code, list, item, startFromId, onClose, onDone }: {
   const [why, setWhy] = useState("");
   const [busy, setBusy] = useState(false);
   const latch = useRef(false);
+  const stuck = useRef(false);
   const [said, setSaid] = useState<Said | null>(null);
   const from = holding.find((s) => s.id === fromId) ?? null;
   const destinations = places.filter((s) => s.isActive && s.id !== fromId);
@@ -235,9 +240,10 @@ export function Transfer({ code, list, item, startFromId, onClose, onDone }: {
         body: `${res.from.onHand} ${res.unit} left in ${res.from.name}, ${res.to.onHand} ${res.unit} in ${res.to.name}.`, tone: "ok",
       });
     } catch (e) {
-      setSaid(saidOf("Not moved", e));
+      if (outcomeUnknown(e)) { stuck.current = true; setSaid(unknownSaid("Not moved", e)); }
+      else setSaid(saidOf("Not moved", e));
     } finally {
-      latch.current = false;
+      latch.current = stuck.current;
       setBusy(false);
     }
   }

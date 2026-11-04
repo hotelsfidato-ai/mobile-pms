@@ -1,3 +1,5 @@
+import { unknownSaid } from "./kit";
+import { outcomeUnknown } from "../../core/api";
 import { useQueryClient } from "@tanstack/react-query";
 import { Printer } from "lucide-react-native";
 import { useEffect, useRef, useState } from "react";
@@ -46,6 +48,7 @@ export function Count({ hotel, role, startStoreId, onBack }: {
   const [reasons, setReasons] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
   const latch = useRef(false);
+  const stuck = useRef(false);
   const [said, setSaid] = useState<Said | null>(null);
   const [done, setDone] = useState<Said | null>(null);
 
@@ -93,7 +96,8 @@ export function Count({ hotel, role, startStoreId, onBack }: {
       const fresh = await readStore(code).catch(() => null);
       if (fresh && !isRefused(fresh)) setLines(linesOf(fresh.items, store.id));
     } catch (e) {
-      setSaid(saidOf("Not saved", e));
+      if (outcomeUnknown(e)) { stuck.current = true; setSaid(unknownSaid("Not saved", e)); }
+      else setSaid(saidOf("Not saved", e));
       /* The lines whose book moved take the new book and lose their count. */
       try {
         const fresh = await readStore(code);
@@ -107,7 +111,7 @@ export function Count({ hotel, role, startStoreId, onBack }: {
         }
       } catch { /* the refusal is already said */ }
     } finally {
-      latch.current = false;
+      latch.current = stuck.current;
       setBusy(false);
     }
   }

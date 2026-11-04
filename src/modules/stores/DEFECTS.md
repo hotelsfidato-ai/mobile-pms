@@ -36,6 +36,13 @@ is used: it would send a key nobody reads. **Asked of the PMS:** read the key on
 `POST /stores/movements` and `/stores/transfers`, as `finance/postings.ts` does. **The rule:** a key
 the server ignores protects nothing; say which writes are exposed.
 
+### MST-3 · A receipt, an issue or a count could be recorded twice after a lost reply (4 Nov) — narrowed at the merge
+
+With MST-2 standing (no key read), a second tap after a lost reply records the stock twice. At the
+merge the mobile chat made every stores write dialog (Act's two, Count, History's Undo, the three
+sheet writes) stop on an unknown outcome (`outcomeUnknown`): "Not known whether it was recorded:
+close this and look at the stock again", no more taps until closed (`kit.tsx unknownSaid`, MEMORY 16).
+
 ## Fixed
 
 None yet.

@@ -4,7 +4,7 @@ import {
 import { Modal, Platform, Pressable, ScrollView, Text, View } from "react-native";
 import { ROLE_LABELS, asRole } from "../../core/menu";
 import { c, face, space, t } from "../../core/theme";
-import { Box, Empty } from "../guest-services/kit";
+import { Box, Empty, type Said } from "../guest-services/kit";
 import { TILES, type Tile } from "./shelf";
 
 /* ══════════════════════════════════════════════════════════════════
@@ -138,3 +138,13 @@ export function Figure({ label, value, unit, under, grey }: { label: string; val
     </View>
   );
 }
+
+/** A write whose outcome is unknown (`outcomeUnknown`: nothing came back, or a 5xx) on a route that
+    reads no key (PMS R-30): said plainly, and the dialog takes no more taps until it is closed and
+    the stock read again (MEMORY 16). */
+export const unknownSaid = (title: string, e: unknown): Said => ({
+  title: title.replace(/^Not /, "Not known whether it was "),
+  body: `${e instanceof Error ? e.message : String(e)} Close this and look at the stock again before trying again.`,
+  tone: "bad",
+});
+
