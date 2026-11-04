@@ -160,7 +160,7 @@ function TestStripe() {
 function FindAScreen({ books, onClose }: { books: boolean; onClose: () => void }) {
   return (
     <Modal transparent visible onRequestClose={onClose} statusBarTranslucent navigationBarTranslucent>
-      <Pressable style={[StyleSheet.absoluteFill, { backgroundColor: SCRIM }]} onPress={onClose} accessibilityLabel="Close" />
+      <Pressable style={[StyleSheet.absoluteFill, { backgroundColor: SCRIM }]} onPress={onClose} accessibilityRole="button" accessibilityLabel="Close" />
       <View style={styles.dialog} accessibilityRole="alert">
         <View style={styles.dialogRow}>
           <Search size={16} color={GREY_400} />
@@ -189,7 +189,7 @@ export function Slide({ from, width, scrim, onClose, children }: {
   }, [x]);
   return (
     <Modal transparent visible onRequestClose={onClose} statusBarTranslucent navigationBarTranslucent>
-      <Pressable style={[StyleSheet.absoluteFill, { backgroundColor: scrim }]} onPress={onClose} accessibilityLabel="Close" />
+      <Pressable style={[StyleSheet.absoluteFill, { backgroundColor: scrim }]} onPress={onClose} accessibilityRole="button" accessibilityLabel="Close" />
       <Animated.View style={[{ position: "absolute", top: 0, bottom: 0, width, transform: [{ translateX: x }] }, from === "left" ? { left: 0 } : { right: 0 }]}>
         {children}
       </Animated.View>

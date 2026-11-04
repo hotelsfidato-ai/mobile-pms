@@ -46,7 +46,7 @@ export function ShellAccount({ hotel, routed, onClose }: { hotel: Hotel | null; 
 
   return (
     <Modal transparent visible onRequestClose={onClose} statusBarTranslucent navigationBarTranslucent>
-      <Pressable style={StyleSheet.absoluteFill} onPress={onClose} accessibilityLabel="Close" />
+      <Pressable style={StyleSheet.absoluteFill} onPress={onClose} accessibilityRole="button" accessibilityLabel="Close" />
       <View style={[styles.panel, { top: insets.top + 56, maxHeight: height - insets.top - 80 }]}>
         <ScrollView contentContainerStyle={{ padding: 4 }}>
           <View style={styles.block}>
