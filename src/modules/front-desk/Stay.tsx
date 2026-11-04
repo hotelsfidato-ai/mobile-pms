@@ -230,7 +230,10 @@ function GuestMarks({ code, stay, role, onSaid }: { code: string; stay: DeskStay
   return (
     <>
       {m.stayedBefore > 0 ? <Pill tone="info">{stayedWords(m.stayedBefore)}</Pill> : null}
-      <Tick value={m.whatsappAgreed} onChange={(v) => void tick(v)} label="Agreed to WhatsApp" disabled={busy || whyNotGuest(role) != null} />
+      <Tick
+        value={m.whatsappAgreed} onChange={(v) => void tick(v)} label="Agreed to WhatsApp" disabled={busy}
+        reason={whyNotGuest(role)} onRefused={(r) => onSaid({ title: r, tone: "held" })}
+      />
     </>
   );
 }

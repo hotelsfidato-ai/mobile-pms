@@ -62,3 +62,10 @@ screen. **Done:** one `NotRead` (StayList.tsx): offline it says "No connection â
 on this phone yet", online the server's words; the lists, the stay, Check in's rooms and Take a
 walk-in use it, and Take a walk-in keeps its last tiles with `Kept`. **The rule:** a failed read
 asks about the line first.
+
+## MFD-7 Â· A refused tick did not say why
+
+The stay's "Agreed to WhatsApp" went grey for a role the API refuses (`customer` edit) and said
+nothing when tapped. Found on 4 Nov checking every greyed control for its sentence. **Done:** `Tick`
+takes the API's `reason` and says it when tapped (and to a screen reader as its hint), as `Button`
+and `MarkLink` do. **The rule:** a greyed control without its sentence is a hidden one.

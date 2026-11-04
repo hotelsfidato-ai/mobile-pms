@@ -250,12 +250,17 @@ export function Toggle({ value, onChange, label, description }: { value: boolean
   );
 }
 
-/** Misc.tsx Checkbox. A greyed one says why through its own label (the web's). */
-export function Tick({ value, onChange, label, disabled }: { value: boolean; onChange: (v: boolean) => void; label: string; disabled?: boolean }) {
+/** Misc.tsx Checkbox. A greyed one says why through its own label (the web's),
+    or, refused by the API, through its `reason` when tapped (AGENTS rule 1). */
+export function Tick({ value, onChange, label, disabled, reason, onRefused }: {
+  value: boolean; onChange: (v: boolean) => void; label: string; disabled?: boolean; reason?: string | null; onRefused?: (reason: string) => void;
+}) {
+  const refused = reason != null;
+  if (refused) disabled = true;
   return (
     <Pressable
-      onPress={() => onChange(!value)} disabled={disabled} accessibilityRole="checkbox" accessibilityLabel={label}
-      accessibilityState={{ checked: value, disabled: disabled === true }}
+      onPress={() => (refused ? onRefused?.(reason) : onChange(!value))} disabled={disabled && !refused} accessibilityRole="checkbox" accessibilityLabel={label}
+      accessibilityState={{ checked: value, disabled: disabled === true }} accessibilityHint={reason ?? undefined}
       style={{ minHeight: 44, flexDirection: "row", alignItems: "center", gap: 10 }}
     >
       <View style={{ width: 20, height: 20, borderRadius: 4, borderWidth: 1, alignItems: "center", justifyContent: "center", borderColor: value ? c.orange : c.grey300, backgroundColor: value ? c.orange : disabled ? c.grey100 : c.white }}>
