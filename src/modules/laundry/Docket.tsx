@@ -68,7 +68,8 @@ export function Docket({ hotel, role, id, collected, onBack }: {
     setRefusal(null);
     try {
       await chargeDocket(code, id);
-      refresh();
+      /* Held until the docket is read again, so the button is gone before it could be tapped twice. */
+      await cache.invalidateQueries({ queryKey: ["laundry", code] });
       setSaid({ title: `${d.number} is on the room's bill as its own line.`, tone: "ok" });
     } catch (e) {
       setRefusal(e instanceof HeldError ? saidOf("", e) : { title: message(e), tone: "bad" });
