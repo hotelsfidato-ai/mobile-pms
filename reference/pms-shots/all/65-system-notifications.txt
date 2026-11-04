@@ -1,0 +1,64 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Notifications
+6
+
+Derived, never stored - so nothing here can go stale while the thing it describes changes.
+
+reservation
+
+5 arrivals not yet checked in
+
+Arjun Nair · room 210, Sneha Kulkarni · room 207, Imran Shaikh · room 208 and 2 more
+
+20 days ago
+
+Open
+payment
+
+₹7,582 outstanding on room 203
+
+Omkar Shinde is due out today. Settle the folio before the room releases.
+
+20 days ago
+
+Open
+system
+
+1 room out of service
+
+Room 308. Occupancy divides by the sellable house, not the physical one.
+
+20 days ago
+
+Open
+approval
+
+Crockery in Main store: never counted
+
+Crockery and cutlery is counted every month. On the Store, Count a store, then choose Main store.
+
+20 days ago
+
+Open
+approval
+
+21 postings reversed today
+
+The ledger is append-only, so each reversal is its own line. Worth a look before the night audit.
+
+20 days ago
+
+Open
+approval
+
+2 requests waiting for your approval
+
+A void, a discount, an NC, a paid-out or a purchase sent to you. Approve or reject each, with a reason.
+
+20 days ago
+
+Open

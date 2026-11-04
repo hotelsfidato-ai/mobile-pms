@@ -1,0 +1,91 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Night audit
+5 to look at
+
+The night audit is closing Sunday, 11 October 2026 and opening Monday, 12 October 2026.
+
+Arrivals still outstanding
+
+5
+
+An arrival left unchecked at roll-over becomes a no-show. A retention posts against it only if the booking has cancellation terms.
+
+Open
+
+Departures not yet checked out
+
+1
+
+A room still showing due out holds its inventory into tomorrow.
+
+Open
+
+In-house folios carrying a balance
+
+7
+
+These roll forward. Nothing is wrong with that - it is worth seeing before it happens.
+
+Open
+
+Room charges to post
+
+3
+
+One night's tariff and tax for each room the run will charge. A stay charged for tonight already (the first night is charged at check-in), a day-use stay and a complimentary room are not counted.
+
+Rooms still marked dirty
+
+6
+
+Not a blocker. A room left dirty overnight is a room the morning shift inherits.
+
+Open
+
+Postings reversed today
+
+21
+
+Every reversal is somebody correcting something. Worth reading before the day closes.
+
+Open
+
+Run the audit and roll to Monday, 12 October 2026
+
+1 room is still showing due out. Check them out, or extend the stay - the audit will not decide which. A front-desk drawer is still open. Count the cash and close the shift - the audit cannot say what was taken at the desk until somebody has. The till has not been closed for today. Run the day end on it first - the restaurant's takings belong in this audit, and they are not final until the drawer is counted. The bar has not been counted tonight. Count the counter and the bar store on Bar stock, Today's sheet - or, if the bar did not open, the general manager marks it closed there with the reason.
+
+Last run: 10 Oct 2026
+
+Run night audit
+Closed days
+
+Every night audit run at this property, newest first. Days from Tuesday, 1 September 2026 on can be corrected; older ones stay as they are.
+
+10 Oct 2026
+RAN BY
+Test GM
+CLOSED
+13 Oct 2026, 3:54 AM
+ROOMS POSTED
+1
+ROOM REVENUE
+₹3,699
+NO-SHOWS
+0
+Correct
+9 Oct 2026
+RAN BY
+Test GM
+CLOSED
+13 Oct 2026, 2:32 AM
+ROOMS POSTED
+0
+ROOM REVENUE
+₹0
+NO-SHOWS
+1
+Correct

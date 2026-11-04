@@ -1,0 +1,247 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Rates
+
+Each day's price, and how the day sold. The add-ons follow the base.
+
+Prices
+Rooms left
+Set prices
+11 Oct 2026 – 24 Oct 2026
+BASE, ONE GUEST, ROOM ONLY	
+SUN
+11
+	
+MON
+12
+	
+TUE
+13
+	
+WED
+14
+	
+THU
+15
+	
+FRI
+16
+	
+SAT
+17
+	
+SUN
+18
+	
+MON
+19
+	
+TUE
+20
+	
+WED
+21
+	
+THU
+22
+	
+FRI
+23
+	
+SAT
+24
+
+Superior	
+₹4,099
+0 left
+	
+₹4,099
+3 left
+	
+₹4,099
+6 left
+	
+₹4,099
+8 left
+	
+₹4,099
+9 left
+	
+₹4,099
+10 left
+	
+₹4,099
+10 left
+	
+₹4,099
+10 left
+	
+₹4,099
+10 left
+	
+₹4,099
+10 left
+	
+₹4,099
+10 left
+	
+₹4,099
+10 left
+	
+₹4,099
+10 left
+	
+₹4,099
+9 left
+
+2 guests	₹4,099	₹4,099	₹4,099	₹4,099	₹4,099	₹4,099	₹4,099	₹4,099	₹4,099	₹4,099	₹4,099	₹4,099	₹4,099	₹4,099
+CP · 2 guests	₹4,099	₹4,099	₹4,099	₹4,099	₹4,099	₹4,099	₹4,099	₹4,099	₹4,099	₹4,099	₹4,099	₹4,099	₹4,099	₹4,099
+MAP · 2 guests	₹4,099	₹4,099	₹4,099	₹4,099	₹4,099	₹4,099	₹4,099	₹4,099	₹4,099	₹4,099	₹4,099	₹4,099	₹4,099	₹4,099
+AP · 2 guests	₹4,099	₹4,099	₹4,099	₹4,099	₹4,099	₹4,099	₹4,099	₹4,099	₹4,099	₹4,099	₹4,099	₹4,099	₹4,099	₹4,099
+AI · 2 guests	₹4,099	₹4,099	₹4,099	₹4,099	₹4,099	₹4,099	₹4,099	₹4,099	₹4,099	₹4,099	₹4,099	₹4,099	₹4,099	₹4,099
+Deluxe	
+₹3,699
+0 left
+	
+₹3,699
+3 left
+	
+₹3,699
+7 left
+	
+₹3,699
+6 left
+	
+₹3,699
+6 left
+	
+₹3,699
+6 left
+	
+₹3,699
+7 left
+	
+₹3,699
+7 left
+	
+₹3,699
+7 left
+	
+₹3,699
+5 left
+	
+₹3,699
+5 left
+	
+₹3,699
+5 left
+	
+₹3,699
+6 left
+	
+₹3,699
+5 left
+
+2 guests	₹3,699	₹3,699	₹3,699	₹3,699	₹3,699	₹3,699	₹3,699	₹3,699	₹3,699	₹3,699	₹3,699	₹3,699	₹3,699	₹3,699
+CP · 2 guests	₹3,699	₹3,699	₹3,699	₹3,699	₹3,699	₹3,699	₹3,699	₹3,699	₹3,699	₹3,699	₹3,699	₹3,699	₹3,699	₹3,699
+MAP · 2 guests	₹3,699	₹3,699	₹3,699	₹3,699	₹3,699	₹3,699	₹3,699	₹3,699	₹3,699	₹3,699	₹3,699	₹3,699	₹3,699	₹3,699
+AP · 2 guests	₹3,699	₹3,699	₹3,699	₹3,699	₹3,699	₹3,699	₹3,699	₹3,699	₹3,699	₹3,699	₹3,699	₹3,699	₹3,699	₹3,699
+AI · 2 guests	₹3,699	₹3,699	₹3,699	₹3,699	₹3,699	₹3,699	₹3,699	₹3,699	₹3,699	₹3,699	₹3,699	₹3,699	₹3,699	₹3,699
++ per extra adult	-	-	-	-	-	-	-	-	-	-	-	-	-	-
++ per extra child	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+
+Paying rooms sold
+Occupancy
+	
+18
+106%
+	
+11
+65%
+	
+4
+24%
+	
+3
+18%
+	
+2
+12%
+	
+1
+6%
+	
+0
+0%
+	
+0
+0%
+	
+0
+0%
+	
+2
+12%
+	
+2
+12%
+	
+2
+12%
+	
+1
+6%
+	
+3
+18%
+
+ADR	₹3,222	₹3,505	₹2,977	₹2,801	₹2,817	₹2,900	-	-	-	₹3,699	₹3,699	₹3,699	₹3,699	₹2,799
+Revenue	₹58,004	₹38,560	₹11,909	₹8,404	₹5,634	₹2,900	₹0	₹0	₹0	₹7,398	₹7,398	₹7,398	₹3,699	₹8,398
+
+Tap any price to change it, for that day or through a later day.
+
+4,000 a base
+4,000 from the base room type
+4,000 a price set before (covers 2)
+- not priced
+3 left: rooms of the type still to sell that day
+Paying rooms sold, ADR and revenue leave complimentary rooms and day use out; occupancy counts complimentary rooms, as the reports do.
+How rates are built
+
+Each room type has its own base. The add-ons ride on every base.
+
+Edit
+Breakfast (CP), per guest
+-
+MAP, per guest
+-
+AP, per guest
+-
+All inclusive (AI), per guest
+-
+Double occupancy (the second guest)
+-
+Extra adult (from the third guest)
+-
+Extra child (from the third guest)
+-
+
+A base covers one guest, room only. A dash is not set: nothing that needs it is sold.
+
+Prices set before
+
+Kept exactly as they were: each covers the guests it always did, and wins over the base on its dates.
+
+Superior · old rack rate ₹4,099, covers 2
+Used only on dates no base covers.
+Remove
+Deluxe · old rack rate ₹3,699, covers 2
+Used only on dates no base covers.
+Remove
+Manager report
+Monthly occupancy
+Monthly statistics
+Revenue outlook

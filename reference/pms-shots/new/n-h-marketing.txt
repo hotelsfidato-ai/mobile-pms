@@ -1,0 +1,54 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Marketing
+
+One month, by arrival date. Spend from the leads app; bookings and revenue from this system's own stays, room charges before tax.
+
+Month
+Campaigns
+
+A booking carries its campaign when it is made from a lead.
+
+No campaigns this month
+
+No spend was recorded in the leads app, and no stay arriving this month came from a campaign.
+
+Spend is read from the leads app, which is not connected yet.
+
+By booking source
+
+Every stay arriving this month.
+
+WhatsApp
+BOOKINGS
+2
+REVENUE
+₹11,097
+Website
+BOOKINGS
+5
+REVENUE
+₹37,790
+Walk-in
+BOOKINGS
+20
+REVENUE
+₹91,760
+No source recorded
+BOOKINGS
+20
+REVENUE
+₹1,05,505
+Fidato Hotels
+BOOKINGS
+4
+REVENUE
+₹29,592
+Agoda
+BOOKINGS
+1
+REVENUE
+₹8,198

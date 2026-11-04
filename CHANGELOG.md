@@ -5,6 +5,31 @@ commits.
 
 ---
 
+## 2026-11-04 · the cloud session's first steps (M-12): the gates run here; the PMS cannot be read
+
+**Asked for:** `npm ci` and the gates on `main`; read the PMS's code; then the 9 branches, one at
+a time, asking before each.
+
+**Shipped:** nothing in the app. These notes only.
+
+**Proved (in the cloud container, Linux, Node 22.23.4, npm 10.9.9)**
+- `npm ci` installs from the lock file as it stands.
+- `bash scripts/gates.sh` on `main` (`dafdea8`), **unchanged**: ALL GATES GREEN — types, all 10
+  `*.check.ts`, the android and ios exports, no test sign-in in either bundle, the bundle's routes
+  exactly `app/`. About 65 s. `gates.sh` needed no change: `..` here is `/home/user`, so its logs
+  and Metro cache go to `/home/user/.local/` (outside the repository, nothing to commit); no gate
+  lock is needed with one session.
+- The 9 branches, probed in throwaway copies (deleted after): each type-checks with 0 errors and
+  passes its own checks; each merges into `main` without a conflict; none adds a package.
+
+**Found:** the PMS's code cannot be read here. `git clone https://github.com/hotelsfidato-ai/pms`
+is refused (private, no credentials), and attaching it to the session is refused ("you don't have
+access"). Every screen is built from `reference/pms-shots/` (pictures and words) alone.
+
+**Left open:** the 9 branches (next: `mobile/pos-tables`, after the owner's yes); Tier 2.
+
+---
+
 ## 2026-10-15 · slice 2 built: Rooms, Report a repair, Out of service (three Opus helpers)
 
 **Asked for:** "send a helper to build the housekeeping screens"; then "use Opus and multiple

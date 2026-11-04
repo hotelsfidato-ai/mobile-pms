@@ -1,0 +1,28 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Company accounts
+₹7,768 owed
+
+What each company or booking site owes and paid, Thursday, 1 October 2026 to Sunday, 11 October 2026.
+
+Record payment
+A4 Test Traders
+OPENING
+₹0
+SENT TO THE ACCOUNT
+₹7,768
+RECEIVED
+₹0
+BALANCE
+₹7,768
+
+The same figures as the City ledger report under Reports. Opening is what was owed before Thursday, 1 October 2026; Received is what the account paid, by the day it reached the hotel.
+
+Payments received
+
+Newest first. A wrong line is reversed, never edited.
+
+No company has paid yet. Record a payment when one arrives.

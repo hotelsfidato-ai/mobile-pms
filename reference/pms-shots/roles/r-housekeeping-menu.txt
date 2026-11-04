@@ -1,0 +1,605 @@
+5
+TH
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Housekeeping
+
+Tap a room to move it on. Clean, then inspected.
+
+Online
+
+Empty rooms
+
+3/7
+
+clean
+
+Clean
+3/7
+Inspected
+1/7
+Needs cleaning
+4
+Clean
+2
+Inspected
+1
+In house
+10
+Due out
+1
+Out of service
+1
+All rooms
+18
+D27371 HK
+0
+Test Housekeeper
+2
+Agra Clerk
+0
+RCFIX waiter
+0
+RPTEST accountant
+0
+RPTEST clerk
+0
+Test Accountant
+0
+Test Chef
+0
+Test GM
+0
+Test Hotel Manager
+0
+Test Inventory Manager
+0
+Test Kitchen Manager
+0
+Test Reception
+0
+Test Revenue Manager
+0
+Test Waiter
+0
+VOIDPAID Manager
+0
+VOIDPAID Waiter
+0
+Unassigned
+16
+Needs cleaning
+4
+201
+Superior
+
+Floor 2
+
+Who is cleaning room 201
+Unassigned
+D27371 HK
+Test Housekeeper
+Agra Clerk
+RCFIX waiter
+RPTEST accountant
+RPTEST clerk
+Test Accountant
+Test Chef
+Test GM
+Test Hotel Manager
+Test Inventory Manager
+Test Kitchen Manager
+Test Reception
+Test Revenue Manager
+Test Waiter
+VOIDPAID Manager
+VOIDPAID Waiter
+Clean
+Inspected
+Repair
+
+207
+Superior
+
+Floor 2
+
+Who is cleaning room 207
+Unassigned
+D27371 HK
+Test Housekeeper
+Agra Clerk
+RCFIX waiter
+RPTEST accountant
+RPTEST clerk
+Test Accountant
+Test Chef
+Test GM
+Test Hotel Manager
+Test Inventory Manager
+Test Kitchen Manager
+Test Reception
+Test Revenue Manager
+Test Waiter
+VOIDPAID Manager
+VOIDPAID Waiter
+Clean
+Inspected
+Repair
+
+302
+Deluxe
+
+Floor 3
+
+Who is cleaning room 302
+Unassigned
+D27371 HK
+Test Housekeeper
+Agra Clerk
+RCFIX waiter
+RPTEST accountant
+RPTEST clerk
+Test Accountant
+Test Chef
+Test GM
+Test Hotel Manager
+Test Inventory Manager
+Test Kitchen Manager
+Test Reception
+Test Revenue Manager
+Test Waiter
+VOIDPAID Manager
+VOIDPAID Waiter
+Clean
+Inspected
+Repair
+
+304
+Deluxe
+
+Floor 3
+
+Who is cleaning room 304
+Unassigned
+D27371 HK
+Test Housekeeper
+Agra Clerk
+RCFIX waiter
+RPTEST accountant
+RPTEST clerk
+Test Accountant
+Test Chef
+Test GM
+Test Hotel Manager
+Test Inventory Manager
+Test Kitchen Manager
+Test Reception
+Test Revenue Manager
+Test Waiter
+VOIDPAID Manager
+VOIDPAID Waiter
+Clean
+Inspected
+Repair
+
+Clean
+2
+208
+Superior
+
+Floor 2
+
+Who is cleaning room 208
+Unassigned
+D27371 HK
+Test Housekeeper
+Agra Clerk
+RCFIX waiter
+RPTEST accountant
+RPTEST clerk
+Test Accountant
+Test Chef
+Test GM
+Test Hotel Manager
+Test Inventory Manager
+Test Kitchen Manager
+Test Reception
+Test Revenue Manager
+Test Waiter
+VOIDPAID Manager
+VOIDPAID Waiter
+Clean
+Inspected
+Repair
+
+210
+Superior
+
+Floor 2
+
+Who is cleaning room 210
+Unassigned
+D27371 HK
+Test Housekeeper
+Agra Clerk
+RCFIX waiter
+RPTEST accountant
+RPTEST clerk
+Test Accountant
+Test Chef
+Test GM
+Test Hotel Manager
+Test Inventory Manager
+Test Kitchen Manager
+Test Reception
+Test Revenue Manager
+Test Waiter
+VOIDPAID Manager
+VOIDPAID Waiter
+Clean
+Inspected
+Repair
+
+Inspected
+1
+306
+Deluxe
+
+Floor 3
+
+Who is cleaning room 306
+Unassigned
+D27371 HK
+Test Housekeeper
+Agra Clerk
+RCFIX waiter
+RPTEST accountant
+RPTEST clerk
+Test Accountant
+Test Chef
+Test GM
+Test Hotel Manager
+Test Inventory Manager
+Test Kitchen Manager
+Test Reception
+Test Revenue Manager
+Test Waiter
+VOIDPAID Manager
+VOIDPAID Waiter
+Clean
+Inspected
+Repair
+
+In house
+10
+202
+Superior
+
+Vikram Desai
+
+Who is cleaning room 202
+Unassigned
+D27371 HK
+Test Housekeeper
+Agra Clerk
+RCFIX waiter
+RPTEST accountant
+RPTEST clerk
+Test Accountant
+Test Chef
+Test GM
+Test Hotel Manager
+Test Inventory Manager
+Test Kitchen Manager
+Test Reception
+Test Revenue Manager
+Test Waiter
+VOIDPAID Manager
+VOIDPAID Waiter
+Clean
+Inspected
+Repair
+
+203
+Superior
+Due out
+
+Omkar Shinde
+
+Who is cleaning room 203
+Unassigned
+D27371 HK
+Test Housekeeper
+Agra Clerk
+RCFIX waiter
+RPTEST accountant
+RPTEST clerk
+Test Accountant
+Test Chef
+Test GM
+Test Hotel Manager
+Test Inventory Manager
+Test Kitchen Manager
+Test Reception
+Test Revenue Manager
+Test Waiter
+VOIDPAID Manager
+VOIDPAID Waiter
+Clean
+Inspected
+Repair
+
+204
+Superior
+
+A3 Test Desai
+
+Who is cleaning room 204
+Unassigned
+D27371 HK
+Test Housekeeper
+Agra Clerk
+RCFIX waiter
+RPTEST accountant
+RPTEST clerk
+Test Accountant
+Test Chef
+Test GM
+Test Hotel Manager
+Test Inventory Manager
+Test Kitchen Manager
+Test Reception
+Test Revenue Manager
+Test Waiter
+VOIDPAID Manager
+VOIDPAID Waiter
+Clean
+Inspected
+Repair
+
+205
+Superior
+
+Priya Menon
+
+Who is cleaning room 205
+Unassigned
+D27371 HK
+Test Housekeeper
+Agra Clerk
+RCFIX waiter
+RPTEST accountant
+RPTEST clerk
+Test Accountant
+Test Chef
+Test GM
+Test Hotel Manager
+Test Inventory Manager
+Test Kitchen Manager
+Test Reception
+Test Revenue Manager
+Test Waiter
+VOIDPAID Manager
+VOIDPAID Waiter
+Clean
+Inspected
+Repair
+
+206
+Superior
+
+Shridhar Kamble
+
+Who is cleaning room 206
+Unassigned
+D27371 HK
+Test Housekeeper
+Agra Clerk
+RCFIX waiter
+RPTEST accountant
+RPTEST clerk
+Test Accountant
+Test Chef
+Test GM
+Test Hotel Manager
+Test Inventory Manager
+Test Kitchen Manager
+Test Reception
+Test Revenue Manager
+Test Waiter
+VOIDPAID Manager
+VOIDPAID Waiter
+Clean
+Inspected
+Repair
+
+209
+Superior
+
+A3 Test Iyer
+
+Who is cleaning room 209
+Unassigned
+D27371 HK
+Test Housekeeper
+Agra Clerk
+RCFIX waiter
+RPTEST accountant
+RPTEST clerk
+Test Accountant
+Test Chef
+Test GM
+Test Hotel Manager
+Test Inventory Manager
+Test Kitchen Manager
+Test Reception
+Test Revenue Manager
+Test Waiter
+VOIDPAID Manager
+VOIDPAID Waiter
+Clean
+Inspected
+Repair
+
+301
+Deluxe
+
+A3 Test Smith
+
+Who is cleaning room 301
+Unassigned
+D27371 HK
+Test Housekeeper
+Agra Clerk
+RCFIX waiter
+RPTEST accountant
+RPTEST clerk
+Test Accountant
+Test Chef
+Test GM
+Test Hotel Manager
+Test Inventory Manager
+Test Kitchen Manager
+Test Reception
+Test Revenue Manager
+Test Waiter
+VOIDPAID Manager
+VOIDPAID Waiter
+Clean
+Inspected
+Repair
+
+303
+Deluxe
+
+A5 Test Rane
+
+Who is cleaning room 303
+Unassigned
+D27371 HK
+Test Housekeeper
+Agra Clerk
+RCFIX waiter
+RPTEST accountant
+RPTEST clerk
+Test Accountant
+Test Chef
+Test GM
+Test Hotel Manager
+Test Inventory Manager
+Test Kitchen Manager
+Test Reception
+Test Revenue Manager
+Test Waiter
+VOIDPAID Manager
+VOIDPAID Waiter
+Clean
+Inspected
+Repair
+
+305
+Deluxe
+
+A4 Test Kulkarni
+
+Who is cleaning room 305
+Unassigned
+D27371 HK
+Test Housekeeper
+Agra Clerk
+RCFIX waiter
+RPTEST accountant
+RPTEST clerk
+Test Accountant
+Test Chef
+Test GM
+Test Hotel Manager
+Test Inventory Manager
+Test Kitchen Manager
+Test Reception
+Test Revenue Manager
+Test Waiter
+VOIDPAID Manager
+VOIDPAID Waiter
+Clean
+Inspected
+Repair
+
+307
+Deluxe
+
+A3 Test Gokhale
+
+Who is cleaning room 307
+Unassigned
+D27371 HK
+Test Housekeeper
+Agra Clerk
+RCFIX waiter
+RPTEST accountant
+RPTEST clerk
+Test Accountant
+Test Chef
+Test GM
+Test Hotel Manager
+Test Inventory Manager
+Test Kitchen Manager
+Test Reception
+Test Revenue Manager
+Test Waiter
+VOIDPAID Manager
+VOIDPAID Waiter
+Clean
+Inspected
+Repair
+
+Out of service
+1
+308
+Deluxe
+
+Floor 3
+
+Who is cleaning room 308
+Unassigned
+D27371 HK
+Test Housekeeper
+Agra Clerk
+RCFIX waiter
+RPTEST accountant
+RPTEST clerk
+Test Accountant
+Test Chef
+Test GM
+Test Hotel Manager
+Test Inventory Manager
+Test Kitchen Manager
+Test Reception
+Test Revenue Manager
+Test Waiter
+VOIDPAID Manager
+VOIDPAID Waiter
+Put back
+
+Navigation
+
+Main application navigation
+
+Fidato Hotels
+Rooms
+FRONT DESK
+Housekeeping
+Work orders
+Guest requests
+Lost property
+STORE AND EQUIPMENT
+Store
+Equipment
+Purchasing
+LAUNDRY
+1
+SYSTEM
+1
+Find a screen
+Collapse
