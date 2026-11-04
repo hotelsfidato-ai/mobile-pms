@@ -197,8 +197,14 @@ export const stayWords = (s: { roomNumber: string; guest: string; reference: str
 export function returnBody(
   lines: readonly Pick<DocketLine, "id" | "quantity" | "returnedQuantity" | "description">[], counts: Readonly<Record<string, string>>,
 ): { problem: string } | { body: { lineId: string; quantity: number }[] } {
+  /* A field left blank is the count already recorded, never 0: Number("") is
+     0, and 0 would reopen a returned docket (the review of 4 Nov, MLDY-1). */
+  const typed = (l: { id: string; returnedQuantity: number }) => {
+    const text = counts[l.id];
+    return text === undefined || text.trim() === "" ? l.returnedQuantity : Number(text);
+  };
   const returned = lines
-    .map((l) => ({ lineId: l.id, quantity: Number(counts[l.id] ?? l.returnedQuantity) }))
+    .map((l) => ({ lineId: l.id, quantity: typed(l) }))
     .filter((r) => Number.isInteger(r.quantity));
   if (returned.length !== lines.length) return { problem: "A count is a whole number." };
   const over = lines.find((l) => Number(counts[l.id] ?? 0) > l.quantity);

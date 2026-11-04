@@ -12,7 +12,13 @@ None yet.
 
 ## Fixed
 
-None yet.
+### MLDY-1 · A count left blank in "Record what came back" sent 0 (4 Nov) — fixed
+
+**What happened:** `Number("")` is 0, so a count field cleared and left blank sent `quantity: 0`, and
+the server set that line's returned count to 0 and reopened a returned docket (the web's
+ReturnDialog does the same). **How found:** the independent review before the merge. **What was
+done:** a blank field keeps the count already recorded (`docket.ts returnBody`, checked, broken
+once); none came back is typed as 0. **The rule:** a blank field is never a zero.
 
 ## Seen in the web twin, not the phone's (for the PMS, through the mobile chat)
 

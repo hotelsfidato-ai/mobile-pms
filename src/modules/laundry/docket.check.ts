@@ -99,6 +99,7 @@ const lines = [
 ];
 eq(returnBody(lines, { l1: "4", l2: "2" }), { body: [{ lineId: "l1", quantity: 4 }, { lineId: "l2", quantity: 2 }] }, "all back");
 eq(returnBody(lines, { l2: "1" }), { body: [{ lineId: "l1", quantity: 1 }, { lineId: "l2", quantity: 1 }] }, "untouched keeps what came back");
+eq(returnBody(lines, { l1: "", l2: " " }), { body: [{ lineId: "l1", quantity: 1 }, { lineId: "l2", quantity: 0 }] }, "a field left blank keeps the count recorded, never 0 (MLDY-1)");
 eq(returnBody(lines, { l1: "2.5", l2: "1" }), { problem: "A count is a whole number." }, "a part");
 eq(returnBody(lines, { l1: "4", l2: "3" }), { problem: "Only 2 bed sheet went out." }, "more back than went");
 eq(backWords(0), "Everything is back.", "done");
