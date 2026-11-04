@@ -1,10 +1,10 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { AlarmClock, Calendar, Check, Clock, Plus } from "lucide-react-native";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Text, View } from "react-native";
 import type { Hotel } from "../../core/api";
 import { c, space, t } from "../../core/theme";
-import { Head, Screen, useRead } from "../../core/ui";
+import { Head, notKnown, Screen, useRead, useStuck } from "../../core/ui";
 import { actOnWakeUp, listWakeUps, setWakeUp } from "./data";
 import {
   Back, Box, Btn, body, Dialog, Empty, Failed, Field, Foot, IconChip, InDialog, Input, Loading, NotYours, Pill,
@@ -116,7 +116,7 @@ export function WakeUpCalls({ hotel, role, onBack }: { hotel: Hotel; role: strin
 
       <Toast said={said} onClose={() => setSaid(null)} />
       {setting ? (
-        <SetDialog code={code} rooms={list.data?.rooms ?? []} today={list.data?.today ?? hotel.today ?? hotel.businessDate} onClose={() => setSetting(false)} onDone={refresh} />
+        <SetDialog code={code} rooms={list.data?.rooms ?? []} today={list.data?.today ?? hotel.today ?? hotel.businessDate} onClose={() => { setSetting(false); refresh(); }} onDone={refresh} />
       ) : null}
       {cancelling ? <CancelDialog code={code} w={cancelling} onClose={() => setCancelling(null)} onDone={refresh} /> : null}
     </View>
@@ -132,9 +132,16 @@ function SetDialog({ code, rooms, today, onClose, onDone }: {
   const [note, setNote] = useState("");
   const [busy, setBusy] = useState(false);
   const [said, setSaid] = useState<Said | null>(null);
+  /* A second tap is a second call, and the route reads no key: latched at
+     the tap, and after an unknown outcome no more taps until this is closed
+     and the calls read again (MGS-3). */
+  const latch = useRef(false);
+  const once = useStuck();
   const clock = timeOf(time);
 
   async function save() {
+    if (latch.current || once.isStuck()) return;
+    latch.current = true;
     setBusy(true);
     setSaid(null);
     try {
@@ -142,8 +149,10 @@ function SetDialog({ code, rooms, today, onClose, onDone }: {
       onClose();
       onDone();
     } catch (e) {
-      setSaid(saidOf("Not set", e));
+      setSaid(once.stop(e) ? { ...notKnown("set", "the calls once this is closed", e), tone: "bad" } : saidOf("Not set", e));
       setBusy(false);
+    } finally {
+      latch.current = false;
     }
   }
 
@@ -175,7 +184,7 @@ function SetDialog({ code, rooms, today, onClose, onDone }: {
           <InDialog said={said} />
           <Foot>
             <Btn label="Cancel" tall grow onPress={onClose} />
-            <Btn label="Set the call" variant="primary" tall grow disabled={busy || !reservationId || !day || !clock} onPress={() => void save()} />
+            <Btn label="Set the call" variant="primary" tall grow disabled={busy || once.stuck || !reservationId || !day || !clock} onPress={() => void save()} />
           </Foot>
         </>
       )}

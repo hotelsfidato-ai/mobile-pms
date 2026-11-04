@@ -1,10 +1,10 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { PackageSearch, Plus } from "lucide-react-native";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Text, View } from "react-native";
 import type { Hotel } from "../../core/api";
 import { c, space, t } from "../../core/theme";
-import { Head, Screen, useRead } from "../../core/ui";
+import { Head, notKnown, Screen, useRead, useStuck } from "../../core/ui";
 import { clearLost, listLost, logLost } from "./data";
 import {
   Back, Box, Btn, body, Dialog, Empty, Failed, Field, Foot, IconChip, InDialog, Input, Loading, NotYours, Pill,
@@ -96,7 +96,7 @@ export function LostProperty({ hotel, role, onBack }: { hotel: Hotel; role: stri
             )}
       </Screen>
 
-      {logging ? <LogDialog code={code} onClose={() => setLogging(false)} onDone={refresh} /> : null}
+      {logging ? <LogDialog code={code} onClose={() => { setLogging(false); refresh(); }} onDone={refresh} /> : null}
       {clearing ? <ClearDialog code={code} {...clearing} onClose={() => setClearing(null)} onDone={refresh} /> : null}
     </View>
   );
@@ -109,8 +109,15 @@ function LogDialog({ code, onClose, onDone }: { code: string; onClose: () => voi
   const [keptWhere, setKeptWhere] = useState("");
   const [busy, setBusy] = useState(false);
   const [said, setSaid] = useState<Said | null>(null);
+  /* A second tap is a second item, and the route reads no key: latched at
+     the tap, and after an unknown outcome no more taps until this is closed
+     and the items kept read again (MGS-3). */
+  const latch = useRef(false);
+  const once = useStuck();
 
   async function save() {
+    if (latch.current || once.isStuck()) return;
+    latch.current = true;
     setBusy(true);
     setSaid(null);
     try {
@@ -118,8 +125,10 @@ function LogDialog({ code, onClose, onDone }: { code: string; onClose: () => voi
       onClose();
       onDone();
     } catch (e) {
-      setSaid(saidOf("Not logged", e));
+      setSaid(once.stop(e) ? { ...notKnown("logged", "the items kept once this is closed", e), tone: "bad" } : saidOf("Not logged", e));
       setBusy(false);
+    } finally {
+      latch.current = false;
     }
   }
 
@@ -146,7 +155,7 @@ function LogDialog({ code, onClose, onDone }: { code: string; onClose: () => voi
       <InDialog said={said} />
       <Foot>
         <Btn label="Cancel" tall grow onPress={onClose} />
-        <Btn label="Log it" variant="primary" tall grow disabled={busy || !what.trim() || !foundWhere.trim()} onPress={() => void save()} />
+        <Btn label="Log it" variant="primary" tall grow disabled={busy || once.stuck || !what.trim() || !foundWhere.trim()} onPress={() => void save()} />
       </Foot>
     </Dialog>
   );

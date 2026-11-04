@@ -11,6 +11,21 @@ None yet.
 
 ## Fixed
 
+### MGS-3 · A lost reply let a request, a call, an item or a reply be made twice (4 Nov)
+
+- **What happened:** New request, Set the call, Log it and Send reply were guarded only by `busy`
+  and came live again after any failure; their routes read no idempotency key, so a second tap
+  after a lost reply (nothing came back, or a 5xx) made a second request, a second wake-up call, a
+  second kept item or a second message to the guest.
+- **How found:** applying MEMORY 16 across the modules (4 Nov).
+- **What was done:** each is latched at the tap; on `outcomeUnknown(e)` it says "Not known whether
+  it was raised / set / logged / sent … look at … before trying again" and takes no more taps until
+  the dialog is closed (closing now reads the list again) or the thread is left (`useStuck`,
+  `notKnown` in core/ui.tsx). Checked safe to repeat (the server refuses a second): Take it / Done
+  / Cancel it on a request, Confirm / Done / Cancel on a call, Returned / Disposed on an item,
+  Confirm / Set aside on online check-in, Mark handled.
+- **The rule it leaves:** an unknown outcome on a route without a key stops the button.
+
 ### MGS-1 · Wake-up calls: Cancel it could be tapped while a call was being changed (4 Nov)
 
 - **What happened:** on a call's card, Confirm and Done turned grey while their write was on its

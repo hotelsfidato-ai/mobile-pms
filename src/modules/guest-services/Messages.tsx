@@ -1,9 +1,9 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Text, View } from "react-native";
 import type { Hotel } from "../../core/api";
 import { c, face, t } from "../../core/theme";
-import { Head, Screen, useRead } from "../../core/ui";
+import { Head, notKnown, Screen, useRead, useStuck } from "../../core/ui";
 import { getDeskMessages, handleRequest, replyToGuest } from "./data";
 import {
   Back, Box, Btn, body, Empty, Failed, Field, InDialog, Input, Loading, NotYours, Pill, Stale, Toast, saidOf, type Said,
@@ -56,7 +56,14 @@ export function Messages({ hotel, role, reservation, onBack, onOpen }: {
     }
   }
 
+  /* A second tap is a second reply to the guest, and the route reads no key:
+     latched at the tap, and after an unknown outcome Send reply takes no more
+     taps until this thread is left and read again (MGS-3). */
+  const latch = useRef(false);
+  const once = useStuck();
   async function sendReply() {
+    if (latch.current || once.isStuck()) return;
+    latch.current = true;
     setBusy(true);
     setRefusal(null);
     try {
@@ -64,8 +71,12 @@ export function Messages({ hotel, role, reservation, onBack, onOpen }: {
       setReply("");
       await refresh();
     } catch (e) {
-      setRefusal(saidOf("Not sent", e));
+      if (once.stop(e)) {
+        setRefusal({ ...notKnown("sent", "the thread once it is opened again", e), tone: "bad" });
+        void refresh();
+      } else setRefusal(saidOf("Not sent", e));
     } finally {
+      latch.current = false;
       setBusy(false);
     }
   }
@@ -131,7 +142,7 @@ export function Messages({ hotel, role, reservation, onBack, onOpen }: {
                     </Field>
                     <InDialog said={refusal} />
                     <View style={{ flexDirection: "row" }}>
-                      <Btn label={busy ? "Sending…" : "Send reply"} disabled={busy || !replyFits(reply)} onPress={() => void sendReply()} />
+                      <Btn label={busy ? "Sending…" : "Send reply"} disabled={busy || once.stuck || !replyFits(reply)} onPress={() => void sendReply()} />
                     </View>
                   </Box>
                 ) : <Text style={body}>This guest has checked out. Replies stop at check-out.</Text>) : null}

@@ -1,10 +1,10 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { BedDouble, Check, Plus, UtensilsCrossed, Wrench } from "lucide-react-native";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Text, View } from "react-native";
 import type { Hotel } from "../../core/api";
 import { c, space, t } from "../../core/theme";
-import { Head, Screen, useRead } from "../../core/ui";
+import { Head, notKnown, Screen, useRead, useStuck } from "../../core/ui";
 import { actOnRequest, listRequests, raiseRequest } from "./data";
 import {
   Back, Box, Btn, body, Dialog, Empty, Failed, Field, Foot, IconChip, InDialog, Input, Loading, NotYours, Pill,
@@ -106,7 +106,7 @@ export function Requests({ hotel, role, onBack }: { hotel: Hotel; role: string |
       <Toast said={said} onClose={() => setSaid(null)} />
       {raising ? (
         <RaiseDialog
-          code={code} rooms={list.data?.rooms ?? []} onClose={() => setRaising(false)}
+          code={code} rooms={list.data?.rooms ?? []} onClose={() => { setRaising(false); refresh(); }}
           onDone={(line) => { setSaid({ title: "Raised", body: line, tone: "ok" }); refresh(); }}
         />
       ) : null}
@@ -156,8 +156,15 @@ function RaiseDialog({ code, rooms, onClose, onDone }: {
   const [when, setWhen] = useState("");
   const [busy, setBusy] = useState(false);
   const [said, setSaid] = useState<Said | null>(null);
+  /* A second tap is a second request, and the route reads no key: latched at
+     the tap, and after an unknown outcome no more taps until this is closed
+     and the open requests read again (MGS-3). */
+  const latch = useRef(false);
+  const once = useStuck();
 
   async function save() {
+    if (latch.current || once.isStuck()) return;
+    latch.current = true;
     setBusy(true);
     setSaid(null);
     try {
@@ -165,8 +172,10 @@ function RaiseDialog({ code, rooms, onClose, onDone }: {
       onClose();
       onDone(`${TEAM_LABEL[team]}: ${what.trim()}`);
     } catch (e) {
-      setSaid(saidOf("Not raised", e));
+      setSaid(once.stop(e) ? { ...notKnown("raised", "the open requests once this is closed", e), tone: "bad" } : saidOf("Not raised", e));
       setBusy(false);
+    } finally {
+      latch.current = false;
     }
   }
 
@@ -192,7 +201,7 @@ function RaiseDialog({ code, rooms, onClose, onDone }: {
           <InDialog said={said} />
           <Foot>
             <Btn label="Cancel" tall grow onPress={onClose} />
-            <Btn label="Raise it" variant="primary" tall grow disabled={busy || !reservationId || !what.trim()} onPress={() => void save()} />
+            <Btn label="Raise it" variant="primary" tall grow disabled={busy || once.stuck || !reservationId || !what.trim()} onPress={() => void save()} />
           </Foot>
         </>
       )}
