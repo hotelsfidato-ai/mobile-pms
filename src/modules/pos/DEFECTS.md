@@ -49,6 +49,22 @@ None yet.
 
 ## Kitchen
 
+### MPOS-4 · A lost reply let the same round, parcel or add-ons be sent again (4 Nov)
+
+**What happened.** When nothing came back (or the server failed), the pad kept the round and Send
+live ("the waiter changes that dish and sends again"), Open the parcel stayed live, and a sent dish's
+Done (Add to …) stayed live; the batch, orders and add-on routes read no idempotency key, so a second
+tap could make a second docket, a second parcel, or a second set of add-ons (a second one split off).
+**How found:** applying MEMORY 16 across the modules (4 Nov). **What was done:** on
+`outcomeUnknown(e)` each says "Not known whether it was sent / opened / added … look at … before
+trying again" and takes no more taps until it is closed and the table read again (`useStuck`,
+`notKnown` in core/ui.tsx; the order's `Outcome` carries `unknown`). Checked safe to repeat (the
+server refuses a second or sets a value): Pay (settle refuses an order no longer open), Clear,
+Taken, Close early / Reopen, Send to the kitchen ("already with the kitchen"), strike, one fewer,
+round off, discount, hold, close unpaid, the header, the kitchen's Start / Ready; a reprint or bill
+print prints the paper again, no second record. **The rule:** an unknown outcome on a route without
+a key stops the button.
+
 ### MPOS-K1 · The pass drew each column as its own scroll; the PMS at phone width is one page (4 Nov)
 
 **What happened:** By stage put Ordered and On the fire in two side-by-side scrolls under fixed

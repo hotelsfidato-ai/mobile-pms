@@ -1,10 +1,10 @@
 import { Minus, Plus, Square, SquareCheck, X } from "lucide-react-native";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { api, type Hotel } from "../../core/api";
 import { cash } from "../../core/format";
 import { c, face, t } from "../../core/theme";
-import { useRead } from "../../core/ui";
+import { notKnown, useRead } from "../../core/ui";
 import { MOST_OF_A_CUSTOM, MOST_OF_ONE, customiseAct, whyNotCustom } from "./order";
 import { Btn, Choice, Field, Input, Refused, Sheet, type Write } from "./OrderSheets";
 import type { CustomAddon, LineAddon, NumberedAddon, Order, OrderLine } from "./types";
@@ -51,10 +51,24 @@ export function CustomiseSheet({ hotel, order, line, onClose, write }: {
   const nothing = sent && chosen.length === 0 && customs.length === 0;
   const list = addons.data ?? [];
 
+  /* Added twice is two sets of add-ons (or a second one split off), and the
+     route reads no key: after an unknown outcome Done takes no more taps
+     until this is closed and the order read again (MPOS-4). */
+  const stuck = useRef(false);
+  const [unknown, setUnknown] = useState(false);
   const done = async () => {
+    if (stuck.current) return;
+    stuck.current = true;
     setBusy(true);
     setRefused(null);
     const out = await write(customiseAct(code, order, line, chosen, scope ?? "all", customs)).finally(() => setBusy(false));
+    if ("refused" in out && out.unknown) {
+      const n = notKnown("added", "the order once this is closed");
+      setUnknown(true);
+      setRefused(`${n.title}. ${out.refused} ${n.body}`);
+      return;
+    }
+    stuck.current = false;
     if ("refused" in out) setRefused(out.refused);
     else onClose();
   };
@@ -69,7 +83,7 @@ export function CustomiseSheet({ hotel, order, line, onClose, write }: {
       footer={(
         <View style={{ flexDirection: "row", gap: 8 }}>
           <Btn label="Cancel" onPress={onClose} grow />
-          <Btn label="Done" kind="primary" off={(asks && scope === null) || nothing || busy} busy={busy} onPress={() => void done()} grow />
+          <Btn label="Done" kind="primary" off={(asks && scope === null) || nothing || busy || unknown} busy={busy} onPress={() => void done()} grow />
         </View>
       )}
     >

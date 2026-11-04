@@ -5,6 +5,7 @@ import { Pressable, ScrollView, StyleSheet, Text, View, type NativeScrollEvent, 
 import { api, HeldError, send, type Hotel } from "../../core/api";
 import { cash } from "../../core/format";
 import { c, face, space, t } from "../../core/theme";
+import { notKnown, useStuck } from "../../core/ui";
 import { DishSheet } from "./DishSheet";
 import { since, type FloorNow } from "./floor";
 import { OrderPadCustomise } from "./OrderPadCustomise";
@@ -52,6 +53,11 @@ export function OrderPad({ hotel, role, table, orderId, onClose }: {
   /* One Send in flight, from the first tap: state reaches the button a render
      later, and a second tap in between would ring the round twice (MPOS-3). */
   const inFlight = useRef(false);
+  /* A round sent twice is two dockets, and the batch route reads no key: after
+     an unknown outcome Send takes no more taps until the pad is closed and the
+     table read again (MPOS-4). */
+  const once = useStuck();
+  const unknownRound = notKnown("sent", "the table's order once the pad is closed");
   const [asked, setAsked] = useState<string | null>(null);
   /* What Tables left for the pad: a parcel just opened. */
   const [said, setSaid] = useState<Said | null>(takeSaid);
@@ -137,7 +143,7 @@ export function OrderPad({ hotel, role, table, orderId, onClose }: {
   }
 
   async function sendRound() {
-    if (lines.length === 0 || inFlight.current) return;
+    if (lines.length === 0 || inFlight.current || once.isStuck()) return;
     if (ringReason) { setSaid({ title: table, body: ringReason, tone: "bad" }); return; }
     inFlight.current = true;
     setSending(true);
@@ -166,6 +172,13 @@ export function OrderPad({ hotel, role, table, orderId, onClose }: {
         setLines([]);
         leaveSaid({ title: `${table} is held`, body: "The kitchen does not have it yet. It goes as soon as the connection is back.", tone: "held" });
         onClose();
+        return;
+      }
+      /* Not known whether the kitchen has it: the round stays to be looked at,
+         never sent again from here. */
+      if (once.stop(e)) {
+        void cache.invalidateQueries({ queryKey: ["pos", code] });
+        setSaid({ title: unknownRound.title, body: notKnown("sent", "the table's order once the pad is closed", e).body, tone: "bad" });
         return;
       }
       /* THE ROUND STAYS: the waiter changes that dish and sends again. */
@@ -376,7 +389,7 @@ export function OrderPad({ hotel, role, table, orderId, onClose }: {
             <Text style={[t.caption, ty.xs]}>{footerLine(lines)}</Text>
           </View>
           <Btn label="Close" onPress={onClose} />
-          <Btn label="Send" primary busy={sending} disabled={lines.length === 0 || ringReason != null} hint={ringReason ?? undefined} onPress={() => void sendRound()} />
+          <Btn label="Send" primary busy={sending} disabled={lines.length === 0 || ringReason != null || once.stuck} hint={ringReason ?? (once.stuck ? unknownRound.line : undefined)} onPress={() => void sendRound()} />
         </View>
       </View>
 

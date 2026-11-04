@@ -5,7 +5,7 @@ import {
 } from "lucide-react-native";
 import { useCallback, useEffect, useState } from "react";
 import { AppState, Pressable, Text, View } from "react-native";
-import { api, HeldError, send, type Hotel } from "../../core/api";
+import { api, HeldError, outcomeUnknown, send, type Hotel } from "../../core/api";
 import { isOnline } from "../../core/offline";
 import { c, face, space, t } from "../../core/theme";
 import { Capsule, Card, Head, ReadFailed, Row, Screen, useRead } from "../../core/ui";
@@ -85,7 +85,7 @@ export function Order({ hotel, id, role, onBack }: { hotel: Hotel; id: string; r
         return { held: e.message };
       }
       /* An ApiError: the server's own words, or the web's refusal sentence (503). */
-      return { refused: e instanceof Error ? e.message : String(e) };
+      return { refused: e instanceof Error ? e.message : String(e), unknown: outcomeUnknown(e) };
     } finally {
       setBusy(false);
     }

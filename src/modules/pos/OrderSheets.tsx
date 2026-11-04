@@ -22,7 +22,8 @@ import type { Order, PromotionList } from "./types";
    ══════════════════════════════════════════════════════════════════ */
 
 /** What a write came to: the order's screen runs it (Order.tsx). */
-export type Outcome = { done: true } | { held: string } | { refused: string };
+/** `unknown`: nothing came back, or a 5xx - it may have been made (MEMORY 16). */
+export type Outcome = { done: true } | { held: string } | { refused: string; unknown?: boolean };
 export type Write = (act: Act, reason?: string) => Promise<Outcome>;
 
 /** A button 44px or more to the touch. `why`: refused for this person -

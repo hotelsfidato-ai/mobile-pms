@@ -7,7 +7,7 @@ import { ApiError, api, HeldError, send, type Hotel } from "../../core/api";
 import { cash, DASH } from "../../core/format";
 import { newKey } from "../../core/offline";
 import { c, face, space, t } from "../../core/theme";
-import { Capsule, Screen } from "../../core/ui";
+import { Capsule, notKnown, Screen, useStuck } from "../../core/ui";
 import {
   CLOSE_FOR, closedLine, closure, kotLines, LEGEND, LOOK, maySetUpKots, openLabel, padHref, parcelTile, READY, startCard, takenLabel, tileLabel, tileOffers,
   type FloorNow, type KotKind, type Tile as Table,
@@ -483,13 +483,17 @@ function NewParcel({ code, onCancel, onHeld, onOpened }: {
   const [phone, setPhone] = useState("");
   const [busy, setBusy] = useState(false);
   const [problem, setProblem] = useState<string | null>(null);
-  /* One parcel per tap: a second tap before the first answer is two orders (MPOS-3). */
+  /* One parcel per tap: a second tap before the first answer is two orders (MPOS-3).
+     The route reads no key: after an unknown outcome, no more taps until this
+     is closed and the floor read again (MPOS-4). */
   const inFlight = useRef(false);
+  const once = useStuck();
+  const unknown = notKnown("opened", "the parcels on the floor once this is closed");
 
   async function create() {
     const who = name.trim();
     if (!who) { setProblem("Whose parcel is it? Type the customer's name."); return; }
-    if (inFlight.current) return;
+    if (inFlight.current || once.isStuck()) return;
     inFlight.current = true;
     setBusy(true);
     try {
@@ -497,6 +501,7 @@ function NewParcel({ code, onCancel, onHeld, onOpened }: {
       onOpened(order, who);
     } catch (e) {
       if (e instanceof HeldError) onHeld({ title: "Saved on this phone", body: e.message, tone: "held" });
+      else if (once.stop(e)) setProblem(`${unknown.title}. ${notKnown("opened", "the parcels on the floor once this is closed", e).body}`);
       else setProblem(e instanceof ApiError || e instanceof Error ? e.message : String(e));
     } finally {
       inFlight.current = false;
@@ -510,7 +515,7 @@ function NewParcel({ code, onCancel, onHeld, onOpened }: {
       footer={(
         <View style={{ flexDirection: "row", justifyContent: "flex-end", gap: 8 }}>
           <Btn label="Cancel" size="md" onPress={onCancel} />
-          <Btn label="Open the parcel" size="md" primary busy={busy} onPress={() => void create()} />
+          <Btn label="Open the parcel" size="md" primary busy={busy} disabled={once.stuck} hint={once.stuck ? unknown.line : undefined} onPress={() => void create()} />
         </View>
       )}
     >
