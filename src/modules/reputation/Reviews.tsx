@@ -83,7 +83,9 @@ export function Reviews({ hotel, role }: { hotel: Hotel; role: string | null }) 
             <Stale error={q.error} />
             <Body
               code={code} page={page} test={test} unknown={unknown} setSaid={setSaid}
-              onUnknown={(u) => setUnknown({ ...u, at: Date.now() })} onReadAgain={() => void readAgain()}
+              /* Said where the tap was too: the card that holds the ways sits at the top of the list. */
+              onUnknown={(u) => { setUnknown({ ...u, at: Date.now() }); setSaid({ title: u.title, body: u.body, tone: "bad" }); }}
+              onReadAgain={() => void readAgain()}
               refresh={() => void cache.invalidateQueries({ queryKey: key })}
             />
           </>
