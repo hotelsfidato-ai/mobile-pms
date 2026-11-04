@@ -1,6 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { router, type Href } from "expo-router";
-import { AlertTriangle, UserCheck } from "lucide-react-native";
+import { AlertTriangle, Plus, UserCheck } from "lucide-react-native";
 import { useState, type ReactNode } from "react";
 import { KeyboardAvoidingView, Platform, Text, View } from "react-native";
 import { ApiError, HeldError, type Hotel } from "../../core/api";
@@ -299,7 +299,10 @@ export function WalkIn({ hotel, role, room: walkRoom, onClose }: { hotel: Hotel;
           <Toggle value={whatsapp} onChange={setWhatsapp} label="Guest agreed to WhatsApp" description="Ask them. Unticked, messages go by email if there is one, else not at all." />
         </Section>
 
-        <Section title="Stay">
+        <Section
+          title="Stay"
+          action={<Button label="Another room" Icon={Plus} size="sm" reason={WEBSITE} onRefused={(r) => setToast({ title: r, body: "A walk-in is one room on the phone; a group is New booking's, on the website.", tone: "held" })} onPress={() => undefined} />}
+        >
           <Field label="Arrival"><Text style={[t.label, t.tab, { color: c.ink900, minHeight: 28 }]}>{dateLong(from)}</Text></Field>
           <Field
             label="Departure"
@@ -318,15 +321,21 @@ export function WalkIn({ hotel, role, room: walkRoom, onClose }: { hotel: Hotel;
             <Pick value={roomTypeId} onChange={(v) => { setTypeId(v); setRoom(""); }} title="Room type" tall options={types.map((x) => ({ value: x.id, label: x.name }))} />
           </Field>
           <Field label="Meal plan"><Pick value={mealPlan} onChange={setMealPlan} title="Meal plan" tall options={PLANS} /></Field>
+          {/* The picture's grid: Rooms | Adults, Children | Rate. A walk-in is one room: its box is greyed at 1. */}
           <View style={{ flexDirection: "row", gap: 8 }}>
+            <View style={{ flex: 1 }}><Field label="Rooms"><Box value="1" label="Rooms" disabled tall onChange={() => undefined} /></Field></View>
             <View style={{ flex: 1 }}><Field label="Adults"><Box value={adults} label="Adults" keyboard="number-pad" tall onChange={setAdults} /></Field></View>
-            <View style={{ flex: 1 }}><Field label="Children"><Box value={children} label="Children" keyboard="number-pad" tall onChange={setChildren} /></Field></View>
           </View>
-          <Field label="Rate" hint={comp ? "Complimentary." : dayUse ? "Type the day's price." : "Empty uses the calendar."}>
-            <Box value={comp ? "" : rate} label="Rate" placeholder="-" keyboard="decimal-pad" disabled={comp} tall onChange={setRate} />
-          </Field>
-          {!comp ? <Tick value={incl && !quote.data?.contractRate} onChange={setIncl} label="Rate includes GST" disabled={quote.data?.contractRate === true} /> : null}
-          {!comp && quote.data?.contractRate ? <Text style={t.caption}>Contract rates are before GST</Text> : null}
+          <View style={{ flexDirection: "row", gap: 8 }}>
+            <View style={{ flex: 1 }}><Field label="Children"><Box value={children} label="Children" keyboard="number-pad" tall onChange={setChildren} /></Field></View>
+            <View style={{ flex: 1, gap: 4 }}>
+              <Field label="Rate" hint={comp ? "Complimentary." : dayUse ? "Type the day's price." : "Empty uses the calendar."}>
+                <Box value={comp ? "" : rate} label="Rate" placeholder="-" keyboard="decimal-pad" disabled={comp} tall onChange={setRate} />
+              </Field>
+              {!comp ? <Tick value={incl && !quote.data?.contractRate} onChange={setIncl} label="Rate includes GST" disabled={quote.data?.contractRate === true} /> : null}
+              {!comp && quote.data?.contractRate ? <Text style={t.caption}>Contract rates are before GST</Text> : null}
+            </View>
+          </View>
           <InclusiveNote split={quote.data?.split ?? null} gross={quote.data?.gross ?? null} />
           {!waiting ? (
             <Field label="Room" hint="Optional. A room picked is kept.">
@@ -497,12 +506,15 @@ export function WalkIn({ hotel, role, room: walkRoom, onClose }: { hotel: Hotel;
 }
 
 /** A card with its head (Card, CardHeader, CardBody). */
-function Section({ title, description, children }: { title: string; description?: string; children: ReactNode }) {
+function Section({ title, description, action, children }: { title: string; description?: string; action?: ReactNode; children: ReactNode }) {
   return (
     <Card style={{ paddingHorizontal: 0, paddingVertical: 0 }}>
-      <View style={{ paddingHorizontal: space.cardX, paddingTop: 14, paddingBottom: 12, borderBottomWidth: 1, borderBottomColor: c.grey100, gap: 2 }}>
-        <Text style={t.heading} accessibilityRole="header">{title}</Text>
-        {description ? <Text style={[t.label, body, { color: c.grey500 }]}>{description}</Text> : null}
+      <View style={{ paddingHorizontal: space.cardX, paddingTop: 14, paddingBottom: 12, borderBottomWidth: 1, borderBottomColor: c.grey100, flexDirection: "row", alignItems: "flex-start", gap: 8 }}>
+        <View style={{ flex: 1, gap: 2 }}>
+          <Text style={t.heading} accessibilityRole="header">{title}</Text>
+          {description ? <Text style={[t.label, body, { color: c.grey500 }]}>{description}</Text> : null}
+        </View>
+        {action}
       </View>
       <View style={{ paddingHorizontal: space.cardX, paddingVertical: 14, gap: 16 }}>{children}</View>
     </Card>
