@@ -13,7 +13,7 @@ import type { Floor, FloorTable, TableState } from "./types";
    ══════════════════════════════════════════════════════════════════ */
 
 /** src/styles/theme.css values, named for the floor (theme.ts carries them since 4 Nov);
-    yet; every other colour here is a theme.ts token. */
+    every other colour here is a theme.ts token too. */
 const success = c.success, success50 = c.success50, success100 = c.success100;
 const yellow = c.yellow, grey400 = c.grey400;
 

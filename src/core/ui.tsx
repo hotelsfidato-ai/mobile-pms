@@ -40,7 +40,8 @@ export function Head({ eyebrow, title, under, action }: { eyebrow?: string; titl
       <View style={{ flex: 1, gap: 2 }}>
         {eyebrow ? <Text style={t.eyebrow}>{eyebrow}</Text> : null}
         <Text style={t.title} accessibilityRole="header">{title}</Text>
-        {under ? <Text style={[t.label, { color: c.grey500 }]}>{under}</Text> : null}
+        {/* text-sm's 21 px line, as the pictures (the work-orders helper, 4 Nov). */}
+        {under ? <Text style={[t.label, { color: c.grey500, lineHeight: 21 }]}>{under}</Text> : null}
       </View>
       {action}
     </View>
