@@ -3,7 +3,7 @@
    and the web's offline tier for its two writes. */
 import { ruleFor } from "../../core/offline.ts";
 import {
-  connectionOf, dateTime, dayYear, failedWords, formOf, noteOf, outcomeOf, readsAsLine, stayLines, stayOf, toldOf,
+  connectionOf, dateTime, dayYear, factsOf, failedWords, formOf, noteOf, outcomeOf, readsAsLine, stayLines, stayOf, toldOf,
   type CrsBooking, type CrsConnection, type CrsSetup,
 } from "./bookings.ts";
 
@@ -99,5 +99,14 @@ const UNLISTED = "This cannot be done offline yet. It has not been checked as sa
 eq([ruleFor("/api/hotels/5EL/crs/bookings/aB3dE/done", "POST").tier, ruleFor("/api/hotels/5EL/crs/bookings/aB3dE/done", "POST").reason],
   ["refuse", UNLISTED], "Done is refused offline");
 eq(ruleFor("/api/hotels/5EL/crs/setup", "PUT", JSON.stringify(form)).tier, "refuse", "Save is refused offline");
+
+/* ── The front door (CrsFacts.tsx): nothing for a booking the CRS did not sell ── */
+const of = (b: CrsBooking | null) => ({ connection: conn(), bookings: b ? [b] : [] });
+eq(factsOf(undefined), null, "still reading: nothing");
+eq(factsOf(of(null)), null, "not a CRS booking: nothing");
+eq(factsOf(of(booking())), { line: "CRS FH-2026-00042 · sold by Asha · no company", change: null }, "the facts");
+eq(factsOf(of(booking({ salesperson: null, company: "Tata", changeNote: "Dates moved." }))),
+  { line: "CRS FH-2026-00042 · sold by - · Tata", change: "Changed in the CRS: Dates moved." }, "an open change");
+eq(factsOf(of(booking({ changeNote: "Dates moved.", changeDone: true })))?.change, null, "a change done says nothing");
 
 console.log("crs bookings: ok");

@@ -194,3 +194,18 @@ export function failedWords(
   if (fromServer && e) return { title: e.message };
   return { title: what === "done" ? "Not marked done." : "Not saved." };
 }
+
+/* ── The front door: a booking's CRS facts (the web's CrsFacts.tsx) ─ */
+
+/** For the screen that owns a booking's panel (the front desk places it, as
+    on the web's StayDrawer): "CRS FH-2026-00042 · sold by Asha · no company",
+    and a change made in the CRS not yet done. Null for a booking the CRS did
+    not sell, so the panel draws nothing. */
+export function factsOf(answer: CrsBookings | undefined): { line: string; change: string | null } | null {
+  const b = answer?.bookings[0];
+  if (!b) return null;
+  return {
+    line: `CRS ${b.crsReference} · sold by ${b.salesperson ?? DASH} · ${b.company ?? "no company"}`,
+    change: b.changeNote && !b.changeDone ? `Changed in the CRS: ${b.changeNote}` : null,
+  };
+}

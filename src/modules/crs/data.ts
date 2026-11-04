@@ -30,3 +30,7 @@ export const markNoteDone = (code: string, crsId: string) =>
 export const getCrsSetup = (code: string) => api<CrsSetup>(`${at(code)}/setup`);
 
 export const saveCrsSetup = (code: string, form: SetupForm) => send<{ ok: true }>("PUT", `${at(code)}/setup`, form);
+
+/** One booking's CRS facts, for its own panel (the web's CrsFacts: `?reservation=<id>`). */
+export const crsFactsOf = (code: string, reservationId: string) =>
+  api<CrsBookings>(`${at(code)}/bookings?reservation=${encodeURIComponent(reservationId)}`);
