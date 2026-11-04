@@ -13,8 +13,10 @@ import {
 
 /* ══════════════════════════════════════════════════════════════════
    ONLINE CHECK-IN, THE DESK'S SIDE on a phone — the web's
-   /h/:code/online-checkin (src/modules/online-checkin/pages/Desk.tsx;
-   picture pms-shots/flows/guest-services/w-online-checkin). What a guest's own
+   /h/:code/online-checkin (src/modules/online-checkin/pages/Desk.tsx).
+   Its picture, reference/pms-shots/all/09-front-desk-online-check-in, came
+   out blank (the page had not drawn when it was taken; its words are empty),
+   so this screen follows the ported code alone. What a guest's own
    page leaves for a person: details to check against the ID (only a
    clerk's Confirm reaches guest_documents, and so Form C), spa and laundry
    requests to mark, and the room cards.
@@ -147,8 +149,9 @@ function KeptPhotos({ code }: { code: string }) {
   const rows = kept.data?.photos ?? [];
   return (
     <Section title="ID photos kept">
-      {kept.error ? <Text style={[body, { color: c.red700 }]}>{kept.error}</Text>
-        : !kept.data ? <Loading words="Reading the photos kept…" />
+      {kept.data ? <Stale error={kept.error} /> : null}
+      {!kept.data
+        ? (kept.error ? <Failed title="ID photos kept did not load" error={kept.error} onRetry={kept.reload} /> : <Loading words="Reading the photos kept…" />)
           : rows.length === 0 ? (
             <Box><Empty compact title="None kept" description="Once the desk has checked a guest's details, or added a photo at check-in, the photo is kept here for the owner, an administrator and the general manager." /></Box>
           ) : (
@@ -201,7 +204,8 @@ function RoomCards({ rooms }: { rooms: RoomCardRow[] }) {
     <View>
       <SectionHead title="Room cards" note={CARD_NOTE} action={<Btn label="Print cards for every room" disabled onPress={() => undefined} />} />
       <Text style={[t.caption, { color: c.grey600, marginBottom: 12, marginTop: -4 }]}>{ON_THE_WEBSITE}</Text>
-      <Box>
+      {/* No rooms, no list: an empty white box says nothing. */}
+      {rooms.length === 0 ? null : <Box>
         {rooms.map((r, i) => (
           <View key={r.id} style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 12, paddingHorizontal: 16, paddingVertical: 12, minHeight: 56, borderTopWidth: i ? 1 : 0, borderTopColor: c.grey100 }}>
             <View style={{ flex: 1, minWidth: 0 }}>
@@ -211,7 +215,7 @@ function RoomCards({ rooms }: { rooms: RoomCardRow[] }) {
             <Btn label={r.cardSince ? "Print a new card" : "Print a card"} a11y={`${r.cardSince ? "Print a new card" : "Print a card"} for room ${r.number}: ${ON_THE_WEBSITE}`} variant="ghost" disabled onPress={() => undefined} />
           </View>
         ))}
-      </Box>
+      </Box>}
     </View>
   );
 }
