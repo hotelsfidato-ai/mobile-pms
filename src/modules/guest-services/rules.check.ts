@@ -1,7 +1,7 @@
 /* Run: node --experimental-strip-types mobile/src/modules/guest-services/rules.check.ts
    The web's words for guest services, on small made-up rows. */
 import {
-  clearedLine, closeAsks, dateShort, dateTime, daysFrom, detailLines, foundLine, keptLine, minutes, photoLine, replyFits,
+  clearedLine, closeAsks, dateShort, dateTime, daysFrom, detailLines, foundLine, instant, keptLine, minutes, photoLine, replyFits,
   requestLine, thread, timeOf, unread, wakeLine, wakeWhen,
   type GuestRequest, type LostItem, type WaitingDetails, type WakeUpCall,
 } from "./rules.ts";
@@ -13,6 +13,10 @@ const eq = (got: unknown, want: unknown, what: string) => {
 /* Dates as the web writes them; a moment built on this machine's own clock. */
 eq(dateShort("2026-10-07"), "7 Oct 2026", "a day");
 eq(dateShort(null), "-", "no day is a dash");
+/* MGS-2: Postgres's own text, converted to what a phone's engine reads (node reads both, so test the text). */
+eq(instant("2026-10-31 07:35:58.215147+05:30"), "2026-10-31T07:35:58.215+05:30", "Postgres text as ISO");
+eq(instant("2026-10-31 07:35:58+05"), "2026-10-31T07:35:58+05:00", "an hour-only offset");
+eq(instant("2026-10-31T02:05:58.215Z"), "2026-10-31T02:05:58.215Z", "ISO kept");
 eq(dateTime(new Date(2026, 9, 17, 9, 5).toISOString()), "17 Oct 2026, 9:05 AM", "morning");
 eq(dateTime(new Date(2026, 9, 17, 0, 30).toISOString()), "17 Oct 2026, 12:30 AM", "after midnight");
 eq(dateTime(new Date(2026, 9, 17, 12, 0).toISOString()), "17 Oct 2026, 12:00 PM", "noon");

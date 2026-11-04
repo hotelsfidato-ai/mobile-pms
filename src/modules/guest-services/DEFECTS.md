@@ -20,3 +20,15 @@ None yet.
   picture match of 4 Nov).
 - **What was done:** Cancel it is disabled while `busy`, as the other two (`WakeUpCalls.tsx`).
 - **The rule it leaves:** every button on a card waits while any write on that card is in flight.
+
+### MGS-2 · A server moment in Postgres's own text would read as NaN on a phone (4 Nov)
+
+- **What happened:** `rules.ts` read every moment with `new Date(text)`. The API sends some times as
+  Postgres's own text ("2026-10-31 07:35:58.215147+05:30", seen on the KOT stations' `seenAt`,
+  MPOS-1); a browser and node read that, Hermes (the phone's engine) does not, and the card's time
+  and age would say NaN. Not seen on a guest-services read: the risk is the same reader.
+- **How found:** the mobile chat's review at the merge, after the tables helper's MPOS-1.
+- **What was done:** `toDate` reads a moment through `instant()` (the same conversion as
+  `pos/floor.ts`), with a check on the converted text (node reads both forms, so the result alone
+  proves nothing).
+- **The rule it leaves:** every server time goes through one ISO conversion before `Date`.
