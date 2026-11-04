@@ -93,7 +93,8 @@ export async function send<T>(
   method: "POST" | "PUT" | "PATCH" | "DELETE", path: string, body?: unknown, keeper?: KeyKeeper,
 ): Promise<T> {
   const text = body === undefined ? undefined : JSON.stringify(body);
-  const key = keeper ? keeper.keyFor(method, path, text) : newKey();
+  const ticket = keeper?.begin(method, path, text);
+  const key = ticket?.key ?? newKey();
   let response: Response;
   try {
     response = await fetch(`${API_URL}${path}`, {
@@ -104,7 +105,7 @@ export async function send<T>(
   } catch {
     noteUnreachable();
     /* Nothing came back: whether it was made is unknown, so its key is kept. */
-    keeper?.failed(method, path, text, 0);
+    if (ticket) keeper!.failed(ticket, 0);
     const rule = ruleFor(path, method, text);
     if (rule.tier === "refuse") throw new ApiError(503, rule.reason!);
     const entry = await enqueue({
@@ -131,10 +132,10 @@ export async function send<T>(
   }
   noteReachable();
   if (!response.ok) {
-    keeper?.failed(method, path, text, response.status);
+    if (ticket) keeper!.failed(ticket, response.status);
     throw await refused(response);
   }
-  keeper?.landed(method, path, text);
+  if (ticket) keeper!.landed(ticket);
   return (await response.json()) as T;
 }
 

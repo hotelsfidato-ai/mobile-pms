@@ -18,10 +18,12 @@ lost reply, which only the core's key can make safe. **Fixed by the mobile chat 
 is unknown: tried again unchanged before the bill could be read, the SAME key (made once); changed,
 a new key; landed or refused by the server (a 4xx other than 409/425/429), forgotten; the bill read
 again after it failed (`readBill` → `seen`), forgotten — the person sees what was made, so a guest
-paying ₹500 twice is two payments; another person signed in, never shared. `send(…, keeper)` tells
-it each outcome; `data.ts` gives every bill write one keeper (`keys.check.ts`; each rule broken once).
-A first version kept the key until it landed: the review of 4 Nov showed it would swallow a
-deliberate second ₹500 (MEMORY 13). **The rule:** a write
+paying ₹500 twice is two payments; the server's "not yet" (409, 425, 429), kept until a read begun
+30 s later; another person signed in, never shared. `send(…, keeper)` reports each outcome on the
+ticket `begin` gave it; `data.ts` keeps one keeper per stay's bill, so another stay's read changes
+nothing (`keys.check.ts`; each rule broken once). Two earlier versions were stopped by the reviews of
+4 Nov: kept until it landed, it would swallow a deliberate second ₹500 (MEMORY 13); cleared by any
+read, a 409's key went at Settle's immediate re-read, and one stay's read cleared another's. **The rule:** a write
 that moves money carries one key from the tap to the answer.
 
 ## MFIN-2 · The server's `needs` does not reach the screen (fixed 4 Nov, the core)

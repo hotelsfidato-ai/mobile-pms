@@ -143,7 +143,7 @@ function EditSheet({ code, stayId, line, onClose, onDone }: Act & { line: BillLi
   );
 }
 
-function MoveSheet({ code, line, targets, onClose, onDone }: Act & { line: BillLine; targets: StayFolio[]; onClose: () => void }) {
+function MoveSheet({ code, stayId, line, targets, onClose, onDone }: Act & { line: BillLine; targets: StayFolio[]; onClose: () => void }) {
   const [busy, setBusy] = useState<string | null>(null);
   const [refused, setRefused] = useState<string | null>(null);
 
@@ -152,7 +152,7 @@ function MoveSheet({ code, line, targets, onClose, onDone }: Act & { line: BillL
     setBusy(toFolioId);
     setRefused(null);
     try {
-      await moveLine(code, line.id, toFolioId);
+      await moveLine(code, stayId, line.id, toFolioId);
       onDone({ tone: "ok", title: "Moved", text: "Reversed on one bill and posted on the other - nothing was edited." });
     } catch (e) {
       setRefused(e instanceof Error ? e.message : "Not moved.");

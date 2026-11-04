@@ -1,4 +1,4 @@
-import { keyKeeper } from "../../core/keys";
+import { keyKeeper, type KeyKeeper } from "../../core/keys";
 import { api, currentSubject, orNull, send } from "../../core/api";
 import type { Stay } from "../../core/types";
 import type { Billable, BillLine, Folio, StayBill, StayFolio } from "./bill";
@@ -17,20 +17,27 @@ const at = (code: string, stayId: string) => `/api/hotels/${code}/stays/${stayId
 /** The stay itself (bookings: `reservation` view); null when not found. */
 export const readStay = (code: string, stayId: string) => orNull<Stay>(at(code, stayId));
 
-/** One keeper for every write on a bill (MFIN-1, core/keys.ts): the same
-    payment, check-out or posting tapped again after a lost reply, before the
-    bill could be read, keeps its key, so the server (finance postings honour
-    the key, R-13) makes it once. Once the bill is read again (readBill, below)
-    the person sees what was made and a repeat is a new one; each signed-in
-    person has their own keys. */
-const keys = keyKeeper({ who: currentSubject });
+/** One keeper per stay's bill (MFIN-1, core/keys.ts): the same payment,
+    check-out or posting tapped again after a lost reply, before that bill
+    could be read, keeps its key, so the server (finance postings honour the
+    key, R-13) makes it once. Once that bill is read again (readBill, below)
+    the person sees what was made and a repeat is a new one; another stay's
+    read changes nothing here; each signed-in person has their own keys. */
+const keepers = new Map<string, KeyKeeper>();
+const keysOf = (code: string, stayId: string) => {
+  const id = `${code}/${stayId}`;
+  let k = keepers.get(id);
+  if (!k) { k = keyKeeper({ who: currentSubject }); keepers.set(id, k); }
+  return k;
+};
 
 /** The whole bill in one read: every line, each bill's balance and the
     server's totals. No bill yet (404 `noBill`, FIN-2) is a null folio.
     Once it is back, every write that had failed before it began is known
     (keys.seen): tapped again, it is a new one. */
 export async function readBill(code: string, stayId: string) {
-  const started = Date.now();
+  const keys = keysOf(code, stayId);
+  const started = keys.mark();
   const [lines, folio, folios, bill] = await Promise.all([
     api<BillLine[]>(`${at(code, stayId)}/postings`),
     orNull<Folio>(`${at(code, stayId)}/folio`),
@@ -86,29 +93,29 @@ export interface PaymentInput {
   pan?: string; form97?: boolean; heldAsCredit?: boolean; folioId?: string;
 }
 export const takePayment = (code: string, stayId: string, input: PaymentInput) =>
-  send("POST", WRITES.payment(code, stayId), input, keys);
+  send("POST", WRITES.payment(code, stayId), input, keysOf(code, stayId));
 
 export const checkOut = (code: string, stayId: string, late: { lateReason?: string; waiveLate?: boolean }, nextDestination: string) =>
-  send("POST", WRITES.checkOut(code, stayId), { ...late, ...(nextDestination ? { nextDestination } : {}) }, keys);
+  send("POST", WRITES.checkOut(code, stayId), { ...late, ...(nextDestination ? { nextDestination } : {}) }, keysOf(code, stayId));
 
 export const issueInvoice = (code: string, stayId: string, folioId: string) =>
-  send<{ ok: boolean; number?: string; vatBill?: string | null }>("POST", WRITES.invoice(code, stayId), { folioId }, keys);
+  send<{ ok: boolean; number?: string; vatBill?: string | null }>("POST", WRITES.invoice(code, stayId), { folioId }, keysOf(code, stayId));
 
 export const reverseLine = (code: string, stayId: string, lineId: string, reason: string) =>
-  send("POST", WRITES.reverse(code, stayId, lineId), { reason }, keys);
+  send("POST", WRITES.reverse(code, stayId, lineId), { reason }, keysOf(code, stayId));
 
 export const editLine = (code: string, stayId: string, lineId: string, edit: { description: string; amount: number; reason: string }) =>
-  send("POST", WRITES.edit(code, stayId, lineId), edit, keys);
+  send("POST", WRITES.edit(code, stayId, lineId), edit, keysOf(code, stayId));
 
 export const postCharge = (code: string, stayId: string, input: {
   category: string; description: string; amount: number; taxable: boolean; businessDate: string; overLimitReason?: string;
-}) => send<{ ok: boolean; data?: { id?: string } }>("POST", WRITES.charge(code, stayId), input, keys);
+}) => send<{ ok: boolean; data?: { id?: string } }>("POST", WRITES.charge(code, stayId), input, keysOf(code, stayId));
 
 export const changeRate = (code: string, stayId: string, input: { rate: number; reason: string; includesGst?: boolean }) =>
-  send<{ ok: boolean; data?: { corrected: number } }>("POST", WRITES.rate(code, stayId), input, keys);
+  send<{ ok: boolean; data?: { corrected: number } }>("POST", WRITES.rate(code, stayId), input, keysOf(code, stayId));
 
 export const openSecondBill = (code: string, stayId: string, companyId: string) =>
-  send("POST", WRITES.secondBill(code, stayId), { billTo: "company", companyId }, keys);
+  send("POST", WRITES.secondBill(code, stayId), { billTo: "company", companyId }, keysOf(code, stayId));
 
-export const moveLine = (code: string, lineId: string, toFolioId: string) =>
-  send("POST", WRITES.move(code, lineId), { toFolioId }, keys);
+export const moveLine = (code: string, stayId: string, lineId: string, toFolioId: string) =>
+  send("POST", WRITES.move(code, lineId), { toFolioId }, keysOf(code, stayId));
