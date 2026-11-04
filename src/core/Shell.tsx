@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import { useGlobalSearchParams, usePathname } from "expo-router";
+import { router, useGlobalSearchParams, usePathname } from "expo-router";
 import { AlertTriangle, Bell, ChevronDown, Menu, Search } from "lucide-react-native";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Animated, Easing, Modal, Platform, Pressable, StyleSheet, Text, View } from "react-native";
 import { api, type Hotel, type HotelsResponse } from "./api";
 import { dateShort, daysBehind } from "./format";
-import { ON_THE_WEBSITE, ROLE_LABELS, asRole, can, coversTheFrame, initials, mayReach } from "./menu";
+import { ON_THE_WEBSITE, ROLE_LABELS, asRole, can, coversTheFrame, initials, mayReach, phoneRoute } from "./menu";
 import { roleAt, useSession } from "./session";
 import { ShellAccount } from "./ShellAccount";
 import { ShellMenu, type Modules } from "./ShellMenu";
@@ -99,7 +99,7 @@ export function Shell() {
           </Pressable>
         </View>
       </View>
-      {hotel ? <DateBehind hotel={hotel} audit={mayReach(role, "/h/:code/night-audit")} /> : null}
+      {hotel ? <DateBehind hotel={hotel} audit={mayReach(role, "/h/:code/night-audit") ? phoneRoute("/h/:code/night-audit", hotel.code) : null} /> : null}
 
       {open === "menu" ? (
         <ShellMenu
@@ -132,9 +132,9 @@ function BellButton({ unread, onPress }: { unread: number; onPress: () => void }
 }
 
 /** BusinessDateBehind.tsx: one line while the business date is behind today.
-    The web links Night audit (underlined, for a role that may open it); the
-    phone has no such screen yet, so the words stay and the reason follows. */
-function DateBehind({ hotel, audit }: { hotel: Hotel; audit: boolean }) {
+    The web links Night audit (underlined, for a role that may open it): on
+    the phone it opens Night audit (mobile/t2-night-audit, 4 Nov). */
+function DateBehind({ hotel, audit }: { hotel: Hotel; audit: string | null }) {
   const days = daysBehind(hotel);
   if (!days) return null;
   return (
@@ -143,8 +143,10 @@ function DateBehind({ hotel, audit }: { hotel: Hotel; audit: boolean }) {
       <Text style={[body, regular, { flex: 1, color: c.ink900 }]}>
         Business date {dateShort(hotel.businessDate)}, {days} {days === 1 ? "day" : "days"} behind
         {" "}today ({dateShort(hotel.today!)}). Close the days in{" "}
-        <Text style={audit ? { textDecorationLine: "underline" } : undefined}>Night audit</Text>.
-        {audit ? <Text style={{ color: c.grey500 }}> {ON_THE_WEBSITE}</Text> : null}
+        <Text
+          style={audit ? { textDecorationLine: "underline" } : undefined}
+          {...(audit ? { onPress: () => router.push(audit as never), accessibilityRole: "link" as const } : {})}
+        >Night audit</Text>.
       </Text>
     </View>
   );
