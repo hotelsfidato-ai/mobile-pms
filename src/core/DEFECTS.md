@@ -6,6 +6,23 @@ it, and the rule it leaves. Fixed entries stay.
 
 ---
 
+### MCORE-5 · A fault in the build's sign-in settings would read as the person's own mistake (4 Nov) — fixed
+
+**What happened:** a wrong Firebase setting (invalid-api-key, configuration-not-found,
+operation-not-allowed, app-not-authorized) was told as "That email and password do not match."
+**How found:** the signin helper, reading `firebase.ts` against the installed SDK 12.18.0's codes.
+**What was done:** those codes say the build's sign-in is not set up correctly, naming the code; with
+no settings at all the form is off and names the missing `EXPO_PUBLIC_FIREBASE_*` values; Firebase's
+start is guarded so bad settings never white-screen the app (`firebase.ts`, `signin.check.ts`).
+**The rule:** a fault in the build's settings is never told to the person as their own mistake.
+
+### MCORE-4 · A kept session flashed the sign-in form at start (4 Nov) — fixed
+
+**What happened:** `Checking` was imported in `app/index.tsx` but never drawn, so while Firebase read
+the kept session the form showed, then a signed-in person jumped in. **How found:** the signin
+helper, reading the code. **What was done:** `app/index.tsx` draws `Checking` while `starting`.
+**The rule:** a state you import must be drawn.
+
 ### MCORE-3 · The menu lit Arrivals on every front-desk screen (4 Nov) — fixed
 
 **What happened:** the menu lit an entry when the screen's route started with the entry's route, as

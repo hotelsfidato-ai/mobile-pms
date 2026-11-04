@@ -5,41 +5,39 @@ Kept by the mobile chat; brought up to date at every merge. Each slice is built 
 its own scratch database, its own ports), and merged into `mobile/app` by the mobile chat after
 review and green gates.
 
-## Screens, at a glance (31 Oct)
+## Screens, at a glance (4 Nov, after the cloud session)
 
-**The picture is the spec (M-11):** every native screen is matched to the PMS's own phone view,
-`../.local/pms-shots/` (today's PMS at 390 px: `all\` 81 screens, `new\` 63 more, `roles\` each role's
-home, menu and account menu), and compared side by side before it merges.
+**All of Tier 1 is merged into `main`** (`b628aae`, ALL GATES GREEN on each merge commit): the nine
+branches the helpers left on 31 Oct were finished in the cloud (M-12), one copy each, and merged.
+**Nothing was opened on a screen** in the cloud (no API, no Expo there): every picture comparison
+below is the code read against the picture (`reference/pms-shots/`), never seen running. The PC
+opens them next.
 
 | | Screens | |
 |---|---|---|
-| ✅ Built and merged, being re-matched to the pictures | **7** | Sign in (development) · All properties · Dashboard · Rooms · Report a repair · Out of service · The order (with paying and printing) |
-| 🔨 Written in its copy, not merged | **2** | Tables · Order pad (with a dish's sheet) |
-| 🔨 Being built now | **12** | Arrivals · In house · Walk-in · Check-in · A stay's bill and check-out · Kitchen · Work orders · Guest requests · A request · Wake-up calls · Online check-ins (desk) · Real sign-in |
-| 🔨 New: the app's frame | **2** | The menu for each role · Notifications (with the top bar, the business-date banner and the account menu, which sit on every screen) |
+| ✅ Matches its picture (only the phone's own rules differ: 44 px touch, Back until the frame, "On the website for now") | **13** | All properties · Dashboard · Rooms · Tables · Arrivals (Today, Upcoming) · In house (now, Due out) · Walk-ins record · Kitchen · Work orders · Guest requests · Wake-up calls · Lost property · Notifications |
+| 🟠 Differences left, each listed in its MODULE.md | **3** | Walk-in (picture 14: no server quote for GST and Due, R-22) · Messages from guests (picture 17 shows the sent-messages record, not on the phone) · the menu for each role (6 of 11 match outright; 5 lack one System entry the pictures never show open) |
+| ⬜ No usable picture yet (built from the ported code) | **12** | Sign in · Report a repair · Out of service · The order (with paying, printing) · Order pad · A stay · Check in · Take a walk-in · A stay's bill and check-out · Online check-in (picture blank) · Guest services hub · the account menu (pictures never opened it) |
 | ⏳ Tier 2, planned (one copy each, in waves) | **15** | below |
 | ◻ Tier 3, desk set-up: kept on the website unless the owner says otherwise | 9 | below |
 
-**Tier 1: 23 screens; 7 merged, 2 written, 14 being built.** The first full comparison with the
-pictures comes when these helpers report.
+**Tier 1: 28 screens on `main`. 13 match their pictures, 3 have differences left, 12
+have no usable picture.** Real sign-in is built and waits for the owner's public settings (M-10).
 
-## Tier 1 — every slice, its copy
+## Tier 1 — every slice (all merged, 4 Nov)
 
-| Slice | Screens | Copy · branch | DB · API · Expo | Status |
-|---|---|---|---|---|
-| 1 Owner's figures | Sign in (dev), All properties, Dashboard | merged | `fidato_mobile` · 8860 · 8081 | ✅ owner's look: "it's good" |
-| 2 Housekeeping | Rooms, Report a repair, Out of service | merged | — | ✅ owner's look: "it's good" |
-| 3 Waiter | Tables + the pad | `pos-tables` · `mobile/pos-tables` | `_hk` · 8861 · 8082 | 🔨 `7d8b6cd1`, matching today's picture |
-| 3 Waiter | The order | merged | — | ✅ merged `14a4b25b` |
-| 3 Waiter | Paying, printing (in the order) | merged | — | ✅ merged `29337c78` |
-| 4a Reception | Arrivals, In house, Walk-in, Check-in | `front-desk` · `mobile/front-desk` | `_desk` · 8864 · 8085 | ⏳ restarting |
-| 4b Reception money | A stay's bill, payments, check-out | `folio` · `mobile/folio` | `_folio` · 8865 · 8086 | ⏳ restarting |
-| 5 Real sign-in | Sign in, Switch hotel | `signin` · `mobile/signin` | `_signin` · 8869 · 8090 | ⏳ started 17 Oct (M-10); the owner's public settings to come |
-| 6 Kitchen | Kitchen | `kitchen` · `mobile/kitchen` | `_kitchen` · 8866 · 8087 | ⏳ restarting |
-| 7 Maintenance | Work orders | `maintenance` · `mobile/maintenance` | `_maint` · 8867 · 8088 | ⏳ restarting |
-| 8 Guest services | Requests, a request, wake-up calls, online check-ins | `guest-services` · `mobile/guest-services` | `_gs` · 8868 · 8089 | ⏳ restarting |
-| core | The frame: top bar, banner, each role's menu, notifications, account menu, switch hotel | `shell` · `mobile/shell` | `_hk3` · 8863 · 8084 | 🔨 started 31 Oct |
-| 1, 2 again | Dashboard, All properties, Rooms and its two screens, to today's pictures | `align` · `mobile/align` | `_hk2` · 8862 · 8083 | 🔨 started 31 Oct |
+| Slice | Screens | Merged | Picture match (4 Nov, by reading) |
+|---|---|---|---|
+| 1 Owner's figures | Sign in (dev), All properties, Dashboard | ✅ 15 Oct; re-matched `b628aae` | All properties, Dashboard match; each role lands on its picture's first screen (MRP-1) |
+| 2 Housekeeping | Rooms, Report a repair, Out of service | ✅ 15 Oct; re-matched `b628aae` | Rooms matches; the two forms have no picture |
+| 3 Waiter | Tables, the pad, the order (paying, printing) | ✅ `40f66e0` | Tables matches (round printer on a tile); pad and order: no picture |
+| 4a Reception | Arrivals, In house, Walk-ins, Take a walk-in, Walk-in, a stay, Check in | ✅ `5e00ff1` | 04-08 match; walk-in 5 differences; stay and Check in: no picture here |
+| 4b Reception money | A stay's bill, payments, check-out | ✅ `6ff663a` | no picture shows the bill |
+| 5 Real sign-in | Sign in, staying signed in, sign-out | ✅ `99c6e42` | no picture; waits for the owner's settings |
+| 6 Kitchen | Kitchen | ✅ `e90e524` | matches ("not live" until the live stream; Set up on the website) |
+| 7 Maintenance | Work orders | ✅ `da301c3` | matches (Record the cost needs a picker package) |
+| 8 Guest services | Hub, Requests, Wake-up calls, Lost property, Online check-in, Messages | ✅ `1ef35c3` | 3 of 6 match (only empty states pictured) |
+| core | The frame: top bar, banner, each role's menu, notifications, account menu | ✅ `f908380` | Notifications matches; menus 6 of 11; account menus not pictured |
 
 ## Tier 2 — managers on the move (one copy each, started as Tier 1 copies finish)
 

@@ -6,13 +6,42 @@
 
 ## 4–5 November 2026 — read this first: the work moves to the cloud (M-12)
 
-**The cloud session, 4 Nov (latest):** step 1 done — `npm ci` and `bash scripts/gates.sh` ALL
-GATES GREEN on `main` `dafdea8`, the script unchanged (its logs and Metro cache land in
-`/home/user/.local/`, outside the repository). **The PMS's code cannot be read from the cloud**
-(clone and attach both refused): screens are built from `reference/pms-shots/` alone, never
-inventing a route, field, rule or figure. The 9 branches each type-check, pass their own checks
-and merge into `main` without a conflict (probed, not yet gated or reviewed). **Next:**
-`mobile/pos-tables`, once the owner says yes. Nothing was opened on a screen.
+**The cloud session, 4 Nov (latest) — read this first.**
+- **All of Tier 1 is on `main`**: the nine branches are finished, reviewed and merged, each merge gated
+  green (CHANGELOG 4 Nov). `docs/STATUS.md`: 28 screens, **13 match their pictures, 3 with
+  differences left, 12 with no usable picture**, all by reading code against the pictures.
+- **Nothing was opened on a screen.** The PC opens every screen next, on the phone or at 375 × 812,
+  with each role, including the held path (MEMORY 1: warm both bundles before the phone link).
+- The PMS's code cannot be read from the cloud (clone and attach refused); the pictures and the
+  ported code were the spec. The remote `mobile/*` branches are stale; `main` has everything.
+- Each picture folder has its own `index.json` (MEMORY 6).
+
+**Questions waiting for the owner (each with a recommendation)**
+1. **Phone-side previews:** the pad's "before tax" and the walk-in's nightly rate after a discount
+   are worked out on the phone, as the web does (only previews; the server prices what is sent).
+   *Keep, as the web (M-9).*
+2. **Paise on a stay's bill** (₹7,582.50, where the web's headline shows ₹7,582). *Keep paise.*
+3. **Back / Sign out on module screens** now that the frame is merged. *Remove where the frame's
+   account menu covers it, as the pictures.*
+4. **Core changes asked by the helpers:** MFIN-1 (`send()` takes a key kept from the tap, so a lost
+   reply never makes a second payment), MFIN-2 (`ApiError` carries `needs`), `Head`'s line height,
+   one shared `instant()` and the web's five missing colour tokens in the core. *Yes, by the mobile
+   chat, Opus, gated.*
+5. **Packages** (each asked when its control is built; until then "On the website for now"):
+   `expo-image-picker` ~57.0.20 (Record the cost), `@react-native-community/datetimepicker` 9.1.0
+   (wake-up day and time), `qrcode` 1.5.4 (room cards; the web's version). *Not now.*
+6. **ID photos on the phone** (Show, Remove). *Keep on the website (DPDP).*
+7. **New pictures on the PC** (`capture.mjs`): the account menu opened for each role, Online
+   check-in with a guest waiting, a stay's panel and Bill tab, Check in, Settle, check-out, Report a
+   repair, Out of service, the System section open. *Yes, before the next re-match.*
+8. **The sign-in settings** (M-10): `EXPO_PUBLIC_FIREBASE_API_KEY`, `_PROJECT_ID`, `_APP_ID`
+   (needed), `_AUTH_DOMAIN` (recommended); never in a file. *Tried first against the local API.*
+9. Smaller, recommended as the helpers said: the kitchen says "not live" until a live stream;
+   Switch hotel keeps the web's in-place switch; the desk's Rooms grid (`/h/:code/stay`) comes to the
+   phone later in its lane; a work order's timestamps shown as the hotel's day once the PMS confirms
+   the form.
+
+**Next:** the PC's look at every screen; then Tier 2, only after the owner's yes.
 
 **Where it is now**
 - The app's own repository: **`hotelsfidato-ai/mobile-pms`** (public, the owner's choice). `main` is

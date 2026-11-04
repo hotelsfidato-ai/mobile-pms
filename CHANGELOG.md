@@ -5,6 +5,47 @@ commits.
 
 ---
 
+## 2026-11-04 · all of Tier 1 merged: the nine branches finished in the cloud (M-12)
+
+**Asked for:** "start all and complete all the pending screens".
+
+**Shipped** (merged into `main`, each merge gated green on its own commit, pushed; tip `b628aae`
+before these notes). Nine Opus helpers, one copy each (`/home/user/wt/<name>/mobile`, its own gate
+logs and Metro cache), one gate run at a time; the mobile chat reviewed and merged each:
+- **work orders** `da301c3` (MHK-W1 a timestamp read as its day, MHK-W2 one tap one change)
+- **kitchen** `e90e524` (the pass scrolls as one page, MPOS-K1; a column counts its struck dishes)
+- **a stay's bill** `6ff663a` (MFIN-4: no rounded, clamped or dashed figure the server did not send;
+  every write refused offline in the web's sentence, checked; route `[id]`, MFIN-3)
+- **Tables and the pad** `40f66e0` (MPOS-1 Postgres time on a phone, MPOS-2, MPOS-3 one tap one
+  round; at the merge: a tile prints from the picture's round printer, `PrintBill round`)
+- **front desk** `5e00ff1` (MFD-3 the stay's foot and Due out are the server's figures; MFD-4 to -7)
+- **guest services** `1ef35c3` (MGS-1; at the merge MGS-2: a server moment read as Hermes can)
+- **the frame** `f908380` (every role's menu to its picture, one entry lit, MCORE-3; each menu link
+  checked to land on a real route file)
+- **real sign-in** `99c6e42` (MCORE-4, MCORE-5: with no settings the form is off and names the
+  missing `EXPO_PUBLIC_FIREBASE_*`; the dev-login gate broken once and seen failing)
+- **slices 1-2 re-matched** `b628aae` (the Dashboard's work tiles open the desk; at the merge MRP-1:
+  each role lands on its picture's first screen, the owner on All properties)
+- Notes: `docs/STATUS.md` (28 screens: 13 match their pictures, 3 with differences left, 12 with no
+  usable picture), `docs/api-requests.md` R-16 to R-24, `src/core/DEFECTS.md` MCORE-4 and -5,
+  MEMORY 6 to 12, `.gitignore` ignores `.env`.
+
+**Proved:** ALL GATES GREEN on every merge commit (types, every check, both phone bundles, no test
+sign-in, the bundle's routes exactly `app/`); each helper broke its new rules once and saw the check
+fail. The mobile chat's review: a scan of every diff (bare `fetch`, `?? 0`, `Math.*`, sums, writes
+not through `send()`, `.env`, packages) and a read of every flagged money line.
+
+**Not proved:** nothing was opened on a screen, a phone or a preview; no API was run; no held,
+refused or sent path was exercised. Every picture comparison is code read against the picture.
+
+**Found:** the helpers' own `git push` of their branches was refused by the session's permission
+check; their commits reached GitHub through `main`. The remote `mobile/*` branches are therefore
+stale (31 Oct); `main` holds all of the work.
+
+**Left open:** the owner's questions (HANDOVER); Tier 2, after the owner's yes.
+
+---
+
 ## 2026-11-04 · the cloud session's first steps (M-12): the gates run here; the PMS cannot be read
 
 **Asked for:** `npm ci` and the gates on `main`; read the PMS's code; then the 9 branches, one at

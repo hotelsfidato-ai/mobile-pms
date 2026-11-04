@@ -5,6 +5,58 @@ module's `DEFECTS.md` instead. Read the newest first.
 
 ---
 
+### 12 · A picture can be blank, or show a press that never happened (4 Nov)
+
+`all/09-front-desk-online-check-in` is a blank page with an empty `.txt`; every `r-<role>-account`
+picture equals its `-home` (the avatar's press never opened the menu); `02-home-rooms` is the desk's
+Rooms grid, not the housekeeping board. **The rule:** before matching, check the `.txt` is not empty,
+the pressed state really differs from the page before it, and the picture's path in its folder's
+`index.json` is the screen you think.
+
+### 11 · A check whose test data makes a wrong formula right proves nothing (4 Nov)
+
+The desk's `footOf` check passed with Charged = balance + paid, because the made-up bill had total =
+balance + paid. **The rule:** choose data where the server's figure differs from any sum the phone
+could make, then break the rule once and see it fail.
+
+### 10 · A route parameter with a capital is invisible to the routes gate (4 Nov)
+
+`[stayId]` never matches `gates.sh`'s `\[[a-z]+\]`, so the bundle-routes check cannot see it (MFD-1,
+MFIN-3: twice). **The rule:** route parameters are lower case (`[id]`, `[code]`); a brief names them
+so.
+
+### 9 · A module's own formatter or clamp gets round the figure rule (4 Nov)
+
+On a stay's bill a whole-rupee formatter showed ₹7,583 for ₹7,582.50 and "₹0 still owed" for twenty
+paise; `Math.max(balance, 0)` turned an overpaid bill into "₹0 outstanding" (MFIN-4). **The rule:** a
+figure is shown as the server sent it — never rounded, never clamped; a dash only for "not sent";
+review every `Math.*`, `?? 0` and local formatter on a money screen.
+
+### 8 · One tap must be one write: `send()` mints a key per call (4 Nov)
+
+A button guarded only by a `busy` state can be tapped twice before the state reaches it, and each
+call to `send()` makes a new idempotency key, so the server sees two writes (MPOS-3, MHK-W2).
+**The rule:** latch a write at the tap (`useRef`), grey the button while it is on its way; a key
+that outlives a lost reply needs the core change MFIN-1.
+
+### 7 · The phone's engine reads only ISO times; node reads more (4 Nov)
+
+The API sends some times as Postgres's text ("2026-10-31 07:35:58.215147+05:30"). Node and a browser
+read it, Hermes answers NaN — so a `.check.ts` passes while the phone shows "NaN" (MPOS-1, MGS-2,
+R-18). **The rule:** every server time goes through one ISO conversion (`instant()`) before `Date`,
+and the check tests the converted text, not only the result.
+
+### 6 · A brief named a file wrong because only the top folder was looked at (4 Nov)
+
+The mobile chat's cloud brief told nine helpers "there is no index.json" after listing only
+`reference/pms-shots/`; each of `all/`, `new/` and `roles/` has one. **The rule:** before a brief
+says a file is or is not there, search the whole tree (`find`), not one folder.
+
+Also learnt in the cloud (4 Nov), not mistakes: an `EXPO_PUBLIC_*` value reaches the bundle only
+when written out in full as `process.env.EXPO_PUBLIC_X` (never `process.env[name]`), and Metro must
+start with `--clear` after it changes; a helper's `git push` of its own branch was refused by the
+session's permission check, while the mobile chat's merge into `main` went through.
+
 ### 5 · Copies that share node_modules must not share Metro's cache (15 Oct)
 
 Three helper copies at once, one `%TEMP%\metro-cache`: expo-router's route list was cached for
