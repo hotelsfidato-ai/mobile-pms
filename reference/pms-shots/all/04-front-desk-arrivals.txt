@@ -1,0 +1,336 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Arrivals
+17 expected
+
+Expected on Sunday, 11 October 2026. Check in from the row - the panel opens over this list.
+
+Today17
+Upcoming
+17 of 17
+-
+Due in
+
+P6MSG Guest
+
+P6MSG-OWN
+
+Type
+Superior
+Plan
+EP
+Source
+Fidato Hotels
+Departure
+12 Oct 2026
+Nights
+1
+Rate
+₹1,000
+-
+Due in
+
+P6MSG Guest
+
+P6MSG-OTA
+
+Type
+Superior
+Plan
+EP
+Source
+P6MSG Expedia
+Departure
+12 Oct 2026
+Nights
+1
+Rate
+₹1,000
+201
+No show
+
+Rohit Deshpande
+
+FH-2608-4866
+
+Type
+Superior
+Plan
+CP
+Source
+go-MMT
+Departure
+13 Oct 2026
+Nights
+2
+Rate
+₹3,434
+203
+No show
+
+Meera Iyer
+
+FH-2608-4867
+
+Type
+Superior
+Plan
+EP
+Source
+go-MMT
+Departure
+14 Oct 2026
+Nights
+3
+Rate
+₹2,939
+204
+In house
+
+A3 Test Desai
+
+FH-5EL-2610-5049
+
+Type
+Superior
+Plan
+EP
+Source
+Website
+Departure
+13 Oct 2026
+Nights
+2
+Rate
+₹4,099
+207
+Due in
+
+Sneha Kulkarni
+
+FH-2608-4869
+
+Type
+Superior
+Plan
+EP
+Source
+go-MMT
+Departure
+14 Oct 2026
+Nights
+3
+Rate
+₹3,170
+208
+Due in
+
+Imran Shaikh
+
+FH-2608-4870
+
+Type
+Superior
+Plan
+EP
+Source
+Agoda
+Departure
+14 Oct 2026
+Nights
+3
+Rate
+₹3,378
+209
+In house
+
+A3 Test Iyer
+
+FH-5EL-2610-5050
+
+Type
+Superior
+Plan
+EP
+Source
+Agoda
+Departure
+13 Oct 2026
+Nights
+2
+Rate
+₹4,099
+210
+Due in
+
+Arjun Nair
+
+FH-2608-4868
+
+Type
+Superior
+Plan
+CP
+Source
+Expedia
+Departure
+12 Oct 2026
+Nights
+1
+Rate
+₹2,648
+301
+In house
+
+A3 Test Smith
+
+FH-5EL-2610-5046
+
+Type
+Deluxe
+Plan
+EP
+Source
+WhatsApp
+Departure
+13 Oct 2026
+Nights
+2
+Rate
+₹3,699
+302
+Checked out
+
+A5 Test Wagh
+
+FH-5EL-2610-5048
+
+Type
+Deluxe
+Plan
+EP
+Source
+Walk-in
+Departure
+12 Oct 2026
+Nights
+1
+Rate
+₹3,699
+302
+Checked out
+
+A5 Test Wagh
+
+FH-5EL-2610-5059
+
+Type
+Deluxe
+Plan
+EP
+Source
+Walk-in
+Departure
+12 Oct 2026
+Nights
+1
+Rate
+₹3,699
+303
+In house
+
+A5 Test Rane
+
+FH-5EL-2610-5058
+
+Type
+Deluxe
+Plan
+EP
+Source
+Walk-in
+Departure
+13 Oct 2026
+Nights
+2
+Rate
+₹3,699
+303
+Checked out
+
+A5 Test Rane
+
+FH-5EL-2610-5047
+
+Type
+Deluxe
+Plan
+EP
+Source
+Walk-in
+Departure
+12 Oct 2026
+Nights
+1
+Rate
+₹3,699
+305
+In house
+
+A4 Test Kulkarni
+
+FH-5EL-2610-5057
+
+Type
+Deluxe
+Plan
+EP
+Source
+Walk-in
+Departure
+13 Oct 2026
+Nights
+2
+Rate
+₹3,699
+305
+Checked out
+
+A4 Test Kulkarni
+
+FH-5EL-2610-5056
+
+Type
+Deluxe
+Plan
+EP
+Source
+Walk-in
+Departure
+12 Oct 2026
+Nights
+1
+Rate
+₹3,699
+307
+In house
+
+A3 Test Gokhale
+
+FH-5EL-2610-5055
+
+Type
+Deluxe
+Plan
+CP
+Source
+Walk-in
+Departure
+13 Oct 2026
+Nights
+2
+Rate
+₹3,699

@@ -5,11 +5,12 @@
    chat's own local API), else the live API. Expo writes the value in when
    it bundles; no file holds it.
 
-   WHO: on a development run only, the API's development header names a
-   test person (the API's ALLOW_DEV_AUTH, the web's "Development only"
-   buttons). `__DEV__` is false in every release build, so a build that
-   reaches a phone never sends it, and the live API refuses it anyway.
-   Email and password through Firebase come with the live setup.
+   WHO: the signed-in person's Firebase token on every request (the web's
+   authHeaders). On a development run only, the API's development header
+   names a test person instead (the API's ALLOW_DEV_AUTH, the web's
+   "Development only" buttons). `__DEV__` is false in every release build,
+   so a build that reaches a phone never sends it, and the live API refuses
+   it anyway.
 
    WRITES go through `send`: the web's tiers (./offline.ts) decide what is
    held when nothing leaves the phone, and the idempotency key is minted at
@@ -17,6 +18,7 @@
    make a second repair.
    ══════════════════════════════════════════════════════════════════ */
 
+import { auth } from "./firebase";
 import { newKey, noteReachable, noteUnreachable, ruleFor, type OutboxEntry } from "./offline";
 import { enqueue } from "./outbox";
 
@@ -28,9 +30,17 @@ export const setDevSubject = (subject: string | null) => {
 };
 
 /** The person who acted, stamped on a held change (the web's currentSubject). */
-export const currentSubject = () => (__DEV__ && devSubject ? devSubject : "");
+export const currentSubject = () => (__DEV__ && devSubject ? devSubject : auth?.currentUser?.uid ?? "");
 
-const who = (): Record<string, string> => (__DEV__ && devSubject ? { "x-dev-staff-id": devSubject } : {});
+/* Awaited inside each request's try, as on the web: offline with an expired
+   token, getIdToken fails as the request would, and a write is held, not lost. */
+async function who(): Promise<Record<string, string>> {
+  if (__DEV__ && devSubject) return { "x-dev-staff-id": devSubject };
+  const user = auth?.currentUser;
+  /* getIdToken refreshes when the token is near expiry, so a clerk on a
+     twelve-hour shift is not signed out mid-check-in. */
+  return user ? { authorization: `Bearer ${await user.getIdToken()}` } : {};
+}
 
 export class ApiError extends Error {
   constructor(readonly status: number, message: string) {
@@ -59,7 +69,7 @@ async function refused(response: Response): Promise<ApiError> {
 export async function api<T>(path: string): Promise<T> {
   let response: Response;
   try {
-    response = await fetch(`${API_URL}${path}`, { headers: who() });
+    response = await fetch(`${API_URL}${path}`, { headers: await who() });
   } catch {
     noteUnreachable();
     throw new ApiError(0, __DEV__
@@ -80,7 +90,7 @@ export async function send<T>(method: "POST" | "PUT" | "PATCH" | "DELETE", path:
   try {
     response = await fetch(`${API_URL}${path}`, {
       method,
-      headers: { ...who(), "content-type": "application/json", "idempotency-key": key },
+      headers: { ...(await who()), "content-type": "application/json", "idempotency-key": key },
       ...(text === undefined ? {} : { body: text }),
     });
   } catch {
@@ -115,10 +125,10 @@ export async function send<T>(method: "POST" | "PUT" | "PATCH" | "DELETE", path:
 }
 
 /** One held change, sent again with the SAME key it was given at the tap. */
-export function sendHeld(entry: OutboxEntry): Promise<Response> {
+export async function sendHeld(entry: OutboxEntry): Promise<Response> {
   return fetch(`${API_URL}${entry.path}`, {
     method: entry.method,
-    headers: { ...who(), "content-type": "application/json", "idempotency-key": entry.idempotencyKey },
+    headers: { ...(await who()), "content-type": "application/json", "idempotency-key": entry.idempotencyKey },
     ...(entry.body === undefined ? {} : { body: entry.body }),
   });
 }
@@ -149,6 +159,6 @@ export interface Hotel {
 }
 /** src/lib/api.ts HotelsResponse. */
 export interface HotelsResponse {
-  scope: { staffId: string; fullName: string; isGroupAdmin: boolean; hotels: Array<{ hotelId: string; role: string }> };
+  scope: { staffId: string; email: string; fullName: string; isGroupAdmin: boolean; hotels: Array<{ hotelId: string; role: string }> };
   hotels: Hotel[];
 }

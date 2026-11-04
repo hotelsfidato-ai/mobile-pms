@@ -4,7 +4,54 @@
 
 ---
 
-## 15 October 2026 — read this first
+## 4–5 November 2026 — read this first: the work moves to the cloud (M-12)
+
+**The cloud session, 4 Nov (latest):** step 1 done — `npm ci` and `bash scripts/gates.sh` ALL
+GATES GREEN on `main` `dafdea8`, the script unchanged (its logs and Metro cache land in
+`/home/user/.local/`, outside the repository). **The PMS's code cannot be read from the cloud**
+(clone and attach both refused): screens are built from `reference/pms-shots/` alone, never
+inventing a route, field, rule or figure. The 9 branches each type-check, pass their own checks
+and merge into `main` without a conflict (probed, not yet gated or reviewed). **Next:**
+`mobile/pos-tables`, once the owner says yes. Nothing was opened on a screen.
+
+**Where it is now**
+- The app's own repository: **`hotelsfidato-ai/mobile-pms`** (public, the owner's choice). `main` is
+  the PMS worktree's `mobile/` folder with its history. The PMS itself is not here and stays
+  private: never push to it, never copy its code into this repository.
+- Screens and slices: `docs/STATUS.md` (31 Oct). **On `main`, merged:** Sign in (development), All
+  properties, Dashboard, Rooms, Report a repair, Out of service, the order (with paying and printing).
+- **Unfinished, one branch each**, pushed as the helpers left them (never gated, not reviewed):
+  `mobile/pos-tables` (Tables, the pad) · `mobile/front-desk` (Arrivals, In house, Walk-in,
+  Check-in) · `mobile/folio` (a stay's bill, payments, check-out) · `mobile/kitchen` ·
+  `mobile/maintenance` (work orders) · `mobile/guest-services` · `mobile/shell` (the frame: top bar,
+  business-date banner, each role's menu, notifications, account menu) · `mobile/signin` (real
+  Firebase sign-in, M-10; the owner's public settings still to come) · `mobile/align` (slices 1–2
+  re-matched to the pictures). `folio`, `maintenance` and `shell` end with a "WIP" commit: what the
+  helper had not saved when it stopped on 31 Oct. A branch's last commits say where it stopped.
+- **The spec (M-11):** `reference/pms-shots/` — 158 pictures of today's PMS at 390 px, each with its
+  words (`all/` 81 screens by menu, `new/` 44 addresses added since, `roles/` each role's home, menu
+  and account menu), on demo data. `reference/helper-rules-31oct.md`: the rules every slice is built
+  by (its paths are the PC's).
+
+**What the cloud cannot do** (it needs the PC): run the PMS's API or database, open a screen with
+data, take a new picture (`capture.mjs` needs the PMS website), give the owner the phone link, an
+Expo build (M-8: the owner's yes per build). The web's code each screen ports is in the private
+`hotelsfidato-ai/pms`: if it cannot be read, say so and build from the pictures and their words,
+never inventing a route, a field or a rule.
+
+**What next, in order**
+1. `npm ci`, then `bash scripts/gates.sh` on `main`: proves the gates run in the cloud.
+2. Finish each unfinished branch to its pictures, gates green on it, reviewed (Opus for money,
+   rights and the offline path), merged into `main` — as AGENTS.md says the mobile chat does.
+3. Then Tier 2 (`docs/STATUS.md`).
+
+**Unchanged:** no decision without the owner's yes; no new package without it; never a `.env`; a
+dash, never a zero; the API decides; nothing goes to the PMS repository; no deploy, no store
+upload, no Expo build. Every mistake in `MEMORY.md`, every defect in its module's `DEFECTS.md`.
+
+---
+
+## 15 October 2026
 
 **Where it stands**
 - A **separate system** (M-2), rebuilt natively for phones with React Native + Expo (M-3). Rules:

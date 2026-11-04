@@ -6,6 +6,19 @@ it, and the rule it leaves. Fixed entries stay.
 
 ---
 
+### MCORE-3 · The menu lit Arrivals on every front-desk screen (4 Nov) — fixed
+
+**What happened:** the menu lit an entry when the screen's route started with the entry's route, as
+the web's `matchPrefix` does. The web's addresses never nest (`/h/:code/arrivals`,
+`/h/:code/in-house`), but the phone's do: Arrivals is `/front-desk/:code` and In house, Walk-ins and
+the stay all sit under it. On In house both Arrivals and In house were lit and Arrivals' Today and
+Upcoming opened under it. **How it was found:** reading `ShellMenu.tsx` against the reception
+picture while adding the front desk's routes (shell helper, 4 Nov). **What was done:** one entry is
+lit, chosen by `menu.ts` `activeRoute`: the exact route (with its `?view=` tab), else the same
+screen without its query, else the longest prefix; `menu.check.ts` pins it and fails when the first
+prefix is taken instead (seen). **The rule:** a web rule that leans on the web's addresses is
+re-checked against the phone's routes before it is ported.
+
 ### MCORE-2 · One Metro cache for every copy: a preview served another copy's screens (15 Oct) — fixed
 
 **What happened:** the helpers' copies share `mobile/node_modules` through a junction, and every

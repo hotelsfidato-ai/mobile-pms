@@ -1,0 +1,321 @@
+[
+ {
+  "name": "r-owner-home",
+  "to": "/all-properties",
+  "as": "dev-owner",
+  "path": "/all-properties",
+  "title": "All properties",
+  "height": 2895,
+  "ok": true
+ },
+ {
+  "name": "r-owner-menu",
+  "to": "/all-properties",
+  "as": "dev-owner",
+  "pressed": true,
+  "path": "/all-properties",
+  "title": "All properties",
+  "height": 2895,
+  "ok": true
+ },
+ {
+  "name": "r-owner-account",
+  "to": "/all-properties",
+  "as": "dev-owner",
+  "pressed": true,
+  "path": "/all-properties",
+  "title": "All properties",
+  "height": 2895,
+  "ok": true
+ },
+ {
+  "name": "r-gm-home",
+  "to": "/",
+  "as": "dev-gm",
+  "path": "/",
+  "title": "Dashboard",
+  "height": 2681,
+  "ok": true
+ },
+ {
+  "name": "r-gm-menu",
+  "to": "/",
+  "as": "dev-gm",
+  "pressed": true,
+  "path": "/",
+  "title": "Dashboard",
+  "height": 2681,
+  "ok": true
+ },
+ {
+  "name": "r-gm-account",
+  "to": "/",
+  "as": "dev-gm",
+  "pressed": true,
+  "path": "/",
+  "title": "Dashboard",
+  "height": 2681,
+  "ok": true
+ },
+ {
+  "name": "r-hotel-manager-home",
+  "to": "/",
+  "as": "dev-hotel-manager",
+  "path": "/",
+  "title": "Dashboard",
+  "height": 2681,
+  "ok": true
+ },
+ {
+  "name": "r-hotel-manager-menu",
+  "to": "/",
+  "as": "dev-hotel-manager",
+  "pressed": true,
+  "path": "/",
+  "title": "Dashboard",
+  "height": 2681,
+  "ok": true
+ },
+ {
+  "name": "r-hotel-manager-account",
+  "to": "/",
+  "as": "dev-hotel-manager",
+  "pressed": true,
+  "path": "/",
+  "title": "Dashboard",
+  "height": 2681,
+  "ok": true
+ },
+ {
+  "name": "r-reception-home",
+  "to": "/",
+  "as": "dev-desk",
+  "path": "/",
+  "title": "Dashboard",
+  "height": 2681,
+  "ok": true
+ },
+ {
+  "name": "r-reception-menu",
+  "to": "/",
+  "as": "dev-desk",
+  "pressed": true,
+  "path": "/",
+  "title": "Dashboard",
+  "height": 2681,
+  "ok": true
+ },
+ {
+  "name": "r-reception-account",
+  "to": "/",
+  "as": "dev-desk",
+  "pressed": true,
+  "path": "/",
+  "title": "Dashboard",
+  "height": 2681,
+  "ok": true
+ },
+ {
+  "name": "r-housekeeping-home",
+  "to": "/h/5EL/housekeeping",
+  "as": "dev-housekeeping",
+  "path": "/h/5EL/housekeeping",
+  "title": "Housekeeping",
+  "height": 4505,
+  "ok": true
+ },
+ {
+  "name": "r-housekeeping-menu",
+  "to": "/h/5EL/housekeeping",
+  "as": "dev-housekeeping",
+  "pressed": true,
+  "path": "/h/5EL/housekeeping",
+  "title": "Housekeeping",
+  "height": 4505,
+  "ok": true
+ },
+ {
+  "name": "r-housekeeping-account",
+  "to": "/h/5EL/housekeeping",
+  "as": "dev-housekeeping",
+  "pressed": true,
+  "path": "/h/5EL/housekeeping",
+  "title": "Housekeeping",
+  "height": 4505,
+  "ok": true
+ },
+ {
+  "name": "r-waiter-home",
+  "to": "/pos/5EL/tables",
+  "as": "dev-pos",
+  "path": "/pos/5EL/tables",
+  "title": "Tables",
+  "height": 2759,
+  "ok": true
+ },
+ {
+  "name": "r-waiter-menu",
+  "to": "/pos/5EL/tables",
+  "as": "dev-pos",
+  "pressed": true,
+  "path": "/pos/5EL/tables",
+  "title": "Tables",
+  "height": 2759,
+  "ok": true
+ },
+ {
+  "name": "r-waiter-account",
+  "to": "/pos/5EL/tables",
+  "as": "dev-pos",
+  "pressed": true,
+  "path": "/pos/5EL/tables",
+  "title": "Tables",
+  "height": 2759,
+  "ok": true
+ },
+ {
+  "name": "r-chef-home",
+  "to": "/pos/5EL/kitchen",
+  "as": "dev-chef",
+  "path": "/pos/5EL/kitchen",
+  "title": "Kitchen",
+  "height": 9000,
+  "ok": true
+ },
+ {
+  "name": "r-chef-menu",
+  "to": "/pos/5EL/kitchen",
+  "as": "dev-chef",
+  "pressed": true,
+  "path": "/pos/5EL/kitchen",
+  "title": "Kitchen",
+  "height": 9000,
+  "ok": true
+ },
+ {
+  "name": "r-chef-account",
+  "to": "/pos/5EL/kitchen",
+  "as": "dev-chef",
+  "pressed": true,
+  "path": "/pos/5EL/kitchen",
+  "title": "Kitchen",
+  "height": 9000,
+  "ok": true
+ },
+ {
+  "name": "r-kitchen-manager-home",
+  "to": "/pos/5EL/kitchen",
+  "as": "dev-kitchen",
+  "path": "/pos/5EL/kitchen",
+  "title": "Kitchen",
+  "height": 9000,
+  "ok": true
+ },
+ {
+  "name": "r-kitchen-manager-menu",
+  "to": "/pos/5EL/kitchen",
+  "as": "dev-kitchen",
+  "pressed": true,
+  "path": "/pos/5EL/kitchen",
+  "title": "Kitchen",
+  "height": 9000,
+  "ok": true
+ },
+ {
+  "name": "r-kitchen-manager-account",
+  "to": "/pos/5EL/kitchen",
+  "as": "dev-kitchen",
+  "pressed": true,
+  "path": "/pos/5EL/kitchen",
+  "title": "Kitchen",
+  "height": 9000,
+  "ok": true
+ },
+ {
+  "name": "r-inventory-home",
+  "to": "/",
+  "as": "dev-stores",
+  "path": "/h/5EL/stores",
+  "title": "Store",
+  "height": 3318,
+  "ok": true
+ },
+ {
+  "name": "r-inventory-menu",
+  "to": "/",
+  "as": "dev-stores",
+  "pressed": true,
+  "path": "/h/5EL/stores",
+  "title": "Store",
+  "height": 3318,
+  "ok": true
+ },
+ {
+  "name": "r-inventory-account",
+  "to": "/",
+  "as": "dev-stores",
+  "pressed": true,
+  "path": "/h/5EL/stores",
+  "title": "Store",
+  "height": 3318,
+  "ok": true
+ },
+ {
+  "name": "r-accountant-home",
+  "to": "/",
+  "as": "dev-finance",
+  "path": "/",
+  "title": "Dashboard",
+  "height": 2681,
+  "ok": true
+ },
+ {
+  "name": "r-accountant-menu",
+  "to": "/",
+  "as": "dev-finance",
+  "pressed": true,
+  "path": "/",
+  "title": "Dashboard",
+  "height": 2681,
+  "ok": true
+ },
+ {
+  "name": "r-accountant-account",
+  "to": "/",
+  "as": "dev-finance",
+  "pressed": true,
+  "path": "/",
+  "title": "Dashboard",
+  "height": 2681,
+  "ok": true
+ },
+ {
+  "name": "r-revenue-home",
+  "to": "/",
+  "as": "dev-revenue",
+  "path": "/",
+  "title": "Dashboard",
+  "height": 2681,
+  "ok": true
+ },
+ {
+  "name": "r-revenue-menu",
+  "to": "/",
+  "as": "dev-revenue",
+  "pressed": true,
+  "path": "/",
+  "title": "Dashboard",
+  "height": 2681,
+  "ok": true
+ },
+ {
+  "name": "r-revenue-account",
+  "to": "/",
+  "as": "dev-revenue",
+  "pressed": true,
+  "path": "/",
+  "title": "Dashboard",
+  "height": 2681,
+  "ok": true
+ }
+]

@@ -1,0 +1,42 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+GST sales register
+
+1 Oct 2026 to 11 Oct 2026
+
+Print
+CSV
+
+5 Elements Akkalkot
+
+GST SALES REGISTER
+
+1 Oct 2026 to 11 Oct 2026
+
+GSTR-1 extract Every document issued in the period, credit notes included
+
+INVOICE	DATE	RECIPIENT	GSTIN	TYPE	PLACE	TAXABLE	CGST	SGST	TOTAL
+5EL/2026-27/00001	10 Oct 2026	Expedia	-	B2C	MH	₹3,130	₹78	₹78	₹3,286
+5EL/2026-27/00002	10 Oct 2026	Day Test Kumar	-	B2C	MH	₹3,699	₹92	₹92	₹3,884
+5EL/2026-27/00003	11 Oct 2026	Fidato Hotels	-	B2C	MH	₹6,747	₹169	₹169	₹7,085
+5EL/2026-27/00004	11 Oct 2026	A5 Test Wagh	-	B2C	MH	₹3,699	₹92	₹92	₹3,884
+5EL/2026-27/00005	11 Oct 2026	A5 Test Wagh	-	B2C	MH	₹3,699	₹92	₹92	₹3,884
+5EL/2026-27/00006	11 Oct 2026	P6MSG Expedia	-	B2C	MH	₹1,000	₹25	₹25	₹1,050
+5EL/2026-27/00007	11 Oct 2026	P6MSG Guest	-	B2C	MH	₹1,000	₹25	₹25	₹1,050
+5EL/2026-27/00008	11 Oct 2026	Acme Traders	27AAPFU0939F1ZV	B2B	MH	₹3,699	₹92	₹92	₹3,884
+5EL/2026-27/00009
+credits 5EL/2026-27/00008
+	11 Oct 2026	Acme Traders	27AAPFU0939F1ZV	B2B	MH	-₹3,699	-₹92	-₹92	-₹3,884
+5EL/2026-27/00010	11 Oct 2026	Ayaan Singh [DH]	-	B2C	MH	₹4,569	₹114	₹114	₹4,798
+5EL/2026-27/00011	11 Oct 2026	Ishaan Nair [DH]	27AAPFU0939F1ZV	B2B	MH	₹4,249	₹106	₹106	₹4,461
+5EL/2026-27/00012	11 Oct 2026	D27371 Billed Co	29ABCDE1234F1ZW	B2B	MH	₹3,122	₹78	₹78	₹3,278
+Total · 12 documents	₹34,914	₹873	₹873	₹36,660
+
+Credit notes appear as their own rows with negative values, because that is how they are filed. Netting them into the invoice would leave this register disagreeing with the invoices actually issued. Place of supply is the property's state on every row - accommodation is supplied where the hotel is, so a hotel supply is never IGST.
+
+Printed 31/10/2026, 07:32:43 pm
+
+Test GM

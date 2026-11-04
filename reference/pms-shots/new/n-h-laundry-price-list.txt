@@ -1,0 +1,25 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Dockets
+Price list
+Laundry price list
+
+What this property charges for each thing it launders, item by item and service by service.
+
+Add an item
+
+One item has no price yet. It reads "-", never 0, and a guest's bag holding one has no total and cannot be charged to a room. A price added later applies to new bags only; a bag already taken keeps the dash and is taken again. Leave it blank for the hotel's own linen, which is counted and never charged.
+
+ITEM	PRICE	ON THE LIST
+Bed sheet · Wash	
+Free
+	Retire
+Saree · Dry-clean	
+Free
+	Retire
+Shirt · Wash	
+Free
+	Retire

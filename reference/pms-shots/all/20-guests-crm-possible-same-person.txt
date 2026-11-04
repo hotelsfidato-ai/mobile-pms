@@ -1,0 +1,250 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Possible same person
+13 to look at
+
+Guest records that share a phone number or an email, across every hotel. Join two that are one person, or say they are not; either can be undone.
+
+Same phone.
+
+Not the same person
+A10 Test Ravi Kumar
+
+9000000010 · a10.test@example.com
+
+Has not stayed with the group yet · last - · no ID on file
+
+Keep this record
+A10 Test R. Kumar
+
+9000000010 · -
+
+Has not stayed with the group yet · last - · no ID on file
+
+Keep this record
+
+Same phone.
+
+Not the same person
+A2 Test Joshi
+
+98765 00204 · -
+
+Has not stayed with the group yet · last - · no ID on file
+
+Keep this record
+A2 Test Joshi
+
+98765 00204 · -
+
+Has not stayed with the group yet · last - · no ID on file
+
+Keep this record
+
+Same phone.
+
+Not the same person
+A2 Test Kumar
+
+98765 00202 · -
+
+Stayed with the group once · last 10 Oct 2026 · ID on file
+
+Keep this record
+A2 Test Kumar
+
+98765 00202 · -
+
+Stayed with the group once · last 10 Oct 2026 · ID on file
+
+Keep this record
+
+Same phone.
+
+Not the same person
+A2 Test Kumar
+
+98765 00202 · -
+
+Stayed with the group once · last 10 Oct 2026 · ID on file
+
+Keep this record
+A2 Test Kumar
+
+98765 00202 · -
+
+Stayed with the group once · last 10 Oct 2026 · ID on file
+
+Keep this record
+
+Same phone.
+
+Not the same person
+A2 Test Kumar
+
+98765 00202 · -
+
+Stayed with the group once · last 10 Oct 2026 · ID on file
+
+Keep this record
+A2 Test Kumar
+
+98765 00202 · -
+
+Stayed with the group once · last 10 Oct 2026 · ID on file
+
+Keep this record
+
+Same phone.
+
+Not the same person
+A2 Test Mehta
+
+98765 00203 · -
+
+Has not stayed with the group yet · last - · no ID on file
+
+Keep this record
+A2 Test Mehta
+
+98765 00203 · -
+
+Has not stayed with the group yet · last - · no ID on file
+
+Keep this record
+
+Same phone.
+
+Not the same person
+A2 Test Sharma
+
+98765 00201 · -
+
+Has not stayed with the group yet · last - · no ID on file
+
+Keep this record
+A2 Test Sharma
+
+98765 00201 · -
+
+Has not stayed with the group yet · last - · no ID on file
+
+Keep this record
+
+Same phone.
+
+Not the same person
+A2 Test Sharma
+
+98765 00201 · -
+
+Has not stayed with the group yet · last - · no ID on file
+
+Keep this record
+A2 Test Sharma
+
+98765 00201 · -
+
+Has not stayed with the group yet · last - · no ID on file
+
+Keep this record
+
+Same phone.
+
+Not the same person
+A2 Test Sharma
+
+98765 00201 · -
+
+Has not stayed with the group yet · last - · no ID on file
+
+Keep this record
+A2 Test Sharma
+
+98765 00201 · -
+
+Has not stayed with the group yet · last - · no ID on file
+
+Keep this record
+
+Same phone.
+
+Not the same person
+A4 Test Kulkarni
+
++91 98200 00405 · -
+
+Stayed with the group once · last 13 Oct 2026 · ID on file
+
+Keep this record
+A4 Test Kulkarni
+
++91 98200 00405 · -
+
+Stayed with the group once · last 12 Oct 2026 · ID on file
+
+Keep this record
+
+Same phone.
+
+Not the same person
+A5 Test Rane
+
+98765 00501 · -
+
+Stayed with the group once · last 13 Oct 2026 · ID on file
+
+Keep this record
+A5 Test Rane
+
+98765 00501 · -
+
+Stayed with the group once · last 12 Oct 2026 · ID on file
+
+Keep this record
+
+Same phone.
+
+Not the same person
+A5 Test Wagh
+
+98765 00502 · -
+
+Stayed with the group once · last 12 Oct 2026 · ID on file
+
+Keep this record
+A5 Test Wagh
+
+98765 00502 · -
+
+Stayed with the group once · last 12 Oct 2026 · ID on file
+
+Keep this record
+
+Same phone.
+
+Not the same person
+D27371 No company
+
+9811100071 · -
+
+Has not stayed with the group yet · last - · no ID on file
+
+Keep this record
+D27371 With company
+
+9811100071 · -
+
+Has not stayed with the group yet · last - · no ID on file
+
+Keep this record
+Joined
+
+No joins stand. A join made above appears here, with its undo.
+
+Not the same person
+
+No answers stand. Two records answered "Not the same person" above appear here, with the undo.
