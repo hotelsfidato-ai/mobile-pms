@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Text, View } from "react-native";
-import { ApiError, type Hotel } from "../../core/api";
+import { ApiError, type Hotel, outcomeUnknown } from "../../core/api";
 import { c, space, t } from "../../core/theme";
 import { Row } from "../../core/ui";
 import {
@@ -79,7 +79,7 @@ export function SettleSheet({ hotel, stayId, payer, balance, folios, active, onC
         /* The same payment tapped again keeps its key (MFIN-1, data.ts's keeper),
            so the server makes it once; emptied too, so a repeat is typed on
            purpose with the bill in view. */
-        if (e instanceof ApiError && e.status === 503) change("");
+        if (outcomeUnknown(e)) change("");
       }
     } finally {
       setBusy(false);

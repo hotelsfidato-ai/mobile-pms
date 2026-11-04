@@ -1,3 +1,4 @@
+import { outcomeUnknown } from "../../core/api";
 import { useRef, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import type { Hotel } from "../../core/api";
@@ -43,6 +44,7 @@ export function Delivery({ code, id, store, lines, hotel, onClose, onDone }: {
   const [bill, setBill] = useState<BillDraft>({ billNo: "", billDate: hotel.today ?? "", amount: "", dueOn: "" });
   const [busy, setBusy] = useState(false);
   const latch = useRef(false);
+  const stuck = useRef(false);
   const [said, setSaid] = useState<Said | null>(null);
 
   const set = (lineId: string, patch: Partial<DeliveryDraft>) =>
@@ -59,9 +61,14 @@ export function Delivery({ code, id, store, lines, hotel, onClose, onDone }: {
       const done = await recordDelivery(code, id, out.body);
       onDone(deliveredWords(done.received.length, store));
     } catch (e) {
-      setSaid(saidOf("Not recorded", e));
+      /* Not known whether it was made, and this route reads no key (R-30): the dialog
+         takes no more taps; it is closed and the order read again first (4 Nov). */
+      if (outcomeUnknown(e)) {
+        stuck.current = true;
+        setSaid({ title: "Not known whether it was recorded", body: `${e instanceof Error ? e.message : String(e)} Close this and look at the order before trying again.`, tone: "bad" });
+      } else setSaid(saidOf("Not recorded", e));
     } finally {
-      latch.current = false;
+      latch.current = stuck.current;
       setBusy(false);
     }
   }

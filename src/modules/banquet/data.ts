@@ -40,8 +40,23 @@ async function read<T>(path: string): Promise<T | Refused> {
 export const isRefused = (x: unknown): x is Refused => typeof x === "object" && x !== null && "refused" in x;
 
 /** The diary over a window; none named, the server's own (the business date and 30 days). */
-export const readDiary = (code: string, w: Window | null) =>
-  read<Diary>(`${at(code)}${w ? `?from=${w.from}&to=${w.to}` : ""}`);
+/** The property's enquiries keep one key while an unchanged Register is tried
+    again (the server reads it, 062): a reply lost or a 5xx after it committed
+    never makes a second enquiry; the diary read again lets it go (the review
+    of 4 Nov). */
+const enquiries = new Map<string, KeyKeeper>();
+const enquiryKeys = (code: string) => {
+  let k = enquiries.get(code);
+  if (!k) { k = keyKeeper({ who: currentSubject }); enquiries.set(code, k); }
+  return k;
+};
+export async function readDiary(code: string, w: Window | null) {
+  const keys = enquiryKeys(code);
+  const started = keys.mark();
+  const d = await read<Diary>(`${at(code)}${w ? `?from=${w.from}&to=${w.to}` : ""}`);
+  keys.seen(started);
+  return d;
+}
 
 /** The halls and packages, for Register and Add a course (reservation or room_config view). */
 export const readSetup = (code: string) => read<Setup>(`${at(code)}/setup`);
@@ -72,7 +87,7 @@ type Ok = { ok: true };
 
 /** An enquiry: holds nothing. Its warning (a clash, the banquet tax unset) is the server's. */
 export const register = (code: string, body: RegisterInput) =>
-  send<Ok & { id: string; reference: string; warning: string | null }>("POST", `${at(code)}/events`, body);
+  send<Ok & { id: string; reference: string; warning: string | null }>("POST", `${at(code)}/events`, body, enquiryKeys(code));
 
 /** Takes the hall and opens its bill; a refusal names the function in the way. */
 export const confirmFn = (code: string, id: string) => send<Ok & { folioId: string }>("POST", `${fnAt(code, id)}/confirm`);

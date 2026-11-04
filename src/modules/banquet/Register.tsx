@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { Text, View } from "react-native";
-import { HeldError } from "../../core/api";
+import { HeldError, outcomeUnknown } from "../../core/api";
 import { c, t } from "../../core/theme";
 import { useRead } from "../../core/ui";
 import { Field, Input, Tick } from "../finance/Kit";
@@ -61,7 +61,7 @@ export function Register({ code, businessDate, onClose, onDone, onHeld }: {
       onDone(res.id, res.reference, res.warning);
     } catch (e) {
       if (e instanceof HeldError) onHeld(saidOf("", e));
-      else setSaid({ title: "Not registered", body: message(e), tone: "bad" });
+      else setSaid({ title: outcomeUnknown(e) ? "Not known whether it was registered" : "Not registered", body: outcomeUnknown(e) ? `${message(e)} Tapped again unchanged, it is sent with the same key, so it is made once.` : message(e), tone: "bad" });
     } finally {
       latch.current = false;
       setBusy(false);

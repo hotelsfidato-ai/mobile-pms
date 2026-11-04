@@ -1,3 +1,4 @@
+import { outcomeUnknown } from "../../core/api";
 import { Plus, Trash2 } from "lucide-react-native";
 import { useRef, useState } from "react";
 import { Pressable, Text, View } from "react-native";
@@ -26,6 +27,7 @@ export function Ask({ code, data, onClose, onAsked }: {
   const [lines, setLines] = useState<AskDraft[]>([{ ...EMPTY_DRAFT }]);
   const [busy, setBusy] = useState(false);
   const latch = useRef(false);
+  const stuck = useRef(false);
   const [said, setSaid] = useState<Said | null>(null);
 
   const set = (i: number, patch: Partial<AskDraft>) => setLines((all) => all.map((l, n) => (n === i ? { ...l, ...patch } : l)));
@@ -43,9 +45,14 @@ export function Ask({ code, data, onClose, onAsked }: {
       onAsked(done.request);
     } catch (e) {
       /* The server's sentence; offline, the web's ("This cannot be done offline yet…"). */
-      setSaid(saidOf("Not sent", e));
+      /* Not known whether it was made, and this route reads no key (R-30): the dialog
+         takes no more taps; it is closed and the order read again first (4 Nov). */
+      if (outcomeUnknown(e)) {
+        stuck.current = true;
+        setSaid({ title: "Not known whether it was sent", body: `${e instanceof Error ? e.message : String(e)} Close this and look at the order before trying again.`, tone: "bad" });
+      } else setSaid(saidOf("Not sent", e));
     } finally {
-      latch.current = false;
+      latch.current = stuck.current;
       setBusy(false);
     }
   }

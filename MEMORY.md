@@ -5,6 +5,15 @@ module's `DEFECTS.md` instead. Read the newest first.
 
 ---
 
+### 16 · Letting a key go on a re-read assumes the person sees the record (4 Nov)
+
+The keeper forgets a payment's key once its record is read again — written for Settle, which also
+empties the amount. Banquet's payment dialog re-read the function but stayed open with the amount
+typed, so a lost reply then a second tap made a second ₹50,000 advance (MBQ-1, the independent
+review). **The rule:** on `outcomeUnknown(e)` (nothing came back, or a 5xx) a money form empties its
+amount and says "Not known whether it was …"; where the server reads no key, the dialog takes no
+more taps until it is closed and the record seen.
+
 ### 15 · A link lost at a merge, and the gates stayed green (4 Nov)
 
 Resolving Laundry's menu conflict, the mobile chat's script refused to add its PHONE_ROUTES line

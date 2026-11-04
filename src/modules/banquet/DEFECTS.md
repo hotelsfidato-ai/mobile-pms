@@ -12,7 +12,27 @@ None yet.
 
 ## Fixed
 
-None yet.
+### MBQ-1 · An advance could be taken twice after a lost reply (4 Nov) — fixed at the merge
+
+**What happened:** on a failure the payment dialog re-read the function (which lets the key go,
+`core/keys.ts`) but stayed open with the amount still typed: a lost reply, then a second tap, went
+with a new key and made a second advance. **How found:** the independent review before the merge.
+**What was done:** when the outcome is unknown (`core/api.ts outcomeUnknown`: nothing came back, or
+a 5xx) the amount and the credit tick are emptied and the dialog says "Not known whether it was
+taken"; the bill read again is then in view. **The rule:** a key may be let go only once the
+person can see the record; a form left filled is not seeing it.
+
+### MBQ-2 · Registering again after a server failure made a second enquiry (4 Nov) — fixed
+
+Register had no keeper, so a 5xx after the server committed, then a second tap, sent a new key. It
+now keeps one key per property while the request is unchanged (the server reads it, 062), let go
+when the diary is read again; the words say it is made once.
+
+### MBQ-3 · A course could be added twice after a lost reply (4 Nov) — narrowed
+
+`POST /catering` reads no key (PMS R-27 kind). On an unknown outcome the change dialogs now take no
+more taps and say "Not known whether it was added: close this and look at the function before
+trying again". The server's key is still asked for.
 
 ## Seen in the web twin, not the phone's (for the PMS, through the mobile chat)
 

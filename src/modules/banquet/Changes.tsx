@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { Text, View } from "react-native";
-import { ApiError, HeldError } from "../../core/api";
+import { ApiError, HeldError, outcomeUnknown } from "../../core/api";
 import { c } from "../../core/theme";
 import { useRead } from "../../core/ui";
 import { Field, Input, Tick } from "../finance/Kit";
@@ -25,6 +25,7 @@ const inDialog = (title: string, e: unknown): Said =>
 /** The one write a dialog makes, latched at the tap. */
 function useWrite(onDone: () => void, title: string) {
   const latch = useRef(false);
+  const stuck = useRef(false);
   const [busy, setBusy] = useState(false);
   const [said, setSaid] = useState<Said | null>(null);
   const run = async (write: () => Promise<unknown>) => {
@@ -36,9 +37,16 @@ function useWrite(onDone: () => void, title: string) {
       await write();
       onDone();
     } catch (e) {
-      setSaid(inDialog(title, e));
+      /* Not known whether it was made (a lost reply, a server failure), and a
+         course has no key the server reads: this dialog takes no more taps; it
+         is closed and the function read again before anything is tried twice
+         (the review of 4 Nov). */
+      if (outcomeUnknown(e)) {
+        stuck.current = true;
+        setSaid({ title: `${title.replace(/^Not /, "Not known whether it was ")}`, body: `${message(e)} Close this and look at the function before trying again.`, tone: "bad" });
+      } else setSaid(inDialog(title, e));
     } finally {
-      latch.current = false;
+      latch.current = stuck.current;
       setBusy(false);
     }
   };

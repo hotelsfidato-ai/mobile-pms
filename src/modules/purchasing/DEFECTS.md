@@ -12,6 +12,13 @@ None yet.
 
 ## Fixed
 
+### MPUR-2 · A delivery or a request could be recorded twice after a lost reply (4 Nov) — narrowed
+
+The purchasing routes read no key, so a second tap after a lost reply records the goods (or asks)
+twice. Since 4 Nov, on an unknown outcome (`outcomeUnknown`) the dialog takes no more taps and says
+"Not known whether it was recorded: close this and look at the order before trying again". The
+server's key is asked for (PMS R-30).
+
 ### MPUR-1 · The order's acts read "not on the setting" before the setting was read (4 Nov) — fixed
 
 **What happened:** the order's Send, Cancel and Agree a price take who may from the list's read

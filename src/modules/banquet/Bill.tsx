@@ -1,7 +1,7 @@
 import { Receipt } from "lucide-react-native";
 import { useRef, useState } from "react";
 import { Text, View } from "react-native";
-import { ApiError, HeldError, type Hotel } from "../../core/api";
+import { ApiError, HeldError, outcomeUnknown, type Hotel } from "../../core/api";
 import { c, space, t } from "../../core/theme";
 import { asks, asksCredit, asksPan, firstWay, owedLine, payingWays, startAmount, typed, type DeskRules } from "../finance/bill";
 import { Field, Input, Tick } from "../finance/Kit";
@@ -234,7 +234,13 @@ function PayDialog({ hotel, f, advance, onClose, onTaken, onReread }: {
       if (asks(e instanceof ApiError ? e.needs : undefined, "credit", words, asksCredit)) {
         setCredit(words);
       } else {
-        setSaid(refusedAs("Not taken", e));
+        /* Not known whether it was made (a lost reply, a server failure): the
+           amount is emptied, so a repeat is typed on purpose with the bill in
+           view - the bill's read below lets the key go (the review of 4 Nov). */
+        if (outcomeUnknown(e)) {
+          change("");
+          setSaid({ title: "Not known whether it was taken", body: `${message(e)} The bill is read again: check it before taking this payment again.`, tone: "bad" });
+        } else setSaid(refusedAs("Not taken", e));
         /* The bill may have moved under the dialog: read it again (the web's onDone). */
         onReread();
       }

@@ -3,7 +3,7 @@ import { router, type Href } from "expo-router";
 import { AlertTriangle, Check, Plus, Trash2, UserCheck } from "lucide-react-native";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { KeyboardAvoidingView, Platform, Pressable, Text, View } from "react-native";
-import { ApiError, HeldError, type Hotel } from "../../core/api";
+import { ApiError, HeldError, type Hotel, outcomeUnknown } from "../../core/api";
 import { cash } from "../../core/format";
 import { c, face, space, t } from "../../core/theme";
 import { Card, Screen, useRead } from "../../core/ui";
@@ -254,7 +254,10 @@ export function NewBooking({ hotel, role, room: walkRoom, date: walkDate }: { ho
       try {
         await takeAdvance(code, lead.id, { method: advanceBy, amount: advanceAmount, businessDate: today, heldAsCredit: true });
         advanceTaken = { amount: advanceAmount };
-      } catch (e) { advanceTaken = { failed: wordOf(e) }; }
+      } catch (e) {
+        /* Not known whether it was taken: said, so it is never taken twice from the bill (the review of 4 Nov). */
+        advanceTaken = { failed: outcomeUnknown(e) ? `Not known whether it was taken: ${wordOf(e)} Check the booking's bill before taking it again.` : wordOf(e) };
+      }
     }
     /* Check in now: front desk's own check-in, which gives the room itself. */
     if (now && lead?.id && first) {
