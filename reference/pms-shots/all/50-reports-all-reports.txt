@@ -1,0 +1,196 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+All reports
+29 of 29 built
+
+Taken from real exports out of the live system, so the columns and the totals match what is being read today.
+
+The day
+
+What happened, and what is about to.
+
+Manager report
+
+Today, period to date and year to date in three columns. The one an owner opens first.
+
+Open
+
+Night audit report
+
+What happened on one day, to the paisa: rooms charged, who left, every receipt, the restaurant.
+
+Open
+
+Voids
+
+Every voided bill, order closed unpaid and struck dish in the restaurant, by outlet and day: what, how much, who, when and why.
+
+Open
+
+Monthly occupancy
+
+Occupancy for every day of the month, as a chart. Full houses and empty ones both stand out.
+
+Open
+
+Monthly statistics
+
+The daily grid - rooms sold, ADR, RevPAR, pax, charges, tax and receipts.
+
+Open
+
+Yearly statistics
+
+The same columns at month grain, with a grand total that recomputes rates rather than averaging averages.
+
+Open
+Money owed
+
+Balances that have left the building without being settled.
+
+City ledger
+
+Bills transferred to a company or booking site, account by account.
+
+Open
+
+No show
+
+Bookings that never arrived on a day. It prints even when nobody did.
+
+Open
+
+Guest ledger
+
+Every folio that moved, with its opening and closing balance.
+
+Open
+
+Cashier shift
+
+What each cashier took today, by method. Reversed receipts excluded.
+
+Open
+
+Supplier dues
+
+What we owe each supplier on a date, bill by bill, and the payments made.
+
+Open
+
+Supplier statement
+
+One supplier's ledger for the days chosen: bills, payments, TDS, credit notes, the running balance.
+
+Open
+
+TDS on supplier payments
+
+TDS deducted from suppliers, by section and supplier: the figures for the quarterly return (26Q).
+
+Open
+
+Petty cash
+
+Every expense paid out of the restaurant's tin and the front desk's drawer, by day and category.
+
+Open
+Statutory
+
+Filed, not read. These have to reconcile to the rupee.
+
+Lodging tax
+
+CGST and SGST at each slab's rate, as the return expects it.
+
+Open
+
+GST sales register
+
+Invoice-level GSTR-1 extract, credit notes as their own rows.
+
+Open
+
+Form III register
+
+Foreign guests' arrivals and departures in Form III's order, and the FRRO portal's numbers.
+
+Open
+Store and equipment
+
+What the stores hold and use, and where the equipment is. Costs as recorded.
+
+Closing stock
+
+Each store's stock on a date, at the average cost as recorded.
+
+Open
+
+Stock movement by day
+
+Received, issued, wasted and counted, one row a day.
+
+Open
+
+Consumption
+
+What was issued, per item and per outlet.
+
+Open
+
+Wastage and breakage
+
+Every wastage, and every breakage with who broke it.
+
+Open
+
+Count differences
+
+What each count corrected, and why.
+
+Open
+
+Dead stock
+
+Stock that has not gone out for 30, 60 or 90 days.
+
+Open
+
+Days of cover
+
+How long each item lasts at the last 7 days' use.
+
+Open
+
+Supplier spend
+
+Deliveries per supplier, and each item's first and last price.
+
+Open
+
+Equipment report
+
+What is out of the store, under repair, and when warranties and AMCs end.
+
+Open
+
+Bar stock
+
+The bar's day: each drink's opening, purchases, sales, count and closing.
+
+Open
+
+FLR-1A/2A/3A register
+
+The daily excise register: each brand's opening, receipts, sales and closing, by bottle size.
+
+Open
+
+FLR-3 register
+
+The monthly excise register: received, sold and closing, day by day, by class and size.
+
+Open

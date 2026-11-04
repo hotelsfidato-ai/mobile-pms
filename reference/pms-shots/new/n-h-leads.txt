@@ -1,0 +1,12 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Leads and WhatsApp
+
+Enquiries from the leads app, read as you open this page. Staff reply in the leads app.
+
+Not connected yet
+
+The leads app is read with a read-only login the owner sets up on the server. Until then nothing is read and nothing is shown here.

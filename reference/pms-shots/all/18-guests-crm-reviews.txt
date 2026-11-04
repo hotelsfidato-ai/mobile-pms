@@ -1,0 +1,253 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Reviews
+
+Ask a guest for a review after they have left, and see who has been asked.
+
+Sending is not set up yet. Bills and vouchers print and download as usual; nothing goes by WhatsApp or email until the sending workflow's address, its secret and the WhatsApp number are in the server's settings.
+The review link
+This property sends:
+-
+
+No review link has been set for this property, so nobody can be asked for a review yet. This hotel's own Google review link has not been given. Nothing is sent until somebody pastes one here.
+
+Setting this is for the owner or an administrator. Ask one of them.
+
+Departures
+A4 Test Kulkarni
+FH-5EL-2610-5056
+LEFT
+12 Oct 2026
+STAY
+11 Oct 2026 - 12 Oct 2026
+REVIEW ASKED
+-
+A5 Test Rane
+FH-5EL-2610-5047
+LEFT
+12 Oct 2026
+STAY
+11 Oct 2026 - 12 Oct 2026
+REVIEW ASKED
+-
+A5 Test Wagh
+FH-5EL-2610-5059
+LEFT
+12 Oct 2026
+STAY
+11 Oct 2026 - 12 Oct 2026
+REVIEW ASKED
+-
+A5 Test Wagh
+FH-5EL-2610-5048
+LEFT
+12 Oct 2026
+STAY
+11 Oct 2026 - 12 Oct 2026
+REVIEW ASKED
+-
+A4 Test Kulkarni
+FH-5EL-2610-5033
+LEFT
+11 Oct 2026
+STAY
+9 Oct 2026 - 11 Oct 2026
+REVIEW ASKED
+-
+A5 Test More
+FH-5EL-2610-5035
+LEFT
+11 Oct 2026
+STAY
+9 Oct 2026 - 11 Oct 2026
+REVIEW ASKED
+-
+Day Test Kumar
+FH-5EL-2610-5045
+LEFT
+11 Oct 2026
+STAY
+10 Oct 2026 - 11 Oct 2026
+REVIEW ASKED
+-
+Sudarshan Kator
+FH-2608-4865
+LEFT
+11 Oct 2026
+STAY
+10 Oct 2026 - 11 Oct 2026
+REVIEW ASKED
+-
+Tanvi Bhide
+FH-2608-4858
+LEFT
+11 Oct 2026
+STAY
+9 Oct 2026 - 11 Oct 2026
+REVIEW ASKED
+-
+A2 Test Kumar
+FH-5EL-2610-5041
+LEFT
+10 Oct 2026
+STAY
+9 Oct 2026 - 10 Oct 2026
+REVIEW ASKED
+-
+A2 Test Kumar
+FH-5EL-2610-5039
+LEFT
+10 Oct 2026
+STAY
+9 Oct 2026 - 10 Oct 2026
+REVIEW ASKED
+-
+A2 Test Kumar
+FH-5EL-2610-5040
+LEFT
+10 Oct 2026
+STAY
+9 Oct 2026 - 10 Oct 2026
+REVIEW ASKED
+-
+A5 Test Deshmukh
+FH-5EL-2610-5034
+LEFT
+10 Oct 2026
+STAY
+9 Oct 2026 - 10 Oct 2026
+REVIEW ASKED
+-
+Ananya Bose
+FH-2608-4861
+LEFT
+10 Oct 2026
+STAY
+9 Oct 2026 - 10 Oct 2026
+REVIEW ASKED
+-
+Harsha Kamat
+FH-2608-4860
+LEFT
+10 Oct 2026
+STAY
+9 Oct 2026 - 10 Oct 2026
+REVIEW ASKED
+-
+Kapil Ganjoo
+FH-2608-5002
+LEFT
+10 Oct 2026
+STAY
+9 Oct 2026 - 10 Oct 2026
+REVIEW ASKED
+-
+A5 Test Pawar
+FH-5EL-2610-5036
+LEFT
+9 Oct 2026
+STAY
+9 Oct 2026 - 9 Oct 2026
+REVIEW ASKED
+-
+Ganesh Patil
+FH-2608-5004
+LEFT
+9 Oct 2026
+STAY
+7 Oct 2026 - 9 Oct 2026
+REVIEW ASKED
+-
+Kalyani Rege
+FH-2608-5001
+LEFT
+9 Oct 2026
+STAY
+8 Oct 2026 - 9 Oct 2026
+REVIEW ASKED
+-
+Rekha Gaikwad
+FH-2608-4857
+LEFT
+9 Oct 2026
+STAY
+8 Oct 2026 - 9 Oct 2026
+REVIEW ASKED
+-
+Sameer Gokhale
+FH-2608-5003
+LEFT
+9 Oct 2026
+STAY
+9 Oct 2026 - 9 Oct 2026
+REVIEW ASKED
+-
+Suresh Mane
+FH-2608-4856
+LEFT
+5 Oct 2026
+STAY
+2 Oct 2026 - 5 Oct 2026
+REVIEW ASKED
+-
+Neha Sawant
+FH-2608-4855
+LEFT
+4 Oct 2026
+STAY
+2 Oct 2026 - 4 Oct 2026
+REVIEW ASKED
+-
+Anjali Pawar
+FH-2608-4853
+LEFT
+3 Oct 2026
+STAY
+30 Sep 2026 - 3 Oct 2026
+REVIEW ASKED
+-
+Deepa Rao
+FH-2608-4851
+LEFT
+2 Oct 2026
+STAY
+29 Sep 2026 - 2 Oct 2026
+REVIEW ASKED
+-
+Nikhil Joshi
+FH-2608-4852
+LEFT
+2 Oct 2026
+STAY
+29 Sep 2026 - 2 Oct 2026
+REVIEW ASKED
+-
+Vivek Thorat
+FH-2608-4854
+LEFT
+2 Oct 2026
+STAY
+1 Oct 2026 - 2 Oct 2026
+REVIEW ASKED
+-
+Imran Shaikh
+FH-2608-4850
+LEFT
+1 Oct 2026
+STAY
+29 Sep 2026 - 1 Oct 2026
+REVIEW ASKED
+-
+Sneha Kulkarni
+FH-2608-4849
+LEFT
+1 Oct 2026
+STAY
+28 Sep 2026 - 1 Oct 2026
+REVIEW ASKED
+-
+What guests wrote
+Reviews left on Google, TripAdvisor and the booking sites are not read into this system. Nothing is pulled in from anywhere, so this screen can say who was asked and cannot say what they wrote. Open the site itself to read them.

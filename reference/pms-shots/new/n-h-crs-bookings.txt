@@ -1,0 +1,14 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+CRS bookings
+
+Bookings the CRS sold for this hotel, and what became of each
+
+The CRS login is not in the server's settings yet, so nothing is read.
+
+No CRS booking has arrived yet
+
+A booking a salesperson makes in the CRS for this hotel arrives here within five minutes as a waiting booking, with the room held, for the hotel to confirm.

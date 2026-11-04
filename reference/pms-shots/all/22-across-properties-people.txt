@@ -1,0 +1,167 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+People
+
+17 active · 0 can reach every property
+
+Add somebody
+
+Agra Clerk
+
+agra@fidato.in
+
+5EL · Reception
+
+D27371 HK
+
+d27371-hk@fidato.in
+
+Password
+Edit
+Deactivate
+5EL · Housekeeping
+
+RCFIX waiter
+
+rcfix-waiter@fidato.in
+
+Password
+Edit
+Deactivate
+5EL · Waiter
+
+RPTEST accountant
+
+rp4-accountant@fidato.in
+
+Password
+Edit
+Deactivate
+5EL · Accountant
+
+RPTEST clerk
+
+rp4-clerk@fidato.in
+
+Password
+Edit
+Deactivate
+5EL · Reception
+
+Test Accountant
+
+dev-finance@fidato.in
+
+Password
+Edit
+Deactivate
+5EL · Accountant
+
+Test Chef
+
+dev-chef@fidato.in
+
+Password
+Edit
+Deactivate
+5EL · Chef
+
+Test GM
+
+gm@fidato.in
+
+Password
+Edit
+5EL · General Manager
+
+Test Hotel Manager
+
+dev-hotel-manager@fidato.in
+
+Password
+Edit
+Deactivate
+5EL · Hotel Manager
+
+Test Housekeeper
+
+dev-housekeeping@fidato.in
+
+Password
+Edit
+Deactivate
+5EL · Housekeeping
+
+Test Inventory Manager
+
+dev-stores@fidato.in
+
+Password
+Edit
+Deactivate
+5EL · Inventory Manager
+
+Test Kitchen Manager
+
+dev-kitchen@fidato.in
+
+Password
+Edit
+Deactivate
+5EL · Kitchen Manager
+
+Test Reception
+
+desk@fidato.in
+
+Password
+Edit
+Deactivate
+5EL · Reception
+
+Test Revenue Manager
+
+dev-revenue@fidato.in
+
+Password
+Edit
+Deactivate
+5EL · Revenue Manager
+
+Test Waiter
+
+dev-pos@fidato.in
+
+Password
+Edit
+Deactivate
+5EL · Waiter
+
+VOIDPAID Manager
+
+No password yet
+
+void-gm@fidato.in
+
+Set a password
+Edit
+Deactivate
+
+No sign-in account yet - they cannot get in at all. Set a password and they can.
+
+VOIDPAID Waiter
+
+No password yet
+
+void-waiter@fidato.in
+
+Set a password
+Edit
+Deactivate
+
+No sign-in account yet - they cannot get in at all. Set a password and they can.
+
+Adding somebody creates their sign-in account and sets the password you give. Tell it to them - nothing is emailed. The address has to be the one they actually use: it is what they sign in with, and a typo means a person who cannot get in.

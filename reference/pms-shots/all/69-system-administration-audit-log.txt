@@ -1,0 +1,1117 @@
+6
+TG
+
+Business date 11 Oct, 20 days behind today (31 Oct). Close the days in Night audit.
+
+Audit log
+Entries 1-100
+
+Append-only. Nothing here is edited or deleted - a wrong posting is reversed, and the reversal is its own entry.
+
+By
+From
+To
+Newer
+Older
+28 Oct 2026, 8:37 PM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Took a payment
+SUBJECT
+Omkar Shinde · room 203
+DETAIL
+Received - Cash
+BY
+Group Owner
+28 Oct 2026, 8:36 PM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Reversed a posting
+SUBJECT
+Vikram Desai · room 202
+DETAIL
+Reversal - Received - UPI (why: guest-page proforma test)
+BY
+Group Owner
+28 Oct 2026, 8:36 PM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Took a payment
+SUBJECT
+Vikram Desai · room 202
+DETAIL
+Received - UPI
+BY
+GUESTBEHIND Desk
+22 Oct 2026, 11:18 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+Vikram Desai · room 202
+DETAIL
+Reversal - room charge test
+BY
+Group Owner
+22 Oct 2026, 11:18 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+Vikram Desai · room 202
+DETAIL
+Reversal - room charge test
+BY
+Group Owner
+22 Oct 2026, 11:18 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+Vikram Desai · room 202
+DETAIL
+Fidato Restaurant - 20261011-100
+BY
+Group Owner
+22 Oct 2026, 11:18 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+Vikram Desai · room 202
+DETAIL
+Fidato Restaurant - 20261011-99
+BY
+Group Owner
+22 Oct 2026, 11:17 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+Vikram Desai · room 202
+DETAIL
+Fidato Restaurant - 20261011-95
+BY
+Group Owner
+22 Oct 2026, 11:16 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Reversed a posting
+SUBJECT
+Vikram Desai · room 202
+DETAIL
+Void - Test outlet - TEST-10068-report
+BY
+POS test outlet
+22 Oct 2026, 11:16 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Reversed a posting
+SUBJECT
+Vikram Desai · room 202
+DETAIL
+Void - Test outlet - TEST-10068-recover
+BY
+POS test outlet
+22 Oct 2026, 11:16 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Reversed a posting
+SUBJECT
+A4 Test Kulkarni · room 305
+DETAIL
+Void - Test outlet - TEST-10068-ambig
+BY
+POS test outlet
+22 Oct 2026, 11:16 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Reversed a posting
+SUBJECT
+Vikram Desai · room 202
+DETAIL
+Void - Test outlet - TEST-10068-retry
+BY
+POS test outlet
+22 Oct 2026, 11:16 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Reversed a posting
+SUBJECT
+Vikram Desai · room 202
+DETAIL
+Void - Test outlet - TEST-10068-date
+BY
+POS test outlet
+22 Oct 2026, 11:16 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+Vikram Desai · room 202
+DETAIL
+Test outlet - TEST-10068-report
+BY
+POS test outlet
+22 Oct 2026, 11:16 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Reversed a posting
+SUBJECT
+Vikram Desai · room 202
+DETAIL
+Reversal - pos test
+BY
+POS test outlet
+22 Oct 2026, 11:16 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+Vikram Desai · room 202
+DETAIL
+Test outlet - TEST-10068-reversed
+BY
+POS test outlet
+22 Oct 2026, 11:16 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Reversed a posting
+SUBJECT
+Vikram Desai · room 202
+DETAIL
+Void - Test outlet - TEST-10068-void2
+BY
+POS test outlet
+22 Oct 2026, 11:16 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+Vikram Desai · room 202
+DETAIL
+Test outlet - TEST-10068-void2
+BY
+POS test outlet
+22 Oct 2026, 11:16 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Reversed a posting
+SUBJECT
+Vikram Desai · room 202
+DETAIL
+Void - Test outlet - TEST-10068-void
+BY
+POS test outlet
+22 Oct 2026, 11:16 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+Vikram Desai · room 202
+DETAIL
+Test outlet - TEST-10068-void
+BY
+POS test outlet
+22 Oct 2026, 11:16 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+Vikram Desai · room 202
+DETAIL
+Test outlet - TEST-10068-recover
+BY
+POS test outlet
+22 Oct 2026, 11:16 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+A4 Test Kulkarni · room 305
+DETAIL
+Test outlet - TEST-10068-ambig
+BY
+POS test outlet
+22 Oct 2026, 11:16 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+Vikram Desai · room 202
+DETAIL
+Test outlet - TEST-10068-retry
+BY
+POS test outlet
+22 Oct 2026, 11:16 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+Vikram Desai · room 202
+DETAIL
+Test outlet - TEST-10068-date
+BY
+POS test outlet
+22 Oct 2026, 11:16 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+Vikram Desai · room 202
+DETAIL
+Reversal - till test
+BY
+Group Owner
+22 Oct 2026, 11:16 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+Vikram Desai · room 202
+DETAIL
+Reversal - till test
+BY
+Group Owner
+22 Oct 2026, 11:16 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+Vikram Desai · room 202
+DETAIL
+Reversal - till test
+BY
+Group Owner
+22 Oct 2026, 11:16 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+Vikram Desai · room 202
+DETAIL
+Reversal - till test
+BY
+Group Owner
+22 Oct 2026, 11:16 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+Vikram Desai · room 202
+DETAIL
+Reversal - till test
+BY
+Group Owner
+22 Oct 2026, 11:16 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+Vikram Desai · room 202
+DETAIL
+Reversal - till test
+BY
+Group Owner
+22 Oct 2026, 11:15 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+Vikram Desai · room 202
+DETAIL
+Fidato Restaurant - 20261011-54 (5%)
+BY
+Group Owner
+22 Oct 2026, 11:15 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+Vikram Desai · room 202
+DETAIL
+Fidato Restaurant - 20261011-54 (18%)
+BY
+Group Owner
+22 Oct 2026, 11:15 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+Vikram Desai · room 202
+DETAIL
+Fidato Restaurant - 20261011-31
+BY
+Group Owner
+22 Oct 2026, 11:15 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+Vikram Desai · room 202
+DETAIL
+Fidato Restaurant - 20261011-30
+BY
+Group Owner
+22 Oct 2026, 11:15 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+Vikram Desai · room 202
+DETAIL
+Fidato Restaurant - 20261011-29 (5%)
+BY
+Group Owner
+22 Oct 2026, 11:15 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+Vikram Desai · room 202
+DETAIL
+Fidato Restaurant - 20261011-29 (18%)
+BY
+Group Owner
+21 Oct 2026, 6:10 PM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+P6MSG Guest
+DETAIL
+Room night
+BY
+-
+21 Oct 2026, 6:10 PM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+P6MSG Guest
+DETAIL
+Room night
+BY
+-
+21 Oct 2026, 2:49 PM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Reversed a posting
+SUBJECT
+Meera Iyer · room 203
+DETAIL
+Reversal - Received - UPI (why: reports test fixture)
+BY
+Group Owner
+21 Oct 2026, 2:49 PM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Reversed a posting
+SUBJECT
+Omkar Shinde · room 203
+DETAIL
+Reversal - Received - UPI (why: reports test fixture)
+BY
+Group Owner
+21 Oct 2026, 2:49 PM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Reversed a posting
+SUBJECT
+Omkar Shinde · room 203
+DETAIL
+Reversal - Transferred to city ledger (why: reports test fixture)
+BY
+Group Owner
+21 Oct 2026, 2:48 PM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Took a payment
+SUBJECT
+Omkar Shinde · room 203
+DETAIL
+Transferred to city ledger
+BY
+Group Owner
+21 Oct 2026, 2:48 PM
+BUSINESS DATE
+10 Mar 2026
+ACTION
+Posted a charge
+SUBJECT
+Kalyani Rege · room 301
+DETAIL
+Room 999 · 3 nights
+BY
+-
+21 Oct 2026, 2:48 PM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Took a payment
+SUBJECT
+Omkar Shinde · room 203
+DETAIL
+Received - UPI
+BY
+RPTEST clerk
+21 Oct 2026, 2:48 PM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Took a payment
+SUBJECT
+Meera Iyer · room 203
+DETAIL
+Received - UPI
+BY
+Group Owner
+21 Oct 2026, 2:46 PM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Reversed a posting
+SUBJECT
+Rohit Deshpande · room 201
+DETAIL
+Reversal - Received - UPI (why: reports test fixture)
+BY
+Group Owner
+21 Oct 2026, 2:46 PM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Reversed a posting
+SUBJECT
+Omkar Shinde · room 203
+DETAIL
+Reversal - Received - UPI (why: reports test fixture)
+BY
+Group Owner
+21 Oct 2026, 2:46 PM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Reversed a posting
+SUBJECT
+Omkar Shinde · room 203
+DETAIL
+Reversal - Transferred to city ledger (why: reports test fixture)
+BY
+Group Owner
+21 Oct 2026, 2:46 PM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Took a payment
+SUBJECT
+Omkar Shinde · room 203
+DETAIL
+Transferred to city ledger
+BY
+Group Owner
+21 Oct 2026, 2:46 PM
+BUSINESS DATE
+10 Mar 2026
+ACTION
+Posted a charge
+SUBJECT
+Kalyani Rege · room 301
+DETAIL
+Room 999 · 3 nights
+BY
+-
+21 Oct 2026, 2:46 PM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Took a payment
+SUBJECT
+Omkar Shinde · room 203
+DETAIL
+Received - UPI
+BY
+RPTEST clerk
+21 Oct 2026, 2:46 PM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Took a payment
+SUBJECT
+Rohit Deshpande · room 201
+DETAIL
+Received - UPI
+BY
+Group Owner
+20 Oct 2026, 12:39 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Took a payment
+SUBJECT
+A5 Test Wagh · room 302
+DETAIL
+Received - UPI
+BY
+Test Reception
+20 Oct 2026, 12:39 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+A5 Test Wagh · room 302
+DETAIL
+Room 302 · 1 night
+BY
+Test Reception
+20 Oct 2026, 12:38 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Took a payment
+SUBJECT
+A5 Test Rane · room 303
+DETAIL
+Received - UPI
+BY
+Test Reception
+20 Oct 2026, 12:34 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+A5 Test Rane · room 303
+DETAIL
+Room 303 · 1 night
+BY
+Test Reception
+20 Oct 2026, 12:19 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Took a payment
+SUBJECT
+A4 Test Kulkarni · room 305
+DETAIL
+Received - Cash
+BY
+Test Reception
+20 Oct 2026, 12:18 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Took a payment
+SUBJECT
+A4 Test Kulkarni · room 305
+DETAIL
+Transferred to city ledger
+BY
+Test Reception
+20 Oct 2026, 12:18 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+A4 Test Kulkarni · room 305
+DETAIL
+Transferred in - Room 305 · 1 night
+BY
+Test Reception
+20 Oct 2026, 12:18 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Reversed a posting
+SUBJECT
+A4 Test Kulkarni · room 305
+DETAIL
+Transferred out - Room 305 · 1 night
+BY
+Test Reception
+20 Oct 2026, 12:18 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+A4 Test Kulkarni · room 305
+DETAIL
+Laundry, 3 shirts
+BY
+Test GM
+20 Oct 2026, 12:18 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Reversed a posting
+SUBJECT
+A4 Test Kulkarni · room 305
+DETAIL
+Reversal - Laundry, 3 shirts (why: Two shirts, not three - counted again with the guest)
+BY
+Test GM
+20 Oct 2026, 12:17 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Reversed a posting
+SUBJECT
+A4 Test Kulkarni · room 305
+DETAIL
+Reversal - Minibar - water (why: Posted to the wrong room - it was room 304's)
+BY
+Test Reception
+20 Oct 2026, 12:17 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+A4 Test Kulkarni · room 305
+DETAIL
+Minibar - water
+BY
+Test Reception
+20 Oct 2026, 12:16 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+A4 Test Kulkarni · room 305
+DETAIL
+Two coffees, room service
+BY
+Test Reception
+20 Oct 2026, 12:16 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+A4 Test Kulkarni · room 305
+DETAIL
+Laundry, 3 shirts
+BY
+Test Reception
+20 Oct 2026, 12:15 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+A4 Test Kulkarni · room 305
+DETAIL
+Room 305 · 1 night
+BY
+Test Reception
+20 Oct 2026, 12:15 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Took a payment
+SUBJECT
+A4 Test Kulkarni · room 305
+DETAIL
+Received - UPI
+BY
+Test Reception
+20 Oct 2026, 12:13 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Took a payment
+SUBJECT
+A4 Test Kulkarni · room 305
+DETAIL
+Transferred to city ledger
+BY
+Test Reception
+20 Oct 2026, 12:13 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+A4 Test Kulkarni · room 305
+DETAIL
+Transferred in - Room 305 · 1 night
+BY
+Test Reception
+20 Oct 2026, 12:13 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Reversed a posting
+SUBJECT
+A4 Test Kulkarni · room 305
+DETAIL
+Transferred out - Room 305 · 1 night
+BY
+Test Reception
+20 Oct 2026, 12:11 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+A4 Test Kulkarni · room 305
+DETAIL
+Laundry, 3 shirts
+BY
+Test GM
+20 Oct 2026, 12:11 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Reversed a posting
+SUBJECT
+A4 Test Kulkarni · room 305
+DETAIL
+Reversal - Laundry, 3 shirts (why: Two shirts, not three - counted again with the guest)
+BY
+Test GM
+20 Oct 2026, 12:11 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Reversed a posting
+SUBJECT
+A4 Test Kulkarni · room 305
+DETAIL
+Reversal - Minibar - water (why: Posted to the wrong room - it was room 304's)
+BY
+Test Reception
+20 Oct 2026, 12:10 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+A4 Test Kulkarni · room 305
+DETAIL
+Minibar - water
+BY
+Test Reception
+20 Oct 2026, 12:10 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+A4 Test Kulkarni · room 305
+DETAIL
+Two coffees, room service
+BY
+Test Reception
+20 Oct 2026, 12:10 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+A4 Test Kulkarni · room 305
+DETAIL
+Laundry, 3 shirts
+BY
+Test Reception
+20 Oct 2026, 12:07 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+A4 Test Kulkarni · room 305
+DETAIL
+Room 305 · 1 night
+BY
+Test Reception
+19 Oct 2026, 7:24 PM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+A3 Test Gokhale · room 307
+DETAIL
+Room 307 · 1 night
+BY
+Test Reception
+17 Oct 2026, 10:50 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Took a payment
+SUBJECT
+Tanvi Bhide · room 201
+DETAIL
+Received - UPI
+BY
+Test Reception
+17 Oct 2026, 10:48 AM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Took a payment
+SUBJECT
+Sudarshan Kator · room 207
+DETAIL
+Received - UPI
+BY
+Test Reception
+13 Oct 2026, 9:05 PM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Took a payment
+SUBJECT
+A4 Test Kulkarni · room 305
+DETAIL
+Received - UPI
+BY
+Test Reception
+13 Oct 2026, 8:39 PM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Took a payment
+SUBJECT
+A3 Test Smith · room 301
+DETAIL
+Received - UPI
+BY
+Test Reception
+13 Oct 2026, 8:30 PM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+A3 Test Iyer · room 209
+DETAIL
+Room 209 · 1 night
+BY
+Test Reception
+13 Oct 2026, 8:13 PM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+A3 Test Desai · room 204
+DETAIL
+Room 204 · 1 night
+BY
+Test Reception
+13 Oct 2026, 8:12 PM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+A3 Test Smith · room 301
+DETAIL
+Room 301 · 1 night
+BY
+Test Reception
+13 Oct 2026, 7:46 PM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Took a payment
+SUBJECT
+A5 Test Wagh · room 302
+DETAIL
+Received - UPI
+BY
+Test Reception
+13 Oct 2026, 7:45 PM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+A5 Test Wagh · room 302
+DETAIL
+Room 302 · 1 night
+BY
+Test Reception
+13 Oct 2026, 7:08 PM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Took a payment
+SUBJECT
+A5 Test Rane · room 303
+DETAIL
+Received - UPI
+BY
+Test Reception
+13 Oct 2026, 3:22 PM
+BUSINESS DATE
+11 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+A5 Test Rane · room 303
+DETAIL
+Room 303 · 1 night
+BY
+Test Reception
+13 Oct 2026, 3:54 AM
+BUSINESS DATE
+10 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+A4 Test Kulkarni · room 305
+DETAIL
+Room 305 · 1 night
+BY
+Test GM
+13 Oct 2026, 3:46 AM
+BUSINESS DATE
+10 Oct 2026
+ACTION
+Took a payment
+SUBJECT
+A5 Test More · room 304
+DETAIL
+Received - UPI
+BY
+Test Reception
+13 Oct 2026, 3:44 AM
+BUSINESS DATE
+10 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+Sudarshan Kator · room 207
+DETAIL
+Room 207 · 1 night
+BY
+Test Reception
+13 Oct 2026, 3:43 AM
+BUSINESS DATE
+10 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+Priya Menon · room 205
+DETAIL
+Room 205 · 1 night
+BY
+Test Reception
+13 Oct 2026, 3:42 AM
+BUSINESS DATE
+10 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+Shridhar Kamble · room 206
+DETAIL
+Fidato Restaurant - 20261010-4
+BY
+Test GM
+13 Oct 2026, 3:31 AM
+BUSINESS DATE
+10 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+Shridhar Kamble · room 206
+DETAIL
+Room 206 · 1 night
+BY
+Test Reception
+13 Oct 2026, 3:30 AM
+BUSINESS DATE
+10 Oct 2026
+ACTION
+Posted a charge
+SUBJECT
+Vikram Desai · room 202
+DETAIL
+Room 202 · 1 night
+BY
+Test Reception
+13 Oct 2026, 3:29 AM
+BUSINESS DATE
+10 Oct 2026
+ACTION
+Took a payment
+SUBJECT
+Ananya Bose · room 207
+DETAIL
+Received - UPI
+BY
+Test Reception
+13 Oct 2026, 2:55 AM
+BUSINESS DATE
+10 Oct 2026
+ACTION
+Took a payment
+SUBJECT
+A2 Test Kumar · room 301
+DETAIL
+Received - UPI
+BY
+Test Reception
+13 Oct 2026, 2:54 AM
+BUSINESS DATE
+10 Oct 2026
+ACTION
+Took a payment
+SUBJECT
+A2 Test Kumar · room 210
+DETAIL
+Received - UPI
+BY
+Test Reception
+
+The folio ledger is the audit trail for money. It is append-only by construction, so nothing is recorded twice and nothing can be quietly rewritten. By is the person who made the entry. A dash means nobody was recorded - older charges, payments and reversals made at the desk did not record who made them.
