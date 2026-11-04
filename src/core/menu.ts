@@ -910,6 +910,8 @@ export const PHONE_ROUTES: Readonly<Record<string, string>> = {
   "/h/:code/requests": "/guest-services/:code/requests",
   /* mobile/t2-approvals (4 Nov) */
   "/h/:code/approvals": "/approvals/:code",
+  /* mobile/t2-revenue (4 Nov) */
+  "/h/:code/revenue-outlook": "/revenue/:code",
   /* mobile/t2-stores (4 Nov): the Store (the Inventory Manager's landing), Inventory, and the
      Restaurant menu's Bar stock and Kitchen stock - one sheet screen, three doors, as the web. */
   "/h/:code/stores": "/stores/:code",
