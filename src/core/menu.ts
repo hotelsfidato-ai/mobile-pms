@@ -906,10 +906,22 @@ export const PHONE_ROUTES: Readonly<Record<string, string>> = {
   "/h/:code/walk-ins": "/front-desk/:code/walk-ins",
   /* mobile/guest-services: each web screen to its own twin, not to the
      phone's hub (the hub has no web twin; its MODULE.md). Guest messages
-     stays on the website: the phone's Messages is only its card. */
+     (what the system sent guests) is its own screen since 4 Nov (mobile/t2-messages). */
   "/h/:code/requests": "/guest-services/:code/requests",
   /* mobile/t2-approvals (4 Nov) */
   "/h/:code/approvals": "/approvals/:code",
+  /* mobile/t2-revenue (4 Nov) */
+  "/h/:code/revenue-outlook": "/revenue/:code",
+  /* mobile/t2-crs (4 Nov) */
+  "/h/:code/crs-bookings": "/crs/:code",
+  /* mobile/t2-loyalty (4 Nov) */
+  "/h/:code/loyalty": "/loyalty/:code",
+  /* mobile/t2-reviews (4 Nov) */
+  "/h/:code/reviews": "/reputation/:code",
+  /* mobile/t2-messages (4 Nov): Guest messages (Guests & CRM, and Settings → Messages, the same page) and
+     Connection health (Settings → Modules and connections), read only. */
+  "/h/:code/guest-messages": "/guest-messages/:code",
+  "/settings/connections/connection-health": "/connections/:code",
   /* mobile/t2-stores (4 Nov): the Store (the Inventory Manager's landing), Inventory, and the
      Restaurant menu's Bar stock and Kitchen stock - one sheet screen, three doors, as the web. */
   "/h/:code/stores": "/stores/:code",
