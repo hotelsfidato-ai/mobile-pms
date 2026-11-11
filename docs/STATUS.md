@@ -5,7 +5,7 @@ Kept by the mobile chat; brought up to date at every merge. Each slice is built 
 its own scratch database, its own ports), and merged into `mobile/app` by the mobile chat after
 review and green gates.
 
-## Screens, at a glance (4 Nov, after the cloud session)
+## Screens, at a glance (4 Nov, after the cloud session; Tier 2 added the same day)
 
 **All of Tier 1 is merged into `main`** (`b628aae`, ALL GATES GREEN on each merge commit): the nine
 branches the helpers left on 31 Oct were finished in the cloud (M-12), one copy each, and merged.
@@ -16,9 +16,9 @@ opens them next.
 | | Screens | |
 |---|---|---|
 | ✅ Matches its picture (only the phone's own rules differ: 44 px touch, Back until the frame, "On the website for now") | **13** | All properties · Dashboard · Rooms · Tables · Arrivals (Today, Upcoming) · In house (now, Due out) · Walk-ins record · Kitchen · Work orders · Guest requests · Wake-up calls · Lost property · Notifications |
-| 🟠 Differences left, each listed in its MODULE.md | **3** | Walk-in (picture 14: no server quote for GST and Due, R-22) · Messages from guests (picture 17 shows the sent-messages record, not on the phone) · the menu for each role (6 of 11 match outright; 5 lack one System entry the pictures never show open) |
+| 🟠 Differences left, each listed in its MODULE.md | **1** | Walk-in (picture 14: no server quote for GST and Due, R-22). Resolved since: Guest messages is its own screen (Tier 2, slice 23); the menus' extra System entry is the web's development-only "Design system" (`01ed1a5`) |
 | ⬜ No usable picture yet (built from the ported code) | **12** | Sign in · Report a repair · Out of service · The order (with paying, printing) · Order pad · A stay · Check in · Take a walk-in · A stay's bill and check-out · Online check-in (picture blank) · Guest services hub · the account menu (pictures never opened it) |
-| ⏳ Tier 2, planned (one copy each, in waves) | **15** | below |
+| ✅ Tier 2, merged 4 Nov (15 slices, built from today's PMS code) | **15** | below: every pictured first screen matches its picture |
 | ◻ Tier 3, desk set-up: kept on the website unless the owner says otherwise | 9 | below |
 
 **Tier 1: 28 screens on `main`. 13 match their pictures, 3 have differences left, 12
