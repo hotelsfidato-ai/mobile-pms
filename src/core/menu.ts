@@ -910,6 +910,12 @@ export const PHONE_ROUTES: Readonly<Record<string, string>> = {
   "/h/:code/requests": "/guest-services/:code/requests",
   /* mobile/t2-approvals (4 Nov) */
   "/h/:code/approvals": "/approvals/:code",
+  /* mobile/m13-fin-desk (19 Nov): the drawer, company accounts, cash deposits, Form III, supplier dues. */
+  "/h/:code/cashiering": "/finance/:code/cashiering",
+  "/h/:code/city-ledger": "/finance/:code/city-ledger",
+  "/h/:code/cash-deposits": "/finance/:code/cash-deposits",
+  "/h/:code/form-c": "/finance/:code/form-c",
+  "/h/:code/supplier-dues": "/finance/:code/supplier-dues",
   /* mobile/t2-revenue (4 Nov) */
   "/h/:code/revenue-outlook": "/revenue/:code",
   /* mobile/t2-crs (4 Nov) */
