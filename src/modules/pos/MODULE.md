@@ -166,3 +166,85 @@ Compared by reading the code against the pictures (`reference/pms-shots/all/45-p
 of your role" for Kitchen stock), not part of the pass: **not built**, not in this lane.
 
 1 of 1 screens built here matches its pictures apart from the differences above.
+
+## Till and Terminal (lane m13-till, 19 Nov)
+
+**The web twin's map** (today's PMS, 16 Nov release, read-only checkout):
+- Pages: `src/modules/pos/pages/Till.tsx` (TillPage: Start an order, Open orders, Settled today,
+  An earlier day's bill; beside them the open order's OrderPanel and the menu) and
+  `pages/Terminal.tsx` (the outlet chosen once on the device, then Start an order / the open
+  orders / guests' room-service orders, and the bill pane); both inside `PosGate`
+  (`GET /till/access`). Pieces: `components/NewParcel.tsx`, `GuestOrders.tsx`, `KotStation.tsx`
+  (KotStatus), `components/app/StartHere.tsx`, `modules/guests/components/Preferences.tsx`
+  (RoomPreferences).
+- Reads and their gates (`api/src/roleGate.ts`): `GET /till/orders`, `/till/bills`,
+  `/till/guest-orders` (TILL_READ: `payment` view + waiter + Bar person), `/till/menu` (MENU_READ),
+  `/till/kot-setup` (KOT_READ), `/pos/outlets` (`payment`/`invoice`/`setting` view + waiter + Bar),
+  `/guest-preferences` (`reservation` view + waiter + Bar).
+- Writes: `POST /till/orders` (Open, New parcel), `POST /till/orders/batch {guestOrderId}`
+  (Accept and send), `POST /till/guest-orders/:id/decline` — all TILL (`payment` create + waiter +
+  Bar person, roleGate 228). None reads an idempotency key (R-13).
+- Offline (`src/core/offline.ts`, the web's): the first two are "Order" (queue: held); Decline is
+  not on the list (refused with the web's sentence). Settling is the order screen's (refused).
+
+**How the Till relates to Tables, the pad and the order (nothing of theirs edited):** the web's
+Till is one page — the lists, and beside them the open order (OrderPanel) and the menu. On the
+phone the open order IS the order screen (`OrderScreen.tsx`, `/pos/:code/order/:id`, the port of
+OrderPanel, with `Pay.tsx` settling and printing) and the menu IS the order pad (`OrderPad.tsx`).
+A row opens the order; Open and New parcel make the order, then open the order and its pad over
+it (`TillKit.goToOrder`), as the web shows the new order with its menu. The Terminal does the same
+on its outlet: its bill pane is the same order screen (the web: "a terminal that could do something
+the till could not would be a second system").
+
+| | Till | Terminal |
+|---|---|---|
+| Route, files | `app/pos/[code]/till.tsx`; `Till.tsx`, `TillKit.tsx`, `till.ts` (+ check) | `app/pos/[code]/terminal.tsx`; `Terminal.tsx`, `TillKit.tsx`, `till.ts` (+ check) |
+| Reads | orders (every 30 s on screen, again on coming back: the web's live stream is not on the phone), the menu (only "There is no menu yet" and its failure; the pad's key), KOT lines, bills by number | outlets, orders (30 s), guest orders (20 s, as the web), guests' preferences, KOT lines |
+| Writes | Open, New parcel | Open the order, New parcel, Accept and send, Decline |
+| Rights | `till.ts ringWhy`: today's TILL and its sentence (MPOS-T1); refused buttons grey, the tap says why | the same |
+| Unknown outcome | Open and New parcel: one tap one order (latched); after nothing came back or a 5xx, "Not known whether it was opened", no more taps until the screen is left and the list read again (Open) or the sheet closed (parcel) | the same; Accept and Decline are refused a second time by the server ("already answered"), so they say "Not known…" and read again |
+| States | loading (grey block, "Reading today's orders") · failed / offline before a read (ReadProblem: its words differ) · a failed re-read (Stale line) · empty (as the web: no list card, Start an order stays) · no menu ("There is no menu yet") | loading ("Loading the outlets…") · failed · none ("No outlet is configured") · the same list states |
+| Native (docs/NATIVE.md) | the parcel sheet pads the safe areas, lifts over the keyboard, closes on the back gesture; phone-pad for the phone; Android ripple on rows | 64 px thumb buttons, ripple; no frame (core `coversTheFrame`) |
+| Exports | the web offers no download of these lists: none | none |
+
+### Picture match (19 Nov)
+
+Compared by reading the code against the pictures (`reference/pms-shots/all/43-point-of-sale-till`
+= `new/n-pos-till`, the GM, 2929 px; `all/44-point-of-sale-terminal` = `new/n-pos-terminal`, the
+GM, the outlet's choice); **never seen running**.
+
+**Till — matches, with these differences left:**
+1. **The top bar and the business-date banner** are the frame's (`src/core/Shell.tsx`), not this screen.
+2. **NC rows show their value** ("NC ₹441"), the picture "NC" alone: today's code (D27-394, `Till.tsx`
+   625) is newer than the 31 Oct picture (MEMORY 14).
+3. **A figure with paise keeps them** (₹1,481.50) where the web's money() rounds (MEMORY 9); whole
+   figures look as the picture.
+4. **Day** (the web's date picker) is drawn, greyed, and says "On the website for now": a date
+   picker needs `@react-native-community/datetimepicker` 9.1.0 (not installed). The bill number asks
+   alone (two characters, as the web).
+5. **The open order beside the lists** (OrderPanel and the menu, at a tablet's width) is the order
+   screen and the pad on the phone (above).
+6. **Start here** (the waiter's and the Bar person's) is not in the GM's picture: drawn from
+   `StartHere.tsx`; its first two jobs open Tables, the third is "On this screen".
+7. **The live stream** (`useLiveOrders`) is not on the phone: the list is read every 30 s on screen.
+
+**Terminal — the outlet's choice matches** (eyebrow, title, sentence, the outlets' tiles with name,
+code and arrow, "← Back to the console"). **Not pictured**, built from `Terminal.tsx`: the terminal
+after the choice (header, Console, KOT lines, room-service orders, Start an order, open orders,
+"This terminal is locked to …", Change outlet). Differences left:
+1. **The outlet is kept per property** (`fidato.terminal-outlet.<code>`): the web's one key carries
+   one hotel's outlet into another's till (AGENTS rule 5).
+2. **A room-service order's total is not drawn:** the web adds the guest's basket up in the browser
+   (`GuestOrders.tsx` 65); the server sends no total and the phone never totals.
+3. **The bill pane, the menu beside it, the running-total bar** (with its ₹0.00 for no order) are
+   the order screen and the pad; the Terminal-only acts there — a note per dish (the speech
+   bubble), the tip for the staff, the coupon, the voluntary service charge, No charge (NC), Move
+   and Join — are the order screen's to have or not (the order lane's).
+4. **"Console"** replaces the Terminal by the Till (the web's link to `/pos/:code/till`).
+
+2 of 2 screens match their pictures apart from the differences above (the Terminal: its pictured
+state only).
+
+**Web addresses of this lane:** `/pos/:code/till` → built at `/pos/:code/till`;
+`/pos/:code/terminal` → built at `/pos/:code/terminal` (and the web's old `/h/:code/till`,
+`/h/:code/till/terminal` redirect there on the web).

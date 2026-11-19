@@ -76,3 +76,29 @@ good and each column scrolled on its own.
 and the board (By stage and By table), with one pull to refresh (`2dd8bb6`).
 **The rule:** a full-length picture taller than the screen means the page scrolls as one; draw
 inner scrolls only where the picture shows a clipped box.
+
+## Till and Terminal (lane m13-till, 19 Nov)
+
+### MPOS-T1 · The phone refuses the Bar person the till the API allows (19 Nov)
+
+**What happened.** `roles.ts` (15 Oct) lists who rings up as the owner, an administrator, the GM,
+the hotel manager, reception, the waiter and the accountant, and says "a till operator". Today's
+API (`roleGate.ts` 228) adds the Bar person (D27-324) and says "a waiter, a bar person or the
+accountant". Every screen that asks `whyNotRing` (Tables, the pad, the order, Pay) greys every
+till button for a Bar person, whose landing is Tables. **How found:** mapping today's roleGate
+against `roles.ts` for the Till. **What was done:** the Till and the Terminal ask `till.ts ringWhy`
+(today's list and sentence); `till.check.ts` holds it equal to `roles.ts` for every other role, so
+a drift shows (broken once: without the Bar person it fails). `roles.ts` is not this lane's: the
+mobile chat should give it the Bar person and today's sentence. **The rule:** a ported list of who
+may is dated; a lane re-reads the gate it builds on.
+
+### MPOS-T2 · A voided or NC bill opened from the Till reads "Closed unpaid - null" (19 Nov)
+
+**What happened.** The Till's Settled today and An earlier day's bill list voided (`void`) and no
+charge (`no_charge`) bills, as the web. The order screen they open (`order.ts finished()`,
+`OrderScreen.tsx`) knows only open, settled and abandoned: such a bill reads "Closed unpaid - null"
+and offers no Print the bill, where the web says "VOID - <reason>." / "NC · No charge, …" and
+prints it (`Terminal.tsx` 1066-1083). **How found:** following a Till row to the screen it opens.
+**What was done:** nothing here (the order lane's files, never edited from this lane); for the
+mobile chat. **The rule:** a list that opens another lane's screen is followed through every
+status it can show.
