@@ -5,7 +5,7 @@ import {
   type LucideIcon,
 } from "lucide-react-native";
 import { useEffect, useState } from "react";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import { Platform, Pressable, ScrollView, Text, View } from "react-native";
 import { api, HeldError, type Hotel } from "../../core/api";
 import { dateLong } from "../../core/format";
 import { isOnline } from "../../core/offline";
@@ -65,6 +65,10 @@ const PILL_ICON: Record<Pill, LucideIcon> = {
 const PILL_CHIP: Record<Pill, ChipTone> = {
   All: "neutral", Vacant: "neutral", Occupied: "blue", Arrivals: "orange", Reserved: "neutral", Blocked: "neutral", "Due Out": "yellow", Dirty: "green",
 };
+
+/** Press feedback (docs/NATIVE.md): the ripple on Android, the pressed shade on iPhone, never both. */
+const ios = Platform.OS === "ios";
+const ripple = { color: c.grey200, borderless: false } as const;
 
 /* The person's Room type / Floor for this run: their server preference (087), then what they chose here. */
 let chosenGrouping: GroupBy | null = null;
@@ -193,13 +197,14 @@ function Tile({ room, stay, refused, onOpen }: { room: ChartRoom; stay: Stay | u
       onPress={onOpen} disabled={off} accessibilityRole="button" accessibilityLabel={words}
       accessibilityState={{ disabled: off || (act.kind === "walk-in" && refused !== null) }}
       accessibilityHint={act.kind === "walk-in" ? refused ?? "Starts a walk-in into this room" : undefined}
+      android_ripple={off ? undefined : ripple}
       style={({ pressed }) => ({
-        flex: 1, minHeight: 92, minWidth: 0, borderRadius: 12, borderWidth: 1, paddingHorizontal: 14, paddingVertical: 12, gap: 2,
-        backgroundColor: look.bg, borderColor: pressed && !off ? (look.ink ?? c.grey400) : look.ring,
+        flex: 1, minHeight: 92, minWidth: 0, borderRadius: 12, borderWidth: 1, paddingHorizontal: 14, paddingVertical: 12, gap: 2, overflow: "hidden",
+        backgroundColor: look.bg, borderColor: ios && pressed && !off ? (look.ink ?? c.grey400) : look.ring,
       })}
     >
       <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
-        <Text style={[t.figure, free ? [face[500], { color: c.grey700 }] : { color: c.ink900 }]}>{room.number}</Text>
+        <Text numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.8} style={[t.figure, { flexShrink: 0 }, free ? [face[500], { color: c.grey700 }] : { color: c.ink900 }]}>{room.number}</Text>
         <View style={{ flexDirection: "row", alignItems: "center", gap: 6, flexShrink: 1 }}>
           {dirtyMark(room) ? <Text style={[t.caption, face[600], { color: c.red700 }]}>dirty</Text> : null}
           {free ? <Text style={t.caption}>{TILE_LABEL.free}</Text> : (
@@ -241,9 +246,10 @@ function Tiles({ pill, onPick, counts }: { pill: Pill; onPick: (p: Pill) => void
         return (
           <Pressable
             key={p} onPress={() => onPick(p)} accessibilityRole="tab" accessibilityState={{ selected: on }} accessibilityLabel={`${PILL_LABEL[p]}, ${n ?? "not read"}`}
+            android_ripple={ripple}
             style={({ pressed }) => ({
-              minWidth: 116, borderRadius: 12, borderWidth: 1, paddingHorizontal: 14, paddingVertical: 12, gap: 4,
-              backgroundColor: on ? c.ink900 : job === "orange" ? c.orange50 : job === "yellow" ? c.yellow50 : pressed ? c.grey50 : c.white,
+              minWidth: 116, borderRadius: 12, borderWidth: 1, paddingHorizontal: 14, paddingVertical: 12, gap: 4, overflow: "hidden",
+              backgroundColor: on ? c.ink900 : job === "orange" ? c.orange50 : job === "yellow" ? c.yellow50 : ios && pressed ? c.grey50 : c.white,
               borderColor: on ? c.ink900 : job === "orange" ? c.orange100 : job === "yellow" ? c.yellow100 : c.grey200,
             })}
           >

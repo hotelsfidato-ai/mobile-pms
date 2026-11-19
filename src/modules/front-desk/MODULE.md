@@ -154,3 +154,8 @@ is the phone's own (the web shows nothing); (3) the stale line has no time "as t
 (the core's read gives no time) and keeps Try again offline (the phone cannot tell the read will
 resume by itself); (4) the grouping chosen here is remembered for this run, not handed to the
 Calendar's own (each screen keeps its own until the session's scope carries it).
+
+**Native (docs/NATIVE.md, 19 Nov):** the tiles and the count tiles ripple on Android and shade on
+iPhone, never both; every tap is 44 px or more (tiles 92); the room number shrinks to fit (0.8) rather
+than clip; pull down reads again (the core's `Screen`); no sheet of its own (Assign room is
+reservations'). **Export:** the web's Rooms offers no download or print, so no `ExportButtons` here.
