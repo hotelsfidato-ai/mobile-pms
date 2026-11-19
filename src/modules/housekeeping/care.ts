@@ -286,3 +286,23 @@ export function runPill(r: Pick<ChecklistRun, "passed" | "job">): { label: strin
 export const failedText = (f: { item: string; note: string | null }) => (f.note ? `${f.item} - ${f.note}` : f.item);
 export const runsEmptyTitle = (room: string) =>
   (room.trim() ? `Nothing ticked in room ${room.trim().toUpperCase()} yet` : "Nothing ticked yet");
+
+/* ── The files (Minibar.tsx RECORD_EXPORT, Checklists.tsx RUN_EXPORT) ── */
+
+/** A take's status in the export's own words. */
+export function exportStatus(r: Pick<MinibarRecord, "reversed" | "status" | "waitingWhy">): string {
+  if (r.reversed) return "Taken off the bill";
+  if (r.status === "charged") return "On the bill";
+  if (r.status === "waiting") return r.waitingWhy === "after_checkout" ? "Waiting: found after check-out" : "Waiting: not sure";
+  return "Not charged";
+}
+export const RECORD_COLUMNS = ["Room", "Booking", "Guest", "Taken", "Status", "Charged with tax", "Recorded by", "Recorded", "Decided by", "Decided", "Note"] as const;
+/** One take as the export's row, each cell as the screen writes it; `when` writes the times. */
+export const recordRow = (r: MinibarRecord, when: (at: string | null) => string): string[] => [
+  r.room, r.reference ?? DASH, r.guest ?? DASH, r.lines.map((l) => `${l.name} x ${l.quantity}`).join(", "), exportStatus(r),
+  money(r.charged), r.recordedBy ?? DASH, when(r.recordedAt), r.decidedBy ?? DASH, when(r.decidedAt), r.decidedNote ?? DASH,
+];
+export const RUN_COLUMNS = ["Room", "Job", "Result", "Ticked by", "When", "What failed"] as const;
+export const runRow = (r: ChecklistRun, when: (at: string | null) => string): string[] => [
+  r.room, JOB_LABELS[r.job], runPill(r).label, r.doneBy ?? DASH, when(r.doneAt), r.failed.map(failedText).join("; ") || DASH,
+];

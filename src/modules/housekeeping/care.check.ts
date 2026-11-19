@@ -3,7 +3,7 @@
 import {
   changeItemBody, countedText, decideBody, failedText, guestText, itemsOf, lineText, listEmpty, money, newItemBody,
   newListBody, priceInput, recordedLine, recordedOf, recordedPill, runPill, runsEmptyTitle, runsPath, startStore, step,
-  stockText, takeBody, takeLines, takenWords, waitingOf, waitingPill, whatWasTaken, whyNotDecline, whyNotOpenTake,
+  exportStatus, recordRow, runRow, stockText, takeBody, takeLines, takenWords, waitingOf, waitingPill, whatWasTaken, whyNotDecline, whyNotOpenTake,
   whyNotSaveItem, whyNotSaveList, whyNotTake, RECORD_REFUSED, SAY_WHY_NOT,
   type MinibarItem, type MinibarRecord,
 } from "./care.ts";
@@ -125,3 +125,11 @@ eq(runsPath("5EL", " 204 "), "/api/hotels/5EL/housekeeping/checklist-runs?room=2
 eq(runsPath("5EL", ""), "/api/hotels/5EL/housekeeping/checklist-runs");
 
 console.log("care: all checks pass");
+
+/* The files: the server's figure with its tax, a dash for none. */
+eq(recordRow(rec({}), when), ["204", "FD-1042", "Tanvi Bhide", "Water x 2, Chips x 1", "On the bill", "₹151.73", "Test Housekeeper", "19 Nov 2026, 10:00 AM", "-", "-", "-"]);
+eq(exportStatus(rec({ status: "waiting", waitingWhy: "after_checkout", charged: null })), "Waiting: found after check-out");
+eq(recordRow(rec({ status: "waiting", charged: null }), when)[5], "-");
+eq(runRow({ id: "k", room: "204", job: "inspection", doneAt: "x", doneBy: null, passed: false, failed: [{ item: "Towels", note: "Stained" }] }, when),
+  ["204", "Inspection", "Failed", "-", "19 Nov 2026, 10:00 AM", "Towels - Stained"]);
+console.log("care: the files pass");
