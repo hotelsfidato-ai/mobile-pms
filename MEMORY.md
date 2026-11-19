@@ -5,6 +5,13 @@ module's `DEFECTS.md` instead. Read the newest first.
 
 ---
 
+### 18 · "Break it once" on an uncommitted file, restored with git, restored nothing (19 Nov)
+
+The mobile chat broke `exportDoc.ts`'s escaping to prove its check, then ran `git checkout` to put
+it back — but the file was new and untracked, so nothing came back and the broken file stayed (and
+the check had not failed either: its data held no `&`). **The rule:** copy a file aside before
+breaking it and copy it back; and a break that does not fail means the check is missing a case.
+
 ### 17 · Three small traps of 4 Nov's cloud work
 
 - **A push in the same command as a commit** lost the commit when the permission check refused
