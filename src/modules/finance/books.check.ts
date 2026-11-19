@@ -2,6 +2,7 @@
    Folios, Invoices, Payments and an invoice's page: every figure the
    server's, counted never summed, the API's sentences, every write refused
    offline in the web's words (books.ts). */
+import { instant } from "../../core/format.ts";
 import { ruleFor } from "../../core/offline.ts";
 import {
   BOOK_READS, BOOK_WRITES, amountInWords, balanceShown, cancellable, creditable, groupBalance, groupBills, halfLabel,
@@ -49,6 +50,8 @@ eq(Object.keys(methodCounts(receipts)[0]!), ["method", "count"], "no amount is m
 eq(reversedNote(receipts)?.slice(0, 32), "1 receipt is marked Reversed. Th", "one reversed");
 eq(reversedNote([pay("Cash", 1, true), pay("UPI", 1, true)])?.slice(0, 21), "2 receipts are marked", "two reversed");
 eq(reversedNote([pay("Cash", 1)]), null, "none reversed, no note");
+/* MEMORY 7: a receipt's time is Postgres's text; the phone reads it only through instant(), as ISO. */
+eq(instant(receipts[0]!.at), "2026-10-28T20:37:00.123+05:30", "a receipt's time, as the phone's engine reads it");
 
 /* ── Invoices ── */
 const bill = (status: BillableRow["status"], invoice: string | null): BillableRow =>
