@@ -25,7 +25,7 @@ import {
    enquiry never shares a booking's colour; an unpriced function is a dash.
    The window moves 30 days a step (Earlier, From today, Later), as the web.
    Register a function opens the web's dialog (Register.tsx); Halls and
-   packages is desk set-up and stays on the website (grey, with the reason).
+   packages opens its screen (Setup.tsx, lane U).
    ══════════════════════════════════════════════════════════════════ */
 
 export function Diary({ hotel, role, onBack }: { hotel: Hotel; role: string | null; onBack: () => void }) {

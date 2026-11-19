@@ -133,3 +133,41 @@ matters: its words equal today's `SpaDiary.tsx`, word for word (MEMORY 14).
 
 **1 of 1 pictured screens matches its picture** (with the differences listed); three dialogs are
 not pictured; the set-up screen stays on the website.
+
+## Lane U — Treatments and therapists (m13-setups, 19 Nov)
+
+**Web twin:** `/h/:code/spa/setup`, `src/modules/spa/pages/SpaSetup.tsx` (TreatmentDialog,
+TherapistDialog, TherapistToggle, TREATMENT_EXPORT), `data/spa.ts` lines 165-216; the API
+`api/src/modules/spa/spa.ts` lines 160-395, its own lists (roleGate.ts `own(...)`): reads
+SPA_READ_ROLES, writes SPA_LIST_ROLES (the owner, an administrator, the GM) with LIST_REFUSED (403).
+Offline: no spa path is on the web's list, each write **refused** (UNLISTED). Read at `c9394cb` (16 Nov).
+
+| Screen | Route → file | Picture | Reads / writes |
+|---|---|---|---|
+| Treatments and therapists | `app/spa/[code]/setup.tsx` → `Setup.tsx` | `new/n-h-spa-setup` (dev-gm) | `GET /spa/treatments`, `GET /spa/therapists` (data.ts, keys `["spa", code, "treatments" / "therapists"]`); `POST`/`PATCH /treatments`, `POST`/`PATCH /therapists` (`setupData.ts`) |
+| Add / Change a treatment (dialog) | on it | not pictured | name, minutes, price, Free; Take off / Put back on the list |
+| Add a therapist (dialog) | on it | not pictured | name |
+
+Rules `setup.ts` (`setup.check.ts`); pieces from `../banquet/setupKit.tsx`. The diary's "Treatments and
+therapists" and "Add a therapist" now open it for the three who set the list (grey with LIST_REFUSED
+for the rest; the web leaves them out).
+
+- **Prices** typed and sent as typed: empty is null ("-", never ₹0), emptying a priced one unprices
+  it; 0 only with Free; paise kept. The web's checks in its order and words; minutes must be whole
+  (the server stores an int).
+- **Rights:** the web shows every button to every reader and lets the server refuse; the phone greys
+  them with LIST_REFUSED, said once under the head.
+- **Taking a treatment or a therapist off the list asks first** (`Alert.alert`); putting back does not.
+- **Export:** the treatments card carries the core's ExportButtons (print / save as PDF, share) built
+  from the rows shown, the web's TREATMENT_EXPORT columns (no download right asked: the API's
+  `spa-treatments` list holds neither money nor guests). A real .xlsx waits for a package.
+- **Unknown outcome:** a dialog sticks until closed (then read again); a toggle re-reads at once.
+
+### Picture match (19 Nov)
+
+Read against `new/n-h-spa-setup` (31 Oct), never seen running; the page changed on 16 Nov (the PDF and
+Excel buttons, D27-383), after the picture. **Matches**, with these differences left: (a) the export
+row (PDF or print, Share) under the Treatments head, which today's web has and the picture predates;
+(b) for a role outside the list the buttons are grey with the API's sentence; (c) the (i) opens its
+note under the heading, not a popover; (d) buttons 44 px. **1 of 1 pictured screen matches**; the
+dialogs are not pictured.
