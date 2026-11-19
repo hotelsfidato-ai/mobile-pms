@@ -3,11 +3,11 @@
    and who may (roleGate.ts): each rule the phone ported. */
 import { dateDay } from "../finance/bill.ts";
 import {
-  billTo, chipsOf, emptyOf, groupLine, headLine, notYet, owed, routedNote, rowLine, settleOff, stateOf, whyNotLead, whyNotRoute,
+  billTo, chipsOf, emptyOf, groupLine, groupsTable, headLine, notYet, owed, routedNote, rowLine, settleOff, stateOf, whyNotLead, whyNotRoute,
   type GroupDetail, type GroupRoom, type StayGroup,
 } from "./groups.ts";
 import { whyNotChangeBill, whyNotChangeBooking, whyNotCharge, whyNotInvoice, whyNotPay, whyNotUnwaitlist, whyNotWaitlist } from "./groupRoles.ts";
-import { bodyOf, freePill, nights, nightsWord, partsOf, typesOf, wrongOf, type WaitlistEntry } from "./waitlist.ts";
+import { bodyOf, freePill, nights, nightsWord, partsOf, typesOf, waitlistTable, wrongOf, type WaitlistEntry } from "./waitlist.ts";
 
 const eq = (got: unknown, want: unknown, what: string) => {
   if (JSON.stringify(got) !== JSON.stringify(want)) throw new Error(`${what}: got ${JSON.stringify(got)}, want ${JSON.stringify(want)}`);
@@ -122,4 +122,15 @@ eq(typesOf([{ roomTypeId: "s", roomType: "Superior" }, { roomTypeId: "d", roomTy
   [{ id: "s", name: "Superior" }, { id: "d", name: "Deluxe" }], "each type once, in the grid's order");
 eq(typesOf(null), [], "no inventory: no types");
 
+
+/* ── The exports: the screen's own words, nothing added up ── */
+const gt = groupsTable([g({ masterBalance: null, reference: "" }), g({ id: "g2", masterBalance: 1250.5, company: "Acme" })], "Fidato Agra", "current", dateDay);
+eq(gt.subtitle, "Fidato Agra · Showing here and coming", "the scope said");
+eq(gt.rows[0]!.slice(-1)[0], "-", "no host account: a dash in the file too");
+eq(gt.rows[1]!.slice(-1)[0], "₹1,250.50", "the host's figure to the paisa");
+eq([gt.rows[0]![1], gt.rows[0]![2], gt.rows[0]![3]], ["-", "-", "24 Oct 2026"], "no reference, no company: dashes");
+eq("totals" in gt, false, "no totals row: the server sends none");
+const wt = waitlistTable([e("a", 0), e("b", 2), e("c", null)], "Fidato Agra", dateDay, () => "16 Nov 2026, 3:30 PM");
+eq(wt.rows.map((r) => `${r[0]}|${r[6]}`), ["A room is free now|2", "Still full|0", "Arrival has passed|-"], "three parts in order; passed has no free count");
+eq(wt.rows[0]![2], "-", "a phone withheld is a dash");
 console.log("groups.check: ok");

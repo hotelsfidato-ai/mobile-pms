@@ -193,3 +193,19 @@ export const routedSaid = (r: GroupRoom) =>
 
 /** Settle is the bill's main act while the host owes; with nothing owed it is off (FolioPanel SettleDialog). */
 export const settleOff = (m: GroupMaster) => m.balance <= 0;
+
+/* ── The list in a file (Groups.tsx GROUP_EXPORT, D27-383 item 1) ── */
+
+/** Its columns and rows as the screen writes them: a date as a day, a count as
+    a count, the host's balance a dash when there is no host account. */
+export function groupsTable(groups: readonly StayGroup[], hotel: string, scope: Scope, day: (iso: string) => string) {
+  return {
+    title: "Groups",
+    subtitle: `${hotel} · Showing ${scope === "current" ? "here and coming" : "all"}`,
+    columns: ["Group", "Reference", "Company", "Arrival", "Departure", "Rooms", "Room nights", "In house", "Due in", "Departed", "Cancelled", "Host owes"],
+    rows: groups.map((g) => [
+      g.name, g.reference || DASH, g.company ?? DASH, day(g.arrival), day(g.departure), String(g.rooms), String(g.nights),
+      String(g.inHouse), String(g.dueIn), String(g.departed), String(g.cancelled), owed(g.masterBalance),
+    ]),
+  };
+}

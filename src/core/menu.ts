@@ -910,6 +910,9 @@ export const PHONE_ROUTES: Readonly<Record<string, string>> = {
   "/h/:code/requests": "/guest-services/:code/requests",
   /* mobile/t2-approvals (4 Nov) */
   "/h/:code/approvals": "/approvals/:code",
+  /* mobile/m13-groups (19 Nov): Groups (one group under it) and the Waitlist (16 Nov release) */
+  "/h/:code/groups": "/reservations/:code/groups",
+  "/h/:code/waitlist": "/reservations/:code/waitlist",
   /* mobile/t2-revenue (4 Nov) */
   "/h/:code/revenue-outlook": "/revenue/:code",
   /* mobile/t2-crs (4 Nov) */

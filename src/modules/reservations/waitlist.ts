@@ -77,3 +77,19 @@ export function typesOf(cells: ReadonlyArray<{ roomTypeId: string; roomType: str
   for (const c of cells ?? []) seen.set(c.roomTypeId, { id: c.roomTypeId, name: c.roomType });
   return [...seen.values()];
 }
+
+/* ── The list in a file (Waitlist.tsx WAITLIST_EXPORT, D27-383 item 1): its three parts in order ── */
+
+export function waitlistTable(entries: readonly WaitlistEntry[], hotel: string, day: (iso: string) => string, when: (at: string) => string) {
+  const p = partsOf(entries);
+  const part = (rows: WaitlistEntry[], name: string) => rows.map((e) => [
+    name, e.guestName, e.phone ?? "-", e.roomType, day(e.arrival), day(e.departure),
+    e.free === null ? "-" : String(e.free), e.note ?? "-", when(e.createdAt), e.addedBy ?? "-",
+  ]);
+  return {
+    title: "Waitlist",
+    subtitle: `${hotel} · Sorted oldest first`,
+    columns: ["Part", "Guest", "Phone", "Room type", "Arrival", "Departure", "Rooms free now", "Note", "Added", "Added by"],
+    rows: [...part(p.free, "A room is free now"), ...part(p.full, "Still full"), ...part(p.passed, "Arrival has passed")],
+  };
+}
