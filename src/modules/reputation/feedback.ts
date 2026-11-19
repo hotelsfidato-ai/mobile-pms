@@ -1,4 +1,6 @@
 import { DASH } from "../../core/format.ts";
+import type { ExportTable } from "../../core/exportDoc.ts";
+import { moment } from "./rules.ts";
 
 /* ══════════════════════════════════════════════════════════════════
    GUEST FEEDBACK'S RULES AND WORDS — mobile/m13-sales (19 Nov), lane F.
@@ -105,3 +107,13 @@ export const latestNote = (n: number) =>
   `The latest ${n}, newest first. A 1 or a 2, overall or in any part, is red and goes to Notifications for a week.`;
 export const LATEST_EMPTY = { title: "No answers yet", line: "Each answer and its comment will be listed here." };
 export const FAILED = "Guest feedback did not load";
+
+/** Feedback.tsx ANSWER_EXPORT: each answer, its columns in the web's order; a part not scored is a dash. */
+export const answersTable = (page: Pick<FeedbackPage, "answers">): ExportTable => ({
+  title: TITLE,
+  columns: ["Answered", "Guest", "Booking", "Room", "Overall", "Room score", "Cleanliness", "Food", "Staff", "Low (1-2)", "Comment"],
+  rows: page.answers.map((a) => [
+    moment(a.answeredAt), a.guest, a.reference, a.roomNumber, String(a.overall),
+    ...PARTS.map((p) => (a[p] == null ? DASH : String(a[p]))), a.low ? "Yes" : "No", a.comment ?? DASH,
+  ]),
+});

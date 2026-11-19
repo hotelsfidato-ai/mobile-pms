@@ -1,10 +1,13 @@
-import { ChevronRight, FileSpreadsheet, FileText, Inbox, type LucideIcon } from "lucide-react-native";
+import { ChevronRight, FileText, Inbox, Share2, type LucideIcon } from "lucide-react-native";
 import type { ReactNode } from "react";
 import { Pressable, Text, View } from "react-native";
+import { ExportButtons } from "../../core/Export";
+import type { ExportTable } from "../../core/exportDoc";
 import { c, face, space, t } from "../../core/theme";
 import { body, Btn } from "../guest-services/kit";
 import { capsLabel } from "../laundry/kit";
 import { InfoButton } from "../reports/kit";
+import { exportRefusal } from "./lane";
 
 /* ══════════════════════════════════════════════════════════════════
    THE PIECES THE SALES LANE'S SCREENS SHARE (mobile/m13-sales, 19 Nov):
@@ -89,17 +92,20 @@ export function Blank({ icon: Icon = Inbox, title, line, compact }: { icon?: Luc
   );
 }
 
-/** The phone's word for a download (reports' ExportButtons: PDF and Excel). A file needs
-    expo-file-system ~57.0.7 and expo-sharing ~57.0.23, not approved (M-13): drawn, grey. */
-export const NO_DOWNLOAD = "Downloading a PDF or an Excel file: On the website for now";
-export function Exports() {
+/** The web's ExportButtons on a list that holds money or guests' details: the core's print and
+    share sheets (src/core/Export.tsx) for whoever downloads reports; anyone else reads the server's
+    sentence under the two greyed buttons (lane.ts). A real .xlsx file waits for a package
+    (expo-file-system ~57.0.7 + expo-sharing ~57.0.23, M-13). */
+export function Exports({ role, holds, table }: { role: string | null; holds: "money" | "guests"; table: ExportTable | null }) {
+  const refused = exportRefusal(role, holds);
+  if (!refused) return <ExportButtons table={table} />;
   return (
     <View style={{ gap: 4 }}>
       <View style={{ flexDirection: "row", gap: 8 }}>
-        <Btn label="PDF" a11y={`PDF. ${NO_DOWNLOAD}`} icon={FileText} disabled onPress={() => undefined} />
-        <Btn label="Excel" a11y={`Excel. ${NO_DOWNLOAD}`} icon={FileSpreadsheet} disabled onPress={() => undefined} />
+        <Btn label="PDF or print" a11y={`PDF or print. ${refused}`} icon={FileText} disabled onPress={() => undefined} />
+        <Btn label="Share" a11y={`Share. ${refused}`} icon={Share2} disabled onPress={() => undefined} />
       </View>
-      <Text style={[t.caption, { color: c.grey500 }]}>{NO_DOWNLOAD}</Text>
+      <Text style={[t.caption, { color: c.grey500 }]}>{refused}</Text>
     </View>
   );
 }

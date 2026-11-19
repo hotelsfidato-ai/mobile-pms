@@ -4,7 +4,7 @@
    months and moments from their digits; who may read it. */
 import { moment } from "./rules.ts";
 import {
-  answerRef, FEEDBACK_REFUSED, monthWords, overallTone, overallWords, partsLine, score, whyNotFeedback,
+  answerRef, answersTable, FEEDBACK_REFUSED, monthWords, overallTone, overallWords, partsLine, score, whyNotFeedback,
 } from "./feedback.ts";
 
 const eq = (got: unknown, want: unknown, what: string) => {
@@ -42,5 +42,11 @@ eq(moment("2026-11-18T21:05"), "18 Nov 2026, 9:05 PM", "answeredAt, the hotel's 
 eq(["owner", "admin", "gm"].map(whyNotFeedback), [null, null, null], "the owner, an administrator, the GM");
 eq(["hotel_manager", "front_desk", "finance", "read_only", null].map(whyNotFeedback).every((x) => x === FEEDBACK_REFUSED), true,
   "the hotel manager, reception, the accountant, a viewer: the server's sentence");
+
+/* ── The export: the rows as shown, a part not scored a dash ── */
+const tab = answersTable({ answers: [{ id: "1", answeredAt: "2026-11-18T21:05", overall: 2, room: null, cleanliness: 1, food: 4, staff: 5,
+  comment: null, low: true, stayId: "s", reference: "FH-1", guest: "Asha", roomNumber: "204" }] });
+eq(tab.rows[0], ["18 Nov 2026, 9:05 PM", "Asha", "FH-1", "204", "2", "-", "1", "4", "5", "Yes", "-"], "an answer's row");
+eq(tab.columns.length, tab.rows[0]!.length, "a cell per column");
 
 console.log("feedback: all checks pass");

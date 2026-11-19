@@ -8,7 +8,7 @@ import { Pill } from "../front-desk/kit";
 import { body, Failed, Loading, NotYours, Stale } from "../guest-services/kit";
 import { Blank, Exports, Line, Panel, RowCard } from "../leads/kit";
 import {
-  answerRef, FAILED, LATEST_EMPTY, LATEST_TITLE, latestNote, MONTHS_EMPTY, MONTHS_NOTE, MONTHS_TITLE, monthWords, OFF,
+  answerRef, answersTable, FAILED, LATEST_EMPTY, LATEST_TITLE, latestNote, MONTHS_EMPTY, MONTHS_NOTE, MONTHS_TITLE, monthWords, OFF,
   overallTone, overallWords, PART_WORD, PARTS, partsLine, score, TITLE, UNDER, whyNotFeedback,
 } from "./feedback";
 import { isRefused, readFeedback } from "./feedbackData";
@@ -47,7 +47,7 @@ export function Feedback({ hotel, role }: { hotel: Hotel; role: string | null })
   return (
     <Screen refreshing={pulled && q.loading} onRefresh={() => { setPulled(true); q.reload(); }}>
       <Head title={TITLE} under={UNDER} />
-      <Exports />
+      <Exports role={role} holds="guests" table={page ? answersTable(page) : null} />
       {page === null ? (
         q.error ? <Failed title={FAILED} error={q.error} onRetry={q.reload} /> : <Loading words="Reading the answers…" />
       ) : (
