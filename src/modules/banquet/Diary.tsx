@@ -11,7 +11,7 @@ import { LoadFailed } from "../laundry/kit";
 import { isRefused, readDiary } from "./data";
 import { NotAvailable } from "./kit";
 import { Register } from "./Register";
-import { ON_THE_WEBSITE, whyNotBook, whyNotRead } from "./roles";
+import { whyNotBook, whyNotRead } from "./roles";
 import {
   confirmedWords, fromToday, hallCount, rupees, shift, statusOf, whenLabel, type DiaryEvent, type DiaryHall, type Window,
 } from "./rules";
@@ -74,10 +74,9 @@ export function Diary({ hotel, role, onBack }: { hotel: Hotel; role: string | nu
           <>
             <View style={{ gap: 4, marginTop: -4 }}>
               <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
-                <Btn label="Halls and packages" icon={Settings2} disabled onPress={() => undefined} />
+                <Btn label="Halls and packages" icon={Settings2} onPress={() => router.push(`/banquet/${code}/setup`)} />
                 <Btn label="Register a function" variant="primary" icon={Plus} disabled={mayBook != null} onPress={() => setRegistering(true)} />
               </View>
-              <Text style={[t.caption, { color: c.grey600 }]}>Halls and packages: {ON_THE_WEBSITE}</Text>
               {mayBook ? <Text style={[t.caption, { color: c.grey600 }]}>{mayBook}</Text> : null}
             </View>
             <Stale error={q.error} />
@@ -96,8 +95,7 @@ export function Diary({ hotel, role, onBack }: { hotel: Hotel; role: string | nu
                     compact title="No halls yet"
                     description="A property with a banquet hall has somebody enter it, the same way rooms are entered. Nothing is created for you."
                   />
-                  <Btn label="Add a hall" disabled onPress={() => undefined} />
-                  <Text style={[t.caption, { color: c.grey600, marginTop: 4 }]}>Add a hall: {ON_THE_WEBSITE}</Text>
+                  <Btn label="Add a hall" onPress={() => router.push(`/banquet/${code}/setup`)} />
                 </View>
               ) : (
                 d.venues.map((v, i) => <HallRows key={v.id} v={v} last={i === d.venues.length - 1} open={(e) => router.push(`/banquet/${code}/${e.id}`)} />)
