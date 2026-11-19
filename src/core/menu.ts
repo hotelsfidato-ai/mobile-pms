@@ -910,6 +910,10 @@ export const PHONE_ROUTES: Readonly<Record<string, string>> = {
   "/h/:code/requests": "/guest-services/:code/requests",
   /* mobile/t2-approvals (4 Nov) */
   "/h/:code/approvals": "/approvals/:code",
+  /* mobile/m13-fin-bills (19 Nov): the finance desk's three lists; an invoice's page is reached from Invoices. */
+  "/h/:code/folios": "/finance/:code/folios",
+  "/h/:code/invoices": "/finance/:code/invoices",
+  "/h/:code/payments": "/finance/:code/payments",
   /* mobile/t2-revenue (4 Nov) */
   "/h/:code/revenue-outlook": "/revenue/:code",
   /* mobile/t2-crs (4 Nov) */
