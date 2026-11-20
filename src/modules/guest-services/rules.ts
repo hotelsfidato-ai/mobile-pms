@@ -129,27 +129,14 @@ export function wakeLine(w: WakeUpCall): string {
 
 /** The API's TIME (wakeAndLost.ts). */
 const TIME = /^([01]\d|2[0-3]):[0-5]\d$/;
-/** The phone's own (the web has a time input): "7:30", "730" and "0730"
-    are read as 07:30; anything else is null, and the call is not offered. */
+/** The time as the API takes it: the phone's clock (TimeField) gives "07:30"; "7:30", "730" and "0730"
+    are read as 07:30 too; anything else is null, and the call is not offered. */
 export function timeOf(raw: string): string | null {
   const s = raw.trim().replace(".", ":");
   const m = /^(\d{1,2}):?(\d{2})$/.exec(s);
   if (!m) return null;
   const t = `${m[1]!.padStart(2, "0")}:${m[2]}`;
   return TIME.test(t) ? t : null;
-}
-
-/** The phone's own: the web's date input is a calendar from today; here,
-    the next `n` days from the hotel's today, each as that input writes it
-    (the value the API takes, the words "31-10-2026"). ponytail: a list, no
-    date-picker package; @react-native-community/datetimepicker 9.1.0 if the
-    owner wants the phone's own calendar. */
-export function daysFrom(today: string, n: number): { value: string; label: string }[] {
-  const start = Date.parse(`${today}T00:00:00Z`);
-  return Array.from({ length: n }, (_, i) => {
-    const value = new Date(start + i * 86_400_000).toISOString().slice(0, 10);
-    return { value, label: `${value.slice(8)}-${value.slice(5, 7)}-${value.slice(0, 4)}` };
-  });
 }
 
 /* ── Lost property (LostProperty.tsx) ──────────────────────────── */

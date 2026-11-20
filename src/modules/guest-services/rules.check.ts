@@ -1,7 +1,7 @@
 /* Run: node --experimental-strip-types mobile/src/modules/guest-services/rules.check.ts
    The web's words for guest services, on small made-up rows. */
 import {
-  clearedLine, closeAsks, dateShort, dateTime, daysFrom, detailLines, foundLine, instant, keptLine, minutes, photoLine, replyFits,
+  clearedLine, closeAsks, dateShort, dateTime, detailLines, foundLine, instant, keptLine, minutes, photoLine, replyFits,
   requestLine, thread, timeOf, unread, wakeLine, wakeWhen,
   type GuestRequest, type LostItem, type WaitingDetails, type WakeUpCall,
 } from "./rules.ts";
@@ -53,10 +53,6 @@ eq(wakeLine(wake({ fromGuest: true, status: "done", handledBy: "Ravi" })), "Room
 eq(wakeLine(wake({ status: "cancelled", handledBy: "Ravi" })), "Room 301 · Rekha · set by Asha · cancelled by Ravi", "cancelled");
 eq([timeOf("7:30"), timeOf("0730"), timeOf("730"), timeOf("07.30"), timeOf("23:59")], ["07:30", "07:30", "07:30", "07:30", "23:59"], "times read");
 eq([timeOf("24:00"), timeOf("7:5"), timeOf("seven"), timeOf("")], [null, null, null, null], "times refused");
-
-eq(daysFrom("2026-10-30", 3), [
-  { value: "2026-10-30", label: "30-10-2026" }, { value: "2026-10-31", label: "31-10-2026" }, { value: "2026-11-01", label: "01-11-2026" },
-], "the days to choose, over a month's end");
 
 /* Lost property. */
 const lost = (x: Partial<LostItem>): LostItem => ({

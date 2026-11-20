@@ -1,8 +1,9 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { AlarmClock, Calendar, Check, Clock, Plus } from "lucide-react-native";
+import { AlarmClock, Check, Plus } from "lucide-react-native";
 import { useRef, useState } from "react";
 import { Text, View } from "react-native";
 import type { Hotel } from "../../core/api";
+import { DateField, TimeField } from "../../core/DateField";
 import { c, space, t } from "../../core/theme";
 import { Head, notKnown, Screen, Stopped, useRead, useScreenStop } from "../../core/ui";
 import { actOnWakeUp, listWakeUps, setWakeUp } from "./data";
@@ -12,7 +13,7 @@ import {
 import { whyNotWakeUps } from "./roles";
 import { ListExport } from "../reports/ListExport";
 import { callTable } from "./exports";
-import { daysFrom, timeOf, wakeLine, wakeWhen, type InHouse, type WakeUpCall } from "./rules";
+import { timeOf, wakeLine, wakeWhen, type InHouse, type WakeUpCall } from "./rules";
 
 /* ══════════════════════════════════════════════════════════════════
    WAKE-UP CALLS on a phone — the web's /h/:code/wake-up-calls
@@ -21,9 +22,9 @@ import { daysFrom, timeOf, wakeLine, wakeWhen, type InHouse, type WakeUpCall } f
    their own page, and it waits here until the desk confirms it. Due from
    fifteen minutes before until marked done; no "missed" state. Every time
    is the hotel's own clock, as the server writes it.
-   Where the phone differs (no date-picker package): the day is chosen from
-   the next 31 days and the time is typed (rules.ts daysFrom, timeOf); the
-   web has a date input and a time input, side by side, as here.
+   The day and the time are each phone's own pickers (DateField from the
+   hotel's today, as the web's min; TimeField - M-16), one under the other
+   at phone width; the web's date and time inputs sit side by side.
    ══════════════════════════════════════════════════════════════════ */
 
 type View_ = "open" | "done";
@@ -177,19 +178,9 @@ function SetDialog({ code, rooms, today, onClose, onDone }: {
           <Field label="Room" required>
             <Select label="Room" value={reservationId} options={roomChoices(rooms)} onChange={setReservationId} />
           </Field>
-          <View style={{ flexDirection: "row", gap: 12 }}>
-            <View style={{ flex: 1 }}>
-              <Field label="Day" required>
-                <Select label="Day" icon={Calendar} value={day} options={daysFrom(today, 31)} onChange={setDay} />
-              </Field>
-            </View>
-            <View style={{ flex: 1 }}>
-              <Field label="Time" required>
-                <Input label="Time" icon={Clock} value={time} onChangeText={setTime} maxLength={5} placeholder="--:--" keyboardType="numbers-and-punctuation" />
-              </Field>
-            </View>
-          </View>
-          {time && !clock ? <Text style={t.caption}>Type the time as 06:30, on the 24-hour clock.</Text> : null}
+          {/* The web's <input type="date" min={today}> and type="time": each phone's own picker (M-16), one under the other. */}
+          <DateField label="Day" required value={day} onChange={setDay} hotel={{ today, businessDate: today }} min={today} disabled={busy} />
+          <TimeField label="Time" required value={time} onChange={setTime} disabled={busy} />
           <Field label="Note" hint="Only if there is something to say on the call.">
             <Input label="Note" maxLength={200} value={note} onChangeText={setNote} />
           </Field>
