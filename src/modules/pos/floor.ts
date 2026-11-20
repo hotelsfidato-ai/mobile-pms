@@ -209,3 +209,8 @@ export function kotLines(kinds: KotKind[], now = new Date()): { id: string; text
     parcel or a counter order has no table to clash on, so one whose outcome is unknown greys opening
     another at that outlet until a read of its floor begun after the loss is back. */
 export const parcelsStop = (code: string, outlet: string) => `pos/${code}/parcels/${outlet}`;
+
+/** The name of a round's stop (MPOS-U2): POST till/orders/batch reads no key, so a round whose outcome is
+    unknown greys Send on that order's pad - kept outside the pad, whose draft survives a close - until a
+    read of the order begun after the loss is back; a round that opened a table, until a read of the floor. */
+export const roundStop = (code: string, orderId: string | undefined) => `pos/${code}/round/${orderId ?? "new"}`;

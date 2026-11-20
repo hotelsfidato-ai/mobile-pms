@@ -10,7 +10,7 @@ import { c, face, space, t } from "../../core/theme";
 import { Capsule, notKnown, Screen, Stopped, useScreenStop, ripple, shade, keys } from "../../core/ui";
 import {
   CLOSE_FOR, closedLine, closure, kotLines, LEGEND, LOOK, maySetUpKots, openLabel, padHref, parcelTile, READY, startCard, takenLabel, tileLabel, tileOffers,
-  type FloorNow, type KotKind, type Tile as Table, parcelsStop } from "./floor";
+  type FloorNow, type KotKind, type Tile as Table, parcelsStop, roundStop } from "./floor";
 import { draftedTables } from "./pad";
 import { PrintBill } from "./Pay";
 import { whyNotRing } from "./roles";
@@ -48,9 +48,11 @@ export function Tables({ hotel, role, onBack, onSignOut }: {
   /* A parcel whose outcome is unknown (MPOS-U1): POST till/orders reads no key and a parcel has no
      table to clash on, so New parcel stays grey until a read of the floor begun after it is back. */
   const parcelStop = useScreenStop(parcelsStop(code, OUTLET));
+  /* A round that opened a table, whose outcome is unknown (MPOS-U2): the floor shows whether it runs. */
+  const newRound = useScreenStop(roundStop(code, undefined));
   const floor = useQuery({
     queryKey: ["pos", code, "tables", "floor"],
-    queryFn: parcelStop.watch(() => api<FloorNow>(`/api/hotels/${code}/till/floor?outlet=${OUTLET}`)),
+    queryFn: parcelStop.watch(newRound.watch(() => api<FloorNow>(`/api/hotels/${code}/till/floor?outlet=${OUTLET}`))),
   });
   const kot = useQuery({
     queryKey: ["pos", code, "tables", "kot"],

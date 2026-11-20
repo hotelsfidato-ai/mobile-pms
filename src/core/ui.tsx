@@ -77,9 +77,9 @@ export function useScreenStop(name: string) {
     },
     /* react-query hands its queryFn a signal; a read it cancelled (a newer one replaced it) is
        thrown away, so it lets nothing go. */
-    watch: <T,>(read: () => Promise<T>) => async (ctx?: { signal?: AbortSignal }): Promise<T> => {
+    watch: <T,>(read: (ctx?: { signal?: AbortSignal }) => Promise<T>) => async (ctx?: { signal?: AbortSignal }): Promise<T> => {
       const ticket = stops.begin();
-      const got = await read();
+      const got = await read(ctx);
       if (!ctx?.signal?.aborted) stops.good(name, ticket);
       return got;
     },
