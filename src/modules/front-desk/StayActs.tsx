@@ -15,6 +15,7 @@ import {
 } from "./data";
 import { addDays, amendLine, amendWrong, day, MOVE_REASONS, nightsBetween } from "./desk";
 import { body, Box, Button, Field, FormSheet, Pick, Pill, Sheet, Toggle, WEBSITE, type Said } from "./kit";
+import { viewVoucher } from "../reservations/data";
 import { mayGiveComp, whyNotChange } from "./roles";
 
 /* ══════════════════════════════════════════════════════════════════
@@ -50,6 +51,17 @@ export function MoreOptions({ hotel, stay, role, onSaid }: { hotel: Hotel; stay:
     } catch (e) { onSaid({ title: "Not confirmed", body: said(e), tone: "bad" }); }
   };
 
+  /* View voucher (StayActions.tsx, D27-187): the menu closes, the PDF goes to the share sheet; one at a time. */
+  const opening = useRef(false);
+  const voucher = async () => {
+    setAct(null);
+    if (opening.current) return;
+    opening.current = true;
+    try { await viewVoucher(code, stay.id, stay.reference); }
+    catch (e) { onSaid({ title: "No voucher", body: said(e), tone: "bad" }); }
+    finally { opening.current = false; }
+  };
+
   const notArrived = over ? "This stay is over." : "They have not arrived yet.";
   const gone = arrived ? "They have arrived. Check them out instead." : null;
   return (
@@ -60,7 +72,7 @@ export function MoreOptions({ hotel, stay, role, onSaid }: { hotel: Hotel; stay:
           <Group title="The booking" />
           {waiting ? <Item Icon={Check} label="Confirm the booking" onPress={() => void confirm()} /> : null}
           <Item Icon={CalendarRange} label="Change dates or guests" reason={over ? "This stay is over." : null} onPress={() => setAct("amend")} />
-          <Item Icon={FileText} label="View voucher" reason={stay.status !== "due-in" ? "Only a confirmed booking still to arrive has a voucher." : WEBSITE} onPress={close} />
+          <Item Icon={FileText} label="View voucher" reason={stay.status !== "due-in" ? "Only a confirmed booking still to arrive has a voucher." : null} onPress={() => void voucher()} />
           <Group title="The room" />
           <Item
             Icon={ArrowLeftRight} label="Move to another room" onPress={() => setAct("move")}

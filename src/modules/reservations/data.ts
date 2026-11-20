@@ -1,4 +1,5 @@
 import { api, ApiError, currentSubject, send } from "../../core/api";
+import { downloadToShare } from "../../core/Download";
 import { keyKeeper, type KeyKeeper } from "../../core/keys";
 import type { Stay } from "../../core/types";
 import { readHouse, readRooms, type DeskStay } from "../front-desk/data";
@@ -17,6 +18,16 @@ import { buildChart, windowFrom, type NightPrice } from "./chart";
    ══════════════════════════════════════════════════════════════════ */
 
 const H = (code: string) => `/api/hotels/${code}`;
+
+/** booking.ts viewVoucher's own sentence when nothing comes back. */
+export const VOUCHER_OFFLINE = "The voucher needs the connection to open.";
+/** booking.ts viewVoucher (D27-187): the booking's voucher PDF, to look at, print or save; it sends nothing.
+    GET /stays/:id/voucher.pdf (`reservation` create, "Viewing a booking's voucher"), downloaded with the
+    sign-in and handed to the phone's share sheet (the core's downloadToShare, M-16). Offline, the web's
+    sentence; a refusal, the server's. A read: safe to tap again. */
+export const viewVoucher = (code: string, stayId: string, reference: string) =>
+  downloadToShare(`${H(encodeURIComponent(code))}/stays/${encodeURIComponent(stayId)}/voucher.pdf`,
+    `Voucher ${reference.replace(/[^A-Za-z0-9 _-]/g, "-") || "booking"}.pdf`, "application/pdf", VOUCHER_OFFLINE);
 
 /** Each room type's price each night, one read; 404 (an older API) is no prices: dashes. */
 async function nightPrices(code: string, from: string, days: number) {

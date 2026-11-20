@@ -1,10 +1,11 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { router, type Href } from "expo-router";
-import { AlertTriangle, Check, Plus, Trash2, UserCheck } from "lucide-react-native";
+import { AlertTriangle, Check, FileText, Plus, Trash2, UserCheck } from "lucide-react-native";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { KeyboardAvoidingView, Platform, Pressable, Text, View } from "react-native";
 import { ApiError, HeldError, type Hotel, outcomeUnknown } from "../../core/api";
 import { cash } from "../../core/format";
+import { TimeField } from "../../core/DateField";
 import { c, face, space, t } from "../../core/theme";
 import { Card, notKnown, Screen, Stopped, useRead, useScreenStop, ripple, shade } from "../../core/ui";
 import { Day } from "../housekeeping/DayStepper";
@@ -26,7 +27,7 @@ import {
   assignReasonFor, bookReason, checkInReasonFor, counted, departureHint, firstNight, isWalkIn, leftFor, linesBody, moveArrival, newLine, toAssign, totalRooms, withRooms,
   type Line,
 } from "./book";
-import { takeAdvance, newBookingStop } from "./data";
+import { takeAdvance, newBookingStop, viewVoucher } from "./data";
 import { walkInStop } from "../front-desk/data";
 import { mayGiveComp, OVER_LIMIT_WHO, whyNotBook, whyNotPay } from "./roles";
 
@@ -451,12 +452,11 @@ export function NewBooking({ hotel, role, room: walkRoom, date: walkDate }: { ho
             <Segmented value={waiting ? "waiting" : "confirmed"} onChange={(v) => setWaiting(v === "waiting")}
               options={[{ value: "confirmed", label: "Confirmed" }, { value: "waiting", label: "Waiting for the hotel" }]} />
           </Field>
-          <Field label="Expected check-in" hint={`If they said. The hotel's check-in is ${times.checkInTime ?? "-"}.`}>
-            <Box value={expected} label="Expected check-in" placeholder="HH:MM" keyboard="numbers-and-punctuation" tall onChange={setExpected} />
-          </Field>
-          <Field label="Expected check-out" hint={`If they said. The hotel's check-out is ${times.checkOutTime ?? "-"}.`}>
-            <Box value={expectedOut} label="Expected check-out" placeholder="HH:MM" keyboard="numbers-and-punctuation" tall onChange={setExpectedOut} />
-          </Field>
+          {/* BookingPage.tsx's <input type="time">: each phone's own clock (TimeField, M-16), blank when they did not say. */}
+          <TimeField label="Expected check-in" hint={`If they said. The hotel's check-in is ${times.checkInTime ?? "-"}.`} clearable
+            value={expected} onChange={setExpected} opensAt={times.checkInTime ?? undefined} />
+          <TimeField label="Expected check-out" hint={`If they said. The hotel's check-out is ${times.checkOutTime ?? "-"}.`} clearable
+            value={expectedOut} onChange={setExpectedOut} opensAt={times.checkOutTime ?? undefined} />
           <Field label="Business source" hint="The account or agent behind it, if there is one.">
             <Pick value={businessSource} onChange={setBusinessSource} title="Business source" tall
               options={[{ value: "", label: "None" }, ...(accounts.data ?? []).map((x) => ({ value: x.name, label: x.name }))]} />
@@ -756,6 +756,17 @@ function BookedCard({ hotel, done, onAnother }: { hotel: Hotel; done: Done; onAn
       setToast({ title: "Confirmed", body: "The voucher can go now.", tone: "ok" });
     } catch (e) { setToast({ title: "Not confirmed", body: wordOf(e), tone: "bad" }); } finally { setBusy(false); }
   };
+  /* View voucher (D27-187): the PDF to the share sheet, one download at a time; the web's "No voucher" when not. */
+  const opening = useRef(false);
+  const [viewing, setViewing] = useState(false);
+  const view = async () => {
+    if (!lead?.id || opening.current) return;
+    opening.current = true;
+    setViewing(true);
+    try { await viewVoucher(code, lead.id, lead.reference); }
+    catch (e) { setToast({ title: "No voucher", body: wordOf(e), tone: "bad" }); }
+    finally { opening.current = false; setViewing(false); }
+  };
   return (
     <View style={{ flex: 1 }}>
       <Screen refreshing={false} onRefresh={() => undefined}>
@@ -788,7 +799,7 @@ function BookedCard({ hotel, done, onAnother }: { hotel: Hotel; done: Done; onAn
             <View style={{ gap: 8 }}>
               <Button label="The guest's page link" reason={WEBSITE} onRefused={(r) => setToast({ title: r, tone: "held" })} onPress={() => undefined} />
               <Button label="Send voucher" reason={WEBSITE} onRefused={(r) => setToast({ title: r, tone: "held" })} onPress={() => undefined} />
-              {!inHouse ? <Button label="View voucher" reason={WEBSITE} onRefused={(r) => setToast({ title: r, tone: "held" })} onPress={() => undefined} /> : null}
+              {!inHouse && lead?.id ? <Button label="View voucher" Icon={FileText} busy={viewing} onPress={() => void view()} /> : null}
               <Text style={t.caption}>{WEBSITE}</Text>
             </View>
           )}

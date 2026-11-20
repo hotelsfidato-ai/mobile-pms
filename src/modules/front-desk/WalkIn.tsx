@@ -6,6 +6,7 @@ import { useRef, useState, type ReactNode } from "react";
 import { KeyboardAvoidingView, Platform, Text, View } from "react-native";
 import { ApiError, HeldError, outcomeUnknown, type Hotel } from "../../core/api";
 import { cash, dateLong } from "../../core/format";
+import { TimeField } from "../../core/DateField";
 import { c, face, space, t } from "../../core/theme";
 import { Card, notKnown, Screen, Stopped, useRead, useScreenStop } from "../../core/ui";
 import { Day } from "../housekeeping/DayStepper";
@@ -421,12 +422,11 @@ export function WalkIn({ hotel, role, room: walkRoom, onClose }: { hotel: Hotel;
             <Segmented value={waiting ? "waiting" : "confirmed"} onChange={(v) => setWaiting(v === "waiting")}
               options={[{ value: "confirmed", label: "Confirmed" }, { value: "waiting", label: "Waiting for the hotel" }]} />
           </Field>
-          <Field label="Expected check-in" hint={`If they said. The hotel's check-in is ${times.checkInTime ?? "-"}.`}>
-            <Box value={expected} label="Expected check-in" placeholder="HH:MM" keyboard="numbers-and-punctuation" tall onChange={setExpected} />
-          </Field>
-          <Field label="Expected check-out" hint={`If they said. The hotel's check-out is ${times.checkOutTime ?? "-"}.`}>
-            <Box value={expectedOut} label="Expected check-out" placeholder="HH:MM" keyboard="numbers-and-punctuation" tall onChange={setExpectedOut} />
-          </Field>
+          {/* BookingPage.tsx's <input type="time">: each phone's own clock (TimeField, M-16), blank when they did not say. */}
+          <TimeField label="Expected check-in" hint={`If they said. The hotel's check-in is ${times.checkInTime ?? "-"}.`} clearable
+            value={expected} onChange={setExpected} opensAt={times.checkInTime ?? undefined} />
+          <TimeField label="Expected check-out" hint={`If they said. The hotel's check-out is ${times.checkOutTime ?? "-"}.`} clearable
+            value={expectedOut} onChange={setExpectedOut} opensAt={times.checkOutTime ?? undefined} />
           <Field label="Business source" hint="The account or agent behind it, if there is one.">
             <Pick value={businessSource} onChange={setBusinessSource} title="Business source" tall
               options={[{ value: "", label: "None" }, ...(accounts.data ?? []).map((x) => ({ value: x.name, label: x.name }))]} />
