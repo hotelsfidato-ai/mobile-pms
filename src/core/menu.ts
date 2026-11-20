@@ -912,6 +912,7 @@ export const PHONE_ROUTES: Readonly<Record<string, string>> = {
   "/h/:code/approvals": "/approvals/:code",
   /* mobile/m13-admin (19 Nov): Administration and the Settings console's own pages. */
   "/people": "/admin/:code/people",
+  "/admin/users": "/admin/:code/users",
   /* mobile/t2-revenue (4 Nov) */
   "/h/:code/revenue-outlook": "/revenue/:code",
   /* mobile/t2-crs (4 Nov) */
