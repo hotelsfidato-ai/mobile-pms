@@ -94,3 +94,11 @@ then lost on `outcomeUnknown`), `watch(read)` (wraps a screen's read; a read rea
 nothing go); `Stopped` is the screen's line with a way to read again. The check was broken once each way
 (a read begun before the loss let go; the in-flight stop removed) and failed, then restored by copying the
 file back (MEMORY 18). **The rule:** a write on a route that reads no idempotency key keeps its stop OUTSIDE the sheet and the screen (core `useScreenStop`, by name), stopped while it is on its way, and let go only by a read of the record that BEGAN after the loss and came back good.
+
+**The review of 20 Nov (on 5fc5064):** a loss with nothing back (0, or send()'s own 503 for a route refused
+offline) or a gateway's give-up (502, 504) is let go only by a read that began `SETTLE_MS` (5 s) after it:
+the server may still be committing (the phone's fetch gives up before the database's statement timeout).
+`settleMs` and the wait are checked, broken once (the wait removed: a read 100 ms after the loss let it
+go). `watch` is now `watched` in stop.ts, so its "a cancelled read lets nothing go" is checked too (broken
+once). `stop(e, ...more)` and `guard(write, ...more)` mark other names the same write could be repeated
+from.

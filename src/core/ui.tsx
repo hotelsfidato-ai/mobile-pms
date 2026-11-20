@@ -6,8 +6,8 @@ import {
   type TextStyle, type ViewStyle,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { outcomeUnknown } from "./api";
-import { stops } from "./stop";
+import { ApiError, outcomeUnknown } from "./api";
+import { settleMs, stops, watched } from "./stop";
 import { c, face, space, t } from "./theme";
 
 /* The few pieces every screen shares, after the web kit (src/components/ui). */
@@ -57,32 +57,33 @@ export function useStuck() {
 export function useScreenStop(name: string) {
   const stuck = useSyncExternalStore(stops.subscribe, () => stops.stuck(name));
   const unknown = useSyncExternalStore(stops.subscribe, () => stops.unknown(name));
+  /* A lost reply or a gateway's give-up waits SETTLE_MS (stop.ts): the server may still be committing. */
+  const lose = (e: unknown, more: string[]) => {
+    const wait = settleMs(e instanceof ApiError ? e.status : 0);
+    for (const x of [name, ...more]) stops.lost(x, wait);
+  };
   return {
     /** Grey every act that could repeat the write. */
     stuck,
     /** Lost (not merely on its way): show the `Stopped` line. */
     unknown,
     isStuck: () => stops.stuck(name),
-    stop: (e: unknown) => {
+    /** In a catch: true, and stopped, when the outcome is unknown. `more`: other names the same write
+        could be repeated from (the other stay of an exchange; New booking for a walk-in). */
+    stop: (e: unknown, ...more: string[]) => {
       if (!outcomeUnknown(e)) return false;
-      stops.lost(name);
+      lose(e, more);
       return true;
     },
     /** The write itself: stopped while it is on its way, and lost if its outcome is unknown. */
-    guard: async <T,>(write: () => Promise<T>): Promise<T> => {
-      const done = stops.sending(name);
+    guard: async <T,>(write: () => Promise<T>, ...more: string[]): Promise<T> => {
+      const done = [name, ...more].map((x) => stops.sending(x));
       try { return await write(); }
-      catch (e) { if (outcomeUnknown(e)) stops.lost(name); throw e; }
-      finally { done(); }
+      catch (e) { if (outcomeUnknown(e)) lose(e, more); throw e; }
+      finally { for (const d of done) d(); }
     },
-    /* react-query hands its queryFn a signal; a read it cancelled (a newer one replaced it) is
-       thrown away, so it lets nothing go. */
-    watch: <T,>(read: (ctx?: { signal?: AbortSignal }) => Promise<T>) => async (ctx?: { signal?: AbortSignal }): Promise<T> => {
-      const ticket = stops.begin();
-      const got = await read(ctx);
-      if (!ctx?.signal?.aborted) stops.good(name, ticket);
-      return got;
-    },
+    /** The screen's read of the record: a good one begun after the loss (and its wait) lets it go. */
+    watch: <T,>(read: (ctx?: { signal?: AbortSignal }) => Promise<T>) => watched(stops, name, read),
   };
 }
 

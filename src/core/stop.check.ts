@@ -1,5 +1,5 @@
 /* stop.ts. Run: node --experimental-strip-types src/core/stop.check.ts */
-import { stopBook } from "./stop.ts";
+import { SETTLE_MS, settleMs, stopBook, watched } from "./stop.ts";
 
 const eq = (got: unknown, want: unknown, what: string) => {
   if (JSON.stringify(got) !== JSON.stringify(want)) throw new Error(`${what}: got ${JSON.stringify(got)}, want ${JSON.stringify(want)}`);
@@ -81,9 +81,46 @@ b.begin(); /* the remounted screen's opening read, which failed */
 b.good(W, cached);
 eq(b.stuck(W), true, "remounted: the failed opening read and the cached read from before let nothing go");
 
+/* A SERVER STILL COMMITTING: after a lost reply or a gateway's give-up, a read must begin SETTLE_MS later. */
+eq([0, 502, 503, 504].map(settleMs), [SETTLE_MS, SETTLE_MS, SETTLE_MS, SETTLE_MS], "nothing back, or a gateway gave up: wait");
+eq([500, 501].map(settleMs), [0, 0], "the server's own failure: no wait");
+let clock = 10_000;
+const c = stopBook({ now: () => clock });
+const K = "pos/5EL/open/REST";
+c.lost(K, settleMs(0));
+clock += 100;
+c.good(K, c.begin());
+eq(c.stuck(K), true, "a read begun 100 ms after a lost reply lets nothing go: the server may still be committing");
+clock += SETTLE_MS - 200;
+c.good(K, c.begin());
+eq(c.stuck(K), true, "nor one begun just under the wait");
+clock += 100;
+c.good(K, c.begin());
+eq(c.stuck(K), false, "a read begun SETTLE_MS after the loss lets it go");
+c.lost(K, settleMs(500));
+clock += 1;
+c.good(K, c.begin());
+eq(c.stuck(K), false, "a 500 waits for nothing: the next read begun after it lets it go");
+
+/* watched: the read wrapper ui.tsx's watch is. A good read lets go; a cancelled one does not; a failed one does not. */
+const run = async () => {
+  const d = stopBook();
+  const N = "stores/5EL/shelf";
+  d.lost(N);
+  const cancelled = new AbortController();
+  await watched(d, N, async () => 1)({ signal: (cancelled.abort(), cancelled.signal) });
+  eq(d.stuck(N), true, "a read react-query cancelled lets nothing go");
+  await watched(d, N, async () => { throw new Error("offline"); })().catch(() => undefined);
+  eq(d.stuck(N), true, "a read that failed lets nothing go");
+  const live = new AbortController();
+  eq(await watched(d, N, async () => 7)({ signal: live.signal }), 7, "the read's answer is passed on");
+  eq(d.stuck(N), false, "a good read begun after the loss lets it go");
+};
+
 off();
 const quiet = told;
 b.lost(S);
 eq(told, quiet, "an unsubscribed listener is not told");
 
+await run();
 console.log("stop.check: ok");
