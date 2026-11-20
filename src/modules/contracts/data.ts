@@ -13,8 +13,11 @@ import type { AllotmentInput, CompanyContracts, CompanyInput, CompanyRow, Contra
    path is on the web's list, so each is refused with the UNLISTED sentence
    and nothing is held (rules.check.ts). None reads an idempotency key and
    none moves money (a contract's prices price the NEXT booking), so no
-   keeper: each dialog takes one tap at a time and stops on an outcome
-   nobody knows until it is closed and the company read again (MEMORY 16).
+   keeper. Each sheet takes one tap at a time and cannot be closed while a
+   write is on its way; on an outcome nobody knows the COMPANY page greys
+   every write (a new sheet included) until a read of the company made
+   after that moment has landed (rules.ts stillUnknown, MEMORY 16, MCON-1):
+   POST /allotments has no duplicate check, so a retype would hold twice.
    ══════════════════════════════════════════════════════════════════ */
 
 const at = (code: string) => `/api/hotels/${encodeURIComponent(code)}`;

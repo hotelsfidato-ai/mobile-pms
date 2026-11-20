@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { Alert, Text, View } from "react-native";
-import { HeldError } from "../../core/api";
+import { ApiError, HeldError } from "../../core/api";
 import { c, t } from "../../core/theme";
 import { notKnown, useStuck } from "../../core/ui";
 import { Toggle } from "../front-desk/kit";
@@ -8,7 +8,7 @@ import { body, Btn, message, Segmented, type Said } from "../guest-services/kit"
 import { addAllotment, addCompany, addContract, saveAllotment, saveCompany, saveContract, stopAllotment } from "./data";
 import { Box, Choices, Field, FormSheet, Wrong } from "./kit";
 import {
-  allotmentForm, allotmentInput, allotmentWrong, cellKey, companyForm, companyInput, companyWrong, CONTRACT_SAVED, contractForm,
+  allotmentForm, allotmentInput, alreadyStopped, allotmentWrong, cellKey, companyForm, companyInput, companyWrong, CONTRACT_SAVED, contractForm,
   contractInput, contractWrong, HELD_SAID, KIND_LABEL, KINDS, RATES_NOTE, STOP_ASK, STOPPED_SAID, validWords,
   type Allotment, type AllotmentForm, type Company, type CompanyContracts, type CompanyForm, type Contract, type ContractForm,
 } from "./rules";
@@ -26,14 +26,19 @@ import {
 
    ONE TAP, ONE WRITE (MEMORY 8): latched at the tap. AN OUTCOME NOBODY
    KNOWS (MEMORY 16; none of these routes reads a key): "Not known
-   whether it was …", and the sheet takes no more taps until it is closed
-   and the company read again (the parent re-reads on every close).
+   whether it was …" in the sheet, and the moment is handed to the company
+   page (`onUnknown`), which greys every write - a fresh sheet included -
+   until the company has been read again after it (rules.ts stillUnknown,
+   MCON-1). The sheet cannot be closed while a write is on its way, so its
+   answer always reaches the page.
    ══════════════════════════════════════════════════════════════════ */
 
 type Done = (said: Said) => void;
+/** The company page's own record of a write nobody knows the end of (Company.tsx). */
+export type OnUnknown = (title: string, line: string) => void;
 
 /** Shared by the three: the latch, the stop, the sheet's own message. */
-function useWrite() {
+function useWrite(onUnknown: OnUnknown) {
   const latch = useRef(false);
   const stuck = useStuck();
   const [busy, setBusy] = useState(false);
@@ -48,8 +53,9 @@ function useWrite() {
       done();
     } catch (e) {
       if (stuck.stop(e)) {
-        const w = notKnown(unknownWhat, "the company once this is closed", e);
+        const w = notKnown(unknownWhat, "the company's contracts and allotments", e);
         setSaid({ title: w.title, body: w.body, tone: "bad" });
+        onUnknown(w.title, w.line);
       } else if (e instanceof HeldError) setSaid({ title: "Saved on this phone", body: e.message, tone: "held" });
       else setSaid({ title: notDone, body: message(e), tone: "bad" });
     } finally {
@@ -62,11 +68,11 @@ function useWrite() {
 
 /* ── Add or edit a company ───────────────────────────────────────── */
 
-export function CompanyDialog({ code, company, keeper, onClose, onDone }: {
-  code: string; company?: Company; keeper: boolean; onClose: () => void; onDone: (said: Said, id: string) => void;
+export function CompanyDialog({ code, company, keeper, onClose, onDone, onUnknown }: {
+  code: string; company?: Company; keeper: boolean; onClose: () => void; onDone: (said: Said, id: string) => void; onUnknown: OnUnknown;
 }) {
   const [form, setForm] = useState<CompanyForm>(() => companyForm(company));
-  const w = useWrite();
+  const w = useWrite(onUnknown);
   const set = <K extends keyof CompanyForm>(k: K) => (v: CompanyForm[K]) => setForm((f) => ({ ...f, [k]: v }));
   const wrong = companyWrong(form);
   const save = () => {
@@ -83,13 +89,13 @@ export function CompanyDialog({ code, company, keeper, onClose, onDone }: {
   );
   return (
     <FormSheet
-      title={company ? "Edit company" : "Add company"} onClose={onClose} said={w.said}
+      title={company ? "Edit company" : "Add company"} onClose={onClose} busy={w.busy} said={w.said}
       description={keeper
         ? "One record for the group: the same company at every hotel."
         : "Its name, GSTIN and address, for the tax invoice. Credit and contracts are set by the owner, an administrator or the GM."}
       foot={(
         <View style={{ flexDirection: "row", gap: 8 }}>
-          <Btn label="Cancel" grow tall onPress={onClose} />
+          <Btn label="Cancel" grow tall disabled={w.busy} onPress={onClose} />
           <Btn label={w.busy ? "Saving…" : company ? "Save" : "Add company"} variant="primary" grow tall disabled={wrong !== null || w.busy || w.stuck} onPress={save} />
         </View>
       )}
@@ -130,11 +136,11 @@ export function CompanyDialog({ code, company, keeper, onClose, onDone }: {
 
 /* ── Add or edit a contract: its prices are typed, never filled in ── */
 
-export function ContractDialog({ code, data, contract, onClose, onDone }: {
-  code: string; data: CompanyContracts; contract?: Contract; onClose: () => void; onDone: Done;
+export function ContractDialog({ code, data, contract, onClose, onDone, onUnknown }: {
+  code: string; data: CompanyContracts; contract?: Contract; onClose: () => void; onDone: Done; onUnknown: OnUnknown;
 }) {
   const [form, setForm] = useState<ContractForm>(() => contractForm(contract, data.today));
-  const w = useWrite();
+  const w = useWrite(onUnknown);
   const agent = data.company.kind === "travel_agent";
   const set = <K extends keyof ContractForm>(k: K) => (v: ContractForm[K]) => setForm((f) => ({ ...f, [k]: v }));
   const setCell = (key: string, which: "single" | "double", v: string) =>
@@ -150,11 +156,11 @@ export function ContractDialog({ code, data, contract, onClose, onDone }: {
   };
   return (
     <FormSheet
-      title={contract ? "Edit contract" : "Add contract"} onClose={onClose} said={w.said}
+      title={contract ? "Edit contract" : "Add contract"} onClose={onClose} busy={w.busy} said={w.said}
       description={`${data.company.name}, at this hotel. The contract in force on the arrival date prices the booking.`}
       foot={(
         <View style={{ flexDirection: "row", gap: 8 }}>
-          <Btn label="Cancel" grow tall onPress={onClose} />
+          <Btn label="Cancel" grow tall disabled={w.busy} onPress={onClose} />
           <Btn label={w.busy ? "Saving…" : contract ? "Save" : "Add contract"} variant="primary" grow tall disabled={wrong !== null || w.busy || w.stuck} onPress={save} />
         </View>
       )}
@@ -213,11 +219,11 @@ export function ContractDialog({ code, data, contract, onClose, onDone }: {
 
 /* ── Hold rooms, change an allotment, stop holding ───────────────── */
 
-export function AllotmentDialog({ code, data, contract, allotment, onClose, onDone }: {
-  code: string; data: CompanyContracts; contract: Contract; allotment?: Allotment; onClose: () => void; onDone: Done;
+export function AllotmentDialog({ code, data, contract, allotment, onClose, onDone, onUnknown }: {
+  code: string; data: CompanyContracts; contract: Contract; allotment?: Allotment; onClose: () => void; onDone: Done; onUnknown: OnUnknown;
 }) {
   const [form, setForm] = useState<AllotmentForm>(() => allotmentForm(allotment, contract, data));
-  const w = useWrite();
+  const w = useWrite(onUnknown);
   const set = (k: keyof AllotmentForm) => (v: string) => setForm((f) => ({ ...f, [k]: v }));
   const wrong = allotmentWrong(form, contract);
   const save = () => {
@@ -235,19 +241,21 @@ export function AllotmentDialog({ code, data, contract, allotment, onClose, onDo
       { text: "Cancel", style: "cancel" },
       {
         text: "Yes, stop holding", style: "destructive",
-        onPress: () => void w.run(() => stopAllotment(code, allotment.id),
+        onPress: () => void w.run(
+          /* A repeated Stop answers 404 "No such allotment here": already stopped (rules.ts alreadyStopped). */
+          () => stopAllotment(code, allotment.id).catch((e: unknown) => { if (!(e instanceof ApiError && alreadyStopped(e.status))) throw e; }),
           () => onDone({ title: "No longer held", body: STOPPED_SAID, tone: "ok" }), "Not stopped", "the allotment was stopped"),
       },
     ]);
   };
   return (
     <FormSheet
-      title={allotment ? "Change allotment" : "Hold rooms"} onClose={onClose} said={w.said}
+      title={allotment ? "Change allotment" : "Hold rooms"} onClose={onClose} busy={w.busy} said={w.said}
       description={`${data.company.name}, under "${contract.name}" (${validWords(contract)}). Booked at the contract's rate.`}
       foot={(
         <>
           <View style={{ flexDirection: "row", gap: 8 }}>
-            <Btn label="Cancel" grow tall onPress={onClose} />
+            <Btn label="Cancel" grow tall disabled={w.busy} onPress={onClose} />
             <Btn label={w.busy ? "Saving…" : allotment ? "Save" : "Hold rooms"} variant="primary" grow tall disabled={wrong !== null || w.busy || w.stuck} onPress={save} />
           </View>
           {allotment ? <Btn label="Stop holding" tall disabled={w.busy || w.stuck} onPress={stop} /> : null}

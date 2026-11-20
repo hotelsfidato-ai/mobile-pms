@@ -12,7 +12,7 @@ import { Blank, Exports, Line, Panel, RowCard } from "../leads/kit";
 import { isRefused, readCompanyRecords } from "./data";
 import { CompanyDialog } from "./Dialogs";
 import { whyNotAddCompany, whyNotChangeCompany, whyNotContracts } from "./roles";
-import { contractHere, contractsTable, creditLine, EMPTY, KIND_LABEL, TITLE, UNDER } from "./rules";
+import { contractHere, contractsTable, creditLine, EMPTY, KIND_LABEL, stillUnknown, TITLE, UNDER } from "./rules";
 
 /* ══════════════════════════════════════════════════════════════════
    CONTRACTS on a phone — the web's /contracts
@@ -38,6 +38,11 @@ export function Contracts({ hotel, role }: { hotel: Hotel; role: string | null }
   const [adding, setAdding] = useState(false);
   const [said, setSaid] = useState<Said | null>(null);
   const [pulled, setPulled] = useState(false);
+  /* An add nobody knows the end of: Add company stays grey until the list is read after it (rules.ts stillUnknown). */
+  const [unknown, setUnknown] = useState<{ line: string; at: number } | null>(null);
+  const st = cache.getQueryState([...key, "list"]);
+  const blocked = stillUnknown(unknown?.at ?? null, st ? { dataUpdatedAt: st.dataUpdatedAt, error: st.error } : undefined);
+  const whyAdd = mayAdd ?? (blocked ? unknown!.line : null);
   const refused = isRefused(q.data) ? q.data.refused : null;
   const rows = Array.isArray(q.data) ? q.data : null;
 
@@ -55,12 +60,12 @@ export function Contracts({ hotel, role }: { hotel: Hotel; role: string | null }
       <Screen refreshing={pulled && q.loading} onRefresh={() => { setPulled(true); q.reload(); }}>
         <PageHead title={TITLE} description={UNDER}>
           <Exports role={role} holds="money" table={rows ? contractsTable(rows) : null} />
-          {mayAdd === null ? (
+          {whyAdd === null ? (
             <Btn label="Add company" variant="primary" icon={Plus} onPress={() => setAdding(true)} style={{ alignSelf: "flex-start" }} />
           ) : (
             <View style={{ gap: 4 }}>
-              <Btn label="Add company" a11y={`Add company. ${mayAdd}`} variant="primary" icon={Plus} disabled onPress={() => undefined} style={{ alignSelf: "flex-start" }} />
-              <Text style={[t.caption, { color: c.grey600 }]}>{mayAdd}</Text>
+              <Btn label="Add company" a11y={`Add company. ${whyAdd}`} variant="primary" icon={Plus} disabled onPress={() => undefined} style={{ alignSelf: "flex-start" }} />
+              <Text style={[t.caption, { color: c.grey600 }]}>{whyAdd}</Text>
             </View>
           )}
         </PageHead>
@@ -94,7 +99,7 @@ export function Contracts({ hotel, role }: { hotel: Hotel; role: string | null }
       </Screen>
       {adding ? (
         <CompanyDialog
-          code={code} keeper={keeper}
+          code={code} keeper={keeper} onUnknown={(_, line) => setUnknown({ line, at: Date.now() })}
           onClose={() => { setAdding(false); void cache.invalidateQueries({ queryKey: key }); }}
           onDone={(s, id) => {
             setAdding(false);

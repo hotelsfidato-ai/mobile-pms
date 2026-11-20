@@ -16,20 +16,23 @@ import { body, InDialog, type Said } from "../guest-services/kit";
    Field) with the core's tokens.
    ══════════════════════════════════════════════════════════════════ */
 
-export function FormSheet({ title, description, said, foot, onClose, children }: {
-  title: string; description?: string; said: Said | null; foot: ReactNode; onClose: () => void; children: ReactNode;
+export function FormSheet({ title, description, said, foot, onClose, busy, children }: {
+  title: string; description?: string; said: Said | null; foot: ReactNode; onClose: () => void;
+  /** A write on its way: the sheet does not close (X, back, swipe), so its answer reaches the page. */
+  busy?: boolean; children: ReactNode;
 }) {
   const insets = useSafeAreaInsets();
+  const close = () => { if (!busy) onClose(); };
   return (
-    <Modal visible animationType="slide" onRequestClose={onClose} statusBarTranslucent navigationBarTranslucent>
+    <Modal visible animationType="slide" onRequestClose={close} statusBarTranslucent navigationBarTranslucent>
       <KeyboardAvoidingView style={{ flex: 1, backgroundColor: c.white }} behavior={Platform.OS === "ios" ? "padding" : "height"}>
         <View style={{ flexDirection: "row", alignItems: "flex-start", gap: 8, paddingHorizontal: space.side, paddingTop: insets.top + 12, paddingBottom: 12, borderBottomWidth: 1, borderBottomColor: c.grey200 }}>
           <View style={{ flex: 1, gap: 2 }}>
             <Text style={t.heading} accessibilityRole="header">{title}</Text>
             {description ? <Text style={[body, { color: c.grey500 }]}>{description}</Text> : null}
           </View>
-          <Pressable onPress={onClose} accessibilityRole="button" accessibilityLabel="Close" hitSlop={10} style={{ width: 44, height: 44, alignItems: "center", justifyContent: "center" }}>
-            <X size={20} color={c.grey600} />
+          <Pressable onPress={close} disabled={busy} accessibilityRole="button" accessibilityLabel={busy ? "Close: wait, a change is on its way" : "Close"} accessibilityState={{ disabled: Boolean(busy) }} hitSlop={10} style={{ width: 44, height: 44, alignItems: "center", justifyContent: "center" }}>
+            <X size={20} color={busy ? c.grey300 : c.grey600} />
           </Pressable>
         </View>
         <ScrollView contentContainerStyle={{ padding: space.side, gap: 16 }} keyboardShouldPersistTaps="handled">

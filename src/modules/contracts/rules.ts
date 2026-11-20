@@ -294,3 +294,21 @@ export const contractsTable = (rows: readonly CompanyRow[]): ExportTable => ({
     c.contractName ?? DASH, c.contractTo ? day(c.contractTo) : DASH,
   ]),
 });
+
+/* ── An outcome nobody knows (MEMORY 16; MCON-1) ─────────────────────
+   None of these routes reads a key, and POST /allotments has no check for
+   a second hold over the same nights. So once a write's outcome is not
+   known, the COMPANY page (not the sheet, which can be closed) greys every
+   write until a read of the company that began after that moment has
+   landed without an error - then its allotments and contracts say what
+   was done. */
+
+/** True while the writes stay grey: an unknown moment, and no clean read of the company since it. */
+export function stillUnknown(at: number | null, read: { dataUpdatedAt: number; error: unknown } | undefined): boolean {
+  if (at === null) return false;
+  return !(read !== undefined && read.error == null && read.dataUpdatedAt > at);
+}
+
+/** A repeated Stop holding: the allotment is no longer held, so the server answers 404 "No such
+    allotment here" - already stopped, not a failure (it was the first press that stopped it). */
+export const alreadyStopped = (status: number | undefined) => status === 404;

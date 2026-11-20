@@ -57,9 +57,16 @@ edited: front desk's validators (`gstinProblem`, `phoneProblem`, `emailProblem`,
   phone draws them greyed with the API's sentence (AGENTS rule 1). Reception's Add company sheet has
   only name, GSTIN and address, as the web's (credit is the three's).
 - Every write goes through `send()`: refused offline with the UNLISTED sentence, nothing held.
-- One tap, one write (a latch). On an outcome nobody knows (`outcomeUnknown`), the sheet says "Not
-  known whether …" with what came back and takes no more taps (`useStuck`) until it is closed; every
-  close reads the company (and Companies and agents) again (MEMORY 16).
+- One tap, one write (a latch); a sheet cannot be closed (X, back, swipe, Cancel) while a write is on
+  its way, so its answer always reaches the page. On an outcome nobody knows (`outcomeUnknown`) the
+  sheet says "Not known whether …" and hands the moment to the PAGE, which greys Add contract, Edit
+  company, Edit, Hold rooms and Change (and the list greys Add company) with that line until a read of
+  the company (the list) made after the moment has landed without an error (`rules.ts stillUnknown`,
+  "Read the company again"). Closing the sheet and opening a fresh one cannot hold the rooms twice
+  (MCON-1, the independent review of 20 Nov). Every close reads the company and Companies and agents
+  again (MEMORY 16).
+- A repeated **Stop holding** answering 404 "No such allotment here" is read as already stopped
+  (`alreadyStopped`), not as a failure.
 - **Stop holding** asks first with the phone's own dialog, in the web's words ("What it still holds
   goes back on sale now. Bookings made from it stand." — "Yes, stop holding", destructive).
 

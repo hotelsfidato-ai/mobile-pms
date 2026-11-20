@@ -6,7 +6,8 @@
 import { ruleFor } from "../../core/offline.ts";
 import {
   allotmentForm, allotmentRate, allotmentWrong, companyForm, companyInput, companyWrong, contractForm, contractHere, contractInput,
-  contractsTable, contractWrong, creditLine, heldLine, leftIn, priceWords, ratesOf, releaseLine, type Allotment, type CompanyRow,
+  alreadyStopped, contractsTable, contractWrong, creditLine, heldLine, leftIn, priceWords, ratesOf, releaseLine, stillUnknown,
+  type Allotment, type CompanyRow,
 } from "./rules.ts";
 
 const eq = (got: unknown, want: unknown, what: string) => {
@@ -87,5 +88,15 @@ for (const [m, p] of [["POST", "/api/hotels/5EL/companies"], ["PATCH", "/api/hot
 const row: CompanyRow = { id: "1", name: "A4 Test Traders", kind: "corporate", gstin: null, contactName: null, phone: null, email: null,
   addressLine: null, city: "Solapur", state: null, pincode: null, creditAllowed: true, creditDays: 30, creditLimit: null, contractName: null, contractTo: null };
 eq(contractsTable([row]).rows[0], ["A4 Test Traders", "Corporate", "-", "-", "-", "-", "Solapur", "-", "Yes", "30", "-", "-", "-"], "a row");
+
+/* ── An outcome nobody knows: only a clean read of the company AFTER it lets the writes go ── */
+eq(stillUnknown(null, undefined), false, "nothing unknown: the writes are on");
+eq(stillUnknown(1000, undefined), true, "unknown, nothing read yet: grey");
+eq(stillUnknown(1000, { dataUpdatedAt: 900, error: null }), true, "the read before the write does not count");
+eq(stillUnknown(1000, { dataUpdatedAt: 1000, error: null }), true, "the same moment does not count");
+eq(stillUnknown(1000, { dataUpdatedAt: 1500, error: new Error("no line") }), true, "a re-read that failed does not count");
+eq(stillUnknown(1000, { dataUpdatedAt: 1500, error: null }), false, "a clean read after it: the page shows what was done");
+eq(alreadyStopped(404), true, "a second Stop answers 404: already stopped");
+eq([alreadyStopped(409), alreadyStopped(500), alreadyStopped(undefined)], [false, false, false], "anything else is not");
 
 console.log("contracts: all checks pass");
