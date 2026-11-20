@@ -81,7 +81,7 @@ another day, or another hotel, does not. It stays latched until the diary is rea
 lands. The spa API does not read the idempotency key: what keeps a treatment off the bill twice is
 the server's lock on the row (`for update`) and its "That treatment is already closed and on the bill."
 
-**The time** is typed (no time-picker package; the web has a time input), on the 24-hour clock, and
+**The time** is the phone's own clock picker (M-16; the web has a time input), and
 said back under the field as the diary will show it ("At 4:00 AM on 11 Oct 2026.", MSPA-1). It is
 sent with the day being looked at, as typed: `2026-10-11T16:00`, no offset. No end: the length is
 the treatment's.
@@ -109,7 +109,7 @@ the treatment's.
 
 1. **Rights:** grey with the API's sentence where the web leaves the button out (Book a treatment,
    Cancel, Charge to room for housekeeping; Treatments and therapists for everybody, on the website).
-2. **The time is typed** and said back under the field (MSPA-1); the web's time input picks it.
+2. **The time** is the phone's own picker (M-16) and said back under the field (MSPA-1).
 3. **The guest picker** opens from the foot of the screen (the kit's `Select`), as the web's native
    select does on a phone.
 4. **Figures keep their paise** (above).
@@ -171,3 +171,8 @@ row (PDF or print, Share) under the Treatments head, which today's web has and t
 (b) for a role outside the list the buttons are grey with the API's sentence; (c) the (i) opens its
 note under the heading, not a popover; (d) buttons 44 px. **1 of 1 pictured screen matches**; the
 dialogs are not pictured.
+
+## m16 pickers (20 Nov) — lane m16-pick-pos, PICKERS.md 2.15
+
+Book a treatment's **What time** (`Acts.tsx`) is a `TimeField`; the time is said back under it as the
+diary will show it (MSPA-1's line, now the field's hint) and sent as before. Not opened on a phone or a preview.

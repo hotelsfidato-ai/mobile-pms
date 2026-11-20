@@ -230,3 +230,13 @@ once the order is not open).
 open orders, never on the floor, so it has its own name (`openStop`), let go only by a /till/orders read;
 parcels keep `parcelsStop`, let go by either read. A new table's first round is kept by its table
 (`roundStop(code, undefined, table)`), and a floor read lets go each table it shows.
+
+## m16 pickers (20 Nov) — lane m16-pick-pos
+
+### MPOS-P1 · A stored bill that is a PDF opens named as a picture (20 Nov) — open, a core question
+**What:** a paid-out's bill may be a photo or a PDF (BILL takes both), but the list says only `photo: true`,
+and the core's `downloadToShare` needs the type before it downloads. The phone names it `bill-….jpg`,
+`image/jpeg`, as the web shows it (an `<img>`, which breaks for a PDF too). **Found:** writing 2.1.
+**Done:** named as a picture (the common case, the web's own assumption); said in `BillPhoto.tsx` and
+in the lane's report. **Rule:** the core's download should take the server's Content-Type (or the
+file's first bytes) when the caller cannot know it — asked of the mobile chat.
