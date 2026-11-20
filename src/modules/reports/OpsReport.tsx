@@ -24,13 +24,12 @@ import { PAGES, notYourRole, type ReportLink } from "./opsIndex";
    day, the month and the year are the property's business date's (REP-1),
    nothing typed in; Item sales asks From and To (day steppers, M-7).
 
-   The files (NATIVE.md, BRIEF-T3): the phone's print sheet (save as PDF)
-   and share sheet from the rows shown (core/Export.tsx). A real Excel or CSV
-   file needs expo-file-system and expo-sharing; the Email button is the web's
-   dialog: both on the website for now.
+   The files (NATIVE.md, BRIEF-T3, M-14): PDF, Excel (a CSV file) and Print
+   from the rows shown, through core/Export.tsx. The web's Email button (a
+   dialog that sends the server's file) is on the website for now.
    ══════════════════════════════════════════════════════════════════ */
 
-const LEFT = "Excel and CSV files, and Email: on the website for now.";
+const LEFT = "Email: on the website for now.";
 
 export function OpsReport({ hotel, role, page, report, title, period, query, what, controls }: {
   hotel: Hotel; role: string | null; page: Pick<ReportLink, "may" | "menu">;

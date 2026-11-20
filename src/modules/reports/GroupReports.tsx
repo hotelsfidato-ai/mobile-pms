@@ -61,10 +61,7 @@ export function GroupReports({ hotel, role }: { hotel: Hotel; role: string | nul
   return (
     <Screen refreshing={pulled && read.loading} onRefresh={reload}>
       <Head title="Group reports" under={period || undefined} />
-      <View style={{ gap: 6 }}>
-        <ExportButtons table={doc ? exportOf(doc, period) : null} />
-        <Text style={t.caption}>Excel and CSV files: on the website for now.</Text>
-      </View>
+      <ExportButtons table={doc ? exportOf(doc, period) : null} />
 
       {/* The report's own settings, above it and never printed (ReportShell's controls). */}
       <Card style={{ gap: 16 }}>
