@@ -7,8 +7,10 @@
      button of the print preview) and on Android ("Save as PDF").
    - shareTable: the phone's own share sheet (React Native's Share), the
      rows as plain text to WhatsApp, mail, notes.
-   A file attached to the share (a real .pdf or .xlsx) needs expo-file-
-   system and expo-sharing: asked of the owner, not used here.
+   - Since 19 Nov (M-14, expo-file-system + expo-sharing approved): a real
+     PDF file and a CSV file (opens in Excel, Sheets, Numbers) handed to
+     the phone's share sheet. A true .xlsx needs a spreadsheet library: not
+     installed; CSV is what Excel opens.
 
    Every figure is the screen's, as the server sent it and as the screen
    already writes it (a dash for none, paise kept): this file formats
@@ -59,3 +61,16 @@ export function tableText(t: ExportTable): string {
     .filter((l, i, a) => !(l === "" && a[i - 1] === ""))
     .join("\n");
 }
+
+/** The table as CSV for Excel: a byte-order mark so Excel reads ₹ and Hindi names
+    right, every cell quoted, quotes doubled, CRLF lines (RFC 4180). */
+export function tableCsv(t: ExportTable): string {
+  const cell = (s: string) => `"${s.replace(/"/g, '""')}"`;
+  const line = (r: readonly string[]) => r.map(cell).join(",");
+  return "\uFEFF" + [line(t.columns), ...t.rows.map(line), ...(t.totals ? [line(t.totals)] : [])].join("\r\n") + "\r\n";
+}
+
+/** A file name from the title: "GST sales register" -> "gst-sales-register". */
+export const fileName = (title: string) =>
+  title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "export";
+
