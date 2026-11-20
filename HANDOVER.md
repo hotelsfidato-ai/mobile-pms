@@ -10,9 +10,10 @@
 are in every screen that uploads, imports, downloads or picks a date (44 controls, docs/PICKERS.md;
 CHANGELOG). **Testing is in Expo Go from the PC: `docs/TESTING.md`**, against the local PMS
 (`fidato_mobile`), never the live hotels; nothing automatic (no over-the-air update, no store).
-**Waiting for the owner:** `expo-image-manipulator` ~57.0.21 (recommended yes: camera photos for the
-gallery and room types are refused over 1600 px without it); camera quality as the web (yes); the
-Bar role on Purchasing's Bar tab (no). Questions 1-4 below were answered "yes to all 4" (M-16).
+**Answered (M-18):** `expo-image-manipulator` ~57.0.21 is installed and a gallery or room-type photo
+(camera or library) is shrunk on the phone as the web shrinks it (lane m18-photos, `src/core/photoFit.ts`);
+camera quality as the web (yes); the Bar role on Purchasing's Bar tab (no). Questions 1-4 below were
+answered "yes to all 4" (M-16).
 
 **Where it stands.** `main` holds every screen of the 16 Nov web on the phone, 181 route files
 (CHANGELOG 19/20 Nov): Tier 1 and 2, the reports, the admin screens and the whole Settings console,

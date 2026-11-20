@@ -11,6 +11,8 @@ Line numbers are the app's at that commit. Nothing here was opened on a screen.
 | Piece | File | Use |
 |---|---|---|
 | `pickPhoto({ camera?, quality? })` | `src/core/pickers.ts` | The camera or the library; `Picked` or null (cancelled). A refused camera throws `NoPermission`; `explainPick(e)` says it with "Open Settings". |
+| `pickPhotoFrom(title, line)` | `src/core/pickers.ts` | Take a photo / Choose a photo in the phone's own sheet (as `pickBill`), full quality (M-18). |
+| `fitPhoto(picked, PHOTO)`, `fitSize(w, h, most)` | `src/core/photoFit.ts`, `files.ts` | A hotel's or a room type's photo redrawn as the web's shrinkPhoto.ts: upright, the long side down to 1600 px (never enlarged, rounded), a JPEG at 0.85; `{ ok, data }` or `{ ok: false, reason }`. The picked copy and the redrawn file are deleted. Not redrawn: the file as picked if `PHOTO.problem` lets it (the web sends it as it is). |
 | `pickFile({ types })` | `src/core/pickers.ts` | The phone's file picker; `types` from the rule (`BILL.types`, `LOGO.types`, `SHEET_TYPES`, `CSV_IMPORT.types`). |
 | `BILL`, `PHOTO`, `LOGO`, `OLD_SYSTEM_FILE`, `ROOMING_FILE`, `CSV_IMPORT` | `src/core/files.ts` | `rule.problem(picked)`: the web's or the server's sentence, or null. Check before sending. |
 | `sendForm(method, path, parts, keeper?)` | `src/core/upload.ts` | A multipart form (`filePart("file", picked)`, `{ name, value }`). Never held: offline it is ApiError 503 with the route's own web sentence; `outcomeUnknown` is then true, so keep the screen's stop (`useScreenStop`) until the record is read again. |
@@ -23,10 +25,9 @@ Two things the core does NOT have, which a lane may need (ask the mobile chat, a
   `parseCsv`, each screen's spec, and `downloadTemplate`) and sends `{ rows, dryRun }`. The first
   lane to wire an Import ports `importSpec.ts` (pure) into `src/core`; `CSV_IMPORT.problem` is already
   its `fileProblem`. The template is made on the phone as the exports are (`Export.tsx`'s way).
-- **Shrinking a photo**: the web redraws a gallery or room type photo at 1600 px, JPEG 0.85 before it
-  is sent; the server refuses more than 1600 px or 600 KB. The phone cannot redraw (no image library):
-  `PHOTO.problem` refuses a larger photo with a plain sentence, so most camera photos (4000 px) will be
-  refused. `expo-image-manipulator ~57.0.21` (Expo SDK 57's) would do it: a question for the owner.
+- ~~**Shrinking a photo**~~ — done (M-18, 20 Nov): `expo-image-manipulator` ~57.0.21 is installed and
+  `fitPhoto` (src/core/photoFit.ts) redraws a gallery or room-type photo as the web does (1600 px,
+  JPEG 0.85, upright, never enlarged); the server still checks 600 KB and its sentence is shown.
 
 ## Core follow-ups (20 Nov, lane m16-core2)
 
@@ -100,7 +101,7 @@ A month (`MonthStep`, GroupReports' Month) stays stepped: DateField picks days.
 | 2.7 **done** 7b6385d | Time, typed — `pos/TableBookings.tsx:299`; Day typed or stepped — `:296` | pages/TableBookings.tsx:357, 358 (min today) | unchanged | unchanged | unchanged | TimeField, DateField |
 | 2.8 **done** 0dc4cdd | From, To (typed or stepped) — `pos/BillHistory.tsx:82, 83` | pages/BillHistory.tsx:190, 194 (max today) | a read | unchanged | a read | DateField ×2 |
 | 2.9 **done** a9432f2 | Import (room types, rooms) — `inventory/RoomTypes.tsx:122` | pages/RoomSetup.tsx:267; data/roomSetup.ts:192 | CSV on the phone; POST `/room-types/import`, `/rooms/import` `{ rows, dryRun }` | SETUP_ADD | unlisted (refused) | pickFile(CSV_IMPORT) + readText + importSpec port |
-| 2.10 **done** a9432f2 | A room type's photos: add (and its order, delete) — `inventory/RoomTypes.tsx:245` | pages/RoomSetup.tsx:557-620 | POST `/room-types/:id/photos` `{ data }` (base64 JPEG, ten a type); PUT `…/photos/order` `{ ids }`; DELETE `…/photos/:photoId`; GET `…/photos/:photoId` `{ type, data }` | `room_config` edit (SETUP_CHANGE); see: SETUP | unlisted (refused) | pickPhoto({ quality: PHOTO_QUALITY }) + base64For(PHOTO) + send; shown with dataUrl |
+| 2.10 **done** a9432f2 | A room type's photos: add (and its order, delete) — `inventory/RoomTypes.tsx:245` | pages/RoomSetup.tsx:557-620 | POST `/room-types/:id/photos` `{ data }` (base64 JPEG, ten a type); PUT `…/photos/order` `{ ids }`; DELETE `…/photos/:photoId`; GET `…/photos/:photoId` `{ type, data }` | `room_config` edit (SETUP_CHANGE); see: SETUP | unlisted (refused) | pickPhoto (camera or library, full quality) + fitPhoto(PHOTO) + send, **shrunk on the phone** (M-18); shown with dataUrl |
 | 2.11 **done** f1058cf | Import — `equipment/Register.tsx:93` | pages/EquipmentRegister.tsx:322; data/equipment.ts:251 | CSV on the phone; POST `/equipment/import` `{ rows, dryRun }` | equipment/grants.ts | unlisted (refused) | pickFile(CSV_IMPORT) + readText + importSpec port |
 | 2.12 **done** f1058cf | Bought on, Warranty ends, Service contract (AMC) ends, in Add — `equipment/Register.tsx:288` (`register.ts:349` `addBody`) | flows/AddEquipmentDialog.tsx:228, 241, 247 (min the purchase date) | POST `/equipment`: add `purchaseDate?`, `warrantyEnds?`, `amcEnds?` (left out when blank; equipment.ts:154-158) | unchanged | unchanged | DateField ×3, clearable |
 | 2.13 **done** f1058cf | The same three, in Edit — `equipment/ItemDialogs.tsx:115` | flows/ItemDialogs.tsx:151, 160, 164 | PATCH `/equipment/items/:id`, the changes with the three dates (equipment.ts:182) | unchanged | unchanged | DateField ×3, clearable |
@@ -117,7 +118,7 @@ sheet is `pos/ImportSheet.tsx` (inventory and equipment import it).
 
 | # | Control (file:line) | Web twin | Route and body | Who | Offline | Core piece |
 |---|---|---|---|---|---|---|
-| 3.1 | Add photos (the hotel's) — `settings/PropPhotos.tsx:65` | admin/components/HotelGalleryCard.tsx:46, 72 (several at once) | POST `/gallery` `{ data, caption? }` (base64 JPEG ≤ 1600 px, ≤ 600 KB; 20 a hotel) | `room_config` edit (HOTEL_GALLERY) | unlisted (refused) | pickPhoto({ quality: PHOTO_QUALITY }) + base64For(PHOTO) + send — **done** `afd5a3f` |
+| 3.1 | Add photos (the hotel's) — `settings/PropPhotos.tsx:100` | admin/components/HotelGalleryCard.tsx:46, 72 (several at once) | POST `/gallery` `{ data, caption? }` (base64 JPEG ≤ 1600 px, ≤ 600 KB; 20 a hotel) | `room_config` edit (HOTEL_GALLERY) | unlisted (refused) | pickPhotoFrom (Take a photo / Choose a photo) + fitPhoto(PHOTO) + send, **shrunk on the phone** (M-18) — **done** `afd5a3f` |
 | 3.2 | This hotel's logo: Upload / Replace — `settings/PropPhotos.tsx:105` (LogoRow, at :60) | admin/components/GroupCard.tsx:213 (HotelLogoCard) | PUT `/logo` `{ data }` (a PNG or SVG, ≤ 200 KB; the server reads it) | `room_config` edit (HOTEL_LOGO) | unlisted (refused) | pickFile(LOGO) + base64For(LOGO) + send — **done** `afd5a3f` |
 | 3.3 | The group's logo: Upload / Replace — `settings/PropGroup.tsx:71` (the same LogoRow) | GroupCard.tsx LogoRow | PUT `/group/logo` `{ data }` | `room_config` edit (GROUP_LOGO) | unlisted (refused) | as 3.2 — **done** `afd5a3f` |
 | 3.4 | Choose the file (the old system's), and the voucher switch after it — `settings/PropOldData.tsx:72, 83` | admin/oldData/OldDataPage.tsx:211; data/oldSystem.ts:106 | POST `/imports/:kind/check`, then `/imports/:kind` `{ name, data, system, columns?, choices?, sendVouchers }` | the owner or an administrator (oldSystem.ts) | unlisted (refused) | pickFile(OLD_SYSTEM_FILE) + base64For + send — **done** `4985d15` |

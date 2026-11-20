@@ -1,7 +1,7 @@
 /* files.ts. Run: node --experimental-strip-types src/core/files.check.ts
    Every limit and sentence is the web's or the server's (named in files.ts); these hold them still. */
 import {
-  ANY_FILE, BILL, CSV_IMPORT, LOGO, OLD_SYSTEM_FILE, PHOTO, ROOMING_FILE, dataUrl, formOffline, formSig, isWithin, nameIn, pathOf,
+  ANY_FILE, BILL, CSV_IMPORT, LOGO, OLD_SYSTEM_FILE, PHOTO, ROOMING_FILE, dataUrl, fitSize, formOffline, formSig, isWithin, nameIn, pathOf,
   statusIn, typeFromName, utiOf,
   type Picked,
 } from "./files.ts";
@@ -21,12 +21,28 @@ eq(BILL.problem(f({ size: 12.34 * MB })), "That file is 12.3 MB. The limit is 9 
 eq(BILL.problem(f({ size: null })), null, "a size the phone cannot tell is left to the server");
 eq(BILL.types, ["image/*", "application/pdf"], "the web's picker: any picture or a PDF");
 
-/* A hotel's or a room type's photo: a JPEG within 1600 px (the server's), the bytes left to the server. */
+/* A hotel's or a room type's photo, redrawn as the web's shrinkPhoto.ts: the long side down to 1600 px,
+   never enlarged, each side rounded (Math.round); a JPEG at 0.85. */
+eq([PHOTO.longSide, PHOTO.quality], [1600, 0.85], "the web's 1600 px and 0.85");
+eq(fitSize(4000, 3000, 1600), { width: 1600, height: 1200 }, "a camera's 4000 × 3000, lying: 1600 × 1200");
+eq(fitSize(3000, 4000, 1600), { width: 1200, height: 1600 }, "standing: the long side is the height");
+eq(fitSize(4032, 3024, 1600), { width: 1600, height: 1200 }, "an iPhone's 12 MP: 1600 × 1200");
+eq(fitSize(4000, 2254, 1600), { width: 1600, height: 902 }, "901.6 rounds up, as Math.round (not down)");
+eq(fitSize(4000, 2251, 1600), { width: 1600, height: 900 }, "900.4 rounds down, as Math.round");
+eq(fitSize(3001, 2000, 1600), { width: 1600, height: 1066 }, "1066.31… rounds to 1066");
+eq(fitSize(3000, 1999, 1600), { width: 1600, height: 1066 }, "1066.13… rounds to 1066");
+eq(fitSize(2000, 1250, 1600), { width: 1600, height: 1000 }, "an exact ratio stays exact");
+eq(fitSize(1600, 1200, 1600), { width: 1600, height: 1200 }, "exactly 1600 is kept as it is");
+eq(fitSize(800, 600, 1600), { width: 800, height: 600 }, "a smaller photo is never enlarged");
+eq(fitSize(1601, 1601, 1600), { width: 1600, height: 1600 }, "a square one px over");
+eq(fitSize(0, 0, 1600), { width: 0, height: 0 }, "a frame not known is kept");
+/* PHOTO.problem: the file as picked, only when the phone could not redraw it. */
 eq(PHOTO.problem(f({ width: 1600, height: 1200 })), null, "1600 px on its long side goes");
 eq(PHOTO.problem(f({ width: 1200, height: 1601 })),
-  "That photo is 1200 × 1601 px. The most is 1600 px on its long side, and this phone cannot make it smaller yet. Add it on the website, which does.",
-  "1601 px on the long side, standing: refused before it is sent");
-eq(PHOTO.problem(f({ mimeType: "image/png", width: 800, height: 600 })), "A photo must be a JPEG. Choose a photo taken with a camera.", "a PNG is not a photo here");
+  "That photo is 1200 × 1601 px. The most is 1600 px on its long side, and this phone could not make it smaller. Choose another, or add it on the website.",
+  "1601 px on the long side, standing, not redrawn: refused before it is sent");
+eq(PHOTO.problem(f({ mimeType: "image/png", width: 800, height: 600 })),
+  "This phone could not make that photo into a JPEG. Choose another, or add it on the website.", "a PNG not redrawn is not a photo the server takes");
 eq(PHOTO.problem(f({ size: 900 * 1024, width: 1600, height: 900 })), null, "900 KB with its camera notes: the server measures without them");
 eq(PHOTO.problem(f({ width: 0, height: 0 })), null, "a frame the picker did not give: left to the server");
 

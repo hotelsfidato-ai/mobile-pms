@@ -2,12 +2,12 @@ import { ArrowLeft, ArrowRight, Camera, ImagePlus, Trash2 } from "lucide-react-n
 import { useRef, useState } from "react";
 import { ActivityIndicator, Image, Text, View } from "react-native";
 import { outcomeUnknown } from "../../core/api";
-import { dataUrl, PHOTO, PHOTO_LONG_SIDE, PHOTO_QUALITY } from "../../core/files";
+import { dataUrl, PHOTO, PHOTO_LONG_SIDE } from "../../core/files";
+import { fitPhoto } from "../../core/photoFit";
 import { explainPick, pickPhoto } from "../../core/pickers";
 import { stops } from "../../core/stop";
 import { c, t } from "../../core/theme";
 import { notKnown, useRead, useScreenStop } from "../../core/ui";
-import { base64For } from "../../core/upload";
 import { movedOrder, photosLine, photosStop } from "./config";
 import { addTypePhoto, orderTypePhotos, readTypePhoto, readTypePhotos, removeTypePhoto } from "./configData";
 import { Btn, Failed, Loading, confirm } from "./configKit";
@@ -19,10 +19,11 @@ import { InDialog, body, saidOf, type Said } from "./kit";
    ten a type, the first shown first; Earlier / Later (the owner's M-16
    "Move up / Move down", as the web's arrows), Delete asked first with
    the phone's own dialog (M-16). A photo from the camera or the library
-   (expo-image-picker), sent as base64 JPEG (core base64For with PHOTO).
-   The web redraws a photo at 1600 px first; this phone cannot (no image
-   library), so a larger one is refused with a plain sentence before it is
-   sent (expo-image-manipulator is asked of the owner).
+   (expo-image-picker, full quality), redrawn on the phone as the web's
+   shrinkPhoto redraws it - upright, 1600 px at most on its long side, a
+   JPEG at 0.85, whether a JPEG, a PNG or a HEIC was picked (core
+   photoFit.ts fitPhoto with PHOTO, M-18) - and sent as base64. The server
+   still checks the 600 KB; its sentence is shown when it refuses.
    Changing them is `room_config` edit (SETUP_CHANGE): a refused role sees
    them with the API's sentence. Nothing here is held offline (unlisted).
    ONE TAP, ONE PHOTO: a repeated POST adds a second photo, so an add whose
@@ -56,10 +57,10 @@ export function TypePhotos({ code, typeId, cannotChange }: { code: string; typeI
   const add = (camera: boolean) => void run("add", async () => {
     if (stop.isStuck()) return null;
     let picked;
-    try { picked = await pickPhoto({ camera, quality: PHOTO_QUALITY }); }
+    try { picked = await pickPhoto({ camera }); }
     catch (e) { return explainPick(e) ? null : { title: "Not added", body: "The phone's picker could not be opened. Try again.", tone: "bad" }; }
     if (!picked) return null;
-    const read = await base64For(picked, PHOTO);
+    const read = await fitPhoto(picked, PHOTO);
     if (!read.ok) return { title: "Not added", body: read.reason, tone: "bad" };
     try {
       await stop.guard(() => addTypePhoto(code, typeId, read.data));
@@ -105,7 +106,7 @@ export function TypePhotos({ code, typeId, cannotChange }: { code: string; typeI
             <Btn label="Choose a photo" icon={ImagePlus} disabled={why !== null || busy !== null} onPress={() => add(false)} />
           </View>
           <Text style={[t.caption, { color: why ? c.grey600 : c.grey500 }]}>
-            {why ?? `A JPEG of at most ${PHOTO_LONG_SIDE} px on its long side: this phone cannot make a photo smaller yet.`}
+            {why ?? `Each photo is made at most ${PHOTO_LONG_SIDE} px on its long side as it is sent.`}
           </Text>
         </View>
       ) : null}

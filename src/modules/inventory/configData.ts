@@ -56,7 +56,7 @@ export const readTypePhotos = (code: string, typeId: string) =>
 /** One photo, as base64 JPEG ({ type, data }): shown with files.ts dataUrl. */
 export const readTypePhoto = (code: string, typeId: string, photoId: string) =>
   api<{ type: string; data: string }>(`${H(code)}/room-types/${encodeURIComponent(typeId)}/photos/${encodeURIComponent(photoId)}`);
-/** `data`: the JPEG's bytes, base64 (core base64For with PHOTO). A repeat adds a second photo (no key read). */
+/** `data`: the JPEG's bytes, base64 (core photoFit.ts fitPhoto with PHOTO, M-18). A repeat adds a second photo (no key read). */
 export const addTypePhoto = (code: string, typeId: string, data: string) =>
   send<{ ok: true; id: string }>("POST", `${H(code)}/room-types/${encodeURIComponent(typeId)}/photos`, { data });
 export const removeTypePhoto = (code: string, typeId: string, photoId: string) =>

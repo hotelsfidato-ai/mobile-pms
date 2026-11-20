@@ -240,7 +240,7 @@ Nothing here was opened on a phone or a preview: built from the web's code at c9
 | Row | Control | Where | How |
 |---|---|---|---|
 | 2.9 | Import (room types, then rooms) | `RoomTypes.tsx`, pos `ImportSheet.tsx` | The shared sheet with core `ROOM_TYPE_SPEC` / `ROOM_SPEC`; POST `/room-types/import`, `/rooms/import` `{ rows, dryRun }` (`configData.ts` importSetup). After room types land, closing the sheet offers the rooms file, as the web. Grey with SETUP_ADD's sentence. |
-| 2.10 | A room type's photos | `TypePhotos.tsx` (the type's Photos tab) | Take or choose (`pickPhoto` at PHOTO_QUALITY) → `base64For(PHOTO)`: a JPEG of 1600 px at most on its long side, a larger one refused plainly (expo-image-manipulator is the owner's question) → POST `…/photos { data }`; Earlier / Later (PUT `…/photos/order`, the whole list), Delete asked first (the phone's own dialog, M-16); shown from `{ type, data }` with `dataUrl`. Changing is SETUP_CHANGE's. |
+| 2.10 | A room type's photos | `TypePhotos.tsx` (the type's Photos tab) | Take or choose (`pickPhoto`, full quality) → `fitPhoto(PHOTO)`: redrawn on the phone as the web's shrinkPhoto (upright, 1600 px at most on the long side, never enlarged, a JPEG at 0.85; expo-image-manipulator ~57.0.21, M-18); the server checks 600 KB and its sentence is shown → POST `…/photos { data }`; Earlier / Later (PUT `…/photos/order`, the whole list), Delete asked first (the phone's own dialog, M-16); shown from `{ type, data }` with `dataUrl`. Changing is SETUP_CHANGE's. |
 | opt. | Group rates' From / Through; the rate dialogs' From / Through | `GroupRates.tsx`, `Dialogs.tsx` | `DateField` (the M-7 stepper gone). |
 
 **Repeats (the API, read 20 Nov):** POST a photo reads no key and adds a SECOND photo on a repeat, so

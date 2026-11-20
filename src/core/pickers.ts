@@ -14,11 +14,10 @@ import { BILL, isWithin, typeFromName, type Picked } from "./files";
    NoPermission with a plain sentence, and `explainPick` shows it in the
    phone's own dialog with a way to its Settings (Linking.openSettings).
 
-   Nothing is redrawn: the web sends a bill's photo as picked, and
-   redraws only the gallery's photos (1600 px, JPEG 0.85) - which this
-   phone cannot (no image library is installed), so files.ts PHOTO
-   refuses a larger one before it is sent. `quality` re-encodes a JPEG
-   only; pass files.ts PHOTO_QUALITY (the web's 0.85) for a gallery photo.
+   A bill's photo is sent as picked, at full quality (the web's; M-18).
+   A hotel's or a room type's photo is picked at full quality too and then
+   redrawn once, as the web does (1600 px, JPEG 0.85): photoFit.ts
+   fitPhoto with files.ts PHOTO (M-18, expo-image-manipulator ~57.0.21).
    DPDP (20 Nov): each picker copies the file into this app's cache; the
    caller deletes that copy once it is read or sent (`forgetPicked`;
    upload.ts base64For and readText do it themselves).
@@ -100,8 +99,7 @@ export function forgetPicked(picked: Pick<Picked, "uri"> | null | undefined): vo
    paid-out's bill, a deposit slip, a bar bill, a repair's proof), which
    a phone's browser opens as three choices: the camera, the photos, the
    files. Here the same three in each phone's own way: iPhone's action
-   sheet (with Cancel), Android's dialog (three buttons at most; a tap
-   outside or the back gesture closes it). Sent as picked, never redrawn
+   sheet (with Cancel), Android's dialog (askOne). Sent as picked, never redrawn
    (the web's); files.ts BILL's 9 MB checked first, in the web's own
    sentence, and a refused file's copy deleted. A refused camera is said
    with the way to Settings (explainPick). The same as lane 1's
@@ -131,14 +129,42 @@ export function pickBill(title: string): Promise<BillPick> {
     const acts = [go(() => pickPhoto({ camera: true })), go(() => pickPhoto()), go(() => pickFile({ types: BILL.types }))];
     /* The web preview has no camera or dialog of its own: the browser's file box. */
     if (Platform.OS === "web") return acts[2]!();
-    if (Platform.OS === "ios") {
-      ActionSheetIOS.showActionSheetWithOptions(
-        { title, message: BILL_LINE, options: [...BILL_CHOICES, "Cancel"], cancelButtonIndex: BILL_CHOICES.length },
-        (i) => { const act = acts[i]; if (act) act(); else end(null); },
-      );
-      return;
-    }
-    const buttons: AlertButton[] = BILL_CHOICES.map((text, i) => ({ text, onPress: acts[i] }));
-    Alert.alert(title, BILL_LINE, buttons, { cancelable: true, onDismiss: () => end(null) });
+    askOne(title, BILL_LINE, BILL_CHOICES, acts, () => end(null));
+  });
+}
+
+/** The phone's own choice: iPhone's action sheet (with Cancel), Android's dialog (three buttons at most;
+    a tap outside or the back gesture closes it, `none`). */
+function askOne(title: string, line: string, choices: readonly string[], acts: (() => void)[], none: () => void): void {
+  if (Platform.OS === "ios") {
+    ActionSheetIOS.showActionSheetWithOptions(
+      { title, message: line, options: [...choices, "Cancel"], cancelButtonIndex: choices.length },
+      (i) => { const act = acts[i]; if (act) act(); else none(); },
+    );
+    return;
+  }
+  const buttons: AlertButton[] = choices.map((text, i) => ({ text, onPress: acts[i] }));
+  Alert.alert(title, line, buttons, { cancelable: true, onDismiss: none });
+}
+
+/* ── A PHOTO FROM THE CAMERA OR THE LIBRARY (M-18, 20 Nov) ───────────
+   The web's <input type="file" accept="image/*">, which a phone's browser
+   opens as the camera or the photos: here Take a photo / Choose a photo
+   in the phone's own way (askOne, as pickBill). Picked at full quality;
+   the caller redraws it (photoFit.ts fitPhoto). A refused camera throws
+   NoPermission, as pickPhoto (the caller's explainPick says it). */
+const PHOTO_CHOICES = ["Take a photo", "Choose a photo"] as const;
+
+export function pickPhotoFrom(title: string, line: string): Promise<Picked | null> {
+  /* The web preview: the browser's own photo box. */
+  if (Platform.OS === "web") return pickPhoto();
+  return new Promise((resolve, reject) => {
+    let done = false;
+    const go = (camera: boolean) => () => {
+      if (done) return;
+      done = true;
+      pickPhoto({ camera }).then(resolve, reject);
+    };
+    askOne(title, line, PHOTO_CHOICES, [go(true), go(false)], () => { if (!done) { done = true; resolve(null); } });
   });
 }

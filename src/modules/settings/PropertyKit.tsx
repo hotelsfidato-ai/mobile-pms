@@ -114,7 +114,8 @@ export function CardHead({ title, line, info, action }: { title: string; line?: 
 
 /** A file or a photo chosen with the phone's own picker (M-16; core pickers.ts), checked against the web's or
     the server's own limits BEFORE anything is sent (files.ts), and read as base64 for a JSON route's `data`
-    (the web's FileReader). Null: cancelled, or refused - said here (`refused(name)` is the toast's title;
+    (the web's FileReader) - or, for a gallery photo, redrawn first (`rule` is then the reader: core photoFit.ts
+    fitPhoto, M-18). Null: cancelled, or refused - said here (`refused(name)` is the toast's title;
     a camera refused by the phone says so in its own dialog, with Settings). One picker at a time (`open`).
     DPDP: the pickers copy the file into this app's cache (an old system's file holds guests' ID numbers,
     birth dates and phones); the copy is deleted as soon as it is read, kept or refused. The page keeps
@@ -122,7 +123,11 @@ export function CardHead({ title, line, info, action }: { title: string; line?: 
 export function usePickData(say: (s: Said) => void) {
   const open = useRef(false);
   const [picking, setPicking] = useState(false);
-  const pick = async (choose: () => Promise<Picked | null>, rule: FileRule, refused: (name: string) => string) => {
+  const pick = async (
+    choose: () => Promise<Picked | null>,
+    rule: FileRule | ((picked: Picked) => Promise<{ ok: true; data: string } | { ok: false; reason: string }>),
+    refused: (name: string) => string,
+  ) => {
     if (open.current) return null;
     open.current = true;
     setPicking(true);
@@ -130,7 +135,7 @@ export function usePickData(say: (s: Said) => void) {
       let picked: Picked | null;
       try { picked = await choose(); } catch (e) { if (!explainPick(e)) say(saidOf(e, "Nothing chosen")); return null; }
       if (!picked) return null;
-      const read = await base64For(picked, rule);
+      const read = typeof rule === "function" ? await rule(picked) : await base64For(picked, rule);
       try { new File(picked.uri).delete(); } catch { /* already gone, or not ours to delete */ }
       if (!read.ok) { say({ title: refused(picked.name), body: read.reason, tone: "bad" }); return null; }
       return { picked, data: read.data };

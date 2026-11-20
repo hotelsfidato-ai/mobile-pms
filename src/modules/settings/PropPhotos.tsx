@@ -1,8 +1,9 @@
 import { ArrowLeft, ArrowRight, ImagePlus, Trash2, Upload } from "lucide-react-native";
 import { useState, type ReactNode } from "react";
 import { ActivityIndicator, Image, Pressable, Text, TextInput, View } from "react-native";
-import { LOGO, PHOTO, PHOTO_LONG_SIDE, PHOTO_QUALITY } from "../../core/files";
-import { pickFile, pickPhoto } from "../../core/pickers";
+import { LOGO, PHOTO } from "../../core/files";
+import { fitPhoto } from "../../core/photoFit";
+import { pickFile, pickPhotoFrom } from "../../core/pickers";
 import { c, face, t } from "../../core/theme";
 import { s as core, confirmAct, useRead } from "../../core/ui";
 import { Btn, Toast, body, useSaid } from "../admin/kit";
@@ -21,13 +22,13 @@ import { logoOf, moved, type Logo } from "./propertyRules";
    THE PHONE'S OWN PICKERS (M-16, 20 Nov): the logo's Upload / Replace is
    the file picker (a PNG or an SVG, 200 KB at most: files.ts LOGO, the
    server's sentence), sent as picked, base64 (PUT /:code/logo { data }, as
-   GroupCard.tsx LogoRow); a repeat puts the same logo again. Add photos is
-   the photo library, one photo a tap (the web takes several at once), a
-   JPEG re-encoded at the web's 0.85 (PHOTO_QUALITY) - but the phone cannot
-   make a photo smaller (no image library; expo-image-manipulator ~57.0.21
-   is asked of the owner), so one over 1600 px on its long side is refused
-   before it is sent, in a plain sentence (files.ts PHOTO), and the server
-   still checks the 600 KB. POST /:code/gallery { data } reads no key and a
+   GroupCard.tsx LogoRow); a repeat puts the same logo again. Add photos
+   (M-18) is Take a photo / Choose a photo (the phone's own sheet, core
+   pickPhotoFrom), one photo a tap (the web takes several at once), redrawn
+   on the phone as the web redraws it - upright, 1600 px at most on its long
+   side, a JPEG at 0.85 (core photoFit.ts fitPhoto, files.ts PHOTO) - and
+   the server still checks the 600 KB, its sentence shown when it refuses.
+   POST /:code/gallery { data } reads no key and a
    repeat ADDS A SECOND PHOTO: an unknown outcome stops the page (the core's
    stop) until a read begun after it. Remove the logo, captions, the order,
    Delete (each asking first) as before. An SVG logo is not drawn on the
@@ -49,10 +50,10 @@ export function PropPhotos({ hotel, role }: AdminProps) {
   const [pulled, setPulled] = useState(false);
   const mayEdit = mayEditHere(role);
   const files = usePickData(say);
-  /* Add photos (HotelGalleryCard.tsx add): the library's photo, checked, then sent; the web's words after. */
+  /* Add photos (HotelGalleryCard.tsx add): the camera's or the library's photo, redrawn as the web's, then sent; the web's words after. */
   const addOne = async () => {
     if (w.off || files.picking) return;
-    const got = await files.pick(() => pickPhoto({ quality: PHOTO_QUALITY }), PHOTO, (name) => `${name} not added`);
+    const got = await files.pick(() => pickPhotoFrom("Add a photo", "Guests see it on their page."), (p) => fitPhoto(p, PHOTO), (name) => `${name} not added`);
     if (!got) return;
     await w.write(() => addPhoto(code, got.data), {
       ok: () => ({ title: "Photo added", body: "Guests see it on their page from now on.", tone: "ok" }),
@@ -98,7 +99,7 @@ export function PropPhotos({ hotel, role }: AdminProps) {
                     <View style={{ alignSelf: "flex-start" }}>
                       <Btn label={w.busy ? "Adding…" : "Add photos"} disabled={w.off || files.picking || photos.length >= (gallery.most ?? 20)}
                         icon={<ImagePlus size={16} color={w.off || files.picking ? c.grey500 : c.ink900} />} onPress={() => void addOne()} />
-                      <Text style={[t.caption, { lineHeight: 17, marginTop: 4 }]}>{`From this phone's photos, one at a time. This phone cannot make a photo smaller yet: one over ${PHOTO_LONG_SIDE} px on its long side is added on the website, which does.`}</Text>
+                      <Text style={[t.caption, { lineHeight: 17, marginTop: 4 }]}>From the camera or this phone's photos, one at a time.</Text>
                     </View>
                   ) : null}
                   {photos.length === 0 ? (

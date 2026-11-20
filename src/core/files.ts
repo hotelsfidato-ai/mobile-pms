@@ -16,8 +16,8 @@
      HEIC or PDF, 9 MB at most (`BILL`).
    - JSON with the file's bytes in base64 (`data`), through `send()`:
      the hotel's photos and a room type's (admin/data/gallery.ts,
-     inventory RoomSetup: redrawn by the web at 1600 px as a JPEG at
-     0.85 first, `PHOTO`), the group's and a hotel's logo
+     inventory RoomSetup: redrawn at 1600 px as a JPEG at 0.85 first,
+     by the web and the phone alike, `PHOTO`, `fitSize`), the group's and a hotel's logo
      (admin/components/GroupCard.tsx: as picked, `LOGO`), the old
      system's file (admin/data/oldSystem.ts, `OLD_SYSTEM_FILE`) and a
      group's rooming list (reservations/data/roomingList.ts, `ROOMING_FILE`).
@@ -64,24 +64,45 @@ export const BILL: FileRule = {
   problem: (f) => (f.size == null ? null : billTooBig(f.size)),
 };
 
+/** A rule for a photo the phone redraws before it is sent (photoFit.ts fitPhoto, M-18): the long side
+    at most, the JPEG quality, and `problem` for the file as picked when the phone could not redraw it. */
+export interface PhotoRule extends FileRule {
+  longSide: number;
+  quality: number;
+}
+
+/** The frame a photo is redrawn at: its long side brought down to `most`, never enlarged, each side
+    rounded - the web's shrinkPhoto.ts:19-22 (scale = min(1, most / long side), Math.round). A frame
+    not known (0 or less) is kept. */
+export function fitSize(width: number, height: number, most: number): { width: number; height: number } {
+  const long = Math.max(width, height);
+  if (!(width > 0 && height > 0) || long <= most) return { width, height };
+  const scale = most / long;
+  return { width: Math.round(width * scale), height: Math.round(height * scale) };
+}
+
 /** A hotel's or a room type's photo (api/src/modules/admin/gallery.ts readPhoto): a JPEG, at most
-    1600 px on its long side, 600 KB once its camera notes are taken out - the server measures the
-    bytes after taking them out, so the phone checks only the frame and leaves the bytes to it. The
-    web redraws every photo at 1600 px as a JPEG at 0.85 (online-checkin/shrinkPhoto.ts); this
-    phone has no way to redraw one (no image library is installed), so a larger photo is refused
-    here, said plainly, before it is sent. */
+    1600 px on its long side, 600 KB once its camera notes are taken out. The web redraws every photo
+    upright at 1600 px at most as a JPEG at 0.85 before it is sent (online-checkin/shrinkPhoto.ts,
+    called by admin/components/HotelGalleryCard.tsx:46 and inventory/pages/RoomSetup.tsx:566); the
+    phone does the same (photoFit.ts fitPhoto, M-18) and leaves the bytes to the server, whose 600 KB
+    sentence is shown when it refuses. `problem` is for the file AS PICKED, used only when the phone
+    could not redraw it (the web then sends the file as it is, shrinkPhoto.ts:27-28): only a JPEG
+    within the frame can be taken by the server, so anything else is said plainly before it is sent. */
 export const PHOTO_LONG_SIDE = 1600;
 export const PHOTO_MOST_BYTES = 600 * 1024;
-/** The web's JPEG quality when it redraws a photo (shrinkPhoto.ts). */
+/** The web's JPEG quality when it redraws a photo (shrinkPhoto.ts:25). */
 export const PHOTO_QUALITY = 0.85;
-export const PHOTO: FileRule = {
+export const PHOTO: PhotoRule = {
   types: ["image/*"],
+  longSide: PHOTO_LONG_SIDE,
+  quality: PHOTO_QUALITY,
   problem(f) {
-    if (f.mimeType !== "image/jpeg") return "A photo must be a JPEG. Choose a photo taken with a camera.";
+    if (f.mimeType !== "image/jpeg") return "This phone could not make that photo into a JPEG. Choose another, or add it on the website.";
     const long = Math.max(f.width ?? 0, f.height ?? 0);
     if (long > PHOTO_LONG_SIDE) {
       return `That photo is ${f.width} × ${f.height} px. The most is ${PHOTO_LONG_SIDE} px on its long side, `
-        + "and this phone cannot make it smaller yet. Add it on the website, which does.";
+        + "and this phone could not make it smaller. Choose another, or add it on the website.";
     }
     return null;
   },

@@ -74,3 +74,9 @@ once (a raw `Date.parse`) to see it fail. **The rule:** as MEMORY 7.
 **What:** after a landed move or delete the arrows wait for a fresh read; if that read failed, the screen
 said "Reading the photos again…" for ever. **Found:** the independent review of 0d933d5. **Done:** while
 waiting (or after a lost add), a failed read is said with "Read them again".
+
+### MINV-P2 · A room type's camera photo was refused over 1600 px (20 Nov, M-18) — fixed
+**What:** Take a photo was there, but with no image library any photo over 1600 px on its long side -
+nearly every camera photo - was refused and sent to the website. **Found:** docs/PICKERS.md, the owner's
+M-18. **Done:** the photo is redrawn as the web's shrinkPhoto (core photoFit.ts `fitPhoto`), picked at full
+quality so it is encoded once at 0.85. **The rule:** redraw as the web does; never encode a photo twice.

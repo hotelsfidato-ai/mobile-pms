@@ -405,7 +405,7 @@ Lane m16-pick-front (DECISIONS M-16; docs/PICKERS.md lane 3). Nothing opened on 
 
 | Row | Control | Where | How |
 |---|---|---|---|
-| 3.1 | Add photos | `PropPhotos.tsx:99` | `pickPhoto({ quality: PHOTO_QUALITY })` (the library, one a tap; the web takes several) → `base64For(PHOTO)` → POST `/:code/gallery { data }`. Over 1600 px refused before sending in a plain sentence (no image library; `expo-image-manipulator` ~57.0.21 is the owner's question); the server checks 600 KB. A repeat ADDS A SECOND PHOTO: the page's stop |
+| 3.1 | Add photos | `PropPhotos.tsx:100` | `pickPhotoFrom` (Take a photo / Choose a photo, the phone's own sheet, M-18; one a tap, the web takes several) → `fitPhoto(PHOTO)`: redrawn on the phone as the web's shrinkPhoto (upright, 1600 px at most on the long side, never enlarged, a JPEG at 0.85; expo-image-manipulator ~57.0.21) → POST `/:code/gallery { data }`; the server checks 600 KB and its sentence is shown. A repeat ADDS A SECOND PHOTO: the page's stop |
 | 3.2 | This hotel's logo Upload / Replace | `PropPhotos.tsx:92, 145` | `pickFile(LOGO)` → `base64For(LOGO)` → PUT `/:code/logo { data }` ("Logo saved"). A repeat replaces with the same |
 | 3.3 | The group's logo Upload / Replace | `PropGroup.tsx:85` | as 3.2, PUT `/:code/group/logo` |
 | 3.4 | Bring in old data, steps 1-3 | `PropOldData.tsx:127, 177, 208` | the web's steps exactly (see the file's head): the system named first, `pickFile(OLD_SYSTEM_FILE)`, POST `…/imports/:kind/check` (nothing saved), the columns and every row (50 at a time), keep / merge / skip, Bring in N rows → POST `…/imports/:kind` through the page's stop: a repeat brings the file in TWICE. Rules: `propertyRules.ts` (savingOf, saveBlocked, countsWords, broughtInWords, rowResult, everyDupe …) with checks |
@@ -416,6 +416,6 @@ Lane m16-pick-front (DECISIONS M-16; docs/PICKERS.md lane 3). Nothing opened on 
 | 3.9 | Rooms ready from, Check-out by, the audit's hour | `ListsDesk.tsx:320-323` | `TimeField` ×3, the route's sentences still checked |
 
 Differences left, each for a reason:
-- **One photo a tap**, from the library only: the camera's photos are larger than 1600 px and would all be refused until the phone can shrink one.
+- **One photo a tap** (the web takes several at once): Take a photo or Choose a photo, each shrunk on the phone as the web shrinks it (M-18).
 - **Bring in old data, a save refused with its rows** (a 409 that carries the rows, a fault found at the save): the web shows those rows; the core's `ApiError` keeps only the sentence (no body), so the phone says it and greys Bring in until Check again, which shows them. A core change would carry the body (asked in the report).
 - **The rows come 50 at a time** ("Show N more"): the server allows 5,000.

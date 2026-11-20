@@ -190,3 +190,7 @@ What happened: the document picker copies the chosen file into the app's cache; 
 ### MSET-K3 · After an unknown Bring in, the old check could bring it in again (fixed)
 
 What happened: once a fresh read let the page's stop go, "Bring in N rows" was live on the old check, and the route reads no key: a second tap would import everything twice. A failed check offline also said send()'s sentence for a write. How found: the independent review. Done: an unknown outcome marks the check stale (a new Check first); a check with nothing back says plainly that nothing was checked or saved; the voucher switch sends what it shows (`sendVouchers && voucherOn`). The rule: after an unknown outcome, the form that sent it must be rebuilt from the server, never re-sent as it was.
+
+### MSET-K4 · A camera's photo was refused over 1600 px (20 Nov, M-18) — fixed
+
+What happened: with no image library, Add photos took only the library and refused any photo over 1600 px on its long side - nearly every camera photo - and pointed to the website. How found: docs/PICKERS.md (core's note), the owner's M-18. Done: `expo-image-manipulator` ~57.0.21; Add photos offers Take a photo / Choose a photo and redraws the photo as the web does (core photoFit.ts `fitPhoto`, files.ts `fitSize`, checked). The rule: a web rule that redraws a file is ported with its numbers (long side, quality, never enlarging, rotation), not replaced by a refusal, once the package is there.

@@ -36,7 +36,10 @@ installed (no new package without the owner's yes).
 - **Pickers (M-16, 20 Nov):** photos and the camera through `expo-image-picker` ~57.0.20, files
   through `expo-document-picker` ~57.0.3, dates and times through
   `@react-native-community/datetimepicker` 9.1.0 — each phone's own picker (iOS's inline / spinner,
-  Android's dialog). Installed 19 Nov (M-14): `expo-file-system`, `expo-sharing`. Not installed,
+  Android's dialog). A hotel's or a room type's photo is redrawn on the phone as the web redraws it
+  (upright, 1600 px on its long side at most, JPEG 0.85) through `expo-image-manipulator` ~57.0.21
+  (M-18, `src/core/photoFit.ts`); a bill's photo goes at full quality, as picked. Installed 19 Nov
+  (M-14): `expo-file-system`, `expo-sharing`. Not installed,
   asked of the owner when wanted: haptics (`expo-haptics` ~57.0.3), the clipboard (`expo-clipboard`
   ~57.0.2).
 - **Nothing automatic (M-17):** no `expo-updates`, no over-the-air update, no store; testing is in
