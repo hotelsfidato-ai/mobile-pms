@@ -46,7 +46,7 @@ the page hook, the latch, the frame and the four states, links, the text editor,
 | Set up this hotel | `new/n-h-setup` (dev-gm) | MATCHES: the groups with "n of m done" and their notes, each row's disc / title / line / pill, the open step's facts, Open Profile in orange, Next / Later / Remind me. Buttons are 44 px tall (the web's sm is smaller). |
 | The other seven | none | Not pictured: built from the web's code. |
 
-8 lines of each picture checked; 2 of 9 pages pictured, both match.
+2 of the 9 pages are pictured; both match their pictures.
 
 ### Differences from the web (each for a reason)
 
