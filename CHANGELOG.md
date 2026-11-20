@@ -5,6 +5,18 @@ commits.
 
 ---
 
+## 2026-11-20 (night) · M-18: photos shrunk on the phone, as the web does
+
+**Asked for:** "yes to all 3 recommendations" (M-18). **Shipped** `5f513ef` `expo-image-manipulator`
+~57.0.21 (SDK 57's own; nothing else moved); `9c342b7` the web's own resize (`shrinkPhoto.ts`:
+upright, long side to 1600 px only when larger, JPEG at 0.85, the file as picked if redrawing
+fails) as core `fitPhoto` with `fitSize` checked; the gallery and room-type photos use it, and the
+gallery offers Take a photo. Bill and slip photos unchanged (full quality, as the web); the Bar role
+keeps reaching its bills through Bar stock. **Not proved:** nothing opened on a phone; a 48 MP photo
+on a low-end Android is worth watching at the first test.
+
+---
+
 ## 2026-11-20 (evening) · M-16 and M-17: the phones' own pickers everywhere; testing in Expo Go
 
 **Asked for** (the owner, 20 Nov): "yes to all 4 recommendations", "also use the native features and
