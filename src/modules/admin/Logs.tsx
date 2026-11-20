@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Text, View } from "react-native";
+import type { Hotel } from "../../core/api";
+import { DateField } from "../../core/DateField";
 import { ExportButtons } from "../../core/Export";
 import { c, face, t } from "../../core/theme";
 import { Head, Screen, s as core, useRead } from "../../core/ui";
@@ -39,11 +41,11 @@ function useFilters() {
   return { draft, setDraft, applied, ok, apply: () => { if (ok) setApplied({ who: draft.who.trim(), from: from!, to: to! }); }, from, to };
 }
 
-function DayField({ label, value, onChange, bad }: { label: string; value: string; onChange: (v: string) => void; bad: boolean }) {
+/** The web's From / To <input type="date">: the phone's own picker, blank for no filter; To never before From. */
+function DayField({ label, value, onChange, hotel, min }: { label: string; value: string; onChange: (v: string) => void; hotel: Hotel; min?: string }) {
   return (
     <View style={{ flex: 1 }}>
-      <Field label={label} value={value} onChangeText={onChange} keyboardType="numbers-and-punctuation" placeholder="2026-10-31"
-        autoCapitalize="none" maxLength={10} error={bad ? "A date is written YYYY-MM-DD." : undefined} />
+      <DateField label={label} value={value} onChange={onChange} hotel={hotel} min={min || undefined} clearable />
     </View>
   );
 }
@@ -72,10 +74,8 @@ export function AuditLog({ hotel, role }: AdminProps) {
           {list.data ? <View style={{ flexDirection: "row", marginTop: -8 }}><Pill tone="neutral">{entriesWords(page, AUDIT_PAGE, rows.length)}</Pill></View> : null}
           <View style={[core.card, { gap: 12 }]}>
             <Field label="By" value={f.draft.who} onChangeText={(who) => f.setDraft({ ...f.draft, who })} placeholder="Part of a name" autoCapitalize="words" />
-            <View style={{ flexDirection: "row", gap: 8 }}>
-              <DayField label="From" value={f.draft.from} onChange={(from) => f.setDraft({ ...f.draft, from })} bad={f.from === null} />
-              <DayField label="To" value={f.draft.to} onChange={(to) => f.setDraft({ ...f.draft, to })} bad={f.to === null} />
-            </View>
+            <DayField label="From" value={f.draft.from} hotel={hotel} onChange={(from) => f.setDraft({ ...f.draft, from })} />
+            <DayField label="To" value={f.draft.to} hotel={hotel} min={f.draft.from} onChange={(to) => f.setDraft({ ...f.draft, to })} />
             <View style={{ flexDirection: "row" }}><Btn label="Show" variant="primary" disabled={!f.ok} onPress={() => { f.apply(); setPage(0); }} /></View>
           </View>
           <ExportButtons table={table} />
@@ -151,10 +151,8 @@ export function Activity({ hotel, role }: AdminProps) {
               choices={(list.data?.people ?? []).map((p) => ({ value: p.id, label: p.name }))} />
             <Choose label="Kind" value={kind} none="Everything" onChange={(v) => { setKind(v); setPage(0); }}
               choices={(list.data?.kinds ?? []).map((k) => ({ value: k.key, label: k.label }))} />
-            <View style={{ flexDirection: "row", gap: 8 }}>
-              <DayField label="From" value={f.draft.from} onChange={(from) => f.setDraft({ ...f.draft, from })} bad={f.from === null} />
-              <DayField label="To" value={f.draft.to} onChange={(to) => f.setDraft({ ...f.draft, to })} bad={f.to === null} />
-            </View>
+            <DayField label="From" value={f.draft.from} hotel={hotel} onChange={(from) => f.setDraft({ ...f.draft, from })} />
+            <DayField label="To" value={f.draft.to} hotel={hotel} min={f.draft.from} onChange={(to) => f.setDraft({ ...f.draft, to })} />
             <View style={{ flexDirection: "row" }}><Btn label="Show" variant="primary" disabled={!f.ok} onPress={() => { f.apply(); setPage(0); }} /></View>
           </View>
           <ExportButtons table={table} />
