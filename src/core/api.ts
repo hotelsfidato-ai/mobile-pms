@@ -46,8 +46,9 @@ export async function who(): Promise<Record<string, string>> {
 }
 
 export class ApiError extends Error {
-  /** `needs`: what the server says would satisfy a refusal (MFIN-2), when it says. */
-  constructor(readonly status: number, message: string, readonly needs?: string) {
+  /** `needs`: what the server says would satisfy a refusal (MFIN-2), when it says. `body`: the refusal's
+      whole JSON as the server sent it (Bring in old data's 409 carries the refused rows the web shows). */
+  constructor(readonly status: number, message: string, readonly needs?: string, readonly body?: unknown) {
     super(message);
     this.name = "ApiError";
   }
@@ -81,6 +82,7 @@ export async function refused(response: Response): Promise<ApiError> {
     response.status,
     body?.error ?? body?.reason ?? body?.message ?? `Request failed (${response.status}).`,
     typeof body?.needs === "string" ? body.needs : undefined,
+    body ?? undefined,
   );
 }
 
@@ -184,6 +186,8 @@ export interface Hotel {
   businessDate: string;
   /** The property's real date in its own time zone (D27-237). */
   today?: string;
+  /** The property's time zone, e.g. "Asia/Kolkata" (api/src/routes/hotels.ts); a time picker opens on its clock. */
+  timezone?: string;
   /** A test hotel's real hotel, by code (D27-296); null for a real one. */
   testOf?: string | null;
 }

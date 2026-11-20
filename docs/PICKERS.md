@@ -28,6 +28,31 @@ Two things the core does NOT have, which a lane may need (ask the mobile chat, a
   `PHOTO.problem` refuses a larger photo with a plain sentence, so most camera photos (4000 px) will be
   refused. `expo-image-manipulator ~57.0.21` (Expo SDK 57's) would do it: a question for the owner.
 
+## Core follow-ups (20 Nov, lane m16-core2)
+
+From the reviews of the three picker lanes; core files only, nothing opened on a screen.
+- **Server-named downloads**: `downloadToShare(path, "", type)` takes the server's own name
+  (Content-Disposition), for a stored bill that may be a JPEG, a HEIC or a PDF. The name is the
+  uploader's (the server strips only `"`, `\`, CR, LF), so the file must land straight inside the
+  downloads folder (`nameIn`, files.ts) or it is deleted and refused (`UNSAFE_NAME`); nothing is
+  written over (`idempotent` off, the folder is empty).
+- **Nothing kept (DPDP)**: every download goes into `Paths.cache/share/`, emptied at the start of each
+  download, at app start and at sign-out (session.tsx) - not after the share sheet (Android's
+  receiving app may read late). `forgetPicked(picked)` (pickers.ts) deletes a picked file's copy,
+  only inside this app's cache; `base64For` and `readText` call it after reading. A form's file
+  (`sendForm`) is read again on a repeat: the screen calls `forgetPicked` once it landed or is given up.
+- **Sheets and CSVs**: `OLD_SYSTEM_FILE.types` and `CSV_IMPORT.types` are `ANY_FILE` (`*/*`): Android
+  types a CSV as `application/vnd.ms-excel` or `application/octet-stream`. The name decides
+  (`csvImportProblem`; the old system's file `.xlsx`, `.csv` or `.txt`, as the web's accept), the
+  content is the server's or the CSV reader's.
+- **TimeField** opens, with no value and no `opensAt`, on the hotel's clock (`hotelClock`): its
+  `timezone` when given (`hotel={hotel}`; GET /api/hotels sends it, now on `Hotel`), else India's
+  +05:30 - never the phone's.
+- **ApiError.body**: the refusal's whole JSON (Bring in old data's 409 carries the refused rows).
+- **pickBill(title)** in pickers.ts: Take a photo / Choose a photo / Choose a file (iPhone's action
+  sheet, Android's dialog), BILL's 9 MB first; answers `{ file }`, `{ problem }` or null - the same
+  shape as lane 1's `finance/billPick.ts`, which can import it from the core.
+
 Columns: **Who** is the API's gate (`api/src/roleGate.ts`, or the module file it names); the phone
 shows the control to everyone the web does and lets the server refuse, as today. **Offline**: a form
 and a download are refused in the web's sentence (`files.ts`); a JSON write goes through `send()`'s

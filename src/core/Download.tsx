@@ -1,10 +1,10 @@
-import { File, Paths } from "expo-file-system";
+import { Directory, File, Paths } from "expo-file-system";
 import * as Sharing from "expo-sharing";
 import { Download as DownloadIcon } from "lucide-react-native";
 import { useRef, useState } from "react";
 import { Platform, Pressable, Text, View } from "react-native";
 import { API_URL, ApiError, refused, who } from "./api";
-import { DOWNLOAD_OFFLINE, statusIn, utiOf } from "./files";
+import { DOWNLOAD_OFFLINE, nameIn, statusIn, UNSAFE_NAME, utiOf } from "./files";
 import { noteReachable, noteUnreachable } from "./offline";
 import { c, face, t as type } from "./theme";
 
@@ -19,20 +19,51 @@ import { c, face, t as type } from "./theme";
    A download is a read with no cached copy: with nothing coming back it
    is refused in the web's sentence, never held. A refusal is the
    server's own sentence: the download says only its status, so the same
-   GET is asked once more to read it (a read, safe to repeat). Files go
-   to the cache, which the phone may clear: nothing is kept (DPDP).
+   GET is asked once more to read it (a read, safe to repeat).
+   NOTHING KEPT (DPDP, 20 Nov): every download goes into one folder,
+   `share/` in the cache, emptied at the start of each download, at app
+   start and at sign-out (session.tsx) - never straight after the share
+   sheet, as Android's receiving app may read the file late.
+   A blank `fileName` takes the SERVER's name (Content-Disposition): a
+   stored bill may be a JPEG, a HEIC or a PDF, and iPhone's share sheet
+   goes by the name. That name is the uploader's, stripped only of ", \,
+   CR and LF (api/src/routes/attachments.ts), so where it landed is
+   checked: straight inside `share/`, or deleted and refused (UNSAFE_NAME).
+   Nothing is ever written over: the folder is empty, so `idempotent`
+   stays off and a name that is a folder ("." or "..") fails, never
+   replaces it.
    ══════════════════════════════════════════════════════════════════ */
 
-/** Downloads `path` (the API's, with its query) as `fileName` and opens the share sheet. `offline`: the
-    web's own sentence for this file when nothing comes back (the voucher's), else downloadFile's. */
+/** The one folder downloads go into. */
+const shareFolder = () => new Directory(Paths.cache, "share");
+
+/** Empties the downloads folder (app start, sign-out, each download). Never throws. */
+export function emptyShared(): void {
+  if (Platform.OS === "web") return;
+  try {
+    const dir = shareFolder();
+    if (dir.exists) dir.delete();
+  } catch { /* nothing there, or the phone cleared its cache */ }
+}
+
+/** Downloads `path` (the API's, with its query) as `fileName` ("": the server's own name) and opens the share
+    sheet. `offline`: the web's own sentence for this file when nothing comes back (the voucher's), else
+    downloadFile's. */
 export async function downloadToShare(path: string, fileName: string, mimeType: string, offline = DOWNLOAD_OFFLINE): Promise<void> {
   const url = `${API_URL}${path}`;
-  const file = new File(Paths.cache, fileName);
+  emptyShared();
+  const dir = shareFolder();
+  dir.create({ intermediates: true, idempotent: true });
+  const file = fileName ? new File(dir, fileName) : dir; /* "": the SERVER's name (Content-Disposition) - a stored bill the phone cannot name (m16-pick-money) */
+  if (file instanceof File && nameIn(dir.uri, file.uri) === null) throw new Error(UNSAFE_NAME);
   let got: File;
   try {
-    got = await File.downloadFileAsync(url, file, { headers: await who(), idempotent: true });
+    got = await File.downloadFileAsync(url, file, { headers: await who(), idempotent: false });
   } catch (e) {
-    const status = statusIn(e instanceof Error ? e.message : String(e));
+    const said = e instanceof Error ? e.message : String(e);
+    /* A name that is already there (a folder, "." or ".."): refused, never written over. */
+    if (/already exists/i.test(said)) throw new Error(UNSAFE_NAME);
+    const status = statusIn(said);
     if (status === null) { noteUnreachable(); throw new ApiError(0, offline); }
     noteReachable();
     /* The server's own words for its refusal. */
@@ -41,8 +72,13 @@ export async function downloadToShare(path: string, fileName: string, mimeType: 
     throw again.ok ? new ApiError(status, `Request failed (${status}).`) : await refused(again);
   }
   noteReachable();
+  /* Where the server's name put it: straight inside share/, or deleted (a file only) and refused. */
+  if (nameIn(dir.uri, got.uri) === null) {
+    try { if (got.exists) got.delete(); } catch { /* not a file, or gone */ }
+    throw new Error(UNSAFE_NAME);
+  }
   if (!(await Sharing.isAvailableAsync())) throw new Error("This phone cannot share a file, so it was not opened.");
-  await Sharing.shareAsync(got.uri, { mimeType, UTI: utiOf(mimeType), dialogTitle: fileName });
+  await Sharing.shareAsync(got.uri, { mimeType, UTI: utiOf(mimeType), dialogTitle: fileName || got.name });
 }
 
 /** A download as a capsule, in ExportButtons' style: one tap at a time, its failure said under it. */

@@ -2,6 +2,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { api, currentSubject, setDevSubject, type HotelsResponse } from "./api";
+import { emptyShared } from "./Download";
 import { auth, endSession, forget, keptNotice, notSetUp, remember, reopen, signInRefusal } from "./firebase";
 import { freshHotels } from "./hotels";
 import { list } from "./outbox";
@@ -54,6 +55,8 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   const [starting, setStarting] = useState(Boolean(auth));
 
   useEffect(() => {
+    /* DPDP: a file downloaded to share is not kept past the session (Download.tsx). */
+    emptyShared();
     if (!auth) return;
     const held = auth;
     void held.authStateReady()
@@ -67,6 +70,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       if (user || currentSubject()) return;
       setWho(null);
       cache.clear();
+      emptyShared();
       void forget();
     });
   }, [cache]);
@@ -126,6 +130,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     await endSession();
     setWho(null);
     cache.clear();
+    emptyShared();
     setError(null);
     setNotice(keptNotice(kept.length));
   }
