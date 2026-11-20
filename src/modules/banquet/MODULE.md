@@ -148,3 +148,46 @@ not this module's. The banquet pages last changed on 2 Nov (`a4527ea`), the pict
 Correcting a billed function's figures after a credit note, and refunding a cancelled function's
 advance (the web's DEFECTS BQ-9, "Left open"); a function billed to a company (the server reads one,
 no screen sets it).
+
+## Lane U — Halls and packages (m13-setups, 19 Nov)
+
+**Web twin:** `/h/:code/banquet/setup`, `src/modules/banquet/pages/BanquetSetup.tsx` (VenueDialog,
+PackageDialog), `data/banquet.ts` lines 326-364; the API `api/src/modules/banquet/banquet.ts` lines
+975-1158; gates `api/src/roleGate.ts`: the read `see(["reservation", "room_config"], "the banquet
+halls")` (line 942), every write HALLS = `room_config` edit (line 175: the owner, an administrator, the
+general manager). Offline: no venue or package path is on `src/lib/offline.ts`'s list, so each is
+**refused** with the UNLISTED sentence (`setup.check.ts`). Read at the PMS's `c9394cb` (16 Nov).
+
+| Screen | Route → file | Picture | Reads / writes |
+|---|---|---|---|
+| Halls and packages | `app/banquet/[code]/setup.tsx` → `Setup.tsx` | `new/n-h-banquet-setup` (dev-gm) | `GET /banquet/setup` (data.ts `readSetup`, key `["banquet", code, "setup"]`); `POST /venues`, `PATCH /venues/:id`, `POST /packages`, `PATCH /packages/:id {isActive}` (`setupData.ts`) |
+| Add a hall / Edit the hall (dialog) | on it → `Setup.tsx` HallDialog | not pictured | the web's VenueDialog body |
+| Add a package (dialog) | on it → `Setup.tsx` PackageDialog | not pictured | the web's PackageDialog body |
+
+Rules `setup.ts` (`setup.check.ts`); the lane's shared pieces `setupKit.tsx` (CardHead, ListRow,
+`useDialogWrite`, `useRowWrite`, `askFirst`, a safe-area Dialog, a Btn with Android's ripple; used by
+spa, laundry and purchasing's set-up screens too). The Diary's "Halls and packages" and "Add a hall"
+now open it (their "On the website for now" lines removed).
+
+- **Prices:** typed and sent as typed; blank is null ("no usual rate", "no rate - agreed per
+  function"), never 0; 0 only with Free ticked (the server's `priceProblem` refuses it otherwise, in
+  its words); a word is "Not a figure." and not sent (the web would send `Number("abc")`, null). The
+  server's figures are shown with paise (`rupees`; the web's `money()` rounds, MEMORY 9).
+- **Rights:** every control is grey for a role without `room_config` edit, with HALLS's sentence under
+  the Diary button and the web's own notes in each card ("The owner, an administrator or the GM adds
+  and edits them.").
+- **Switching a package off asks first** (`Alert.alert`, destructive): the web switches at once. On
+  again does not ask. A package is never changed (D27-305): no Edit, as the web.
+- **Unknown outcome** (MEMORY 16): a dialog's Add/Save sticks ("Not known whether it was added: look
+  at the halls…") until closed, and the list is read again on closing; a switch is a set, so the list
+  is read again at once and the outcome said.
+
+### Picture match (19 Nov)
+
+Compared by reading the code against the picture (taken 31 Oct; the page last changed before it),
+never seen running. **Matches**, with these differences left: (a) the "← Diary" capsule goes back
+(or to the Diary) rather than pushing it; (b) a role without the right sees the HALLS sentence under
+it (the GM's picture has none); (c) buttons are 44 px tall (the picture's 36); (d) the Switch is each
+phone's own (iPhone's or Android's) in the theme's green; (e) a hall's capacity must be a whole number
+("Not a whole number.": the server casts it to int and would fail on 12.5). **1 of 1 pictured
+screen matches**; the two dialogs are not pictured, built from the web's code.

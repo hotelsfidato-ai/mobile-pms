@@ -28,7 +28,7 @@ import { MAY_NOT_ASK, ON_THE_WEBSITE, seesSupplierDues, whyNotAct, whyNotRead } 
    each bill) and Supplier dues (D27-370, accounts) are the web's other two
    tabs: they stay on the website, said so in their place. "Who may ask"
    (set-up, D18-2) is the web's button for the owner and an administrator:
-   here, grey, with the reason.
+   it opens its screen (WhoMayAsk.tsx, lane U).
    ══════════════════════════════════════════════════════════════════ */
 
 type TabName = "hotel" | "bar" | "dues";
@@ -79,10 +79,9 @@ export function Purchasing({ hotel, role, onBack }: { hotel: Hotel; role: string
         {tab === "hotel" ? (
           <View style={{ gap: 4, marginTop: -4 }}>
             <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
-              {data?.me.maySetRequesters ? <Btn label="Who may ask" icon={ShieldCheck} disabled onPress={() => undefined} /> : null}
+              {data?.me.maySetRequesters ? <Btn label="Who may ask" icon={ShieldCheck} onPress={() => router.push(`/purchasing/${code}/who-may-ask`)} /> : null}
               {askButton}
             </View>
-            {data?.me.maySetRequesters ? <Text style={[t.caption, { color: c.grey600 }]}>Who may ask: {ON_THE_WEBSITE}</Text> : null}
             {/* The web's REQUEST_EXPORT; purchasing's own export right. */}
             <ListExport screen="purchasing" role={role} table={data ? {
               subtitle: "Showing restaurant and hotel",

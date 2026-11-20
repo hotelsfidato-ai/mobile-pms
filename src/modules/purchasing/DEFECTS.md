@@ -43,3 +43,18 @@ acts are grey with no sentence; a failed read says so ("Could not read who may a
 - The web offers Record the delivery only to a person on the raise setting (`mayAct`), while the route
   asks only the Store's `stock` create: a kitchen manager not on the setting cannot reach a delivery the
   server would take, and housekeeping on it sees a button the server refuses.
+
+## Lane U (m13-setups, 19 Nov)
+
+### MPUR-U1 · Switching Housekeeping's right offline is held as "Housekeeping" (19 Nov) — open, the PMS's
+
+**What happened:** `PUT /purchasing/requesters/housekeeping` ends in `/housekeeping`, so the web's
+offline rule `{ test: /\/housekeeping(\/|$)/, tier: "queue", label: "Housekeeping" }`
+(`src/lib/offline.ts` line 148; the core's copy) holds it and sends it later, where every other role's
+switch is refused with the UNLISTED sentence. The person reads "Housekeeping is held and will be sent
+when the connection is back." **How found:** `requesters.check.ts`'s offline line failed on its first
+run. **What was done:** nothing on the phone - offline is the web's and the tiers are not added to;
+the PUT sets a value, so a late send is the same act, and the server still checks the role when it
+lands. The check pins today's behaviour so a fix in the web shows. **For the PMS:** anchor the
+housekeeping rule to its own routes (`/api/hotels/[^/]+/housekeeping(\/|$)`). **The rule:** a path
+regex in the offline tiers matches any later segment too; test a new write's path against every rule.

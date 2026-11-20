@@ -1,3 +1,4 @@
+import { router } from "expo-router";
 import { CalendarDays, Plus, Settings2 } from "lucide-react-native";
 import { useState } from "react";
 import { Text, View } from "react-native";
@@ -12,7 +13,7 @@ import {
   actsOf, bandWords, clockTime, countLine, rupees, SETTLEMENT, shiftDay, UNPRICED_LINE,
   type SpaAppointment, type SpaDiaryTherapist,
 } from "./diary";
-import { ON_THE_WEBSITE, whyNotBook, whyNotRead, whyNotSetUp } from "./roles";
+import { whyNotBook, whyNotRead, whyNotSetUp } from "./roles";
 import { ListExport } from "../reports/ListExport";
 
 /* ══════════════════════════════════════════════════════════════════
@@ -27,15 +28,15 @@ import { ListExport } from "../reports/ListExport";
    to room while it is booked, never Charge to room while it is unpriced
    (the web leaves it out, and the row says why). A role the API refuses
    sees them GREY with the API's sentence (roles.ts; AGENTS rule 1), where
-   the web leaves them out. Treatments and therapists is desk set-up and
-   stays on the website: its button is here, grey, with the reason.
+   the web leaves them out. Treatments and therapists opens its screen
+   (Setup.tsx, lane U), grey with the API's sentence for the rest.
    ══════════════════════════════════════════════════════════════════ */
 
 export function Diary({ hotel, role }: { hotel: Hotel; role: string | null }) {
   const code = hotel.code;
   const refusedRead = whyNotRead(role);
   const mayBook = whyNotBook(role);
-  const setUp = whyNotSetUp(role) ?? ON_THE_WEBSITE;
+  const setUp = whyNotSetUp(role);
   const [day, setDay] = useState<string | null>(null);
   const [pulled, setPulled] = useState(false);
   const [booking, setBooking] = useState(false);
@@ -66,10 +67,10 @@ export function Diary({ hotel, role }: { hotel: Hotel; role: string | null }) {
 
         <View style={{ gap: 4, marginTop: -4 }}>
           <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
-            <Btn label="Treatments and therapists" icon={Settings2} disabled onPress={() => undefined} />
+            <Btn label="Treatments and therapists" icon={Settings2} disabled={setUp != null} onPress={() => router.push(`/spa/${code}/setup`)} />
             <Btn label="Book a treatment" variant="primary" icon={Plus} disabled={mayBook != null || !d} onPress={() => setBooking(true)} />
           </View>
-          <Text style={[t.caption, { color: c.grey600 }]}>Treatments and therapists: {setUp}</Text>
+          {setUp ? <Text style={[t.caption, { color: c.grey600 }]}>Treatments and therapists: {setUp}</Text> : null}
           {mayBook ? <Text style={[t.caption, { color: c.grey600 }]}>{mayBook}</Text> : null}
         </View>
         {/* The web's DIARY_EXPORT, the day shown; the spa's own export right. */}
@@ -110,8 +111,8 @@ export function Diary({ hotel, role }: { hotel: Hotel; role: string | null }) {
                     description={"A booking is against a person, not a room, so the diary has nothing to draw until somebody "
                       + "enters who gives the treatments. Nothing is created for you."}
                   />
-                  <Btn label="Add a therapist" disabled onPress={() => undefined} />
-                  <Text style={[t.caption, { color: c.grey600, paddingHorizontal: 24, textAlign: "center" }]}>{setUp}</Text>
+                  <Btn label="Add a therapist" disabled={setUp != null} onPress={() => router.push(`/spa/${code}/setup`)} />
+                  {setUp ? <Text style={[t.caption, { color: c.grey600, paddingHorizontal: 24, textAlign: "center" }]}>{setUp}</Text> : null}
                 </View>
               ) : (
                 d.therapists.map((th, i) => (

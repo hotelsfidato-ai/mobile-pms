@@ -142,3 +142,35 @@ both stay on the website.
 sends, receives), `dev-owner` (Who may ask grey), `dev-housekeeping` (raises once switched on; the
 delivery grey with the Store's sentence), `dev-finance` (reads; Supplier dues tab), `dev-pos` (refused,
 the server's sentence).
+
+## Lane U — Who may ask to buy (m13-setups, 19 Nov)
+
+**Web twin:** `/h/:code/purchasing/who-may-ask`, `src/modules/purchasing/pages/WhoMayAsk.tsx`,
+`data/purchasing.ts` lines 179-189; the API `api/src/modules/purchasing/purchasing.ts` lines 315-385
+and `purchasingGrants.ts` (its own lists, roleGate `own(...)`): the read VIEW_ROLES
+(PURCHASING_REFUSED.view), the switch SETTING_KEEPERS - the owner and an administrator - answered as
+`mayChange` on the read (PURCHASING_REFUSED.setting otherwise). Offline: refused (UNLISTED), except
+Housekeeping's row, which the web's housekeeping rule holds (MPUR-U1). Read at `c9394cb` (16 Nov).
+
+| Screen | Route → file | Picture | Reads / writes |
+|---|---|---|---|
+| Who may ask to buy | `app/purchasing/[code]/who-may-ask.tsx` → `WhoMayAsk.tsx` | `all/35-store-and-equipment-who-may-ask-to-buy` (dev-gm) | `GET /purchasing/requesters` (key `["purchasing", code, "requesters"]`); `PUT /purchasing/requesters/:role {mayRaise}` (`requestersData.ts`) |
+
+Rules `requesters.ts` (`requesters.check.ts`: ROLE_LABELS, the order a person reads, a row's words).
+Purchasing's "Who may ask" button (shown to the server's `maySetRequesters`) now opens it.
+
+- **Who may change it is the server's answer** (`mayChange`), never the phone's list: Switch on / Switch
+  off for them; for the rest "Yes" or a dash and the web's card ("Changing this is for the owner or an
+  administrator. What it says today is below."), as the web and the picture.
+- **Switching a role off asks first** (`Alert.alert`): it takes the right away at once. On does not ask.
+- **A switch** is latched per row, greyed "Saving…" on its way; the web's toast on landing; the list
+  and Purchasing read again; an unknown outcome said and the list read again at once.
+
+### Picture match (19 Nov)
+
+Read against `all/35-…-who-may-ask-to-buy` (31 Oct, the GM: `mayChange` false), never seen running.
+**Matches**: the words, the card for one who may not change it, the fourteen roles in the picture's
+order with "Can / Cannot raise a request" and "Yes" / "-". Differences left: (a) no "Purchasing ›
+Who may ask to buy" breadcrumb (the "Back to purchasing" button does its work); (b) the shield sits
+at the head's right rather than after the title; (c) the button is 44 px. **1 of 1 pictured screen
+matches.** The owner's and an administrator's switches are not pictured, built from the code.

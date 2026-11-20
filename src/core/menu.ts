@@ -933,6 +933,11 @@ export const PHONE_ROUTES: Readonly<Record<string, string>> = {
   "/reports/no-show": "/reports/:code/no-show",
   "/reports/item-sales": "/reports/:code/item-sales",
   "/group-reports": "/reports/:code/group-reports",
+  /* mobile/m13-setups (19 Nov): the set-up screens, each in its own module. */
+  "/h/:code/banquet/setup": "/banquet/:code/setup",
+  "/h/:code/spa/setup": "/spa/:code/setup",
+  "/h/:code/laundry/price-list": "/laundry/:code/price-list",
+  "/h/:code/purchasing/who-may-ask": "/purchasing/:code/who-may-ask",
   /* mobile/m13-rooms (19 Nov): Rooms, the house as tiles for today. */
   "/h/:code/stay": "/front-desk/:code/rooms",
   /* mobile/m13-till (19 Nov): the Till and the Terminal, each its own twin. */

@@ -10,7 +10,7 @@ import { Collect } from "./Collect";
 import { isRefused, readDockets, type Whose } from "./data";
 import { byState, collectedDay, rupees, STATUS_TONE, STATUS_WORDS, stillOutWords, whoseWords, type Docket } from "./docket";
 import { Fact, LoadFailed, StatePill } from "./kit";
-import { ON_THE_WEBSITE, whyNotRead, whyNotTake } from "./roles";
+import { whyNotRead, whyNotTake } from "./roles";
 import { ListExport } from "../reports/ListExport";
 import { clockOf, dayOf } from "./docket";
 
@@ -20,8 +20,8 @@ import { clockOf, dayOf } from "./docket";
    A guest's bag and the hotel's own linen, one list, whose it is on every
    row (D18-5), open first. The list as the web's DataTable draws it at
    phone width: one card a docket, its six columns as labelled lines.
-   Collect a bag opens the web's dialog (Collect.tsx). The Price list is set
-   up on the website: its button is here, grey, with the reason.
+   Collect a bag opens the web's dialog (Collect.tsx). The Price list opens
+   its screen (PriceList.tsx, lane U).
    ══════════════════════════════════════════════════════════════════ */
 
 export function Dockets({ hotel, role, onBack }: { hotel: Hotel; role: string | null; onBack: () => void }) {
@@ -59,10 +59,9 @@ export function Dockets({ hotel, role, onBack }: { hotel: Hotel; role: string | 
         />
         <View style={{ gap: 4, marginTop: -4 }}>
           <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
-            <Btn label="Price list" icon={IndianRupee} disabled onPress={() => undefined} />
+            <Btn label="Price list" icon={IndianRupee} onPress={() => router.push(`/laundry/${code}/price-list`)} />
             {collectButton}
           </View>
-          <Text style={[t.caption, { color: c.grey600 }]}>Price list: {ON_THE_WEBSITE}</Text>
           {mayTake ? <Text style={[t.caption, { color: c.grey600 }]}>{mayTake}</Text> : null}
         </View>
 
