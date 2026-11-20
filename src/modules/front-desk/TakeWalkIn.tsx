@@ -5,7 +5,7 @@ import { Pressable, Text, View } from "react-native";
 import type { Hotel } from "../../core/api";
 import { dateLong } from "../../core/format";
 import { c, face, t } from "../../core/theme";
-import { Card, Screen, useRead } from "../../core/ui";
+import { Card, Screen, useRead, ripple, shade } from "../../core/ui";
 import { readEmpty } from "./data";
 import { body, Empty, PageHead, Pill } from "./kit";
 import { whyNotBook } from "./roles";
@@ -40,13 +40,13 @@ export function TakeWalkIn({ hotel, role }: { hotel: Hotel; role: string | null 
               {read.data.map((room) => {
                 const dirty = room.status === "dirty";
                 return (
-                  <Pressable
+                  <Pressable android_ripple={ripple}
                     key={room.number} disabled={refused != null} onPress={() => router.push(`/front-desk/${code}/walk-in?room=${encodeURIComponent(room.number)}`)}
                     accessibilityRole="button" accessibilityLabel={`Room ${room.number}, ${room.type}, ${dirty ? "needs cleaning" : "empty"}`} accessibilityState={{ disabled: refused != null }}
-                    style={({ pressed }) => ({
+                    style={shade(({ pressed }) => ({
                       width: "48.8%", minHeight: 84, borderRadius: 12, borderWidth: 1, paddingHorizontal: 14, paddingVertical: 12, gap: 4,
                       borderColor: dirty ? c.red100 : c.grey200, backgroundColor: pressed ? c.grey50 : dirty ? c.red50 : c.white,
-                    })}
+                    }))}
                   >
                     <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 4 }}>
                       <Text style={[t.figure, face[500], { color: c.grey700 }]}>{room.number}</Text>

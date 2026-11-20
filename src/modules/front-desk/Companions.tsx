@@ -173,7 +173,7 @@ function AdultSheet({ code, stayId, today, rules, person, nationality, leadVisit
         </View>
       )}
     >
-          <Field label="Full name" required><Box value={name} label="Full name" onChange={setName} /></Field>
+          <Field label="Full name" required><Box value={name} label="Full name" kind="name" onChange={setName} /></Field>
           {person?.idNumber ? (
             <Text style={[t.label, body, { color: c.grey600 }]}>{`On record: ${idWord.get(person.idType ?? "") ?? "ID"} ${person.idNumber}. Fill in the document only to replace it.`}</Text>
           ) : null}

@@ -52,6 +52,7 @@ export function WalkIns({ hotel }: { hotel: Hotel }) {
       <Kept error={rows ? read.error : undefined} what="the walk-ins" />
       <StayList
         code={code} rows={rows} read={read} columns={COLUMNS} what="the walk-ins" offerCheckIn
+        exportAs={{ screen: "walk-ins", facts: "On record" }}
         emptyTitle="No walk-ins on record" emptyLine="One appears here the moment it is taken from an empty cell on the Calendar."
       />
     </Screen>

@@ -23,7 +23,9 @@ export interface ListScreen {
 /* listExports.ts LIST_SCREENS (16 Nov), the entries the phone draws. */
 export const LIST_SCREENS = {
   "arrivals": { title: "Arrivals", holds: "guests" },
+  "upcoming-arrivals": { title: "Upcoming arrivals", holds: "guests" },
   "in-house": { title: "In house", holds: "money" },
+  "due-out": { title: "Due out", holds: "money" },
   "walk-ins": { title: "Walk-ins", holds: "guests" },
   "all-bookings": { title: "All bookings", holds: "guests" },
   "guests": { title: "Guests", holds: "guests" },

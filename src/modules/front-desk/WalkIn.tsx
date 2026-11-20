@@ -291,7 +291,7 @@ export function WalkIn({ hotel, role, room: walkRoom, onClose }: { hotel: Hotel;
               </Field>
             </View>
             <View style={{ flex: 1 }}>
-              <Field label="Full name" required><Box value={guestName} label="Full name" placeholder="Anil Sharma" tall onChange={setGuestName} /></Field>
+              <Field label="Full name" required><Box value={guestName} label="Full name" placeholder="Anil Sharma" kind="name" tall onChange={setGuestName} /></Field>
             </View>
           </View>
           <Field label="Phone" hint="Needed for online check-in and WhatsApp.">
@@ -306,7 +306,7 @@ export function WalkIn({ hotel, role, room: walkRoom, onClose }: { hotel: Hotel;
           />
           {show.company ? (
             <>
-              <Field label="Company name"><Box value={companyName} label="Company name" max={200} tall onChange={setCompanyName} /></Field>
+              <Field label="Company name"><Box value={companyName} label="Company name" max={200} kind="name" tall onChange={setCompanyName} /></Field>
               <Field label="GSTIN" hint="With a GSTIN, the tax invoice is made out to the company. The guest still pays." error={companyGstin.trim().length === 15 ? gstinProblem(companyGstin) : null}>
                 <Box value={companyGstin} label="GSTIN" max={15} upper tall onChange={(v) => setCompanyGstin(v.toUpperCase())} />
               </Field>
@@ -420,10 +420,10 @@ export function WalkIn({ hotel, role, room: walkRoom, onClose }: { hotel: Hotel;
               options={[{ value: "confirmed", label: "Confirmed" }, { value: "waiting", label: "Waiting for the hotel" }]} />
           </Field>
           <Field label="Expected check-in" hint={`If they said. The hotel's check-in is ${times.checkInTime ?? "-"}.`}>
-            <Box value={expected} label="Expected check-in" placeholder="HH:MM" tall onChange={setExpected} />
+            <Box value={expected} label="Expected check-in" placeholder="HH:MM" keyboard="numbers-and-punctuation" tall onChange={setExpected} />
           </Field>
           <Field label="Expected check-out" hint={`If they said. The hotel's check-out is ${times.checkOutTime ?? "-"}.`}>
-            <Box value={expectedOut} label="Expected check-out" placeholder="HH:MM" tall onChange={setExpectedOut} />
+            <Box value={expectedOut} label="Expected check-out" placeholder="HH:MM" keyboard="numbers-and-punctuation" tall onChange={setExpectedOut} />
           </Field>
           <Field label="Business source" hint="The account or agent behind it, if there is one.">
             <Pick value={businessSource} onChange={setBusinessSource} title="Business source" tall
@@ -436,7 +436,7 @@ export function WalkIn({ hotel, role, room: walkRoom, onClose }: { hotel: Hotel;
             <Pick value={salesPick} onChange={setSalesPick} title="Sales person" tall
               options={[{ value: "", label: "None" }, ...(sales.data ?? []).map((p) => ({ value: p.name, label: p.name })), { value: OTHER, label: "Other…" }]} />
           </Field>
-          {salesPick === OTHER ? <Field label="Sales person's name" required><Box value={salesOther} label="Sales person's name" tall onChange={setSalesOther} /></Field> : null}
+          {salesPick === OTHER ? <Field label="Sales person's name" required><Box value={salesOther} label="Sales person's name" kind="name" tall onChange={setSalesOther} /></Field> : null}
           <Field label="Discount">
             <Pick value={mode} onChange={(v) => setMode(v as DiscountMode)} title="Discount" tall
               options={[{ value: "none", label: "None" }, { value: "hand", label: "Up to 10%" }, { value: "rupees", label: "₹ off" }, { value: "promotion", label: "Promotion" }]} />
