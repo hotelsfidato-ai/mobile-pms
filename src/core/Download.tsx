@@ -35,7 +35,8 @@ import { c, face, t as type } from "./theme";
    ══════════════════════════════════════════════════════════════════ */
 
 /** The one folder downloads go into. */
-const shareFolder = () => new Directory(Paths.cache, "share");
+/** The one folder every file handed to the share sheet goes into (downloads here, exports in Export.tsx). */
+export const shareFolder = () => new Directory(Paths.cache, "share");
 
 /** Empties the downloads folder (app start, sign-out, each download). Never throws. */
 export function emptyShared(): void {

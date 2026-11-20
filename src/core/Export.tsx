@@ -1,4 +1,5 @@
-import { File, Paths } from "expo-file-system";
+import { File } from "expo-file-system";
+import { emptyShared, shareFolder } from "./Download";
 import * as Print from "expo-print";
 import * as Sharing from "expo-sharing";
 import { FileSpreadsheet, FileText, Printer } from "lucide-react-native";
@@ -20,8 +21,8 @@ import { c, face, t as type } from "./theme";
    A phone that cannot share a file (rare) gets the rows as text through
    React Native's Share instead, and says so. `table` is built by the
    screen from what it shows; null while nothing is read yet (the buttons
-   wait, never an empty export). Files go to the cache, which the phone
-   may clear: nothing about a guest is kept (DPDP).
+   wait, never an empty export). Files go to the cache's share/ folder,
+   emptied before each export or download, on sign-out and at app start: nothing about a guest is kept (DPDP).
    ══════════════════════════════════════════════════════════════════ */
 
 const madeNow = () => {
@@ -58,8 +59,11 @@ export function ExportButtons({ table }: { table: ExportTable | null }) {
 
   const excel = () => run("make the Excel file", async (tb) => {
     if (!(await Sharing.isAvailableAsync())) return asText(tb);
-    const file = new File(Paths.cache, `${fileName(tb.title)}.csv`);
-    if (file.exists) file.delete();
+    /* Into share/, emptied first and on sign-out and app start (Download.tsx): nothing kept (DPDP). */
+    emptyShared();
+    const dir = shareFolder();
+    if (!dir.exists) dir.create();
+    const file = new File(dir, `${fileName(tb.title)}.csv`);
     file.create();
     file.write(tableCsv(tb));
     await Sharing.shareAsync(file.uri, { mimeType: "text/csv", UTI: "public.comma-separated-values-text", dialogTitle: tb.title });
