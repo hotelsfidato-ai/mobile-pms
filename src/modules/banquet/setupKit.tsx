@@ -1,10 +1,9 @@
 import { X, type LucideIcon } from "lucide-react-native";
 import { useRef, useState, type ReactNode } from "react";
-import { Alert, KeyboardAvoidingView, Modal, Platform, Pressable, ScrollView, Text, View, useWindowDimensions } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { KeyboardAvoidingView, Modal, Platform, Pressable, ScrollView, Text, View, useWindowDimensions } from "react-native";
 import { outcomeUnknown } from "../../core/api";
 import { c, space, t } from "../../core/theme";
-import { notKnown, useStuck } from "../../core/ui";
+import { confirmAct, modalEdge, notKnown, ripple, shade, useSheetPad, useStuck } from "../../core/ui";
 import { Foot, IconChip, InDialog, message, saidOf, type Said } from "../guest-services/kit";
 
 /* ══════════════════════════════════════════════════════════════════
@@ -35,7 +34,6 @@ export function Btn({ label, a11y, variant = "secondary", icon: Icon, onPress, d
   label: string; a11y?: string; variant?: "primary" | "secondary" | "danger"; icon?: LucideIcon;
   onPress: () => void; disabled?: boolean; tall?: boolean; grow?: boolean; hint?: string | null;
 }) {
-  const ios = Platform.OS === "ios";
   const solid = variant !== "secondary";
   const fg = disabled ? (solid ? c.grey600 : c.grey500) : solid ? c.white : c.ink900;
   const rest = { primary: c.orange600, secondary: c.white, danger: c.red700 }[variant];
@@ -44,13 +42,13 @@ export function Btn({ label, a11y, variant = "secondary", icon: Icon, onPress, d
     <Pressable
       onPress={onPress} disabled={disabled} accessibilityRole="button" accessibilityLabel={a11y ?? label}
       accessibilityState={{ disabled: Boolean(disabled) }} accessibilityHint={hint ?? undefined}
-      android_ripple={{ color: solid ? "rgba(255,255,255,0.25)" : c.grey200 }}
-      style={({ pressed }) => ({
+      android_ripple={ripple}
+      style={shade(({ pressed }) => ({
         minHeight: tall ? 48 : 44, paddingHorizontal: 14, borderRadius: 999, flexDirection: "row", gap: 8, overflow: "hidden",
         alignItems: "center", justifyContent: "center", ...(grow ? { flex: 1 } : null),
-        backgroundColor: disabled ? (solid ? c.grey300 : c.grey50) : pressed && ios ? down : rest,
+        backgroundColor: disabled ? (solid ? c.grey300 : c.grey50) : pressed ? down : rest,
         borderWidth: solid ? 0 : 1, borderColor: c.grey300,
-      })}
+      }))}
     >
       {Icon ? <Icon size={16} color={fg} /> : null}
       <Text style={[t.label, { color: fg }]}>{label}</Text>
@@ -138,24 +136,22 @@ export function useRowWrite(say: (s: Said) => void, reread: () => void) {
 }
 
 /** Asks before a destructive act, in each phone's own dialog: the question, what it does, the act's word. */
-export function askFirst(title: string, body: string, yes: string, onYes: () => void) {
-  Alert.alert(title, body, [{ text: "Cancel", style: "cancel" }, { text: yes, style: "destructive", onPress: onYes }]);
-}
+export const askFirst = (title: string, body: string, yes: string, onYes: () => void) => confirmAct(title, body, yes, onYes);
 
 /** The web's Dialog: centred, 16 from each side and inside the safe area, a hairline under its head. */
 export function Dialog({ title, description, onClose, children }: {
   title: string; description?: string; onClose: () => void; children: ReactNode;
 }) {
-  const insets = useSafeAreaInsets();
+  const pad = useSheetPad();
   const { height } = useWindowDimensions();
   return (
-    <Modal visible transparent animationType="fade" onRequestClose={onClose} statusBarTranslucent>
+    <Modal {...modalEdge} visible transparent animationType="fade" onRequestClose={onClose}>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={{ flex: 1, backgroundColor: "rgba(3,23,40,0.25)", justifyContent: "center", paddingHorizontal: 16, paddingTop: insets.top, paddingBottom: Math.max(insets.bottom, 16) }}
+        style={{ flex: 1, backgroundColor: "rgba(3,23,40,0.25)", justifyContent: "center", paddingHorizontal: 16, paddingTop: pad.top, paddingBottom: pad.bottom }}
       >
         <Pressable style={{ position: "absolute", top: 0, bottom: 0, left: 0, right: 0 }} onPress={onClose} accessibilityLabel="Close" />
-        <View style={{ backgroundColor: c.white, borderRadius: 12, borderWidth: 1, borderColor: c.grey200, maxHeight: height - insets.top - insets.bottom - 48 }}>
+        <View style={{ backgroundColor: c.white, borderRadius: 12, borderWidth: 1, borderColor: c.grey200, maxHeight: height - pad.top - pad.bottom - 32 }}>
           <View style={{ flexDirection: "row", gap: 16, paddingHorizontal: 20, paddingVertical: 16, borderBottomWidth: 1, borderBottomColor: c.grey200 }}>
             <View style={{ flex: 1 }}>
               <Text style={t.heading} accessibilityRole="header">{title}</Text>
@@ -163,7 +159,7 @@ export function Dialog({ title, description, onClose, children }: {
             </View>
             <Pressable
               onPress={onClose} accessibilityRole="button" accessibilityLabel="Close" hitSlop={10}
-              android_ripple={{ color: c.grey200, borderless: true }}
+              android_ripple={{ ...ripple, borderless: true }}
               style={{ width: 24, height: 24, alignItems: "center", justifyContent: "center" }}
             >
               <X size={16} color={c.grey500} />

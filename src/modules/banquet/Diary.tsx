@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import type { Hotel } from "../../core/api";
 import { c, face, space, t } from "../../core/theme";
-import { Head, Screen, useRead } from "../../core/ui";
+import { Head, Screen, useRead, ripple, shade } from "../../core/ui";
 import { Pill } from "../finance/Kit";
 import { Back, Box, Btn, body, Empty, Loading, Stale, Toast, type Said } from "../guest-services/kit";
 import { LoadFailed } from "../laundry/kit";
@@ -13,8 +13,9 @@ import { NotAvailable } from "./kit";
 import { Register } from "./Register";
 import { whyNotBook, whyNotRead } from "./roles";
 import {
-  confirmedWords, fromToday, hallCount, rupees, shift, statusOf, whenLabel, type DiaryEvent, type DiaryHall, type Window,
+  clockOf, confirmedWords, dayOf, fromToday, hallCount, rupees, shift, statusOf, whenLabel, type DiaryEvent, type DiaryHall, type Window,
 } from "./rules";
+import { ListExport } from "../reports/ListExport";
 
 /* ══════════════════════════════════════════════════════════════════
    THE DIARY on a phone — the web's /h/:code/banquet
@@ -79,6 +80,16 @@ export function Diary({ hotel, role, onBack }: { hotel: Hotel; role: string | nu
               </View>
               {mayBook ? <Text style={[t.caption, { color: c.grey600 }]}>{mayBook}</Text> : null}
             </View>
+            {/* The web's EVENT_EXPORT, every hall's functions in the window shown. */}
+            <ListExport screen="banquet" role={role} table={{
+              subtitle: `Period ${dayOf(d.from)} to ${dayOf(d.to)}`,
+              columns: ["Hall", "Function", "Reference", "Status", "Starts", "Ends", "Host", "Guests", "Agreed", "Registered by"],
+              rows: d.venues.flatMap((v) => v.events.map((e) => [
+                v.name, e.title, e.reference, statusOf(e.status).label, `${dayOf(e.startsAt)}, ${clockOf(e.startsAt)}`,
+                `${dayOf(e.endsAt)}, ${clockOf(e.endsAt)}`, e.hostName || "-", e.pax == null ? "-" : String(e.pax), rupees(e.agreedAmount),
+                e.registeredBy ?? "-",
+              ])),
+            }} />
             <Stale error={q.error} />
 
             {/* One chart card, the Calendar's way: its own toolbar moves the window; each hall a grey-50 row. */}
@@ -145,12 +156,12 @@ function HallRows({ v, last, open }: { v: DiaryHall; last: boolean; open: (e: Di
 function EventRow({ e, first, onPress }: { e: DiaryEvent; first: boolean; onPress: () => void }) {
   const s = statusOf(e.status);
   return (
-    <Pressable
+    <Pressable android_ripple={ripple}
       onPress={onPress} accessibilityRole="button" accessibilityLabel={`${e.title}, ${s.label}, ${e.reference}`}
-      style={({ pressed }) => ({
+      style={shade(({ pressed }) => ({
         minHeight: 56, flexDirection: "row", alignItems: "center", gap: 12, paddingHorizontal: space.cardX, paddingVertical: 12,
         borderTopWidth: first ? 0 : 1, borderTopColor: c.grey100, backgroundColor: pressed ? c.grey50 : "transparent",
-      })}
+      }))}
     >
       <View style={{ flex: 1, minWidth: 0 }}>
         <View style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center", columnGap: 8, rowGap: 4 }}>

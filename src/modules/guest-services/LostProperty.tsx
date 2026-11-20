@@ -5,7 +5,9 @@ import { Text, View } from "react-native";
 import type { Hotel } from "../../core/api";
 import { c, space, t } from "../../core/theme";
 import { Head, notKnown, Screen, useRead, useStuck } from "../../core/ui";
+import { ListExport } from "../reports/ListExport";
 import { clearLost, listLost, logLost } from "./data";
+import { lostTable } from "./exports";
 import {
   Back, Box, Btn, body, Dialog, Empty, Failed, Field, Foot, IconChip, InDialog, Input, Loading, NotYours, Pill,
   Segmented, Stale, saidOf, type Said,
@@ -46,6 +48,10 @@ export function LostProperty({ hotel, role, onBack }: { hotel: Hotel; role: stri
         <View style={{ flexDirection: "row", marginTop: -4, marginBottom: 8 }}>
           <Btn label="Log an item" variant="primary" icon={Plus} disabled={refused != null} onPress={() => setLogging(true)} />
         </View>
+        {refused ? null : (
+          <ListExport screen="lost-property" role={role}
+            table={list.data ? lostTable(items, view === "kept" ? "kept" : "returned or disposed of") : null} />
+        )}
         <View style={{ marginBottom: 8 }}>
           <Segmented<View_>
             label="Kept or cleared" value={view} onChange={setView}

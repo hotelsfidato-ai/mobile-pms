@@ -5,7 +5,7 @@ import { Pressable, Text, View } from "react-native";
 import type { Hotel } from "../../core/api";
 import { ExportButtons } from "../../core/Export";
 import { c, face, space, t } from "../../core/theme";
-import { Head, Screen, useRead } from "../../core/ui";
+import { Head, ripple, Screen, useRead } from "../../core/ui";
 import { askFirst, Btn, CardHead, Dialog, DialogFoot, ListRow, useDialogWrite, useRowWrite, Why } from "../banquet/setupKit";
 import { Field, Input, Tick } from "../finance/Kit";
 import { Box, body, Empty, Loading, NotYours, Pill, Stale, Toast, type Said } from "../guest-services/kit";
@@ -95,7 +95,7 @@ export function Setup({ hotel, role }: { hotel: Hotel; role: string | null }) {
             extra={(
               <Pressable
                 onPress={() => setInfo(!info)} accessibilityRole="button" accessibilityLabel="About prices" accessibilityState={{ expanded: info }}
-                android_ripple={{ color: c.grey200, borderless: true }}
+                android_ripple={{ ...ripple, borderless: true }}
                 style={{ width: 44, height: 44, marginVertical: -10, marginLeft: -6, alignItems: "center", justifyContent: "center" }}
               >
                 <Info size={16} color={c.grey500} />

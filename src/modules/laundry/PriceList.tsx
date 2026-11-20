@@ -5,7 +5,7 @@ import { Text, TextInput, View } from "react-native";
 import type { Hotel } from "../../core/api";
 import { ExportButtons } from "../../core/Export";
 import { c, face, space, t } from "../../core/theme";
-import { Head, Screen, useRead } from "../../core/ui";
+import { Head, keys, Screen, useRead } from "../../core/ui";
 import { askFirst, Btn, Dialog, DialogFoot, ListRow, useDialogWrite, useRowWrite, Why } from "../banquet/setupKit";
 import { Field, Input, Tick } from "../finance/Kit";
 import { Back, Box, body, Empty, Loading, NotYours, Select, Stale, Toast, type Said } from "../guest-services/kit";
@@ -156,7 +156,7 @@ function ItemRow({ item, first, refused, busy, onSave, onRetire }: {
           <TextInput
             value={typed} onChangeText={setTyped} onEndEditing={() => onSave(typed, free)}
             editable={refused == null && !busy && !free} accessibilityLabel={label} accessibilityHint={refused ?? undefined}
-            keyboardType="decimal-pad" inputMode="decimal" placeholder="-" placeholderTextColor={c.grey500} returnKeyType="done"
+            {...keys.amount} placeholder="-" placeholderTextColor={c.grey500} returnKeyType="done"
             style={[t.label, t.tab, {
               width: 100, minHeight: 44, textAlign: "right", borderWidth: 1, borderColor: c.grey300, borderRadius: 8, paddingHorizontal: 12,
               color: refused != null || free ? c.grey500 : c.ink900, backgroundColor: refused != null || free ? c.grey50 : c.white,

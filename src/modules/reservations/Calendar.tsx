@@ -10,9 +10,9 @@ import { HeldError, type Hotel } from "../../core/api";
 import { dateLong } from "../../core/format";
 import { isOnline } from "../../core/offline";
 import { c, face, space, t } from "../../core/theme";
-import { useRead } from "../../core/ui";
+import { useRead, ripple, shade as iosShade } from "../../core/ui";
 import { day } from "../front-desk/desk";
-import { Button, Segmented, Toast, WEBSITE, type Said } from "../front-desk/kit";
+import { Button, Segmented, Toast, type Said } from "../front-desk/kit";
 import { IconChip, type ChipTone } from "../reports/kit";
 import { AssignRoom } from "./AssignRoom";
 import {
@@ -130,7 +130,7 @@ export function Calendar({ hotel, role, grouping }: { hotel: Hotel; role: string
       {/* Rooms is the desk's tiles (/h/:code/stay): not on the phone yet. */}
       <Segmented<"calendar" | "floor">
         value="calendar"
-        onChange={(v) => { if (v === "floor") setToast({ title: WEBSITE, body: "Rooms, the house as tiles, is on the website for now.", tone: "held" }); }}
+        onChange={(v) => { if (v === "floor") router.push(`/front-desk/${code}/rooms` as Href); }}
         options={[{ value: "calendar", label: "Calendar" }, { value: "floor", label: "Rooms" }]}
       />
       <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
@@ -247,13 +247,13 @@ export function Calendar({ hotel, role, grouping }: { hotel: Hotel; role: string
                         <View key={r.number} style={{ height: ROW_H, borderBottomWidth: 1, borderBottomColor: c.grey100 }}>
                           <View style={{ flexDirection: "row", height: ROW_H - 1 }}>
                             {data.dates.map((d) => (
-                              <Pressable
+                              <Pressable android_ripple={ripple}
                                 key={d} onPress={() => bookRoom(r.number, d)} accessibilityRole="button" accessibilityLabel={`Book room ${r.number} on ${d}`}
                                 accessibilityState={{ disabled: refusedBook != null }}
-                                style={({ pressed }) => ({
+                                style={iosShade(({ pressed }) => ({
                                   width: dayW, borderRightWidth: 1, borderRightColor: c.grey100,
                                   backgroundColor: pressed && !refusedBook ? c.orange50 : d === today ? "rgba(3,23,40,0.035)" : shade(d) ? c.grey50 : c.white,
-                                })}
+                                }))}
                               />
                             ))}
                           </View>
@@ -322,13 +322,13 @@ function Tiles({ pill, onPick, counts }: { pill: Pill; onPick: (p: Pill) => void
         const job = !on && (n ?? 0) > 0 ? (p === "Arrivals" ? "orange" : p === "Due Out" ? "yellow" : null) : null;
         const good = p === "Dirty" && n === 0 && !on;
         return (
-          <Pressable
+          <Pressable android_ripple={ripple}
             key={p} onPress={() => onPick(p)} accessibilityRole="tab" accessibilityState={{ selected: on }} accessibilityLabel={`${PILL_LABEL[p]}, ${n ?? "not read"}`}
-            style={({ pressed }) => ({
+            style={iosShade(({ pressed }) => ({
               minWidth: 116, borderRadius: 12, borderWidth: 1, paddingHorizontal: 14, paddingVertical: 12, gap: 4,
               backgroundColor: on ? c.ink900 : job === "orange" ? c.orange50 : job === "yellow" ? c.yellow50 : pressed ? c.grey50 : c.white,
               borderColor: on ? c.ink900 : job === "orange" ? c.orange100 : job === "yellow" ? c.yellow100 : c.grey200,
-            })}
+            }))}
           >
             <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
               <IconChip icon={PILL_ICON[p]} tone={on ? "glass" : p === "Dirty" && (n ?? 0) > 0 ? "neutral" : PILL_CHIP[p]} size={24} />
@@ -355,14 +355,14 @@ function Bar({ bar, dayW, own, onOpen }: { bar: ChartBar; dayW: number; own: str
     <Pressable
       onPress={onOpen} accessibilityRole="button"
       accessibilityLabel={`${bar.stay.guest}, ${BAR_LABEL[bar.tone]}, ${day(bar.stay.arrival)} to ${day(bar.stay.departure)}, ${nights}`}
-      style={({ pressed }) => ({
+      style={iosShade(({ pressed }) => ({
         position: "absolute", top: (ROW_H - 1 - 24) / 2, height: 24,
         left: bar.startIndex * dayW + (bar.clippedStart ? 0 : 2), width: bar.span * dayW - (bar.clippedStart ? 0 : 2) - (bar.clippedEnd ? 0 : 2),
         borderTopLeftRadius: bar.clippedStart ? 0 : 4, borderBottomLeftRadius: bar.clippedStart ? 0 : 4,
         borderTopRightRadius: bar.clippedEnd ? 0 : 4, borderBottomRightRadius: bar.clippedEnd ? 0 : 4,
         backgroundColor: own ?? b.bg, borderWidth: b.ring && !own ? 1 : 0, borderColor: b.ring, borderStyle: b.dashed ? "dashed" : "solid",
         flexDirection: "row", alignItems: "center", gap: 4, paddingHorizontal: 6, opacity: pressed ? 0.85 : 1,
-      })}
+      }))}
     >
       <Icon size={10} color={fg} style={{ opacity: 0.8 }} />
       <Text numberOfLines={1} style={text}>{bar.stay.guest}</Text>
@@ -372,8 +372,8 @@ function Bar({ bar, dayW, own, onOpen }: { bar: ChartBar; dayW: number; own: str
 
 function Round({ Icon, label, onPress }: { Icon: LucideIcon; label: string; onPress: () => void }) {
   return (
-    <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={label}
-      style={({ pressed }) => ({ width: 44, height: 44, borderRadius: 22, borderWidth: 1, borderColor: c.grey300, alignItems: "center", justifyContent: "center", backgroundColor: pressed ? c.grey100 : c.white })}>
+    <Pressable android_ripple={ripple} onPress={onPress} accessibilityRole="button" accessibilityLabel={label}
+      style={iosShade(({ pressed }) => ({ width: 44, height: 44, borderRadius: 22, borderWidth: 1, borderColor: c.grey300, alignItems: "center", justifyContent: "center", backgroundColor: pressed ? c.grey100 : c.white }))}>
       <Icon size={16} color={c.ink900} />
     </Pressable>
   );

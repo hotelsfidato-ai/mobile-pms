@@ -10,6 +10,7 @@ import {
   deliveredWords, deliveryBody, deliveryStart, figure, GST_RATES, gstParts, suggestedDue,
   type BillDraft, type DeliveryDraft, type PurchaseLine,
 } from "./purchase";
+import { ripple, shade, keys } from "../../core/ui";
 
 /* ══════════════════════════════════════════════════════════════════
    THE DELIVERY — the web's DeliveryDialog (pages/PurchaseRequest.tsx).
@@ -92,37 +93,37 @@ export function Delivery({ code, id, store, lines, hotel, onClose, onDone }: {
             <View style={{ flexDirection: "row", gap: 8 }}>
               <View style={{ flex: 1 }}>
                 <Field label="Came">
-                  <Input label={`How much of the ${l.item} came`} keyboardType="numbers-and-punctuation" value={d.came} onChangeText={(v) => set(l.id, { came: v })} />
+                  <Input label={`How much of the ${l.item} came`} {...keys.amount} value={d.came} onChangeText={(v) => set(l.id, { came: v })} />
                 </Field>
               </View>
               <View style={{ flex: 1 }}>
                 <Field label="Cost each, ₹">
-                  <Input label={`What the ${l.item} cost each`} keyboardType="numbers-and-punctuation" value={d.cost} onChangeText={(v) => set(l.id, { cost: v })} placeholder="-" />
+                  <Input label={`What the ${l.item} cost each`} {...keys.amount} value={d.cost} onChangeText={(v) => set(l.id, { cost: v })} placeholder="-" />
                 </Field>
               </View>
             </View>
             <View style={{ flexDirection: "row", gap: 8 }}>
               <View style={{ flex: 1 }}>
                 <Field label="GST %">
-                  <Input label={`GST rate on the ${l.item}, per cent`} keyboardType="numbers-and-punctuation" value={d.rate} onChangeText={(v) => set(l.id, { rate: v })} placeholder="-" />
+                  <Input label={`GST rate on the ${l.item}, per cent`} {...keys.amount} value={d.rate} onChangeText={(v) => set(l.id, { rate: v })} placeholder="-" />
                 </Field>
               </View>
               <View style={{ flex: 1 }}>
                 <Field label="GST amount, ₹">
-                  <Input label={`GST amount on the ${l.item}, as on the bill`} keyboardType="numbers-and-punctuation" value={d.gst} onChangeText={(v) => set(l.id, { gst: v })} placeholder="-" />
+                  <Input label={`GST amount on the ${l.item}, as on the bill`} {...keys.amount} value={d.gst} onChangeText={(v) => set(l.id, { gst: v })} placeholder="-" />
                 </Field>
               </View>
             </View>
             {/* The web's rates since 22 September 2025 (its datalist); 12 and 28 still typed for an older bill. */}
             <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 6 }}>
               {GST_RATES.map((r) => (
-                <Pressable
+                <Pressable android_ripple={ripple}
                   key={r} onPress={() => set(l.id, { rate: r })} accessibilityRole="button" accessibilityLabel={`GST ${r} per cent on the ${l.item}`}
                   accessibilityState={{ selected: d.rate.trim() === r }}
-                  style={({ pressed }) => ({
+                  style={shade(({ pressed }) => ({
                     minHeight: 44, minWidth: 52, paddingHorizontal: 12, borderRadius: 999, borderWidth: 1, alignItems: "center", justifyContent: "center",
                     borderColor: d.rate.trim() === r ? c.ink900 : c.grey300, backgroundColor: pressed ? c.grey100 : c.white,
-                  })}
+                  }))}
                 >
                   <Text style={[t.label, t.tab, { color: c.ink900 }]}>{r}%</Text>
                 </Pressable>
@@ -178,7 +179,7 @@ export function Delivery({ code, id, store, lines, hotel, onClose, onDone }: {
             </View>
           </View>
           <Field label="Amount, as printed, ₹">
-            <Input label="The bill's amount, as printed, in rupees" keyboardType="numbers-and-punctuation" value={bill.amount} onChangeText={(v) => setBill((b) => ({ ...b, amount: v }))} />
+            <Input label="The bill's amount, as printed, in rupees" {...keys.amount} value={bill.amount} onChangeText={(v) => setBill((b) => ({ ...b, amount: v }))} />
           </Field>
         </View>
       ) : null}

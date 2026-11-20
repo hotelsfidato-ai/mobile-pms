@@ -7,6 +7,7 @@ import { ON_THE_WEBSITE, asRole, landing } from "./menu";
 import { roleAt, useSession } from "./session";
 import { body, regular } from "./Shell";
 import { c, face, t } from "./theme";
+import { ripple, shade } from "./ui";
 
 /* ══════════════════════════════════════════════════════════════════
    THE ACCOUNT MENU BEHIND THE AVATAR — the web's AccountMenu.tsx.
@@ -66,10 +67,10 @@ export function ShellAccount({ hotel, routed, onClose }: { hotel: Hotel | null; 
             <>
               <Text style={styles.label}>Property</Text>
               {workable.map((h: Seen) => (
-                <Pressable
+                <Pressable android_ripple={ripple}
                   key={h.id} onPress={() => pick(h)} accessibilityRole="button" accessibilityState={{ selected: h.id === hotel?.id }}
                   accessibilityLabel={`${h.name}, ${h.code}`}
-                  style={({ pressed }) => [styles.choice, pressed && { backgroundColor: c.grey100 }]}
+                  style={shade(({ pressed }) => [styles.choice, pressed && { backgroundColor: c.grey100 }])}
                 >
                   <Check size={16} color={c.orange} style={{ opacity: h.id === hotel?.id ? 1 : 0 }} />
                   <View style={{ flex: 1 }}>
@@ -103,9 +104,9 @@ export function ShellAccount({ hotel, routed, onClose }: { hotel: Hotel | null; 
 
           <View style={styles.rule} />
 
-          <Pressable
+          <Pressable android_ripple={ripple}
             onPress={signOut} accessibilityRole="button" accessibilityLabel="Sign out"
-            style={({ pressed }) => [styles.choice, { gap: 8 }, pressed && { backgroundColor: c.grey100 }]}
+            style={shade(({ pressed }) => [styles.choice, { gap: 8 }, pressed && { backgroundColor: c.grey100 }])}
           >
             <LogOut size={16} color={c.grey400} />
             <Text style={[body, regular, { color: c.ink900 }]}>Sign out</Text>

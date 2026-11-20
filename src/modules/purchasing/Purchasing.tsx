@@ -5,13 +5,14 @@ import { useCallback, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import type { Hotel } from "../../core/api";
 import { c, space, t } from "../../core/theme";
-import { Head, Screen, useRead } from "../../core/ui";
+import { Head, Screen, useRead, ripple, shade } from "../../core/ui";
 import { Back, Box, Btn, body, Empty, Loading, NotYours, Segmented, Stale, Toast, type Said } from "../guest-services/kit";
 import { Fact, LoadFailed, Note } from "../laundry/kit";
 import { Ask } from "./Ask";
 import { isRefused, readPurchasing } from "./data";
 import { StatePill, useBackInView } from "./kit";
-import { askedDay, raisedWords, rupees, STATE_TONE, STATE_WORDS, type PurchaseRequest } from "./purchase";
+import { askedDay, dayOf, raisedWords, rupees, STATE_TONE, STATE_WORDS, when, type PurchaseRequest } from "./purchase";
+import { ListExport } from "../reports/ListExport";
 import { MAY_NOT_ASK, ON_THE_WEBSITE, seesSupplierDues, whyNotAct, whyNotRead } from "./roles";
 
 /* ══════════════════════════════════════════════════════════════════
@@ -81,6 +82,20 @@ export function Purchasing({ hotel, role, onBack }: { hotel: Hotel; role: string
               {data?.me.maySetRequesters ? <Btn label="Who may ask" icon={ShieldCheck} onPress={() => router.push(`/purchasing/${code}/who-may-ask`)} /> : null}
               {askButton}
             </View>
+            {/* The web's REQUEST_EXPORT; purchasing's own export right. */}
+            <ListExport screen="purchasing" role={role} table={data ? {
+              subtitle: "Showing restaurant and hotel",
+              columns: ["Request", "State", "What for", "Store", "Supplier", "Lines", "Unpriced lines", "Total", "Asked by", "Asked",
+                "Decided by", "Decision note", "Ordered by", "Ordered", "Received by", "Received", "Delivery note", "Why cancelled"],
+              rows: requests.map((r) => {
+                const at = (x: string | null) => (x ? `${dayOf(x)}, ${when(x)}` : "-");
+                return [
+                  r.reference, STATE_WORDS[r.state], r.reason, r.store.name, r.supplier?.name ?? "-", String(r.lines), String(r.unpriced),
+                  rupees(r.total), r.requestedBy ?? "-", at(r.requestedAt), r.decidedBy ?? "-", r.decisionNote ?? "-", r.orderedBy ?? "-",
+                  at(r.orderedAt), r.receivedBy ?? "-", at(r.receivedAt), r.deliveryNote ?? "-", r.cancelledReason ?? "-",
+                ];
+              }),
+            } : null} />
           </View>
         ) : null}
 
@@ -131,14 +146,14 @@ export function Purchasing({ hotel, role, onBack }: { hotel: Hotel; role: string
                 <Stale error={q.error} />
                 <Box>
                   {requests.map((r, i) => (
-                    <Pressable
+                    <Pressable android_ripple={ripple}
                       key={r.id} onPress={() => open(r)} accessibilityRole="button"
                       accessibilityLabel={`${r.reference}, ${STATE_WORDS[r.state]}, ${r.reason}`}
-                      style={({ pressed }) => ({
+                      style={shade(({ pressed }) => ({
                         minHeight: 44, flexDirection: "row", alignItems: "center", gap: 12, paddingHorizontal: space.cardX, paddingVertical: 12,
                         borderTopWidth: i === 0 ? 0 : 1, borderTopColor: c.grey100, backgroundColor: pressed ? c.grey50 : "transparent",
                         borderTopLeftRadius: i === 0 ? 12 : 0, borderTopRightRadius: i === 0 ? 12 : 0,
-                      })}
+                      }))}
                     >
                       <View style={{ flex: 1, minWidth: 0, gap: 4 }}>
                         <Text style={[body, { color: c.ink900, marginBottom: 2 }]}>{r.reference}</Text>

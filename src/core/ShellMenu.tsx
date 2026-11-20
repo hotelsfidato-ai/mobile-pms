@@ -9,6 +9,10 @@ import {
 } from "./menu";
 import { regular, SCRIM, Slide } from "./Shell";
 import { c, face } from "./theme";
+import { shade } from "./ui";
+
+/** Android's ripple on the navy menu: white at 12%. */
+const ripple = { color: "rgba(255,255,255,0.12)" };
 
 /* ══════════════════════════════════════════════════════════════════
    THE MENU BEHIND ☰ — the web's Sidebar and SpaceSwitcher in their phone
@@ -66,7 +70,7 @@ export function ShellMenu({ role, code, modules, path, folded, onFold, onClose }
           {spaces.length > 1 ? (
             <View accessibilityLabel="Spaces" style={styles.spaces}>
               {spaces.map((s) => (
-                <Pressable
+                <Pressable android_ripple={ripple}
                   key={s} onPress={() => openSpace(s)} accessibilityRole="button" accessibilityState={{ selected: s === space }}
                   style={[styles.space, s === space && { backgroundColor: c.white }]}
                 >
@@ -93,7 +97,7 @@ export function ShellMenu({ role, code, modules, path, folded, onFold, onClose }
             return (
               <View key={key}>
                 {section.label ? (
-                  <Pressable
+                  <Pressable android_ripple={ripple}
                     onPress={() => onFold(key, isFolded)} accessibilityRole="button" accessibilityState={{ expanded: !isFolded }}
                     accessibilityLabel={section.label} style={styles.section} hitSlop={{ top: 10, bottom: 10 }}
                   >
@@ -145,10 +149,10 @@ function Row({ item, code, lit, onGo }: { item: NavItem; code: string; lit: stri
 
   return (
     <View>
-      <Pressable
+      <Pressable android_ripple={ripple}
         disabled={!route} onPress={() => onGo(route!)} accessibilityRole="button" accessibilityState={{ disabled: !route, selected: groupActive === true }}
         accessibilityLabel={why ? `${item.label}. ${why}` : item.label}
-        style={[styles.row, groupActive && { backgroundColor: white(0.1) }]}
+        style={shade(({ pressed }) => [styles.row, groupActive && { backgroundColor: white(0.1) }, pressed && { backgroundColor: white(0.06) }])}
       >
         <Icon size={18} color={colour} />
         <View style={{ flex: 1 }}>
@@ -164,11 +168,11 @@ function Row({ item, code, lit, onGo }: { item: NavItem; code: string; lit: stri
             const r = phoneRoute(child.to, code);
             const here = r !== null && r === lit;
             return (
-              <Pressable
+              <Pressable android_ripple={ripple}
                 key={`${child.label}-${child.to}`} disabled={!r} onPress={() => onGo(r!)}
                 accessibilityRole="button" accessibilityState={{ disabled: !r, selected: here }}
                 accessibilityLabel={r ? child.label : `${child.label}. ${ON_THE_WEBSITE}`}
-                style={[styles.child, here && { backgroundColor: white(0.08) }]}
+                style={shade(({ pressed }) => [styles.child, here && { backgroundColor: white(0.08) }, pressed && { backgroundColor: white(0.06) }])}
               >
                 <Text style={{ fontSize: 14, color: !r ? white(0.35) : here ? c.white : white(0.5), ...regular }}>{child.label}</Text>
                 {!r ? <Text style={[styles.reason, regular]}>{ON_THE_WEBSITE}</Text> : null}

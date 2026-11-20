@@ -3,6 +3,7 @@ import { useState, type ReactNode } from "react";
 import { KeyboardAvoidingView, Modal, Platform, Pressable, RefreshControl, ScrollView, Text, TextInput, View } from "react-native";
 import { c, face, space, t } from "../../core/theme";
 import { more } from "../reports/kit";
+import { ripple, shade, modalEdge, useSheetPad } from "../../core/ui";
 
 /* ══════════════════════════════════════════════════════════════════
    THE WEB'S FORM PIECES, for Report a repair and Out of service
@@ -29,7 +30,7 @@ export function Sheet({ title, under, onClose, refreshing, onRefresh, children }
               <Text style={t.heading} accessibilityRole="header">{title}</Text>
               <Text style={[t.label, { color: c.grey500, lineHeight: 21 }]}>{under}</Text>
             </View>
-            <Pressable
+            <Pressable android_ripple={ripple}
               onPress={onClose} accessibilityRole="button" accessibilityLabel="Close"
               style={{ width: 44, height: 44, margin: -14, alignItems: "center", justifyContent: "center" }}
             >
@@ -81,27 +82,28 @@ export function Select({ label, value, options, onChange, off }: {
   label: string; value: string; options: ReadonlyArray<{ value: string; label: string }>; onChange?: (value: string) => void; off?: boolean;
 }) {
   const [open, setOpen] = useState(false);
+  const pad = useSheetPad();
   const chosen = options.find((o) => o.value === value)?.label ?? value;
   return (
     <>
-      <Pressable
+      <Pressable android_ripple={ripple}
         onPress={() => setOpen(true)} disabled={off} accessibilityRole="button" accessibilityLabel={`${label}: ${chosen}`} accessibilityState={{ disabled: Boolean(off) }}
         style={[FIELD, { flexDirection: "row", alignItems: "center", gap: 8 }, off ? { backgroundColor: c.grey50 } : null]}
       >
         <Text style={[t.label, { flex: 1, color: off ? c.grey500 : c.ink900 }]} numberOfLines={1}>{chosen}</Text>
         <ChevronDown size={16} color={off ? more.grey400 : c.grey500} />
       </Pressable>
-      <Modal visible={open} transparent animationType="fade" onRequestClose={() => setOpen(false)}>
+      <Modal visible={open} transparent animationType="fade" onRequestClose={() => setOpen(false)} {...modalEdge}>
         <View style={{ flex: 1, backgroundColor: "rgba(3,23,40,0.4)" }}>
           <Pressable style={{ flex: 1 }} onPress={() => setOpen(false)} accessibilityRole="button" accessibilityLabel="Close" />
-          <View style={{ backgroundColor: c.white, borderTopLeftRadius: 16, borderTopRightRadius: 16, paddingHorizontal: space.side, paddingTop: 16, paddingBottom: 24, gap: 4, maxHeight: "75%" }}>
+          <View style={{ backgroundColor: c.white, borderTopLeftRadius: 16, borderTopRightRadius: 16, paddingHorizontal: space.side, paddingTop: 16, paddingBottom: pad.bottom + 8, gap: 4, maxHeight: "75%" }}>
             <Text style={[t.heading, { marginBottom: 4 }]} accessibilityRole="header">{label}</Text>
             <ScrollView>
               {options.map((o) => (
-                <Pressable
+                <Pressable android_ripple={ripple}
                   key={o.value} onPress={() => { setOpen(false); onChange?.(o.value); }}
                   accessibilityRole="button" accessibilityLabel={o.label} accessibilityState={{ selected: o.value === value }}
-                  style={({ pressed }) => ({ minHeight: 48, flexDirection: "row", alignItems: "center", gap: 8, borderTopWidth: 1, borderTopColor: c.grey100, backgroundColor: pressed ? c.grey50 : c.white })}
+                  style={shade(({ pressed }) => ({ minHeight: 48, flexDirection: "row", alignItems: "center", gap: 8, borderTopWidth: 1, borderTopColor: c.grey100, backgroundColor: pressed ? c.grey50 : c.white }))}
                 >
                   <Text style={[t.label, { flex: 1, color: c.ink900 }]}>{o.label}</Text>
                   {o.value === value ? <Check size={18} color={c.orange} /> : null}
@@ -121,17 +123,17 @@ export function Button({ label, icon: Icon, kind = "secondary", tall, disabled, 
 }) {
   const fg = kind === "primary" ? (disabled ? c.grey600 : c.white) : disabled ? c.grey500 : kind === "ghost" ? c.grey600 : c.ink900;
   return (
-    <Pressable
+    <Pressable android_ripple={ripple}
       onPress={onPress} disabled={disabled} accessibilityRole="button" accessibilityLabel={a11y ?? label}
       accessibilityState={{ disabled: Boolean(disabled) }} accessibilityHint={hint}
-      style={({ pressed }) => ({
+      style={shade(({ pressed }) => ({
         minHeight: tall ? 48 : 44, paddingHorizontal: 14, borderRadius: 999, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 8,
         ...(kind === "primary"
           ? { backgroundColor: disabled ? c.grey300 : pressed ? c.orange700 : c.orange600 }
           : kind === "secondary"
             ? { borderWidth: 1, borderColor: c.grey300, backgroundColor: disabled ? c.grey50 : pressed ? c.grey100 : c.white }
             : { backgroundColor: pressed ? c.grey100 : "transparent" }),
-      })}
+      }))}
     >
       {Icon ? <Icon size={16} color={fg} /> : null}
       <Text style={[t.label, { color: fg }]}>{label}</Text>
