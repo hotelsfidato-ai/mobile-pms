@@ -412,6 +412,74 @@ export interface ImportsView {
   noRate?: { id: string; reference: string; guest: string; arrival: string; roomType: string }[];
 }
 const many = (n: number, one: string) => `${n} ${one}${n === 1 ? "" : "s"}`;
+
+/* The check and the bring-in (data/oldSystem.ts ImportCheck; OldDataPage.tsx 89-124, 262-269, 359-361). */
+export interface ImportField { key: string; label: string; required: boolean; note: string | null }
+export interface ImportRow {
+  line: number; name: string; what: string;
+  /** new | duplicate | merge | skip | booking | stay | refused */
+  action: string; problems: string[]; refused?: string; notes: string[];
+  matches?: { id: string; name: string; visits: number }[];
+}
+export interface ImportCounts {
+  rows: number; faults: number; toChoose: number; new: number; merge: number; skip: number;
+  bookings: number; stays: number; refused: number; noRate: number;
+}
+export interface ImportCheck {
+  ok: boolean; reason?: string; headers: string[]; columns: Record<string, string>; fields: ImportField[];
+  rows: ImportRow[]; counts?: ImportCounts; importId?: string;
+}
+export type ImportChoice = { action: "keep" } | { action: "skip" } | { action: "merge"; guestId: string };
+
+/** OldDataPage 90: the system's name is asked before the file is sent. */
+export const NAME_THE_SYSTEM = "Say which system the file came from first (IDS, eZee, a spreadsheet).";
+/** The rows that would be saved (OldDataPage 121). */
+export const savingOf = (c: ImportCounts | undefined) => (c ? c.new + c.merge + c.bookings + c.stays : 0);
+/** Why "Bring in" is grey, in the web's words (OldDataPage 122-124), or null. */
+export function saveBlocked(check: Pick<ImportCheck, "ok" | "counts"> | null, stale: boolean): string | null {
+  if (!check || !check.ok) return "Correct what the check lists first.";
+  if (stale) return "Check again: the columns or a choice changed.";
+  return savingOf(check.counts) === 0 ? "Nothing in this file would be brought in." : null;
+}
+/** The rows card's line (OldDataPage 262-269). */
+export const countsWords = (c: ImportCounts) => [
+  `${c.rows} rows`, c.faults && `${c.faults} with a fault in the file`, c.toChoose && `${c.toChoose} to choose for`,
+  c.new && many(c.new, "new guest"), c.merge && `${c.merge} to merge`, c.skip && `${c.skip} to skip`,
+  c.bookings && many(c.bookings, "booking"), c.noRate && `${c.noRate} with no rate`, c.stays && many(c.stays, "past stay"),
+  c.refused && `${c.refused} refused`,
+].filter(Boolean).join(" · ");
+/** The toast after Bring in (OldDataPage 97-101); undefined when the server sent no counts. */
+export const broughtInWords = (c: ImportCounts | undefined) => (c
+  ? [c.new && many(c.new, "new guest"), c.merge && `${c.merge} merged`, c.bookings && many(c.bookings, "booking"),
+    c.stays && many(c.stays, "past stay"), c.refused + c.skip && `${c.refused + c.skip} not brought in, listed`].filter(Boolean).join(", ")
+  : undefined);
+/** A row's "Becomes" pill (OldDataPage RESULT, 131): a fault in the file wins over the action, but not on a duplicate. */
+const RESULT: Record<string, { tone: "success" | "neutral" | "warning" | "danger" | "info"; word: string }> = {
+  new: { tone: "success", word: "New guest" }, duplicate: { tone: "warning", word: "Already on file" },
+  merge: { tone: "info", word: "Merge" }, skip: { tone: "neutral", word: "Skip" }, booking: { tone: "success", word: "Booking" },
+  stay: { tone: "info", word: "Past stay" }, refused: { tone: "danger", word: "Refused" },
+};
+export const rowResult = (r: Pick<ImportRow, "action" | "problems">) =>
+  r.problems.length && r.action !== "duplicate" ? { tone: "danger" as const, word: "Fault in the file" }
+    : RESULT[r.action] ?? { tone: "neutral" as const, word: r.action };
+/** A row's problems as shown: "Already on file" is said by its choice, not again (OldDataPage 157). */
+export const rowProblems = (r: Pick<ImportRow, "problems" | "matches">) =>
+  r.problems.filter((p) => !(r.matches && p.startsWith("Already on file")));
+/** The keep / merge / skip choice as a select's value and back (OldDataPage 359-361). */
+export const choiceValue = (c: ImportChoice | undefined) => (!c ? "" : c.action === "merge" ? `merge:${c.guestId}` : c.action);
+export const choiceOf = (v: string): ImportChoice =>
+  v.startsWith("merge:") ? { action: "merge", guestId: v.slice(6) } : v === "skip" ? { action: "skip" } : { action: "keep" };
+/** "For all of them" (OldDataPage 282-287): every duplicate row's choice. */
+export function everyDupe(rows: readonly ImportRow[], now: Record<string, ImportChoice>, how: "keep" | "merge" | "skip") {
+  const dupes = rows.filter((r) => r.matches);
+  return {
+    ...now,
+    ...Object.fromEntries(dupes.map((r) => [String(r.line),
+      how === "keep" ? { action: "keep" } : how === "skip" ? { action: "skip" }
+        : r.matches!.length === 1 ? { action: "merge", guestId: r.matches![0]!.id } : now[String(r.line)] ?? { action: "keep" }])),
+  } as Record<string, ImportChoice>;
+}
+
 /** "Brought in": its own counts in words, a dash for none. */
 export const broughtWords = (d: ImportRecord) =>
   [d.guests && many(d.guests, "guest"), d.filled && `${d.filled} filled in`, d.bookings && many(d.bookings, "booking"),

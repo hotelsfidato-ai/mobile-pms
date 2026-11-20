@@ -6,7 +6,8 @@ import {
   addDays, ageOf, broughtWords, checkAddress, checklistLine, childAgeWords, dayCompact, docWhen, doneIn,
   findAmenities, groupNameSaid, kindNote, logoOf, mapPoint, mayUndo, moved, openStep, rowOf, showsChecklist,
   stateText, STEPS, summaryOf, typedAgeWords, typeWord, voucherWords,
-  type Commissioning, type ImportRecord, type SetupView,
+  broughtInWords, choiceOf, choiceValue, countsWords, everyDupe, rowProblems, rowResult, saveBlocked, savingOf,
+  type Commissioning, type ImportCounts, type ImportRecord, type ImportRow, type SetupView,
 } from "./propertyRules.ts";
 
 const eq = (got: unknown, want: unknown, what: string) => {
@@ -87,5 +88,32 @@ eq(broughtWords(imp), "2 filled in, 1 booking, 3 past stays", "brought in");
 eq(broughtWords({ ...imp, filled: 0, bookings: 0, stays: 0 }), "-", "nothing brought in is a dash");
 eq([voucherWords(imp), voucherWords({ ...imp, kind: "guests" })], ["Not sent", "-"], "vouchers");
 eq(kindNote("bookings", "1 Oct 2026").includes("(before 1 Oct 2026)"), true, "the first day in the note");
+
+/* The check before anything is saved, and Bring in (OldDataPage.tsx): counts chosen so a wrong sum differs. */
+const counts: ImportCounts = { rows: 9, faults: 0, toChoose: 0, new: 2, merge: 1, skip: 1, bookings: 0, stays: 3, refused: 2, noRate: 0 };
+eq(savingOf(counts), 6, "saved: new, merged, bookings and stays - never the skipped or refused");
+eq(savingOf(undefined), 0, "no counts, nothing saved");
+eq(saveBlocked(null, false), "Correct what the check lists first.", "no check yet");
+eq(saveBlocked({ ok: false, counts }, false), "Correct what the check lists first.", "a check with faults");
+eq(saveBlocked({ ok: true, counts }, true), "Check again: the columns or a choice changed.", "changed since the check");
+eq(saveBlocked({ ok: true, counts: { ...counts, new: 0, merge: 0, stays: 0 } }, false), "Nothing in this file would be brought in.", "nothing to bring in");
+eq(saveBlocked({ ok: true, counts }, false), null, "ready");
+eq(countsWords(counts), "9 rows · 2 new guests · 1 to merge · 1 to skip · 3 past stays · 2 refused", "the rows card's line, nothing for a zero");
+eq(broughtInWords(counts), "2 new guests, 1 merged, 3 past stays, 3 not brought in, listed", "the toast: refused and skipped together");
+eq(broughtInWords(undefined), undefined, "no counts, no line");
+const dupe = (line: number, ids: string[]): ImportRow => ({
+  line, name: "Asha", what: "guest", action: "duplicate", problems: ["Already on file: choose keep, merge or skip."], notes: [],
+  matches: ids.map((id) => ({ id, name: `Asha ${id}`, visits: 1 })),
+});
+eq(rowResult(dupe(2, ["g1"])), { tone: "warning", word: "Already on file" }, "a duplicate's own pill, though it has a problem");
+eq(rowResult({ action: "booking", problems: ["No arrival"] }), { tone: "danger", word: "Fault in the file" }, "a fault wins");
+eq(rowResult({ action: "odd", problems: [] }), { tone: "neutral", word: "odd" }, "an action the phone does not know is said as sent");
+eq(rowProblems(dupe(2, ["g1"])), [], "the duplicate's line is said by its choice");
+eq([choiceValue(undefined), choiceValue({ action: "merge", guestId: "g1" }), choiceValue({ action: "skip" })], ["", "merge:g1", "skip"], "choice to value");
+eq([choiceOf("merge:g1"), choiceOf("skip"), choiceOf("keep")], [{ action: "merge", guestId: "g1" }, { action: "skip" }, { action: "keep" }], "value to choice");
+const rows = [dupe(2, ["g1"]), dupe(3, ["g2", "g3"]), { ...dupe(4, []), matches: undefined }];
+eq(everyDupe(rows, {}, "merge"), { 2: { action: "merge", guestId: "g1" }, 3: { action: "keep" } }, "merge where ONE matches; two matches keep, a non-duplicate untouched");
+eq(everyDupe(rows, { 3: { action: "skip" } }, "merge")["3"], { action: "skip" }, "two matches keep the choice already made");
+eq(everyDupe(rows, {}, "skip"), { 2: { action: "skip" }, 3: { action: "skip" } }, "skip them all");
 
 console.log("propertyRules.check: ok");

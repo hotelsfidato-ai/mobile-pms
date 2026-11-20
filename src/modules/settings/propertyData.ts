@@ -1,7 +1,7 @@
 import { api, ApiError, currentSubject, send } from "../../core/api";
 import { keyKeeper, type KeyKeeper } from "../../core/keys";
 import type {
-  Amenity, Commissioning, GroupOffice, GroupRead, ImportsView, PropertyDetail, PropertyProfile, ProfileField,
+  Amenity, Commissioning, GroupOffice, GroupRead, ImportCheck, ImportChoice, ImportKind, ImportsView, PropertyDetail, PropertyProfile, ProfileField,
   Registration, SetupView, StepChoice, StepId, TextKind,
 } from "./propertyRules";
 
@@ -137,5 +137,19 @@ export const removePhoto = (code: string, id: string) => send<Done>("DELETE", `$
 
 export const chooseStep = (code: string, id: StepId, choice: StepChoice) =>
   send<Done>("PUT", `${H(code)}/setup/${id}`, choice, keysOf(`${code} setup`));
+/** oldSystem.ts sendImport's body: the file's name and bytes (base64), the old system, the columns matched and the
+    choices made, and the voucher switch (off unless ticked). */
+export interface ImportAsk {
+  name: string; data: string; system: string; columns?: Record<string, string>; choices?: Record<string, ImportChoice>; sendVouchers: boolean;
+}
+/** POST /:code/imports/:kind/check: every row read and shown, NOTHING saved (the server rolls it back). 200 with
+    the rows (ok false: what to put right); 409 with only a reason (the file, its size, its rows). */
+export const checkImport = (code: string, kind: ImportKind, ask: ImportAsk) =>
+  send<ImportCheck>("POST", `${H(code)}/imports/${kind}/check`, ask);
+/** POST /:code/imports/:kind: all of it in one transaction, or none. The route reads no key and a repeat BRINGS
+    IT IN TWICE (a second import, every guest and booking again), so the page's stop holds after an unknown
+    outcome until a read of the list begun after it (the import is listed there once it is in). */
+export const bringIn = (code: string, kind: ImportKind, ask: ImportAsk) =>
+  send<ImportCheck>("POST", `${H(code)}/imports/${kind}`, ask, keysOf(`${code} old-data`));
 export const undoImport = (code: string, id: string) =>
   send<Done>("POST", `${H(code)}/imports/${enc(id)}/undo`, {}, keysOf(`${code} old-data`));
