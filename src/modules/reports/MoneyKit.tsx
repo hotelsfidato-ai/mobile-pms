@@ -2,21 +2,20 @@ import { Check, ChevronDown, CloudOff, FileSpreadsheet, Lock, Minus, Plus, type 
 import { useState, type ReactNode } from "react";
 import { ActivityIndicator, Modal, Platform, Pressable, ScrollView, Switch, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { DateField } from "../../core/DateField";
 import { ExportButtons } from "../../core/Export";
 import type { ExportTable } from "../../core/exportDoc";
-import { dateLong } from "../../core/format";
 import { isOnline } from "../../core/offline";
 import { c, face, space, t } from "../../core/theme";
 import { Capsule, Card, Head, ReadFailed, Screen, s } from "../../core/ui";
-import { addDays } from "./figures";
 import { addMonths, docCards, factsLine, monthWords, type CardItem, type Figure, type ReportDoc } from "./money";
 
 /* ══════════════════════════════════════════════════════════════════
    THE REPORT KIT of the money and tax reports (lane m13-rep-money), after
    the web's components/ReportShell.tsx and ReportView.tsx, cut for a phone:
-   the page head with its period, the report's own settings (a day, a month
-   or a range, stepped as the app's day stepper, M-7: no date-picker
-   package), the export (print or save as PDF, share: src/core/Export.tsx),
+   the page head with its period, the report's own settings (a day or a
+   range on each phone's own date picker, M-16; a month stepped), the
+   export (print or save as PDF, share: src/core/Export.tsx),
    the masthead, and the server's rows as cards of labelled figures in the
    web's column order, its own totals as total cards. Nothing is added up
    here (money.ts).
@@ -68,15 +67,12 @@ function Stepper({ label, hint, words, earlier, later, onEarlier, onLater }: {
   );
 }
 
-/** One day, never before `min` nor after `max` (the web's date input's min and max). */
+/** One day, never before `min` nor after `max` (the web's date input's min and max): each phone's own
+    date picker (M-16, core DateField), the day as the same text. */
 export function DayStep({ label, value, min, max, hint, onChange }: {
   label: string; value: string; min?: string; max?: string; hint?: string; onChange: (d: string) => void;
 }) {
-  return (
-    <Stepper label={label} words={dateLong(value)} {...(hint ? { hint } : {})}
-      earlier={min === undefined || value > min} later={max === undefined || value < max}
-      onEarlier={() => onChange(addDays(value, -1))} onLater={() => onChange(addDays(value, 1))} />
-  );
+  return <DateField label={label} value={value} min={min} max={max} hint={hint} hotel={{ businessDate: value }} onChange={(d) => { if (d) onChange(d); }} />;
 }
 
 /** One month, "YYYY-MM", never after `max` (Gst.tsx MonthPicker). */

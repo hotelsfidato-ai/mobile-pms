@@ -12,7 +12,7 @@ import {
   GROUP_REPORTS, earliestOf, groupAsk, groupPeriod, hotelsWhere, mayOpenGroup, readsMoney, readsReports, type GroupReportKey,
 } from "./opsGroup";
 import { notYourRole } from "./opsIndex";
-import { DayStep } from "./OpsReport";
+import { DayPick, DayStep } from "./OpsReport";
 
 /* ══════════════════════════════════════════════════════════════════
    GROUP REPORTS on a phone — the web's /group-reports (src/modules/reports/
@@ -88,8 +88,8 @@ export function GroupReports({ hotel, role }: { hotel: Hotel; role: string | nul
           <DayStep label="Month" value={query.month!} max={earliest.slice(0, 7)} onChange={setMonth} words={monthWords} step={plusMonths} />
         ) : (
           <>
-            {report.asks === "range" ? <DayStep label="From" value={query.from!} max={day} onChange={setFrom} /> : null}
-            <DayStep label={report.asks === "range" ? "To" : "As on"} value={day} max={earliest} onChange={setAsOn} />
+            {report.asks === "range" ? <DayPick label="From" value={query.from!} max={day} onChange={setFrom} /> : null}
+            <DayPick label={report.asks === "range" ? "To" : "As on"} value={day} max={earliest} onChange={setAsOn} />
           </>
         )}
 

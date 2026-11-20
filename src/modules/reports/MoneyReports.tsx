@@ -4,6 +4,7 @@ import { Text, View } from "react-native";
 import { orNull, type Hotel } from "../../core/api";
 import { c, t } from "../../core/theme";
 import { useRead } from "../../core/ui";
+import { DownloadButton } from "../../core/Download";
 import { dateYear } from "./figures";
 import { DayStep, DocReport, Files, MonthStep, Nothing, OnOff, ReadState, Refused, RangeStep, ReportPage, Choose } from "./MoneyKit";
 import { accountNames, docTable, monthStartOf, monthWords, queryString, rangeWords, type DocKey, type ReportDoc, type ReportQuery } from "./money";
@@ -153,8 +154,12 @@ export function Gstr1(p: Props) {
   return (
     <DocScreen {...p} report="gstr-1" title="GSTR-1" what="the GSTR-1" period={monthWords(month)} query={{ month }}
       controls={<MonthStep value={month} max={p.hotel.businessDate.slice(0, 7)} onChange={setMonth} />}
-      more="Email, and the GSTR-1 file (JSON) for the GST portal"
-      extra={may ? null : (
+      more="Email"
+      extra={may ? (
+        /* M-16 row 1.13: the GST offline tool's JSON, saved under the server's own name (its GSTIN in it). */
+        <DownloadButton label="GSTR-1 file (JSON)" a11y={`The GSTR-1 file for ${monthWords(month)}, as JSON`}
+          path={`/api/hotels/${encodeURIComponent(p.hotel.code)}/reports/gstr-1.json?month=${month}`} fileName="" mimeType="application/json" />
+      ) : (
         <View style={{ flexDirection: "row", gap: 6, alignItems: "flex-start" }}>
           <FileJson size={14} color={c.grey400} style={{ marginTop: 1 }} />
           <Text style={[t.caption, { flex: 1 }]}>{GSTR1_FILE_REFUSED}</Text>
