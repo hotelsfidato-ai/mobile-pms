@@ -686,7 +686,9 @@ function InclusiveNote({ split, gross }: { split: Split | null; gross: number | 
 }
 
 /** ReturningGuest.tsx: never automatic; a blacklisted match only warns. */
-function Returning({ code, phone, email, chosen, onChoose, onUseCompany }: {
+/** ReturningGuest (guests/components/ReturningGuest.tsx): a guest already on file by this phone or email,
+    to link instead of a new record; Backfill's Add a stay uses it too. */
+export function Returning({ code, phone, email, chosen, onChoose, onUseCompany }: {
   code: string; phone: string; email: string; chosen: { id: string; name: string } | null; onChoose: (g: { id: string; name: string } | null) => void;
   onUseCompany?: (x: { name: string | null; gstin: string | null; address: string | null }) => void;
 }) {

@@ -125,6 +125,15 @@ export const setModule = (code: string, module: string, enabled: boolean) =>
 /* ── Backfill ────────────────────────────────────────────────────── */
 
 export const getBackfill = (code: string) => read<BackfillView>(`backfill ${code}`, `${H(code)}/backfill`);
+/** POST /:code/backfill/:kind (data/backfill.ts addBackfill): a new line. The route reads no key: a repeat
+    makes a SECOND line (and a stay's ticked bill goes again), so an unknown outcome stops the screen. `sent`:
+    true once the bill went, the reason when it did not, null when not ticked. */
+export const addBackfill = (code: string, kind: BackfillKind, body: object) =>
+  send<{ ok: true; id: string; sent?: true | string | null }>("POST", `${H(code)}/backfill/${kind}`, body, keysOf(`backfill ${code}`));
+/** PUT /:code/backfill/:kind/:id (correctBackfill): the line corrected, with the reason (kept and in the
+    audit log); a repeat corrects it to the same again. */
+export const correctBackfill = (code: string, kind: BackfillKind, id: string, body: object & { reason: string }) =>
+  send<{ ok: true; sent?: true | string | null }>("PUT", `${H(code)}/backfill/${kind}/${enc(id)}`, body, keysOf(`backfill ${code}`));
 export const removeBackfill = (code: string, kind: BackfillKind, id: string, reason: string) =>
   send<Done>("POST", `${H(code)}/backfill/${kind}/${enc(id)}/remove`, { reason }, keysOf(`backfill ${code}`));
 

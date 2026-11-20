@@ -6,6 +6,8 @@ import {
   addReady, addedWords, auditDay, auditLag, boundary, bytes, chosenRole, dateTime, dayOrBlank, deviceInWords, entriesWords, grantable,
   integrationsOf, mayGrant, mayTake, ms, paged, peopleLine, placeLine, placesOf, precise, problemsOf, queryOf, removeWhy,
   signInNow, staffRecord, strandedOf, taxLine, taxOf, taxRows, trailWords, uptime, within, type AdminStaff, type RosterPlace,
+  backfillSaved, billBody, billForm, billReady, cashBody, cashForm, cashReady, dayBeforeFirst, isForeign, sendWhy, shownFig,
+  stayBody, stayForm, stayReady, typedFig, type BackfillStay,
 } from "./rules.ts";
 
 const eq = (got: unknown, want: unknown, what: string) => {
@@ -123,4 +125,35 @@ eq(trailWords({ changeReason: "typo", changedBy: null, removedReason: null, remo
 eq(trailWords({ changeReason: "typo", changedBy: "A", removedReason: "twice", removedBy: "B" }), "Removed by B: twice", "removed wins");
 
 Date.parse = realParse;
+/* Backfill's forms: blank is null (a dash), never 0; paise kept; the web's own bodies. */
+eq([typedFig(""), typedFig("  "), typedFig("0"), typedFig("1250.50")], [null, null, 0, 1250.5], "blank is not typed; zero is a figure; paise kept");
+eq([shownFig(null), shownFig(0), shownFig(7.25)], ["", "0", "7.25"], "a figure back into its box");
+eq([dayBeforeFirst("2026-03-01"), dayBeforeFirst("2026-01-01")], ["2026-02-28", "2025-12-31"], "the last day before the first, across a month and a year");
+const rooms = { rooms: [{ id: "r1", number: "101" }] };
+const fresh = stayForm(rooms, null);
+eq([fresh.nationality, fresh.idType, fresh.roomId, fresh.adults, fresh.children, fresh.rate], ["IN", "aadhaar", "r1", "1", "0", ""], "a new stay's start");
+const gb = { ...fresh, guestName: "Ann", nationality: "gb ", idType: "aadhaar", rate: "", roomCharges: "4500", gst: "0", paid: "4500.5", paidBy: "", adults: "2" };
+eq(isForeign(gb), true, "not IN is foreign, whatever the case");
+const body = stayBody(gb, "g9", true, "Type the guest's email first: it goes by email.");
+eq([body.nationality, body.idType, body.rate, body.roomCharges, body.gst, body.paid, body.paidBy, body.adults, body.guestId, body.sendBill],
+  ["GB", "passport", null, 4500, 0, 4500.5, null, 2, "g9", false], "the stay's body: a foreigner's passport, blank null, zero kept, the tick off when it cannot send");
+eq(stayBody({ ...fresh, nationality: "" }, null, true, null).nationality, "IN", "blank nationality is India");
+eq(stayBody(fresh, null, true, null).sendBill, true, "ticked and sendable");
+const row = { guestName: "Ravi", nationality: "IN", idType: "voter", idNumber: "1234", roomId: "r2", arrival: "2026-01-02", departure: "2026-01-03",
+  adults: 1, children: 1, rate: null, roomCharges: 3000, gst: 0, otherCharges: null, otherChargesFor: null, paid: null, paidBy: "Cash",
+  billNumber: null, phone: null, email: null, visaNumber: null, formCReference: null } as unknown as BackfillStay;
+const again = stayForm(rooms, row);
+eq([again.idNumber, again.roomId, again.rate, again.roomCharges, again.gst, again.paidBy], ["", "r2", "", "3000", "0", "Cash"], "a correction starts from the row; the ID number blank keeps it");
+eq([stayReady(fresh), stayReady({ ...fresh, guestName: "A", arrival: "2026-01-01", departure: "2026-01-02" })], [false, true], "a stay is ready with a name, two days and a room");
+eq([sendWhy({ sending: { ok: false, reason: "No email set up." } }, "a@x.in"), sendWhy({ sending: { ok: true, reason: null } }, " "), sendWhy({ sending: { ok: true, reason: null } }, "a@x.in")],
+  ["No email set up.", "Type the guest's email first: it goes by email.", null], "why the bill cannot go");
+const bill = billForm({ outlets: [{ id: "o1", name: "Café" }] }, null);
+eq(billBody({ ...bill, billDate: "2026-01-05", amount: "100", gst: "", total: "105.00" }), { ...bill, billDate: "2026-01-05", amount: 100, gst: null, total: 105, paidBy: null }, "a bill's body");
+eq([billReady(bill), billReady({ ...bill, billDate: "2026-01-05" })], [false, true], "a bill needs its restaurant and date");
+const cash = cashForm(null);
+eq(cashBody({ ...cash, amount: "" }).amount, null, "a blank amount is never 0");
+eq([cashReady(cash), cashReady({ ...cash, cashDate: "2026-01-05", amount: "50", purpose: "Float", person: "Asha" })], [false, true], "cash needs all four");
+eq([backfillSaved(true).title, backfillSaved("No email address.").title, backfillSaved(null).title, backfillSaved(undefined).tone],
+  ["Saved", "Saved, but the bill was not sent", "Saved", "ok"], "what the save says");
+
 console.log("admin rules: ok");

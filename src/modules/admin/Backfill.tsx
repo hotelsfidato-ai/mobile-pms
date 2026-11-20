@@ -5,9 +5,10 @@ import { Text, View } from "react-native";
 import { ExportButtons } from "../../core/Export";
 import { ON_THE_WEBSITE } from "../../core/menu";
 import { c, face, t } from "../../core/theme";
-import { Head, Screen, s as core, notKnown, useRead } from "../../core/ui";
+import { Head, Screen, s as core, notKnown, useRead, useScreenStop } from "../../core/ui";
+import { BackfillForm, useBackfillWrite, type BackfillWrite, type Editing } from "./BackfillForms";
 import { getBackfill, removeBackfill } from "./data";
-import { Btn, Empty, Failed, Field, Labelled, Loading, Pill, Refused, Segmented, Sheet, Stale, Toast, body, saidOf, useAct, useSaid, useStop, type Said, type Stop } from "./kit";
+import { Btn, Empty, Failed, Field, Labelled, Loading, Pill, Refused, Segmented, Sheet, Stale, Toast, body, saidOf, useSaid, type Said } from "./kit";
 import { refusedBackfill } from "./roles";
 import {
   DASH, ID_WORDS, dateShort, live, precise, removeWhy, trailWords,
@@ -23,12 +24,15 @@ import type { AdminProps } from "./Route";
    apart from the live books. Not pictured.
 
    On the phone: the three registers, each line as the server sent it
-   (paise kept, a dash for a figure nobody typed), with Remove (a reason,
-   asked first; the line stays, marked) for whom the server says may write
-   (`mayWrite`), and an export of each. Left on the website: Add and
-   Correct (a day to pick, a room, an outlet, a returning guest; the date
-   picker is a package not approved) and "Day by day" - the web adds that
-   table up in the browser, and the phone never totals money (BRIEF-T3).
+   (paise kept, a dash for a figure nobody typed), with Add and Correct
+   (BackfillForms.tsx: the web's three forms, their days on each phone's
+   own date picker, M-16) and Remove (a reason, asked first; the line
+   stays, marked) for whom the server says may write (`mayWrite`), and an
+   export of each. The three writes share the screen's stop, the core's
+   book (`admin/<code>/backfill`, outside React: MEMORY 22): after an
+   unknown outcome all three are grey until a read of the registers begun
+   after it. Left on the website: "Day by day" - the web adds that table up
+   in the browser, and the phone never totals money (BRIEF-T3).
    ══════════════════════════════════════════════════════════════════ */
 
 type Tab = "stays" | "bills" | "cash";
@@ -41,17 +45,12 @@ export function Backfill({ hotel, role }: AdminProps) {
   const [tab, setTab] = useState<Tab>("stays");
   const [pulled, setPulled] = useState(false);
   const [removing, setRemoving] = useState<{ kind: BackfillKind; id: string; what: string } | null>(null);
+  const [editing, setEditing] = useState<Editing | null>(null);
   const key = ["admin", code, "backfill"];
-  const [seenAt, setSeenAt] = useState(0);
-  const view = useRead(async () => {
-    if (refused) return null;
-    const started = Date.now();
-    const answer = await getBackfill(code);
-    setSeenAt(started);
-    return answer;
-  }, key);
-  /* Remove's stop, kept here so closing the sheet does not free it (MADM-3). */
-  const stop = useStop(seenAt);
+  /* Add, Correct and Remove's stop, the core's: kept by hotel outside every sheet and screen (MADM-3, MEMORY 22). */
+  const stop = useScreenStop(`admin/${code}/backfill`);
+  const view = useRead(stop.watch(() => (refused ? Promise.resolve(null) : getBackfill(code))), key);
+  const w = useBackfillWrite(stop);
   const refresh = () => void cache.invalidateQueries({ queryKey: key });
   const v = view.data;
 
@@ -72,21 +71,30 @@ export function Backfill({ hotel, role }: AdminProps) {
                 { value: "stays", label: `Stays ${live(v.stays)}` }, { value: "bills", label: `Bills ${live(v.bills)}` }, { value: "cash", label: `Cash ${live(v.cash)}` },
               ]} />
               <View style={{ gap: 4 }}>
-                <View style={{ flexDirection: "row" }}><Btn variant="primary" disabled label={tab === "stays" ? "Add a stay" : tab === "bills" ? "Add a restaurant bill" : "Add cash in or out"} onPress={() => undefined} /></View>
-                <Text style={t.caption}>{v.mayWrite ? `Adding and correcting: ${ON_THE_WEBSITE.toLowerCase()}. Day by day: ${ON_THE_WEBSITE.toLowerCase()} (the website adds it up).` : "Only the owner, an administrator or the general manager enters and corrects these."}</Text>
+                {v.mayWrite ? (
+                  <View style={{ flexDirection: "row" }}>
+                    <Btn variant="primary" disabled={w.stuck || (tab === "bills" && v.outlets.length === 0)}
+                      label={tab === "stays" ? "Add a stay" : tab === "bills" ? "Add a restaurant bill" : "Add cash in or out"}
+                      onPress={() => setEditing({ kind: tab, row: null } as Editing)} />
+                  </View>
+                ) : null}
+                <Text style={t.caption}>{!v.mayWrite ? "Only the owner, an administrator or the general manager enters and corrects these."
+                  : tab === "bills" && v.outlets.length === 0 ? "No restaurant is set up at this hotel yet."
+                    : w.stuck ? notKnown("saved", "the register").line : `Day by day: ${ON_THE_WEBSITE.toLowerCase()} (the website adds it up).`}</Text>
               </View>
               <ExportButtons table={tableOf(v, tab, hotel.name)} />
               {tab === "stays" ? (v.stays.length === 0 ? <Empty title="No stays backfilled yet." /> : v.stays.map((s) => (
-                <Stay key={s.id} s={s} v={v} stuck={stop.stuck} onRemove={() => setRemoving({ kind: "stays", id: s.id, what: `${s.guestName}'s stay` })} />
+                <Stay key={s.id} s={s} v={v} stuck={w.stuck} onCorrect={() => setEditing({ kind: "stays", row: s })} onRemove={() => setRemoving({ kind: "stays", id: s.id, what: `${s.guestName}'s stay` })} />
               ))) : tab === "bills" ? (v.bills.length === 0 ? <Empty title="No restaurant bills backfilled yet." /> : v.bills.map((b) => (
-                <Bill key={b.id} b={b} v={v} stuck={stop.stuck} onRemove={() => setRemoving({ kind: "bills", id: b.id, what: `bill ${b.billNumber ?? DASH}` })} />
+                <Bill key={b.id} b={b} v={v} stuck={w.stuck} onCorrect={() => setEditing({ kind: "bills", row: b })} onRemove={() => setRemoving({ kind: "bills", id: b.id, what: `bill ${b.billNumber ?? DASH}` })} />
               ))) : (v.cash.length === 0 ? <Empty title="No cash backfilled yet." /> : v.cash.map((x) => (
-                <Cash key={x.id} x={x} v={v} stuck={stop.stuck} onRemove={() => setRemoving({ kind: "cash", id: x.id, what: `the cash line "${x.purpose}"` })} />
+                <Cash key={x.id} x={x} v={v} stuck={w.stuck} onCorrect={() => setEditing({ kind: "cash", row: x })} onRemove={() => setRemoving({ kind: "cash", id: x.id, what: `the cash line "${x.purpose}"` })} />
               )))}
             </>
           )}
       </Screen>
-      {removing ? <Remove stop={stop} code={code} r={removing} onSaid={say} onClose={() => { setRemoving(null); refresh(); }} /> : null}
+      {removing ? <Remove w={w} code={code} r={removing} onSaid={say} onClose={() => { setRemoving(null); refresh(); }} /> : null}
+      {editing && v ? <BackfillForm editing={editing} hotel={hotel} v={v} w={w} onSaid={say} onClose={() => { setEditing(null); refresh(); }} /> : null}
       <Toast said={said} onClose={close} />
     </View>
   );
@@ -94,7 +102,7 @@ export function Backfill({ hotel, role }: AdminProps) {
 
 const struck = (r: { removedAt: string | null }) => (r.removedAt ? { textDecorationLine: "line-through" as const, color: c.grey500 } : null);
 
-function Foot({ r, v, onRemove, stuck }: { r: BackfillStay | BackfillBill | BackfillCash; v: BackfillView; onRemove: () => void; stuck: boolean }) {
+function Foot({ r, v, onCorrect, onRemove, stuck }: { r: BackfillStay | BackfillBill | BackfillCash; v: BackfillView; onCorrect: () => void; onRemove: () => void; stuck: boolean }) {
   const why = removeWhy(v, r) ?? (stuck ? notKnown("removed", "the register").line : null);
   const trail = trailWords(r);
   return (
@@ -102,7 +110,7 @@ function Foot({ r, v, onRemove, stuck }: { r: BackfillStay | BackfillBill | Back
       {trail ? <Text style={[body, { color: c.grey600 }]}>{trail}</Text> : null}
       <View style={{ gap: 4, borderTopWidth: 1, borderColor: c.grey100, paddingTop: 10 }}>
         <View style={{ flexDirection: "row", gap: 8 }}>
-          <Btn variant="ghost" label="Correct" disabled onPress={() => undefined} a11y={`Correct: ${ON_THE_WEBSITE}`} />
+          <Btn variant="ghost" label="Correct" disabled={Boolean(why)} onPress={onCorrect} />
           <Btn label="Remove" disabled={Boolean(why)} onPress={onRemove} icon={<Trash2 size={16} color={why ? c.grey400 : c.red700} />} />
         </View>
         {why ? <Text style={t.caption}>{why}</Text> : null}
@@ -111,7 +119,7 @@ function Foot({ r, v, onRemove, stuck }: { r: BackfillStay | BackfillBill | Back
   );
 }
 
-function Stay({ s, v, onRemove, stuck }: { s: BackfillStay; v: BackfillView; onRemove: () => void; stuck: boolean }) {
+function Stay({ s, v, onCorrect, onRemove, stuck }: { s: BackfillStay; v: BackfillView; onCorrect: () => void; onRemove: () => void; stuck: boolean }) {
   return (
     <View style={[core.card, { gap: 10 }]}>
       <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8, alignItems: "center" }}>
@@ -128,12 +136,12 @@ function Stay({ s, v, onRemove, stuck }: { s: BackfillStay; v: BackfillView; onR
       <Labelled label="Paid" value={s.paid === null ? DASH : `${precise(s.paid)}${s.paidBy ? ` · ${s.paidBy}` : ""}`} />
       <Labelled label="Hotel's bill" value={s.billNumber ?? DASH} />
       {s.sendBill ? <Pill tone={s.message?.status === "sent" ? "success" : "danger"}>{s.message?.status === "sent" ? `Sent ${s.message.at ?? ""}`.trim() : "Not sent"}</Pill> : null}
-      <Foot r={s} v={v} onRemove={onRemove} stuck={stuck} />
+      <Foot r={s} v={v} onCorrect={onCorrect} onRemove={onRemove} stuck={stuck} />
     </View>
   );
 }
 
-function Bill({ b, v, onRemove, stuck }: { b: BackfillBill; v: BackfillView; onRemove: () => void; stuck: boolean }) {
+function Bill({ b, v, onCorrect, onRemove, stuck }: { b: BackfillBill; v: BackfillView; onCorrect: () => void; onRemove: () => void; stuck: boolean }) {
   return (
     <View style={[core.card, { gap: 10 }]}>
       <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8, alignItems: "center" }}>
@@ -146,12 +154,12 @@ function Bill({ b, v, onRemove, stuck }: { b: BackfillBill; v: BackfillView; onR
       <Labelled label="Total" value={precise(b.total)} strong />
       <Labelled label="Paid by" value={b.paidBy ?? DASH} />
       <Labelled label="Note" value={b.note ?? DASH} />
-      <Foot r={b} v={v} onRemove={onRemove} stuck={stuck} />
+      <Foot r={b} v={v} onCorrect={onCorrect} onRemove={onRemove} stuck={stuck} />
     </View>
   );
 }
 
-function Cash({ x, v, onRemove, stuck }: { x: BackfillCash; v: BackfillView; onRemove: () => void; stuck: boolean }) {
+function Cash({ x, v, onCorrect, onRemove, stuck }: { x: BackfillCash; v: BackfillView; onCorrect: () => void; onRemove: () => void; stuck: boolean }) {
   return (
     <View style={[core.card, { gap: 10 }]}>
       <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8, alignItems: "center" }}>
@@ -161,14 +169,13 @@ function Cash({ x, v, onRemove, stuck }: { x: BackfillCash; v: BackfillView; onR
       <Labelled label="Amount" value={precise(x.amount)} strong />
       <Labelled label="What for" value={x.purpose} />
       <Labelled label="Who" value={x.person} />
-      <Foot r={x} v={v} onRemove={onRemove} stuck={stuck} />
+      <Foot r={x} v={v} onCorrect={onCorrect} onRemove={onRemove} stuck={stuck} />
     </View>
   );
 }
 
 /** RemoveDialog: the reason asked first; the line stays, marked. */
-function Remove({ stop, code, r, onSaid, onClose }: { stop: Stop; code: string; r: { kind: BackfillKind; id: string; what: string }; onSaid: (s: Said) => void; onClose: () => void }) {
-  const act = useAct(undefined, stop);
+function Remove({ w: act, code, r, onSaid, onClose }: { w: BackfillWrite; code: string; r: { kind: BackfillKind; id: string; what: string }; onSaid: (s: Said) => void; onClose: () => void }) {
   const [reason, setReason] = useState("");
   const submit = () => act.run(() => removeBackfill(code, r.kind, r.id, reason.trim()), {
     ok: () => { onSaid({ title: "Removed", body: "It stays on the list, marked removed.", tone: "ok" }); onClose(); },

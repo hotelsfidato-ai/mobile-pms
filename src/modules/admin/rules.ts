@@ -367,20 +367,27 @@ export interface Trail {
   changeReason: string | null; removedBy: string | null; removedAt: string | null; removedReason: string | null;
 }
 export interface BackfillStay extends Trail {
-  id: string; guestName: string; nationality: string; idType: string; idNumber: string | null;
-  formCReference: string | null; room: string; arrival: string; departure: string;
-  roomCharges: number | null; gst: number | null; otherCharges: number | null; otherChargesFor: string | null;
+  id: string; guestId: string; guestName: string; phone: string | null; email: string | null; nationality: string; idType: string;
+  /** Null for somebody who may not read guests' ID (D25-38); an Aadhaar is its last four (D25-37). */
+  idNumber: string | null; visaNumber: string | null;
+  formCReference: string | null; roomId: string; room: string; arrival: string; departure: string;
+  adults: number; children: number; rate: number | null; roomCharges: number | null; gst: number | null; otherCharges: number | null; otherChargesFor: string | null;
   paid: number | null; paidBy: string | null; billNumber: string | null; sendBill: boolean;
   message: { status: "sent" | "failed"; at: string | null; detail: string | null } | null;
 }
 export interface BackfillBill extends Trail {
-  id: string; outlet: string; billDate: string; billNumber: string | null;
+  id: string; outletId: string; outlet: string; billDate: string; billNumber: string | null;
   amount: number | null; gst: number | null; total: number | null; paidBy: string | null; note: string | null;
 }
 export interface BackfillCash extends Trail { id: string; cashDate: string; direction: "in" | "out"; amount: number; purpose: string; person: string }
 export interface BackfillView {
   firstDay: string; today: string; mayWrite: boolean; showsId: boolean;
+  /** Whether the send tick can send here, and the sentence when not. */
+  sending: { ok: boolean; reason: string | null };
+  rooms: { id: string; number: string }[];
   outlets: { id: string; name: string }[];
+  /** The hotel's payment methods, by their words. */
+  methods: string[];
   stays: BackfillStay[]; bills: BackfillBill[]; cash: BackfillCash[];
 }
 export type BackfillKind = "stays" | "bills" | "cash";
@@ -405,3 +412,70 @@ export interface BankDetails {
   accountName: string; accountNumber: string; bankName: string; branch: string | null; ifsc: string; upi: string | null;
   changedAt: string; changedBy: string | null;
 }
+
+/* ── Backfill's three forms (BackfillPage.tsx StayDialog, BillDialog, CashDialog) ── */
+
+/** BackfillPage `typed`: blank is "not typed" (null, a dash), never zero; anything else as the web sends it. */
+export const typedFig = (v: string) => (v.trim() === "" ? null : Number(v));
+/** BackfillPage `shown`: a figure back into its box; nothing typed is blank. */
+export const shownFig = (v: number | null | undefined) => (v === null || v === undefined ? "" : String(v));
+/** The day before (`addDays(firstDay, -1)`): the last day a bill, a cash line or an arrival may be. */
+export const dayBeforeFirst = (firstDay: string) => {
+  const d = new Date(`${firstDay}T00:00:00Z`);
+  d.setUTCDate(d.getUTCDate() - 1);
+  return d.toISOString().slice(0, 10);
+};
+
+export interface StayForm {
+  guestName: string; phone: string; email: string; nationality: string; idType: string; idNumber: string;
+  visaNumber: string; formCReference: string; roomId: string; arrival: string; departure: string;
+  adults: string; children: string; rate: string; roomCharges: string; gst: string; otherCharges: string;
+  otherChargesFor: string; paid: string; paidBy: string; billNumber: string;
+}
+/** StayDialog's first state: a row's own, or a new stay's (Indian, Aadhaar, the first room, one adult). */
+export const stayForm = (v: Pick<BackfillView, "rooms">, row: BackfillStay | null): StayForm => ({
+  guestName: row?.guestName ?? "", phone: row?.phone ?? "", email: row?.email ?? "",
+  nationality: row?.nationality ?? "IN", idType: row?.idType ?? "aadhaar", idNumber: "",
+  visaNumber: row?.visaNumber ?? "", formCReference: row?.formCReference ?? "",
+  roomId: row?.roomId ?? v.rooms[0]?.id ?? "", arrival: row?.arrival ?? "", departure: row?.departure ?? "",
+  adults: String(row?.adults ?? 1), children: String(row?.children ?? 0),
+  rate: shownFig(row?.rate), roomCharges: shownFig(row?.roomCharges), gst: shownFig(row?.gst),
+  otherCharges: shownFig(row?.otherCharges), otherChargesFor: row?.otherChargesFor ?? "",
+  paid: shownFig(row?.paid), paidBy: row?.paidBy ?? "", billNumber: row?.billNumber ?? "",
+});
+/** Not from India: the ID is the passport, with a visa and Form C (StayDialog `foreign`). */
+export const isForeign = (f: Pick<StayForm, "nationality">) => f.nationality.trim().toUpperCase() !== "IN";
+/** Why the bill cannot be sent, or null (StayDialog `sendWhy`). */
+export const sendWhy = (v: Pick<BackfillView, "sending">, email: string) =>
+  !v.sending.ok ? v.sending.reason : !email.trim() ? "Type the guest's email first: it goes by email." : null;
+/** StayDialog's body, as the web sends it. */
+export function stayBody(f: StayForm, guestId: string | null, sendBill: boolean, why: string | null) {
+  return {
+    ...f, nationality: f.nationality.trim().toUpperCase() || "IN", idType: isForeign(f) ? "passport" : f.idType,
+    adults: Number(f.adults), children: Number(f.children),
+    rate: typedFig(f.rate), roomCharges: typedFig(f.roomCharges), gst: typedFig(f.gst), otherCharges: typedFig(f.otherCharges),
+    paid: typedFig(f.paid), paidBy: f.paidBy || null, guestId, sendBill: sendBill && !why,
+  };
+}
+export const stayReady = (f: StayForm) => !!f.guestName.trim() && !!f.arrival && !!f.departure && !!f.roomId;
+
+export interface BillForm { outletId: string; billDate: string; billNumber: string; amount: string; gst: string; total: string; paidBy: string; note: string }
+export const billForm = (v: Pick<BackfillView, "outlets">, row: BackfillBill | null): BillForm => ({
+  outletId: row?.outletId ?? v.outlets[0]?.id ?? "", billDate: row?.billDate ?? "", billNumber: row?.billNumber ?? "",
+  amount: shownFig(row?.amount), gst: shownFig(row?.gst), total: shownFig(row?.total), paidBy: row?.paidBy ?? "", note: row?.note ?? "",
+});
+export const billBody = (f: BillForm) => ({ ...f, amount: typedFig(f.amount), gst: typedFig(f.gst), total: typedFig(f.total), paidBy: f.paidBy || null });
+export const billReady = (f: BillForm) => !!f.outletId && !!f.billDate;
+
+export interface CashForm { cashDate: string; direction: "in" | "out"; amount: string; purpose: string; person: string }
+export const cashForm = (row: BackfillCash | null): CashForm => ({
+  cashDate: row?.cashDate ?? "", direction: row?.direction ?? "in", amount: row ? String(row.amount) : "", purpose: row?.purpose ?? "", person: row?.person ?? "",
+});
+export const cashBody = (f: CashForm) => ({ ...f, amount: typedFig(f.amount) });
+export const cashReady = (f: CashForm) => !!f.cashDate && !!f.amount.trim() && !!f.purpose.trim() && !!f.person.trim();
+
+/** BackfillPage `saved`: what the server said after a save - the bill sent, not sent (its reason), or not ticked. */
+export const backfillSaved = (sent: true | string | null | undefined): { title: string; body?: string; tone: "ok" | "held" } =>
+  sent === true ? { title: "Saved", body: "The bill and thank-you went to the guest by email.", tone: "ok" }
+    : typeof sent === "string" ? { title: "Saved, but the bill was not sent", body: sent, tone: "held" }
+      : { title: "Saved", tone: "ok" };
