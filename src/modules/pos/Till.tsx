@@ -5,7 +5,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { AppState, Pressable, Text, View } from "react-native";
 import { api, HeldError, send, type Hotel } from "../../core/api";
 import { c, face, space, t } from "../../core/theme";
-import { notKnown, Screen, useStuck } from "../../core/ui";
+import { notKnown, Screen, useScreenStop } from "../../core/ui";
+import { parcelsStop } from "./floor";
 import { Btn, Field, Input, ReadProblem, Refused, SaidBar, Stale, ty, useAccess, web, type Said } from "./TablesKit";
 import {
   EARLIER_FAILED, earlierAsked, earlierNone, earlierPath, openBody, openPill, orderHref, ringWhy, TILL_OUTLET, tillLists, type TillRow,
@@ -41,9 +42,11 @@ export function Till({ hotel, role }: { hotel: Hotel; role: string | null }) {
   const code = hotel.code;
   const cache = useQueryClient();
   const access = useAccess(code);
+  /* An order or a parcel whose outcome is unknown (MPOS-U1): let go by a read of the open orders begun after it. */
+  const opening = useScreenStop(parcelsStop(code, TILL_OUTLET));
   const orders = useQuery({
     queryKey: ["pos", code, "till", "orders"],
-    queryFn: () => api<{ businessDate: string; orders: TillRow[] }>(`/api/hotels/${code}/till/orders`),
+    queryFn: opening.watch(() => api<{ businessDate: string; orders: TillRow[] }>(`/api/hotels/${code}/till/orders`)),
   });
   /* The pad's own read, under its key: here only "no menu yet" and its failure (Till.tsx 299-326). */
   const menu = useQuery({
@@ -187,8 +190,10 @@ function StartAnOrder({ code, role, onOpened, onSay, onParcel }: {
   const [busy, setBusy] = useState(false);
   const [problem, setProblem] = useState<string | null>(null);
   const inFlight = useRef(false);
-  const once = useStuck();
-  const where = "the open orders below; to open another, leave this screen and come back";
+  /* Kept by the outlet, outside this card (MPOS-U1): leaving the screen and coming back lets nothing go;
+     a read of the open orders begun after the loss does. */
+  const once = useScreenStop(parcelsStop(code, TILL_OUTLET));
+  const where = "the open orders below - they are read again by pulling down";
   const unknown = notKnown("opened", where);
   const why = ringWhy(role);
 
@@ -200,7 +205,7 @@ function StartAnOrder({ code, role, onOpened, onSay, onParcel }: {
     setBusy(true);
     setProblem(null);
     try {
-      const order = await send<Order & { ok: true }>("POST", `/api/hotels/${code}/till/orders`, openBody(TILL_OUTLET, table));
+      const order = await once.guard(() => send<Order & { ok: true }>("POST", `/api/hotels/${code}/till/orders`, openBody(TILL_OUTLET, table)));
       setTable("");
       onOpened(order);
     } catch (e) {
@@ -228,8 +233,8 @@ function StartAnOrder({ code, role, onOpened, onSay, onParcel }: {
         />
         <Btn label="Open" primary icon={<Plus size={16} color={why || once.stuck ? c.grey600 : c.white} />} busy={busy}
           disabled={why != null || once.stuck} hint={why ?? (once.stuck ? unknown.line : undefined)} onPress={() => void open()} />
-        <Btn label="New parcel" icon={<ShoppingBag size={16} color={why ? c.grey500 : c.ink900} />} disabled={why != null} hint={why ?? undefined}
-          onPress={() => (why ? setProblem(why) : onParcel())} />
+        <Btn label="New parcel" icon={<ShoppingBag size={16} color={why || once.stuck ? c.grey500 : c.ink900} />} disabled={why != null || once.stuck} hint={why ?? (once.stuck ? unknown.line : undefined)}
+          onPress={() => (why ? setProblem(why) : once.isStuck() ? setProblem(unknown.line) : onParcel())} />
       </View>
       {problem ? <Problem text={problem} /> : null}
     </View>

@@ -7,11 +7,10 @@ import { ApiError, api, HeldError, send, type Hotel } from "../../core/api";
 import { cash, DASH } from "../../core/format";
 import { newKey } from "../../core/offline";
 import { c, face, space, t } from "../../core/theme";
-import { Capsule, notKnown, Screen, useStuck, ripple, shade, keys } from "../../core/ui";
+import { Capsule, notKnown, Screen, Stopped, useScreenStop, ripple, shade, keys } from "../../core/ui";
 import {
   CLOSE_FOR, closedLine, closure, kotLines, LEGEND, LOOK, maySetUpKots, openLabel, padHref, parcelTile, READY, startCard, takenLabel, tileLabel, tileOffers,
-  type FloorNow, type KotKind, type Tile as Table,
-} from "./floor";
+  type FloorNow, type KotKind, type Tile as Table, parcelsStop } from "./floor";
 import { draftedTables } from "./pad";
 import { PrintBill } from "./Pay";
 import { whyNotRing } from "./roles";
@@ -35,6 +34,8 @@ import {
 /** The web polls the floor every 30 s; the minutes are the point of a tile. */
 const FLOOR_MS = 30_000;
 const OUTLET = "REST";
+/** A parcel whose outcome was not known (MPOS-U1): the line on the floor and on New parcel. */
+const PARCEL_UNKNOWN = notKnown("opened", "the parcels on the floor").line;
 /** This phone's id for the KOT read: it is never a printing computer. */
 const DEVICE = newKey();
 
@@ -44,9 +45,12 @@ export function Tables({ hotel, role, onBack, onSignOut }: {
   const code = hotel.code;
   const cache = useQueryClient();
   const access = useAccess(code);
+  /* A parcel whose outcome is unknown (MPOS-U1): POST till/orders reads no key and a parcel has no
+     table to clash on, so New parcel stays grey until a read of the floor begun after it is back. */
+  const parcelStop = useScreenStop(parcelsStop(code, OUTLET));
   const floor = useQuery({
     queryKey: ["pos", code, "tables", "floor"],
-    queryFn: () => api<FloorNow>(`/api/hotels/${code}/till/floor?outlet=${OUTLET}`),
+    queryFn: parcelStop.watch(() => api<FloorNow>(`/api/hotels/${code}/till/floor?outlet=${OUTLET}`)),
   });
   const kot = useQuery({
     queryKey: ["pos", code, "tables", "kot"],
@@ -205,9 +209,10 @@ export function Tables({ hotel, role, onBack, onSignOut }: {
             {/* A parcel (D27-359): named by its customer, its pad opens at once. */}
             {!closed ? (
               <Btn label="New parcel" icon={<ShoppingBag size={16} color={c.ink900} />}
-                onPress={() => { if (ringReason) refuse("Not opened", ringReason); else setParcel(true); }}
-                disabled={ringReason != null} hint={ringReason ?? undefined} />
+                onPress={() => { if (ringReason) refuse("Not opened", ringReason); else if (!parcelStop.isStuck()) setParcel(true); }}
+                disabled={ringReason != null || parcelStop.stuck} hint={ringReason ?? (parcelStop.stuck ? PARCEL_UNKNOWN : undefined)} />
             ) : null}
+            {parcelStop.unknown ? <Stopped line={PARCEL_UNKNOWN} onRead={() => void floor.refetch()} /> : null}
             {closed ? (
               <Btn label={`Reopen ${outlet.name}`} size="md"
                 onPress={() => (ringReason ? refuse("Not reopened", ringReason) : void act("outlet", `/api/hotels/${code}/till/outlet/${outlet.code}/closed`, { closed: false },
@@ -292,7 +297,7 @@ export function Tables({ hotel, role, onBack, onSignOut }: {
 
       {parcel ? (
         <NewParcel
-          code={code} onCancel={() => setParcel(false)}
+          code={code} onCancel={() => { setParcel(false); if (parcelStop.isStuck()) void floor.refetch(); }}
           onHeld={(word) => { setParcel(false); setSaid(word); }}
           onOpened={(order, name) => {
             setParcel(false);
@@ -487,21 +492,22 @@ function NewParcel({ code, onCancel, onHeld, onOpened }: {
      The route reads no key: after an unknown outcome, no more taps until this
      is closed and the floor read again (MPOS-4). */
   const inFlight = useRef(false);
-  const once = useStuck();
+  const once = useScreenStop(parcelsStop(code, OUTLET));
+  const [dead, setDead] = useState(false);
   const unknown = notKnown("opened", "the parcels on the floor once this is closed");
 
   async function create() {
     const who = name.trim();
     if (!who) { setProblem("Whose parcel is it? Type the customer's name."); return; }
-    if (inFlight.current || once.isStuck()) return;
+    if (inFlight.current || dead || once.isStuck()) return;
     inFlight.current = true;
     setBusy(true);
     try {
-      const order = await send<Order & { ok: true }>("POST", `/api/hotels/${code}/till/orders`, { outlet: OUTLET, parcel: { name: who, phone: phone.trim() || null } });
+      const order = await once.guard(() => send<Order & { ok: true }>("POST", `/api/hotels/${code}/till/orders`, { outlet: OUTLET, parcel: { name: who, phone: phone.trim() || null } }));
       onOpened(order, who);
     } catch (e) {
       if (e instanceof HeldError) onHeld({ title: "Saved on this phone", body: e.message, tone: "held" });
-      else if (once.stop(e)) setProblem(`${unknown.title}. ${notKnown("opened", "the parcels on the floor once this is closed", e).body}`);
+      else if (once.stop(e)) { setDead(true); setProblem(`${unknown.title}. ${notKnown("opened", "the parcels on the floor once this is closed", e).body}`); }
       else setProblem(e instanceof ApiError || e instanceof Error ? e.message : String(e));
     } finally {
       inFlight.current = false;
@@ -511,11 +517,11 @@ function NewParcel({ code, onCancel, onHeld, onOpened }: {
 
   return (
     <Sheet
-      open onClose={onCancel} title="New parcel" gap={12}
+      open onClose={() => { if (!busy) onCancel(); }} title="New parcel" gap={12}
       footer={(
         <View style={{ flexDirection: "row", justifyContent: "flex-end", gap: 8 }}>
-          <Btn label="Cancel" size="md" onPress={onCancel} />
-          <Btn label="Open the parcel" size="md" primary busy={busy} disabled={once.stuck} hint={once.stuck ? unknown.line : undefined} onPress={() => void create()} />
+          <Btn label="Cancel" size="md" disabled={busy} onPress={onCancel} />
+          <Btn label="Open the parcel" size="md" primary busy={busy} disabled={dead || once.stuck} hint={dead || once.stuck ? unknown.line : undefined} onPress={() => void create()} />
         </View>
       )}
     >

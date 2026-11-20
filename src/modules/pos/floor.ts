@@ -204,3 +204,8 @@ export function kotLines(kinds: KotKind[], now = new Date()): { id: string; text
     return { id: k.id, text: `${k.name} KOTs wait: ${k.station.name} not seen since ${since(k.station.seenAt, now)}`, printing: false };
   });
 }
+
+/** The name of an outlet's parcel stop (core useScreenStop, MPOS-U1): POST till/orders reads no key and a
+    parcel or a counter order has no table to clash on, so one whose outcome is unknown greys opening
+    another at that outlet until a read of its floor begun after the loss is back. */
+export const parcelsStop = (code: string, outlet: string) => `pos/${code}/parcels/${outlet}`;
