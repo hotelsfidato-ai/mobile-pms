@@ -7,7 +7,7 @@ import type { Hotel } from "../../core/api";
 import { ExportButtons } from "../../core/Export";
 import { ON_THE_WEBSITE } from "../../core/menu";
 import { c, face, space, t } from "../../core/theme";
-import { Head, notKnown, Screen, useRead, useStuck } from "../../core/ui";
+import { Head, notKnown, ripple, Screen, useRead, useStuck } from "../../core/ui";
 import {
   Act, Back, body, Box, Btn, Dialog, Empty, Failed, Fact, Field, Foot, IconChip, InDialog, Input, Loading, NotYours, Pill,
   Refused, saidOf, Segmented, Select, Stale, Toast, type Said,
@@ -152,7 +152,7 @@ export function Register({ hotel, role, onBack }: { hotel: Hotel; role: string |
 function Line({ i, today, onPress }: { i: EquipmentItem; today: string; onPress: () => void }) {
   return (
     <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={`${i.name}, ${placeText(i)}, ${STATUS_LABEL[i.status]}`}
-      android_ripple={Platform.OS === "android" ? { color: c.grey200 } : undefined}
+      android_ripple={ripple}
       style={({ pressed }) => ({ backgroundColor: pressed && Platform.OS === "ios" ? c.grey50 : c.white, borderRadius: 12, borderWidth: 1, borderColor: c.grey200, paddingHorizontal: space.cardX, paddingVertical: space.cardY, overflow: "hidden" })}>
       <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
         <View style={{ flex: 1, gap: 6 }}>

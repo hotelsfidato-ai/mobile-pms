@@ -12,7 +12,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { HeldError } from "../../core/api";
 import { isOnline } from "../../core/offline";
 import { c, face, space, t } from "../../core/theme";
-import { Capsule } from "../../core/ui";
+import { Capsule, modalEdge, ripple as coreRipple, useSheetPad } from "../../core/ui";
 
 /* ══════════════════════════════════════════════════════════════════
    THE WEB KIT'S PIECES THE MINIBAR, THE CHECKLISTS AND EQUIPMENT USE
@@ -26,7 +26,8 @@ import { Capsule } from "../../core/ui";
    another module's; housekeeping's own screens keep theirs.
    ══════════════════════════════════════════════════════════════════ */
 
-const ripple = Platform.OS === "android" ? { color: c.grey200, borderless: false } : undefined;
+/** The core's Android ripple (src/core/ui.tsx, the native sweep); iPhone ignores it. */
+const ripple = coreRipple;
 /** The pressed shade on iPhone only: Android has its ripple (NATIVE.md, never both). */
 const pressedShade = (pressed: boolean, shade: string, rest: string) => (pressed && Platform.OS === "ios" ? shade : rest);
 
@@ -282,7 +283,7 @@ export function Dialog({ title, description, onClose, children }: {
   const { height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
   return (
-    <Modal visible transparent animationType="fade" onRequestClose={onClose} statusBarTranslucent>
+    <Modal visible transparent animationType="fade" onRequestClose={onClose} {...modalEdge}>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={{ flex: 1, backgroundColor: "rgba(3,23,40,0.25)", justifyContent: "center", paddingHorizontal: 16, paddingTop: insets.top, paddingBottom: insets.bottom }}
@@ -294,7 +295,7 @@ export function Dialog({ title, description, onClose, children }: {
               <Text style={t.heading} accessibilityRole="header">{title}</Text>
               {description ? <Text style={[t.label, { color: c.grey500, marginTop: 4, lineHeight: 21 }]}>{description}</Text> : null}
             </View>
-            <Pressable onPress={onClose} accessibilityRole="button" accessibilityLabel="Close" android_ripple={{ color: c.grey200, borderless: true }}
+            <Pressable onPress={onClose} accessibilityRole="button" accessibilityLabel="Close" android_ripple={{ ...coreRipple, borderless: true }}
               style={{ width: 44, height: 44, alignItems: "center", justifyContent: "center" }}>
               <X size={16} color={c.grey500} />
             </Pressable>
@@ -360,7 +361,7 @@ export function Select<T extends string>({ label, value, options, onChange, plac
   label: string; value: T; options: { value: T; label: string }[]; onChange: (v: T) => void; placeholder?: string; disabled?: boolean;
 }) {
   const [open, setOpen] = useState(false);
-  const insets = useSafeAreaInsets();
+  const pad = useSheetPad();
   const shown = options.find((o) => o.value === value)?.label ?? placeholder ?? "";
   return (
     <>
@@ -372,10 +373,10 @@ export function Select<T extends string>({ label, value, options, onChange, plac
         <Text style={{ flex: 1, fontSize: 16, color: disabled ? c.grey500 : c.ink900, ...face[500] }} numberOfLines={1}>{shown}</Text>
         <ChevronDown size={16} color={c.grey500} />
       </Pressable>
-      <Modal visible={open} transparent animationType="slide" onRequestClose={() => setOpen(false)} statusBarTranslucent>
+      <Modal visible={open} transparent animationType="slide" onRequestClose={() => setOpen(false)} {...modalEdge}>
         <View style={{ flex: 1, backgroundColor: "rgba(3,23,40,0.4)" }}>
           <Pressable style={{ flex: 1 }} onPress={() => setOpen(false)} accessibilityRole="button" accessibilityLabel="Close" />
-          <View style={{ backgroundColor: c.white, borderTopLeftRadius: 16, borderTopRightRadius: 16, paddingHorizontal: space.side, paddingTop: 16, paddingBottom: Math.max(insets.bottom, 16), gap: 4, maxHeight: "75%" }}>
+          <View style={{ backgroundColor: c.white, borderTopLeftRadius: 16, borderTopRightRadius: 16, paddingHorizontal: space.side, paddingTop: 16, paddingBottom: pad.bottom, gap: 4, maxHeight: "75%" }}>
             <Text style={[t.heading, { marginBottom: 4 }]} accessibilityRole="header">{label}</Text>
             <ScrollView>
               {options.map((o) => (

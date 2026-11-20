@@ -1,11 +1,11 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { ListChecks, Plus } from "lucide-react-native";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Alert, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import type { Hotel } from "../../core/api";
 import { ExportButtons } from "../../core/Export";
 import { c, space, t } from "../../core/theme";
-import { Head, notKnown, Screen, useRead, useStuck } from "../../core/ui";
+import { confirmAct, Head, notKnown, Screen, useRead, useStuck } from "../../core/ui";
 import { dateTime } from "../night-audit/audit";
 import {
   failedText, itemsHint, itemsOf, JOB_LABELS, JOBS, listsEmpty, listTitle, newListBody, REMOVED, roomTypeText, RUN_COLUMNS,
@@ -223,11 +223,7 @@ function ListDialog({ code, d, list, onClose, onDone }: {
   }
 
   /* The web removes at once; a destructive act on the phone asks first, in the web's words (BRIEF-T3). */
-  const askRemove = () => Alert.alert(
-    "Remove this checklist?",
-    "What was ticked with it stays on each room's record.",
-    [{ text: "Cancel", style: "cancel" }, { text: "Remove", style: "destructive", onPress: () => void run("remove") }],
-  );
+  const askRemove = () => confirmAct("Remove this checklist?", "What was ticked with it stays on each room's record.", "Remove", () => void run("remove"));
 
   return (
     <Dialog title={list ? listTitle(list) : "Add a checklist"} description="One item per line, in the order it is done." onClose={onClose}>
