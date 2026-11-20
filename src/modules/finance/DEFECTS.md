@@ -58,3 +58,27 @@ formatter, `rupees`, to the paisa on the core's dash; `owedLine` says the server
 word; `startAmount` starts blank when nothing is owed; `typedShown` dashes nothing typed; each in
 `bill.check.ts`, the clamp broken once and seen to fail. **The rule:** on a bill a figure is shown as
 the server sent it - never rounded, never clamped - and a dash means only "not sent".
+
+---
+
+# Lane B, m13-fin-bills (19-20 Nov)
+
+## MFIN-B1 · The stay's Issue sheet does not stop on an unknown outcome (open, not this lane's file)
+
+`Issue.tsx` IssueSheet (the Bill tab's tax invoice) shows any failure as a refusal and leaves Issue
+pressable: after a lost reply a second tap is a second request. The server answers a repeat with the
+invoice already made (invoices.ts "duplicate"), so no second number is taken, but the person reads
+"Could not reach the server" over an invoice that may exist. **Found** reading Issue.tsx against MEMORY
+16 while building Invoices (20 Nov). **Done:** not changed (not this lane's file); Invoices' own sheet
+latches the tap, stops on `outcomeUnknown` with "Not known whether it was issued: look at the Issued
+list…", and reads the list again on close. **The rule:** every write's sheet uses `useStuck` /
+`notKnown`, even where the server de-duplicates by state.
+
+## MFIN-B2 · The web's money tiles are the browser's sums (a difference, asked of the PMS)
+
+Folios' Outstanding, Overpaid and Net position and Payments' per-method tiles and Total received are
+added up in the browser (`Folios.tsx` 47-51, `billing.ts` paymentsByMethod); no read sends them.
+**Found** mapping the web twin (19 Nov). **Done:** the phone counts rows and shows a dash for the
+figure, with a line saying why (MODULE.md differences 1-2; `books.check.ts` proves no amount is made).
+**The rule:** where the web sums money in the browser, the phone shows the server's rows and asks the
+API for the total.
