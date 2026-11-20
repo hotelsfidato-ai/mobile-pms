@@ -7,7 +7,7 @@ import type { Hotel } from "../../core/api";
 import { isOnline } from "../../core/offline";
 import { c, face, space, t } from "../../core/theme";
 import type { Stay } from "../../core/types";
-import { Capsule, Card, Head, ReadFailed, Row, Screen, s, useRead } from "../../core/ui";
+import { Capsule, Card, Head, ReadFailed, Row, Screen, s, useRead, ripple } from "../../core/ui";
 import {
   billName, chargesToCome, closingWord, dateDay, headline, inSections, rupees, settleIsMain, whyNotAddTo,
   type BillLine, type DeskRules, type StayBill, type StayFolio,
@@ -191,7 +191,7 @@ function BillStrip({ folios, everything, active, onPick }: { folios: StayFolio[]
   const tab = (key: string, id: string | null, label: string, balance: number | null) => {
     const on = active === id;
     return (
-      <Pressable
+      <Pressable android_ripple={ripple}
         key={key} onPress={() => onPick(id)} accessibilityRole="button" accessibilityState={{ selected: on }} accessibilityLabel={`${label}, ${rupees(balance)}`}
         style={{ minHeight: 44, paddingHorizontal: 14, paddingVertical: 6, borderRadius: 8, borderWidth: 1, borderColor: on ? c.orange : c.grey200, backgroundColor: on ? c.orange50 : c.white }}
       >
