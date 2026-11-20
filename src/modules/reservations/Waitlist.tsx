@@ -5,7 +5,7 @@ import { ActivityIndicator, Linking, Pressable, Text, View } from "react-native"
 import { type Hotel, outcomeUnknown } from "../../core/api";
 import { ExportButtons } from "../../core/Export";
 import { c, face, space, t } from "../../core/theme";
-import { Card, notKnown, Screen, useRead, useStuck } from "../../core/ui";
+import { Capsule, Card, notKnown, Screen, useRead } from "../../core/ui";
 import { dateDay } from "../finance/bill";
 import { addDays } from "../front-desk/desk";
 import { Choice } from "../finance/Kit";
@@ -17,7 +17,7 @@ import { moveArrival } from "./book";
 import { Panel, Said as SaidLine, Sheet } from "./GroupKit";
 import { whyNotUnwaitlist, whyNotWaitlist } from "./groupRoles";
 import { addToWaitlist, readTypes, readWaitlist, removeFromWaitlist } from "./groupsData";
-import { bodyOf, freePill, nightsWord, PARTS, partsOf, typesOf, waitlistTable, wrongOf, type WaitlistEntry, type WaitlistInput } from "./waitlist";
+import { bodyOf, freePill, nightsWord, PARTS, partsOf, stillUnknown, typesOf, waitlistTable, wrongOf, type WaitlistEntry, type WaitlistInput } from "./waitlist";
 
 /* ══════════════════════════════════════════════════════════════════
    THE WAITLIST — the web's /h/:code/waitlist (src/modules/reservations/
@@ -45,6 +45,14 @@ export function Waitlist({ hotel, role }: { hotel: Hotel; role: string | null })
   const [removing, setRemoving] = useState<WaitlistEntry | null>(null);
   const [toast, setToast] = useState<Said | null>(null);
   useEffect(() => { if (!read.loading) setPulled(false); }, [read.loading]);
+  /* AN ADD NOBODY KNOWS THE END OF (MRS-G3): kept by the screen, not the sheet,
+     so closing the sheet lets nothing go. Add stays grey until a read of the
+     waitlist that finished after this moment came back good (stillUnknown). */
+  const [unknownAt, setUnknownAt] = useState<number | null>(null);
+  const state = qc.getQueryState(["reservations", code, "waitlist"]);
+  const addStuck = stillUnknown(unknownAt, state?.dataUpdatedAt ?? 0, state?.error ?? null);
+  useEffect(() => { if (unknownAt !== null && !addStuck) setUnknownAt(null); }, [unknownAt, addStuck]);
+  const stuckLine = notKnown("added", "the Waitlist").line;
 
   const list = read.data;
   const entries = list?.entries ?? [];
@@ -62,8 +70,14 @@ export function Waitlist({ hotel, role }: { hotel: Hotel; role: string | null })
           <View style={{ gap: 12 }}>
             <ExportButtons table={list ? waitlistTable(entries, hotel.name, dateDay, dateTime) : null} />
             <View style={{ flexDirection: "row" }}>
-              <Button label="Put a guest on the waitlist" kind="primary" Icon={Plus} reason={addWhy ?? (kinds.length === 0 ? "" : null)} onRefused={why} onPress={() => setAdding(true)} />
+              <Button label="Put a guest on the waitlist" kind="primary" Icon={Plus} reason={addWhy ?? (addStuck ? stuckLine : kinds.length === 0 ? "" : null)} onRefused={why} onPress={() => setAdding(true)} />
             </View>
+            {addStuck ? (
+              <View accessibilityRole="alert" style={{ gap: 8, padding: space.card, borderRadius: 12, backgroundColor: c.red50 }}>
+                <Text style={[t.label, face[600], { color: c.red700 }]}>{stuckLine}</Text>
+                <View style={{ flexDirection: "row" }}><Capsule label="Read the waitlist again" onPress={read.reload} /></View>
+              </View>
+            ) : null}
           </View>
         </PageHead>
 
@@ -83,7 +97,8 @@ export function Waitlist({ hotel, role }: { hotel: Hotel; role: string | null })
 
       {adding ? (
         <AddSheet
-          code={code} today={hotel.businessDate} types={kinds} onClose={() => { setAdding(false); reread(); }}
+          code={code} today={hotel.businessDate} types={kinds} stuck={addStuck} stuckLine={stuckLine} onClose={() => { setAdding(false); reread(); }}
+          onUnknown={() => { setUnknownAt(Date.now()); reread(); }}
           onAdded={(name) => {
             setAdding(false);
             setToast({ title: `${name} is on the waitlist`, body: "When a room frees up for those nights, the Waitlist shows it. Nobody is told by the system.", tone: "ok" });
@@ -141,20 +156,22 @@ function Row({ e, first, canBook, bookWhy, removeWhy, onRefused, onRemove }: {
 }
 
 /** WaitlistDialog.tsx: name, phone, the nights, the room type, a note. */
-function AddSheet({ code, today, types, onClose, onAdded }: {
-  code: string; today: string; types: Array<{ id: string; name: string }>; onClose: () => void; onAdded: (name: string) => void;
+function AddSheet({ code, today, types, stuck, stuckLine, onClose, onAdded, onUnknown }: {
+  code: string; today: string; types: Array<{ id: string; name: string }>; stuck: boolean; stuckLine: string;
+  onClose: () => void; onAdded: (name: string) => void;
+  /** Told to the SCREEN, which keeps the moment whatever becomes of this sheet. */
+  onUnknown: () => void;
 }) {
   /* The web's date boxes start empty; a day stepper needs a day (M-7): the business date and one night. */
   const [form, setForm] = useState<WaitlistInput>({ guestName: "", phone: "", roomTypeId: types[0]?.id ?? "", arrival: today, departure: addDays(today, 1), note: "" });
   const [busy, setBusy] = useState(false);
   const [said, setSaid] = useState<string | null>(null);
   const going = useRef(false);
-  const stuck = useStuck();
   const set = (k: keyof WaitlistInput) => (v: string) => setForm((f) => ({ ...f, [k]: v }));
   const wrong = wrongOf(form);
 
   async function save() {
-    if (going.current || stuck.isStuck()) return;
+    if (going.current || stuck) return;
     going.current = true;
     setBusy(true);
     setSaid(null);
@@ -163,7 +180,7 @@ function AddSheet({ code, today, types, onClose, onAdded }: {
       onAdded(form.guestName.trim());
     } catch (e) {
       /* POST /waitlist reads no key: a second tap after a lost reply would put them on twice. */
-      if (stuck.stop(e)) setSaid(notKnown("added", "the Waitlist", e).line);
+      if (outcomeUnknown(e)) { onUnknown(); setSaid(notKnown("added", "the Waitlist", e).line); }
       else setSaid(`Not added. ${e instanceof Error ? e.message : String(e)}`);
     } finally {
       going.current = false;
@@ -173,13 +190,13 @@ function AddSheet({ code, today, types, onClose, onAdded }: {
 
   return (
     <Sheet
-      title="Put on the waitlist" onClose={onClose}
+      title="Put on the waitlist" onClose={onClose} busy={busy}
       description="For nights and a room type that are full. When a room frees up, the Waitlist shows it; the desk decides."
       foot={(
         <>
-          <Button label="Cancel" onPress={onClose} />
+          <Button label="Cancel" reason={busy ? "" : null} onPress={onClose} />
           <Button label="Add to the waitlist" kind="primary" busy={busy}
-            reason={stuck.stuck ? notKnown("added", "the Waitlist").line : wrong}
+            reason={stuck ? stuckLine : wrong}
             onRefused={(w) => { if (w) setSaid(w); }} onPress={() => void save()} />
         </>
       )}
@@ -236,11 +253,11 @@ function RemoveSheet({ code, entry: e, onClose, onRemoved }: { code: string; ent
 
   return (
     <Sheet
-      title="Take off the waitlist" onClose={onClose}
+      title="Take off the waitlist" onClose={onClose} busy={busy}
       description={`${e.guestName}, ${e.roomType}, ${dateDay(e.arrival)} → ${dateDay(e.departure)}. Kept in the record.`}
       foot={(
         <>
-          <Button label="Cancel" onPress={onClose} />
+          <Button label="Cancel" reason={busy ? "" : null} onPress={onClose} />
           <Button label="Remove" kind="primary" busy={busy} onPress={() => void remove()} />
         </>
       )}

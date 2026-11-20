@@ -49,11 +49,15 @@ export function Tile({ icon, tone, label, value, missing, note }: {
 }
 
 /** The web's Dialog at phone width: a sheet from the bottom, clear of the home
-    indicator, lifted over the keyboard; Android's back and a tap above close it. */
-export function Sheet({ title, description, onClose, children, foot }: {
+    indicator, lifted over the keyboard; Android's back and a tap above close it,
+    never while its write is on its way. */
+export function Sheet({ title, description, onClose: close, children, foot, busy }: {
   title: string; description?: string; onClose: () => void; children: ReactNode; foot: ReactNode;
+  /** A write on its way: neither a tap above nor Android's back closes the sheet until it ends (the review of 20 Nov). */
+  busy?: boolean;
 }) {
   const insets = useSafeAreaInsets();
+  const onClose = () => { if (!busy) close(); };
   return (
     <Modal visible transparent statusBarTranslucent animationType={Platform.OS === "web" ? "none" : "slide"} onRequestClose={onClose}>
       <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : "height"}>

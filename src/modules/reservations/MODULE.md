@@ -127,7 +127,9 @@ the key; a lost reply keeps it until the group is read again; Settle then EMPTIE
 "Not known whether it was taken" (MEMORY 16). Opening the host account, the lead, routing and the
 invoice are safe to repeat (the server answers the same, the invoice `duplicate`): on an unknown
 outcome the phone says "Not known whether it was …" and reads the group again. Add to the waitlist
-reads no key: on an unknown outcome its button stops (`useStuck`) until the sheet is closed (MRS-G1).
+reads no key: on an unknown outcome the SCREEN keeps the moment and greys Add (in the sheet and on the
+page) until a read of the waitlist that finished after it came back good (`stillUnknown`, MRS-G1, MRS-G3).
+A sheet does not close while its write is on its way.
 Every write is latched at the tap.
 
 **Where the phone differs from the web**

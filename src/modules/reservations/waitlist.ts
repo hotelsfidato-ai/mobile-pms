@@ -93,3 +93,15 @@ export function waitlistTable(entries: readonly WaitlistEntry[], hotel: string, 
     rows: [...part(p.free, "A room is free now"), ...part(p.full, "Still full"), ...part(p.passed, "Arrival has passed")],
   };
 }
+
+/* ── Add's unknown outcome (MEMORY 16; the independent review of 20 Nov) ── */
+
+/** POST /waitlist reads no key, so after an add whose outcome is unknown (at
+    `moment`, ms) Add stays stopped until a read of the waitlist that FINISHED
+    after that moment came back without an error: only then does the person
+    see whether the guest is on it. Not a re-read begun, not one that failed,
+    not one that landed before. Null moment: nothing unknown. */
+export function stillUnknown(moment: number | null, dataUpdatedAt: number, error: unknown): boolean {
+  if (moment === null) return false;
+  return error != null || !(dataUpdatedAt > moment);
+}

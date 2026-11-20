@@ -91,10 +91,10 @@ export function GroupSettle({ hotel, groupId, payer, balance, role, onClose, onT
 
   return (
     <Sheet
-      title="Settle bill" description={`${owedLine(balance)} · ${payer}`} onClose={onClose}
+      title="Settle bill" description={`${owedLine(balance)} · ${payer}`} onClose={onClose} busy={busy}
       foot={(
         <>
-          <Btn kind="ghost" label="Cancel" onPress={onClose} />
+          <Btn kind="ghost" label="Cancel" off={busy} onPress={onClose} />
           <Btn kind="primary" label={allowing ? "Allow, with reason" : "Take payment"} busy={busy} off={off} onPress={() => void once(take)} />
         </>
       )}

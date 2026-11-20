@@ -7,7 +7,7 @@ import {
   type GroupDetail, type GroupRoom, type StayGroup,
 } from "./groups.ts";
 import { whyNotChangeBill, whyNotChangeBooking, whyNotCharge, whyNotInvoice, whyNotPay, whyNotUnwaitlist, whyNotWaitlist } from "./groupRoles.ts";
-import { bodyOf, freePill, nights, nightsWord, partsOf, typesOf, waitlistTable, wrongOf, type WaitlistEntry } from "./waitlist.ts";
+import { bodyOf, freePill, nights, nightsWord, partsOf, stillUnknown, typesOf, waitlistTable, wrongOf, type WaitlistEntry } from "./waitlist.ts";
 
 const eq = (got: unknown, want: unknown, what: string) => {
   if (JSON.stringify(got) !== JSON.stringify(want)) throw new Error(`${what}: got ${JSON.stringify(got)}, want ${JSON.stringify(want)}`);
@@ -133,4 +133,11 @@ eq("totals" in gt, false, "no totals row: the server sends none");
 const wt = waitlistTable([e("a", 0), e("b", 2), e("c", null)], "Fidato Agra", dateDay, () => "16 Nov 2026, 3:30 PM");
 eq(wt.rows.map((r) => `${r[0]}|${r[6]}`), ["A room is free now|2", "Still full|0", "Arrival has passed|-"], "three parts in order; passed has no free count");
 eq(wt.rows[0]![2], "-", "a phone withheld is a dash");
+/* Add stays stopped after an unknown outcome until a good read finished after it (MEMORY 16). */
+eq(stillUnknown(null, 0, null), false, "nothing unknown: Add is free");
+eq(stillUnknown(1000, 900, null), true, "the last read landed before the unknown moment: still stopped");
+eq(stillUnknown(1000, 1000, null), true, "a read at the same instant is not after it");
+eq(stillUnknown(1000, 1500, new Error("offline")), true, "a re-read that failed lets nothing go");
+eq(stillUnknown(1000, 1500, null), false, "a good read finished after the moment: the person sees the list");
+
 console.log("groups.check: ok");
