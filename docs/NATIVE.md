@@ -41,6 +41,9 @@ installed (no new package without the owner's yes).
   ~57.0.2).
 - **Nothing automatic (M-17):** no `expo-updates`, no over-the-air update, no store; testing is in
   Expo Go from the PC.
+- **The core pieces (M-16):** `src/core/pickers.ts` (pickPhoto, pickFile), `upload.ts` (sendForm,
+  base64For) with `files.ts` (the web's and the server's file limits), `DateField.tsx` (DateField,
+  TimeField), `Download.tsx` (downloadToShare); what each greyed control needs: `docs/PICKERS.md`.
 
 ## Designed for a phone, with room
 - The side margin is `space.side` (20); cards `space.cardX` / `space.cardY` (16 / 14); between

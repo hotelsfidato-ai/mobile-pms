@@ -34,8 +34,10 @@ export const setDevSubject = (subject: string | null) => {
 export const currentSubject = () => (__DEV__ && devSubject ? devSubject : auth?.currentUser?.uid ?? "");
 
 /* Awaited inside each request's try, as on the web: offline with an expired
-   token, getIdToken fails as the request would, and a write is held, not lost. */
-async function who(): Promise<Record<string, string>> {
+   token, getIdToken fails as the request would, and a write is held, not lost.
+   Exported for a form upload and a file download (upload.ts, Download.tsx):
+   the same sign-in, the same development header. */
+export async function who(): Promise<Record<string, string>> {
   if (__DEV__ && devSubject) return { "x-dev-staff-id": devSubject };
   const user = auth?.currentUser;
   /* getIdToken refreshes when the token is near expiry, so a clerk on a
@@ -71,7 +73,8 @@ export class HeldError extends Error {
   }
 }
 
-async function refused(response: Response): Promise<ApiError> {
+/** The server's refusal as an ApiError (its own sentence); upload.ts and Download.tsx read it the same way. */
+export async function refused(response: Response): Promise<ApiError> {
   const body = (await response.json().catch(() => null)) as
     | { error?: string; reason?: string; message?: string; needs?: string } | null;
   return new ApiError(
