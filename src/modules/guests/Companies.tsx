@@ -14,6 +14,8 @@ import {
   commissionWords, companyRows, groupLine, groupsOf, KIND_COPY, owed, revenueWords, splitOf, type CompanyRecord,
 } from "./lookup";
 import { ON_THE_WEBSITE, whyNotAddCompany, whyNotChangeCompany, whyNotCompanies } from "./roles";
+import { ListExport } from "../reports/ListExport";
+import { companyTable } from "./exports";
 
 /* ══════════════════════════════════════════════════════════════════
    COMPANIES AND AGENTS on a phone — the web's /companies
@@ -69,6 +71,7 @@ export function Companies({ hotel, role }: { hotel: Hotel; role: string | null }
           </Text>
         </View>
       </PageHead>
+      <ListExport screen="companies" role={role} table={booked ? companyTable(groups.flatMap((g) => g.rows)) : null} />
 
       {/* THE SPLIT, before the detail (the web's order): shares of the revenue that has a source. */}
       {split ? (
