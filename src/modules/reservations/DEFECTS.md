@@ -34,3 +34,36 @@ alone (its keeper per booking was already there; the payments route reads the ke
 repeat: Assign room (the server refuses "already in room …"), check in ("Already checked in"), confirm
 a waiting booking, Room type / Floor (a preference). **Rule:** an unknown outcome on a route without a
 key stops the button.
+
+## Lane m13-groups (20 Nov)
+
+### MRS-G1 · Putting a guest on the waitlist twice after a lost reply (20 Nov)
+
+**What:** `POST /waitlist` reads no idempotency key and inserts a row each time; the web's dialog keeps
+its button live after a failure, so a lost reply then a second tap puts the guest on twice. **Found:**
+reading `api/src/modules/reservations/waitlist.ts` while porting. **Done:** on `outcomeUnknown(e)` the
+phone says "Not known whether it was added: look at the Waitlist before trying again" and the button
+takes no more taps until the sheet is closed and the list read (`useStuck`); asked of the PMS (the
+report). **Rule:** a write on a route without a key stops on an unknown outcome (MEMORY 16).
+
+### MRS-G2 · Book from the waitlist cannot reach the phone's New booking (20 Nov)
+
+**What:** the web's Book opens `/h/:code/book?waitlist=<id>`, which fills the form from the entry and
+sends `waitlistId` so saving takes the guest off the list. The phone's New booking (another lane's file)
+reads only `room` and `date`. Opening it without the entry would book the guest and leave them waiting.
+**Found:** mapping the web twin. **Done:** Book is greyed "On the website for now"; the change is in the
+report for the mobile chat. **Rule:** a door that opens another screen carries what that screen needs,
+or stays shut with its reason.
+
+### MRS-G3 · Add to the waitlist let go before the list was really read again (20 Nov)
+
+**What:** MRS-G1's stop lived inside the Add sheet (`useStuck`); closing the sheet only asked for the
+list again, and the sheet closed on a tap above, Cancel or Android's back even while the add was on
+its way. A lost reply, a re-read that failed or landed before the commit, then a fresh sheet: the
+guest added twice (POST /waitlist reads no key). **Found:** the independent review of this lane.
+**Done:** the screen keeps the unknown moment; Add (on the page and in the sheet) is grey with "Not
+known whether it was added: look at the Waitlist before trying again" until a waitlist read that
+finished after that moment came back without an error (`stillUnknown` in waitlist.ts, checked, broken
+once); "Read the waitlist again" beside it; the sheets (Add, Remove, Settle) do not close while their
+write is on its way. **Rule:** an unknown outcome is held by the screen that outlives the dialog, and
+only a good read finished after it lets it go (MEMORY 16, as guests' SamePerson).

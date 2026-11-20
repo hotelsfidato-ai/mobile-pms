@@ -970,6 +970,9 @@ export const PHONE_ROUTES: Readonly<Record<string, string>> = {
   /* mobile/m13-pos-setup (19 Nov): the Menu and Restaurant setup */
   "/pos/:code/menu": "/pos/:code/menu",
   "/pos/:code/setup": "/pos/:code/setup",
+  /* mobile/m13-groups (19 Nov): Groups (one group under it) and the Waitlist (16 Nov release) */
+  "/h/:code/groups": "/reservations/:code/groups",
+  "/h/:code/waitlist": "/reservations/:code/waitlist",
   /* mobile/t2-revenue (4 Nov) */
   "/h/:code/revenue-outlook": "/revenue/:code",
   /* mobile/t2-crs (4 Nov) */
