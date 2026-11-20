@@ -56,3 +56,37 @@ None yet.
   draws it (`sheets.ts`); pinned in no check.
 - `heldText` on the Store floors a negative drink (-0.5 of a 750 ml bottle reads "-1 + 375 ml");
   the bar sheet's `held` keeps the sign. Ported as each page draws it.
+
+---
+
+# m13-stops (20 Nov)
+
+## MST-U1 · Receive, Issue, Move and Correct could be sent again after an unknown outcome
+
+The Act and Transfer dialogs (POST /stores/movements, /stores/transfers: no key) and Count a store (POST
+/stores/counts, no key; it refuses a line whose book moved, but a count that matched every line is written
+twice) held their stop in the dialog or screen: reopened, a second receipt or move went. **Found** by the m13-stops sweep (grep for `useStuck` / `outcomeUnknown` inside sheets), reading the API to see which routes read the key.
+**Done:** the shelf's stop (`STOP.shelf`, shared by the Store and Count a store, which read the same
+record) greys Receive, Issue, More's acts and Save the count, says why above the list, and is let go by a
+read of the shelf begun after the loss; closing a stopped dialog reads it again; dialogs cannot close
+while a write is on its way; Count takes its book only from a read after the loss. **The rule:** a write on a route that reads no idempotency key keeps its stop OUTSIDE the sheet and the screen (core `useScreenStop`, by name), stopped while it is on its way, and let go only by a read of the record that BEGAN after the loss and came back good.
+
+## MST-U2 · The kitchen's and the bar's closing count, after an unknown outcome
+
+POST /kitchen-stock/count and /bar/count read no key (book-checked like the store's count, so only an
+all-matching count repeats). Switching to Recipes, Requests or another day remounted the card. **Done:**
+`STOP.kitchen`, `STOP.bar(place)`: Save stays grey until a read of TODAY's sheet (of that place) begun after
+the loss. Marking the bar closed or open sets a value: no stop.
+
+## MST-U3 · Ask the store, sent twice
+
+POST /bar/requests reads no key: a second ask is a second request. Switching segments remounted Requests.
+**Done:** `STOP.requests`: Ask the store grey until a read of the requests begun after the loss. Approve
+and Reject are refused once decided ("This ask was approved already"): no stop. History's Undo is refused
+once undone ("already reversed"): left as it was.
+
+**The review of 20 Nov (on 5fc5064):** Count a store and the kitchen's, bar's and requests' cards kept a
+never-reset ref beside the screen stop: after the stop was let go, Save stayed grey with no reason, or a
+button looked live and did nothing. The refs are gone (the latch resets in `finally`); on an unknown
+outcome the count, the draft or the ask is emptied, and Count a store takes its book again only from the
+read that let the stop go. The kitchen's Save checks the stop at the tap. `STOP.history` (unused) dropped.

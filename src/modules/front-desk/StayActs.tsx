@@ -7,11 +7,11 @@ import { Pressable, ScrollView, Text, View } from "react-native";
 import { HeldError, type Hotel } from "../../core/api";
 import { cash } from "../../core/format";
 import { c, t } from "../../core/theme";
-import { notKnown, useRead, useStuck, ripple, shade } from "../../core/ui";
+import { notKnown, useRead, useScreenStop, ripple, shade } from "../../core/ui";
 import { Day } from "../housekeeping/DayStepper";
 import {
   addStayInclusion, amendStay, cancelConfirmed, cancelPreview, cancelWaiting, confirmWaiting, exchangeRooms, moveRoom, readExchangeable, readInclusions,
-  readReasons, readStayInclusions, removeStayInclusion, said, unassignRoom, voidStay, type DeskStay,
+  inclusionsStop, readReasons, readStayInclusions, removeStayInclusion, said, stayStop, SWAP_UNKNOWN, unassignRoom, voidStay, type DeskStay,
 } from "./data";
 import { addDays, amendLine, amendWrong, day, MOVE_REASONS, nightsBetween } from "./desk";
 import { body, Box, Button, Field, FormSheet, Pick, Pill, Sheet, Toggle, WEBSITE, type Said } from "./kit";
@@ -38,7 +38,9 @@ export function MoreOptions({ hotel, stay, role, onSaid }: { hotel: Hotel; stay:
   const over = stay.status === "no-show";
   const waiting = stay.status === "tentative";
   const done = (s: Said) => { setAct(null); onSaid(s); void cache.invalidateQueries(); };
-  const close = () => setAct(null);
+  /* An exchange whose outcome is unknown stops Exchange on this stay (MFD-U1); closing reads the stay again. */
+  const swap = useScreenStop(stayStop(code, stay.id));
+  const close = () => { setAct(null); if (swap.isStuck()) void cache.invalidateQueries({ queryKey: ["front-desk", code, "stay", stay.id] }); };
 
   const confirm = async () => {
     setAct(null);
@@ -64,7 +66,7 @@ export function MoreOptions({ hotel, stay, role, onSaid }: { hotel: Hotel; stay:
             Icon={ArrowLeftRight} label="Move to another room" onPress={() => setAct("move")}
             reason={arrived ? null : over ? "This stay is over." : "They have not arrived yet - change the room with Assign room on the Calendar."}
           />
-          <Item Icon={Repeat} label="Exchange with another guest" reason={arrived ? null : notArrived} onPress={() => setAct("swap")} />
+          <Item Icon={Repeat} label="Exchange with another guest" reason={arrived ? (swap.stuck ? SWAP_UNKNOWN : null) : notArrived} onPress={() => { if (!swap.isStuck()) setAct("swap"); }} />
           <Group title="The rate" />
           <Item Icon={Gift} label="What this booking includes" onPress={() => setAct("inclusions")} />
           {mayGiveComp(role) && stay.status === "due-in" ? <Item Icon={IndianRupee} label="Change rate" reason={WEBSITE} onPress={close} /> : null}
@@ -252,25 +254,29 @@ function Exchange({ code, stay, businessDate, onClose, onDone }: { code: string;
   /* A second exchange swaps them back, and the route reads no key: one tap,
      and none after an unknown outcome until the stay is seen (MFD-8). */
   const latch = useRef(false);
-  const once = useStuck();
+  const once = useScreenStop(stayStop(code, stay.id));
+  const [dead, setDead] = useState(false);
 
   const submit = async () => {
-    if (latch.current || once.isStuck()) return;
+    if (latch.current || dead || once.isStuck()) return;
     latch.current = true;
     setBusy(true);
     try {
-      const r = await exchangeRooms(code, stay.id, { withStayId: withId, from, reason: reason.trim() });
+      /* The exchange is symmetric (stayExtras.ts): the doubt is the OTHER stay's too, whose Exchange would swap them back. */
+      const r = await once.guard(() => exchangeRooms(code, stay.id, { withStayId: withId, from, reason: reason.trim() }), stayStop(code, withId));
       onDone({ title: "Rooms exchanged", body: `${stay.guest} moves to ${r.to}, ${chosen?.guest ?? "the other guest"} to ${r.from}, from ${day(from)}.`, tone: "ok" });
     } catch (e) {
       setBusy(false);
-      setBad(once.stop(e) ? { ...notKnown("exchanged", `both stays' rooms`, e), tone: "bad" } : { title: "Not exchanged", body: said(e), tone: "bad" });
+      const unknown = once.stop(e, stayStop(code, withId));
+      if (unknown) setDead(true);
+      setBad(unknown ? { ...notKnown("exchanged", `both stays' rooms`, e), tone: "bad" } : { title: "Not exchanged", body: said(e), tone: "bad" });
     } finally { latch.current = false; }
   };
 
   return (
     <FormSheet
-      title={`Exchange ${stay.guest}'s room`} description={`${stay.reference} · currently in ${stay.roomNumber}`} onClose={onClose} said={bad} onSaid={setBad}
-      foot={<Foot onCancel={onClose}><Button label="Exchange" kind="primary" size="lg" Icon={ArrowLeftRight} busy={busy} reason={once.stuck ? notKnown("exchanged", "both stays' rooms").line : withId && reason.trim() ? null : ""} onPress={() => void submit()} /></Foot>}
+      title={`Exchange ${stay.guest}'s room`} description={`${stay.reference} · currently in ${stay.roomNumber}`} onClose={() => { if (!busy) onClose(); }} said={bad} onSaid={setBad}
+      foot={<Foot onCancel={() => { if (!busy) onClose(); }}><Button label="Exchange" kind="primary" size="lg" Icon={ArrowLeftRight} busy={busy} reason={dead || once.stuck ? notKnown("exchanged", "both stays' rooms").line : withId && reason.trim() ? null : ""} onPress={() => void submit()} /></Foot>}
     >
       {list.length === 0 ? (
         <View style={{ gap: 6, paddingVertical: 24 }}>
@@ -315,7 +321,10 @@ function Exchange({ code, stay, businessDate, onClose, onDone }: { code: string;
 /* ── What this booking includes (InclusionsFlow.tsx) ─────────────── */
 function Inclusions({ code, stay, onClose }: { code: string; stay: DeskStay; onClose: () => void }) {
   const key = ["front-desk", code, "stay-inclusions", stay.id];
-  const lines = useRead(() => readStayInclusions(code, stay.id), key);
+  /* An add whose outcome is unknown (MFD-U2): kept by this stay's list, outside the sheet; let go by a
+     read of the list begun after it, which this sheet shows. */
+  const once = useScreenStop(inclusionsStop(code, stay.id));
+  const lines = useRead(once.watch(() => readStayInclusions(code, stay.id)), key);
   const catalogue = useRead(() => readInclusions(code), ["front-desk", code, "inclusions"]);
   const cache = useQueryClient();
   const [adding, setAdding] = useState(false);
@@ -328,18 +337,23 @@ function Inclusions({ code, stay, onClose }: { code: string; stay: DeskStay; onC
   /* A second add is a second line, and the route reads no key: one tap, and
      none after an unknown outcome until this is closed (MFD-8). */
   const latch = useRef(false);
-  const once = useStuck();
+  /* Dead after an unknown add until the sheet is closed: the read that refresh() starts must not give
+     Add back in this same open view (MFD-U2, the review). */
+  const [dead, setDead] = useState(false);
 
   const add = async () => {
-    if (latch.current || once.isStuck()) return;
+    if (latch.current || dead || once.isStuck()) return;
     latch.current = true;
     setBusy(true);
     try {
-      await addStayInclusion(code, stay.id, { ...(pick ? { inclusionId: pick } : { name: name.trim() }), quantity: Number(qty) || 1 });
+      await once.guard(() => addStayInclusion(code, stay.id, { ...(pick ? { inclusionId: pick } : { name: name.trim() }), quantity: Number(qty) || 1 }));
       setAdding(false); setPick(""); setName(""); setQty("1");
       refresh();
     } catch (e) {
-      if (once.stop(e)) { setBad({ ...notKnown("added", "this list once it is opened again", e), tone: "bad" }); refresh(); }
+      if (once.stop(e)) {
+        setDead(true); setPick(""); setName(""); setQty("1");
+        setBad({ ...notKnown("added", "this list once it is opened again", e), tone: "bad" }); refresh();
+      }
       else setBad({ title: "Not added", body: said(e), tone: "bad" });
     }
     latch.current = false;
@@ -352,8 +366,8 @@ function Inclusions({ code, stay, onClose }: { code: string; stay: DeskStay; onC
 
   return (
     <FormSheet
-      title="What this booking includes" description={`${stay.guest} · ${stay.reference}`} onClose={onClose} said={bad} onSaid={setBad}
-      foot={<Button label="Done" size="lg" onPress={onClose} />}
+      title="What this booking includes" description={`${stay.guest} · ${stay.reference}`} onClose={() => { if (!busy) onClose(); }} said={bad} onSaid={setBad}
+      foot={<Button label="Done" size="lg" reason={busy ? "" : null} onPress={() => { if (!busy) onClose(); }} />}
     >
       {(lines.data ?? []).length === 0 && !adding ? (
         <View style={{ alignItems: "center", gap: 6, borderRadius: 10, borderWidth: 1, borderStyle: "dashed", borderColor: c.grey300, backgroundColor: c.grey50, padding: 16 }}>
@@ -396,7 +410,7 @@ function Inclusions({ code, stay, onClose }: { code: string; stay: DeskStay; onC
           ) : null}
           <Field label="How many"><Box value={qty} label="How many" keyboard="number-pad" onChange={setQty} /></Field>
           <View style={{ flexDirection: "row", gap: 8 }}>
-            <Button label={busy ? "Adding…" : "Add"} kind="primary" reason={once.stuck ? notKnown("added", "this list once it is opened again").line : pick || name.trim() ? null : ""} busy={busy} onPress={() => void add()} />
+            <Button label={busy ? "Adding…" : "Add"} kind="primary" reason={dead || once.stuck ? notKnown("added", "this list once it is opened again").line : pick || name.trim() ? null : ""} busy={busy} onPress={() => void add()} />
             <Button label="Cancel" onPress={() => setAdding(false)} />
           </View>
         </View>

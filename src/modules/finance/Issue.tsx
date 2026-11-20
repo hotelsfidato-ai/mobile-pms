@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Text, View } from "react-native";
 import { c, t } from "../../core/theme";
-import { Card, useRead } from "../../core/ui";
+import { outcomeUnknown } from "../../core/api";
+import { Card, notKnown, useRead } from "../../core/ui";
 import { owedLine, type Billable } from "./bill";
 import { issueInvoice, readBillable, readSeries } from "./data";
 import { Btn, Refused, Sheet, type Said, useOnce } from "./Kit";
@@ -45,12 +46,17 @@ export function TaxInvoices({ code, stayId, role, onSaid, onDone }: {
           )}
         </View>
       ))}
-      {asking ? <IssueSheet code={code} row={asking} onClose={() => setAsking(null)} onDone={(said) => { setAsking(null); onDone(said); }} /> : null}
+      {/* Closed after anything but a yes, the rows are read again: an invoice whose outcome was not known shows its number (MFIN-B1). */}
+      {asking ? <IssueSheet code={code} row={asking} onClose={() => { setAsking(null); rows.reload(); }} onDone={(said) => { setAsking(null); onDone(said); }} /> : null}
     </Card>
   );
 }
 
-/** D27-117: a legal number is taken only after "are you sure" (IssueInvoiceDialog). */
+/** D27-117: a legal number is taken only after "are you sure" (IssueInvoiceDialog).
+    AN UNKNOWN OUTCOME (MFIN-B1): POST …/invoice reads no key but answers a repeat for the same bill with
+    the invoice already made (invoices.ts "duplicate", under a per-folio advisory lock), so Issue again
+    takes no second number and says the one taken; the sheet says "Not known whether it was issued", it
+    cannot be closed while the request is on its way, and closing it reads the rows again. */
 function IssueSheet({ code, row, onClose, onDone }: { code: string; row: Billable; onClose: () => void; onDone: (said: Said) => void }) {
   const series = useRead(() => readSeries(code), ["finance", code, "series"]);
   const [busy, setBusy] = useState(false);
@@ -65,7 +71,10 @@ function IssueSheet({ code, row, onClose, onDone }: { code: string; row: Billabl
       const r = await issueInvoice(code, row.stayId, row.folioId);
       onDone({ tone: "ok", title: `Issued ${r.number ?? ""}${r.vatBill ? `, and VAT bill ${r.vatBill} for the alcohol` : ""}.` });
     } catch (e) {
-      setRefused(e instanceof Error ? e.message : "The invoice was not issued. Nothing was changed.");
+      if (outcomeUnknown(e)) {
+        const n = notKnown("issued", "this bill's tax invoice row", e);
+        setRefused(`${n.title}. ${n.body} Issuing again cannot take a second number: the server answers with the one already taken.`);
+      } else setRefused(e instanceof Error ? e.message : "The invoice was not issued. Nothing was changed.");
     } finally {
       setBusy(false);
     }
@@ -73,10 +82,10 @@ function IssueSheet({ code, row, onClose, onDone }: { code: string; row: Billabl
 
   return (
     <Sheet
-      visible onClose={onClose} title="Issue this tax invoice?" description={`${row.guest} · room ${row.roomNumber} · ${row.reference}`}
+      visible onClose={() => { if (!busy) onClose(); }} title="Issue this tax invoice?" description={`${row.guest} · room ${row.roomNumber} · ${row.reference}`}
       footer={(
         <>
-          <Btn label="Keep it" onPress={onClose} />
+          <Btn label="Keep it" off={busy} onPress={() => { if (!busy) onClose(); }} />
           <Btn kind="primary" label="Issue the invoice" busy={busy} onPress={() => void once(issue)} />
         </>
       )}

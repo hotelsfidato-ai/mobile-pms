@@ -4,10 +4,10 @@ import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import type { Hotel } from "../../core/api";
 import { c, space, t } from "../../core/theme";
-import { Head, Screen, useRead, ripple, shade } from "../../core/ui";
+import { Head, Screen, Stopped, useRead, useScreenStop, ripple, shade } from "../../core/ui";
 import { Back, Box, Btn, body, Empty, Loading, NotYours, Segmented, Stale } from "../guest-services/kit";
 import { Collect } from "./Collect";
-import { isRefused, readDockets, type Whose } from "./data";
+import { isRefused, readDockets, type Whose, COLLECT_UNKNOWN, docketsStop } from "./data";
 import { byState, collectedDay, rupees, STATUS_TONE, STATUS_WORDS, stillOutWords, whoseWords, type Docket } from "./docket";
 import { Fact, LoadFailed, StatePill } from "./kit";
 import { whyNotRead, whyNotTake } from "./roles";
@@ -32,12 +32,15 @@ export function Dockets({ hotel, role, onBack }: { hotel: Hotel; role: string | 
   const [collecting, setCollecting] = useState(false);
   const [pulled, setPulled] = useState(false);
 
-  const list = useRead(() => (refused ? Promise.resolve(null) : readDockets(code, whose)), ["laundry", code, "dockets", whose]);
+  /* A bag whose outcome is unknown (MLDY-U1): let go only by a read of ALL dockets begun after it. */
+  const stop = useScreenStop(docketsStop(code));
+  const readIt = () => (refused ? Promise.resolve(null) : readDockets(code, whose));
+  const list = useRead(whose === "all" ? stop.watch(readIt) : readIt, ["laundry", code, "dockets", whose]);
   const off = isRefused(list.data) ? list.data.refused : null;
   const dockets = list.data && !isRefused(list.data) ? byState(list.data.dockets) : [];
   const open = (d: Docket) => router.push(`/laundry/${code}/${d.id}`);
 
-  const collectButton = <Btn label="Collect a bag" variant="primary" icon={Plus} disabled={mayTake != null} onPress={() => setCollecting(true)} />;
+  const collectButton = <Btn label="Collect a bag" variant="primary" icon={Plus} disabled={mayTake != null || stop.stuck} onPress={() => { if (!stop.isStuck()) setCollecting(true); }} />;
 
   /* Laundry switched off, or the gate: the server's one sentence, with no
      filter or buttons above it that cannot work (the web, QA X-5). */
@@ -63,6 +66,7 @@ export function Dockets({ hotel, role, onBack }: { hotel: Hotel; role: string | 
             {collectButton}
           </View>
           {mayTake ? <Text style={[t.caption, { color: c.grey600 }]}>{mayTake}</Text> : null}
+          {stop.unknown ? <Stopped line={COLLECT_UNKNOWN} onRead={() => { setWhose("all"); list.reload(); }} /> : null}
         </View>
 
         <View style={{ gap: 8, marginTop: 8 }}>
@@ -140,7 +144,7 @@ export function Dockets({ hotel, role, onBack }: { hotel: Hotel; role: string | 
 
       {collecting ? (
         <Collect
-          code={code} onClose={() => setCollecting(false)}
+          code={code} onClose={() => { setCollecting(false); if (stop.isStuck()) list.reload(); }}
           onCollected={(id, number) => {
             setCollecting(false);
             /* The end of the act is the docket itself (the web, MEMORY 291), which says it was collected. */

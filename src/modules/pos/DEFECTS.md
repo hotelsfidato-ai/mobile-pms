@@ -195,3 +195,38 @@ another table: ...". `types.ts` gains the web's statuses and the void / NC field
 charge ₹0 to pay" (Till.tsx 1547-1551); a voided or NC bill offers Print the bill as the web
 (1617, `printable`); the pill says NC (1413, `statusWord`). `order.check.ts` holds each; broken once
 (the void branch skipped), it failed with "Closed unpaid - null".
+
+---
+
+# m13-stops (20 Nov)
+
+## MPOS-U1 · A parcel or a counter order opened twice
+
+POST /till/orders reads no key and a parcel has no table to clash on. The stop was the sheet's or the
+card's - and Till and Terminal said "to open another, leave this screen and come back", which let it go.
+**Found** by the m13-stops sweep (grep for `useStuck` / `outcomeUnknown` inside sheets), reading the API to see which routes read the key. **Done:** `parcelsStop(code, outlet)`: New parcel and Open grey until a read of the floor or
+the open orders begun after the loss; the sheets cannot close mid-write; the advice is now to read the
+orders again. **The rule:** a write on a route that reads no idempotency key keeps its stop OUTSIDE the sheet and the screen (core `useScreenStop`, by name), stopped while it is on its way, and let go only by a read of the record that BEGAN after the loss and came back good.
+
+## MPOS-U2 · A round sent twice from a reopened pad
+
+POST /till/orders/batch reads no key, and the round's draft survives closing the pad. **Done:**
+`roundStop(code, orderId)`: Send greys on that order's pad until a read of the order begun after the loss
+(a round that opened a table: a read of the floor); the pad stays dead until closed.
+
+## MPOS-U3 · A table booking made twice
+
+POST table bookings reads no key. **Done:** `tableBookingStop`: New booking greys until a read of the list
+as first opened, begun after the loss.
+
+## MPOS-U4 · A drawer movement: the moment was screen state, compared with a read's finish
+
+MPOS-S4 lifted it to the screen in `useState` with `stillUnknown(at, dataUpdatedAt)`. **Done:**
+`drawerStop`: kept by name, stopped while on its way, let go only by a read of the day begun after the
+loss. Left: Close the day (refused once closed), set-up acts (upserts or unique names), settle (refused
+once the order is not open).
+
+**The review of 20 Nov (on 5fc5064):** an order opened with no table or for the counter shows only in the
+open orders, never on the floor, so it has its own name (`openStop`), let go only by a /till/orders read;
+parcels keep `parcelsStop`, let go by either read. A new table's first round is kept by its table
+(`roundStop(code, undefined, table)`), and a floor read lets go each table it shows.

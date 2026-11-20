@@ -6,15 +6,15 @@ import type { Hotel } from "../../core/api";
 import { cash, dateLong } from "../../core/format";
 import { c, face, space, t } from "../../core/theme";
 import { roleAt, useSession } from "../../core/session";
-import { Card, s, Screen, useRead, ripple, shade } from "../../core/ui";
+import { Card, s, Screen, useRead, useScreenStop, ripple, shade } from "../../core/ui";
 import { ListExport } from "../reports/ListExport";
-import type { DeskStay } from "../front-desk/data";
+import { walkInStop, type DeskStay } from "../front-desk/data";
 import { addDays, day, statusOf } from "../front-desk/desk";
 import { body, Empty, PageHead, Pill } from "../front-desk/kit";
 import { isHeldCheckIn, Kept, NotRead, useHeld } from "../front-desk/StayList";
 import { IconChip, type ChipTone } from "../reports/kit";
 import { askedOf, countFor, descriptionOf, emptyOf, FILTERS, queryOf, shown, type Chip } from "./bookings";
-import { readBook } from "./data";
+import { readBook, newBookingStop } from "./data";
 
 /* ══════════════════════════════════════════════════════════════════
    ALL BOOKINGS — the web's /h/:code/reservations (src/modules/reservations/
@@ -45,7 +45,13 @@ export function AllBookings({ hotel }: { hotel: Hotel }) {
   }, [search]);
 
   const query = queryOf(asked, since);
-  const read = useRead(() => readBook(code, query), ["reservations", code, "book", query]);
+  /* A New booking whose outcome was not known (MRS-U1) shows here: a read as first opened, begun after
+     the loss, lets it go. A search, or a later "since", may hide it, so it lets nothing go. */
+  const fresh = useScreenStop(newBookingStop(code));
+  /* A walk-in posts the same /bookings, and marks both names (the review): All bookings lets both go. */
+  const walkIn = useScreenStop(walkInStop(code));
+  const readIt = () => readBook(code, query);
+  const read = useRead(asked === "" && since <= today ? fresh.watch(walkIn.watch(readIt)) : readIt, ["reservations", code, "book", query]);
   const held = useHeld();
   useEffect(() => { if (!read.loading) setPulled(false); }, [read.loading]);
   const data = read.data;

@@ -65,6 +65,10 @@ export const rememberGrouping = (roomGrouping: "type" | "floor") => send<{ ok: t
 /** One keeper per booking's bill (MFIN-1, core/keys.ts): the advance taken
     right after the booking is sent once from this page; a lost reply keeps
     its key while its outcome is unknown. A payment: refused offline. */
+/** New booking's stop (core useScreenStop, MRS-U1): let go by a read of All bookings, as first opened
+    (nothing searched, from a day not after today), begun after the loss. */
+export const newBookingStop = (code: string) => `reservations/${code}/new-booking`;
+
 const keepers = new Map<string, KeyKeeper>();
 const keysOf = (code: string, stayId: string) => {
   const id = `${code}/${stayId}`;

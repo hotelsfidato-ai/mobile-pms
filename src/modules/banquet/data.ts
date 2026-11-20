@@ -73,6 +73,12 @@ const keysOf = (code: string, id: string) => {
   return keeper;
 };
 
+/** The name of a function's stop (core useScreenStop, MBQ-U1): an Add a course whose outcome is unknown
+    greys Add on the function until a read of it begun after the loss is back. */
+export const fnStop = (code: string, id: string) => `banquet/${code}/fn/${id}`;
+/** The line a stopped Add says. */
+export const COURSE_UNKNOWN = "Not known whether the course was added: look at the function's catering before adding it again.";
+
 export async function readFn(code: string, id: string) {
   const keys = keysOf(code, id);
   const started = keys.mark();

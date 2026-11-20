@@ -5,7 +5,7 @@ import { useState, type ReactNode } from "react";
 import { ActivityIndicator, Linking, Pressable, Text, View } from "react-native";
 import type { Hotel } from "../../core/api";
 import { c, face, space, t } from "../../core/theme";
-import { Screen, useRead } from "../../core/ui";
+import { notKnown, Screen, useRead, useScreenStop } from "../../core/ui";
 import { PageHead, Pill } from "../front-desk/kit";
 import { body, Btn, Failed, NotYours, Stale, Toast, type Said } from "../guest-services/kit";
 import { Blank, Panel } from "../leads/kit";
@@ -13,7 +13,7 @@ import { isRefused, readCompanyContracts } from "./data";
 import { AllotmentDialog, CompanyDialog, ContractDialog } from "./Dialogs";
 import { whyNotChangeAllotment, whyNotChangeCompany, whyNotContracts, whyNotHold, whyNotSetContract } from "./roles";
 import {
-  addressWords, allotmentHead, stillUnknown, allotmentNights, allotmentRate, BOOK_ON_WEB, commissionWords, creditLine, discountWords, heldLine,
+  addressWords, allotmentHead, allotmentNights, allotmentRate, BOOK_ON_WEB, commissionWords, creditLine, discountWords, heldLine,
   inForce, KIND_LABEL, leftIn, NO_CONTRACT, priceWords, releaseLine, typeName, validWords,
   type Allotment, type CompanyContracts, type Contract,
 } from "./rules";
@@ -46,17 +46,21 @@ export function Company({ hotel, role, id }: { hotel: Hotel; role: string | null
   const notKeeper = whyNotChangeCompany(role);
   const keeper = notKeeper === null;
   const cache = useQueryClient();
-  const q = useRead(() => (refusedRead ? Promise.resolve(null) : readCompanyContracts(code, id)), ["contracts", code, "company", id]);
+  /* The page's stop (MCON-1, MCON-U1): kept by name outside this page, so leaving the company and coming
+     back lets nothing go; let go only by a read of the company that BEGAN after the loss. */
+  /* A company is the GROUP's record, read at any of its hotels (the review): the name carries no hotel. */
+  const cstop = useScreenStop(`contracts/company/${id}`);
+  const q = useRead(cstop.watch(() => (refusedRead ? Promise.resolve(null) : readCompanyContracts(code, id))), ["contracts", code, "company", id]);
   const [open, setOpen] = useState<Open | null>(null);
   const [said, setSaid] = useState<Said | null>(null);
   const [pulled, setPulled] = useState(false);
-  const [unknown, setUnknown] = useState<{ title: string; line: string; at: number } | null>(null);
-  const readKey = ["contracts", code, "company", id];
-  const st = cache.getQueryState(readKey);
-  const blocked = stillUnknown(unknown?.at ?? null, st ? { dataUpdatedAt: st.dataUpdatedAt, error: st.error } : undefined);
+  /* The words of the last unknown write; after a remount, the general words. */
+  const [said_, setUnknown] = useState<{ title: string; line: string } | null>(null);
+  const unknown = said_ ?? notKnown("made", "the company's contracts and allotments");
+  const blocked = cstop.stuck;
   /** Why a write is grey now: the API's sentence for a role that may not, else the unknown outcome's line. */
-  const stop = (why: string | null) => (why ?? (blocked ? unknown!.line : null));
-  const onUnknown = (title: string, line: string) => setUnknown({ title, line, at: Date.now() });
+  const stop = (why: string | null) => (why ?? (blocked ? unknown.line : null));
+  const onUnknown = (title: string, line: string, e: unknown) => { cstop.stop(e); setUnknown({ title, line }); };
   const refused = isRefused(q.data) ? q.data.refused : null;
   const data = q.data && !isRefused(q.data) ? q.data : null;
   /* Every write, and every close (an outcome nobody knows), reads the company again; Companies and agents too. */
@@ -107,10 +111,10 @@ export function Company({ hotel, role, id }: { hotel: Hotel; role: string | null
                 {stop(whyNotSetContract(role)) ? <Text style={[t.caption, { color: c.grey600 }]}>{stop(whyNotSetContract(role))}</Text> : null}
               </View>
             </PageHead>
-            {blocked ? (
+            {cstop.unknown ? (
               <View accessibilityRole="alert" style={{ padding: 12, gap: 8, borderRadius: 12, backgroundColor: c.red50 }}>
-                <Text style={[t.label, { color: c.red700, ...face[600] }]}>{unknown!.title}</Text>
-                <Text style={[t.caption, { color: c.grey700, lineHeight: 17 }]}>{unknown!.line}</Text>
+                <Text style={[t.label, { color: c.red700, ...face[600] }]}>{unknown.title}</Text>
+                <Text style={[t.caption, { color: c.grey700, lineHeight: 17 }]}>{unknown.line}</Text>
                 <Btn label="Read the company again" icon={RotateCw} onPress={q.reload} style={{ alignSelf: "flex-start" }} />
               </View>
             ) : null}

@@ -53,3 +53,17 @@ trying again". The server's key is still asked for.
   as null. The phone refuses it as "Not a figure." before sending.
 - **Offline, Confirm says "The hall is not free"** over the offline sentence (the toast's title for
   every `ok: false`).
+
+---
+
+# m13-stops (20 Nov)
+
+## MBQ-U1 · Add a course could be sent again from a reopened dialog
+
+POST /banquet/events/:id/catering reads no key; the dialog's own stop went with the dialog. **Found** by the m13-stops sweep (grep for `useStuck` / `outcomeUnknown` inside sheets), reading the API to see which routes read the key.
+**Done:** `fnStop(code, id)`: Add a course greys on the function, says why, and is let go by a read of the
+function begun after the loss; closing a stopped dialog reads it again; the hall price, course and cancel
+dialogs cannot close while their write is on its way. Left: the hall price (a PATCH that sets a value),
+Cancel (refused once cancelled), Add a hall / a package (names are unique: a repeat is refused), Register,
+the bill, payments and the invoice (the server reads their keys; the keepers are already per function, in
+data.ts). **The rule:** a write on a route that reads no idempotency key keeps its stop OUTSIDE the sheet and the screen (core `useScreenStop`, by name), stopped while it is on its way, and let go only by a read of the record that BEGAN after the loss and came back good.

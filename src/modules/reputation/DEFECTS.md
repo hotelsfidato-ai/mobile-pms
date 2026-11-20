@@ -44,3 +44,13 @@ None yet.
 ## Lane F — Guest feedback (mobile/m13-sales, 19 Nov)
 
 No defect found. Guest feedback reads only.
+
+---
+
+# m13-stops (20 Nov)
+
+## MREP-U1 · A review ask sent twice after leaving the screen
+
+POST …/ask reads no key and refuses no second ask: a second message to the guest. The moment was screen
+state, compared with a read's finish. **Found** by the m13-stops sweep (grep for `useStuck` / `outcomeUnknown` inside sheets), reading the API to see which routes read the key. **Done:** kept by name, stopped while an ask is on
+its way, let go only by a read of the list begun after the loss. **The rule:** a write on a route that reads no idempotency key keeps its stop OUTSIDE the sheet and the screen (core `useScreenStop`, by name), stopped while it is on its way, and let go only by a read of the record that BEGAN after the loss and came back good.

@@ -110,3 +110,35 @@ done:** `desk.ts fileMoney` (the server's figure to the paisa, its sign kept, a 
 for the Rate and Balance cells of the file; `desk.check.ts` holds it (broken once to the rounded
 `Math.abs` form, it failed). **The rule:** a list's file carries the server's figure, not the card's
 words for it (MEMORY 9).
+
+---
+
+# m13-stops (20 Nov)
+
+## MFD-U1 · Exchange rooms could be sent again - and a second exchange swaps them back
+
+POST /stays/:id/exchange reads no key; the sheet held the stop. **Found** by the m13-stops sweep (grep for `useStuck` / `outcomeUnknown` inside sheets), reading the API to see which routes read the key. **Done:** `stayStop`:
+Exchange with another guest greys on the stay (More options says why; the stay shows the line) until a
+read of the stay begun after the loss; closing reads it; the sheet cannot close mid-write. **The rule:** a write on a route that reads no idempotency key keeps its stop OUTSIDE the sheet and the screen (core `useScreenStop`, by name), stopped while it is on its way, and let go only by a read of the record that BEGAN after the loss and came back good.
+
+## MFD-U2 · An inclusion added twice
+
+POST …/inclusions reads no key. **Done:** `inclusionsStop`: Add greys until a read of the list begun after
+the loss (the sheet shows it); the sheet cannot close mid-write.
+
+## MFD-U3 · An adult added twice
+
+POST …/companions reads no key. **Done:** `adultsStop`: Add an adult greys until a read of the stay's adults
+begun after the loss; closing reads them; the sheet cannot close mid-write (Edit is a PUT: no stop).
+
+## MFD-U4 · A walk-in booked twice by going back and opening it again
+
+POST /bookings reads no key; the walk-in's stop was its screen's. **Done:** `walkInStop`: the walk-in's
+three buttons stay grey, with "Open Arrivals", until a read of today's Arrivals begun after the loss (a
+walk-in is always today's).
+
+**The review of 20 Nov (on 5fc5064):** an exchange is symmetric, so its doubt is now both stays' (the other
+stay's Exchange would swap them back): `guard`/`stop` mark `stayStop(code, withId)` too. Inclusions: the
+sheet stays dead until closed and the line typed is emptied (the read that refresh() starts used to give
+Add back ~100 ms later in the same view). A walk-in's loss marks New booking's name too (the same POST
+/bookings), and All bookings lets both go.

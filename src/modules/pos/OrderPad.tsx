@@ -5,9 +5,9 @@ import { Pressable, ScrollView, StyleSheet, Text, View, type NativeScrollEvent, 
 import { api, HeldError, send, type Hotel } from "../../core/api";
 import { cash } from "../../core/format";
 import { c, face, space, t } from "../../core/theme";
-import { notKnown, useStuck, ripple, shade } from "../../core/ui";
+import { notKnown, useScreenStop, ripple, shade } from "../../core/ui";
 import { DishSheet } from "./DishSheet";
-import { since, type FloorNow } from "./floor";
+import { roundStop, since, type FloorNow } from "./floor";
 import { OrderPadCustomise } from "./OrderPadCustomise";
 import {
   addToSent, asksFirst, batchBody, bump, clearDraft, customiseLine, dishPrice, draftKey, draftTotal, drop, footerLine, isBarDish,
@@ -56,7 +56,9 @@ export function OrderPad({ hotel, role, table, orderId, onClose }: {
   /* A round sent twice is two dockets, and the batch route reads no key: after
      an unknown outcome Send takes no more taps until the pad is closed and the
      table read again (MPOS-4). */
-  const once = useStuck();
+  const once = useScreenStop(roundStop(code, orderId, table));
+  /* This pad stays dead after an unknown round until it is closed, even if a read lets the order go. */
+  const [dead, setDead] = useState(false);
   const unknownRound = notKnown("sent", "the table's order once the pad is closed");
   const [asked, setAsked] = useState<string | null>(null);
   /* What Tables left for the pad: a parcel just opened. */
@@ -73,7 +75,7 @@ export function OrderPad({ hotel, role, table, orderId, onClose }: {
   /* A second round: what the kitchen already has, and its KOTs. */
   const existing = useQuery({
     queryKey: ["pos", code, "pad", "order", orderId],
-    queryFn: () => api<Order & { lines: PadLine[] }>(`/api/hotels/${code}/till/orders/${orderId}`),
+    queryFn: once.watch(() => api<Order & { lines: PadLine[] }>(`/api/hotels/${code}/till/orders/${orderId}`)),
     enabled: Boolean(orderId),
     staleTime: 0,
   });
@@ -143,7 +145,7 @@ export function OrderPad({ hotel, role, table, orderId, onClose }: {
   }
 
   async function sendRound() {
-    if (lines.length === 0 || inFlight.current || once.isStuck()) return;
+    if (lines.length === 0 || inFlight.current || dead || once.isStuck()) return;
     if (ringReason) { setSaid({ title: table, body: ringReason, tone: "bad" }); return; }
     inFlight.current = true;
     setSending(true);
@@ -152,10 +154,10 @@ export function OrderPad({ hotel, role, table, orderId, onClose }: {
     const floor = cache.getQueryData<FloorNow>(["pos", code, "tables", "floor"]);
     const tableId = floor?.sections.flatMap((s) => s.tables).find((x) => x.label === table)?.id;
     try {
-      const result = await send<Order & { ok: true; opened: boolean; kotNo?: number }>(
+      const result = await once.guard(() => send<Order & { ok: true; opened: boolean; kotNo?: number }>(
         "POST", `/api/hotels/${code}/till/orders/batch`,
         batchBody({ ...(orderId ? { orderId } : {}), outlet: OUTLET, ...(tableId ? { tableId } : { table }) }, lines),
-      );
+      ));
       clearDraft(key);
       setLines([]);
       leaveSaid({
@@ -177,6 +179,7 @@ export function OrderPad({ hotel, role, table, orderId, onClose }: {
       /* Not known whether the kitchen has it: the round stays to be looked at,
          never sent again from here. */
       if (once.stop(e)) {
+        setDead(true);
         void cache.invalidateQueries({ queryKey: ["pos", code] });
         setSaid({ title: unknownRound.title, body: notKnown("sent", "the table's order once the pad is closed", e).body, tone: "bad" });
         return;
@@ -389,7 +392,7 @@ export function OrderPad({ hotel, role, table, orderId, onClose }: {
             <Text style={[t.caption, ty.xs]}>{footerLine(lines)}</Text>
           </View>
           <Btn label="Close" onPress={onClose} />
-          <Btn label="Send" primary busy={sending} disabled={lines.length === 0 || ringReason != null || once.stuck} hint={ringReason ?? (once.stuck ? unknownRound.line : undefined)} onPress={() => void sendRound()} />
+          <Btn label="Send" primary busy={sending} disabled={lines.length === 0 || ringReason != null || dead || once.stuck} hint={ringReason ?? (dead || once.stuck ? unknownRound.line : undefined)} onPress={() => void sendRound()} />
         </View>
       </View>
 
