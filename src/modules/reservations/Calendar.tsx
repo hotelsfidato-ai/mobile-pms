@@ -12,7 +12,7 @@ import { isOnline } from "../../core/offline";
 import { c, face, space, t } from "../../core/theme";
 import { useRead } from "../../core/ui";
 import { day } from "../front-desk/desk";
-import { Button, Segmented, Toast, WEBSITE, type Said } from "../front-desk/kit";
+import { Button, Segmented, Toast, type Said } from "../front-desk/kit";
 import { IconChip, type ChipTone } from "../reports/kit";
 import { AssignRoom } from "./AssignRoom";
 import {
@@ -130,7 +130,7 @@ export function Calendar({ hotel, role, grouping }: { hotel: Hotel; role: string
       {/* Rooms is the desk's tiles (/h/:code/stay): not on the phone yet. */}
       <Segmented<"calendar" | "floor">
         value="calendar"
-        onChange={(v) => { if (v === "floor") setToast({ title: WEBSITE, body: "Rooms, the house as tiles, is on the website for now.", tone: "held" }); }}
+        onChange={(v) => { if (v === "floor") router.push(`/front-desk/${code}/rooms` as Href); }}
         options={[{ value: "calendar", label: "Calendar" }, { value: "floor", label: "Rooms" }]}
       />
       <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
