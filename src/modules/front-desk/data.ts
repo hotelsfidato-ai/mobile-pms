@@ -161,6 +161,9 @@ export const readExchangeable = (code: string, id: string) =>
     after it is back (a second one swaps them back); an inclusion, Add until the list is read again. */
 export const stayStop = (code: string, id: string) => `front-desk/${code}/stay/${id}`;
 export const inclusionsStop = (code: string, id: string) => `front-desk/${code}/stay-inclusions/${id}`;
+/** A walk-in booking (POST /bookings reads no key; MFD-U4): let go by a read of today's Arrivals begun after it. */
+export const walkInStop = (code: string) => `front-desk/${code}/walk-in`;
+export const adultsStop = (code: string, id: string) => `front-desk/${code}/companions/${id}`;
 export const SWAP_UNKNOWN = "Not known whether the rooms were exchanged: look at both stays' rooms before exchanging again.";
 
 export const exchangeRooms = (code: string, id: string, input: object) =>

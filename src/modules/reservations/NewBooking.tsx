@@ -6,7 +6,7 @@ import { KeyboardAvoidingView, Platform, Pressable, Text, View } from "react-nat
 import { ApiError, HeldError, type Hotel, outcomeUnknown } from "../../core/api";
 import { cash } from "../../core/format";
 import { c, face, space, t } from "../../core/theme";
-import { Card, notKnown, Screen, useRead, useStuck, ripple, shade } from "../../core/ui";
+import { Card, notKnown, Screen, Stopped, useRead, useScreenStop, ripple, shade } from "../../core/ui";
 import { Day } from "../housekeeping/DayStepper";
 import {
   allIn, byContract, discountIn, gstinProblem, inclusive, MARKET_SEGMENTS, OTHER, PLANS, priceLine, summary, TITLES, worthAsking,
@@ -26,7 +26,7 @@ import {
   assignReasonFor, bookReason, checkInReasonFor, counted, departureHint, firstNight, isWalkIn, leftFor, linesBody, moveArrival, newLine, toAssign, totalRooms, withRooms,
   type Line,
 } from "./book";
-import { takeAdvance } from "./data";
+import { takeAdvance, newBookingStop } from "./data";
 import { mayGiveComp, OVER_LIMIT_WHO, whyNotBook, whyNotPay } from "./roles";
 
 /* ══════════════════════════════════════════════════════════════════
@@ -78,7 +78,10 @@ export function NewBooking({ hotel, role, room: walkRoom, date: walkDate }: { ho
   const latch = useRef(false);
   /* POST bookings reads no key: a booking whose outcome is unknown is never
      made again from here - no more taps until All bookings is looked at (MRS-3). */
-  const once = useStuck();
+  /* A booking whose outcome is unknown (MRS-U1): POST /bookings reads no key. Kept outside this screen,
+     so leaving New booking and opening it again lets nothing go until a read of All bookings begun after
+     it is back. */
+  const once = useScreenStop(newBookingStop(code));
   const unknownBooking = notKnown("booked", "All bookings");
 
   const [title, setTitle] = useState(rules?.defaultTitle ?? "");
@@ -219,7 +222,7 @@ export function NewBooking({ hotel, role, room: walkRoom, date: walkDate }: { ho
     setOverLimit(null);
     let made: Made;
     try {
-      made = await createBooking(code, {
+      made = await once.guard(() => createBooking(code, {
         ...(overLimitReason ? { overLimitReason } : {}),
         guestName: guestName.trim(), phone: phone.trim(), ...(email.trim() ? { email: email.trim() } : {}),
         bookingSourceId: sourceId, ...(siteSource ? { prepaidOnSite: prepaid } : {}),
@@ -239,7 +242,7 @@ export function NewBooking({ hotel, role, room: walkRoom, date: walkDate }: { ho
         ...(show.company && (companyName.trim() || companyGstin.trim() || companyAddress.trim())
           ? { guestCompany: { name: companyName.trim(), gstin: companyGstin.trim(), address: companyAddress.trim() } } : {}),
         lines: linesBody(lines, (l, i) => inclusive(l, quoteOf(i)?.tariff)),
-      });
+      }));
     } catch (e) {
       latch.current = false;
       setSaving(false);
@@ -537,6 +540,7 @@ export function NewBooking({ hotel, role, room: walkRoom, date: walkDate }: { ho
 
         {/* The three buttons: the one filled is the job the page was opened for. */}
         <View style={{ gap: 8 }}>
+          {once.unknown ? <Stopped line={unknownBooking.line} act="Open All bookings" onRead={() => router.push(`/reservations/${code}` as Href)} /> : null}
           <Button label="Save booking" kind={walkIn ? "secondary" : "primary"} size="lg" busy={saving} reason={once.stuck ? unknownBooking.line : reasonToSave} onPress={() => void submit(false)} />
           <Button label="Save and assign room" size="lg" busy={saving} reason={once.stuck ? unknownBooking.line : reasonToSave ?? reasonToAssign} onPress={() => void submit(false)} />
           <Button label="Check in now" kind={walkIn ? "primary" : "secondary"} size="lg" busy={saving} reason={once.stuck ? unknownBooking.line : reasonToSave ?? reasonToCheckIn} onPress={() => void submit(true)} />

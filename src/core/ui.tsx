@@ -224,11 +224,11 @@ export function ReadFailed({ what, error, onRetry }: { what: string; error: stri
 
 /** A screen stopped by `useScreenStop`: why its acts are grey (`notKnown(...).line`), and a way to read
     the record again - the read that lets it go. */
-export function Stopped({ line, onRead }: { line: string; onRead: () => void }) {
+export function Stopped({ line, onRead, act = "Read it again" }: { line: string; onRead: () => void; act?: string }) {
   return (
     <View accessibilityRole="alert" style={{ gap: 8, padding: space.cardX, borderRadius: 12, backgroundColor: c.red50 }}>
       <Text style={[t.label, face[600], { color: c.red700 }]}>{line}</Text>
-      <View style={{ flexDirection: "row" }}><Capsule label="Read it again" onPress={onRead} /></View>
+      <View style={{ flexDirection: "row" }}><Capsule label={act} onPress={onRead} /></View>
     </View>
   );
 }
