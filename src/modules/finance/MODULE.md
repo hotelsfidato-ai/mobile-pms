@@ -153,7 +153,11 @@ the reviews of 20 Nov): its sheet closes - the amount typed goes with it - the s
 known whether it was …: look at … before trying again", reads the record again, and every write
 on the screen stays grey until a read that BEGAN after the loss has come back
 (`desk.ts stillUnknown`, as pos `dayEnd.ts`; checked and broken once). Closing a sheet unlocks
-nothing. A keeper per screen per hotel (`deskData.ts`) is passed to `send()` all the same.
+nothing, and the stop is kept outside the screen (`desk.ts deskStop`, keyed `<code>/<screen>`), so
+leaving and opening the screen again keeps it. While any write of a screen is on its way, no other
+write of it leaves, and its sheet cannot be closed: Cancel is grey, the backdrop and the back
+gesture do nothing (the money review of 20 Nov). A keeper per screen per hotel (`deskData.ts`) is
+passed to `send()` all the same.
 
 ## Money: what the server gives, what the phone shows
 
@@ -191,6 +195,12 @@ mistyped box is sent for the server to refuse, QA FI-10).
 6. **Dates are typed YYYY-MM-DD** (M-7: no date-picker package): Deposited on, Received on, Paid
    on, a credit note's date, the right bill's dates; the server checks each.
 7. **Selects are capsules** (Kit `Choice`); **TDS deducted is a Switch** (docs/NATIVE.md).
+10. **Amounts are refused before they go when the API would refuse them** (its `isMoney`: more than
+    ₹0, two places of paise at most), and a comma (an Android keyboard's "1500,50") is said, not
+    greyed silently: paid in or out, a deposit, a company's payment, a supplier's payment, its TDS
+    and a credit note.
+11. **A supplier's total is a dash when two suppliers share its name**: the report labels its total
+    rows by name although it groups by supplier (asked of the PMS).
 8. **Exports** (core `ExportButtons`) on the three lists the web exports: Cash deposits, Company
    accounts (with the report's Total row) and Form III (the passport masked to its last four, as
    the server's file, `maskId`). Refused, as the server refuses a file, for a role that does not

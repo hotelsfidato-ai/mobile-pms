@@ -34,6 +34,40 @@ export { DASH, dateDay, rupees };
     lost, `began` when the read now on screen began. */
 export const stillUnknown = (stuckAt: number | null, began: number) => stuckAt !== null && began <= stuckAt;
 
+/** THE SCREEN'S STOP, kept outside the screen (the money review of 20 Nov): keyed
+    `${code}/${screen}`, so leaving the screen and coming back does not drop it while the read on
+    screen is from before the loss; and the writes on their way, so no second write leaves while
+    one is out (none of these routes reads a key). A loss is forgotten only once a read begun
+    after it has come back. */
+export interface Lost { at: number; done: string; where: string }
+const losses = new Map<string, Lost>();
+const flying = new Map<string, number>();
+export const deskStop = {
+  lose: (key: string, v: Lost) => { losses.set(key, v); },
+  /** The loss still unknown against the read on screen, begun at `began` (0: none read yet). */
+  lost: (key: string, began: number): Lost | null => {
+    const v = losses.get(key);
+    if (!v) return null;
+    if (!stillUnknown(v.at, began)) { losses.delete(key); return null; }
+    return v;
+  },
+  begin: (key: string) => { flying.set(key, (flying.get(key) ?? 0) + 1); },
+  end: (key: string) => { const n = (flying.get(key) ?? 1) - 1; if (n > 0) flying.set(key, n); else flying.delete(key); },
+  flying: (key: string) => (flying.get(key) ?? 0) > 0,
+};
+
+/** purchasing/supplierDues.ts isMoney, the API's own: more than zero, paise at most. */
+export const isMoney = (v: unknown): v is number =>
+  typeof v === "number" && Number.isFinite(v) && v > 0 && v < 1e10 && Math.round(v * 100) === v * 100;
+export const COMMA = "Type the amount with a point for the paise, not a comma: 1500.50.";
+/** Why a typed amount cannot go, or null (also null while nothing is typed: the button is grey). */
+export function amountProblem(text: string): string | null {
+  const v = text.trim();
+  if (v === "") return null;
+  if (v.includes(",")) return COMMA;
+  return isMoney(Number(v)) ? null : "An amount is more than ₹0, with two places of paise at most.";
+}
+
 /* ── Who may (the API's lists and sentences) ─────────────────────── */
 
 const DESK = ["owner", "admin", "gm", "hotel_manager", "front_desk", "finance"];
@@ -272,9 +306,10 @@ export function closedWords(handedTo: string | null, toDeposit: number | null | 
 /** A movement's form, as the web's MovementDialog guards it. */
 export function movementState(kind: MovementKind, amount: string, reason: string, category: string) {
   const expense = kind === "expense";
-  const ok = amount.trim() !== "" && reason.trim() !== "" && (!expense || category !== "");
+  const problem = amountProblem(amount);
+  const ok = amount.trim() !== "" && problem === null && reason.trim() !== "" && (!expense || category !== "");
   return {
-    ok,
+    ok, problem,
     body: ok ? { kind, amount: Number(amount), reason, ...(expense ? { category } : {}) } : null,
   };
 }
@@ -333,9 +368,10 @@ export const isDay = (text: string) => {
 
 /** Record a deposit: the web's guard (every box), the amount sent as typed. */
 export function depositState(f: { day: string; amount: string; depositedOn: string; bank: string; slipNo: string }) {
-  const ok = f.day !== "" && f.amount.trim() !== "" && f.depositedOn.trim() !== "" && f.bank.trim() !== "" && f.slipNo.trim() !== "";
+  const problem = amountProblem(f.amount);
+  const ok = f.day !== "" && f.amount.trim() !== "" && problem === null && f.depositedOn.trim() !== "" && f.bank.trim() !== "" && f.slipNo.trim() !== "";
   return {
-    ok,
+    ok, problem,
     body: ok ? { businessDate: f.day, amount: Number(f.amount), depositedOn: f.depositedOn.trim(), bank: f.bank, slipNo: f.slipNo } : null,
   };
 }
@@ -391,9 +427,10 @@ export const paymentLine = (p: CompanyPayment) =>
 /** Record a company's payment: the web's guard (an account, more than zero, a date, a way). */
 export function companyPaymentState(view: CompanyPaymentsView | undefined, f: { account: string; amount: string; receivedOn: string; method: string; reference: string; note: string }) {
   const chosen = view?.accounts.find((a) => accountKey(a) === f.account);
-  const ok = Boolean(chosen) && Number(f.amount) > 0 && f.receivedOn.trim() !== "" && f.method !== "";
+  const problem = amountProblem(f.amount);
+  const ok = Boolean(chosen) && f.amount.trim() !== "" && problem === null && f.receivedOn.trim() !== "" && f.method !== "";
   return {
-    ok, chosen,
+    ok, chosen, problem,
     body: ok ? {
       ...(chosen!.companyId ? { companyId: chosen!.companyId } : {}),
       ...(chosen!.bookingSourceId ? { bookingSourceId: chosen!.bookingSourceId } : {}),
@@ -583,14 +620,17 @@ export function dueGroups(d: SupplierDues): DueGroup[] {
     supplierDues.ts: "<supplier>, owed" and "Total owed"); the web adds them in the browser. */
 export function duesTotals(doc: ReportDoc | null | undefined) {
   const rows = doc?.sections.find((s) => s.key === "owed")?.rows.filter((r) => r.kind === "total") ?? [];
-  const of = new Map<string, number>();
+  /* The report groups by supplier id (or the typed name), but labels its total by name: a name
+     that labels two totals is two suppliers, and neither is shown - a dash, never the other's. */
+  const of = new Map<string, number | null>();
   let total: number | null = null;
   for (const r of rows) {
     const label = typeof r.cells["supplier"] === "string" ? (r.cells["supplier"] as string) : "";
     const owed = num(r.cells["owed"]);
-    if (owed === null) continue;
-    if (label === "Total owed") total = owed;
-    else if (label.endsWith(", owed")) of.set(label.slice(0, -", owed".length), owed);
+    if (label === "Total owed") { total = owed; continue; }
+    if (!label.endsWith(", owed")) continue;
+    const name = label.slice(0, -", owed".length);
+    of.set(name, of.has(name) ? null : owed);
   }
   return { total: doc ? total : null, of: (name: string) => of.get(name) ?? null };
 }
@@ -618,11 +658,13 @@ export interface PayForm {
 export function payBody(b: SupplierDue, f: PayForm) {
   const differs = b.differences.length > 0;
   if (differs && !f.seen) return { problem: "Tick that you have seen how this bill differs from its order, then record the payment." };
-  if (!(Number(f.amount) > 0)) return { problem: "Type the amount paid to the supplier: more than zero." };
+  if (f.amount.includes(",")) return { problem: COMMA };
+  if (!isMoney(Number(f.amount))) return { problem: "Type the amount paid to the supplier: more than zero." };
   if (!f.method) return { problem: "How was it paid? Cash, cheque, bank or UPI." };
   if (f.method !== "cash" && !f.reference.trim()) return { problem: "Type the cheque, UTR or UPI reference." };
   if (!f.paidOn) return { problem: "Pick the date it was paid." };
-  if (f.withTds && (!f.section || !(Number(f.rate) > 0) || !(Number(f.tdsAmount) > 0))) return { problem: "TDS is its section, rate and amount: all three." };
+  if (f.withTds && (f.rate.includes(",") || f.tdsAmount.includes(","))) return { problem: COMMA };
+  if (f.withTds && (!f.section || !(Number(f.rate) > 0) || !isMoney(Number(f.tdsAmount)))) return { problem: "TDS is its section, rate and amount: all three." };
   return {
     body: {
       amount: Number(f.amount), method: f.method, reference: f.reference.trim() || null, paidOn: f.paidOn.trim(), handedOverBy: f.handedOverBy.trim(),
@@ -636,7 +678,8 @@ export function payBody(b: SupplierDue, f: PayForm) {
 export function creditBody(target: { bill: SupplierDue | null; supplierId: string },
   f: { issuedBy: "supplier" | "hotel"; noteNo: string; noteDate: string; amount: string; reason: string }) {
   if (!f.noteNo.trim()) return { problem: "Type the credit note's number." };
-  if (!(Number(f.amount) > 0)) return { problem: "Type the credit note's amount: more than zero." };
+  if (f.amount.includes(",")) return { problem: COMMA };
+  if (!isMoney(Number(f.amount))) return { problem: "Type the credit note's amount: more than zero." };
   if (!f.reason.trim()) return { problem: "Say what it is for: goods returned, a short supply, a price corrected." };
   return {
     body: {

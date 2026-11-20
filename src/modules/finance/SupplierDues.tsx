@@ -13,7 +13,7 @@ import {
   type DueGroup, type PayForm, type Reversing, type SupplierDue,
 } from "./desk";
 import { addCreditNote, paySupplier, readDues, readDuesReport, reverseDueEntry } from "./deskData";
-import { DeskSheet, Figure, OnOff, PageHead, ReadState, RefusedCard, TextAct, failedSaid, useWrite, StopCard, useDeskRead, useStop, type Stop } from "./DeskKit";
+import { DeskSheet, Figure, OnOff, PageHead, ReadState, RefusedCard, TextAct, failedSaid, useWrite, StopCard, useDeskRead, usePull, useStop, type Stop } from "./DeskKit";
 import { Btn, Choice, Field, Input, Refused, SaidCard, Tick, type Said } from "./Kit";
 
 /* ══════════════════════════════════════════════════════════════════
@@ -38,13 +38,12 @@ export function SupplierDues({ hotel, role }: { hotel: Hotel; role: string | nul
   const cache = useQueryClient();
   const refused = whyNotReadDues(role);
   const q = useDeskRead(() => (refused ? Promise.resolve(null) : readDues(code)), ["finance", code, "desk", "dues"]);
-  const stop = useStop(q.began);
+  const stop = useStop(`${code}/dues`, q.began);
   const today = q.data?.today ?? null;
   const rep = useDeskRead(() => (refused || !today ? Promise.resolve(null) : readDuesReport(code, today)), ["finance", code, "desk", "dues-report", today ?? ""]);
   const [said, setSaid] = useState<Said | null>(null);
   const [sheet, setSheet] = useState<Sheet | null>(null);
-  const [pulled, setPulled] = useState(false);
-  const pull = () => { setPulled(true); q.reload(); rep.reload(); };
+  const pulling = usePull(q.loading || rep.loading, () => { q.reload(); rep.reload(); });
   const done = (s: Said | null) => { if (s) setSaid(s); void cache.invalidateQueries({ queryKey: ["finance", code] }); };
   const why = whyNotPaySupplier(role);
   const refusedSaid = (title: string) => (w: string) => setSaid({ tone: "refused", title, text: w });
@@ -52,10 +51,10 @@ export function SupplierDues({ hotel, role }: { hotel: Hotel; role: string | nul
   const totals = duesTotals(rep.data);
 
   return (
-    <Screen refreshing={pulled && q.loading} onRefresh={pull}>
+    <Screen refreshing={pulling.refreshing} onRefresh={pulling.pull}>
       <PageHead title="Supplier dues" under="What we owe suppliers: the bills taken on credit, what is paid and what is left." />
       {said ? <SaidCard said={said} /> : null}
-      <StopCard stop={stop} />
+      <StopCard stop={stop} failed={Boolean(q.error)} />
       {refused ? <RefusedCard title="Supplier dues" why={refused} />
         : !d ? <ReadState what="the supplier dues" reading="Reading the supplier dues…" error={q.error} onRetry={q.reload} />
         : d.bills.length === 0 && d.credits.length === 0 ? (
@@ -181,12 +180,12 @@ function PaySheet({ stop, code, bill, today, onClose, onDone }: { stop: Stop; co
     });
   };
   return (
-    <DeskSheet title={`Pay bill ${bill.billNo}`} onClose={close}
+    <DeskSheet busy={w.out} title={`Pay bill ${bill.billNo}`} onClose={close}
       description={`${bill.supplier}: ${money(bill.owed)} left of ${money(bill.amount)}. Pay all of it or a part. Nothing changes in a cash drawer.`}
       footer={(
         <>
-          <Btn label="Cancel" onPress={close} />
-          <Btn label="Record payment" kind="primary" busy={w.busy} off={w.stuck} onPress={submit} />
+          <Btn label="Cancel" off={w.out} onPress={close} />
+          <Btn label="Record payment" kind="primary" busy={w.busy} off={w.stuck || w.out} onPress={submit} />
         </>
       )}>
       {bill.differences.length > 0 ? (
@@ -254,12 +253,12 @@ function CreditSheet({ stop, code, target, today, onClose, onDone }: {
     });
   };
   return (
-    <DeskSheet title={target.bill ? `Credit note on bill ${target.bill.billNo}` : `Credit note from ${target.supplier}`} onClose={close}
+    <DeskSheet busy={w.out} title={target.bill ? `Credit note on bill ${target.bill.billNo}` : `Credit note from ${target.supplier}`} onClose={close}
       description="Money only: it lowers what is owed. Goods sent back leave the store as a store movement, separately."
       footer={(
         <>
-          <Btn label="Cancel" onPress={close} />
-          <Btn label="Record credit note" kind="primary" busy={w.busy} off={w.stuck} onPress={submit} />
+          <Btn label="Cancel" off={w.out} onPress={close} />
+          <Btn label="Record credit note" kind="primary" busy={w.busy} off={w.stuck || w.out} onPress={submit} />
         </>
       )}>
       <Field label="Whose note">
@@ -294,12 +293,12 @@ function ReverseSheet({ stop, code, entry, onClose, onDone }: { stop: Stop; code
     }, (e, lost) => { const x = failedSaid(e, "Not reversed", "reversed", "the dues"); if (lost) { onClose(); onDone(x); return; } setProblem(x.text ? `${x.title}. ${x.text}` : x.title); });
   };
   return (
-    <DeskSheet title={`Reverse ${entry.what}`} onClose={close}
+    <DeskSheet busy={w.out} title={`Reverse ${entry.what}`} onClose={close}
       description="Nothing is deleted: the entry and its reversal both stay on the record, with your reason and your name."
       footer={(
         <>
-          <Btn label="Cancel" onPress={close} />
-          <Btn label="Reverse" kind="danger" busy={w.busy} off={w.stuck} onPress={submit} />
+          <Btn label="Cancel" off={w.out} onPress={close} />
+          <Btn label="Reverse" kind="danger" busy={w.busy} off={w.stuck || w.out} onPress={submit} />
         </>
       )}>
       <Field label="Why"><Input value={reason} onChange={setReason} label="Why" maxLength={200} /></Field>

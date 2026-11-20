@@ -15,7 +15,7 @@ import {
   type FilingKind, type FormCRegister, type FormCRow,
 } from "./desk";
 import { completeDetails, readFormC, recordFiling } from "./deskData";
-import { DeskExport, DeskSheet, PageHead, ReadState, RefusedCard, TextAct, TonePill, failedSaid, useWrite, StopCard, useDeskRead, useStop, type Stop } from "./DeskKit";
+import { DeskExport, DeskSheet, PageHead, ReadState, RefusedCard, TextAct, TonePill, failedSaid, useWrite, StopCard, useDeskRead, usePull, useStop, type Stop } from "./DeskKit";
 import { Btn, Choice, Field, IconBtn, Input, Refused, SaidCard, type Said } from "./Kit";
 
 /* ══════════════════════════════════════════════════════════════════
@@ -41,18 +41,17 @@ export function FormC({ hotel, role }: { hotel: Hotel; role: string | null }) {
   const cache = useQueryClient();
   const refused = whyNotReadFormC(role);
   const q = useDeskRead(() => (refused ? Promise.resolve(null) : readFormC(code)), ["finance", code, "desk", "form-c"]);
-  const stop = useStop(q.began);
+  const stop = useStop(`${code}/form-c`, q.began);
   const [said, setSaid] = useState<Said | null>(null);
   const [editing, setEditing] = useState<FormCRow | null>(null);
   const [card, setCard] = useState<FormCRow | null>(null);
-  const [pulled, setPulled] = useState(false);
-  const pull = () => { setPulled(true); q.reload(); };
+  const pulling = usePull(q.loading, () => { q.reload(); });
   const done = (s: Said | null) => { if (s) setSaid(s); void cache.invalidateQueries({ queryKey: ["finance", code] }); };
   const d = q.data;
   const pill = d ? formCPill(d) : null;
 
   return (
-    <Screen refreshing={pulled && q.loading} onRefresh={pull}>
+    <Screen refreshing={pulling.refreshing} onRefresh={pulling.pull}>
       <PageHead title="Form III" pill={pill ? <TonePill tone={pill.tone} words={pill.words} /> : null}
         under="Foreign guests reported to the FRRO: arrival and departure, each within 24 hours (Form III, earlier called Form C)." />
       {refused ? <RefusedCard title="Form III" why={refused} /> : (
@@ -68,7 +67,7 @@ export function FormC({ hotel, role }: { hotel: Hotel; role: string | null }) {
           </View>
           {d && unrecordedLine(d) ? <Text style={[t.label, { color: c.yellow800, lineHeight: 21 }]}>{unrecordedLine(d)}</Text> : null}
           {said ? <SaidCard said={said} /> : null}
-      <StopCard stop={stop} />
+      <StopCard stop={stop} failed={Boolean(q.error)} />
           {!d ? <ReadState what="the Form III register" reading="Reading the Form III register…" error={q.error} onRetry={q.reload} />
             : d.rows.length === 0 ? (
               <Card style={{ alignItems: "center", gap: 6, paddingVertical: 24 }}>
@@ -106,14 +105,19 @@ function Register({ stop, code, d, why, onSaid, onDone, onEdit, onCard }: {
     setOpen(null);
     setReference("");
     onDone(null);
-  }, (e) => { onSaid(failedSaid(e, "Not recorded", "recorded", "the register")); onDone(null); });
+  }, (e, lost) => {
+    /* Not known whether it was recorded: the number typed goes, so a repeat is typed on purpose (MEMORY 16). */
+    if (lost) { setReference(""); setOpen(null); }
+    onSaid(failedSaid(e, "Not recorded", "recorded", "the register"));
+    onDone(null);
+  });
 
   const entry = (r: FormCRow, kind: FilingKind, numbers: string[]) =>
     open?.id === rowOf(r) && open.kind === kind ? (
       <View style={{ gap: 6, marginTop: 4 }}>
         <Input value={reference} onChange={setReference} label={`FRRO ${kind} number`} placeholder="Portal number" caps="characters" />
         <View style={{ flexDirection: "row", gap: 8 }}>
-          <Btn label="Save" kind="primary" busy={w.busy} off={!reference.trim() || w.stuck} onPress={() => save(r, kind)} />
+          <Btn label="Save" kind="primary" busy={w.busy} off={!reference.trim() || w.stuck || w.out} onPress={() => save(r, kind)} />
           <Btn label="Cancel" kind="ghost" onPress={() => setOpen(null)} />
         </View>
       </View>
@@ -214,10 +218,10 @@ function CompleteDetails({ stop, code, row, idsOff, onClose, onDone }: {
     );
   };
   return (
-    <DeskSheet title="Complete details" description={`${row.guest} · ${row.nationality} · room ${row.room}`} onClose={close} footer={(
+    <DeskSheet busy={w.out} title="Complete details" description={`${row.guest} · ${row.nationality} · room ${row.room}`} onClose={close} footer={(
       <>
-        <Btn label="Cancel" onPress={close} />
-        <Btn label="Save" kind="primary" busy={w.busy} off={doc.wrong !== null || w.stuck} onPress={save} />
+        <Btn label="Cancel" off={w.out} onPress={close} />
+        <Btn label="Save" kind="primary" busy={w.busy} off={doc.wrong !== null || w.stuck || w.out} onPress={save} />
       </>
     )}>
       <Refused text={problem} />

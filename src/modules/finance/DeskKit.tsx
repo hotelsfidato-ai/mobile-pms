@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import type { LucideIcon } from "lucide-react-native";
 import { CloudOff } from "lucide-react-native";
-import { useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import {
   KeyboardAvoidingView, Modal, Platform, Pressable, ScrollView, Switch, Text, View,
 } from "react-native";
@@ -11,8 +11,8 @@ import { ExportButtons } from "../../core/Export";
 import type { ExportTable } from "../../core/exportDoc";
 import { isOnline } from "../../core/offline";
 import { c, face, space, t } from "../../core/theme";
-import { Card, ReadFailed, notKnown } from "../../core/ui";
-import { stillUnknown } from "./desk";
+import { Card, ReadFailed, modalEdge, notKnown } from "../../core/ui";
+import { deskStop } from "./desk";
 import type { Said } from "./Kit";
 
 /* ══════════════════════════════════════════════════════════════════
@@ -125,67 +125,101 @@ export function useDeskRead<T>(read: () => Promise<T>, key: readonly unknown[]) 
   };
 }
 
-/** THE SCREEN'S STOP (MEMORY 16; the reviews of 20 Nov): once a write's outcome is unknown
-    (`outcomeUnknown`: nothing came back, or a 5xx), every write on this screen waits until a read
-    of it that began after that moment has come back - not when a sheet closes. None of these
-    routes reads an idempotency key, so a second tap could be a second deposit or payment. */
-export function useStop(began: number) {
-  const [lost, setLost] = useState<{ at: number; done: string; where: string } | null>(null);
-  const now = useRef({ lost, began });
-  now.current = { lost, began };
-  const stuck = lost !== null && stillUnknown(lost.at, began);
+/* Who is watching each screen's stop, so a write landing after the screen was left and opened
+   again still greys and frees the screen now on show. */
+const watchers = new Map<string, Set<() => void>>();
+const ping = (key: string) => { for (const fn of watchers.get(key) ?? []) fn(); };
+
+/** THE SCREEN'S STOP (MEMORY 16; the reviews of 20 Nov). `key` is `${code}/${screen}`; the state
+    lives in desk.ts `deskStop`, outside the screen, so leaving and coming back keeps it.
+    - A write on its way: every write on the screen waits (`busy`), and its sheet cannot close.
+    - A write whose outcome is unknown (`outcomeUnknown`: nothing came back, or a 5xx): every write
+      on the screen waits until a read of it that BEGAN after that moment has come back - not when
+      a sheet closes, not when the screen is opened again. None of these routes reads an
+      idempotency key, so a second tap could be a second deposit or payment. */
+export function useStop(key: string, began: number) {
+  const [, tick] = useState(0);
+  useEffect(() => {
+    const fn = () => tick((n) => n + 1);
+    const set = watchers.get(key) ?? new Set();
+    set.add(fn);
+    watchers.set(key, set);
+    return () => { set.delete(fn); };
+  }, [key]);
+  const beganNow = useRef(began);
+  beganNow.current = began;
+  const lost = deskStop.lost(key, began);
   return {
-    stuck,
-    line: stuck ? notKnown(lost!.done, lost!.where).line : null,
-    isStuck: () => now.current.lost !== null && stillUnknown(now.current.lost.at, now.current.began),
+    stuck: lost !== null,
+    busy: deskStop.flying(key),
+    line: lost ? notKnown(lost.done, lost.where).line : null,
+    isStuck: () => deskStop.lost(key, beganNow.current) !== null,
+    isBusy: () => deskStop.flying(key),
+    begin: () => { deskStop.begin(key); ping(key); },
+    end: () => { deskStop.end(key); ping(key); },
     lose: (e: unknown, done: string, where: string) => {
       if (!outcomeUnknown(e)) return false;
-      const v = { at: Date.now(), done, where };
-      now.current = { ...now.current, lost: v };
-      setLost(v);
+      deskStop.lose(key, { at: Date.now(), done, where });
+      ping(key);
       return true;
     },
   };
 }
 export type Stop = ReturnType<typeof useStop>;
 
-/** The screen's stop said where the person looks, with the screen's grey buttons. */
-export function StopCard({ stop }: { stop: Stop }) {
+/** The screen's stop said where the person looks, with the screen's grey buttons. `failed`: the
+    read again did not come back, so the person is told to pull down. */
+export function StopCard({ stop, failed }: { stop: Stop; failed: boolean }) {
   if (!stop.line) return null;
   return (
     <Card style={{ backgroundColor: c.yellow50, borderColor: c.yellow100, gap: 4 }}>
       <Text style={[t.label, { color: c.ink900, lineHeight: 20, ...face[500] }]} accessibilityRole="alert">{stop.line}</Text>
-      <Text style={[t.caption, { lineHeight: 16 }]}>It is being read again; nothing here can be done until it has been.</Text>
+      <Text style={[t.caption, { lineHeight: 16 }]}>
+        {failed ? "It could not be read again. Pull down to read it again; nothing here can be done until it has been."
+          : "It is being read again; nothing here can be done until it has been."}
+      </Text>
     </Card>
   );
 }
 
-/** One intent, one write (MEMORY 8, 16): latched at the tap, and refused while the screen's stop
-    is on. `done` and `where` are the words of an unknown outcome: "Not known whether it was
-    <done>: look at <where> before trying again." `onError` hears every failure. */
+/** Pull down to read again: on while the pull's own read is out, off once it is back. */
+export function usePull(loading: boolean, reload: () => void) {
+  const [pulled, setPulled] = useState(false);
+  useEffect(() => { if (!loading) setPulled(false); }, [loading]);
+  return { refreshing: pulled && loading, pull: () => { setPulled(true); reload(); } };
+}
+
+/** One intent, one write (MEMORY 8, 16): latched at the tap, and refused while another write of
+    this screen is on its way or the screen's stop is on. `done` and `where` are the words of an
+    unknown outcome: "Not known whether it was <done>: look at <where> before trying again." */
 export function useWrite(stop: Stop, done: string, where: string) {
   const latch = useRef(false);
-  const [busy, setBusy] = useState(false);
+  const [mine, setMine] = useState(false);
   const run = async (write: () => Promise<void>, onError: (e: unknown, unknown: boolean) => void) => {
-    if (latch.current || stop.isStuck()) return;
+    if (latch.current || stop.isBusy() || stop.isStuck()) return;
     latch.current = true;
-    setBusy(true);
-    try { await write(); } catch (e) { onError(e, stop.lose(e, done, where)); } finally { latch.current = false; setBusy(false); }
+    setMine(true);
+    stop.begin();
+    try { await write(); } catch (e) { onError(e, stop.lose(e, done, where)); } finally { latch.current = false; setMine(false); stop.end(); }
   };
-  return { run, busy, stuck: stop.stuck };
+  /* `busy`: this write's own spinner; `out`: some write of this screen is on its way. */
+  return { run, busy: mine, out: stop.busy, stuck: stop.stuck };
 }
 
 /** A sheet from the bottom: the web's Dialog at phone width, clear of the home indicator and
     the gesture bar, lifted over the keyboard, closed by the back gesture (docs/NATIVE.md). */
-export function DeskSheet({ title, description, onClose, children, footer }: {
+export function DeskSheet({ title, description, onClose, children, footer, busy = false }: {
   title: string; description?: string; onClose: () => void; children?: ReactNode; footer: ReactNode;
+  /** A write on its way: the backdrop and the back gesture do nothing (the money review, 1). */
+  busy?: boolean;
 }) {
   const insets = useSafeAreaInsets();
+  const close = () => { if (!busy) onClose(); };
   return (
-    <Modal visible transparent statusBarTranslucent animationType={Platform.OS === "web" ? "none" : "slide"} onRequestClose={onClose}>
+    <Modal {...modalEdge} visible transparent animationType={Platform.OS === "web" ? "none" : "slide"} onRequestClose={close}>
       <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : "height"}>
-        <View style={{ flex: 1, backgroundColor: "rgba(3,23,40,0.4)", paddingTop: insets.top }}>
-          <Pressable style={{ flex: 1, minHeight: 48 }} onPress={onClose} accessibilityRole="button" accessibilityLabel="Close" />
+        <View style={{ flex: 1, backgroundColor: "rgba(3,23,40,0.4)", paddingTop: insets.top, paddingLeft: insets.left, paddingRight: insets.right }}>
+          <Pressable style={{ flex: 1, minHeight: 48 }} onPress={close} disabled={busy} accessibilityRole="button" accessibilityLabel="Close" accessibilityState={{ disabled: busy }} />
           <View style={{ backgroundColor: c.white, borderTopLeftRadius: 16, borderTopRightRadius: 16, maxHeight: "92%" }}>
             <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingHorizontal: space.side, paddingTop: 18, paddingBottom: 12, gap: 14 }}>
               <View style={{ gap: 2 }}>

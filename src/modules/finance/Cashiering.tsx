@@ -13,7 +13,7 @@ import {
   type CashierDrawer, type CashierDrawerView, type Counts, type MovementKind,
 } from "./desk";
 import { closeDrawer, countDrawer, openDrawer, readDrawer, recordMovement } from "./deskData";
-import { CardHead, DeskSheet, Hair, Line, PageHead, ReadState, RefusedCard, TextAct, failedSaid, useWrite, StopCard, useDeskRead, useStop, type Stop } from "./DeskKit";
+import { CardHead, DeskSheet, Hair, Line, PageHead, ReadState, RefusedCard, TextAct, failedSaid, useWrite, StopCard, useDeskRead, usePull, useStop, type Stop } from "./DeskKit";
 import { Btn, Choice, Field, Input, Refused, SaidCard, type Said } from "./Kit";
 
 /* ══════════════════════════════════════════════════════════════════
@@ -36,20 +36,19 @@ export function Cashiering({ hotel, role }: { hotel: Hotel; role: string | null 
   const cache = useQueryClient();
   const refused = whyNotReadDrawer(role);
   const q = useDeskRead(() => (refused ? Promise.resolve(null) : readDrawer(code)), ["finance", code, "desk", "drawer"]);
-  const stop = useStop(q.began);
+  const stop = useStop(`${code}/drawer`, q.began);
   const [said, setSaid] = useState<Said | null>(null);
   /* Pulling down reads the drawer again: what was stuck on an unknown outcome is seen, and starts afresh. */
-  const [pulled, setPulled] = useState(false);
-  const pull = () => { setPulled(true); q.reload(); };
+  const pulling = usePull(q.loading, () => { q.reload(); });
   const done = (s: Said | null) => { if (s) setSaid(s); void cache.invalidateQueries({ queryKey: ["finance", code] }); };
   const mayNot = whyNotRunDrawer(role);
   const data = q.data;
 
   return (
-    <Screen refreshing={pulled && q.loading} onRefresh={pull}>
+    <Screen refreshing={pulling.refreshing} onRefresh={pulling.pull}>
       <PageHead title="Cashiering" under={data ? `Your drawer · ${dateDay(data.businessDate)}` : "Your drawer"} />
       {said ? <SaidCard said={said} /> : null}
-      <StopCard stop={stop} />
+      <StopCard stop={stop} failed={Boolean(q.error)} />
       {refused ? <RefusedCard title="Cashiering" why={refused} />
         : !data ? <ReadState what="your drawer" reading="Reading your drawer…" error={q.error} onRetry={q.reload} />
         : !data.shift
@@ -72,7 +71,12 @@ function OpenDrawer({ stop, code, view, mayNot, onSaid, onDone }: Acts & { view:
     void w.run(async () => {
       await openDrawer(code, o.opening);
       onDone({ tone: "ok", title: "Drawer open", text: `Starting with ${rupees(o.opening)}.` });
-    }, (e) => { onSaid(failedSaid(e, "Not opened", "opened", "your drawer")); onDone(null); });
+    }, (e, lost) => {
+      /* Not known whether it opened: the float typed goes, so a repeat is counted on purpose (MEMORY 16). */
+      if (lost) setCounts({});
+      onSaid(failedSaid(e, "Not opened", "opened", "your drawer"));
+      onDone(null);
+    });
   };
   const last = lastClose(view.previous);
   return (
@@ -84,7 +88,7 @@ function OpenDrawer({ stop, code, view, mayNot, onSaid, onDone }: Acts & { view:
         <NoteGrid counts={counts} onChange={setCounts} />
         <Btn
           label={w.busy ? "Opening…" : openLabel(counts)} kind="primary" Icon={Wallet} wide busy={w.busy}
-          off={openingOf(counts) === null || w.stuck} why={mayNot} onRefused={(why) => onSaid({ tone: "refused", title: "Not opened", text: why })} onPress={open}
+          off={openingOf(counts) === null || w.stuck || w.out} why={mayNot} onRefused={(why) => onSaid({ tone: "refused", title: "Not opened", text: why })} onPress={open}
         />
       </Card>
       {last ? <Text style={[t.label, { color: c.grey600, lineHeight: 21 }]}>{last}</Text> : null}
@@ -148,7 +152,7 @@ function Shift({ stop, code, shift, colleagues, mayNot, onSaid, onDone }: Acts &
       <Card style={{ gap: 14 }}>
         <CardHead title="Count the drawer" under="Notes and coins, as they come out." />
         <NoteGrid counts={counts} onChange={setCounts} />
-        <Btn label={w.busy ? "Saving…" : saveLabel(counts)} kind="primary" wide busy={w.busy} off={!body || w.stuck} why={mayNot} onRefused={refused("Not saved")} onPress={save} />
+        <Btn label={w.busy ? "Saving…" : saveLabel(counts)} kind="primary" wide busy={w.busy} off={!body || w.stuck || w.out} why={mayNot} onRefused={refused("Not saved")} onPress={save} />
       </Card>
 
       <Card style={{ gap: 12 }}>
@@ -238,10 +242,10 @@ function MovementSheet({ stop, code, onClose, onDone }: { stop: Stop; code: stri
     });
   };
   return (
-    <DeskSheet title="Money in or out" onClose={close} footer={(
+    <DeskSheet busy={w.out} title="Money in or out" onClose={close} footer={(
       <>
-        <Btn label="Cancel" onPress={close} />
-        <Btn label="Record" kind="primary" busy={w.busy} off={!state.ok || w.stuck} onPress={submit} />
+        <Btn label="Cancel" off={w.out} onPress={close} />
+        <Btn label="Record" kind="primary" busy={w.busy} off={!state.ok || w.stuck || w.out} onPress={submit} />
       </>
     )}>
       <Field label="What happened" hint={chosen.hint}>
@@ -249,6 +253,7 @@ function MovementSheet({ stop, code, onClose, onDone }: { stop: Stop; code: stri
       </Field>
       <Field label="How much">
         <Input value={amount} onChange={setAmount} label="How much" keyboard="decimal-pad" tabular />
+        <Refused text={state.problem} />
       </Field>
       <Field label="What was it for" hint="This is the line somebody asks about tomorrow.">
         <Input value={reason} onChange={setReason} label="What was it for" multiline />
@@ -293,10 +298,10 @@ function CloseSheet({ stop, code, shift, colleagues, onClose, onDone }: {
     });
   };
   return (
-    <DeskSheet title="Close and hand over" onClose={close} footer={(
+    <DeskSheet busy={w.out} title="Close and hand over" onClose={close} footer={(
       <>
-        <Btn label="Not yet" onPress={close} />
-        <Btn label="Close the shift" kind="primary" Icon={Lock} busy={w.busy} off={!s.ok || w.stuck} onPress={submit} />
+        <Btn label="Not yet" off={w.out} onPress={close} />
+        <Btn label="Close the shift" kind="primary" Icon={Lock} busy={w.busy} off={!s.ok || w.stuck || w.out} onPress={submit} />
       </>
     )}>
       <VarianceBox v={varianceWords(shift.variance, shift.waiting ?? 0)} />

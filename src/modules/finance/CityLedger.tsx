@@ -13,7 +13,7 @@ import {
   type CompanyPayment, type CompanyPaymentsView, type LedgerRow,
 } from "./desk";
 import { readCompanyPayments, readLedger, recordCompanyPayment, reverseCompanyPayment } from "./deskData";
-import { CardHead, DeskExport, DeskSheet, Hair, PageHead, ReadState, RefusedCard, TextAct, TonePill, failedSaid, useWrite, StopCard, useDeskRead, useStop, type Stop } from "./DeskKit";
+import { CardHead, DeskExport, DeskSheet, Hair, PageHead, ReadState, RefusedCard, TextAct, TonePill, failedSaid, useWrite, StopCard, useDeskRead, usePull, useStop, type Stop } from "./DeskKit";
 import { Btn, Choice, Field, Input, Refused, SaidCard, type Said } from "./Kit";
 
 /* ══════════════════════════════════════════════════════════════════
@@ -40,11 +40,10 @@ export function CityLedger({ hotel, role }: { hotel: Hotel; role: string | null 
   const asOn = hotel.businessDate;
   const doc = useDeskRead(() => (refused ? Promise.resolve(null) : readLedger(code, from, asOn)), ["finance", code, "desk", "city-ledger", from, asOn]);
   const paid = useDeskRead(() => (refused ? Promise.resolve(null) : readCompanyPayments(code)), ["finance", code, "desk", "company-payments"]);
-  const stop = useStop(paid.began);
+  const stop = useStop(`${code}/company-accounts`, paid.began);
   const [said, setSaid] = useState<Said | null>(null);
   const [sheet, setSheet] = useState<{ kind: "record" } | { kind: "reverse"; p: CompanyPayment } | null>(null);
-  const [pulled, setPulled] = useState(false);
-  const pull = () => { setPulled(true); doc.reload(); paid.reload(); };
+  const pulling = usePull(doc.loading || paid.loading, () => { doc.reload(); paid.reload(); });
   const done = (s: Said | null) => { if (s) setSaid(s); void cache.invalidateQueries({ queryKey: ["finance", code] }); };
   const refusedSaid = (title: string) => (why: string) => setSaid({ tone: "refused", title, text: why });
 
@@ -55,7 +54,7 @@ export function CityLedger({ hotel, role }: { hotel: Hotel; role: string | null 
   const mayNotRecord = whyNotRecordCompanyPayment(role);
 
   return (
-    <Screen refreshing={pulled && (doc.loading || paid.loading)} onRefresh={pull}>
+    <Screen refreshing={pulling.refreshing} onRefresh={pulling.pull}>
       <PageHead title="Company accounts" pill={pill ? <TonePill tone={pill.tone} words={pill.words} /> : null}
         under={`What each company or booking site owes and paid, ${period}.`} />
       {refused ? <RefusedCard title="Company accounts" why={refused} /> : (
@@ -66,7 +65,7 @@ export function CityLedger({ hotel, role }: { hotel: Hotel; role: string | null 
           </View>
           <DeskExport why={whyNotExport(role, "money")} table={doc.data ? ledgerTable(rows, owed, `${hotel.name} · ${period}`) : null} />
           {said ? <SaidCard said={said} /> : null}
-      <StopCard stop={stop} />
+      <StopCard stop={stop} failed={Boolean(paid.error)} />
           {!doc.data ? <ReadState what="the company accounts" reading="Reading the company accounts…" error={doc.error} onRetry={doc.reload} />
             : rows.length === 0 ? (
               <Card style={{ gap: 6, alignItems: "center", paddingVertical: 24 }}>
@@ -166,10 +165,10 @@ function RecordSheet({ stop, code, view, onClose, onDone }: { stop: Stop; code: 
     });
   };
   return (
-    <DeskSheet title="Record a company's payment" onClose={close} footer={(
+    <DeskSheet busy={w.out} title="Record a company's payment" onClose={close} footer={(
       <>
-        <Btn label="Cancel" onPress={close} />
-        <Btn label="Record payment" kind="primary" busy={w.busy} off={!s.ok || w.stuck} onPress={submit} />
+        <Btn label="Cancel" off={w.out} onPress={close} />
+        <Btn label="Record payment" kind="primary" busy={w.busy} off={!s.ok || w.stuck || w.out} onPress={submit} />
       </>
     )}>
       <Field label="Who paid" hint="The company or booking site the City ledger names.">
@@ -177,6 +176,7 @@ function RecordSheet({ stop, code, view, onClose, onDone }: { stop: Stop; code: 
       </Field>
       <Field label="Amount received">
         <Input value={f.amount} onChange={set("amount")} label="Amount received" keyboard="decimal-pad" tabular />
+        <Refused text={s.problem} />
       </Field>
       <Field label="Received on" hint="The day the money reached the hotel, as YYYY-MM-DD.">
         <Input value={f.receivedOn} onChange={set("receivedOn")} label="Received on" keyboard="numbers-and-punctuation" placeholder="YYYY-MM-DD" tabular />
@@ -209,12 +209,12 @@ function ReverseSheet({ stop, code, p, onClose, onDone }: { stop: Stop; code: st
     }, (e, lost) => { const x = failedSaid(e, "Not reversed", "reversed", "Payments received"); if (lost) { onClose(); onDone(x); return; } setProblem(x.text ? `${x.title}. ${x.text}` : x.title); });
   };
   return (
-    <DeskSheet title="Reverse this payment?" onClose={close}
+    <DeskSheet busy={w.out} title="Reverse this payment?" onClose={close}
       description={`${rupees(p.amount)} from ${p.account}, received ${dateDay(p.receivedOn)}. The line stays; a reversal is added beside it.`}
       footer={(
         <>
-          <Btn label="Cancel" onPress={close} />
-          <Btn label="Reverse it" kind="danger" busy={w.busy} off={!reason.trim() || w.stuck} onPress={submit} />
+          <Btn label="Cancel" off={w.out} onPress={close} />
+          <Btn label="Reverse it" kind="danger" busy={w.busy} off={!reason.trim() || w.stuck || w.out} onPress={submit} />
         </>
       )}>
       <Field label="Why" hint="This is the line somebody asks about.">

@@ -14,7 +14,7 @@ import {
 } from "./desk";
 import { explainDay, readDeposits, recordDeposit, reverseDeposit, verifyDeposit } from "./deskData";
 import {
-  CardHead, DeskExport, DeskSheet, Figure, Hair, PageHead, ReadState, RefusedCard, TonePill, failedSaid, useWrite, StopCard, useDeskRead, useStop, type Stop } from "./DeskKit";
+  CardHead, DeskExport, DeskSheet, Figure, Hair, PageHead, ReadState, RefusedCard, TonePill, failedSaid, useWrite, StopCard, useDeskRead, usePull, useStop, type Stop } from "./DeskKit";
 import { Btn, Choice, Field, Input, Refused, SaidCard, type Said } from "./Kit";
 
 /* ══════════════════════════════════════════════════════════════════
@@ -38,23 +38,22 @@ export function CashDeposits({ hotel, role }: { hotel: Hotel; role: string | nul
   const cache = useQueryClient();
   const refused = whyNotReadDeposits(role);
   const q = useDeskRead(() => (refused ? Promise.resolve(null) : readDeposits(code)), ["finance", code, "desk", "deposits"]);
-  const stop = useStop(q.began);
+  const stop = useStop(`${code}/deposits`, q.began);
   const [said, setSaid] = useState<Said | null>(null);
   const [sheet, setSheet] = useState<Sheet | null>(null);
-  const [pulled, setPulled] = useState(false);
-  const pull = () => { setPulled(true); q.reload(); };
+  const pulling = usePull(q.loading, () => { q.reload(); });
   const done = (s: Said | null) => { if (s) setSaid(s); void cache.invalidateQueries({ queryKey: ["finance", code] }); };
   const refusedSaid = (title: string) => (why: string) => setSaid({ tone: "refused", title, text: why });
   const d = q.data;
 
   return (
-    <Screen refreshing={pulled && q.loading} onRefresh={pull}>
+    <Screen refreshing={pulling.refreshing} onRefresh={pulling.pull}>
       <PageHead title="Cash deposits" under="Each day's cash to deposit, what was banked, and who verified it." />
       {refused ? <RefusedCard title="Cash deposits" why={refused} /> : (
         <>
           <DeskExport why={whyNotExport(role, "money")} table={d ? depositsTable(d, hotel.name) : null} />
           {said ? <SaidCard said={said} /> : null}
-      <StopCard stop={stop} />
+      <StopCard stop={stop} failed={Boolean(q.error)} />
           {!d ? <ReadState what="the cash deposits log" reading="Reading the cash deposits…" error={q.error} onRetry={q.reload} /> : (
             <>
               <Card style={{ gap: 12 }}>
@@ -143,7 +142,7 @@ function DepositRow({ stop, code, x, first, d, onSaid, onDone, onRefused, onReve
           {x.verifiedAt ? <TonePill tone="success" words="Verified" /> : null}
           {x.slipId ? <Btn label="Slip photo" Icon={FileImage} why={ON_THE_WEBSITE} onRefused={onRefused("Slip photo")} onPress={() => undefined} />
             : !x.reversed ? <Btn label="Add slip photo" Icon={FileImage} why={d.canRecord ? ON_THE_WEBSITE : RECORD_DEPOSIT_REFUSED} onRefused={onRefused("Add slip photo")} onPress={() => undefined} /> : null}
-          {acts.verify ? <Btn label="Verify" kind="primary" Icon={Check} busy={w.busy} off={w.stuck} why={acts.verify.why} onRefused={onRefused("Not verified")} onPress={verify} /> : null}
+          {acts.verify ? <Btn label="Verify" kind="primary" Icon={Check} busy={w.busy} off={w.stuck || w.out} why={acts.verify.why} onRefused={onRefused("Not verified")} onPress={verify} /> : null}
           {acts.reverse ? <Btn label="Reverse" Icon={Undo2} why={acts.reverse.why} onRefused={onRefused("Not reversed")} onPress={onReverse} /> : null}
         </View>
       ) : null}
@@ -173,10 +172,10 @@ function RecordSheet({ stop, code, days, date, onClose, onDone }: { stop: Stop; 
     });
   };
   return (
-    <DeskSheet title="Record a deposit" onClose={close} footer={(
+    <DeskSheet busy={w.out} title="Record a deposit" onClose={close} footer={(
       <>
-        <Btn label="Cancel" onPress={close} />
-        <Btn label="Record deposit" kind="primary" busy={w.busy} off={!s.ok || w.stuck} onPress={submit} />
+        <Btn label="Cancel" off={w.out} onPress={close} />
+        <Btn label="Record deposit" kind="primary" busy={w.busy} off={!s.ok || w.stuck || w.out} onPress={submit} />
       </>
     )}>
       <Field label="The day's cash it banks" hint={dayHint(days.find((x) => x.date === f.day))}>
@@ -184,6 +183,7 @@ function RecordSheet({ stop, code, days, date, onClose, onDone }: { stop: Stop; 
       </Field>
       <Field label="Amount deposited">
         <Input value={f.amount} onChange={set("amount")} label="Amount deposited" keyboard="decimal-pad" tabular />
+        <Refused text={s.problem} />
       </Field>
       <Field label="Deposited on" hint="As YYYY-MM-DD.">
         <Input value={f.depositedOn} onChange={set("depositedOn")} label="Deposited on" keyboard="numbers-and-punctuation" placeholder="YYYY-MM-DD" tabular />
@@ -216,10 +216,10 @@ function ExplainSheet({ stop, code, day, onClose, onDone }: { stop: Stop; code: 
     }, (e, lost) => { const x = failedSaid(e, "Not saved", "saved", "the day"); if (lost) { onClose(); onDone(x); return; } setProblem(x.text ? `${x.title}. ${x.text}` : x.title); });
   };
   return (
-    <DeskSheet title={`Why ${dateDay(day.date)} differs`} description={explainHead(day)} onClose={close} footer={(
+    <DeskSheet busy={w.out} title={`Why ${dateDay(day.date)} differs`} description={explainHead(day)} onClose={close} footer={(
       <>
-        <Btn label="Cancel" onPress={close} />
-        <Btn label="Save the explanation" kind="primary" busy={w.busy} off={!reason.trim() || w.stuck} onPress={submit} />
+        <Btn label="Cancel" off={w.out} onPress={close} />
+        <Btn label="Save the explanation" kind="primary" busy={w.busy} off={!reason.trim() || w.stuck || w.out} onPress={submit} />
       </>
     )}>
       <Field label="Why" hint="What the owner or the accountant needs, in a sentence.">
@@ -244,12 +244,12 @@ function ReverseSheet({ stop, code, x, onClose, onDone }: { stop: Stop; code: st
     }, (e, lost) => { const f = failedSaid(e, "Not reversed", "reversed", "the deposits"); if (lost) { onClose(); onDone(f); return; } setProblem(f.text ? `${f.title}. ${f.text}` : f.title); });
   };
   return (
-    <DeskSheet title="Reverse this deposit?" onClose={close}
+    <DeskSheet busy={w.out} title="Reverse this deposit?" onClose={close}
       description={`${rupees(x.amount)} for ${dateDay(x.businessDate)}, slip ${x.slipNo ?? "-"}. The line stays; a reversal is added beside it.`}
       footer={(
         <>
-          <Btn label="Cancel" onPress={close} />
-          <Btn label="Reverse it" kind="danger" busy={w.busy} off={!reason.trim() || w.stuck} onPress={submit} />
+          <Btn label="Cancel" off={w.out} onPress={close} />
+          <Btn label="Reverse it" kind="danger" busy={w.busy} off={!reason.trim() || w.stuck || w.out} onPress={submit} />
         </>
       )}>
       <Field label="Why" hint="This is the line somebody asks about.">

@@ -106,6 +106,32 @@ reviews of 20 Nov. **Done:** the stop lives at the screen (`DeskKit useStop`): a
 closes its sheet, says so, re-reads, and every write on the screen waits until a read that began
 after the loss has come back (`desk.ts stillUnknown`, checked; "began < stuckAt" broken once and
 seen to fail). **The rule:** an unknown outcome is lifted by a fresh read, never by a closed dialog.
+
+### MFIN-D6 · A sheet could be closed while its write was on its way (fixed 20 Nov)
+
+The latch lived in the sheet: Cancel, the backdrop or the back gesture closed it mid-write, and a
+new sheet tapped again sent a second POST before the first answered - two deposits, two company
+payments, two paid-outs, as none of these routes reads a key; the first reply then closed the
+second sheet. **Found** by the independent money review (13add26). **Done:** a write on its way is
+counted outside the screen (`deskStop.begin/end`, checked); `useWrite` refuses while any write of
+the screen is out; the sheet's Cancel is grey and its backdrop and back do nothing. **The rule:** a
+write that reads no key holds the whole screen until it has answered.
+
+### MFIN-D7 · Leaving the screen dropped the stop (fixed 20 Nov)
+
+The stop was the screen's state, so leaving and coming back forgot an unknown outcome while the
+cached read was from before it; with the first read failing, every write was live. **Found** by the
+money review. **Done:** the moment of loss is kept by `<code>/<screen>` outside the screen
+(`deskStop`), forgotten only by a read begun after it (checked: a screen opened again with no read
+stays stopped; broken once). **The rule:** an unknown outcome outlives the screen that met it.
+
+### MFIN-D8 · A supplier's total was looked up by its name (fixed 20 Nov)
+
+The report groups owed bills by supplier id (or the typed name) but labels each total "<name>,
+owed"; two suppliers of one name would each show one of the two figures. **Found** by the money
+review. **Done:** a name labelling two totals gives a dash on both (`duesTotals`, checked, broken
+once). Asked of the PMS: the supplier's id in the total rows. **The rule:** a figure is matched by
+its key, never by its words.
 # Lane B, m13-fin-bills (19-20 Nov)
 
 ## MFIN-B1 · The stay's Issue sheet does not stop on an unknown outcome (open, not this lane's file)

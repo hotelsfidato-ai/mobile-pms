@@ -5,7 +5,7 @@ import {
   cardLines, cashTaken, closeState, closedWords, companyPaymentState, countBody, creditBody, depositActs, depositState, depositTitle,
   differenceText, differenceTone, dueGroups, duesTotals, filing, filingBody, formCPill, formCTable, guestLine, handedWords, isDay,
   lastClose, ledgerOwed, ledgerRows, ledgerTable, maskId, money, movementAmount, movementState, noteLine, openLabel, openingOf,
-  owedPill, payBody, stillUnknown, peopleWords, reverseBody, saveLabel, tally, unrecordedLine, varianceWords, whyNotClose, whyNotExport,
+  owedPill, payBody, stillUnknown, deskStop, amountProblem, isMoney, COMMA, peopleWords, reverseBody, saveLabel, tally, unrecordedLine, varianceWords, whyNotClose, whyNotExport,
   whyNotPaySupplier, whyNotReadDeposits, whyNotReadDrawer, whyNotReadDues, whyNotReadFormC, whyNotRecordCompanyPayment,
   whyNotReverseCompanyPayment, whyNotRunDrawer, DASH, type CashierDrawer, type FormCRegister, type FormCRow, type ReportDoc,
   type SupplierDue, type SupplierDues,
@@ -21,6 +21,30 @@ eq(stillUnknown(null, 0), false, "nothing lost");
 eq(stillUnknown(1000, 900), true, "the record on screen was read before the loss");
 eq(stillUnknown(1000, 1000), true, "a read begun at the same moment proves nothing");
 eq(stillUnknown(1000, 1001), false, "a read begun after it came back: the person sees the record");
+
+/* The stop outlives the screen (the money review, 2): kept by screen, forgotten only by a later read. */
+deskStop.lose("5EL/deposits", { at: 1000, done: "recorded", where: "the deposits" });
+eq(deskStop.lost("5EL/deposits", 0)?.done, "recorded", "the screen opened again with no read: still stopped");
+eq(deskStop.lost("5EL/deposits", 900)?.at, 1000, "the cache from before the loss: still stopped");
+eq(deskStop.lost("5EL/drawer", 0), null, "another screen is not stopped");
+eq(deskStop.lost("6EL/deposits", 0), null, "another hotel is not stopped");
+eq(deskStop.lost("5EL/deposits", 1001), null, "a read begun after it: lifted");
+eq(deskStop.lost("5EL/deposits", 900), null, "and forgotten");
+deskStop.begin("5EL/drawer"); deskStop.begin("5EL/drawer");
+eq(deskStop.flying("5EL/drawer"), true, "a write on its way (the money review, 1)");
+deskStop.end("5EL/drawer");
+eq(deskStop.flying("5EL/drawer"), true, "two out, one back: still one out");
+deskStop.end("5EL/drawer");
+eq(deskStop.flying("5EL/drawer"), false, "none out");
+
+/* Amounts as the API takes them (isMoney): paise at most, a point not a comma (the money review, 6). */
+eq([isMoney(1500.5), isMoney(1500.505), isMoney(0), isMoney(-1)], [true, false, false, false], "isMoney");
+eq(amountProblem(""), null, "nothing typed: grey, no words");
+eq(amountProblem("1500,50"), COMMA, "an Android comma is said, not greyed silently");
+eq(amountProblem("1500.505"), "An amount is more than ₹0, with two places of paise at most.", "three places");
+eq(amountProblem("1500.50"), null, "an amount");
+eq(movementState("expense", "120.125", "taxi", "Office").ok, false, "a paid-out to a tenth of a paisa does not go");
+eq(depositState({ day: "2026-10-10", amount: "3,286", depositedOn: "2026-10-11", bank: "SBI", slipNo: "1" }).problem, COMMA, "a deposit with a comma");
 
 /* ── Who may: the API's lists and sentences ── */
 eq(whyNotRunDrawer("front_desk"), null, "reception runs a drawer");
@@ -174,6 +198,13 @@ eq(duesTotals(report).total, 4204.1, "Total owed: the server's");
 eq(duesTotals(report).of("A9 Test Kirana Bros"), 2052.55, "a supplier's: the server's, not its bills less its credits");
 eq(duesTotals(report).of("Ravi Dairy"), null, "none sent: a dash");
 eq(duesTotals(null).total, null, "no report read: a dash");
+const twins: ReportDoc = { sections: [{ key: "owed", rows: [
+  { kind: "total", cells: { supplier: "Ravi Dairy, owed", owed: 500 } },
+  { kind: "total", cells: { supplier: "Ravi Dairy, owed", owed: 120 } },
+  { kind: "total", cells: { supplier: "Total owed", owed: 620 } },
+] }] };
+eq(duesTotals(twins).of("Ravi Dairy"), null, "two suppliers of one name: a dash, never the other's figure (the money review, 3)");
+eq(duesTotals(twins).total, 620, "the total still the server's");
 eq(money("2152.50"), "₹2,152.50", "a figure as text, to the paisa");
 eq(money(null), DASH, "none");
 eq(differenceText({ lineId: "l", item: "Rice", unit: "kg", kind: "price", billed: "62.5", against: "60" }), "Rice: ₹62.50 a kg on the bill, ₹60.00 agreed", "a price difference");
@@ -183,6 +214,7 @@ eq(payBody(bill({}), pay).problem, "How was it paid? Cash, cheque, bank or UPI."
 eq(payBody(bill({}), { ...pay, method: "upi" }).problem, "Type the cheque, UTR or UPI reference.", "a reference unless cash");
 eq(payBody(bill({}), { ...pay, method: "cash", withTds: true, section: "194C", rate: "1" }).problem, "TDS is its section, rate and amount: all three.", "TDS whole");
 eq(payBody(bill({}), { ...pay, method: "cash", amount: "1000.25" }).body?.amount, 1000.25, "the amount as typed");
+eq(payBody(bill({}), { ...pay, method: "cash", amount: "1000,25" }).problem, COMMA, "a comma said");
 eq(creditBody({ bill: null, supplierId: "s1" }, { issuedBy: "supplier", noteNo: "CN2", noteDate: "2026-10-11", amount: "50", reason: "returned" }).body?.supplierId, "s1", "against the supplier");
 eq(reverseBody({ kind: "bill", id: "b1", what: "bill" }, "wrong", { billNo: "KB-402", billDate: "", amount: "10", dueOn: "" }).problem,
   "The right bill needs its number, date, amount and due date - or leave its number empty.", "the right bill whole");
