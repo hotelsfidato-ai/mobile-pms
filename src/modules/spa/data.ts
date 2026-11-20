@@ -37,6 +37,11 @@ export const isRefused = (x: unknown): x is Refused => typeof x === "object" && 
 /** One keeper per appointment for Charge to room (core/keys.ts, MFIN-1). */
 const keys = chargeKeys(currentSubject);
 
+/** The name of one diary day's stop (core useScreenStop, MSPA-U1): a booking whose outcome is unknown
+    greys Book a treatment for that day until a read of that day begun after the loss is back. */
+export const dayStop = (code: string, day: string) => `spa/${code}/diary/${day}`;
+export const BOOK_UNKNOWN = "Not known whether it was booked: look at the diary before booking again.";
+
 /** One day of the diary. `day` null on the first read: the server opens it
     on the PROPERTY's business date, never a date this phone picked. */
 export async function readDiary(code: string, day: string | null) {

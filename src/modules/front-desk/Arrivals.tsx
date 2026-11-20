@@ -3,8 +3,8 @@ import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import type { Hotel } from "../../core/api";
 import { dateLong } from "../../core/format";
-import { Screen, useRead } from "../../core/ui";
-import { readArrivals, readUpcoming, type DeskStay } from "./data";
+import { Screen, useRead, useScreenStop } from "../../core/ui";
+import { readArrivals, readUpcoming, type DeskStay, walkInStop } from "./data";
 import { addDays } from "./desk";
 import { PageHead, Pill, Segmented } from "./kit";
 import { Blacklist, Kept, StayList, type Column } from "./StayList";
@@ -30,7 +30,10 @@ export function Arrivals({ hotel, view }: { hotel: Hotel; view: string | undefin
 
   const aheadKey = ["front-desk", code, "upcoming", date];
   const opened = later || cache.getQueryData(aheadKey) != null;
-  const today = useRead(() => readArrivals(code, date), ["front-desk", code, "arrivals", date]);
+  /* Today's Arrivals is where a walk-in whose outcome was not known shows (MFD-U4): a read of it begun after
+     the loss lets the walk-in go. */
+  const walkIn = useScreenStop(walkInStop(code));
+  const today = useRead(walkIn.watch(() => readArrivals(code, date)), ["front-desk", code, "arrivals", date]);
   const ahead = useRead<DeskStay[] | null>(() => (opened ? readUpcoming(code, date, to) : Promise.resolve(null)), opened ? aheadKey : [...aheadKey, "not opened"]);
   const active = later ? ahead : today;
   const rows = active.data ?? undefined;

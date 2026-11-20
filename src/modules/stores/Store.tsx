@@ -6,12 +6,12 @@ import { useState } from "react";
 import { Text, View } from "react-native";
 import type { Hotel } from "../../core/api";
 import { c, space, t } from "../../core/theme";
-import { Head, Screen, useRead } from "../../core/ui";
+import { Head, Screen, Stopped, useRead, useScreenStop } from "../../core/ui";
 import { Back, Box, Btn, body, Empty, Loading, NotYours, Pill, Select, Stale, Toast, type Said } from "../guest-services/kit";
 import { LoadFailed } from "../laundry/kit";
 import { Act, Transfer } from "./Act";
 import { isRefused, readStore } from "./data";
-import { ActionSheet, Figure, GroupHead, Tiles, type MenuChoice } from "./kit";
+import { ActionSheet, Figure, GroupHead, STOP, STOP_LINE, Tiles, type MenuChoice } from "./kit";
 import { LOOK_ONLY, ON_THE_WEBSITE, whyNotChange, whyNotCorrect, whyNotSee } from "./roles";
 import { ListExport } from "../reports/ListExport";
 import {
@@ -46,7 +46,12 @@ export function Store({ hotel, role, onBack }: { hotel: Hotel; role: string | nu
   const [said, setSaid] = useState<Said | null>(null);
   const [pulled, setPulled] = useState(false);
 
-  const q = useRead(() => (refused ? Promise.resolve(null) : readStore(code)), ["stores", code, "shelf"]);
+  /* A movement or a move whose outcome is unknown (MEMORY 16; MST-U1): every act here stays grey
+     until a read of the shelf begun after it is back - closing the dialog lets nothing go. */
+  const stop = useScreenStop(STOP.shelf(code));
+  const act = (a: { item: StockItem; kind: StockKind }) => { if (!stop.isStuck()) setActing(a); };
+  const move = (i: StockItem) => { if (!stop.isStuck()) setMoving(i); };
+  const q = useRead(stop.watch(() => (refused ? Promise.resolve(null) : readStore(code))), ["stores", code, "shelf"]);
   const off = isRefused(q.data) ? q.data.refused : null;
   const list: StoreList | null = q.data && !isRefused(q.data) ? q.data : null;
 
@@ -109,6 +114,7 @@ export function Store({ hotel, role, onBack }: { hotel: Hotel; role: string | nu
         />
 
         {!mayChange ? <Text style={[body, { color: c.grey600 }]}>{LOOK_ONLY}</Text> : null}
+        {stop.unknown ? <Stopped line={STOP_LINE} onRead={q.reload} /> : null}
 
         {list && list.stores.length > 0 ? (
           <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
@@ -154,8 +160,8 @@ export function Store({ hotel, role, onBack }: { hotel: Hotel; role: string | nu
                 <GroupHead title={category} n={group.length} />
                 {group.map((i) => (
                   <ItemCard
-                    key={i.id} item={i} stores={placesFor(i)} picked={picked} mayChange={mayChange}
-                    onAct={(kind) => setActing({ item: i, kind })} onMore={() => setMore(i)}
+                    key={i.id} item={i} stores={placesFor(i)} picked={picked} mayChange={mayChange} stopped={stop.stuck}
+                    onAct={(kind) => act({ item: i, kind })} onMore={() => setMore(i)}
                     onHistory={() => router.push(`/stores/${code}/history/${i.id}` as never)}
                   />
                 ))}
@@ -166,22 +172,22 @@ export function Store({ hotel, role, onBack }: { hotel: Hotel; role: string | nu
       </Screen>
 
       {more && list ? (
-        <ActionSheet title={more.name} onClose={() => setMore(null)} choices={moreFor(more, placesFor(more), picked, notCorrect, {
-          act: (kind) => setActing({ item: more, kind }),
-          move: () => setMoving(more),
+        <ActionSheet title={more.name} onClose={() => setMore(null)} choices={moreFor(more, placesFor(more), picked, notCorrect, stop.stuck, {
+          act: (kind) => act({ item: more, kind }),
+          move: () => move(more),
           history: () => router.push(`/stores/${code}/history/${more.id}` as never),
         })} />
       ) : null}
       {acting && list ? (
         <Act
           code={code} list={list} item={acting.item} kind={acting.kind} startStoreId={picked?.id ?? null}
-          onClose={() => setActing(null)} onDone={(s) => { setActing(null); setSaid(s); }}
+          onClose={() => { setActing(null); if (stop.isStuck()) q.reload(); }} onDone={(s) => { setActing(null); setSaid(s); }}
         />
       ) : null}
       {moving && list ? (
         <Transfer
           code={code} list={list} item={moving} startFromId={picked?.id ?? null}
-          onClose={() => setMoving(null)} onDone={(s) => { setMoving(null); setSaid(s); }}
+          onClose={() => { setMoving(null); if (stop.isStuck()) q.reload(); }} onDone={(s) => { setMoving(null); setSaid(s); }}
         />
       ) : null}
       <Toast said={said} onClose={() => setSaid(null)} />
@@ -204,22 +210,23 @@ function ShelfDays() {
 }
 
 /** More (Stores.tsx 618-665): the rare acts, each with a word; a grey one says why. */
-function moreFor(i: StockItem, stores: StoreSummary[], picked: StoreSummary | null, notCorrect: string | null,
+function moreFor(i: StockItem, stores: StoreSummary[], picked: StoreSummary | null, notCorrect: string | null, stopped: boolean,
   go: { act: (k: StockKind) => void; move: () => void; history: () => void }): MenuChoice[] {
   const held = shownOnHand(i, picked);
   const empty = held === null || held <= 0;
+  const stop = stopped ? STOP_LINE : null;
   const open = stores.filter((s) => s.isActive);
   const choices: MenuChoice[] = [
-    { label: "Waste", icon: Trash2, onPress: () => go.act("wastage"), reason: empty ? NOTHING_ON_HAND : null },
-    { label: "Return to supplier", icon: CornerUpLeft, onPress: () => go.act("return"), reason: empty ? NOTHING_ON_HAND : null },
+    { label: "Waste", icon: Trash2, onPress: () => go.act("wastage"), reason: stop ?? (empty ? NOTHING_ON_HAND : null) },
+    { label: "Return to supplier", icon: CornerUpLeft, onPress: () => go.act("return"), reason: stop ?? (empty ? NOTHING_ON_HAND : null) },
     {
       label: i.crockery ? "Move into use, or to another store" : "Move to another store", icon: ArrowLeftRight, onPress: go.move,
-      reason: empty ? NOTHING_ON_HAND : open.length < 2 ? ONLY_ONE_STORE : null,
+      reason: stop ?? (empty ? NOTHING_ON_HAND : open.length < 2 ? ONLY_ONE_STORE : null),
     },
   ];
-  if (i.crockery) choices.push({ label: "Broken", icon: CircleOff, onPress: () => go.act("breakage"), reason: empty ? NOTHING_ON_HAND : null });
+  if (i.crockery) choices.push({ label: "Broken", icon: CircleOff, onPress: () => go.act("breakage"), reason: stop ?? (empty ? NOTHING_ON_HAND : null) });
   choices.push(
-    { label: "Correct the count", icon: ClipboardCheck, onPress: () => go.act("adjustment"), reason: notCorrect },
+    { label: "Correct the count", icon: ClipboardCheck, onPress: () => go.act("adjustment"), reason: stop ?? notCorrect },
     { label: i.cylinder ? "Set levels and deposit" : "Set levels", icon: Bell, onPress: () => undefined, reason: notCorrect ?? ON_THE_WEBSITE },
     { label: "History", icon: History, onPress: go.history, reason: i.movements === 0 ? NEVER_MOVED : null, gap: true },
   );
@@ -228,8 +235,8 @@ function moreFor(i: StockItem, stores: StoreSummary[], picked: StoreSummary | nu
 
 /** One thing on the shelf (ItemRow): the name on its own line, then On hand
     and Worth, then the buttons; what each store holds under a hairline. */
-function ItemCard({ item, stores, picked, mayChange, onAct, onMore, onHistory }: {
-  item: StockItem; stores: StoreSummary[]; picked: StoreSummary | null; mayChange: boolean;
+function ItemCard({ item, stores, picked, mayChange, stopped, onAct, onMore, onHistory }: {
+  item: StockItem; stores: StoreSummary[]; picked: StoreSummary | null; mayChange: boolean; stopped: boolean;
   onAct: (k: StockKind) => void; onMore: () => void; onHistory: () => void;
 }) {
   const onHand = shownOnHand(item, picked);
@@ -266,8 +273,8 @@ function ItemCard({ item, stores, picked, mayChange, onAct, onMore, onHistory }:
         <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
           {mayChange ? (
             <>
-              <Btn label="Receive" onPress={() => onAct("receipt")} />
-              <Btn label="Issue" a11y={empty ? `Issue: ${NOTHING_ON_HAND}` : "Issue"} disabled={empty} onPress={() => onAct("issue")} />
+              <Btn label="Receive" a11y={stopped ? `Receive: ${STOP_LINE}` : "Receive"} disabled={stopped} onPress={() => onAct("receipt")} />
+              <Btn label="Issue" a11y={stopped ? `Issue: ${STOP_LINE}` : empty ? `Issue: ${NOTHING_ON_HAND}` : "Issue"} disabled={stopped || empty} onPress={() => onAct("issue")} />
               <Btn label="More" a11y={`More for ${item.name}`} icon={ChevronDown} onPress={onMore} />
             </>
           ) : (

@@ -141,6 +141,21 @@ export function Figure({ label, value, unit, under, grey }: { label: string; val
   );
 }
 
+/** The names of the stores screens' stops (core useScreenStop, m13-stops): a write whose outcome is
+    unknown greys every act on that screen that could repeat it, until that screen's record is read
+    again after it. Kept outside the dialogs, so closing and reopening one lets nothing go. */
+export const STOP = {
+  shelf: (code: string) => `stores/${code}/shelf`,
+  /** Today's closing count of the kitchen's store. */
+  kitchen: (code: string) => `stores/${code}/kitchen`,
+  /** Today's count at the bar's counter or its store. */
+  bar: (code: string, place: string) => `stores/${code}/bar/${place}`,
+  /** The counter's asks of the store. */
+  requests: (code: string) => `stores/${code}/requests`,
+};
+/** The line a stopped stores screen shows, and each grey act's reason. */
+export const STOP_LINE = "Not known whether the last change was made: read the stock again before trying again.";
+
 /** A write whose outcome is unknown (`outcomeUnknown`: nothing came back, or a 5xx) on a route that
     reads no key (PMS R-30): said plainly, and the dialog takes no more taps until it is closed and
     the stock read again (MEMORY 16). */

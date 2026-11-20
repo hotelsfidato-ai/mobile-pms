@@ -5,7 +5,7 @@ import { ActivityIndicator, Linking, Pressable, Text, View } from "react-native"
 import { type Hotel, outcomeUnknown } from "../../core/api";
 import { ExportButtons } from "../../core/Export";
 import { c, face, space, t } from "../../core/theme";
-import { Capsule, Card, notKnown, Screen, useRead } from "../../core/ui";
+import { Capsule, Card, notKnown, Screen, useRead, useScreenStop } from "../../core/ui";
 import { dateDay } from "../finance/bill";
 import { addDays } from "../front-desk/desk";
 import { Choice } from "../finance/Kit";
@@ -17,7 +17,7 @@ import { moveArrival } from "./book";
 import { Panel, Said as SaidLine, Sheet } from "./GroupKit";
 import { whyNotUnwaitlist, whyNotWaitlist } from "./groupRoles";
 import { addToWaitlist, readTypes, readWaitlist, removeFromWaitlist } from "./groupsData";
-import { bodyOf, freePill, nightsWord, PARTS, partsOf, stillUnknown, typesOf, waitlistTable, wrongOf, type WaitlistEntry, type WaitlistInput } from "./waitlist";
+import { bodyOf, freePill, nightsWord, PARTS, partsOf, typesOf, waitlistTable, wrongOf, type WaitlistEntry, type WaitlistInput } from "./waitlist";
 
 /* ══════════════════════════════════════════════════════════════════
    THE WAITLIST — the web's /h/:code/waitlist (src/modules/reservations/
@@ -38,20 +38,18 @@ import { bodyOf, freePill, nightsWord, PARTS, partsOf, stillUnknown, typesOf, wa
 export function Waitlist({ hotel, role }: { hotel: Hotel; role: string | null }) {
   const code = hotel.code;
   const qc = useQueryClient();
-  const read = useRead(() => readWaitlist(code), ["reservations", code, "waitlist"]);
+  /* AN ADD NOBODY KNOWS THE END OF (MRS-G3, MRS-U2): kept by name outside the sheet AND this screen (it was
+     screen state, compared with a read's finish), stopped too while on its way; let go only by a read of
+     the waitlist that BEGAN after the loss and came back good. */
+  const stop = useScreenStop(`reservations/${code}/waitlist`);
+  const read = useRead(stop.watch(() => readWaitlist(code)), ["reservations", code, "waitlist"]);
   const types = useRead(() => readTypes(code), ["reservations", code, "waitlist-types"]);
   const [pulled, setPulled] = useState(false);
   const [adding, setAdding] = useState(false);
   const [removing, setRemoving] = useState<WaitlistEntry | null>(null);
   const [toast, setToast] = useState<Said | null>(null);
   useEffect(() => { if (!read.loading) setPulled(false); }, [read.loading]);
-  /* AN ADD NOBODY KNOWS THE END OF (MRS-G3): kept by the screen, not the sheet,
-     so closing the sheet lets nothing go. Add stays grey until a read of the
-     waitlist that finished after this moment came back good (stillUnknown). */
-  const [unknownAt, setUnknownAt] = useState<number | null>(null);
-  const state = qc.getQueryState(["reservations", code, "waitlist"]);
-  const addStuck = stillUnknown(unknownAt, state?.dataUpdatedAt ?? 0, state?.error ?? null);
-  useEffect(() => { if (unknownAt !== null && !addStuck) setUnknownAt(null); }, [unknownAt, addStuck]);
+  const addStuck = stop.stuck;
   const stuckLine = notKnown("added", "the Waitlist").line;
 
   const list = read.data;
@@ -72,7 +70,7 @@ export function Waitlist({ hotel, role }: { hotel: Hotel; role: string | null })
             <View style={{ flexDirection: "row" }}>
               <Button label="Put a guest on the waitlist" kind="primary" Icon={Plus} reason={addWhy ?? (addStuck ? stuckLine : kinds.length === 0 ? "" : null)} onRefused={why} onPress={() => setAdding(true)} />
             </View>
-            {addStuck ? (
+            {stop.unknown ? (
               <View accessibilityRole="alert" style={{ gap: 8, padding: space.card, borderRadius: 12, backgroundColor: c.red50 }}>
                 <Text style={[t.label, face[600], { color: c.red700 }]}>{stuckLine}</Text>
                 <View style={{ flexDirection: "row" }}><Capsule label="Read the waitlist again" onPress={read.reload} /></View>
@@ -98,7 +96,7 @@ export function Waitlist({ hotel, role }: { hotel: Hotel; role: string | null })
       {adding ? (
         <AddSheet
           code={code} today={hotel.businessDate} types={kinds} stuck={addStuck} stuckLine={stuckLine} onClose={() => { setAdding(false); reread(); }}
-          onUnknown={() => { setUnknownAt(Date.now()); reread(); }}
+          onUnknown={() => reread()}
           onAdded={(name) => {
             setAdding(false);
             setToast({ title: `${name} is on the waitlist`, body: "When a room frees up for those nights, the Waitlist shows it. Nobody is told by the system.", tone: "ok" });
@@ -166,21 +164,24 @@ function AddSheet({ code, today, types, stuck, stuckLine, onClose, onAdded, onUn
   const [form, setForm] = useState<WaitlistInput>({ guestName: "", phone: "", roomTypeId: types[0]?.id ?? "", arrival: today, departure: addDays(today, 1), note: "" });
   const [busy, setBusy] = useState(false);
   const [said, setSaid] = useState<string | null>(null);
+  const adding = useScreenStop(`reservations/${code}/waitlist`);
+  /* This sheet stays dead after an unknown add until it is closed, even if a read lets the screen go. */
+  const [dead, setDead] = useState(false);
   const going = useRef(false);
   const set = (k: keyof WaitlistInput) => (v: string) => setForm((f) => ({ ...f, [k]: v }));
   const wrong = wrongOf(form);
 
   async function save() {
-    if (going.current || stuck) return;
+    if (going.current || dead || stuck || adding.isStuck()) return;
     going.current = true;
     setBusy(true);
     setSaid(null);
     try {
-      await addToWaitlist(code, bodyOf(form));
+      await adding.guard(() => addToWaitlist(code, bodyOf(form)));
       onAdded(form.guestName.trim());
     } catch (e) {
       /* POST /waitlist reads no key: a second tap after a lost reply would put them on twice. */
-      if (outcomeUnknown(e)) { onUnknown(); setSaid(notKnown("added", "the Waitlist", e).line); }
+      if (outcomeUnknown(e)) { setDead(true); onUnknown(); setSaid(notKnown("added", "the Waitlist", e).line); }
       else setSaid(`Not added. ${e instanceof Error ? e.message : String(e)}`);
     } finally {
       going.current = false;
@@ -196,7 +197,7 @@ function AddSheet({ code, today, types, stuck, stuckLine, onClose, onAdded, onUn
         <>
           <Button label="Cancel" reason={busy ? "" : null} onPress={onClose} />
           <Button label="Add to the waitlist" kind="primary" busy={busy}
-            reason={stuck ? stuckLine : wrong}
+            reason={dead || stuck ? stuckLine : wrong}
             onRefused={(w) => { if (w) setSaid(w); }} onPress={() => void save()} />
         </>
       )}

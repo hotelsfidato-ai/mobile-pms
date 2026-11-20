@@ -4,10 +4,10 @@ import { useRef, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { c, face, t } from "../../core/theme";
 import { Btn, body, Dialog, Field, Foot, InDialog, Input, saidOf, Select, type Said } from "../guest-services/kit";
-import { raise } from "./data";
+import { listStop, raise } from "./data";
 import { askBody, EMPTY_DRAFT, firstStore, type AskDraft, type PurchaseRequest, type PurchasingList } from "./purchase";
 import { Tick } from "./kit";
-import { ripple, shade, keys } from "../../core/ui";
+import { ripple, shade, keys, useScreenStop } from "../../core/ui";
 
 /* ══════════════════════════════════════════════════════════════════
    ASKING FOR SOMETHING — the web's AskDialog (pages/Purchasing.tsx).
@@ -30,19 +30,20 @@ export function Ask({ code, data, onClose, onAsked }: {
   const latch = useRef(false);
   const stuck = useRef(false);
   const [said, setSaid] = useState<Said | null>(null);
+  const stop = useScreenStop(listStop(code));
 
   const set = (i: number, patch: Partial<AskDraft>) => setLines((all) => all.map((l, n) => (n === i ? { ...l, ...patch } : l)));
   const items = [{ value: "", label: "Pick an item" }, ...data.items.map((it) => ({ value: it.id, label: `${it.name} (${it.unit})` }))];
 
   async function submit() {
-    if (latch.current) return;
+    if (latch.current || stop.isStuck()) return;
     setSaid(null);
     const out = askBody(storeId, reason, lines);
     if ("problem" in out) { setSaid({ title: out.problem, tone: "bad" }); return; }
     latch.current = true;
     setBusy(true);
     try {
-      const done = await raise(code, out.body);
+      const done = await stop.guard(() => raise(code, out.body));
       onAsked(done.request);
     } catch (e) {
       /* The server's sentence; offline, the web's ("This cannot be done offline yet…"). */
@@ -50,7 +51,7 @@ export function Ask({ code, data, onClose, onAsked }: {
          takes no more taps; it is closed and the order read again first (4 Nov). */
       if (outcomeUnknown(e)) {
         stuck.current = true;
-        setSaid({ title: "Not known whether it was sent", body: `${e instanceof Error ? e.message : String(e)} Close this and look at the order before trying again.`, tone: "bad" });
+        setSaid({ title: "Not known whether it was sent", body: `${e instanceof Error ? e.message : String(e)} Close this and look at the list before trying again.`, tone: "bad" });
       } else setSaid(saidOf("Not sent", e));
     } finally {
       latch.current = stuck.current;
@@ -59,7 +60,7 @@ export function Ask({ code, data, onClose, onAsked }: {
   }
 
   return (
-    <Dialog title="Ask to buy something" onClose={onClose}>
+    <Dialog title="Ask to buy something" onClose={onClose} locked={busy}>
       <Field label="Which store is it for">
         {data.stores.length > 0 ? (
           <Select label="Which store is it for" value={storeId} onChange={setStoreId} options={data.stores.map((s) => ({ value: s.id, label: s.name }))} />
@@ -114,8 +115,8 @@ export function Ask({ code, data, onClose, onAsked }: {
 
       <InDialog said={said} />
       <Foot>
-        <Btn label="Cancel" tall grow onPress={onClose} />
-        <Btn label={busy ? "Sending…" : "Send for approval"} variant="primary" tall grow disabled={busy} onPress={() => void submit()} />
+        <Btn label="Cancel" tall grow disabled={busy} onPress={onClose} />
+        <Btn label={busy ? "Sending…" : "Send for approval"} variant="primary" tall grow disabled={busy || stuck.current || stop.stuck} onPress={() => void submit()} />
       </Foot>
     </Dialog>
   );

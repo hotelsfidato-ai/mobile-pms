@@ -134,7 +134,7 @@ once). Asked of the PMS: the supplier's id in the total rows. **The rule:** a fi
 its key, never by its words.
 # Lane B, m13-fin-bills (19-20 Nov)
 
-## MFIN-B1 · The stay's Issue sheet does not stop on an unknown outcome (open, not this lane's file)
+## MFIN-B1 · The stay's Issue sheet does not stop on an unknown outcome (closed by m13-stops, 20 Nov)
 
 `Issue.tsx` IssueSheet (the Bill tab's tax invoice) shows any failure as a refusal and leaves Issue
 pressable: after a lost reply a second tap is a second request. The server answers a repeat with the
@@ -144,6 +144,12 @@ invoice already made (invoices.ts "duplicate"), so no second number is taken, bu
 latches the tap, stops on `outcomeUnknown` with "Not known whether it was issued: look at the Issued
 list…", and reads the list again on close. **The rule:** every write's sheet uses `useStuck` /
 `notKnown`, even where the server de-duplicates by state.
+**Closed (m13-stops, 20 Nov):** `Issue.tsx` IssueSheet now says an unknown outcome as "Not known whether it
+was issued" (the error's words, where to look, and that issuing again takes no second number), cannot be
+closed while the request is on its way (back, the backdrop and Keep it do nothing), and closing it reads
+the bill's rows again, so a number taken shows. No stop is held: POST …/invoice reads no key, but answers
+a repeat for the same bill with the invoice already made (invoices.ts, under a per-folio advisory lock), so
+Issue again is safe and says the number.
 
 ## MFIN-B2 · The web's money tiles are the browser's sums (a difference, asked of the PMS)
 

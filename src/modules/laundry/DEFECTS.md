@@ -53,3 +53,13 @@ first - an item with no price is fine, and is how linen belongs on it.", with "p
 orange link: it closes the dialog and opens `/laundry/<code>/price-list`. Words only; no check (no
 rule). Not opened on a phone here. **The rule:** when a lane brings a screen to the phone, the
 "On the website for now" that pointed at it goes too.
+
+---
+
+# m13-stops (20 Nov)
+
+## MLDY-U1 · Collect a bag, reopened after an unknown outcome
+
+POST dockets reads no key; the stop was the dialog's. **Found** by the m13-stops sweep (grep for `useStuck` / `outcomeUnknown` inside sheets), reading the API to see which routes read the key. **Done:** `docketsStop(code)`:
+Collect a bag greys until a read of ALL dockets begun after the loss; the dialog stays dead until closed and
+cannot close mid-write. **The rule:** a write on a route that reads no idempotency key keeps its stop OUTSIDE the sheet and the screen (core `useScreenStop`, by name), stopped while it is on its way, and let go only by a read of the record that BEGAN after the loss and came back good.

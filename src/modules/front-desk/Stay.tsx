@@ -6,9 +6,9 @@ import { KeyboardAvoidingView, Linking, Platform, Pressable, ScrollView, Text, V
 import { HeldError, type Hotel } from "../../core/api";
 import { cash } from "../../core/format";
 import { c, face, space, t } from "../../core/theme";
-import { useRead, ripple } from "../../core/ui";
+import { Stopped, useRead, useScreenStop, ripple } from "../../core/ui";
 import { Companions, IdPhoto } from "./Companions";
-import { readFoot, readGuestMarks, readStay, readVipLevels, rulesOf, said, setVip, setWhatsapp, type DeskStay } from "./data";
+import { readFoot, readGuestMarks, readStay, readVipLevels, rulesOf, said, setVip, setWhatsapp, type DeskStay, stayStop, SWAP_UNKNOWN } from "./data";
 import { day, foreignNationality, footOf, guestsWords, statusOf, stayedWords, whyNotYet } from "./desk";
 import { body, Button, MarkLink, Pill, Sheet, Tick, Toast, takeNote, WEBSITE, type Said } from "./kit";
 import { maySettle, seesBills, whyNotCheckIn, whyNotGuest } from "./roles";
@@ -30,7 +30,9 @@ export function StayScreen({ hotel, role, id, offer, onClose }: {
 }) {
   const code = hotel.code;
   const today = hotel.businessDate;
-  const read = useRead(() => readStay(code, id), ["front-desk", code, "stay", id]);
+  /* An exchange whose outcome is unknown (MFD-U1) is let go by a read of this stay begun after it. */
+  const swap = useScreenStop(stayStop(code, id));
+  const read = useRead(swap.watch(() => readStay(code, id)), ["front-desk", code, "stay", id]);
   const bills = seesBills(role);
   const held = useHeld();
   const [toast, setToast] = useState<Said | null>(null);
@@ -92,6 +94,7 @@ export function StayScreen({ hotel, role, id, offer, onClose }: {
           {arrived || stay.status === "checked-out" ? <Button label="Print registration card" Icon={Printer} reason={WEBSITE} onPress={() => undefined} onRefused={why} /> : null}
           <MoreOptions hotel={hotel} stay={stay} role={role} onSaid={setToast} />
         </View>
+        {swap.unknown ? <Stopped line={SWAP_UNKNOWN} onRead={read.reload} /> : null}
         {offer && stay.status === "due-in" && notYet ? <Text style={[t.label, body, { color: c.grey500, marginTop: -12 }]}>{notYet}</Text> : null}
 
         {/* The Bill tab is its own screen on a phone. */}
