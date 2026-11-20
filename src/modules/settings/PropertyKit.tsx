@@ -163,6 +163,26 @@ export function TextEditor({ code, page, kind, label, value, hint, mayEdit, w }:
   );
 }
 
+/** The web's Tabs at phone width: the tabs wrap as chips, the chosen one filled. */
+export function Tabs<T extends string>({ value, onChange, options, label }: {
+  value: T; onChange: (v: T) => void; options: ReadonlyArray<readonly [T, string]>; label: string;
+}) {
+  return (
+    <View accessibilityRole="tablist" accessibilityLabel={label} style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
+      {options.map(([v, words]) => {
+        const on = v === value;
+        return (
+          <Pressable key={v} onPress={() => onChange(v)} accessibilityRole="tab" accessibilityState={{ selected: on }} android_ripple={ripple}
+            style={{ minHeight: 44, paddingHorizontal: 14, borderRadius: 999, borderWidth: 1, justifyContent: "center", overflow: "hidden",
+              borderColor: on ? c.ink900 : c.grey300, backgroundColor: on ? c.ink900 : c.white }}>
+            <Text style={[t.label, { color: on ? c.white : c.grey700 }]}>{words}</Text>
+          </Pressable>
+        );
+      })}
+    </View>
+  );
+}
+
 /** The figure's label over its value (SettingRow), a dash greyed. */
 export function Value({ label, value, children }: { label: string; value?: string | null; children?: ReactNode }) {
   const v = value ?? "-";
