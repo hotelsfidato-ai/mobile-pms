@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { cash } from "../../core/format";
 import { c, face, t } from "../../core/theme";
-import { Capsule } from "../../core/ui";
+import { Capsule, ripple, keys } from "../../core/ui";
 import { offNow } from "./floor";
 import { addNumbered, customProblems, lessNumbered, LONGEST_NAME, MOST_OF_A_CUSTOM, nameWithAddons, priceWithAddons } from "./pad";
 import type { CustomAddon, LineAddon, NumberedAddon } from "./types";
@@ -59,7 +59,7 @@ export function OrderPadCustomise({ dish, base, qty = 1, addons, chosen: initial
           <Text style={[t.label, { color: c.ink900 }]}>There are {qty} on this line. Put these add-ons on:</Text>
           <View style={{ flexDirection: "row", gap: 8 }} accessibilityRole="radiogroup" accessibilityLabel="Which of them">
             {([["all", `All ${qty}`], ["one", "Just 1"]] as const).map(([value, label]) => (
-              <Pressable
+              <Pressable android_ripple={ripple}
                 key={value} onPress={() => setScope(value)} accessibilityRole="radio" accessibilityState={{ checked: scope === value }}
                 style={{ minHeight: 44, paddingHorizontal: 16, justifyContent: "center", borderRadius: 999, borderWidth: 1,
                   borderColor: scope === value ? web.success : c.grey300, backgroundColor: scope === value ? web.success50 : c.white }}
@@ -88,7 +88,7 @@ export function OrderPadCustomise({ dish, base, qty = 1, addons, chosen: initial
             const off = offNow(a.offUntil);
             const n = chosen.find((x) => x.id === a.id)?.qty ?? 0;
             return (
-              <Pressable
+              <Pressable android_ripple={ripple}
                 key={a.id} disabled={off} onPress={() => setChosen((prev) => addNumbered(prev, a))}
                 accessibilityRole="button" accessibilityLabel={`Add-on ${a.number}, ${a.name}${n ? `, ${n} on this dish` : ""}`}
                 style={{ minHeight: 64, paddingHorizontal: 14, paddingVertical: 8, borderRadius: 12, borderWidth: 1, flexDirection: "row", gap: 12,
@@ -162,12 +162,12 @@ function CustomForm({ onAdd }: { onAdd: (x: CustomAddon) => void }) {
             {...(!free && price.trim() !== "" && priceBad ? { error: "Rupees, more than 0 - like 40 or 40.50. Or tick Free." } : { hint: "Taxed at the dish's own rate." })}
           >
             <Input
-              value={free ? "" : price} onChangeText={setPrice} editable={!free} keyboardType="decimal-pad" accessibilityLabel="Price"
+              value={free ? "" : price} onChangeText={setPrice} editable={!free} {...keys.amount} accessibilityLabel="Price"
               placeholder={free ? "Free" : "40"} style={free ? { backgroundColor: c.grey50 } : null}
             />
           </Field>
         </View>
-        <Pressable
+        <Pressable android_ripple={ripple}
           onPress={() => setFree((f) => !f)} accessibilityRole="checkbox" accessibilityState={{ checked: free }}
           style={{ minHeight: 44, marginTop: 27, flexDirection: "row", alignItems: "center", gap: 8 }}
         >

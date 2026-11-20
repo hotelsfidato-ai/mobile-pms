@@ -11,6 +11,8 @@ import {
   Segmented, Select, Stale, Toast, roomChoices, saidOf, usePoll, type Said,
 } from "./kit";
 import { whyNotWakeUps } from "./roles";
+import { ListExport } from "../reports/ListExport";
+import { callTable } from "./exports";
 import { daysFrom, timeOf, wakeLine, wakeWhen, type InHouse, type WakeUpCall } from "./rules";
 
 /* ══════════════════════════════════════════════════════════════════
@@ -63,6 +65,9 @@ export function WakeUpCalls({ hotel, role, onBack }: { hotel: Hotel; role: strin
         <View style={{ flexDirection: "row", marginTop: -4, marginBottom: 8 }}>
           <Btn label="Set a call" variant="primary" icon={Plus} disabled={refused != null} onPress={() => setSetting(true)} />
         </View>
+        {refused ? null : (
+          <ListExport screen="wake-up-calls" role={role} table={list.data ? callTable(calls, view === "open" ? "to make" : "done, last 24 h") : null} />
+        )}
         <View style={{ marginBottom: 8 }}>
           <Segmented<View_>
             label="To make or done" value={view} onChange={setView}

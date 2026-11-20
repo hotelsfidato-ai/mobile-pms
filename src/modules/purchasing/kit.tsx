@@ -6,6 +6,7 @@ import { Pressable, Text, View } from "react-native";
 import { DASH } from "../../core/format";
 import { c, face, t } from "../../core/theme";
 import type { Tone } from "./purchase";
+import { ripple } from "../../core/ui";
 
 /* ══════════════════════════════════════════════════════════════════
    THE FEW PIECES PURCHASING NEEDS THAT THE GUEST-SERVICES AND LAUNDRY KITS
@@ -42,7 +43,7 @@ export function YellowChip({ Icon }: { Icon: LucideIcon }) {
 /** The web's Checkbox with its label: a 20px box, the whole line 44 tall. */
 export function Tick({ label, on, onChange, disabled }: { label: string; on: boolean; onChange: (on: boolean) => void; disabled?: boolean }) {
   return (
-    <Pressable
+    <Pressable android_ripple={ripple}
       onPress={() => onChange(!on)} disabled={disabled} accessibilityRole="checkbox"
       accessibilityState={{ checked: on, disabled: Boolean(disabled) }} accessibilityLabel={label}
       style={{ minHeight: 44, flexDirection: "row", alignItems: "center", gap: 10, alignSelf: "flex-start", opacity: disabled ? 0.5 : 1 }}

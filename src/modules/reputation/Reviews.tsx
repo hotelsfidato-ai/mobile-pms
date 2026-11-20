@@ -10,6 +10,7 @@ import { capsLabel, StatePill } from "../laundry/kit";
 import { InfoButton } from "../reports/kit";
 import { askForReview, isRefused, readReviews, saveLink } from "./data";
 import { LINK_NOT_YOURS, NOTHING_SENT, REFUSED, whyNotView } from "./roles";
+import { ListExport } from "../reports/ListExport";
 import {
   askedWords, askState, day, departuresNote, EMPTY_LINE, EMPTY_TITLE, LINK_NOTE, linkLine, moment, offerFor,
   savedWords, stayWords, TITLE, topNote, UNDER, unknownAsk, unknownLink, WROTE, WROTE_TITLE,
@@ -81,6 +82,17 @@ export function Reviews({ hotel, role }: { hotel: Hotel; role: string | null }) 
         ) : (
           <>
             <Stale error={q.error} />
+            {/* The web's DEPARTURE_EXPORT: the departures of the period, with the phone and email the web's file carries. */}
+            <ListExport screen="reviews" role={role} table={{
+              subtitle: `Period left in the last ${page.daysBack} days`,
+              columns: ["Booking", "Guest", "Phone", "Email", "Arrived", "Left", "Group's lead", "Asked", "By", "Asked at", "Detail"],
+              rows: page.departures.map((d) => [
+                d.reference, d.guest, d.phone ?? "-", d.email ?? "-", day(d.arrived), day(d.departed), d.leadReference ?? "-",
+                d.askStatus === "sent" ? "Sent" : d.askStatus === "failed" ? "Failed" : "-",
+                d.askChannel === "whatsapp" ? "WhatsApp" : d.askChannel === "email" ? "Email" : "-",
+                d.askedAt ? moment(d.askedAt) : "-", d.askDetail ?? "-",
+              ]),
+            }} />
             <Body
               code={code} page={page} test={test} unknown={unknown} setSaid={setSaid}
               /* Said where the tap was too: the card that holds the ways sits at the top of the list. */

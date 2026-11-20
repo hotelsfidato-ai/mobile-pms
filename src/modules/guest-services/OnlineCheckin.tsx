@@ -7,6 +7,8 @@ import { Head, Screen, useRead } from "../../core/ui";
 import { confirmDetails, getDesk, getKeptPhotos, handleRequest, setAsideDetails } from "./data";
 import { Back, Box, Btn, Empty, Failed, Loading, NotYours, SectionHead, Stale, Toast, saidOf, type Said, body } from "./kit";
 import { ON_THE_WEBSITE, whyNotDesk } from "./roles";
+import { ListExport } from "../reports/ListExport";
+import { waitingTable } from "./exports";
 import {
   KIND_LABEL, dateShort, dateTime, detailLines, keptLine, photoLine, type DeskView, type OpenRequest, type RoomCardRow, type WaitingDetails,
 } from "./rules";
@@ -61,6 +63,7 @@ export function OnlineCheckin({ hotel, role, onBack }: { hotel: Hotel; role: str
     <View style={{ flex: 1 }}>
       <Screen refreshing={pulled && desk.loading} onRefresh={() => { setPulled(true); desk.reload(); }}>
         <Head title="Online check-in" under="What guests sent from their own page, waiting for the desk." action={<Back onPress={onBack} />} />
+        {refused ? null : <ListExport screen="online-checkin" role={role} table={data ? waitingTable(data.waiting) : null} />}
 
         {refused ? <NotYours title="Online check-in" sentence={refused} />
           : data === undefined

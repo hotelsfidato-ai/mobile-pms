@@ -11,6 +11,8 @@ import {
   Segmented, Select, Stale, Toast, roomChoices, saidOf, usePoll, type Said,
 } from "./kit";
 import { TEAMS, whyNotRequests, type Team } from "./roles";
+import { ListExport } from "../reports/ListExport";
+import { requestTable } from "./exports";
 import { TEAM_LABEL, closeAsks, isClosed, requestLine, type GuestRequest, type InHouse } from "./rules";
 
 /* ══════════════════════════════════════════════════════════════════
@@ -64,6 +66,10 @@ export function Requests({ hotel, role, onBack }: { hotel: Hotel; role: string |
         <View style={{ flexDirection: "row", marginTop: -4, marginBottom: 8 }}>
           <Btn label="New request" variant="primary" icon={Plus} disabled={refused != null} onPress={() => setRaising(true)} />
         </View>
+        {refused ? null : (
+          <ListExport screen="requests" role={role}
+            table={list.data ? requestTable(shown, `${view === "open" ? "open" : "done, last 24 h"}${team !== "all" ? ` · ${TEAM_LABEL[team]}` : ""}`) : null} />
+        )}
 
         <View style={{ gap: 12, marginBottom: 8 }}>
           <Segmented<View_>

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import type { Hotel } from "../../core/api";
 import { c, space, t } from "../../core/theme";
-import { Screen, useRead } from "../../core/ui";
+import { Screen, useRead, ripple, shade } from "../../core/ui";
 import { stayedWords } from "../front-desk/desk";
 import { PageHead, Pill } from "../front-desk/kit";
 import { body, Box, Empty, Loading, NotYours, Stale } from "../guest-services/kit";
@@ -68,13 +68,13 @@ export function Find({ hotel, role }: { hotel: Hotel; role: string | null }) {
                 <Stale error={found.error} />
                 <Box>
                   {guests.map((g, i) => (
-                    <Pressable
+                    <Pressable android_ripple={ripple}
                       key={g.id} onPress={() => router.push(`/guests/${code}/find/${g.id}`)} accessibilityRole="button"
                       accessibilityLabel={`${g.name}${g.isBlacklisted ? ", blacklisted" : ""}, ${stayedWords(g.visits)}`}
-                      style={({ pressed }) => ({
+                      style={shade(({ pressed }) => ({
                         minHeight: 56, flexDirection: "row", alignItems: "center", gap: 12, paddingHorizontal: space.cardX, paddingVertical: 12,
                         borderTopWidth: i === 0 ? 0 : 1, borderTopColor: c.grey100, backgroundColor: pressed ? c.grey50 : "transparent",
-                      })}
+                      }))}
                     >
                       <View style={{ flex: 1, minWidth: 0, gap: 4 }}>
                         <View style={{ flexDirection: "row", alignItems: "center", flexWrap: "wrap", gap: 12 }}>

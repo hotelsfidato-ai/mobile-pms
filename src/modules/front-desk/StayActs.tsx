@@ -7,7 +7,7 @@ import { Pressable, ScrollView, Text, View } from "react-native";
 import { HeldError, type Hotel } from "../../core/api";
 import { cash } from "../../core/format";
 import { c, t } from "../../core/theme";
-import { notKnown, useRead, useStuck } from "../../core/ui";
+import { notKnown, useRead, useStuck, ripple, shade } from "../../core/ui";
 import { Day } from "../housekeeping/DayStepper";
 import {
   addStayInclusion, amendStay, cancelConfirmed, cancelPreview, cancelWaiting, confirmWaiting, exchangeRooms, moveRoom, readExchangeable, readInclusions,
@@ -98,9 +98,9 @@ function Item({ Icon, label, onPress, reason, danger }: { Icon: LucideIcon; labe
   const off = reason != null;
   const ink = off ? c.grey500 : danger ? c.red700 : c.ink900;
   return (
-    <Pressable
+    <Pressable android_ripple={ripple}
       onPress={off ? undefined : onPress} accessibilityRole="button" accessibilityLabel={label} accessibilityState={{ disabled: off }} accessibilityHint={reason ?? undefined}
-      style={({ pressed }) => ({ minHeight: 44, paddingVertical: 8, flexDirection: "row", alignItems: "center", gap: 10, backgroundColor: pressed && !off ? c.grey50 : c.white })}
+      style={shade(({ pressed }) => ({ minHeight: 44, paddingVertical: 8, flexDirection: "row", alignItems: "center", gap: 10, backgroundColor: pressed && !off ? c.grey50 : c.white }))}
     >
       <Icon size={16} color={ink} />
       <View style={{ flex: 1 }}>
@@ -231,7 +231,7 @@ function Move({ code, stay, businessDate, onClose, onDone }: { code: string; sta
       <Text style={[t.label, body, { color: c.grey600, lineHeight: 21 }]}>
         {`Moving rooms changes no charge on its own. Nights before tonight stay as they are - the guest slept in ${stay.roomNumber || "that room"} for them. A new rate applies from tonight forward; to change a night already billed, adjust it on the folio so there is a reason beside it.${stay.offeredTariff > 0 ? ` Currently ${cash(stay.offeredTariff)} a night.` : ""}`}
       </Text>
-      <Pressable onPress={() => void unassign()} disabled={busy || !stay.roomNumber} accessibilityRole="button" style={{ minHeight: 44, flexDirection: "row", alignItems: "center", gap: 8, opacity: busy || !stay.roomNumber ? 0.5 : 1 }}>
+      <Pressable android_ripple={ripple} onPress={() => void unassign()} disabled={busy || !stay.roomNumber} accessibilityRole="button" style={{ minHeight: 44, flexDirection: "row", alignItems: "center", gap: 8, opacity: busy || !stay.roomNumber ? 0.5 : 1 }}>
         <DoorOpen size={14} color={c.grey600} />
         <Text style={[t.label, { flex: 1, color: c.grey600, textDecorationLine: "underline" }]}>Take them out of the room without assigning another</Text>
       </Pressable>
@@ -283,7 +283,7 @@ function Exchange({ code, stay, businessDate, onClose, onDone }: { code: string;
             <Text style={[t.label, body, { color: c.grey600 }]}>Swap with whom? Only guests currently in a room appear - an empty room is a move, not an exchange.</Text>
             <ScrollView style={{ maxHeight: 220 }} nestedScrollEnabled contentContainerStyle={{ gap: 6 }}>
               {list.map((o) => (
-                <Pressable
+                <Pressable android_ripple={ripple}
                   key={o.id} onPress={() => setWithId(o.id)} accessibilityRole="button" accessibilityLabel={`Room ${o.room}, ${o.guest}`} accessibilityState={{ selected: o.id === withId }}
                   style={{ minHeight: 44, flexDirection: "row", alignItems: "center", gap: 10, paddingHorizontal: 12, paddingVertical: 8, borderRadius: 10, borderWidth: 1, borderColor: o.id === withId ? c.orange : c.grey200, backgroundColor: o.id === withId ? c.orange50 : c.white }}
                 >
@@ -374,7 +374,7 @@ function Inclusions({ code, stay, onClose }: { code: string; stay: DeskStay; onC
             </View>
             <Text style={[t.label, body, { color: c.grey500 }]}>{`${l.addedBy} · ${l.at}${l.notes ? ` · ${l.notes}` : ""}`}</Text>
           </View>
-          <Pressable onPress={() => void drop(l.id)} accessibilityRole="button" accessibilityLabel={`Remove ${l.name}`} hitSlop={8} style={{ width: 44, height: 44, alignItems: "center", justifyContent: "center", margin: -8 }}>
+          <Pressable android_ripple={ripple} onPress={() => void drop(l.id)} accessibilityRole="button" accessibilityLabel={`Remove ${l.name}`} hitSlop={8} style={{ width: 44, height: 44, alignItems: "center", justifyContent: "center", margin: -8 }}>
             <X size={16} color={c.grey500} />
           </Pressable>
         </View>

@@ -4,13 +4,15 @@ import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import type { Hotel } from "../../core/api";
 import { c, space, t } from "../../core/theme";
-import { Head, Screen, useRead } from "../../core/ui";
+import { Head, Screen, useRead, ripple, shade } from "../../core/ui";
 import { Back, Box, Btn, body, Empty, Loading, NotYours, Segmented, Stale } from "../guest-services/kit";
 import { Collect } from "./Collect";
 import { isRefused, readDockets, type Whose } from "./data";
 import { byState, collectedDay, rupees, STATUS_TONE, STATUS_WORDS, stillOutWords, whoseWords, type Docket } from "./docket";
 import { Fact, LoadFailed, StatePill } from "./kit";
 import { ON_THE_WEBSITE, whyNotRead, whyNotTake } from "./roles";
+import { ListExport } from "../reports/ListExport";
+import { clockOf, dayOf } from "./docket";
 
 /* ══════════════════════════════════════════════════════════════════
    THE DOCKETS on a phone — the web's /h/:code/laundry
@@ -71,6 +73,17 @@ export function Dockets({ hotel, role, onBack }: { hotel: Hotel; role: string | 
           />
           {list.data ? <Text style={[body, { color: c.grey600 }]}>{stillOutWords(dockets)}</Text> : null}
         </View>
+        {/* The web's DOCKET_EXPORT; laundry's own export right. */}
+        <ListExport screen="laundry-dockets" role={role} table={list.data ? {
+          subtitle: `Whose ${whose === "all" ? "all" : whose === "guest" ? "guests'" : "the hotel's"}`,
+          columns: ["Docket", "Whose", "Guest", "Room", "Booking", "Status", "Day", "Collected", "Returned", "Pieces", "Still out", "Total", "On the guest's bill", "Notes"],
+          rows: dockets.map((d) => [
+            d.number, d.belongsTo === "guest" ? "Guest's" : "The hotel's", d.guestName ?? "-", d.roomNumber ?? "-", d.stayReference ?? "-",
+            STATUS_WORDS[d.status], dayOf(d.businessDate), d.collectedAt ? `${dayOf(d.collectedAt)}, ${clockOf(d.collectedAt)}` : "-",
+            d.returnedAt ? `${dayOf(d.returnedAt)}, ${clockOf(d.returnedAt)}` : "-", String(d.pieces), String(d.stillOut), rupees(d.total),
+            d.belongsTo === "guest" ? (d.charged ? "Yes" : "No") : "-", d.notes ?? "-",
+          ]),
+        } : null} />
 
         {list.data === undefined
           ? (list.error
@@ -95,14 +108,14 @@ export function Dockets({ hotel, role, onBack }: { hotel: Hotel; role: string | 
               <Stale error={list.error} />
               <Box>
                 {dockets.map((d, i) => (
-                  <Pressable
+                  <Pressable android_ripple={ripple}
                     key={d.id} onPress={() => open(d)} accessibilityRole="button"
                     accessibilityLabel={`${d.number}, ${whoseWords(d)}, ${STATUS_WORDS[d.status]}`}
-                    style={({ pressed }) => ({
+                    style={shade(({ pressed }) => ({
                       minHeight: 44, flexDirection: "row", alignItems: "center", gap: 12, paddingHorizontal: space.cardX, paddingVertical: 12,
                       borderTopWidth: i === 0 ? 0 : 1, borderTopColor: c.grey100, backgroundColor: pressed ? c.grey50 : "transparent",
                       borderTopLeftRadius: i === 0 ? 12 : 0, borderTopRightRadius: i === 0 ? 12 : 0,
-                    })}
+                    }))}
                   >
                     <View style={{ flex: 1, minWidth: 0, gap: 4 }}>
                       <Text style={[body, { color: c.ink900, marginBottom: 2 }]}>{d.number}</Text>

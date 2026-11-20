@@ -3,6 +3,7 @@ import { useState, type ReactNode } from "react";
 import { Modal, Pressable, Text, View, type StyleProp, type TextStyle } from "react-native";
 import Svg, { Circle, Defs, LinearGradient, Rect, Stop } from "react-native-svg";
 import { c, face, space, t } from "../../core/theme";
+import { modalEdge, ripple } from "../../core/ui";
 
 /* ══════════════════════════════════════════════════════════════════
    THE WEB KIT'S SMALL PIECES the Dashboard and the housekeeping board share
@@ -86,7 +87,7 @@ export function AnchorGauge({ label, value, fraction, missing }: { label: string
 /** The words a tap opens: the web's popover, centred on the phone. */
 function Words({ open, onClose, title, words }: { open: boolean; onClose: () => void; title?: string; words: string }) {
   return (
-    <Modal visible={open} transparent animationType="fade" onRequestClose={onClose}>
+    <Modal visible={open} transparent animationType="fade" onRequestClose={onClose} {...modalEdge}>
       <Pressable
         onPress={onClose} accessibilityRole="button" accessibilityLabel="Close"
         style={{ flex: 1, backgroundColor: "rgba(3,23,40,0.4)", justifyContent: "center", paddingHorizontal: space.side + 16 }}
@@ -106,7 +107,7 @@ export function InfoButton({ words, color = c.grey500 }: { words: string; color?
   const [open, setOpen] = useState(false);
   return (
     <>
-      <Pressable
+      <Pressable android_ripple={ripple}
         onPress={() => setOpen(true)} accessibilityRole="button" accessibilityLabel={words}
         style={{ width: 44, height: 44, marginVertical: -10, marginRight: -14, alignItems: "center", justifyContent: "center" }}
       >

@@ -61,6 +61,7 @@ export function Arrivals({ hotel, view }: { hotel: Hotel; view: string | undefin
 
       <StayList
         code={code} rows={rows} read={active} columns={COLUMNS} what="the arrivals" offerCheckIn={!later}
+        exportAs={later ? { screen: "upcoming-arrivals", facts: `Expected ${dateLong(from)} to ${dateLong(to)}` } : { screen: "arrivals", facts: `Expected ${dateLong(date)}` }}
         emptyTitle={later ? "Nothing booked in the next fortnight" : "No arrivals today"}
         emptyLine={later ? "Bookings appear here as they are taken." : "Nobody is expected. A walk-in can be taken from any empty cell on the Calendar."}
       />

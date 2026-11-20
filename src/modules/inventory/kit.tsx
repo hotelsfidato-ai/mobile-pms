@@ -1,13 +1,13 @@
 import { AlertCircle, Check, ChevronDown, CloudOff, Inbox, Minus, Plus, RotateCw, X, type LucideIcon } from "lucide-react-native";
 import { useEffect, useState, type ReactNode } from "react";
 import {
-  KeyboardAvoidingView, Modal, Platform, Pressable, ScrollView, Text, TextInput, View, useWindowDimensions,
-  type StyleProp, type ViewStyle,
+  KeyboardAvoidingView, Modal, Platform, Pressable, ScrollView, Switch, Text, TextInput, View, useWindowDimensions, type StyleProp, type ViewStyle,
 } from "react-native";
 import { HeldError } from "../../core/api";
 import { isOnline } from "../../core/offline";
 import { c, face, space, t } from "../../core/theme";
 import { dateShort } from "./rates";
+import { keys, modalEdge, ripple, shade, useSheetPad } from "../../core/ui";
 
 /* ══════════════════════════════════════════════════════════════════
    THE WEB KIT'S PIECES RATES USES — src/components/ui (Button, Segmented,
@@ -70,10 +70,10 @@ export function Btn({ label, a11y, variant = "secondary", icon: Icon, onPress, d
 }) {
   const fg = disabled ? (variant === "primary" ? c.grey600 : c.grey500) : { primary: c.white, secondary: c.ink900, ghost: c.grey600 }[variant];
   return (
-    <Pressable
+    <Pressable android_ripple={ripple}
       onPress={onPress} disabled={disabled} accessibilityRole="button" accessibilityLabel={a11y ?? label}
       accessibilityState={{ disabled: Boolean(disabled) }}
-      style={({ pressed }) => [{
+      style={shade(({ pressed }) => [{
         minHeight: 44, paddingHorizontal: label ? 16 : 0, minWidth: 44, borderRadius: 999, flexDirection: "row", gap: 8,
         alignItems: "center", justifyContent: "center", ...(grow ? { flex: 1 } : null),
         backgroundColor: {
@@ -82,7 +82,7 @@ export function Btn({ label, a11y, variant = "secondary", icon: Icon, onPress, d
           ghost: pressed ? c.grey200 : "transparent",
         }[variant],
         borderWidth: variant === "secondary" ? 1 : 0, borderColor: disabled ? c.grey200 : c.grey300,
-      }, style]}
+      }, style])}
     >
       {Icon ? <Icon size={16} color={fg} /> : null}
       {label ? <Text style={[t.label, { color: fg }]}>{label}</Text> : null}
@@ -110,7 +110,7 @@ export function Segmented<T extends string>({ value, onChange, options, label }:
       {options.map((o) => {
         const on = o.value === value;
         return (
-          <Pressable
+          <Pressable android_ripple={ripple}
             key={o.value} onPress={() => onChange(o.value)} accessibilityRole="tab" accessibilityState={{ selected: on }}
             style={{
               flex: 1, minHeight: 44, paddingHorizontal: 12, borderRadius: 7, alignItems: "center", justifyContent: "center",
@@ -172,18 +172,19 @@ export function Stale({ error }: { error: string | undefined }) {
 
 export function Dialog({ title, onClose, children }: { title: string; onClose: () => void; children: ReactNode }) {
   const { height } = useWindowDimensions();
+  const pad = useSheetPad();
   return (
-    <Modal visible transparent animationType="fade" onRequestClose={onClose}>
-      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : undefined} style={{ flex: 1, backgroundColor: "rgba(3,23,40,0.25)", justifyContent: "center", paddingHorizontal: 16 }}>
+    <Modal visible transparent animationType="fade" onRequestClose={onClose} {...modalEdge}>
+      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1, backgroundColor: "rgba(3,23,40,0.25)", justifyContent: "center", paddingHorizontal: 16, paddingTop: pad.top + 16, paddingBottom: pad.bottom }}>
         <Pressable style={{ position: "absolute", top: 0, bottom: 0, left: 0, right: 0 }} onPress={onClose} accessibilityLabel="Close" />
-        <View style={{ backgroundColor: c.white, borderRadius: 12, borderWidth: 1, borderColor: c.grey200, maxHeight: height - 64 }}>
+        <View style={{ backgroundColor: c.white, borderRadius: 12, borderWidth: 1, borderColor: c.grey200, maxHeight: height - pad.top - pad.bottom - 32 }}>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 16, paddingLeft: 20, paddingRight: 8, paddingVertical: 6, borderBottomWidth: 1, borderBottomColor: c.grey200 }}>
             <Text style={[t.heading, { flex: 1, paddingVertical: 10 }]} accessibilityRole="header">{title}</Text>
-            <Pressable onPress={onClose} accessibilityRole="button" accessibilityLabel="Close" style={{ width: 44, height: 44, alignItems: "center", justifyContent: "center" }}>
+            <Pressable android_ripple={ripple} onPress={onClose} accessibilityRole="button" accessibilityLabel="Close" style={{ width: 44, height: 44, alignItems: "center", justifyContent: "center" }}>
               <X size={16} color={c.grey500} />
             </Pressable>
           </View>
-          <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingHorizontal: 20, paddingVertical: 16, gap: 16 }}>
+          <ScrollView keyboardShouldPersistTaps="handled" keyboardDismissMode="interactive" contentContainerStyle={{ paddingHorizontal: 20, paddingVertical: 16, gap: 16 }}>
             {children}
           </ScrollView>
         </View>
@@ -209,7 +210,7 @@ export function Input({ label, value, onChangeText, keyboardType, disabled, big,
 }) {
   return (
     <TextInput
-      value={value} onChangeText={onChangeText} keyboardType={keyboardType} editable={!disabled} autoFocus={autoFocus}
+      value={value} onChangeText={onChangeText} {...(keyboardType === "decimal-pad" ? keys.amount : keys.count)} editable={!disabled} autoFocus={autoFocus}
       accessibilityLabel={label} placeholder="-" placeholderTextColor={c.grey400}
       style={{
         minHeight: 44, paddingHorizontal: 12, borderRadius: 10, borderWidth: 1, borderColor: c.grey300,
@@ -224,27 +225,28 @@ export function Select({ label, value, options, onChange }: {
   label: string; value: string; options: { value: string; label: string }[]; onChange: (v: string) => void;
 }) {
   const [open, setOpen] = useState(false);
+  const pad = useSheetPad();
   const shown = options.find((o) => o.value === value)?.label ?? "";
   return (
     <>
-      <Pressable
+      <Pressable android_ripple={ripple}
         onPress={() => setOpen(true)} accessibilityRole="button" accessibilityLabel={`${label}: ${shown}`}
         style={{ minHeight: 44, flexDirection: "row", alignItems: "center", gap: 8, paddingLeft: 12, paddingRight: 10, borderRadius: 10, borderWidth: 1, borderColor: c.grey300, backgroundColor: c.white }}
       >
         <Text style={{ flex: 1, fontSize: 16, color: c.ink900, ...face[500] }} numberOfLines={1}>{shown}</Text>
         <ChevronDown size={16} color={c.grey500} />
       </Pressable>
-      <Modal visible={open} transparent animationType="fade" onRequestClose={() => setOpen(false)}>
+      <Modal visible={open} transparent animationType="fade" onRequestClose={() => setOpen(false)} {...modalEdge}>
         <View style={{ flex: 1, backgroundColor: "rgba(3,23,40,0.4)" }}>
           <Pressable style={{ flex: 1 }} onPress={() => setOpen(false)} accessibilityRole="button" accessibilityLabel="Close" />
-          <View style={{ backgroundColor: c.white, borderTopLeftRadius: 16, borderTopRightRadius: 16, paddingHorizontal: space.side, paddingTop: 16, paddingBottom: 24, maxHeight: "75%" }}>
+          <View style={{ backgroundColor: c.white, borderTopLeftRadius: 16, borderTopRightRadius: 16, paddingHorizontal: space.side, paddingTop: 16, paddingBottom: pad.bottom + 8, maxHeight: "75%" }}>
             <Text style={[t.heading, { marginBottom: 8 }]} accessibilityRole="header">{label}</Text>
             <ScrollView>
               {options.map((o) => (
-                <Pressable
+                <Pressable android_ripple={ripple}
                   key={o.value} onPress={() => { onChange(o.value); setOpen(false); }}
                   accessibilityRole="button" accessibilityLabel={o.label} accessibilityState={{ selected: o.value === value }}
-                  style={({ pressed }) => ({ minHeight: 48, flexDirection: "row", alignItems: "center", gap: 8, borderTopWidth: 1, borderTopColor: c.grey100, backgroundColor: pressed ? c.grey50 : c.white })}
+                  style={shade(({ pressed }) => ({ minHeight: 48, flexDirection: "row", alignItems: "center", gap: 8, borderTopWidth: 1, borderTopColor: c.grey100, backgroundColor: pressed ? c.grey50 : c.white }))}
                 >
                   <Text style={[t.label, { flex: 1, color: c.ink900 }]}>{o.label}</Text>
                   {o.value === value ? <Check size={18} color={c.orange} /> : null}
@@ -261,7 +263,7 @@ export function Select({ label, value, options, onChange }: {
 /** The web's Checkbox with its label: a 20px box, the whole line 44 tall. */
 export function Tick({ label, on, onChange }: { label: string; on: boolean; onChange: (on: boolean) => void }) {
   return (
-    <Pressable onPress={() => onChange(!on)} accessibilityRole="checkbox" accessibilityState={{ checked: on }} accessibilityLabel={label}
+    <Pressable android_ripple={ripple} onPress={() => onChange(!on)} accessibilityRole="checkbox" accessibilityState={{ checked: on }} accessibilityLabel={label}
       style={{ minHeight: 44, flexDirection: "row", alignItems: "center", gap: 10, alignSelf: "flex-start" }}>
       <View style={{ width: 20, height: 20, borderRadius: 4, borderWidth: 1, borderColor: on ? c.orange600 : c.grey300, backgroundColor: on ? c.orange600 : c.white, alignItems: "center", justifyContent: "center" }}>
         {on ? <Check size={14} color={c.white} /> : null}
@@ -271,20 +273,21 @@ export function Tick({ label, on, onChange }: { label: string; on: boolean; onCh
   );
 }
 
-/** A restriction's big toggle (RestrictionDialog Toggle): navy when on. */
+/** A restriction's big toggle (RestrictionDialog Toggle): navy when on, with each phone's own Switch
+    (docs/NATIVE.md) where the web draws its tick; the whole card still turns it. */
 export function Toggle({ label, hint, on, onChange }: { label: string; hint: string; on: boolean; onChange: (on: boolean) => void }) {
   return (
     <Pressable onPress={() => onChange(!on)} accessibilityRole="switch" accessibilityState={{ checked: on }} accessibilityLabel={label}
       style={{ minHeight: 56, paddingHorizontal: 16, paddingVertical: 12, borderRadius: 8, borderWidth: 1, flexDirection: "row", alignItems: "center", gap: 12,
         backgroundColor: on ? c.ink900 : c.white, borderColor: on ? c.ink900 : c.grey300 }}>
-      <View style={{ width: 20, height: 20, borderRadius: 4, borderWidth: 1, alignItems: "center", justifyContent: "center",
-        backgroundColor: on ? "rgba(255,255,255,0.2)" : "transparent", borderColor: on ? "rgba(255,255,255,0.4)" : c.grey300 }}>
-        {on ? <Check size={14} color={c.white} /> : null}
-      </View>
       <View style={{ flex: 1 }}>
         <Text style={[t.label, { color: on ? c.white : c.ink900 }]}>{label}</Text>
         <Text style={[t.caption, { color: on ? c.onNavy : c.grey500 }]}>{hint}</Text>
       </View>
+      <Switch
+        value={on} onValueChange={onChange} accessibilityLabel={label} importantForAccessibility="no-hide-descendants"
+        trackColor={{ true: c.orange600, false: c.grey300 }} thumbColor={c.white} ios_backgroundColor={c.grey300}
+      />
     </Pressable>
   );
 }
@@ -305,9 +308,9 @@ export function DayStep({ label, value, min, onChange, step }: {
 
 function StepBtn({ icon: Icon, a11y, disabled, onPress }: { icon: LucideIcon; a11y: string; disabled?: boolean; onPress: () => void }) {
   return (
-    <Pressable onPress={onPress} disabled={disabled} accessibilityRole="button" accessibilityLabel={a11y} accessibilityState={{ disabled: Boolean(disabled) }}
-      style={({ pressed }) => ({ width: 44, height: 44, borderRadius: 999, borderWidth: 1, alignItems: "center", justifyContent: "center",
-        borderColor: disabled ? c.grey200 : c.grey300, backgroundColor: disabled ? c.grey50 : pressed ? c.grey100 : c.white })}>
+    <Pressable android_ripple={ripple} onPress={onPress} disabled={disabled} accessibilityRole="button" accessibilityLabel={a11y} accessibilityState={{ disabled: Boolean(disabled) }}
+      style={shade(({ pressed }) => ({ width: 44, height: 44, borderRadius: 999, borderWidth: 1, alignItems: "center", justifyContent: "center",
+        borderColor: disabled ? c.grey200 : c.grey300, backgroundColor: disabled ? c.grey50 : pressed ? c.grey100 : c.white }))}>
       <Icon size={18} color={disabled ? c.grey300 : c.grey700} />
     </Pressable>
   );

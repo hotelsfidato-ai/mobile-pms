@@ -9,10 +9,11 @@ import { LoadFailed, StatePill } from "../laundry/kit";
 import { Book, Cancel, Charge } from "./Acts";
 import { isRefused, readDiary } from "./data";
 import {
-  actsOf, bandWords, clockTime, countLine, rupees, shiftDay, UNPRICED_LINE,
+  actsOf, bandWords, clockTime, countLine, rupees, SETTLEMENT, shiftDay, UNPRICED_LINE,
   type SpaAppointment, type SpaDiaryTherapist,
 } from "./diary";
 import { ON_THE_WEBSITE, whyNotBook, whyNotRead, whyNotSetUp } from "./roles";
+import { ListExport } from "../reports/ListExport";
 
 /* ══════════════════════════════════════════════════════════════════
    THE SPA DIARY on a phone — the web's /h/:code/spa
@@ -71,6 +72,16 @@ export function Diary({ hotel, role }: { hotel: Hotel; role: string | null }) {
           <Text style={[t.caption, { color: c.grey600 }]}>Treatments and therapists: {setUp}</Text>
           {mayBook ? <Text style={[t.caption, { color: c.grey600 }]}>{mayBook}</Text> : null}
         </View>
+        {/* The web's DIARY_EXPORT, the day shown; the spa's own export right. */}
+        <ListExport screen="spa-diary" role={role} table={d ? {
+          subtitle: `Day ${d.from}`,
+          columns: ["Therapist", "Starts", "Ends", "Treatment", "Minutes", "Guest", "Room", "Status", "Agreed", "Settled"],
+          rows: d.therapists.flatMap((th) => th.appointments.map((a) => [
+            th.name, clockTime(a.startsAt), clockTime(a.endsAt), a.treatment ?? "-", a.minutes == null ? "-" : String(a.minutes),
+            a.guestName ?? "-", a.room ?? "-", a.status.replace(/_/g, " "), rupees(a.amount),
+            a.settlement ? SETTLEMENT[a.settlement]?.label ?? a.settlement : "-",
+          ])),
+        } : null} />
 
         {d === null ? (
           q.error

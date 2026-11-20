@@ -9,10 +9,11 @@ import { BaseDialog, RestrictionDialog, type DayTarget, type PriceTarget } from 
 import { BaseGrid, RoomsGrid, RoomsLegend, type Nav } from "./Grid";
 import { Btn, Empty, Failed, Refused, Segmented, Stale, Toast, body, type Said } from "./kit";
 import {
-  DAYS, addDays, dateShort, differenceOf, figure, offered, rupees, windowOf,
+  DAYS, addDays, cellsByDay, dateShort, differenceOf, figure, offered, rupees, windowOf,
   type Addons, type DayRules, type Pricing,
 } from "./rates";
 import { ON_THE_WEBSITE, PRICE, PRICES, RESTRICTION, refusalFor, whyNot } from "./roles";
+import { ListExport } from "../reports/ListExport";
 
 /* ══════════════════════════════════════════════════════════════════
    RATES on a phone — the web's /h/:code/rates (src/modules/inventory/
@@ -128,6 +129,17 @@ export function Rates({ hotel, role }: { hotel: Hotel; role: string | null }) {
               mayEdit
                 ? <View style={{ flexDirection: "row" }}><Btn label="Set prices" variant="primary" onPress={() => setSetting(true)} /></View>
                 : <Refused label="Set prices" variant="primary" reason={refusalFor(PRICE)} />
+            ) : null}
+            {view === "prices" ? (
+              /* The web's priceExport: each room type's base (EP, one guest) a day, a dash for none set. */
+              <ListExport screen="rates" role={role} table={pricing.data && dates.length ? {
+                subtitle: `Days ${dateShort(dates[0]!)} to ${dateShort(dates[dates.length - 1]!)} · Plan EP, one guest, room only`,
+                columns: ["Room type", ...dates.map((d) => dateShort(d))],
+                rows: pricing.data.roomTypes.map((rt) => {
+                  const cells = cellsByDay(pricing.data!);
+                  return [rt.name, ...dates.map((d) => figure(cells.get(`${rt.id}/${d}`)?.price))];
+                }),
+              } : null} />
             ) : null}
           </View>
         )}
