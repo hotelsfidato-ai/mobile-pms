@@ -195,6 +195,10 @@ eq(phoneRoute("/settings", "5EL"), "/admin/5EL");
 eq(phoneRoute("/settings/property/backfill-data", "5EL"), "/admin/5EL/backfill");
 eq(phoneRoute("/h/5EL/backfill", "5EL"), "/admin/5EL/backfill");
 eq(phoneRoute("/settings/connections/modules", "5EL"), "/admin/5EL/modules");
+/* settings (mobile/m13-set-lists): Lists and Front desk, one phone screen each at the web's slug. */
+for (const x of ["market-segments", "reservation-types", "reasons", "holidays", "id-types", "vip"]) eq(phoneRoute(`/settings/lists/${x}`, "5EL"), `/settings/5EL/${x}`);
+eq(phoneRoute("/settings/front-desk/times-and-rules", "5EL"), "/settings/5EL/times-and-rules");
+eq(phoneRoute("/settings/front-desk/front-desk", "5EL"), "/settings/5EL/front-desk");
 eq(phoneRoute("/properties", "5EL"), "/admin/5EL/properties");
 eq(phoneRoute("/admin/system-health", "5EL"), "/admin/5EL/system-health");
 eq(phoneRoute("/admin/integrations", "5EL"), "/admin/5EL/integrations");
@@ -276,8 +280,6 @@ const NOT_ON_PHONE = [
   ...["profile", "set-up-this-hotel", "old-data", "photos", "highlights", "amenities", "group", "policies", "documents"].map((x) => `/settings/property/${x}`),
   ...["plans", "meal-plans", "taxes"].map((x) => `/settings/rates/${x}`),
   ...["payment-methods", "extra-charges", "discounts", "commission", "pickup"].map((x) => `/settings/money/${x}`),
-  ...["market-segments", "reservation-types", "reasons", "holidays", "id-types", "vip"].map((x) => `/settings/lists/${x}`),
-  "/settings/front-desk/times-and-rules", "/settings/front-desk/front-desk",
   "/settings/messages/switches", "/settings/messages/daily-report-emails", "/settings/messages/scheduled-reports",
   "/settings/connections/rivals-prices",
 ];
