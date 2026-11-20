@@ -6,12 +6,12 @@ import { Text, View } from "react-native";
 import type { Hotel } from "../../core/api";
 import { DASH } from "../../core/format";
 import { c, face, space, t } from "../../core/theme";
-import { Head, Screen, useRead } from "../../core/ui";
+import { Head, Screen, useRead, useScreenStop } from "../../core/ui";
 import { Back, Btn, body, Loading, NotYours, Stale, Toast, type Said } from "../guest-services/kit";
 import { LoadFailed, Note } from "../laundry/kit";
 import { CancelDialog, PriceDialog, SendDialog } from "./Acts";
 import { Delivery } from "./Delivery";
-import { isRefused, readApproval, readPurchasing, readRequest } from "./data";
+import { isRefused, listStop, readApproval, readPurchasing, readRequest } from "./data";
 import { Fact, StatePill, useBackInView, YellowChip } from "./kit";
 import {
   creditLine, decidedCard, deliveredTitle, factsOf, figure, lineParts, mayCancel, mayDeliver, mayDownload, mayPrice, maySend,
@@ -58,7 +58,7 @@ export function Request({ hotel, role, id, onBack }: { hotel: Hotel; role: strin
 
   const q = useRead(() => (refusedRead ? Promise.resolve(null) : readRequest(code, id)), ["purchasing", code, "request", id]);
   /* The same read the list makes: the suppliers, and whether this person may act (the setting). */
-  const list = useRead(() => (refusedRead ? Promise.resolve(null) : readPurchasing(code)), ["purchasing", code, "list"]);
+  const list = useRead(useScreenStop(listStop(code)).watch(() => (refusedRead ? Promise.resolve(null) : readPurchasing(code))), ["purchasing", code, "list"]);
   useBackInView(["purchasing", code]);
   const off = isRefused(q.data) ? q.data.refused : null;
   const d: RequestDetail | null = q.data && !isRefused(q.data) ? q.data : null;

@@ -58,3 +58,15 @@ the PUT sets a value, so a late send is the same act, and the server still check
 lands. The check pins today's behaviour so a fix in the web shows. **For the PMS:** anchor the
 housekeeping rule to its own routes (`/api/hotels/[^/]+/housekeeping(\/|$)`). **The rule:** a path
 regex in the offline tiers matches any later segment too; test a new write's path against every rule.
+
+---
+
+# m13-stops (20 Nov)
+
+## MPUR-U2 · Ask to buy could be sent twice
+
+POST /purchasing/requests reads no key (the keeper `raise` passes is not read by this server): a reopened
+Ask made a second request. **Found** by the m13-stops sweep (grep for `useStuck` / `outcomeUnknown` inside sheets), reading the API to see which routes read the key. **Done:** `listStop(code)`: Ask to buy (both buttons) greys
+until a read of the list begun after the loss; the dialog cannot close mid-write. Left: Record the
+delivery (refused once the order is received: `mark_purchase_received`), Send and Cancel (refused by
+state), a line's price (a PUT). **The rule:** a write on a route that reads no idempotency key keeps its stop OUTSIDE the sheet and the screen (core `useScreenStop`, by name), stopped while it is on its way, and let go only by a read of the record that BEGAN after the loss and came back good.

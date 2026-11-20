@@ -67,3 +67,23 @@ finished after that moment came back without an error (`stillUnknown` in waitlis
 once); "Read the waitlist again" beside it; the sheets (Add, Remove, Settle) do not close while their
 write is on its way. **Rule:** an unknown outcome is held by the screen that outlives the dialog, and
 only a good read finished after it lets it go (MEMORY 16, as guests' SamePerson).
+
+---
+
+# m13-stops (20 Nov)
+
+## MRS-U1 · New booking, reopened after an unknown outcome
+
+POST /bookings reads no key; New booking's stop was its screen's. **Found** by the m13-stops sweep (grep for `useStuck` / `outcomeUnknown` inside sheets), reading the API to see which routes read the key. **Done:**
+`newBookingStop`: its buttons stay grey, with "Open All bookings", until a read of All bookings as first
+opened (nothing searched, from a day not after today) begun after the loss. **The rule:** a write on a route that reads no idempotency key keeps its stop OUTSIDE the sheet and the screen (core `useScreenStop`, by name), stopped while it is on its way, and let go only by a read of the record that BEGAN after the loss and came back good.
+
+## MRS-U2 · The waitlist's stop was screen state, compared with a read's finish
+
+MRS-G3 lifted the add's moment to the Waitlist screen, but in `useState` (gone on leaving) and released by
+a read that FINISHED after it (`stillUnknown`; one on its way at the loss counted). **Done:** kept by name;
+stopped while on its way; let go only by a read that began after the loss; the sheet stays dead until
+closed. `waitlist.ts` stillUnknown stays, with its check, unused by the screen.
+
+**The review of 20 Nov (on 5fc5064):** New booking's loss marks the walk-in's name too (the same POST
+/bookings); All bookings, as first opened, lets both go.
