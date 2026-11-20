@@ -274,8 +274,6 @@ for (const [web, route] of Object.entries(PHONE_ROUTES)) {
 const NOT_ON_PHONE = [
   "/coming-soon/payments", "/coming-soon/room-systems", "/reports/store",
   ...["profile", "set-up-this-hotel", "old-data", "photos", "highlights", "amenities", "group", "policies", "documents"].map((x) => `/settings/property/${x}`),
-  ...["plans", "meal-plans", "taxes"].map((x) => `/settings/rates/${x}`),
-  ...["payment-methods", "extra-charges", "discounts", "commission", "pickup"].map((x) => `/settings/money/${x}`),
   ...["market-segments", "reservation-types", "reasons", "holidays", "id-types", "vip"].map((x) => `/settings/lists/${x}`),
   "/settings/front-desk/times-and-rules", "/settings/front-desk/front-desk",
   "/settings/messages/switches", "/settings/messages/daily-report-emails", "/settings/messages/scheduled-reports",
@@ -300,7 +298,12 @@ eq(activeRoute(FD, "/front-desk/5EL/stay/12"), "/front-desk/5EL"); // the stay o
 eq(activeRoute(FD, "/front-desk/5EL/in-house/x"), "/front-desk/5EL/in-house");
 eq(activeRoute(FD, "/hotel/5EL/x"), null); // not a prefix entry
 eq(activeRoute(FD, "/all"), null);
-eq(phoneRoute("/settings/rates/taxes", "5EL"), null);
+/* mobile/m13-set-money: Settings → Rates and tax, and Money. */
+eq(["plans", "meal-plans", "taxes"].map((x) => phoneRoute(`/settings/rates/${x}`, "5EL")),
+  ["/settings/5EL/plans", "/settings/5EL/meal-plans", "/settings/5EL/taxes"]);
+eq(["payment-methods", "extra-charges", "discounts", "commission", "pickup"].map((x) => phoneRoute(`/settings/money/${x}`, "5EL")),
+  ["/settings/5EL/payment-methods", "/settings/5EL/extra-charges", "/settings/5EL/discounts", "/settings/5EL/commission", "/settings/5EL/pickup"]);
+eq(spaceOf("/settings/5EL/taxes"), "settings");
 
 /* A property's landing, by role (app/index.tsx, the web's WORKING_HOME). */
 eq(landing("housekeeping", "AGR"), "/housekeeping/AGR");
