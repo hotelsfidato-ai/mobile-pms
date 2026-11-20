@@ -247,7 +247,7 @@ wins (MEMORY 14).
    counted for them"). The step tiles truncate their words at 375 px as the picture does. The movement's
    photo (take, pick, open) is "On the website for now" (`expo-image-picker` ~57.0.20). The Record sheet,
    the Cash and Finalize steps, a closed day and a blocker are **not pictured**: built from the code.
-3. Charges to rooms: "₹294" in the picture is "₹280 + ₹14 tax" on the phone (the server's two figures);
+3. Charges to rooms: the picture's single amount ("₹294") is "₹<before tax> + ₹<tax> tax" on the phone (the server's two figures);
    no "₹3,343 on folios" pill; the Till link in "This is the outside door" is plain words (the Till is
    another lane's screen). The refusals box and an empty list are not pictured.
 4. Bill history: "Download to Excel" (picture) is today's ExportButtons (PDF or print, share) — the
