@@ -6,7 +6,7 @@ import { Pressable, Text, View } from "react-native";
 import { ExportButtons } from "../../core/Export";
 import { ON_THE_WEBSITE, phoneRoute } from "../../core/menu";
 import { c, face, space, t } from "../../core/theme";
-import { Head, Screen, s as core, notKnown, useRead } from "../../core/ui";
+import { Head, Screen, s as core, notKnown, ripple, useRead } from "../../core/ui";
 import { getTaxInUse, listAdminProperties, listProperties, setPropertyOpen } from "./data";
 import { Btn, Empty, Failed, Foot, Line, Loading, Pill, Refused, Stale, Toast, body, confirm, saidOf, useAct, useSaid, type Said } from "./kit";
 import { refusedScreen } from "./roles";
@@ -135,7 +135,7 @@ function Links({ code, opens, calendar }: { code: string; opens: boolean; calend
         </View>
       ) : null}
       {calendar && cal ? (
-        <Pressable onPress={() => router.push(cal as never)} accessibilityRole="link" style={{ minHeight: 44, flexDirection: "row", alignItems: "center", gap: 6 }}>
+        <Pressable onPress={() => router.push(cal as never)} accessibilityRole="link" android_ripple={ripple} style={{ minHeight: 44, flexDirection: "row", alignItems: "center", gap: 6 }}>
           <Text style={[t.label, { color: c.orange700 }]}>{calendar}</Text>
           <ArrowRight size={14} color={c.orange700} />
         </Pressable>

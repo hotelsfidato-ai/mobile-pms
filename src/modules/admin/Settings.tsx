@@ -1,9 +1,9 @@
 import { router } from "expo-router";
 import * as Lucide from "lucide-react-native";
-import { Platform, Pressable, Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import { ON_THE_WEBSITE, phoneRoute, sidebarFor, type MenuIcon, type NavItem } from "../../core/menu";
 import { c, face, space, t } from "../../core/theme";
-import { Head, Screen, s as core } from "../../core/ui";
+import { Head, Screen, s as core, ripple, shade } from "../../core/ui";
 import { Refused } from "./kit";
 import { refusedScreen } from "./roles";
 import type { AdminProps } from "./Route";
@@ -53,11 +53,11 @@ function Entry({ item, code, first }: { item: NavItem; code: string; first: bool
       onPress={on ? () => router.push(route as never) : undefined} disabled={!on}
       accessibilityRole={on ? "link" : "text"} accessibilityState={{ disabled: !on }}
       accessibilityLabel={on ? item.label : `${item.label}. ${ON_THE_WEBSITE}`}
-      android_ripple={on && Platform.OS === "android" ? { color: c.grey200 } : undefined}
-      style={({ pressed }) => ({
+      android_ripple={on ? ripple : undefined}
+      style={shade(({ pressed }) => ({
         minHeight: 56, flexDirection: "row", alignItems: "center", gap: 12, paddingHorizontal: space.cardX,
-        borderTopWidth: first ? 0 : 1, borderColor: c.grey100, backgroundColor: pressed && Platform.OS === "ios" ? c.grey50 : "transparent",
-      })}
+        borderTopWidth: first ? 0 : 1, borderColor: c.grey100, backgroundColor: pressed ? c.grey50 : "transparent",
+      }))}
     >
       {/* The menu's glyph in a 28px chip (the web's link rows, D27-220). */}
       <View style={{ width: 28, height: 28, borderRadius: 8, backgroundColor: on ? c.orange50 : c.grey100, alignItems: "center", justifyContent: "center" }}>

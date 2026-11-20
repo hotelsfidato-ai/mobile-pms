@@ -2,7 +2,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { Text, View } from "react-native";
 import { c, t } from "../../core/theme";
-import { Head, Screen, s as core, notKnown, useRead } from "../../core/ui";
+import { Head, Screen, s as core, keys, notKnown, useRead } from "../../core/ui";
 import { getBankDetails, removeBankDetails, setBankDetails } from "./data";
 import { Btn, Failed, Field, Labelled, Loading, Refused, Sheet, Stale, Toast, body, confirm, saidOf, useAct, useSaid, type Said } from "./kit";
 import { refusedScreen } from "./roles";
@@ -102,11 +102,11 @@ function Edit({ code, bank, onSaid, onClose }: { code: string; bank: BankDetails
         <Btn variant="primary" label={act.busy ? "…" : "Save"} disabled={off} onPress={() => void save()} grow />
       </>}>
       <Field label="Account name" required hint="The name the account is in." maxLength={100} value={form.accountName} onChangeText={put("accountName")} autoCapitalize="words" />
-      <Field label="Account number" required hint="Digits only, 9 to 18 of them." keyboardType="number-pad" value={form.accountNumber} onChangeText={put("accountNumber")} />
+      <Field label="Account number" required hint="Digits only, 9 to 18 of them." input={keys.count} value={form.accountNumber} onChangeText={put("accountNumber")} />
       <Field label="Bank" required maxLength={100} value={form.bankName} onChangeText={put("bankName")} autoCapitalize="words" />
       <Field label="Branch" maxLength={100} value={form.branch} onChangeText={put("branch")} autoCapitalize="words" />
-      <Field label="IFSC" required hint="Eleven characters, the fifth a zero." maxLength={11} autoCapitalize="characters" value={form.ifsc} onChangeText={put("ifsc", true)} />
-      <Field label="UPI ID" hint="If guests may pay to one: name@bank." keyboardType="email-address" autoCapitalize="none" value={form.upi} onChangeText={put("upi")} />
+      <Field label="IFSC" required hint="Eleven characters, the fifth a zero." maxLength={11} input={keys.code} value={form.ifsc} onChangeText={put("ifsc", true)} />
+      <Field label="UPI ID" hint="If guests may pay to one: name@bank." input={keys.email} value={form.upi} onChangeText={put("upi")} />
       {act.stuck ? <Text style={[t.caption, { color: c.red700 }]}>{notKnown("saved", "the bank details").line} Close this to read them again.</Text> : null}
     </Sheet>
   );

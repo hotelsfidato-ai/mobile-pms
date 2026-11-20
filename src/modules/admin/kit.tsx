@@ -3,13 +3,14 @@ import { useFocusEffect } from "expo-router";
 import { AlertCircle, Check, ChevronDown, CloudOff, Inbox, RotateCw, ShieldOff, X } from "lucide-react-native";
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import {
-  ActivityIndicator, Alert, AppState, KeyboardAvoidingView, Modal, Platform, Pressable, ScrollView, Switch, Text, TextInput, View,
+  ActivityIndicator, AppState, KeyboardAvoidingView, Modal, Platform, Pressable, ScrollView, Switch, Text, TextInput, View,
   type KeyboardTypeOptions, type TextInputProps,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { HeldError, outcomeUnknown } from "../../core/api";
 import { isOnline } from "../../core/offline";
 import { c, face, space, t } from "../../core/theme";
+import { confirmAct, modalEdge, ripple, shade, useSheetPad } from "../../core/ui";
 
 /* ══════════════════════════════════════════════════════════════════
    THE WEB KIT'S PIECES ADMINISTRATION USES — src/components/ui
@@ -24,8 +25,8 @@ import { c, face, space, t } from "../../core/theme";
 
 /** The web's text-sm: 14 on 21. */
 export const body = { ...t.label, lineHeight: 21 };
-const ripple = Platform.OS === "android" ? { color: c.grey200 } : undefined;
-const shade = (pressed: boolean, base: string, down: string) => (pressed && Platform.OS === "ios" ? down : base);
+/** The pressed colour on iPhone only; Android shows the core's `ripple` (core ui.tsx `shade`). */
+const tint = (pressed: boolean, base: string, down: string) => (pressed ? down : base);
 
 /* ── Said, not only seen (the web's toast) ──────────────────────── */
 
@@ -112,13 +113,10 @@ export function usePoll(queryKey: readonly unknown[], every: number) {
 /* ── The phone's own confirm (docs/NATIVE.md), in the web's words ── */
 
 /** Alert.alert with the web's title, sentence and button; resolves true on the button. */
-export const confirm = (title: string, message: string, button: string, destructive = true) =>
-  new Promise<boolean>((resolve) => {
-    Alert.alert(title, message, [
-      { text: "Cancel", style: "cancel", onPress: () => resolve(false) },
-      { text: button, style: destructive ? "destructive" : "default", onPress: () => resolve(true) },
-    ], { cancelable: true, onDismiss: () => resolve(false) });
-  });
+/** The core's confirmAct (each phone's own dialog; the browser's in the web preview), as a promise that
+    resolves on the act. Cancelled, it never resolves and nothing is sent. */
+export const confirm = (title: string, message: string, button: string) =>
+  new Promise<true>((resolve) => confirmAct(title, message, button, () => resolve(true)));
 
 /* ── StatusPill: a soft tint, a dot where the web draws one ────── */
 
@@ -157,12 +155,12 @@ export function Btn({ label, a11y, onPress, disabled, variant = "secondary", ico
     <Pressable
       onPress={onPress} disabled={disabled} accessibilityRole="button" accessibilityLabel={a11y ?? label}
       accessibilityState={{ disabled: Boolean(disabled) }} android_ripple={ripple}
-      style={({ pressed }) => ({
+      style={shade(({ pressed }) => ({
         minHeight: 44, paddingHorizontal: variant === "ghost" ? 12 : 16, borderRadius: 999, borderWidth: 1, overflow: "hidden",
         borderColor: disabled && variant !== "ghost" ? c.grey200 : v.ring, flexDirection: "row", gap: 6,
         alignItems: "center", justifyContent: "center", ...(grow ? { flexGrow: 1 } : null),
-        backgroundColor: disabled ? (variant === "ghost" ? "transparent" : c.grey100) : shade(pressed, v.bg, v.down),
-      })}
+        backgroundColor: disabled ? (variant === "ghost" ? "transparent" : c.grey100) : tint(pressed, v.bg, v.down),
+      }))}
     >
       {icon}
       <Text style={[t.label, { color: disabled ? c.grey500 : v.fg, ...face[variant === "ghost" ? 500 : 600] }]}>{label}</Text>
@@ -172,10 +170,12 @@ export function Btn({ label, a11y, onPress, disabled, variant = "secondary", ico
 
 /* ── Field: a label over a box, 16 px type under a thumb (Input.tsx Field) ── */
 
-export function Field({ label, value, onChangeText, hint, error, required, keyboardType, secure, multiline, editable = true, placeholder, autoCapitalize, textContentType, maxLength, right }: {
+export function Field({ label, value, onChangeText, hint, error, required, keyboardType, secure, multiline, editable = true, placeholder, autoCapitalize, textContentType, maxLength, right, input }: {
   label: string; value: string; onChangeText: (v: string) => void; hint?: string; error?: string; required?: boolean;
   keyboardType?: KeyboardTypeOptions; secure?: boolean; multiline?: boolean; editable?: boolean; placeholder?: string;
   autoCapitalize?: TextInputProps["autoCapitalize"]; textContentType?: TextInputProps["textContentType"]; maxLength?: number; right?: ReactNode;
+  /** The core's `keys` for the field (the keyboard, autofill, capitals). */
+  input?: TextInputProps;
 }) {
   return (
     <View style={{ gap: 6 }}>
@@ -184,7 +184,7 @@ export function Field({ label, value, onChangeText, hint, error, required, keybo
         <TextInput
           value={value} onChangeText={onChangeText} editable={editable} placeholder={placeholder} placeholderTextColor={c.grey400}
           accessibilityLabel={label} keyboardType={keyboardType} secureTextEntry={secure} multiline={multiline}
-          autoCapitalize={autoCapitalize} textContentType={textContentType} maxLength={maxLength} autoCorrect={!secure && keyboardType !== "email-address"}
+          autoCapitalize={autoCapitalize} textContentType={textContentType} maxLength={maxLength} autoCorrect={!secure && keyboardType !== "email-address"} {...input}
           style={{
             flex: 1, minHeight: multiline ? 72 : 44, paddingHorizontal: 12, paddingVertical: 10, borderRadius: 10, borderWidth: 1,
             borderColor: error ? c.red700 : c.grey300, backgroundColor: editable ? c.white : c.grey50, fontSize: 16, lineHeight: 22,
@@ -223,10 +223,10 @@ export function Choose({ label, value, choices, onChange, disabled, none, hint }
       <Pressable
         onPress={() => setOpen(true)} disabled={disabled} accessibilityRole="button" accessibilityLabel={`${label}: ${shown}`}
         accessibilityState={{ disabled: Boolean(disabled) }} android_ripple={ripple}
-        style={({ pressed }) => ({
+        style={shade(({ pressed }) => ({
           minHeight: 44, paddingHorizontal: 12, borderRadius: 10, borderWidth: 1, borderColor: c.grey300, overflow: "hidden",
-          flexDirection: "row", alignItems: "center", gap: 8, backgroundColor: disabled ? c.grey50 : shade(pressed, c.white, c.grey50),
-        })}
+          flexDirection: "row", alignItems: "center", gap: 8, backgroundColor: disabled ? c.grey50 : tint(pressed, c.white, c.grey50),
+        }))}
       >
         <Text style={{ flex: 1, fontSize: 16, color: disabled ? c.grey500 : c.ink900, ...face[500] }} numberOfLines={1}>{shown}</Text>
         <ChevronDown size={16} color={c.grey500} />
@@ -237,7 +237,7 @@ export function Choose({ label, value, choices, onChange, disabled, none, hint }
           <Pressable
             key={ch.value} onPress={() => { onChange(ch.value); setOpen(false); }} accessibilityRole="button"
             accessibilityState={{ selected: ch.value === value }} android_ripple={ripple}
-            style={({ pressed }) => ({ minHeight: 48, flexDirection: "row", alignItems: "center", gap: 10, paddingHorizontal: 4, borderBottomWidth: 1, borderColor: c.grey100, backgroundColor: shade(pressed, c.white, c.grey50) })}
+            style={shade(({ pressed }) => ({ minHeight: 48, flexDirection: "row", alignItems: "center", gap: 10, paddingHorizontal: 4, borderBottomWidth: 1, borderColor: c.grey100, backgroundColor: tint(pressed, c.white, c.grey50) }))}
           >
             <Text style={[t.label, { flex: 1, fontSize: 16, color: c.ink900 }]}>{ch.label}</Text>
             {ch.value === value ? <Check size={18} color={c.orange} /> : null}
@@ -255,13 +255,13 @@ export function Sheet({ open, title, description, onClose, children, footer, clo
   /** False while a write is on its way, or stuck (MEMORY 16): it closes once the person may close it. */
   closable?: boolean;
 }) {
-  const insets = useSafeAreaInsets();
+  const pad = useSheetPad();
   const close = () => { if (closable) onClose(); };
   return (
-    <Modal visible={open} transparent animationType="slide" onRequestClose={close} statusBarTranslucent>
+    <Modal {...modalEdge} visible={open} transparent animationType="slide" onRequestClose={close}>
       <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1, justifyContent: "flex-end" }}>
         <Pressable style={{ position: "absolute", top: 0, bottom: 0, left: 0, right: 0, backgroundColor: "rgba(3,23,40,0.45)" }} onPress={close} accessibilityLabel="Close" />
-        <View style={{ maxHeight: "90%", backgroundColor: c.white, borderTopLeftRadius: 16, borderTopRightRadius: 16, paddingTop: 16, paddingBottom: Math.max(insets.bottom, 16) }}>
+        <View style={{ maxHeight: "90%", backgroundColor: c.white, borderTopLeftRadius: 16, borderTopRightRadius: 16, paddingTop: 16, paddingBottom: pad.bottom, paddingLeft: pad.left, paddingRight: pad.right }}>
           <View style={{ flexDirection: "row", alignItems: "flex-start", gap: 8, paddingHorizontal: space.side }}>
             <View style={{ flex: 1, gap: 4 }}>
               <Text style={[t.heading, { fontSize: 18 }]} accessibilityRole="header">{title}</Text>
@@ -309,7 +309,7 @@ export function Segmented<T extends string>({ value, onChange, options, label }:
         const on = o.value === value;
         return (
           <Pressable
-            key={o.value} onPress={() => onChange(o.value)} accessibilityRole="tab" accessibilityState={{ selected: on }}
+            key={o.value} onPress={() => onChange(o.value)} accessibilityRole="tab" accessibilityState={{ selected: on }} android_ripple={ripple}
             style={{
               flex: 1, minHeight: 44, paddingHorizontal: 8, borderRadius: 7, alignItems: "center", justifyContent: "center",
               backgroundColor: on ? c.white : "transparent",

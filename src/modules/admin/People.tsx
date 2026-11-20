@@ -1,10 +1,10 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { Building2, Info, UserPlus, X } from "lucide-react-native";
 import { useState } from "react";
-import { Linking, Pressable, Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import { ExportButtons } from "../../core/Export";
 import { c, face, t } from "../../core/theme";
-import { Head, Screen, s as core, notKnown, useRead } from "../../core/ui";
+import { Head, Screen, s as core, keys, mail, notKnown, ripple, useRead } from "../../core/ui";
 import {
   amendStaff, createStaff, deactivateStaff, grantAccess, listPeople, reactivateStaff, revokeAccess, setHomeScreen,
   setStaffPassword, switchTwoStepOff,
@@ -198,7 +198,7 @@ function PersonCard({ person, places, testCodes, me, seenAt, onOpen, onSaid, onD
           {person.isActive && !person.canSignIn ? <Pill tone="danger" dot>No password yet</Pill> : null}
           {person.twoStepOn ? <Pill tone="success">Two-step on</Pill> : null}
         </View>
-        <Pressable onPress={() => void Linking.openURL(`mailto:${person.email}`)} accessibilityRole="link" accessibilityLabel={`Email ${person.email}`}
+        <Pressable onPress={() => mail(person.email)} accessibilityRole="link" accessibilityLabel={`Email ${person.email}`}
           hitSlop={8} style={{ alignSelf: "flex-start", minHeight: 24, justifyContent: "center" }}>
           <Text style={[body, { color: c.grey500 }]}>{person.email}</Text>
         </Pressable>
@@ -222,7 +222,7 @@ function PersonCard({ person, places, testCodes, me, seenAt, onOpen, onSaid, onD
                 </Text>
                 {testCodes.has(a.code) ? <Pill tone="warning">TEST</Pill> : null}
                 {x ? (
-                  <Pressable onPress={() => void take(a.code)} disabled={off} accessibilityRole="button"
+                  <Pressable onPress={() => void take(a.code)} disabled={off} accessibilityRole="button" android_ripple={{ ...ripple, borderless: true }}
                     accessibilityLabel={`Remove ${a.code} from ${person.name}`} accessibilityState={{ disabled: off }}
                     style={{ width: 44, height: 44, alignItems: "center", justifyContent: "center", marginVertical: -7 }}>
                     <X size={15} color={off ? c.grey300 : c.grey500} />
@@ -302,9 +302,8 @@ function AddPerson({ places: realPlaces, testPlaces, placeRequired, onClose, onS
       description={placeRequired ? "Set them a password, where they work and what they do, and they can sign in straight away."
         : "Set them a password and they can sign in straight away. What they can SEE comes next."}
       footer={<Foot2 onCancel={onClose} label="Add" onPress={() => void submit()} ready={ready} busy={act.busy} stuck={act.stuck} />}>
-      <Field label="Their name" required value={name} onChangeText={setName} placeholder="Sunita Kulkarni" autoCapitalize="words" textContentType="name" />
-      <Field label="The email they will sign in with" required value={email} onChangeText={setEmail} keyboardType="email-address"
-        autoCapitalize="none" textContentType="emailAddress" placeholder="sunita@fidatohotels.com"
+      <Field label="Their name" required value={name} onChangeText={setName} placeholder="Sunita Kulkarni" input={keys.name} />
+      <Field label="The email they will sign in with" required value={email} onChangeText={setEmail} input={keys.email} placeholder="sunita@fidatohotels.com"
         hint="This is the link between the person and the account. A typo here means they cannot sign in at all." />
       <PasswordField label="A password for them" value={password} onChangeText={setPassword}
         hint={`At least ${min} characters. Tell it to them - nothing is emailed.`}
@@ -413,8 +412,8 @@ function Edit({ person, onClose, onSaid }: { person: AdminStaff; onClose: () => 
     <Sheet open title={`Edit ${person.name}`} onClose={onClose} closable={!act.busy}
       description="Their name is on everything they have done. The email is how they sign in and cannot be changed here."
       footer={<Foot2 onCancel={onClose} label="Save" onPress={() => void submit()} ready={Boolean(name.trim())} busy={act.busy} stuck={act.stuck} />}>
-      <Field label="Name" required value={name} onChangeText={setName} autoCapitalize="words" textContentType="name" />
-      <Field label="Phone" value={phone} onChangeText={setPhone} keyboardType="phone-pad" textContentType="telephoneNumber" />
+      <Field label="Name" required value={name} onChangeText={setName} input={keys.name} />
+      <Field label="Phone" value={phone} onChangeText={setPhone} input={keys.phone} />
       {!person.isGroupAdmin ? (
         <Choose label="Starts on" value={home} onChange={setHome} choices={HOME_SCREENS}
           hint="The first screen after they sign in. They can change it themselves." />
