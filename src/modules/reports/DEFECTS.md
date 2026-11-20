@@ -18,3 +18,11 @@ routes. **What was done:** nothing in the frozen core; the exact change is asked
 **Fixed** by the mobile chat at the merge (4 Nov): `app/index.tsx` sends the group's owner to `/all`
 and anybody else to `landing(role, code)` (`src/core/menu.ts`, pinned by `menu.check.ts`).
 **The rule:** a role's first screen is its picture's (`roles/r-<role>-home`), not one screen for all.
+
+---
+
+## Lane m13-rep-stock (19 Nov) — letter K (MRP-K1 …)
+
+No defect found in this lane's screens while building them (19 Nov). Three rules were broken once on
+purpose and the check caught each (`stockReports.check.ts`): a missing figure drawn as 0, a total's
+empty words drawn as "-", and the statement asked for days the wrong way round.

@@ -915,6 +915,21 @@ export const PHONE_ROUTES: Readonly<Record<string, string>> = {
   /* mobile/m13-till (19 Nov): the Till and the Terminal, each its own twin. */
   "/pos/:code/till": "/pos/:code/till",
   "/pos/:code/terminal": "/pos/:code/terminal",
+  /* mobile/m13-rep-stock (19 Nov): the store, bar and supplier reports, one screen each. */
+  "/reports/stock-consumption": "/reports/:code/stock-consumption",
+  "/reports/stock-count-differences": "/reports/:code/stock-count-differences",
+  "/reports/stock-cover": "/reports/:code/stock-cover",
+  "/reports/stock-dead": "/reports/:code/stock-dead",
+  "/reports/stock-movements": "/reports/:code/stock-movements",
+  "/reports/stock-on-hand": "/reports/:code/stock-on-hand",
+  "/reports/stock-wastage": "/reports/:code/stock-wastage",
+  "/reports/bar-stock": "/reports/:code/bar-stock",
+  "/reports/flr-daily": "/reports/:code/flr-daily",
+  "/reports/flr-monthly": "/reports/:code/flr-monthly",
+  "/reports/supplier-spend": "/reports/:code/supplier-spend",
+  "/reports/supplier-statement": "/reports/:code/supplier-statement",
+  "/reports/supplier-dues": "/reports/:code/supplier-dues",
+  "/reports/equipment": "/reports/:code/equipment",
   /* mobile/t2-revenue (4 Nov) */
   "/h/:code/revenue-outlook": "/revenue/:code",
   /* mobile/t2-crs (4 Nov) */
