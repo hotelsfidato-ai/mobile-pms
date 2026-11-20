@@ -59,3 +59,16 @@ or timestamps. **How it was found:** the maintenance helper, reading the Costs d
 done:** `workOrders.ts` takes the first ten characters (`day`, `longDay`); checked with both forms,
 broken once. **The rule:** a date from the API goes through one helper that accepts a date and a
 timestamp alike; a timestamp's day is then the UTC day (asked of the owner).
+
+---
+
+## Minibar and Checklists (lane m13-hk) — MHK-K1 …
+
+### MHK-K1 · The money check passed with a zero turned into a dash (19 Nov) — fixed before it ran
+
+**What happened:** `care.ts money` was broken on purpose to `!n ? DASH : …` to prove its check; the check still
+passed, because no case held a real zero — a ₹0.00 the server sent would have read "-". Restoring it with
+`git checkout` restored nothing (the file was new and untracked: MEMORY 18 again); it was put back by hand.
+**How it was found:** the lane's own break-once. **What was done:** `care.check.ts` now holds
+`money(0) = "₹0.00"`; broken again, it failed; restored from a copy. **The rule:** a dash is for "not sent" only;
+a check of a figure rule holds a zero, and a file is copied aside before it is broken.

@@ -226,3 +226,67 @@ sizes give the same. **Differences left:**
    the refused and offline states — built from the web's code on 31 Oct.
 The equipment picture (`all/32-store-and-equipment-equipment.png`) was looked at only for the item's
 name and tag on a card; the phone draws them as plain words, no link.
+
+## Minibar and Checklists (lane m13-hk, K; 19 Nov)
+
+**Web twin (16 Nov release, D27-383 item 10, D27-396):** `pages/Minibar.tsx` (`/h/:code/minibar`),
+`flows/MinibarFlow.tsx` (the take), `pages/Checklists.tsx` (`/h/:code/checklists`), `data/housekeeping.ts`;
+API `api/src/modules/housekeeping/minibar.ts`, `checklists.ts`, roleGate MINIBAR_LIST / MINIBAR_DECIDE /
+CHECKLISTS / CHECKLIST_TICK. On the web neither is in a working menu (a search away; the board's room card opens
+them). **No picture exists of either** (the set is of 31 Oct): built from the code, never seen running.
+
+| Web | Calls | Who | Offline |
+|---|---|---|---|
+| Minibar | `GET /minibar` (items, the fortnight's records, stock, stores, `mayKeep` / `mayRecord` / `mayDecide`) | reservation or invoice view | reads |
+| Record for a room | `POST /minibar/records` (one key per take = the record's id) | MINIBAR_RECORDERS (the route's own) | **refused** (on no list) |
+| Charge / Not charged | `POST /minibar/records/:id/decide` | invoice create | refused |
+| Add / Change an item | `POST /minibar/items`, `PATCH /minibar/items/:id` | room_config edit | refused |
+| Checklists | `GET /checklists`, `GET /housekeeping/checklist-runs?room=` | inventory view | reads |
+| The switch, add / change / remove a list | `PUT /checklists/required`, `POST`/`PUT`/`DELETE /checklists[/:id]` | room_config edit | refused |
+| Ticking a room's list | `POST /housekeeping/checklist-runs` | inventory edit | queued — **the board's, not built here** |
+
+| Screen | Route → file | Rules (checked) | Reads (key) |
+|---|---|---|---|
+| Minibar | `app/housekeeping/[code]/minibar.tsx?room=` → `Minibar.tsx` | `care.ts` (`care.check.ts`) | `["housekeeping", code, "minibar"]` |
+| Housekeeping checklists | `app/housekeeping/[code]/checklists.tsx` → `Checklists.tsx` | the same | `["housekeeping", code, "checklists"]`, `["housekeeping", code, "checklist-runs", room]` |
+
+Shared: `careData.ts` (the calls), `careKit.tsx` (the web kit's pieces, after NATIVE.md: the phone's Switch, its
+spinner, ripple / pressed shade, safe areas in every dialog, the keyboard lift, the right keyboard per field).
+Menu: `PHONE_ROUTES` `"/h/:code/minibar"`, `"/h/:code/checklists"` (the core's `menu.ts` has no entry for
+either yet — the 16 Nov entries are the mobile chat's: see the lane's report).
+
+**Who may** is the server's answer (`mayRecord`, `mayKeep`, `mayDecide`), each refused control grey with its
+sentence, never hidden: Record for a room — the route's RECORD_REFUSED, or "This hotel has no minibar list yet.";
+Add an item / Change — "The owner, an administrator or the general manager change the list and its prices."
+(the web hides them); a waiting take's buttons — "The desk decides this." (the web's); the switch and Add a
+checklist — the web's own lines.
+
+**Money (the minibar):** a price is the hotel's typed figure, `charged` what reached the bill with its tax: both
+as sent, with paise (`money`), a dash when not sent. **The web adds price x count in the browser** ("₹X before
+tax" on a waiting card and in the take dialog); the phone shows each line's own price ("Water x 2 · ₹40.00 each
+before tax") and, in the dialog, how many pieces are counted, never a rupee total.
+
+**One take, one key:** the take dialog mints one key when it opens (`formKeeper`), sent with every tap: the
+server answers a repeat with the first record, never a second refill or charge. On an unknown outcome the counts
+empty and it says "Not known whether it was recorded… Look at Waiting for the desk and Recorded"; the key stays
+for that dialog. **The desk's decision** reads no key (the server's "already decided" guards it): a waiting card
+whose outcome is unknown greys its buttons, says so, reads the list again and unlocks only when that read lands.
+Item and checklist writes latch and stop the same way.
+
+**Where the phone differs from the web (for the owner's yes):**
+1. No browser sums (above).
+2. Remove a checklist asks first (each phone's own dialog, the web's words); the web removes at once.
+3. Add an item, Change, Record for a room and Add a checklist are grey with their sentence where the web hides them.
+4. The minibar opens the take at once with `?room=` (for the board's card, when it links here).
+5. The take's Record is grey until counted and says why when tapped (the web's MarkButton way), as on the web.
+
+**Not built here, with the reason:** ticking a room's checklist (ChecklistFlow) and the minibar from a room's card
+are opened by the board's Clean / Inspected and the room card — the Rooms board is another lane's screen; the
+route `?room=` is ready for it.
+
+### Picture match (19 Nov)
+
+| Screen | Picture | Result |
+|---|---|---|
+| Minibar | none (`all/`, `new/`, `roles/` hold none: the page came on 16 Nov) | **NOT PICTURED** — built from `Minibar.tsx` |
+| Housekeeping checklists | none | **NOT PICTURED** — built from `Checklists.tsx` |
