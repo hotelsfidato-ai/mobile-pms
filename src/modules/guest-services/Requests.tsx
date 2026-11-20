@@ -69,7 +69,7 @@ export function Requests({ hotel, role, onBack }: { hotel: Hotel; role: string |
         <View style={{ flexDirection: "row", marginTop: -4, marginBottom: 8 }}>
           <Btn label="New request" variant="primary" icon={Plus} disabled={refused != null || stop.stuck} onPress={() => { if (!stop.isStuck()) setRaising(true); }} />
         </View>
-        {stop.stuck ? <Stopped line={notKnown("raised", "the open requests").line} onRead={() => { setView("open"); list.reload(); }} /> : null}
+        {stop.unknown ? <Stopped line={notKnown("raised", "the open requests").line} onRead={() => { setView("open"); list.reload(); }} /> : null}
         {refused ? null : (
           <ListExport screen="requests" role={role}
             table={list.data ? requestTable(shown, `${view === "open" ? "open" : "done, last 24 h"}${team !== "all" ? ` · ${TEAM_LABEL[team]}` : ""}`) : null} />

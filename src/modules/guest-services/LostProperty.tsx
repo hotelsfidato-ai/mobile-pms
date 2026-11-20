@@ -51,7 +51,7 @@ export function LostProperty({ hotel, role, onBack }: { hotel: Hotel; role: stri
         <View style={{ flexDirection: "row", marginTop: -4, marginBottom: 8 }}>
           <Btn label="Log an item" variant="primary" icon={Plus} disabled={refused != null || stop.stuck} onPress={() => { if (!stop.isStuck()) setLogging(true); }} />
         </View>
-        {stop.stuck ? <Stopped line={notKnown("logged", "the items kept").line} onRead={() => { setView("kept"); list.reload(); }} /> : null}
+        {stop.unknown ? <Stopped line={notKnown("logged", "the items kept").line} onRead={() => { setView("kept"); list.reload(); }} /> : null}
         {refused ? null : (
           <ListExport screen="lost-property" role={role}
             table={list.data ? lostTable(items, view === "kept" ? "kept" : "returned or disposed of") : null} />

@@ -76,7 +76,7 @@ export function Diary({ hotel, role }: { hotel: Hotel; role: string | null }) {
           </View>
           {setUp ? <Text style={[t.caption, { color: c.grey600 }]}>Treatments and therapists: {setUp}</Text> : null}
           {mayBook ? <Text style={[t.caption, { color: c.grey600 }]}>{mayBook}</Text> : null}
-          {stop.stuck ? <Stopped line={BOOK_UNKNOWN} onRead={q.reload} /> : null}
+          {stop.unknown ? <Stopped line={BOOK_UNKNOWN} onRead={q.reload} /> : null}
         </View>
         {/* The web's DIARY_EXPORT, the day shown; the spa's own export right. */}
         <ListExport screen="spa-diary" role={role} table={d ? {

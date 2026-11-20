@@ -224,7 +224,7 @@ function KitchenSheetCard({ code, role, onSaid }: { code: string; role: string |
             <Btn label={busy ? "Saving…" : `Save the closing count${typedN ? ` (${typedN})` : ""}`} variant="primary" disabled={busy || stuck.current || stop.stuck || typedN === 0} onPress={() => void save()} />
           </View>
         ) : null}
-        {stop.stuck ? <Stopped line={STOP_LINE} onRead={() => { setDate(undefined); q.reload(); }} /> : null}
+        {stop.unknown ? <Stopped line={STOP_LINE} onRead={() => { setDate(undefined); q.reload(); }} /> : null}
         <Text style={[body, { color: c.grey600 }]}>
           {!today ? "An earlier day: the count is typed on today's sheet."
             : s.mayCount ? "The closing count: type each item you count, in its unit; a blank line is not counted. Below zero is red - a delivery or a count puts it right."
@@ -419,7 +419,7 @@ function BarSheetCard({ code, role, onSaid, onRequests }: { code: string; role: 
             <Btn label={busy ? "Saving…" : `Save the ${moment === "morning" ? "morning" : "closing"} count${typedN ? ` (${typedN})` : ""}`} variant="primary" disabled={busy || stop.stuck || typedN === 0} onPress={save} />
           </View>
         ) : null}
-        {stop.stuck ? <Stopped line={STOP_LINE} onRead={() => { setDate(undefined); q.reload(); }} /> : null}
+        {stop.unknown ? <Stopped line={STOP_LINE} onRead={() => { setDate(undefined); q.reload(); }} /> : null}
         <Text style={[body, { color: c.grey600 }]}>{barLead(s, moment)}</Text>
         {"missing" in out && anyTyped ? <Text style={[t.caption, { color: c.red700 }]}>{out.missing}</Text> : null}
         {s.mayCloseBar && today && !s.closedToday ? (
@@ -565,7 +565,7 @@ function Requests({ code, role, onSaid }: { code: string; role: string | null; o
   return (
     <View style={{ gap: space.card }}>
       <InDialog said={said} />
-      {stop.stuck ? <Stopped line="Not known whether the ask was sent: read the requests again before asking again." onRead={q.reload} /> : null}
+      {stop.unknown ? <Stopped line="Not known whether the ask was sent: read the requests again before asking again." onRead={q.reload} /> : null}
       {mayAsk ? (
         <View style={[card, { padding: space.cardX, gap: 12 }]}>
           <View style={{ gap: 2 }}>

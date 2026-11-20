@@ -85,7 +85,7 @@ export function Purchasing({ hotel, role, onBack }: { hotel: Hotel; role: string
               {data?.me.maySetRequesters ? <Btn label="Who may ask" icon={ShieldCheck} onPress={() => router.push(`/purchasing/${code}/who-may-ask`)} /> : null}
               {askButton}
             </View>
-            {stop.stuck ? <Stopped line={ASK_UNKNOWN} onRead={q.reload} /> : null}
+            {stop.unknown ? <Stopped line={ASK_UNKNOWN} onRead={q.reload} /> : null}
             {/* The web's REQUEST_EXPORT; purchasing's own export right. */}
             <ListExport screen="purchasing" role={role} table={data ? {
               subtitle: "Showing restaurant and hotel",

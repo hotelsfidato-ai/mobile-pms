@@ -150,7 +150,7 @@ export function FunctionPage({ hotel, role, id, registered, warning, onBack }: {
             ) : null}
             <Stale error={q.error} />
             {refusal ? (refusal.body ? <Note title={refusal.title} alert>{refusal.body}</Note> : <Note alert>{refusal.title}</Note>) : null}
-            {stop.stuck ? <Stopped line={COURSE_UNKNOWN} onRead={q.reload} /> : null}
+            {stop.unknown ? <Stopped line={COURSE_UNKNOWN} onRead={q.reload} /> : null}
 
             {f.status === "cancelled" && f.cancelReason ? (
               <Warn icon={<TriangleAlert size={16} color={c.red} />}>

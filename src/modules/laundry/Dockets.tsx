@@ -66,7 +66,7 @@ export function Dockets({ hotel, role, onBack }: { hotel: Hotel; role: string | 
             {collectButton}
           </View>
           {mayTake ? <Text style={[t.caption, { color: c.grey600 }]}>{mayTake}</Text> : null}
-          {stop.stuck ? <Stopped line={COLLECT_UNKNOWN} onRead={() => { setWhose("all"); list.reload(); }} /> : null}
+          {stop.unknown ? <Stopped line={COLLECT_UNKNOWN} onRead={() => { setWhose("all"); list.reload(); }} /> : null}
         </View>
 
         <View style={{ gap: 8, marginTop: 8 }}>

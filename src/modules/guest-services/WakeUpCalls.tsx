@@ -68,7 +68,7 @@ export function WakeUpCalls({ hotel, role, onBack }: { hotel: Hotel; role: strin
         <View style={{ flexDirection: "row", marginTop: -4, marginBottom: 8 }}>
           <Btn label="Set a call" variant="primary" icon={Plus} disabled={refused != null || stop.stuck} onPress={() => { if (!stop.isStuck()) setSetting(true); }} />
         </View>
-        {stop.stuck ? <Stopped line={notKnown("set", "the calls").line} onRead={() => { setView("open"); list.reload(); }} /> : null}
+        {stop.unknown ? <Stopped line={notKnown("set", "the calls").line} onRead={() => { setView("open"); list.reload(); }} /> : null}
         {refused ? null : (
           <ListExport screen="wake-up-calls" role={role} table={list.data ? callTable(calls, view === "open" ? "to make" : "done, last 24 h") : null} />
         )}

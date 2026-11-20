@@ -114,7 +114,7 @@ export function Store({ hotel, role, onBack }: { hotel: Hotel; role: string | nu
         />
 
         {!mayChange ? <Text style={[body, { color: c.grey600 }]}>{LOOK_ONLY}</Text> : null}
-        {stop.stuck ? <Stopped line={STOP_LINE} onRead={q.reload} /> : null}
+        {stop.unknown ? <Stopped line={STOP_LINE} onRead={q.reload} /> : null}
 
         {list && list.stores.length > 0 ? (
           <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>

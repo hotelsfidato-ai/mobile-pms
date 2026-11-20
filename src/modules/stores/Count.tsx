@@ -143,7 +143,7 @@ export function Count({ hotel, role, startStoreId, onBack }: {
         </View>
         <Text style={[t.caption, { color: c.grey600 }]}>Print the sheet: {ON_THE_WEBSITE}</Text>
       </View>
-      {stop.stuck ? <Stopped line={STOP_LINE} onRead={q.reload} /> : null}
+      {stop.unknown ? <Stopped line={STOP_LINE} onRead={q.reload} /> : null}
 
       {q.data === undefined ? (
         q.error
