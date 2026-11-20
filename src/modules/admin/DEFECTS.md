@@ -3,7 +3,7 @@
 Every defect found in the phone's Administration module: what happened, how it was found, what was
 done about it, and the rule it leaves. Fixed entries stay.
 
-## MADM-1 · The phone's console list is older than the web's (20 Nov) — open, the core's
+## MADM-1 · The phone's console list is older than the web's (20 Nov) — fixed (mobile/m13-menu)
 
 **What happened.** The core's port of the Settings console (`src/core/menu.ts` PAGES, 4 Nov) has no
 "Backfill data" (`/settings/property/backfill-data`, D27-398) and no "Bring in old data"
@@ -13,6 +13,13 @@ the phone's Settings list cannot show Backfill data, though the screen is built.
 **How found.** Listing `sidebarFor(…, "settings")` for a GM against today's `*.settings.ts`.
 **What was done.** Nothing in the core (frozen): the exact diff is in the lane's report. The Backfill
 screen opens from its own route meanwhile, with the web's own read rule (`refusedBackfill`).
+20 Nov (mobile/m13-menu): the core's menu re-ported from the 16 Nov release — Backfill data, Bring
+in old data, Scheduled reports and "Room discounts" in the console, Backfilled records for the
+Accountant. And the frame's Settings pill now opens this console (`spaceHome` → `/settings` →
+`/admin/<code>`) instead of only showing its list in the drawer, and a console screen
+(`/admin/<code>/roles`, `/inventory/<code>/room-types` …) lights Settings in the drawer
+(`spaceHere`: the space of the web address the phone screen stands for). Pinned in
+`menu.check.ts`; the menu compared with the web's own `navigation.ts` run under node: no difference.
 **The rule.** Before building on a ported list, compare it with the web's of today, not of the day it
 was ported.
 

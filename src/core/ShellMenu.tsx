@@ -4,8 +4,8 @@ import { useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
-  ON_THE_WEBSITE, activeRoute, hiddenCount, phoneRoute, sidebarFor, spaceOf, spacesFor,
-  type MenuIcon, type NavItem, type Role, type Space,
+  ON_THE_WEBSITE, activeRoute, hiddenCount, phoneRoute, sidebarFor, spaceHere, spaceHome, spacesFor,
+  type MenuIcon, type NavItem, type Role, type Several, type Space,
 } from "./menu";
 import { regular, SCRIM, Slide } from "./Shell";
 import { c, face } from "./theme";
@@ -31,19 +31,23 @@ const NAMES: Record<Space, string> = { front: "Front office", pos: "Restaurant",
 
 const white = (a: number) => `rgba(255,255,255,${a})`;
 
-export function ShellMenu({ role, code, modules, path, folded, onFold, onClose }: {
+export function ShellMenu({ role, code, modules, path, several, folded, onFold, onClose }: {
   role: Role; code: string; modules: Modules | undefined; path: string;
+  /** The session's question for Group reports and Group rate change (menu.ts severalOf). */
+  several: Several;
   folded: Record<string, boolean>; onFold: (key: string, shownFolded: boolean) => void; onClose: () => void;
 }) {
   const insets = useSafeAreaInsets();
-  /* Settings has no phone screen to go to: its pill shows its menu here,
-     every entry on the website for now, so the menu is the same overall. */
+  /* A space whose first screen the phone lacks shows its menu here instead
+     (the pill only); each opens where the web's does (MADM-1). */
   const [chosen, setChosen] = useState<Space | null>(null);
   const spaces = spacesFor(role, code, modules);
-  const wanted = chosen ?? spaceOf(path);
+  /* The space the screen in view belongs to, read through the web address it
+     stands for: Settings → Roles is /admin/5EL/roles on a phone (menu.ts spaceHere). */
+  const wanted = chosen ?? spaceHere(path);
   const space = spaces.includes(wanted) ? wanted : spaces[0]!;
-  const sections = sidebarFor(role, code, modules, space);
-  const hidden = hiddenCount(role, code, modules, space);
+  const sections = sidebarFor(role, code, modules, space, several);
+  const hidden = hiddenCount(role, code, modules, space, several);
   /* The one entry lit, the screen in view's own (menu.ts activeRoute). */
   const lit = activeRoute(sections.flatMap((section) => section.items.flatMap((item) => [item, ...(item.children ?? [])]))
     .flatMap((item) => {
@@ -52,10 +56,9 @@ export function ShellMenu({ role, code, modules, path, folded, onFold, onClose }
     }), path);
 
   const go = (route: string) => { onClose(); router.push(route as never); };
-  /* Where each space opens (SpaceSwitcher.tsx). */
+  /* Where each space opens (menu.ts spaceHome): Settings is the console's first screen, /admin/<code>. */
   const openSpace = (s: Space) => {
-    const home = s === "front" ? "/" : s === "pos" ? sidebarFor(role, code, modules, "pos")[0]?.items[0]?.to ?? "/" : null;
-    const route = home ? phoneRoute(home, code) : null;
+    const route = phoneRoute(spaceHome(role, code, modules, s), code);
     if (route) go(route); else setChosen(s);
   };
 

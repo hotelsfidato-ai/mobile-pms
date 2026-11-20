@@ -5,7 +5,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Animated, Easing, Modal, Platform, Pressable, StyleSheet, Text, View } from "react-native";
 import { api, type Hotel, type HotelsResponse } from "./api";
 import { dateShort, daysBehind } from "./format";
-import { ON_THE_WEBSITE, ROLE_LABELS, asRole, can, coversTheFrame, initials, mayReach, phoneRoute } from "./menu";
+import { ON_THE_WEBSITE, ROLE_LABELS, asRole, can, coversTheFrame, initials, mayReach, phoneRoute, severalOf } from "./menu";
 import { roleAt, useSession } from "./session";
 import { ShellAccount } from "./ShellAccount";
 import { ShellMenu, type Modules } from "./ShellMenu";
@@ -104,7 +104,7 @@ export function Shell() {
 
       {open === "menu" ? (
         <ShellMenu
-          role={role} code={code} modules={modules.data} path={here}
+          role={role} code={code} modules={modules.data} path={here} several={severalOf(fresh.data ?? who)}
           folded={folded} onFold={(key, shownFolded) => setFolded((f) => ({ ...f, [key]: !shownFolded }))}
           onClose={close}
         />

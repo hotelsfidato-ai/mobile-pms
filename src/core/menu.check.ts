@@ -1,13 +1,13 @@
 /* Run: node --experimental-strip-types mobile/src/core/menu.check.ts
    Every role's menu in every space it has, as the web's own sidebarFor gives
-   it today (re-run on today's PMS on 4 Nov, a production build, modules all
-   on: unchanged since 31 Oct), every role's whole reach, and the phone's own
-   rules. */
+   it (re-ported from the 16 Nov release on 20 Nov, a production build,
+   modules all on), every role's whole reach, and the phone's own rules. */
 import {
   PHONE_ROUTES, ROLES, activeRoute, asRole, coversTheFrame, flatNavigationFor, hiddenCount, initials, landing, mayReach, navigationFor,
-  phoneRoute, relative, sidebarFor, spaceOf, spacesFor, workingHomeFor, type Role, type Space,
+  phoneRoute, relative, severalOf, sidebarFor, spaceHere, spaceHome, spaceOf, spacesFor, workingHomeFor, type Role, type Space,
 } from "./menu.ts";
-import { existsSync, readdirSync } from "node:fs";
+import type { HotelsResponse } from "./api.ts";
+import { existsSync, readdirSync, statSync } from "node:fs";
 
 /* No node:assert, so the app's own type check reads this file too. */
 const eq = (got: unknown, want: unknown) => {
@@ -22,26 +22,26 @@ const shown = (role: Role, space: Space, modules: Record<string, boolean> = ALL_
 
 const WEB: Record<Role, Partial<Record<Space, string>>> = {
   owner: {
-    front: ": Dashboard, Approvals, Rooms, Calendar / Front desk: Arrivals, Upcoming, In house, Due out, Walk-ins, Online check-in, Housekeeping, Work orders, Guest requests, Wake-up calls, Lost property / Bookings: All bookings, Groups, CRS bookings, New booking / Guests & CRM: Guests, Companies and agents, Guest messages, Reviews, Guest 360, Possible same person / Sales and marketing: Leads and WhatsApp, Marketing, Loyalty / Across properties: All properties, Properties, People / Property setup: Cancellation terms, Booking sources / Rooms and rates: Rates, Revenue outlook / Distribution: Channel manager, Contracts / Store and equipment: Store, Inventory, Equipment, Places and suppliers, Purchasing / Finance: Folios, Invoices, Payments, Cashiering, Cash deposits, Company accounts, Form III, Supplier dues, Online payments / Banquet: Diary, Halls and packages / Laundry: Dockets, Price list / Spa: Spa diary, Treatments / Reports: Night audit, All reports, Manager report / System: Notifications, System health, Room systems",
+    front: ": Dashboard, Approvals, Rooms, Calendar / Front desk: Arrivals, Upcoming, In house, Due out, Walk-ins, Online check-in, Housekeeping, Minibar, Checklists, Work orders, Guest requests, Wake-up calls, Lost property / Bookings: All bookings, Groups, CRS bookings, New booking, Waitlist / Guests & CRM: Guests, Companies and agents, Guest messages, Reviews, Guest feedback, Guest 360, Possible same person / Sales and marketing: Leads and WhatsApp, Marketing, Loyalty / Across properties: All properties, Properties, People / Property setup: Cancellation terms, Booking sources / Rooms and rates: Rates, Revenue outlook / Distribution: Channel manager, Contracts / Store and equipment: Store, Inventory, Equipment, Places and suppliers, Purchasing / Finance: Folios, Invoices, Payments, Cashiering, Cash deposits, Company accounts, Form III, Supplier dues, Online payments / Banquet: Diary, Halls and packages / Laundry: Dockets, Price list / Spa: Spa diary, Treatments / Reports: Night audit, All reports, Manager report / System: Notifications, System health, Room systems",
     pos: "Point of sale: Tables, Table bookings, Till, Bill history, Terminal, Kitchen, Bar stock, Menu, Close restaurant day, Charges to rooms, Restaurant setup",
-    settings: "Property: Profile, Set up this hotel, Logo and photos, Highlights, Cancellation terms, Amenities, Group, Policies, Documents / Rooms: Room types / Rates and tax: Rates, Rate plans, Meal plans, Taxes / Money: Bank details, Payment methods, Extra charges, Discounts, Commission, Pickup and drop / Lists: Booking sources, Market segments, Reservation types, Ready reasons, Holidays, ID types, VIP levels / Front desk: Times and rules, Front desk rules / Messages: Guest messages, Reviews, Online check-in, Guest messages on/off, Daily report emails / People and security: People, Roles and permissions, Audit log, Activity, Sign-ins and devices, Signing in / Modules and connections: Modules, Channel manager, CRS bookings, Rivals' prices, Integrations, Connection health, System health",
+    settings: "Property: Profile, Set up this hotel, Backfill data, Bring in old data, Logo and photos, Highlights, Cancellation terms, Amenities, Group, Policies, Documents / Rooms: Room types / Rates and tax: Rates, Rate plans, Meal plans, Taxes / Money: Bank details, Payment methods, Extra charges, Room discounts, Commission, Pickup and drop / Lists: Booking sources, Market segments, Reservation types, Ready reasons, Holidays, ID types, VIP levels / Front desk: Times and rules, Front desk rules / Messages: Guest messages, Reviews, Online check-in, Guest messages on/off, Daily report emails, Scheduled reports / People and security: People, Roles and permissions, Audit log, Activity, Sign-ins and devices, Signing in / Modules and connections: Modules, Channel manager, CRS bookings, Rivals' prices, Integrations, Connection health, System health",
   },
   admin: {
-    front: ": Dashboard, Approvals, Rooms, Calendar / Front desk: Arrivals, Upcoming, In house, Due out, Walk-ins, Online check-in, Housekeeping, Work orders, Guest requests, Wake-up calls, Lost property / Bookings: All bookings, Groups, CRS bookings, New booking / Guests & CRM: Guests, Companies and agents, Guest messages, Reviews, Guest 360, Possible same person / Sales and marketing: Leads and WhatsApp, Marketing, Loyalty / Across properties: All properties, Properties, People / Property setup: Cancellation terms, Booking sources / Rooms and rates: Rates, Revenue outlook / Distribution: Channel manager, Contracts / Store and equipment: Store, Inventory, Equipment, Places and suppliers, Purchasing / Finance: Folios, Invoices, Payments, Cashiering, Cash deposits, Company accounts, Form III, Supplier dues, Online payments / Banquet: Diary, Halls and packages / Laundry: Dockets, Price list / Spa: Spa diary, Treatments / Reports: Night audit, All reports, Manager report / System: Notifications, System health, Room systems",
+    front: ": Dashboard, Approvals, Rooms, Calendar / Front desk: Arrivals, Upcoming, In house, Due out, Walk-ins, Online check-in, Housekeeping, Minibar, Checklists, Work orders, Guest requests, Wake-up calls, Lost property / Bookings: All bookings, Groups, CRS bookings, New booking, Waitlist / Guests & CRM: Guests, Companies and agents, Guest messages, Reviews, Guest feedback, Guest 360, Possible same person / Sales and marketing: Leads and WhatsApp, Marketing, Loyalty / Across properties: All properties, Properties, People / Property setup: Cancellation terms, Booking sources / Rooms and rates: Rates, Revenue outlook / Distribution: Channel manager, Contracts / Store and equipment: Store, Inventory, Equipment, Places and suppliers, Purchasing / Finance: Folios, Invoices, Payments, Cashiering, Cash deposits, Company accounts, Form III, Supplier dues, Online payments / Banquet: Diary, Halls and packages / Laundry: Dockets, Price list / Spa: Spa diary, Treatments / Reports: Night audit, All reports, Manager report / System: Notifications, System health, Room systems",
     pos: "Point of sale: Tables, Table bookings, Till, Bill history, Terminal, Kitchen, Bar stock, Menu, Close restaurant day, Charges to rooms, Restaurant setup",
-    settings: "Property: Profile, Set up this hotel, Logo and photos, Highlights, Cancellation terms, Amenities, Group, Policies, Documents / Rooms: Room types / Rates and tax: Rates, Rate plans, Meal plans, Taxes / Money: Bank details, Payment methods, Extra charges, Discounts, Commission, Pickup and drop / Lists: Booking sources, Market segments, Reservation types, Ready reasons, Holidays, ID types, VIP levels / Front desk: Times and rules, Front desk rules / Messages: Guest messages, Reviews, Online check-in, Guest messages on/off, Daily report emails / People and security: People, Roles and permissions, Audit log, Activity, Sign-ins and devices, Signing in / Modules and connections: Modules, Channel manager, CRS bookings, Rivals' prices, Integrations, Connection health, System health",
+    settings: "Property: Profile, Set up this hotel, Backfill data, Bring in old data, Logo and photos, Highlights, Cancellation terms, Amenities, Group, Policies, Documents / Rooms: Room types / Rates and tax: Rates, Rate plans, Meal plans, Taxes / Money: Bank details, Payment methods, Extra charges, Room discounts, Commission, Pickup and drop / Lists: Booking sources, Market segments, Reservation types, Ready reasons, Holidays, ID types, VIP levels / Front desk: Times and rules, Front desk rules / Messages: Guest messages, Reviews, Online check-in, Guest messages on/off, Daily report emails, Scheduled reports / People and security: People, Roles and permissions, Audit log, Activity, Sign-ins and devices, Signing in / Modules and connections: Modules, Channel manager, CRS bookings, Rivals' prices, Integrations, Connection health, System health",
   },
   gm: {
-    front: ": Dashboard, Approvals, Rooms, Calendar / Front desk: Arrivals, Upcoming, In house, Due out, Walk-ins, Online check-in, Housekeeping, Work orders, Guest requests, Wake-up calls, Lost property / Bookings: All bookings, Groups, CRS bookings, New booking / Guests & CRM: Guests, Companies and agents, Guest messages, Reviews, Guest 360, Possible same person / Sales and marketing: Leads and WhatsApp, Marketing, Loyalty / Across properties: Properties, People / Property setup: Cancellation terms, Booking sources / Rooms and rates: Rates, Revenue outlook / Distribution: Channel manager, Contracts / Store and equipment: Store, Inventory, Equipment, Places and suppliers, Purchasing / Finance: Folios, Invoices, Payments, Cashiering, Cash deposits, Company accounts, Form III, Supplier dues, Online payments / Banquet: Diary, Halls and packages / Laundry: Dockets, Price list / Spa: Spa diary, Treatments / Reports: Night audit, All reports, Manager report / System: Notifications, Room systems",
+    front: ": Dashboard, Approvals, Rooms, Calendar / Front desk: Arrivals, Upcoming, In house, Due out, Walk-ins, Online check-in, Housekeeping, Minibar, Checklists, Work orders, Guest requests, Wake-up calls, Lost property / Bookings: All bookings, Groups, CRS bookings, New booking, Waitlist / Guests & CRM: Guests, Companies and agents, Guest messages, Reviews, Guest feedback, Guest 360, Possible same person / Sales and marketing: Leads and WhatsApp, Marketing, Loyalty / Across properties: Properties, People / Property setup: Cancellation terms, Booking sources / Rooms and rates: Rates, Revenue outlook / Distribution: Channel manager, Contracts / Store and equipment: Store, Inventory, Equipment, Places and suppliers, Purchasing / Finance: Folios, Invoices, Payments, Cashiering, Cash deposits, Company accounts, Form III, Supplier dues, Online payments / Banquet: Diary, Halls and packages / Laundry: Dockets, Price list / Spa: Spa diary, Treatments / Reports: Night audit, All reports, Manager report / System: Notifications, Room systems",
     pos: "Point of sale: Tables, Table bookings, Till, Bill history, Terminal, Kitchen, Bar stock, Menu, Close restaurant day, Charges to rooms, Restaurant setup",
-    settings: "Property: Profile, Set up this hotel, Logo and photos, Highlights, Cancellation terms, Amenities, Group, Policies, Documents / Rooms: Room types / Rates and tax: Rates, Rate plans, Meal plans, Taxes / Money: Bank details, Payment methods, Extra charges, Discounts, Commission, Pickup and drop / Lists: Booking sources, Market segments, Reservation types, Ready reasons, Holidays, ID types, VIP levels / Front desk: Times and rules, Front desk rules / Messages: Guest messages, Reviews, Online check-in, Guest messages on/off, Daily report emails / People and security: People, Audit log, Activity, Signing in / Modules and connections: Channel manager, CRS bookings, Rivals' prices, Connection health",
+    settings: "Property: Profile, Set up this hotel, Backfill data, Logo and photos, Highlights, Cancellation terms, Amenities, Group, Policies, Documents / Rooms: Room types / Rates and tax: Rates, Rate plans, Meal plans, Taxes / Money: Bank details, Payment methods, Extra charges, Room discounts, Commission, Pickup and drop / Lists: Booking sources, Market segments, Reservation types, Ready reasons, Holidays, ID types, VIP levels / Front desk: Times and rules, Front desk rules / Messages: Guest messages, Reviews, Online check-in, Guest messages on/off, Daily report emails, Scheduled reports / People and security: People, Audit log, Activity, Signing in / Modules and connections: Channel manager, CRS bookings, Rivals' prices, Connection health",
   },
   hotel_manager: {
-    front: ": Dashboard, Approvals, Rooms, Calendar / Front desk: Arrivals, Upcoming, In house, Due out, Walk-ins, Online check-in, Housekeeping, Work orders, Guest requests, Wake-up calls, Lost property / Bookings: All bookings, Groups, CRS bookings, New booking / Guests & CRM: Guests, Companies and agents, Guest messages, Reviews / Sales and marketing: Leads and WhatsApp, Loyalty / Across properties: Properties, People / Property setup: Cancellation terms / Rooms and rates: Rates / Distribution: Contracts / Store and equipment: Store, Inventory, Equipment, Places and suppliers, Purchasing / Finance: Folios, Invoices, Payments, Cashiering, Company accounts, Form III / Banquet: Diary, Halls and packages / Laundry: Dockets, Price list / Spa: Spa diary / Reports: Night audit, All reports, Manager report / System: Notifications",
+    front: ": Dashboard, Approvals, Rooms, Calendar / Front desk: Arrivals, Upcoming, In house, Due out, Walk-ins, Online check-in, Housekeeping, Minibar, Checklists, Work orders, Guest requests, Wake-up calls, Lost property / Bookings: All bookings, Groups, CRS bookings, New booking, Waitlist / Guests & CRM: Guests, Companies and agents, Guest messages, Reviews / Sales and marketing: Leads and WhatsApp, Loyalty / Across properties: Properties, People / Property setup: Cancellation terms / Rooms and rates: Rates / Distribution: Contracts / Store and equipment: Store, Inventory, Equipment, Places and suppliers, Purchasing / Finance: Folios, Invoices, Payments, Cashiering, Company accounts, Form III / Banquet: Diary, Halls and packages / Laundry: Dockets, Price list / Spa: Spa diary / Reports: Night audit, All reports, Manager report / System: Notifications",
     pos: "Point of sale: Tables, Table bookings, Till, Bill history, Terminal, Kitchen, Menu, Close restaurant day, Charges to rooms",
   },
   revenue_manager: {
-    front: ": Dashboard, Rooms, Calendar / Front desk: Arrivals, Upcoming, In house, Due out, Walk-ins, Housekeeping, Work orders / Bookings: All bookings, Groups, CRS bookings / Across properties: Properties / Property setup: Cancellation terms, Booking sources / Rooms and rates: Rates, Revenue outlook / Banquet: Diary, Halls and packages / Reports: Night audit, All reports, Manager report / System: Notifications",
+    front: ": Dashboard, Rooms, Calendar / Front desk: Arrivals, Upcoming, In house, Due out, Walk-ins, Housekeeping, Minibar, Checklists, Work orders / Bookings: All bookings, Groups, CRS bookings, Waitlist / Across properties: Properties / Property setup: Cancellation terms, Booking sources / Rooms and rates: Rates, Revenue outlook / Banquet: Diary, Halls and packages / Reports: Night audit, All reports, Manager report / System: Notifications",
   },
   front_desk: {
     front: ": Dashboard, Rooms, Calendar / Front desk: Arrivals, Upcoming, In house, Due out, Walk-ins, Online check-in, Guest requests, Wake-up calls, Lost property / Bookings: All bookings, CRS bookings, New booking / Guests & CRM: Guests, Guest messages / Finance: Cashiering / Laundry: Dockets / System: Notifications",
@@ -66,11 +66,11 @@ const WEB: Record<Role, Partial<Record<Space, string>>> = {
     front: "Store and equipment: Store, Inventory, Equipment, Purchasing / System: Notifications",
   },
   finance: {
-    front: ": Dashboard, Rooms, Calendar / Front desk: Arrivals, Upcoming, In house, Due out, Walk-ins, Housekeeping / Bookings: All bookings, Groups, CRS bookings / Guests & CRM: Guests, Companies and agents, Guest messages, Reviews / Sales and marketing: Leads and WhatsApp, Loyalty / Across properties: Properties / Property setup: Booking sources / Distribution: Contracts / Store and equipment: Store, Inventory, Equipment, Places and suppliers, Purchasing / Finance: Folios, Invoices, Payments, Cashiering, Cash deposits, Company accounts, Supplier dues / Banquet: Diary / Laundry: Dockets, Price list / Reports: Night audit, All reports, Manager report / System: Notifications",
+    front: ": Dashboard, Rooms, Calendar / Front desk: Arrivals, Upcoming, In house, Due out, Walk-ins, Housekeeping, Minibar / Bookings: All bookings, Groups, CRS bookings, Waitlist / Guests & CRM: Guests, Companies and agents, Guest messages, Reviews / Sales and marketing: Leads and WhatsApp, Loyalty / Across properties: Properties / Property setup: Booking sources / Distribution: Contracts / Store and equipment: Store, Inventory, Equipment, Places and suppliers, Purchasing / Finance: Folios, Invoices, Payments, Cashiering, Cash deposits, Company accounts, Supplier dues / Banquet: Diary / Laundry: Dockets, Price list / Reports: Night audit, All reports, Manager report / System: Notifications",
     pos: "Point of sale: Tables, Table bookings, Till, Bill history, Terminal, Kitchen, Close restaurant day, Charges to rooms",
   },
   read_only: {
-    front: ": Dashboard, Rooms, Calendar / Front desk: Arrivals, Upcoming, In house, Due out, Walk-ins, Housekeeping, Work orders / Bookings: All bookings, Groups, CRS bookings / Guests & CRM: Guests, Companies and agents, Guest messages, Reviews / Sales and marketing: Leads and WhatsApp, Loyalty / Across properties: Properties / Property setup: Cancellation terms, Booking sources / Rooms and rates: Rates / Distribution: Contracts / Store and equipment: Store, Inventory, Equipment, Places and suppliers, Purchasing / Finance: Folios, Invoices, Payments, Cash deposits, Company accounts / Banquet: Diary, Halls and packages / Laundry: Dockets, Price list / Reports: Night audit, All reports, Manager report / System: Notifications",
+    front: ": Dashboard, Rooms, Calendar / Front desk: Arrivals, Upcoming, In house, Due out, Walk-ins, Housekeeping, Minibar, Checklists, Work orders / Bookings: All bookings, Groups, CRS bookings, Waitlist / Guests & CRM: Guests, Companies and agents, Guest messages, Reviews / Sales and marketing: Leads and WhatsApp, Loyalty / Across properties: Properties / Property setup: Cancellation terms, Booking sources / Rooms and rates: Rates / Distribution: Contracts / Store and equipment: Store, Inventory, Equipment, Places and suppliers, Purchasing / Finance: Folios, Invoices, Payments, Cash deposits, Company accounts / Banquet: Diary, Halls and packages / Laundry: Dockets, Price list / Reports: Night audit, All reports, Manager report / System: Notifications",
     pos: "Point of sale: Kitchen, Menu, Charges to rooms",
   },
   automation: {
@@ -84,11 +84,40 @@ for (const role of ROLES) {
 }
 
 /* Every screen each role may reach, listed or not (the web's flatNavigationFor,
-   4 Nov): Find a screen's list and what mayReach asks. */
+   16 Nov release): Find a screen's list and what mayReach asks. Without the
+   session's answer the two group entries are not counted (below). */
 eq(Object.fromEntries(ROLES.map((role) => [role, flatNavigationFor(role, "5EL", ALL_ON).length])), {
-  owner: 144, admin: 144, gm: 138, hotel_manager: 87, revenue_manager: 32, front_desk: 67, housekeeping: 25,
-  kitchen_manager: 25, chef: 8, pos: 18, bar: 19, stores: 22, finance: 78, read_only: 71, automation: 1,
+  owner: 159, admin: 159, gm: 152, hotel_manager: 96, revenue_manager: 39, front_desk: 76, housekeeping: 28,
+  kitchen_manager: 28, chef: 9, pos: 21, bar: 22, stores: 23, finance: 89, read_only: 81, automation: 1,
 });
+/* New in the 16 Nov release, each with the web's own rule. */
+eq(ROLES.filter((r) => mayReach(r, "/h/:code/minibar")), ["owner", "admin", "gm", "hotel_manager", "revenue_manager", "front_desk", "housekeeping", "kitchen_manager", "pos", "bar", "finance", "read_only"]);
+eq(ROLES.filter((r) => mayReach(r, "/h/:code/checklists")), ["owner", "admin", "gm", "hotel_manager", "revenue_manager", "front_desk", "housekeeping", "kitchen_manager", "chef", "pos", "bar", "stores", "read_only"]);
+eq(ROLES.filter((r) => mayReach(r, "/h/:code/feedback")), ["owner", "admin", "gm"]);
+eq(ROLES.filter((r) => mayReach(r, "/h/:code/backfill")), ["finance"]); // Settings' own page for the rest
+eq(ROLES.filter((r) => mayReach(r, "/reports/commission")), ["owner", "admin", "gm", "revenue_manager", "finance", "read_only"]);
+eq(ROLES.filter((r) => mayReach(r, "/reports/input-tax-credit")), ["owner", "admin", "gm", "finance"]);
+eq(ROLES.filter((r) => mayReach(r, "/settings/property/old-data")), ["owner", "admin"]);
+eq(sidebarFor("gm", "5EL", ALL_ON, "front").find((s) => s.label === "Bookings")!.items.map((i) => i.label).at(-1), "Waitlist");
+/* Group reports and Group rate change ask the session (groupHotels.ts hotelsWhere):
+   more than one real property where the person's role may. */
+const hotel = (id: string, testOf: string | null = null) => ({ id, code: id.toUpperCase(), name: id, businessDate: "2026-11-20", testOf });
+const who = (isGroupAdmin: boolean, roles: Array<[string, string]>, ids = ["a", "b", "t"]): HotelsResponse => ({
+  scope: { staffId: "s", email: "e", fullName: "f", isGroupAdmin, hotels: roles.map(([hotelId, role]) => ({ hotelId, role })) },
+  hotels: ids.map((id) => hotel(id, id === "t" ? "A" : null)),
+});
+const across = (role: Role, several: ReturnType<typeof severalOf>) =>
+  sidebarFor(role, "5EL", ALL_ON, "front", several).find((s) => s.label === "Across properties")?.items.map((i) => i.label) ?? [];
+const groupAdmin = severalOf(who(true, []));
+eq(across("owner", groupAdmin), ["All properties", "Group reports", "Group rate change", "Properties", "People"]);
+eq(across("owner", severalOf(null)), ["All properties", "Properties", "People"]); // no session, no group entries
+eq(across("owner", severalOf(who(true, [], ["a", "t"]))), ["All properties", "Properties", "People"]); // a test hotel never counts
+const twoPlaces = severalOf(who(false, [["a", "gm"], ["b", "front_desk"]]));
+eq(across("gm", twoPlaces), ["Group reports", "Properties", "People"]); // reports at both; prices at one only
+eq(mayReach("gm", "/group-rates", twoPlaces), false);
+eq(mayReach("revenue_manager", "/group-rates", severalOf(who(false, [["a", "revenue_manager"], ["b", "revenue_manager"]]))), true);
+eq(mayReach("front_desk", "/group-reports", twoPlaces), true);
+eq(flatNavigationFor("owner", "5EL", ALL_ON, groupAdmin).length, 161);
 /* devOnly is left out: the pictures' extra System entry (a dev build's) reaches nobody here. */
 for (const role of ROLES) {
   eq(flatNavigationFor(role, "5EL", ALL_ON).some((i) => i.to === "/design-system" || i.to === "/admin/console"), false);
@@ -159,6 +188,8 @@ eq(phoneRoute("/h/5EL/purchasing/who-may-ask", "5EL"), "/purchasing/5EL/who-may-
 eq(phoneRoute("/people", "5EL"), "/admin/5EL/people");
 eq(phoneRoute("/admin/users", "5EL"), "/admin/5EL/users");
 eq(phoneRoute("/settings/money/bank", "5EL"), "/admin/5EL/bank");
+eq([phoneRoute("/reports/item-sales", "5EL"), phoneRoute("/settings/property/old-data", "5EL"), phoneRoute("/settings/messages/scheduled-reports", "5EL")],
+  ["/reports/5EL/item-sales", null, null]);
 eq(phoneRoute("/settings/people/signing-in", "5EL"), "/admin/5EL/signing-in");
 eq(phoneRoute("/settings", "5EL"), "/admin/5EL");
 eq(phoneRoute("/settings/property/backfill-data", "5EL"), "/admin/5EL/backfill");
@@ -227,14 +258,31 @@ eq(phoneRoute("/h/5EL/calendar", "5EL"), "/reservations/5EL/calendar");
 eq(phoneRoute("/h/5EL/reservations", "5EL"), "/reservations/5EL");
 eq(phoneRoute("/h/5EL/book", "5EL"), "/reservations/5EL/book");
 eq(phoneRoute("/h/5EL/rates", "5EL"), "/inventory/5EL");
-/* Only the routes the merged app has (the brief's route map). */
-const MERGED = /^\/(hotel\/[^/]+|all|approvals\/[^/]+|housekeeping\/[^/]+(\/(repair|out-of-service|work-orders|minibar|checklists))?|finance\/[^/]+\/(folios|invoices|payments|invoice|vat-bill)|equipment\/[^/]+(\/[^/]+)?|purchasing\/[^/]+\/who-may-ask|laundry\/[^/]+\/price-list|spa\/[^/]+\/setup|banquet\/[^/]+\/setup|contracts\/[^/]+(\/[^/]+)?|marketing\/[^/]+|leads\/[^/]+|guests\/[^/]+\/same-person|reputation\/[^/]+\/feedback|pos\/[^/]+\/(menu|setup)|reservations\/[^/]+\/(groups(\/[^/]+)?|waitlist)|reports\/[^/]+(\/(manager|night-audit|monthly-occupancy|monthly-stats|yearly-stats|no-show|item-sales|group-reports))?|admin\/[^/]+(\/(people|users|roles|sign-ins|activity|audit-log|integrations|system-health|properties|backfill|modules|signing-in|bank))?|pos\/[^/]+\/(bill-history|day-end|room-charges|table-bookings)|inventory\/[^/]+\/(room-types|booking-sources|cancellation-terms|channels|places|group-rates)|pos\/[^/]+\/(till|terminal)|front-desk\/[^/]+\/rooms|reports\/[^/]+\/(stock-consumption|stock-count-differences|stock-cover|stock-dead|stock-movements|stock-on-hand|stock-wastage|bar-stock|flr-daily|flr-monthly|supplier-spend|supplier-statement|supplier-dues|equipment)|finance\/[^/]+\/(folios|invoices|payments|invoice|vat-bill|cashiering|city-ledger|cash-deposits|form-c|supplier-dues)|reports\/[^/]+\/(gst-sales|gstr-1|input-tax-credit|gst-advances|lodging-tax|tds|c-form|accounting|guest-ledger|city-ledger|company-statement|dues-by-age|commission|cashier-shift|petty-cash|voids|nc-bills)|revenue\/[^/]+|crs\/[^/]+|loyalty\/[^/]+|reputation\/[^/]+|guest-messages\/[^/]+|connections\/[^/]+|stores\/[^/]+(\/(count|inventory|bar-stock|kitchen-stock|history\/[^/]+))?|spa\/[^/]+|banquet\/[^/]+(\/[^/]+)?|guests\/[^/]+(\/(companies|find(\/[^/]+)?))?|purchasing\/[^/]+(\/[^/]+)?|laundry\/[^/]+(\/[^/]+)?|night-audit\/[^/]+|reservations\/[^/]+(\/(calendar|book))?|inventory\/[^/]+|notifications\/[^/]+|housekeeping\/[^/]+(\/(repair|out-of-service|work-orders))?|pos\/[^/]+\/(tables|pad|kitchen|order\/[^/]+)|front-desk\/[^/]+(\/(in-house|walk-ins|walk-in|take-walk-in|stay\/[^/]+|check-in\/[^/]+))?|folio\/[^/]+\/[^/]+|guest-services\/[^/]+(\/(requests|wake-up-calls|lost-property|online-checkin|messages))?)(\?.*)?$/;
-for (const role of ROLES) {
-  for (const item of flatNavigationFor(role, "5EL", ALL_ON)) {
-    const route = phoneRoute(item.to, "5EL");
-    if (route !== null && !MERGED.test(route)) throw new Error(`${item.label} goes to ${route}, not a route of the app`);
-  }
+/* Every PHONE_ROUTES target is a route file of app/ (MEMORY 15): the table never
+   sends anybody to a screen the bundle does not have. */
+const routeFiles = (dir: string): string[] => readdirSync(dir).flatMap((f) => {
+  const at = `${dir}/${f}`;
+  return statSync(at).isDirectory() ? routeFiles(at) : f.endsWith(".tsx") && f !== "_layout.tsx" ? [at] : [];
+});
+const ROUTES = new Set(routeFiles("app").map((f) => f.slice(3, -4).replace(/\/index$/, "").replace(/\[code\]/g, ":code") || "/"));
+for (const [web, route] of Object.entries(PHONE_ROUTES)) {
+  if (!ROUTES.has(route.split("?")[0]!)) throw new Error(`${web} goes to ${route}, not a route of the app`);
 }
+/* Every web menu address has its phone screen, but for these (pinned, so a lost
+   line fails): coming soon, the Store reports' index, and the console's pages
+   the phone has not built. */
+const NOT_ON_PHONE = [
+  "/coming-soon/payments", "/coming-soon/room-systems", "/reports/store",
+  ...["profile", "set-up-this-hotel", "old-data", "photos", "highlights", "amenities", "group", "policies", "documents"].map((x) => `/settings/property/${x}`),
+  ...["plans", "meal-plans", "taxes"].map((x) => `/settings/rates/${x}`),
+  ...["payment-methods", "extra-charges", "discounts", "commission", "pickup"].map((x) => `/settings/money/${x}`),
+  ...["market-segments", "reservation-types", "reasons", "holidays", "id-types", "vip"].map((x) => `/settings/lists/${x}`),
+  "/settings/front-desk/times-and-rules", "/settings/front-desk/front-desk",
+  "/settings/messages/switches", "/settings/messages/daily-report-emails", "/settings/messages/scheduled-reports",
+  "/settings/connections/rivals-prices",
+];
+const everywhere = new Set(ROLES.flatMap((role) => flatNavigationFor(role, ":code", ALL_ON, groupAdmin).map((i) => i.to)));
+eq([...everywhere].filter((to) => phoneRoute(to, "5EL") === null).sort(), [...NOT_ON_PHONE].sort());
 
 /* Which entry is lit: the screen's own, never the one its route sits under (MCORE-3). */
 const FD = [
@@ -274,6 +322,17 @@ eq(coversTheFrame("/hotel/5EL"), false);
 
 eq(spaceOf("/pos/5EL/tables"), "pos");
 eq(spaceOf("/housekeeping/5EL"), "front");
+/* MADM-1: the Settings pill opens the phone's console, and a console screen lights Settings. */
+eq(phoneRoute(spaceHome("gm", "5EL", ALL_ON, "settings"), "5EL"), "/admin/5EL");
+eq(phoneRoute(spaceHome("gm", "5EL", ALL_ON, "pos"), "5EL"), "/pos/5EL/tables");
+eq(phoneRoute(spaceHome("front_desk", "5EL", ALL_ON, "pos"), "5EL"), "/pos/5EL/tables");
+eq(phoneRoute(spaceHome("gm", "5EL", ALL_ON, "front"), "5EL"), "/hotel/5EL");
+eq(["/admin/5EL", "/admin/5EL/roles", "/admin/5EL/backfill", "/inventory/5EL/room-types", "/connections/5EL", "/admin/5EL/bank"].map(spaceHere),
+  ["settings", "settings", "settings", "settings", "settings", "settings"]);
+eq(["/admin/5EL/people", "/admin/5EL/integrations", "/hotel/5EL", "/all", "/front-desk/5EL/stay/12", "/inventory/5EL", "/reports/5EL/manager"].map(spaceHere),
+  ["front", "front", "front", "front", "front", "front", "front"]);
+eq(["/pos/5EL/tables", "/pos/5EL/order/9", "/stores/5EL/bar-stock", "/stores/5EL/kitchen-stock"].map(spaceHere), ["pos", "pos", "pos", "pos"]);
+eq(spaceHere("/front-desk/5EL/in-house?view=due-out"), "front");
 eq(asRole("gm"), "gm");
 eq(asRole("nonsense"), "read_only");
 eq(asRole(null), "read_only");

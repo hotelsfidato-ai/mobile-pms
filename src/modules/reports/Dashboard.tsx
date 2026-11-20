@@ -2,8 +2,10 @@ import {
   BedDouble, Building2, Check, ChartColumn, ChevronLeft, ChevronRight, ClipboardList, Landmark, LogIn, LogOut,
   ReceiptText, SprayCan, UserX, Users, Wallet, type LucideIcon,
 } from "lucide-react-native";
+import { router, type Href } from "expo-router";
 import { useState, type ReactNode } from "react";
 import { Pressable, Text, View } from "react-native";
+import { phoneRoute } from "../../core/menu";
 import type { Room, Stay } from "../../core/types";
 import { orNull, type Hotel } from "../../core/api";
 import { DASH, cash, count, dateLong, monthStart, pct } from "../../core/format";
@@ -43,14 +45,22 @@ const NOTES = {
   revenue: "From the Manager report's Revenue Summary, without tax.",
 };
 
-/* One icon each. None is on the phone yet (M-11: greyed, not hidden). */
-const QUICK_REPORTS: Array<{ label: string; icon: LucideIcon }> = [
-  { label: "Manager report", icon: ClipboardList },
-  { label: "Monthly statistics", icon: ChartColumn },
-  { label: "Lodging tax", icon: Landmark },
-  { label: "City ledger", icon: Building2 },
-  { label: "No show", icon: UserX },
+/* Dashboard.tsx QUICK_REPORTS, one icon each, each to its report's phone
+   screen through the core's PHONE_ROUTES (greyed only where the phone has
+   none). The web offers all five to everyone with the Dashboard; each report
+   answers for its own rights, as on the web (RequireAccess). */
+const QUICK_REPORTS: Array<{ label: string; to: string; icon: LucideIcon }> = [
+  { label: "Manager report", to: "/reports/manager", icon: ClipboardList },
+  { label: "Monthly statistics", to: "/reports/monthly-stats", icon: ChartColumn },
+  { label: "Lodging tax", to: "/reports/lodging-tax", icon: Landmark },
+  { label: "City ledger", to: "/reports/city-ledger", icon: Building2 },
+  { label: "No show", to: "/reports/no-show", icon: UserX },
 ];
+/** The phone's screen for a web address, or nothing. */
+const opener = (to: string, code: string) => {
+  const route = phoneRoute(to, code);
+  return route ? () => router.push(route as Href) : undefined;
+};
 const WEBSITE = "On the website for now";
 
 async function readDay(code: string, date: string) {
@@ -256,8 +266,8 @@ export function Dashboard({ hotel, onBack, onOpenArrivals, onOpenDueOut, onOpenI
         <MoneyItem
           last icon={UserX} tone={(noShow?.today ?? 0) > 0 ? "orange" : "neutral"} warn={(noShow?.today ?? 0) > 0}
           label="No-shows" value={show(count(noShow?.today))} note={[`Month so far ${count(noShow?.ptd)}`]}
-          /* The picture's arrow opens the No-show report: not on the phone yet, so greyed. */
-          elsewhere
+          /* The picture's arrow opens the No-show report (MoneyItem to="/reports/no-show"). */
+          onOpen={opener("/reports/no-show", code)} elsewhere={!opener("/reports/no-show", code)}
         />
       </Card>
 
@@ -270,21 +280,28 @@ export function Dashboard({ hotel, onBack, onOpenArrivals, onOpenDueOut, onOpenI
         {day.data?.rooms.length ? <RoomStrip rooms={day.data.rooms} /> : null}
       </Card>
 
-      {/* ── Quick reports: none on the phone yet ─────────────────── */}
+      {/* ── Quick reports ────────────────────────────────────────── */}
       <View style={{ marginTop: 8, gap: 8 }}>
         <Text style={t.heading} accessibilityRole="header">Quick reports</Text>
         <View style={{ flexDirection: "row", flexWrap: "wrap", columnGap: 12, rowGap: 8 }}>
-          {QUICK_REPORTS.map(({ label, icon: Icon }) => (
-            <View
-              key={label} accessible accessibilityRole="button" accessibilityLabel={label} accessibilityState={{ disabled: true }} accessibilityHint={WEBSITE}
-              style={{ minHeight: 44, paddingHorizontal: 14, borderRadius: 999, borderWidth: 1, borderColor: c.grey200, backgroundColor: c.grey50, flexDirection: "row", alignItems: "center", gap: 8 }}
-            >
-              <Icon size={16} color={more.grey400} />
-              <Text style={[t.label, { color: c.grey500 }]}>{label}</Text>
-            </View>
-          ))}
+          {QUICK_REPORTS.map(({ label, to, icon: Icon }) => {
+            const open = opener(to, code);
+            return (
+              <Pressable android_ripple={open ? ripple : undefined}
+                key={label} onPress={open} disabled={!open} accessibilityRole="link" accessibilityLabel={label}
+                accessibilityState={{ disabled: !open }} accessibilityHint={open ? undefined : WEBSITE}
+                style={shade(({ pressed }) => ({
+                  minHeight: 44, paddingHorizontal: 14, borderRadius: 999, borderWidth: 1, flexDirection: "row", alignItems: "center", gap: 8,
+                  borderColor: open ? c.grey300 : c.grey200, backgroundColor: !open ? c.grey50 : pressed ? c.grey50 : c.white,
+                }))}
+              >
+                <Icon size={16} color={open ? c.grey500 : more.grey400} />
+                <Text style={[t.label, { color: open ? c.grey700 : c.grey500, ...face[500] }]}>{label}</Text>
+              </Pressable>
+            );
+          })}
         </View>
-        <Text style={t.caption}>{WEBSITE}</Text>
+        {QUICK_REPORTS.some((q) => !opener(q.to, code)) ? <Text style={t.caption}>{WEBSITE}</Text> : null}
       </View>
     </Screen>
   );
@@ -343,10 +360,12 @@ function WorkTile({ icon, chip, label, n, left, state, note, loading, onPress }:
 
 /** A Money row: the chip beside the label and the note, the amount under the
     label on the right; a split bar, when there is one, on a row of its own. */
-function MoneyItem({ icon, tone = "neutral", label, term, value, note, bar, warn, first, last, elsewhere }: {
+function MoneyItem({ icon, tone = "neutral", label, term, value, note, bar, warn, first, last, elsewhere, onOpen }: {
   icon: LucideIcon; tone?: ChipTone; label: string; term?: TermKey; value: string; note: ReactNode[]; bar?: ReactNode; warn?: boolean; first?: boolean; last?: boolean;
   /** Its list is on the website only: the arrow is drawn grey and says so. */
   elsewhere?: boolean;
+  /** It opens its report (the web's `to`): the label and an arrow (the Tappable Rule). */
+  onOpen?: () => void;
 }) {
   const [why, setWhy] = useState(false);
   return (
@@ -354,7 +373,15 @@ function MoneyItem({ icon, tone = "neutral", label, term, value, note, bar, warn
       <View style={{ flexDirection: "row", alignItems: "center", gap: 14 }}>
         <IconChip icon={icon} tone={tone} />
         <View style={{ flex: 1, gap: 2 }}>
-          {term ? <Term name={term} style={t.label}>{label}</Term> : elsewhere ? (
+          {term && !onOpen ? <Term name={term} style={t.label}>{label}</Term> : onOpen ? (
+            <Pressable android_ripple={ripple}
+              onPress={onOpen} accessibilityRole="link" accessibilityLabel={label}
+              style={shade(({ pressed }) => ({ minHeight: 44, marginVertical: -12, flexDirection: "row", alignItems: "center", gap: 4, alignSelf: "flex-start", opacity: pressed ? 0.6 : 1 }))}
+            >
+              <Text style={t.label}>{label}</Text>
+              <ChevronRight size={16} color={more.grey400} />
+            </Pressable>
+          ) : elsewhere ? (
             /* Not `disabled`: the tap is when a person asks why (the web's D17-8). */
             <Pressable android_ripple={ripple}
               onPress={() => setWhy(true)} accessibilityRole="button" accessibilityLabel={label} accessibilityState={{ disabled: true }} accessibilityHint={WEBSITE}
