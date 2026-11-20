@@ -152,3 +152,44 @@ pictured; one stays on the website.
 
 **4 Nov, at the loyalty merge:** Guest 360 shows the loyalty module's MemberCard (points, statement,
 Adjust with a reason, Leave), as the web's Guest 360 does; it is no longer left on the website.
+
+---
+
+## Lane S — Possible same person (M-13, mobile/m13-sales, 19 Nov)
+
+**Web twin:** `src/modules/crm/pages/SamePerson.tsx`, `data/crm.ts`, `access.ts` (seesGuest360),
+`nav.ts` ("Possible same person" at `/crm/same-person`); the API `api/src/modules/guests/people.ts`:
+`GET /crm/same-person`, `/crm/joins`, `/crm/not-same`; `POST /crm/joins`, `/crm/joins/:id/undo`,
+`/crm/not-same`, `/crm/not-same/:id/undo` (roleGate.ts 447-450 `own`: `app.is_crm_manager`, the owner,
+an administrator or a GM; anyone else 403 MANAGERS_ONLY). Offline: no `/crm` path is on the web's
+list: each write is **refused**, nothing held. This replaces the table's "on the website" line above.
+
+| Screen | Route → file | Picture | Reads (keys) |
+|---|---|---|---|
+| Possible same person | `app/guests/[code]/same-person.tsx` → `SamePerson.tsx` | `all/20-guests-crm-possible-same-person` (dev-gm) | `["guests", code, "same-person", "pairs" / "joins" / "not-same"]` |
+
+Rules and words: `samePerson.ts` (`samePerson.check.ts`, broken once: the side without the only ID
+made choosable fails it); calls `samePersonData.ts`; the lane's kit `../leads/kit.tsx`.
+
+**Merging two guests, exactly as the web guards it** (D21-2, D21-20, D22-8): never automatic — nothing
+is kept until the manager presses "Keep this record" on one side (the record holding the only ID is
+kept for them and the other side is greyed, so no ID is lost; the ID itself never reaches the phone);
+then the tinted strip says "<other>'s stays move to <kept>. Nothing is deleted, and it can be undone."
+and "Join into one" makes the join. **The web asks no further confirmation, and every join is undone
+from Joined below** (and every "Not the same person" from its list): the phone does the same. One tap,
+one write (a latch; one write at a time across the screen). None of the four routes reads a key: on an
+outcome nobody knows, "Not known whether …", every button stops until the three lists are read again
+("Read the lists again", or pull down), MEMORY 16. A name opens Guest 360 (`/guests/:code/find/:id`).
+
+**Guest data (DPDP):** what the web shows: names, phone and email, stays, the last stay, whether an
+ID is on file. The export (the web's PAIR_EXPORT: no ID, nor whether one is on file) is the core's
+print / share sheet, for those who download reports.
+
+**Picture match (19 Nov)**, by reading code against the picture, never seen running: **MATCHES** — the
+title with "13 to look at" in a grey pill, the line, each pair's card ("Same phone." and Not the same
+person; each side's tile with the name in orange-700, "phone · email", "Stayed with the group once ·
+last 10 Oct 2026 · ID on file", Keep this record), then "Joined" and "Not the same person" with their
+grey sentences. Left: (1) the frame is the core's; (2) the export buttons under the head (today's web,
+newer than the picture). **Not pictured:** a side chosen (the orange ring, the strip and Join into
+one), the only-ID sentence, VIP / Blacklisted pills, joins and answers with Undo, no pairs, an unknown
+outcome, a failed read, the read refused.

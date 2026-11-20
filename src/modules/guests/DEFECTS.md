@@ -28,3 +28,18 @@ Fixed before the rules' first commit (`73d128e`).
 
 **The rule** — MEMORY 11 again: before trusting a check on money arithmetic, break it and see it fail;
 pick numbers whose float arithmetic really goes wrong, and compare the number as well as the text.
+
+---
+
+## Lane S — Possible same person (mobile/m13-sales, 19 Nov)
+
+### MGU-S1 · The four same-person writes read no key (19 Nov) — open, the PMS's
+
+**What happened:** `POST /crm/joins`, `/crm/joins/:id/undo`, `/crm/not-same` and
+`/crm/not-same/:id/undo` (people.ts) never read `idempotency-key`. A join whose reply is lost and is
+pressed again is most likely refused by the database (the joined record no longer stands), but the
+answer the person reads is then a refusal of something that was done. **How found:** reading the
+routes for the keeper rule. **What was done:** every button is latched at the tap, and on an outcome
+nobody knows the screen says "Not known whether …" and stops until the lists are read again (MEMORY
+16). **Asked of the PMS:** read the key on the four. **The rule:** a write that reads no key stops on
+an unknown outcome until the record is seen.
