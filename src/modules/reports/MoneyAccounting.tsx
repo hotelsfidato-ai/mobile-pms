@@ -26,10 +26,10 @@ import { whyNotAccounting } from "./moneyRoles";
      PUT /api/hotels/:code/accounting/tally-ledgers      saving them (refused offline: core/offline.ts UNLISTED)
      GET /api/hotels/:code/night-audit/undos              the cancels (night-audit's own read)
    Who: the owner, an administrator, the GM and the accountant
-   (api/src/modules/accounting/routes.ts MAY_EXPORT). The CSV, Excel and
-   Tally files are downloads (expo-file-system + expo-sharing, not
-   installed): on the website for now; the day book itself prints, saves
-   as PDF and shares from the phone (src/core/Export.tsx).
+   (api/src/modules/accounting/routes.ts MAY_EXPORT). The day book as drawn
+   here goes out as PDF, Excel (CSV) or print (src/core/Export.tsx, M-14);
+   the chosen format's own file (the server's day-book layout, the Tally
+   XML) is on the website for now.
    ══════════════════════════════════════════════════════════════════ */
 
 interface Props { hotel: Hotel; role: string | null }
@@ -82,7 +82,7 @@ export function Accounting({ hotel, role }: Props) {
         >
           <Head title="Accounting export" under={DESCRIPTION} />
           <Files table={b && b.days.length ? dayBookTable(b, `${b.property.name} · ${dateYear(b.from)} to ${dateYear(b.to)}`) : null}
-            refusal={null} more={`The ${chosen.label} file`} />
+            refusal={null} more={`The ${chosen.label} file, in the layout the accountant takes`} />
 
           {cancelled.length ? (
             <Card style={{ backgroundColor: c.yellow50, borderColor: c.yellow100, gap: 8 }}>

@@ -156,10 +156,10 @@ export function Choose({ label, value, placeholder, options, onChange }: {
 
 /* ── Taking it away ─────────────────────────────────────────────── */
 
-/** Print or save as PDF, and share, from the rows on screen; or the server's
-    sentence where this person may read the report but not take it away. A
-    real Excel file waits for a package (expo-file-system + expo-sharing). */
-export function Files({ table, refusal, more = "An Excel file" }: { table: ExportTable | null; refusal: string | null; more?: string }) {
+/** PDF, Excel (CSV) and Print from the rows on screen (src/core/Export.tsx,
+    M-14); or the server's sentence where this person may read the report but
+    not take it away. `more`: what of the web's is still on the website. */
+export function Files({ table, refusal, more }: { table: ExportTable | null; refusal: string | null; more?: string }) {
   if (refusal) {
     return (
       <View style={{ flexDirection: "row", gap: 8, alignItems: "flex-start" }} accessibilityRole="text">
@@ -171,10 +171,12 @@ export function Files({ table, refusal, more = "An Excel file" }: { table: Expor
   return (
     <View style={{ gap: 6 }}>
       <ExportButtons table={table} />
-      <View style={{ flexDirection: "row", gap: 6, alignItems: "flex-start" }}>
-        <FileSpreadsheet size={14} color={c.grey400} style={{ marginTop: 1 }} />
-        <Text style={[t.caption, { flex: 1 }]}>{`${more}: on the website for now.`}</Text>
-      </View>
+      {more ? (
+        <View style={{ flexDirection: "row", gap: 6, alignItems: "flex-start" }}>
+          <FileSpreadsheet size={14} color={c.grey400} style={{ marginTop: 1 }} />
+          <Text style={[t.caption, { flex: 1 }]}>{`${more}: on the website for now.`}</Text>
+        </View>
+      ) : null}
     </View>
   );
 }

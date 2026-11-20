@@ -910,6 +910,24 @@ export const PHONE_ROUTES: Readonly<Record<string, string>> = {
   "/h/:code/requests": "/guest-services/:code/requests",
   /* mobile/t2-approvals (4 Nov) */
   "/h/:code/approvals": "/approvals/:code",
+  /* mobile/m13-rep-money (19 Nov): the money and tax reports, one route each. */
+  "/reports/gst-sales": "/reports/:code/gst-sales",
+  "/reports/gstr-1": "/reports/:code/gstr-1",
+  "/reports/input-tax-credit": "/reports/:code/input-tax-credit",
+  "/reports/gst-advances": "/reports/:code/gst-advances",
+  "/reports/lodging-tax": "/reports/:code/lodging-tax",
+  "/reports/tds": "/reports/:code/tds",
+  "/reports/c-form": "/reports/:code/c-form",
+  "/reports/accounting": "/reports/:code/accounting",
+  "/reports/guest-ledger": "/reports/:code/guest-ledger",
+  "/reports/city-ledger": "/reports/:code/city-ledger",
+  "/reports/company-statement": "/reports/:code/company-statement",
+  "/reports/dues-by-age": "/reports/:code/dues-by-age",
+  "/reports/commission": "/reports/:code/commission",
+  "/reports/cashier-shift": "/reports/:code/cashier-shift",
+  "/reports/petty-cash": "/reports/:code/petty-cash",
+  "/reports/voids": "/reports/:code/voids",
+  "/reports/nc-bills": "/reports/:code/nc-bills",
   /* mobile/t2-revenue (4 Nov) */
   "/h/:code/revenue-outlook": "/revenue/:code",
   /* mobile/t2-crs (4 Nov) */

@@ -40,7 +40,7 @@ function DocScreen({ hotel, role, report, title, what, period, query, controls, 
     <ReportPage
       title={doc?.title ?? title} period={period} controls={controls} refreshing={read.loading} onRefresh={read.reload}
       files={<View style={{ gap: 8 }}>
-        <Files table={doc ? docTable(doc, period) : null} refusal={whyNoFile(report, role)} {...(more ? { more } : {})} />
+        <Files table={doc ? docTable(doc, period) : null} refusal={whyNoFile(report, role)} more={more ?? "Email"} />
         {extra}
       </View>}
     >
@@ -153,7 +153,7 @@ export function Gstr1(p: Props) {
   return (
     <DocScreen {...p} report="gstr-1" title="GSTR-1" what="the GSTR-1" period={monthWords(month)} query={{ month }}
       controls={<MonthStep value={month} max={p.hotel.businessDate.slice(0, 7)} onChange={setMonth} />}
-      more="An Excel file and the GSTR-1 file (JSON) for the GST portal"
+      more="Email, and the GSTR-1 file (JSON) for the GST portal"
       extra={may ? null : (
         <View style={{ flexDirection: "row", gap: 6, alignItems: "flex-start" }}>
           <FileJson size={14} color={c.grey400} style={{ marginTop: 1 }} />
