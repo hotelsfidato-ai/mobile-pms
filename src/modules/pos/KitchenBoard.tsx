@@ -1,5 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { useFocusEffect } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import { AlertTriangle, ArrowLeft, Ban, Check, ChevronLeft, Compass, Flame, Printer } from "lucide-react-native";
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { AppState, Pressable, RefreshControl, ScrollView, Text, View } from "react-native";
@@ -263,7 +263,7 @@ export function KitchenBoard({ hotel, role, startHere, tableView, onView, onCons
       </View>
 
       <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }} refreshControl={refreshControl}>
-        <KotLines kinds={kinds} role={role} now={new Date(now)} onSetUp={() => setSaid({ title: "On the website for now", tone: "held" })} />
+        <KotLines kinds={kinds} role={role} now={new Date(now)} onSetUp={() => router.push(`/pos/${code}/setup`)} />
 
         {/* A read that failed while the board was up: the tickets stay, and say they are not current. */}
         {data && board.error ? (
@@ -369,10 +369,10 @@ function KotLines({ kinds, role, now, onSetUp }: { kinds: KotKind[]; role: strin
             {/* The web's link to Restaurant setup: that screen is not on the phone. */}
             {!s.printing && maySetUpKots(role) ? (
               <Pressable android_ripple={ripple}
-                onPress={onSetUp} accessibilityRole="button" accessibilityLabel="Set up" accessibilityState={{ disabled: true }}
-                accessibilityHint="On the website for now" style={{ minHeight: 44, justifyContent: "center" }}
+                onPress={onSetUp} accessibilityRole="button" accessibilityLabel="Set up"
+                accessibilityHint="Opens Restaurant setup" style={{ minHeight: 44, justifyContent: "center" }}
               >
-                <Text style={[t.label, { color: c.grey500, textDecorationLine: "underline" }]}>Set up</Text>
+                <Text style={[t.label, { color: c.red700, textDecorationLine: "underline" }]}>Set up</Text>
               </Pressable>
             ) : null}
           </View>

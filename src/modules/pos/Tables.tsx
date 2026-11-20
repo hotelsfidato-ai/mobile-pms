@@ -29,7 +29,7 @@ import {
    running one opens it for another round; a finished bill offers Clear; a
    joined table only its bill. Not here (the web's): the live channel (the
    30 s poll stands), the KOT section and table setup ("Set up" says they are
-   on the website; "Set up tables" is not drawn).
+   Restaurant setup since 20 Nov, mobile/m13-pos-setup; "Set up tables" is not drawn).
    ══════════════════════════════════════════════════════════════════ */
 
 /** The web polls the floor every 30 s; the minutes are the point of a tile. */
@@ -235,8 +235,8 @@ export function Tables({ hotel, role, onBack, onSignOut }: {
                 <Text style={[t.label, ty.sm, { flex: 1, color: k.printing ? c.grey600 : c.red700 }]}>{k.text}</Text>
                 {!k.printing && maySetUpKots(role) ? (
                   <Pressable android_ripple={ripple}
-                    onPress={() => setSaid({ title: "Set up", body: "On the website for now", tone: "held" })}
-                    accessibilityRole="link" accessibilityHint="On the website for now"
+                    onPress={() => router.push(`/pos/${code}/setup` as never)}
+                    accessibilityRole="link" accessibilityHint="Opens Restaurant setup"
                     style={{ minHeight: 44, marginVertical: -11, justifyContent: "center" }}
                   >
                     <Text style={[t.label, ty.sm, { color: c.red700, textDecorationLine: "underline" }]}>Set up</Text>

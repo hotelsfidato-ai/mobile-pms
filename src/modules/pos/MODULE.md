@@ -342,3 +342,75 @@ wins (MEMORY 14).
    answer (a viewer), where the web hides them (AGENTS rule 1). The time is typed (20:30), not picked.
 
 **4 of 4 screens match their pictures apart from the differences above.**
+
+## The Menu and Restaurant setup (the m13-pos-setup lane, 19-20 Nov)
+
+**Web twin (today's PMS, 16 Nov release, read only):** `src/modules/pos/pages/Menu.tsx` (Dishes, Sides,
+Promotions; `components/NumberedAddonsTab.tsx` the Add-ons tab; `components/DishProfitTab.tsx` Profit per
+dish), `pages/Setup.tsx` (Ready to open, the name, Parcels, Service charge, Owner's allowance, Taxes =
+`finance/flows/TaxRulesCard.tsx`, Sections and tables, `components/KotSection.tsx`, Table booking hours),
+`data/till.ts`, `data/tableBookings.ts`, `finance/data/tax.ts`. **Routes and gates (api/src/roleGate.ts):**
+every Menu write `MENU` (`menu` edit: owner, admin, GM, kitchen manager); setup's name, charges, sections,
+tables `TILL_SETUP` and the hours `TABLE_HOURS` (`room_config` edit: owner, admin, GM); the KOT section
+`KOT_SWITCH` (the menu's four), its design `kotDesign.ts` (owner, admin, GM); the allowance
+`ownerAllowance.ts` (owner, admin; the server answers `mayEdit`); the rates and the menu sections' tax
+heading `GST` (+ the accountant); the alcohol switch `moduleSwitches.ts` (owner, admin). Reads: the menu
+`MENU_READ`, the setup `SETUP`, the profit `reservation` approve. **The web's guards:** Menu: the POS
+gate only; Setup: RequireAccess (`room_config` or `menu` edit), the kitchen manager the KOT section only.
+**Offline (`src/core/offline.ts`, the web's):** a dish's off / on / take off and a preparation time are
+held; everything else here is refused offline (send()).
+
+| | |
+|---|---|
+| Screens | `app/pos/[code]/menu.tsx` → `MenuScreen.tsx` (+ `MenuDishes.tsx`, `MenuSheets.tsx`, `MenuSides.tsx`, `MenuAddons.tsx`, `MenuProfit.tsx`); `app/pos/[code]/setup.tsx` → `SetupScreen.tsx` (+ `SetupKot.tsx`, `SetupTaxes.tsx`); the pieces both share `SetupKit.tsx` |
+| Menu links | PHONE_ROUTES `/pos/:code/menu`, `/pos/:code/setup` (with pins and the MERGED alternative); Ready to open's lines; the Kitchen board's Set up |
+| Rules | `setup.ts` + `setup.check.ts`, `menuEdit.ts` + `menuEdit.check.ts` (broken on purpose: a blank price added at ₹0, a blank figure sent as 0, the allowance's missing "left" written ₹0.00 - each failed, each restored) |
+| Writes | through `send()` only, by `useActs` (SetupKit): latched at the tap; done said and every `["pos", code]` read asked again; held said as held; refused in the server's words; an unknown outcome (`outcomeUnknown`) says "Not known whether it was …" and that control takes no taps until the page is pulled down and read again (none of these routes reads a key, and a toggle repeated flips back) |
+| Reads | `useRead` with `["pos", code, "menu" or "setup", …]`; four states each (Reading … · the web's ReadProblem: failed / no connection / refused · the web's empty words · "Not up to date" over a kept answer) |
+| Native (docs/NATIVE.md) | sheets with safe areas and the keyboard lift, the right keyboard per field, the phone's Switch for every tick and switch, the phone's own Alert for Take away a section (the web's words), ripple on Android, 44 px |
+| Exports | the dishes (the web's DISH_EXPORT columns) through `ExportButtons` |
+
+**What the phone leaves on the website, said in place ("On the website for now"):** This computer
+(naming a KOT computer, ticking what it prints, the Fidato Printer download, the test prints and the
+Reprints - a phone prints through no printer and names no device, as the Kitchen board); Import the
+menu and Import sides (a file picker: `expo-document-picker` ~57.0.3, not installed); a coupon's two
+days and a tax band's dates (a date picker: `@react-native-community/datetimepicker` 9.1.0, not
+installed - a band's dates are shown and kept as they are when its rate is saved). Profit per dish moves
+its days a day at a time (M-7's stepper). The web's Menu has no dish photo, so none is built.
+
+### Picture match (20 Nov)
+
+Compared by **reading the code against the pictures** (`reference/pms-shots/new/n-pos-setup`,
+`new/n-pos-menu`, `all/46-point-of-sale-menu` - the same screen as n-pos-menu; each `.png` cut into
+pieces and its `.txt`), never seen running.
+
+**Restaurant setup** (`n-pos-setup`, as dev-gm, 31 Oct; the picture stops at 18000 px inside the KOT's
+design): the sections in the web's order and words, Ready to open's six cards with the success tick,
+the name card, Parcels, Owner's allowance (disabled boxes and "Set by the owner or an Admin." for the
+GM), Taxes (the switch, the GST card's tiles with Not set and dashed edges, the till's half), the
+section cards with two tiles across, One table / A numbered run, New section, the KOT section. **Differences
+left:** (1) **Service charge** is not in the picture of 31 Oct; today's code has it (Setup.tsx, its "260"), so it is
+built from the code (MEMORY 14; the PMS checkout's history is squashed, so its date cannot be read). (2) **The allowance's bills** are cards of labelled figures, not the web's five-column
+table (too wide for a phone). (3) **Checkboxes are the phone's Switch** (NATIVE.md, 19 Nov). (4) **Selects
+open a sheet of choices** (the phone has no NativeSelect). (5) **This computer** is drawn with its words,
+fields and ticks greyed "On the website for now" (above). (6) **The KOT preview** is drawn in Inter, the
+web's in the printer's monospace. (7) **A tax band's dates** are shown as a line, not two date boxes.
+(8) **"left" with no figure** shows a dash where the web writes ₹0.00. (9) The top bar and the
+business-date banner are the frame's (Shell), not this screen's.
+
+**Menu** (`n-pos-menu`, `all/46`, as dev-gm, 31 Oct): the title with its "22 items" pill, Import sides and
+Import the menu (greyed: the picker), Dishes / Add-ons, the "These prices are yours" banner, Add a part
+of the menu, each part's card (course and minutes rounds, the heading select), each dish (rate, price or
+a dash, MRP, course, minutes, Add / Change variations, Out of stock, Take off), the variation line and
+the sides under a dish, the new-dish row (Dish, Price, Free, 5%, Add), Sides with Change / Remove / Add
+option. **Differences left:** (1) **The export buttons** (PDF or print, Share) are above the tabs; the web's
+ExportButtons sit in its header and are not in the picture of 31 Oct (D27-383 item 1, today's code). (2) **Profit per dish** (a third
+tab for the owner, an Admin and the GM) and **Promotions'** coupon words are not in the picture: built from
+today's code. (3) **Minutes, course and MRP** open a small sheet with one box; the web types into the
+round itself. (4) **Free** is the phone's Switch. (5) The frame, as above.
+
+**2 of 2 screens match their pictures, with the differences above.**
+
+**Questions for the owner (in the lane's report):** the new-dish row starts at 5% as the web's select
+does - keep, or start with no rate chosen; Switch off a KOT kind, Remove a computer and Remove a side
+ask nothing first on the web - keep, or ask with the phone's own Alert.

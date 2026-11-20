@@ -146,3 +146,27 @@ until a read of the day that came back after it (`stillUnknown`, checked; Close 
 found: Close's `Alert.alert` buttons do nothing on react-native-web, so the PC preview asks with the
 browser's own confirm, same words. **The rule:** an unknown outcome is held where the record is read, not
 in the dialog that sent it.
+
+## m13-pos-setup (the Menu and Restaurant setup, 19-20 Nov) — lane letter M
+
+### MPOS-M1 · A check of "off till" passed only in India's time (19 Nov)
+
+**What happened:** `menuEdit.check.ts` expected "Off till 04:46 pm" for a Postgres time of
+16:46+05:30; the cloud machine runs in UTC, so the phone's own clock (rightly) wrote 11:16 am and the
+check failed - it had been written for one time zone, as a phone in another would show.
+**How found:** running the check in the cloud copy, before any commit.
+**What was done:** the check computes the expected words from the same instant in the machine's own
+zone, and is run under `TZ=Asia/Kolkata` and UTC; the reading itself stays ISO-only (MEMORY 7, 17).
+**The rule:** a check of a time on screen never hard-codes a wall-clock hour; it takes the instant and
+the zone the phone would have.
+
+### MPOS-M2 · A typo in a "blank is none" figure would have cleared the setting (19 Nov)
+
+**What happened:** the web's Parcels, Service charge and Owner's allowance send `Number(typed)`; for
+"20o" that is NaN, which JSON writes as `null` - the server reads "none" and clears the charge.
+**How found:** porting Setup.tsx's `save` (reading, not run).
+**What was done:** the phone's `typed()` (setup.ts) sends nothing for text that is not a figure and says
+"A figure, or leave it blank for none."; a band's rate on Taxes the same (`slabsBad`). Checked in
+setup.check.ts. The web's fault goes to `docs/api-requests.md` through the mobile chat (report).
+**The rule:** a figure whose blank means none is parsed to number-or-null on the phone, and anything
+else is refused before it leaves.
