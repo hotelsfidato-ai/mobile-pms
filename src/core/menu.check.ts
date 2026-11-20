@@ -144,6 +144,16 @@ eq(phoneRoute("/h/5EL/online-checkin", "5EL"), "/guest-services/5EL/online-check
 eq(phoneRoute("/h/5EL/approvals", "5EL"), "/approvals/5EL");
 eq(phoneRoute("/people", "5EL"), "/admin/5EL/people");
 eq(phoneRoute("/admin/users", "5EL"), "/admin/5EL/users");
+eq(phoneRoute("/admin/system-health", "5EL"), "/admin/5EL/system-health");
+eq(phoneRoute("/admin/integrations", "5EL"), "/admin/5EL/integrations");
+eq(phoneRoute("/settings/people/activity", "5EL"), "/admin/5EL/activity");
+eq(phoneRoute("/admin/activity", "5EL"), "/admin/5EL/activity");
+eq(phoneRoute("/settings/people/audit-log", "5EL"), "/admin/5EL/audit-log");
+eq(phoneRoute("/admin/audit-log", "5EL"), "/admin/5EL/audit-log");
+eq(phoneRoute("/settings/people/devices", "5EL"), "/admin/5EL/sign-ins");
+eq(phoneRoute("/admin/sign-ins", "5EL"), "/admin/5EL/sign-ins");
+eq(phoneRoute("/settings/people/roles", "5EL"), "/admin/5EL/roles");
+eq(phoneRoute("/admin/roles", "5EL"), "/admin/5EL/roles");
 eq(phoneRoute("/h/5EL/revenue-outlook", "5EL"), "/revenue/5EL");
 eq(phoneRoute("/h/5EL/crs-bookings", "5EL"), "/crs/5EL");
 eq(phoneRoute("/h/5EL/loyalty", "5EL"), "/loyalty/5EL");

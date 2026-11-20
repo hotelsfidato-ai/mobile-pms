@@ -913,6 +913,16 @@ export const PHONE_ROUTES: Readonly<Record<string, string>> = {
   /* mobile/m13-admin (19 Nov): Administration and the Settings console's own pages. */
   "/people": "/admin/:code/people",
   "/admin/users": "/admin/:code/users",
+  "/admin/system-health": "/admin/:code/system-health",
+  "/admin/integrations": "/admin/:code/integrations",
+  "/settings/people/activity": "/admin/:code/activity",
+  "/admin/activity": "/admin/:code/activity",
+  "/settings/people/audit-log": "/admin/:code/audit-log",
+  "/admin/audit-log": "/admin/:code/audit-log",
+  "/settings/people/devices": "/admin/:code/sign-ins",
+  "/admin/sign-ins": "/admin/:code/sign-ins",
+  "/settings/people/roles": "/admin/:code/roles",
+  "/admin/roles": "/admin/:code/roles",
   /* mobile/t2-revenue (4 Nov) */
   "/h/:code/revenue-outlook": "/revenue/:code",
   /* mobile/t2-crs (4 Nov) */
