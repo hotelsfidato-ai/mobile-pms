@@ -27,8 +27,10 @@ export interface StopBook {
   begin(): number;
   /** The read that began at `ticket` came back good: a loss before it is let go. */
   good(name: string, ticket: number): void;
-  /** True while stopped. */
+  /** True while stopped: lost, or a write on its way. */
   stuck(name: string): boolean;
+  /** True only while lost (not merely on its way): what a screen's "not known" line says. */
+  unknown(name: string): boolean;
   /** Told after every change (for React's useSyncExternalStore). */
   subscribe(tell: () => void): () => void;
 }
@@ -58,6 +60,7 @@ export function stopBook(): StopBook {
       if (at !== undefined && ticket > at) { lostAt.delete(name); tell(); }
     },
     stuck: (name) => lostAt.has(name) || going.has(name),
+    unknown: (name) => lostAt.has(name),
     subscribe(f) { told.add(f); return () => { told.delete(f); }; },
   };
 }

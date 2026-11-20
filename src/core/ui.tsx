@@ -56,8 +56,12 @@ export function useStuck() {
     lets it go - one on its way at the loss, or one that failed, lets nothing go. */
 export function useScreenStop(name: string) {
   const stuck = useSyncExternalStore(stops.subscribe, () => stops.stuck(name));
+  const unknown = useSyncExternalStore(stops.subscribe, () => stops.unknown(name));
   return {
+    /** Grey every act that could repeat the write. */
     stuck,
+    /** Lost (not merely on its way): show the `Stopped` line. */
+    unknown,
     isStuck: () => stops.stuck(name),
     stop: (e: unknown) => {
       if (!outcomeUnknown(e)) return false;

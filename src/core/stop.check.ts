@@ -55,11 +55,13 @@ eq([b.stuck(S), b.stuck(B)], [false, true], "one record's loss stops only its ow
 const W = "spa/5EL/book";
 const done = b.sending(W);
 eq(b.stuck(W), true, "a write on its way stops its name");
+eq(b.unknown(W), false, "on its way is not yet unknown: no \"not known\" line");
 b.good(W, b.begin());
 eq(b.stuck(W), true, "a good read while it is on its way lets nothing go");
 b.lost(W);
 done();
 eq(b.stuck(W), true, "lost, then done: still stopped by the loss");
+eq(b.unknown(W), true, "lost: unknown");
 done();
 eq(b.stuck(W), true, "a second done changes nothing");
 const two = b.sending(B); const twoB = b.sending(B);
