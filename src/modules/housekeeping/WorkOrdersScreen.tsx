@@ -3,22 +3,26 @@ import { router } from "expo-router";
 import {
   Check, ChevronLeft, DoorClosed, FileText, Inbox, Plus, Receipt, Wrench, X, type LucideIcon,
 } from "lucide-react-native";
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import {
   KeyboardAvoidingView, Modal, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View,
 } from "react-native";
-import { api, HeldError, send, type Hotel } from "../../core/api";
+import { api, currentSubject, HeldError, outcomeUnknown, send, type Hotel } from "../../core/api";
+import type { Picked } from "../../core/files";
+import { keyKeeper, type KeyKeeper } from "../../core/keys";
+import { filePart, sendForm } from "../../core/upload";
 import { cash, DASH } from "../../core/format";
 import { isOnline, type OutboxEntry } from "../../core/offline";
 import { list, subscribe } from "../../core/outbox";
 import { c, face, space, t } from "../../core/theme";
-import { Capsule, Card, Head, ReadFailed, Screen, useRead, ripple, shade, modalEdge, useSheetPad } from "../../core/ui";
+import { Capsule, Card, Head, ReadFailed, Screen, Stopped, useRead, useScreenStop, ripple, shade, modalEdge, useSheetPad } from "../../core/ui";
+import { BillField, useOpenStored } from "../finance/BillPhoto";
 import { whyNotRepair } from "./roles";
 import { ListExport } from "../reports/ListExport";
 import { orderTable } from "./exports";
 import {
-  cancelCostPath, closeBody, closedWords, empty, foot, heldStatus, isClosed, listPath, longDay, meta, ON_WEBSITE, orderPath, paise,
-  pills, queued, SAY_WHAT, SENDING, startBody, startLabel, UPDATE_WHO, whyNotCancel, whyNotRecord, whyNotUpdate,
+  cancelCostPath, closeBody, closedWords, costMissing, costPath, empty, foot, heldStatus, isClosed, listPath, longDay, meta, orderPath, paise,
+  pills, PROOF_OFFLINE, proofPath, queued, SAY_WHAT, SENDING, startBody, startLabel, UPDATE_WHO, whyNotCancel, whyNotRecord, whyNotUpdate,
   type RepairCost, type Tone, type View as Which, type WorkOrder, type WorkOrderList,
 } from "./workOrders";
 
@@ -33,8 +37,12 @@ import {
    Where the phone differs (MODULE.md): a held Start or Close is said and
    shown on its card, and the Close dialog shuts (the web says nothing and
    stays busy, PMS R-3); a grey button says why when tapped, the API's
-   sentence first, where the web hides it; recording a cost and seeing its
-   proof are on the website for now (a photo or a file; no picker here).
+   sentence first, where the web hides it. A cost is recorded with its proof
+   taken on the phone (the camera, the photos or a file; M-16), and a proof
+   opens under the server's own name to the share sheet. A cost whose outcome
+   is not known stops Record (core useScreenStop, MEMORY 16, 22) until the
+   repairs are read again after it; the server refuses the same file as the
+   proof of a second standing cost ("One bill proves one cost").
    ══════════════════════════════════════════════════════════════════ */
 
 /** The web's tokens (src/styles/theme.css), named for this screen; the core's theme holds them since 4 Nov. */
@@ -54,7 +62,9 @@ export function WorkOrders({ hotel, role, onBack }: { hotel: Hotel; role: string
   const code = hotel.code;
   const cache = useQueryClient();
   const [view, setView] = useState<Which>("open");
-  const work = useRead(() => api<WorkOrderList>(listPath(code, view)), ["housekeeping", code, "work-orders", view]);
+  /* A cost whose outcome is unknown: Record stays grey until a read of the repairs begun after it. */
+  const costStop = useScreenStop(costStopName(code));
+  const work = useRead(costStop.watch(() => seenCosts(code, () => api<WorkOrderList>(listPath(code, view)))), ["housekeeping", code, "work-orders", view]);
   const [held, setHeld] = useState<OutboxEntry[]>([]);
   const [closing, setClosing] = useState<WorkOrder | null>(null);
   const [costing, setCosting] = useState<string | null>(null);
@@ -195,7 +205,7 @@ export function WorkOrders({ hotel, role, onBack }: { hotel: Hotel; role: string
           onDone={(s) => { setClosing(null); setSaid(s); refresh(); }} />
       ) : null}
       {costingNow && data ? (
-        <CostsDialog code={code} order={costingNow} mayRecord={data.mayRecordCosts} onClose={() => setCosting(null)} />
+        <CostsDialog code={code} order={costingNow} mayRecord={data.mayRecordCosts} stop={costStop} onRead={work.reload} onClose={() => setCosting(null)} />
       ) : null}
     </View>
   );
@@ -327,8 +337,27 @@ function CloseDialog({ code, order, onClose, onDone }: {
 
 /* ── Costs (the web's RepairCosts): only for those the list sent them to ── */
 
-function CostsDialog({ code, order, mayRecord, onClose }: {
-  code: string; order: WorkOrder; mayRecord: boolean; onClose: () => void;
+/* ── A cost with its proof (M-16 row 1.14): data/housekeeping.ts recordRepairCost, a form never held
+   offline (core upload.ts; files.ts' sentence). POST /repair-costs reads no key: a keeper per hotel is
+   kept for the day it does, forgotten after each read of the repairs (core keys.ts). ── */
+const costStopName = (code: string) => `housekeeping/${code}/costs`;
+const COST_UNKNOWN = "Not known whether the cost was recorded: look at this repair's costs before recording it again.";
+const costKeepers = new Map<string, KeyKeeper>();
+const costKeys = (code: string) => {
+  let k = costKeepers.get(code);
+  if (!k) { k = keyKeeper({ who: currentSubject }); costKeepers.set(code, k); }
+  return k;
+};
+async function seenCosts<T>(code: string, read: () => Promise<T>): Promise<T> {
+  const keys = costKeys(code);
+  const at = keys.mark();
+  const out = await read();
+  keys.seen(at);
+  return out;
+}
+
+function CostsDialog({ code, order, mayRecord, stop, onRead, onClose }: {
+  code: string; order: WorkOrder; mayRecord: boolean; stop: ReturnType<typeof useScreenStop>; onRead: () => void; onClose: () => void;
 }) {
   const cache = useQueryClient();
   const [cancelling, setCancelling] = useState<string | null>(null);
@@ -338,6 +367,41 @@ function CostsDialog({ code, order, mayRecord, onClose }: {
   /* Which grey button was tapped, and why it is grey. */
   const [tapSaid, setTapSaid] = useState<{ at: string; text: string } | null>(null);
   const costs = order.costs ?? [];
+  const [amount, setAmount] = useState("");
+  const [note, setNote] = useState("");
+  const [file, setFile] = useState<Picked | null>(null);
+  const [recording, setRecording] = useState(false);
+  const latch = useRef(false);
+  const stored = useOpenStored((title, text) => setSaid({ title: "Proof not opened", body: text || title, tone: "bad" }));
+
+  /* The web's record(): the amount as typed, the note, the proof; one tap, one cost. */
+  async function record() {
+    if (latch.current || stop.isStuck()) return;
+    const missing = costMissing(amount, file !== null);
+    if (missing || !file) { setSaid({ title: "Cost not recorded", body: missing ?? "", tone: "bad" }); return; }
+    latch.current = true;
+    setRecording(true);
+    setSaid(null);
+    const typed = amount.trim();
+    try {
+      await stop.guard(() => sendForm<{ ok: true; id: string }>("POST", costPath(code), [
+        { name: "workOrderId", value: order.id }, { name: "amount", value: typed }, { name: "note", value: note.trim() }, filePart("file", file),
+      ], costKeys(code)));
+      setSaid({ title: "Cost recorded", body: `${order.title} · ${typed}`, tone: "ok" });
+      setAmount(""); setNote(""); setFile(null);
+      void cache.invalidateQueries({ queryKey: ["housekeeping", code] });
+    } catch (e) {
+      if (outcomeUnknown(e)) {
+        /* MEMORY 16: the amount and the proof go, so a repeat is typed and chosen on purpose. */
+        setAmount(""); setFile(null);
+        setSaid({ title: "Not known whether the cost was recorded", body: `${message(e)} Look at this repair's costs before recording it again.`, tone: "bad" });
+        void cache.invalidateQueries({ queryKey: ["housekeeping", code] });
+      } else setSaid({ title: "Cost not recorded", body: message(e), tone: "bad" });
+    } finally {
+      latch.current = false;
+      setRecording(false);
+    }
+  }
 
   async function cancel(k: RepairCost) {
     setBusy(true);
@@ -360,7 +424,7 @@ function CostsDialog({ code, order, mayRecord, onClose }: {
     <Dialog
       title={`Costs · ${order.title}`}
       under={order.costTotal == null ? "Nothing recorded yet." : `${cash(order.costTotal)} recorded, each with its proof.`}
-      onClose={onClose}
+      onClose={onClose} locked={recording}
     >
       {costs.length > 0 ? (
         <View style={{ borderWidth: 1, borderColor: c.grey200, borderRadius: 10 }}>
@@ -373,7 +437,8 @@ function CostsDialog({ code, order, mayRecord, onClose }: {
               {k.note ? <Text style={[t.label, line]}>{k.note}</Text> : null}
               {k.cancelled ? <Text style={[t.label, line]}>Cancelled {longDay(k.cancelled.at)} by {k.cancelled.by ?? DASH}: {k.cancelled.reason}</Text> : null}
               <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
-                <Btn label="See the proof" Icon={FileText} reason={ON_WEBSITE} onPress={() => undefined} onRefused={(text) => setTapSaid({ at: k.id, text })} />
+                <Btn label={stored.opening === proofPath(code, k.proof.id) ? "Opening…" : "See the proof"} Icon={FileText} reason={null}
+                  onPress={() => void stored.open(proofPath(code, k.proof.id), PROOF_OFFLINE, "", k.proof.contentType || "*/*")} />
                 {!k.cancelled && cancelling !== k.id ? (
                   <Btn label="Cancel this cost" kind="ghost" reason={whyNotCancel(mayRecord)} onPress={() => { setCancelling(k.id); setWhy(""); setSaid(null); }}
                     onRefused={(text) => setTapSaid({ at: k.id, text })} />
@@ -404,15 +469,37 @@ function CostsDialog({ code, order, mayRecord, onClose }: {
         </View>
       )) : null}
 
-      {/* Recording needs the bill's photo or file as proof (D17-6), and the phone has no picker yet. */}
-      <View style={{ gap: 6 }}>
-        <Text style={[t.label, { color: c.ink900 }]}>Record a cost</Text>
-        <Text style={t.caption}>A photo or screenshot of the bill, the payment or the transaction. A cost is not recorded without it.</Text>
-        <View style={{ flexDirection: "row", marginTop: 6 }}>
-          <Btn label="Record the cost" tall grow kind="primary" reason={whyNotRecord(mayRecord)} onPress={() => undefined} />
+      {/* Recording needs the bill's photo or file as proof (D17-6): taken or chosen on the phone (M-16). */}
+      {mayRecord ? (
+        <View style={{ gap: 12 }}>
+          <Text style={[t.label, { color: c.ink900 }]}>Record a cost</Text>
+          <Field label="Amount, in rupees" required>
+            <TextInput value={amount} onChangeText={setAmount} editable={!recording} accessibilityLabel="Amount, in rupees" keyboardType="decimal-pad" inputMode="decimal"
+              placeholder="1800" placeholderTextColor={web.grey400} style={[input, t.tab, { minHeight: 48 }]} />
+          </Field>
+          <BillField label="Proof" required file={file} onFile={setFile} off={recording}
+            hint="A photo or screenshot of the bill, the payment or the transaction. A cost is not recorded without it." />
+          <Field label="Note" hint="Optional - who was paid, for what.">
+            <TextInput value={note} onChangeText={setNote} editable={!recording} accessibilityLabel="Note" multiline maxLength={500}
+              style={[input, { minHeight: 64 }]} />
+          </Field>
+          {stop.unknown ? <Stopped line={COST_UNKNOWN} onRead={onRead} /> : null}
+          <View style={{ flexDirection: "row", gap: 8 }}>
+            <Btn label="Cancel" tall grow reason={recording ? SENDING : null} onPress={onClose} />
+            <Btn label={recording ? "Recording…" : "Record the cost"} tall grow kind="primary"
+              reason={recording ? SENDING : stop.stuck ? COST_UNKNOWN : costMissing(amount, file !== null)}
+              onPress={() => void record()} onRefused={(text) => setTapSaid({ at: "record", text })} />
+          </View>
+          {tapSaid?.at === "record" ? <Text style={[t.label, line]} accessibilityLiveRegion="polite">{tapSaid.text}</Text> : null}
         </View>
-        <Text style={[t.label, line]}>{whyNotRecord(mayRecord)}</Text>
-      </View>
+      ) : (
+        <View style={{ gap: 6 }}>
+          <View style={{ flexDirection: "row" }}>
+            <Btn label="Record the cost" tall grow kind="primary" reason={whyNotRecord(mayRecord)} onPress={() => undefined} />
+          </View>
+          <Text style={[t.label, line]}>{whyNotRecord(mayRecord)}</Text>
+        </View>
+      )}
     </Dialog>
   );
 }
@@ -426,8 +513,10 @@ const input = {
 
 /** The web's DialogContent: centred, 16px from the sides, a head with its X.
     The X and the shade close it. */
-function Dialog({ title, under, onClose, children }: { title: string; under: string; onClose: () => void; children: ReactNode }) {
+function Dialog({ title, under, onClose: close, locked, children }: { title: string; under: string; onClose: () => void; locked?: boolean; children: ReactNode }) {
   const pad = useSheetPad();
+  /* A write on its way: back, the shade and the X do nothing (MEMORY 22). */
+  const onClose = () => { if (!locked) close(); };
   return (
     <Modal visible transparent animationType="fade" onRequestClose={onClose} {...modalEdge}>
       <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : "height"}>

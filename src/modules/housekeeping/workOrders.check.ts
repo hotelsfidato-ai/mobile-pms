@@ -3,7 +3,7 @@
 import type { OutboxEntry } from "../../core/offline.ts";
 import {
   closeBody, closedWords, COST_REFUSED, day, empty, foot, heldStatus, longDay, meta, ON_WEBSITE, orderPath, paise, pills, queued,
-  SENDING, startBody, startLabel, UPDATE_REFUSED, whyNotCancel, whyNotRecord, whyNotUpdate, type WorkOrder, type WorkOrderList,
+  SENDING, startBody, startLabel, UPDATE_REFUSED, whyNotCancel, whyNotRecord, costAmountProblem, costMissing, proofPath, whyNotUpdate, type WorkOrder, type WorkOrderList,
 } from "./workOrders.ts";
 
 /* No node:assert, so the app's own type check reads this file too. */
@@ -88,7 +88,14 @@ eq(foot("closed", list(100)), null, "closed whole");
 /* Costs: paise shown; recording never on the phone; cancelling for the five only. */
 eq(paise(1800), "₹1,800.00", "paise");
 eq(paise(120000.5), "₹1,20,000.50", "lakh grouping");
-eq([whyNotRecord(true), whyNotRecord(false)], [ON_WEBSITE, COST_REFUSED], "record");
+eq([whyNotRecord(true), whyNotRecord(false)], [null, COST_REFUSED], "record");
+/* The server's readAmount: "1,800.50" and "₹ 900" pass as typed; three places of paise, zero and words do not. */
+const NO_AMOUNT = "How much was it? Type the amount in rupees, more than zero.";
+eq([costAmountProblem("1,800.50"), costAmountProblem("₹ 900"), costAmountProblem("")], [null, null, null], "amounts that pass, and blank");
+eq([costAmountProblem("18.005"), costAmountProblem("0"), costAmountProblem("1800 rupees"), costAmountProblem("-5")], [NO_AMOUNT, NO_AMOUNT, NO_AMOUNT, NO_AMOUNT], "amounts the server refuses");
+eq(costMissing("1800", false)?.startsWith("Attach the proof"), true, "no proof, no cost (D17-6)");
+eq([costMissing(" ", true), costMissing("1800", true)], [NO_AMOUNT, null], "the amount first, then ready");
+eq(proofPath("5EL", "a1"), "/api/hotels/5EL/attachments/a1/file", "the proof's address");
 eq([whyNotCancel(true), whyNotCancel(false)], [null, COST_REFUSED], "cancel");
 
 console.log("work orders: all checks pass");
