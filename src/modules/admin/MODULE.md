@@ -68,7 +68,10 @@ Rules: `rules.ts` (`rules.check.ts`); who opens and reads what: `roles.ts` (`rol
 - **One tap, one write; an unknown outcome** (nothing came back, or a 5xx) says "Not known whether it
   was …" and the act takes no more taps until the record is read again: a sheet until it is closed,
   a card until a read that began after the failure has come back (`useAct` in `kit.tsx`, MEMORY 8,
-  16). The admin routes read no idempotency key; a keeper per list sends one all the same (MFIN-1).
+  16); a sheet's stop is the screen's (`useStop`), so closing the sheet does not free it (MADM-3). The admin routes read no idempotency key; a keeper per list sends one all the same (MFIN-1).
+- **Two-step required** (Signing in) asks the server's own question of the whole roster
+  (`setsTwoStepRequired`, migration 257), not the role at the hotel in view (MADM-4).
+- **Another person's password** is never offered to the phone's password manager (MADM-2).
 - **Integrations**: the web shows no key, secret, password or address, only Set up / Not set up and
   the server's sentence; neither answer carries one, and the phone shows the same and types nothing.
 

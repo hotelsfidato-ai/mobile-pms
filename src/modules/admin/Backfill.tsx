@@ -7,7 +7,7 @@ import { ON_THE_WEBSITE } from "../../core/menu";
 import { c, face, t } from "../../core/theme";
 import { Head, Screen, s as core, notKnown, useRead } from "../../core/ui";
 import { getBackfill, removeBackfill } from "./data";
-import { Btn, Empty, Failed, Field, Labelled, Loading, Pill, Refused, Segmented, Sheet, Stale, Toast, body, saidOf, useAct, useSaid, type Said } from "./kit";
+import { Btn, Empty, Failed, Field, Labelled, Loading, Pill, Refused, Segmented, Sheet, Stale, Toast, body, saidOf, useAct, useSaid, useStop, type Said, type Stop } from "./kit";
 import { refusedBackfill } from "./roles";
 import {
   DASH, ID_WORDS, dateShort, live, precise, removeWhy, trailWords,
@@ -42,7 +42,16 @@ export function Backfill({ hotel, role }: AdminProps) {
   const [pulled, setPulled] = useState(false);
   const [removing, setRemoving] = useState<{ kind: BackfillKind; id: string; what: string } | null>(null);
   const key = ["admin", code, "backfill"];
-  const view = useRead(() => (refused ? Promise.resolve(null) : getBackfill(code)), key);
+  const [seenAt, setSeenAt] = useState(0);
+  const view = useRead(async () => {
+    if (refused) return null;
+    const started = Date.now();
+    const answer = await getBackfill(code);
+    setSeenAt(started);
+    return answer;
+  }, key);
+  /* Remove's stop, kept here so closing the sheet does not free it (MADM-3). */
+  const stop = useStop(seenAt);
   const refresh = () => void cache.invalidateQueries({ queryKey: key });
   const v = view.data;
 
@@ -68,16 +77,16 @@ export function Backfill({ hotel, role }: AdminProps) {
               </View>
               <ExportButtons table={tableOf(v, tab, hotel.name)} />
               {tab === "stays" ? (v.stays.length === 0 ? <Empty title="No stays backfilled yet." /> : v.stays.map((s) => (
-                <Stay key={s.id} s={s} v={v} onRemove={() => setRemoving({ kind: "stays", id: s.id, what: `${s.guestName}'s stay` })} />
+                <Stay key={s.id} s={s} v={v} stuck={stop.stuck} onRemove={() => setRemoving({ kind: "stays", id: s.id, what: `${s.guestName}'s stay` })} />
               ))) : tab === "bills" ? (v.bills.length === 0 ? <Empty title="No restaurant bills backfilled yet." /> : v.bills.map((b) => (
-                <Bill key={b.id} b={b} v={v} onRemove={() => setRemoving({ kind: "bills", id: b.id, what: `bill ${b.billNumber ?? DASH}` })} />
+                <Bill key={b.id} b={b} v={v} stuck={stop.stuck} onRemove={() => setRemoving({ kind: "bills", id: b.id, what: `bill ${b.billNumber ?? DASH}` })} />
               ))) : (v.cash.length === 0 ? <Empty title="No cash backfilled yet." /> : v.cash.map((x) => (
-                <Cash key={x.id} x={x} v={v} onRemove={() => setRemoving({ kind: "cash", id: x.id, what: `the cash line "${x.purpose}"` })} />
+                <Cash key={x.id} x={x} v={v} stuck={stop.stuck} onRemove={() => setRemoving({ kind: "cash", id: x.id, what: `the cash line "${x.purpose}"` })} />
               )))}
             </>
           )}
       </Screen>
-      {removing ? <Remove code={code} r={removing} onSaid={say} onClose={() => { setRemoving(null); refresh(); }} /> : null}
+      {removing ? <Remove stop={stop} code={code} r={removing} onSaid={say} onClose={() => { setRemoving(null); refresh(); }} /> : null}
       <Toast said={said} onClose={close} />
     </View>
   );
@@ -85,8 +94,8 @@ export function Backfill({ hotel, role }: AdminProps) {
 
 const struck = (r: { removedAt: string | null }) => (r.removedAt ? { textDecorationLine: "line-through" as const, color: c.grey500 } : null);
 
-function Foot({ r, v, onRemove }: { r: BackfillStay | BackfillBill | BackfillCash; v: BackfillView; onRemove: () => void }) {
-  const why = removeWhy(v, r);
+function Foot({ r, v, onRemove, stuck }: { r: BackfillStay | BackfillBill | BackfillCash; v: BackfillView; onRemove: () => void; stuck: boolean }) {
+  const why = removeWhy(v, r) ?? (stuck ? notKnown("removed", "the register").line : null);
   const trail = trailWords(r);
   return (
     <>
@@ -102,7 +111,7 @@ function Foot({ r, v, onRemove }: { r: BackfillStay | BackfillBill | BackfillCas
   );
 }
 
-function Stay({ s, v, onRemove }: { s: BackfillStay; v: BackfillView; onRemove: () => void }) {
+function Stay({ s, v, onRemove, stuck }: { s: BackfillStay; v: BackfillView; onRemove: () => void; stuck: boolean }) {
   return (
     <View style={[core.card, { gap: 10 }]}>
       <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8, alignItems: "center" }}>
@@ -119,12 +128,12 @@ function Stay({ s, v, onRemove }: { s: BackfillStay; v: BackfillView; onRemove: 
       <Labelled label="Paid" value={s.paid === null ? DASH : `${precise(s.paid)}${s.paidBy ? ` · ${s.paidBy}` : ""}`} />
       <Labelled label="Hotel's bill" value={s.billNumber ?? DASH} />
       {s.sendBill ? <Pill tone={s.message?.status === "sent" ? "success" : "danger"}>{s.message?.status === "sent" ? `Sent ${s.message.at ?? ""}`.trim() : "Not sent"}</Pill> : null}
-      <Foot r={s} v={v} onRemove={onRemove} />
+      <Foot r={s} v={v} onRemove={onRemove} stuck={stuck} />
     </View>
   );
 }
 
-function Bill({ b, v, onRemove }: { b: BackfillBill; v: BackfillView; onRemove: () => void }) {
+function Bill({ b, v, onRemove, stuck }: { b: BackfillBill; v: BackfillView; onRemove: () => void; stuck: boolean }) {
   return (
     <View style={[core.card, { gap: 10 }]}>
       <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8, alignItems: "center" }}>
@@ -137,12 +146,12 @@ function Bill({ b, v, onRemove }: { b: BackfillBill; v: BackfillView; onRemove: 
       <Labelled label="Total" value={precise(b.total)} strong />
       <Labelled label="Paid by" value={b.paidBy ?? DASH} />
       <Labelled label="Note" value={b.note ?? DASH} />
-      <Foot r={b} v={v} onRemove={onRemove} />
+      <Foot r={b} v={v} onRemove={onRemove} stuck={stuck} />
     </View>
   );
 }
 
-function Cash({ x, v, onRemove }: { x: BackfillCash; v: BackfillView; onRemove: () => void }) {
+function Cash({ x, v, onRemove, stuck }: { x: BackfillCash; v: BackfillView; onRemove: () => void; stuck: boolean }) {
   return (
     <View style={[core.card, { gap: 10 }]}>
       <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8, alignItems: "center" }}>
@@ -152,14 +161,14 @@ function Cash({ x, v, onRemove }: { x: BackfillCash; v: BackfillView; onRemove: 
       <Labelled label="Amount" value={precise(x.amount)} strong />
       <Labelled label="What for" value={x.purpose} />
       <Labelled label="Who" value={x.person} />
-      <Foot r={x} v={v} onRemove={onRemove} />
+      <Foot r={x} v={v} onRemove={onRemove} stuck={stuck} />
     </View>
   );
 }
 
 /** RemoveDialog: the reason asked first; the line stays, marked. */
-function Remove({ code, r, onSaid, onClose }: { code: string; r: { kind: BackfillKind; id: string; what: string }; onSaid: (s: Said) => void; onClose: () => void }) {
-  const act = useAct();
+function Remove({ stop, code, r, onSaid, onClose }: { stop: Stop; code: string; r: { kind: BackfillKind; id: string; what: string }; onSaid: (s: Said) => void; onClose: () => void }) {
+  const act = useAct(undefined, stop);
   const [reason, setReason] = useState("");
   const submit = () => act.run(() => removeBackfill(code, r.kind, r.id, reason.trim()), {
     ok: () => { onSaid({ title: "Removed", body: "It stays on the list, marked removed.", tone: "ok" }); onClose(); },

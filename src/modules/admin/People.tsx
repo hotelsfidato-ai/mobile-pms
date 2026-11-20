@@ -11,7 +11,7 @@ import {
 } from "./data";
 import {
   Btn, Choose, Empty, Failed, Field, Foot, Loading, PasswordField, Pill, Refused, Segmented, Sheet, Stale, Toast,
-  SwitchRow, body, confirm, saidOf, useAct, useSaid, type Said,
+  SwitchRow, body, confirm, saidOf, useAct, useSaid, useStop, type Said, type Stop,
 } from "./kit";
 import { minPasswordFor, refusedScreen, roleLabel, roleWhat } from "./roles";
 import {
@@ -61,6 +61,8 @@ export function People({ hotel, role, who }: AdminProps) {
     return answer;
   }, key);
   const refresh = () => void cache.invalidateQueries({ queryKey: key });
+  /* The sheets' stop, kept here so closing a sheet does not free it (MADM-3). */
+  const stop = useStop(seenAt);
 
   const groupAdmin = who.scope.isGroupAdmin;
   const me = who.scope.staffId;
@@ -91,9 +93,10 @@ export function People({ hotel, role, who }: AdminProps) {
           : list.data === null ? null : (
             <>
               <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8, marginTop: -8 }}>
-                <Btn label="Add somebody" variant="primary" disabled={!mayAdd} onPress={() => setOpen({ kind: "add" })}
+                <Btn label="Add somebody" variant="primary" disabled={!mayAdd || stop.stuck} onPress={() => setOpen({ kind: "add" })}
                   icon={<UserPlus size={16} color={mayAdd ? c.white : c.grey500} />} />
               </View>
+              {stop.stuck ? <Text style={[t.caption, { color: c.red700 }]} accessibilityRole="alert">{notKnown("done", "the list of people").line} Reading it again…</Text> : null}
               <ExportButtons table={table} />
               <Stale error={list.error} />
               {stranded.length > 0 ? (
@@ -115,7 +118,7 @@ export function People({ hotel, role, who }: AdminProps) {
                       options={[{ value: "all", label: "Everybody" }, { value: "off", label: `Switched off (${switchedOff})` }]} />
                   ) : null}
                   {listed.map((p) => (
-                    <PersonCard key={p.id} person={p} places={places.all} testCodes={testCodes} me={me} seenAt={seenAt}
+                    <PersonCard key={p.id} person={p} places={places.all} testCodes={testCodes} me={me} seenAt={seenAt} sheetsStuck={stop.stuck}
                       onOpen={(kind) => setOpen({ kind, person: p })} onSaid={say} onDone={done} />
                   ))}
                 </>
@@ -130,15 +133,15 @@ export function People({ hotel, role, who }: AdminProps) {
           )}
       </Screen>
       {open?.kind === "add" ? (
-        <AddPerson places={places.real} testPlaces={groupAdmin ? places.test : null} placeRequired={!groupAdmin}
+        <AddPerson stop={stop} places={places.real} testPlaces={groupAdmin ? places.test : null} placeRequired={!groupAdmin}
           onClose={() => { setOpen(null); refresh(); }} onSaid={say} />
       ) : null}
       {open?.kind === "grant" ? (
-        <Grant person={open.person} places={places.all} testCodes={testCodes} onClose={() => { setOpen(null); refresh(); }} onSaid={say} />
+        <Grant stop={stop} person={open.person} places={places.all} testCodes={testCodes} onClose={() => { setOpen(null); refresh(); }} onSaid={say} />
       ) : null}
-      {open?.kind === "password" ? <Password person={open.person} onClose={() => { setOpen(null); refresh(); }} onSaid={say} /> : null}
-      {open?.kind === "edit" ? <Edit person={open.person} onClose={() => { setOpen(null); refresh(); }} onSaid={say} /> : null}
-      {open?.kind === "two-step" ? <TwoStepOff person={open.person} onClose={() => { setOpen(null); refresh(); }} onSaid={say} /> : null}
+      {open?.kind === "password" ? <Password stop={stop} person={open.person} onClose={() => { setOpen(null); refresh(); }} onSaid={say} /> : null}
+      {open?.kind === "edit" ? <Edit stop={stop} person={open.person} onClose={() => { setOpen(null); refresh(); }} onSaid={say} /> : null}
+      {open?.kind === "two-step" ? <TwoStepOff stop={stop} person={open.person} onClose={() => { setOpen(null); refresh(); }} onSaid={say} /> : null}
       <Toast said={said} onClose={close} />
     </View>
   );
@@ -146,12 +149,14 @@ export function People({ hotel, role, who }: AdminProps) {
 
 /* ── One person, and what they can reach (PersonCard) ─────────────── */
 
-function PersonCard({ person, places, testCodes, me, seenAt, onOpen, onSaid, onDone }: {
-  person: AdminStaff; places: RosterPlace[]; testCodes: Set<string>; me: string; seenAt: number;
+function PersonCard({ person, places, testCodes, me, seenAt, sheetsStuck, onOpen, onSaid, onDone }: {
+  person: AdminStaff; places: RosterPlace[]; testCodes: Set<string>; me: string; seenAt: number; sheetsStuck: boolean;
   onOpen: (kind: "grant" | "password" | "edit" | "two-step") => void; onSaid: (s: Said) => void; onDone: (s: Said) => void;
 }) {
   const act = useAct(seenAt);
   const off = act.busy || act.stuck;
+  /* A sheet's write whose outcome is unknown greys the sheets' openers too, until the list is read again. */
+  const shut = off || sheetsStuck;
   const lost = (what: string) => (e: unknown) => onDone({ title: notKnown(what, "this person's card").title, body: notKnown(what, "this person's card", e).body, tone: "bad" });
 
   /* D27-117: the ✕ asks first, in the web's words (ConfirmRemoveAccess.tsx). */
@@ -237,10 +242,10 @@ function PersonCard({ person, places, testCodes, me, seenAt, onOpen, onSaid, onD
       {person.isActive ? (
         (grants || person.maySetPassword || person.mayEdit || person.mayTwoStepOff || person.maySwitch) ? (
           <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8, borderTopWidth: 1, borderColor: c.grey100, paddingTop: 12 }}>
-            {grants ? <Btn label="Give a property" disabled={off} onPress={() => onOpen("grant")} icon={<Building2 size={16} color={off ? c.grey500 : c.ink900} />} /> : null}
-            {person.maySetPassword ? <Btn variant="ghost" label={person.canSignIn ? "Password" : "Set a password"} disabled={off} onPress={() => onOpen("password")} /> : null}
-            {person.mayEdit ? <Btn variant="ghost" label="Edit" a11y={`Edit ${person.name}`} disabled={off} onPress={() => onOpen("edit")} /> : null}
-            {person.mayTwoStepOff ? <Btn variant="ghost" label="Two-step off" disabled={off} onPress={() => onOpen("two-step")} /> : null}
+            {grants ? <Btn label="Give a property" disabled={shut} onPress={() => onOpen("grant")} icon={<Building2 size={16} color={shut ? c.grey500 : c.ink900} />} /> : null}
+            {person.maySetPassword ? <Btn variant="ghost" label={person.canSignIn ? "Password" : "Set a password"} disabled={shut} onPress={() => onOpen("password")} /> : null}
+            {person.mayEdit ? <Btn variant="ghost" label="Edit" a11y={`Edit ${person.name}`} disabled={shut} onPress={() => onOpen("edit")} /> : null}
+            {person.mayTwoStepOff ? <Btn variant="ghost" label="Two-step off" disabled={shut} onPress={() => onOpen("two-step")} /> : null}
             {person.maySwitch ? <Btn label={act.busy ? "…" : "Deactivate"} a11y={`Deactivate ${person.name}`} disabled={off} onPress={() => void deactivate()} /> : null}
           </View>
         ) : null
@@ -270,10 +275,10 @@ function Foot2({ onCancel, label, onPress, ready, busy, stuck, cancel = "Cancel"
 const StuckLine = ({ what, stuck }: { what: string; stuck: boolean }) =>
   stuck ? <Text style={[t.caption, { color: c.red700 }]} accessibilityRole="alert">{notKnown(what, "the list of people").line} Close this to read it again.</Text> : null;
 
-function AddPerson({ places: realPlaces, testPlaces, placeRequired, onClose, onSaid }: {
-  places: RosterPlace[]; testPlaces: RosterPlace[] | null; placeRequired: boolean; onClose: () => void; onSaid: (s: Said) => void;
+function AddPerson({ stop, places: realPlaces, testPlaces, placeRequired, onClose, onSaid }: {
+  stop: Stop; places: RosterPlace[]; testPlaces: RosterPlace[] | null; placeRequired: boolean; onClose: () => void; onSaid: (s: Said) => void;
 }) {
-  const act = useAct();
+  const act = useAct(undefined, stop);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -332,10 +337,10 @@ function AddPerson({ places: realPlaces, testPlaces, placeRequired, onClose, onS
   );
 }
 
-function Grant({ person, places, testCodes, onClose, onSaid }: {
-  person: AdminStaff; places: RosterPlace[]; testCodes: Set<string>; onClose: () => void; onSaid: (s: Said) => void;
+function Grant({ stop, person, places, testCodes, onClose, onSaid }: {
+  stop: Stop; person: AdminStaff; places: RosterPlace[]; testCodes: Set<string>; onClose: () => void; onSaid: (s: Said) => void;
 }) {
-  const act = useAct();
+  const act = useAct(undefined, stop);
   const [code, setCode] = useState("");
   const [picked, setPicked] = useState("front_desk");
   const { testOnly, places: available } = grantable(person, places, testCodes);
@@ -371,8 +376,8 @@ function Grant({ person, places, testCodes, onClose, onSaid }: {
   );
 }
 
-function Password({ person, onClose, onSaid }: { person: AdminStaff; onClose: () => void; onSaid: (s: Said) => void }) {
-  const act = useAct();
+function Password({ stop, person, onClose, onSaid }: { stop: Stop; person: AdminStaff; onClose: () => void; onSaid: (s: Said) => void }) {
+  const act = useAct(undefined, stop);
   const [value, setValue] = useState("");
   const min = minPasswordFor(person.access.map((a) => a.role), person.isGroupAdmin);
   const submit = () => act.run(() => setStaffPassword(person.id, value), {
@@ -394,8 +399,8 @@ function Password({ person, onClose, onSaid }: { person: AdminStaff; onClose: ()
   );
 }
 
-function Edit({ person, onClose, onSaid }: { person: AdminStaff; onClose: () => void; onSaid: (s: Said) => void }) {
-  const act = useAct();
+function Edit({ stop, person, onClose, onSaid }: { stop: Stop; person: AdminStaff; onClose: () => void; onSaid: (s: Said) => void }) {
+  const act = useAct(undefined, stop);
   const [name, setName] = useState(person.name);
   const [phone, setPhone] = useState(person.phone ?? "");
   const [home, setHome] = useState(person.homeScreen);
@@ -424,8 +429,8 @@ function Edit({ person, onClose, onSaid }: { person: AdminStaff; onClose: () => 
   );
 }
 
-function TwoStepOff({ person, onClose, onSaid }: { person: AdminStaff; onClose: () => void; onSaid: (s: Said) => void }) {
-  const act = useAct();
+function TwoStepOff({ stop, person, onClose, onSaid }: { stop: Stop; person: AdminStaff; onClose: () => void; onSaid: (s: Said) => void }) {
+  const act = useAct(undefined, stop);
   const [reason, setReason] = useState("");
   const submit = () => act.run(() => switchTwoStepOff(person.id, reason), {
     ok: () => { onSaid({ title: `Two-step sign-in is off for ${person.name}`, body: "They sign in with the password alone, until they set it up again.", tone: "ok" }); onClose(); },

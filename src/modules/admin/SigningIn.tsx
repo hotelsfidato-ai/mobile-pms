@@ -6,7 +6,7 @@ import { c, t } from "../../core/theme";
 import { Head, Screen, s as core, notKnown, useRead } from "../../core/ui";
 import { getTwoStep, setTwoStepRequired } from "./data";
 import { Loading, Refused, SwitchRow, Toast, body, saidOf, useAct, useSaid } from "./kit";
-import { MIN_MANAGER_PASSWORD, MIN_PASSWORD, refusedScreen, switchesModules } from "./roles";
+import { MIN_MANAGER_PASSWORD, MIN_PASSWORD, refusedScreen, setsTwoStepRequired } from "./roles";
 import type { AdminProps } from "./Route";
 
 /* ══════════════════════════════════════════════════════════════════
@@ -24,7 +24,7 @@ function Chip({ children }: { children: ReactNode }) {
   return <View style={{ width: 24, height: 24, borderRadius: 6, backgroundColor: c.orange50, alignItems: "center", justifyContent: "center" }}>{children}</View>;
 }
 
-export function SigningIn({ hotel, role }: AdminProps) {
+export function SigningIn({ hotel, role, who }: AdminProps) {
   const code = hotel.code;
   const cache = useQueryClient();
   /* The console's own rule (`setting`): the page has no narrower one. */
@@ -40,7 +40,8 @@ export function SigningIn({ hotel, role }: AdminProps) {
     return answer;
   }, key);
   const act = useAct(seenAt);
-  const mayChange = switchesModules(role);
+  /* The server's own rule, from the whole roster (MADM-4), not the role at the hotel in view. */
+  const mayChange = setsTwoStepRequired(who);
   const change = (required: boolean) => act.run(() => setTwoStepRequired(required), {
     ok: () => { say({ title: required ? "Two-step sign-in is required" : "Two-step sign-in is no longer required", body: required ? "The owner, Admins, GMs and Accountants set it up before going on." : undefined, tone: "ok" }); void cache.invalidateQueries({ queryKey: key }); },
     no: (e) => say(saidOf(e, "Not changed")),

@@ -77,11 +77,12 @@ export function useSaid() {
     MEMORY 16): when nothing came back or the server failed, this act takes no more taps until the
     record is read again - a sheet until it is closed (it unmounts), a card until a read that BEGAN
     after the failure has landed (`seenAt`, the start of the last read that came back). */
-export function useAct(seenAt?: number) {
+export function useAct(seenAt?: number, stop?: Stop) {
   const latch = useRef(false);
   const [busy, setBusy] = useState(false);
-  const [stuckAt, setStuckAt] = useState<number | null>(null);
-  const stuck = stuckAt !== null && !(seenAt !== undefined && seenAt > stuckAt);
+  const own = useStop(seenAt);
+  const held = stop ?? own;
+  const stuck = held.stuck;
   async function run<T>(fn: () => Promise<T>, on: { ok: (r: T) => void; no: (e: unknown) => void; unknown: (e: unknown) => void }) {
     if (latch.current || stuck) return;
     latch.current = true;
@@ -89,13 +90,21 @@ export function useAct(seenAt?: number) {
     try {
       on.ok(await fn());
     } catch (e) {
-      if (outcomeUnknown(e)) { setStuckAt(Date.now()); on.unknown(e); } else on.no(e);
+      if (outcomeUnknown(e)) { held.mark(); on.unknown(e); } else on.no(e);
     } finally {
       latch.current = false;
       setBusy(false);
     }
   }
   return { busy, stuck, run };
+}
+
+/** The screen-level stop a sheet shares (MADM-3): kept by the screen, so closing the sheet does not
+    free it; only a read of the list that BEGAN after the unknown outcome does (`seenAt`). */
+export interface Stop { stuck: boolean; mark: () => void }
+export function useStop(seenAt?: number): Stop {
+  const [at, setAt] = useState<number | null>(null);
+  return { stuck: at !== null && !(seenAt !== undefined && seenAt > at), mark: () => setAt(Date.now()) };
 }
 
 /** The web's refetchInterval while on screen, not in a pocket. */
@@ -203,7 +212,9 @@ export function Field({ label, value, onChangeText, hint, error, required, keybo
 export function PasswordField(props: { label: string; value: string; onChangeText: (v: string) => void; hint?: string; error?: string }) {
   const [show, setShow] = useState(false);
   return (
-    <Field {...props} required secure={!show} autoCapitalize="none" textContentType="newPassword"
+    /* Another person's password (MADM-2): never offered to the phone's password manager as this
+       person's own Fidato sign-in, so no autofill and no content type. */
+    <Field {...props} required secure={!show} input={{ autoCapitalize: "none", autoCorrect: false, autoComplete: "off", importantForAutofill: "no", textContentType: "none" }}
       placeholder="something they will remember"
       right={<Btn label={show ? "Hide" : "Show"} a11y={show ? "Hide the password" : "Show the password"} onPress={() => setShow((v) => !v)} />} />
   );

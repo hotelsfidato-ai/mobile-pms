@@ -4,7 +4,7 @@
 import { ROLES } from "../../core/menu.ts";
 import {
   AUDIT_REFUSED, BACKFILL_REFUSED, HEALTH_REFUSED, INTEGRATIONS_REFUSED, STAFF_REFUSED, cellOf, inWords, minPasswordFor,
-  notYourRole, readsBackfill, refusedBackfill, refusedScreen, roleLabel, switchesModules, whoMay, type ScreenKey,
+  notYourRole, readsBackfill, refusedBackfill, refusedScreen, roleLabel, setsTwoStepRequired, switchesModules, whoMay, type ScreenKey,
 } from "./roles.ts";
 
 const eq = (got: unknown, want: unknown, what: string) => {
@@ -54,5 +54,15 @@ eq(roleLabel("front_desk"), "Reception", "the matrix's word");
 eq(roleLabel("night_porter"), "night_porter", "an unknown role as stored");
 eq(roleLabel("automation"), "automation", "never offered as a person's role");
 eq(inWords(["Ringing up an order", "Printing"]), "ringing up an order and printing", "a list in a sentence");
+
+/* Two-step required: migration 257, the whole roster (MADM-4). */
+const two = (isGroupAdmin: boolean, roster: Array<[string, string]>, hotels: Array<[string, string | null]>) =>
+  setsTwoStepRequired({ scope: { isGroupAdmin, hotels: roster.map(([hotelId, role]) => ({ hotelId, role })) }, hotels: hotels.map(([id, testOf]) => ({ id, testOf })) });
+eq(two(true, [], []), true, "a group administrator");
+eq(two(false, [["a", "gm"], ["b", "admin"]], [["a", null], ["b", null]]), true, "an Admin elsewhere, opening Settings where they are GM");
+eq(two(false, [["a", "gm"]], [["a", null]]), false, "a GM only");
+eq(two(false, [["t", "admin"]], [["t", "5EL"]]), false, "an Admin only in a test hotel: no real hotel");
+eq(two(false, [["t", "admin"], ["a", "front_desk"]], [["t", "5EL"], ["a", null]]), true, "Admin in a test hotel, rostered at a real one: the server's own answer");
+eq(two(false, [["x", "owner"]], []), false, "a hotel the answer does not list is not counted real: never wider");
 
 console.log("admin roles: ok");

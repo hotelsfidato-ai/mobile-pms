@@ -73,6 +73,21 @@ export const MODULE_SWITCH_REFUSED =
 
 /** admin/moduleSwitchRoles.ts switchesModules: the owner and an Admin (D17-36). */
 export const switchesModules = (role: Role) => role === "owner" || role === "admin";
+/** Whether two-step sign-in is required: the database's own question (migration 257
+    app.set_two_step_required): the person reaches a real hotel (app.has_real_hotel: a group
+    administrator, or rostered where `test_of` is null) AND is a group administrator or holds Owner or
+    Admin at ANY hotel - not only at the one in view (MADM-4). Read from GET /api/hotels's answer: a hotel
+    the person is rostered at that the answer does not list (a closed one) is not counted as real, so the
+    phone is never wider than the server. */
+export function setsTwoStepRequired(who: {
+  scope: { isGroupAdmin: boolean; hotels: ReadonlyArray<{ hotelId: string; role: string }> };
+  hotels: ReadonlyArray<{ id: string; testOf?: string | null }>;
+}): boolean {
+  if (who.scope.isGroupAdmin) return true;
+  const real = who.scope.hotels.some((g) => who.hotels.some((h) => h.id === g.hotelId && !h.testOf));
+  return real && who.scope.hotels.some((g) => g.role === "owner" || g.role === "admin");
+}
+
 /** Activity.tsx mayGroup: "Across the group" is offered to the owner and an Admin. */
 export const seesGroupActivity = switchesModules;
 /** backfill.ts BACKFILL_READ: `invoice` approve (owner, admin, GM, the accountant). */

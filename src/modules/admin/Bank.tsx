@@ -4,7 +4,7 @@ import { Text, View } from "react-native";
 import { c, t } from "../../core/theme";
 import { Head, Screen, s as core, keys, notKnown, useRead } from "../../core/ui";
 import { getBankDetails, removeBankDetails, setBankDetails } from "./data";
-import { Btn, Failed, Field, Labelled, Loading, Refused, Sheet, Stale, Toast, body, confirm, saidOf, useAct, useSaid, type Said } from "./kit";
+import { Btn, Failed, Field, Labelled, Loading, Refused, Sheet, Stale, Toast, body, confirm, saidOf, useAct, useSaid, useStop, type Said, type Stop } from "./kit";
 import { refusedScreen } from "./roles";
 import { dateTime, type BankDetails } from "./rules";
 import type { AdminProps } from "./Route";
@@ -31,7 +31,16 @@ export function Bank({ hotel, role }: AdminProps) {
   const [editing, setEditing] = useState(false);
   const [pulled, setPulled] = useState(false);
   const key = ["admin", code, "bank-details"];
-  const q = useRead(() => (refused ? Promise.resolve(null) : getBankDetails(code)), key);
+  const [seenAt, setSeenAt] = useState(0);
+  const q = useRead(async () => {
+    if (refused) return null;
+    const started = Date.now();
+    const answer = await getBankDetails(code);
+    setSeenAt(started);
+    return answer;
+  }, key);
+  /* The sheet's stop, kept here so closing it does not free it (MADM-3). */
+  const stop = useStop(seenAt);
   const refresh = () => void cache.invalidateQueries({ queryKey: key });
   const bank = q.data?.bank ?? null;
   return (
@@ -46,7 +55,7 @@ export function Bank({ hotel, role }: AdminProps) {
                 <Text style={[body, { color: c.grey500 }]}>The group's owner is told whenever they change.</Text>
                 <Text style={[t.caption, { lineHeight: 17 }]}>Printed on this hotel's booking voucher. With none set, the voucher prints no bank details.</Text>
               </View>
-              {q.data ? <Btn label={bank ? "Change" : "Set bank details"} onPress={() => setEditing(true)} /> : null}
+              {q.data ? <Btn label={bank ? "Change" : "Set bank details"} disabled={stop.stuck} onPress={() => setEditing(true)} /> : null}
             </View>
             {q.data === undefined ? (q.error ? <Failed title="Could not read the bank details" error={q.error} onRetry={q.reload} /> : <Loading what="the bank details" />)
               : !bank ? <Text style={[body, { color: c.grey500 }]}>None set.</Text> : (
@@ -66,14 +75,14 @@ export function Bank({ hotel, role }: AdminProps) {
           </View>
         )}
       </Screen>
-      {editing ? <Edit code={code} bank={bank} onSaid={say} onClose={() => { setEditing(false); refresh(); }} /> : null}
+      {editing ? <Edit stop={stop} code={code} bank={bank} onSaid={say} onClose={() => { setEditing(false); refresh(); }} /> : null}
       <Toast said={said} onClose={close} />
     </View>
   );
 }
 
-function Edit({ code, bank, onSaid, onClose }: { code: string; bank: BankDetails | null; onSaid: (s: Said) => void; onClose: () => void }) {
-  const act = useAct();
+function Edit({ stop, code, bank, onSaid, onClose }: { stop: Stop; code: string; bank: BankDetails | null; onSaid: (s: Said) => void; onClose: () => void }) {
+  const act = useAct(undefined, stop);
   const [form, setForm] = useState(bank
     ? { accountName: bank.accountName, accountNumber: bank.accountNumber, bankName: bank.bankName, branch: bank.branch ?? "", ifsc: bank.ifsc, upi: bank.upi ?? "" }
     : BLANK);
