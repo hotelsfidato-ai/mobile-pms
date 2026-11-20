@@ -6,7 +6,7 @@ import { KeyboardAvoidingView, Linking, Platform, Pressable, ScrollView, Text, V
 import { HeldError, type Hotel } from "../../core/api";
 import { cash } from "../../core/format";
 import { c, face, space, t } from "../../core/theme";
-import { useRead } from "../../core/ui";
+import { useRead, ripple } from "../../core/ui";
 import { Companions, IdPhoto } from "./Companions";
 import { readFoot, readGuestMarks, readStay, readVipLevels, rulesOf, said, setVip, setWhatsapp, type DeskStay } from "./data";
 import { day, foreignNationality, footOf, guestsWords, statusOf, stayedWords, whyNotYet } from "./desk";
@@ -100,7 +100,7 @@ export function StayScreen({ hotel, role, id, offer, onClose }: {
             <View style={{ minHeight: 44, justifyContent: "center", borderBottomWidth: 2, borderBottomColor: c.orange, marginBottom: -1 }}>
               <Text style={[t.label, { color: c.ink900 }]}>Stay</Text>
             </View>
-            <Pressable onPress={() => router.push(`/folio/${code}/${id}` as Href)} accessibilityRole="tab" style={{ minHeight: 44, justifyContent: "center" }}>
+            <Pressable android_ripple={ripple} onPress={() => router.push(`/folio/${code}/${id}` as Href)} accessibilityRole="tab" style={{ minHeight: 44, justifyContent: "center" }}>
               <Text style={[t.label, { color: c.grey600 }]}>Bill</Text>
             </Pressable>
           </View>
@@ -126,7 +126,7 @@ export function Panel({ title, under, onClose, foot, children }: {
           <Text style={[t.heading, face[600], { fontSize: 18 }]} accessibilityRole="header">{title}</Text>
           {under}
         </View>
-        <Pressable onPress={onClose} accessibilityRole="button" accessibilityLabel="Close" hitSlop={10} style={{ width: 44, height: 44, alignItems: "center", justifyContent: "center" }}>
+        <Pressable android_ripple={ripple} onPress={onClose} accessibilityRole="button" accessibilityLabel="Close" hitSlop={10} style={{ width: 44, height: 44, alignItems: "center", justifyContent: "center" }}>
           <X size={20} color={c.grey600} />
         </Pressable>
       </View>
@@ -147,12 +147,12 @@ function HeaderLine({ stay }: { stay: DeskStay }) {
     <View style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center", columnGap: 16, rowGap: 4 }}>
       <Text style={words}>{stay.reference}</Text>
       {stay.phone ? (
-        <Pressable style={item} hitSlop={10} accessibilityRole="link" accessibilityLabel={`Call ${stay.phone}`} onPress={() => void Linking.openURL(`tel:${stay.phone}`)}>
+        <Pressable android_ripple={ripple} style={item} hitSlop={10} accessibilityRole="link" accessibilityLabel={`Call ${stay.phone}`} onPress={() => void Linking.openURL(`tel:${stay.phone}`)}>
           <Phone size={14} color={c.grey600} /><Text style={words}>{stay.phone}</Text>
         </Pressable>
       ) : null}
       {stay.email ? (
-        <Pressable style={item} hitSlop={10} accessibilityRole="link" accessibilityLabel={`Email ${stay.email}`} onPress={() => void Linking.openURL(`mailto:${stay.email}`)}>
+        <Pressable android_ripple={ripple} style={item} hitSlop={10} accessibilityRole="link" accessibilityLabel={`Email ${stay.email}`} onPress={() => void Linking.openURL(`mailto:${stay.email}`)}>
           <Mail size={14} color={c.grey600} /><Text style={words}>{stay.email}</Text>
         </Pressable>
       ) : null}

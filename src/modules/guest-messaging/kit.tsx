@@ -4,6 +4,7 @@ import { Pressable, Text, View } from "react-native";
 import { isOnline } from "../../core/offline";
 import { c, face, space, t } from "../../core/theme";
 import type { Tone } from "./rules";
+import { ripple, shade } from "../../core/ui";
 
 /* ══════════════════════════════════════════════════════════════════
    THE WEB KIT'S PIECES THESE TWO PAGES USE, from src/components/ui
@@ -91,9 +92,9 @@ export function Failed({ title, error, offline, onRetry }: {
         <Text style={[t.heading, { textAlign: "center" }]}>{off ? offline.title : title}</Text>
         <Text style={[body, { color: c.grey500, marginTop: 6, textAlign: "center", lineHeight: 22 }]}>{off ? offline.description : error}</Text>
         <View style={{ marginTop: 20, flexDirection: "row" }}>
-          <Pressable
+          <Pressable android_ripple={ripple}
             onPress={onRetry} accessibilityRole="button" accessibilityLabel="Try again"
-            style={({ pressed }) => ({ minHeight: 44, paddingHorizontal: 16, borderRadius: 999, borderWidth: 1, borderColor: c.grey300, flexDirection: "row", gap: 8, alignItems: "center", backgroundColor: pressed ? c.grey100 : c.white })}
+            style={shade(({ pressed }) => ({ minHeight: 44, paddingHorizontal: 16, borderRadius: 999, borderWidth: 1, borderColor: c.grey300, flexDirection: "row", gap: 8, alignItems: "center", backgroundColor: pressed ? c.grey100 : c.white }))}
           >
             <RotateCw size={16} color={c.ink900} />
             <Text style={[t.label, { color: c.ink900 }]}>Try again</Text>

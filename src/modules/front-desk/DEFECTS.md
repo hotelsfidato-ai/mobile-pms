@@ -84,3 +84,13 @@ advance was taken … look at the bill" and has a keeper per stay (the payments 
 as reservations' New booking. Checked safe to repeat (the server refuses a second or sets a value):
 check-in, assign, move, unassign, void, confirm, cancel, amend, WhatsApp, VIP, edit an adult, remove
 a line or an adult. **The rule:** an unknown outcome on a route without a key stops the button.
+
+# m13-rooms (19 Nov), lane letter R
+
+## MFD-R1 · The Calendar still sends Rooms to the website
+
+The Calendar's Calendar · Rooms switch (`src/modules/reservations/Calendar.tsx`) answers a tap on
+Rooms with "Rooms, the house as tiles, is on the website for now." Found on 19 Nov building Rooms,
+which is now `/front-desk/<code>/rooms`. **Done:** nothing here (reservations' file, another lane);
+the exact change is in the lane's report for the mobile chat. **The rule:** a screen that lands
+looks for the greyed links that pointed at it.

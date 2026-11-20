@@ -5,7 +5,8 @@ import { useRef, useState } from "react";
 import { Pressable, Text, TextInput, View } from "react-native";
 import type { Hotel } from "../../core/api";
 import { c, face, space, t } from "../../core/theme";
-import { Head, Screen, useRead } from "../../core/ui";
+import { Head, Screen, useRead, ripple, shade, keys } from "../../core/ui";
+import { ListExport } from "../reports/ListExport";
 import { LoadFailed, StatePill } from "../laundry/kit";
 import {
   Back, Box, Btn, body, Empty, Field, InDialog, Input, Loading, NotYours, Pill, Segmented, Select, Stale, Toast, saidOf, type Said,
@@ -93,9 +94,9 @@ export function Inventory({ hotel, role, door, tab: startTab, onBack }: {
 /** The web's Day date input, stepped (M-7): never after the business date. */
 function DayStep({ date, max, onChange }: { date: string; max: string; onChange: (d: string) => void }) {
   const step = (n: number, label: string, Icon: typeof ChevronLeft, off: boolean) => (
-    <Pressable
+    <Pressable android_ripple={ripple}
       onPress={() => onChange(dayStep(date, n))} disabled={off} accessibilityRole="button" accessibilityLabel={label} accessibilityState={{ disabled: off }}
-      style={({ pressed }) => ({ width: 44, height: 44, borderRadius: 22, borderWidth: 1, borderColor: c.grey300, alignItems: "center", justifyContent: "center", backgroundColor: off ? c.grey50 : pressed ? c.grey100 : c.white })}
+      style={shade(({ pressed }) => ({ width: 44, height: 44, borderRadius: 22, borderWidth: 1, borderColor: c.grey300, alignItems: "center", justifyContent: "center", backgroundColor: off ? c.grey50 : pressed ? c.grey100 : c.white }))}
     >
       <Icon size={16} color={off ? c.grey400 : c.ink900} />
     </Pressable>
@@ -126,7 +127,7 @@ function CountBox({ label, value, onChange, placeholder, width = 72 }: { label: 
   return (
     <TextInput
       accessibilityLabel={label} value={value} onChangeText={onChange} placeholder={placeholder} placeholderTextColor={c.grey400}
-      keyboardType="decimal-pad" maxLength={10}
+      {...keys.amount} maxLength={10}
       style={{ width, minHeight: 44, paddingHorizontal: 10, borderRadius: 10, borderWidth: 1, borderColor: c.grey300, backgroundColor: c.white, fontSize: 16, color: c.ink900, textAlign: "right", ...face[500], ...t.tab }}
     />
   );
@@ -208,6 +209,12 @@ function KitchenSheetCard({ code, role, onSaid }: { code: string; role: string |
       <View style={[card, { padding: space.cardX, gap: 12 }]}>
         <DayStep date={s.date} max={s.businessDate} onChange={(d) => { setDate(d === s.businessDate ? undefined : d); setDraft({}); }} />
         <Text style={[body, { color: c.grey600 }]}>{s.store.name}{s.mayKeep ? ` · Change: ${ON_THE_WEBSITE}` : ""}</Text>
+        {/* The web's SHEET_EXPORT: quantities only, each in its unit; not counted is a dash. */}
+        <ListExport screen="kitchen-stock" role={role} table={{
+          subtitle: `Day ${s.date} · Store ${s.store.name}`,
+          columns: ["Item", "Unit", ...KITCHEN_COLUMNS.map(([label]) => label), "Counted"],
+          rows: s.items.map((i) => [i.name, i.unit, ...KITCHEN_COLUMNS.map(([, key]) => figure(i[key] as number)), i.counted === null ? "-" : figure(i.counted)]),
+        }} />
         {s.mayCount ? (
           <View style={{ flexDirection: "row" }}>
             <Btn label={busy ? "Saving…" : `Save the closing count${typedN ? ` (${typedN})` : ""}`} variant="primary" disabled={busy || typedN === 0} onPress={() => void save()} />
@@ -406,7 +413,7 @@ function BarSheetCard({ code, role, onSaid, onRequests }: { code: string; role: 
         {"missing" in out && anyTyped ? <Text style={[t.caption, { color: c.red700 }]}>{out.missing}</Text> : null}
         {s.mayCloseBar && today && !s.closedToday ? (
           closing === null ? (
-            <Pressable onPress={() => setClosing("")} accessibilityRole="button" style={{ minHeight: 44, justifyContent: "center", alignSelf: "flex-start" }}>
+            <Pressable android_ripple={ripple} onPress={() => setClosing("")} accessibilityRole="button" style={{ minHeight: 44, justifyContent: "center", alignSelf: "flex-start" }}>
               <Text style={[t.label, { color: c.ink900, textDecorationLine: "underline" }]}>The bar did not open today</Text>
             </Pressable>
           ) : (
@@ -555,7 +562,7 @@ function Requests({ code, role, onSaid }: { code: string; role: string | null; o
                   options={[{ value: "", label: "Pick a drink" }, ...list.map((d) => ({ value: d.id, label: `${d.name}${d.onHand !== null ? ` - the store has ${whole(d.onHand)}` : ""}` }))]} />
               </View>
               <View style={{ width: 96 }}>
-                <Input label={`How many, line ${i + 1}`} placeholder="How many" keyboardType="numbers-and-punctuation" value={l.qty} onChangeText={(v) => setLine(i, { qty: v })} maxLength={5} />
+                <Input label={`How many, line ${i + 1}`} placeholder="How many" {...keys.amount} value={l.qty} onChangeText={(v) => setLine(i, { qty: v })} maxLength={5} />
               </View>
             </View>
           ))}

@@ -1,5 +1,6 @@
 /* Run: node --experimental-strip-types src/modules/reports/opsIndex.check.ts
    All reports: who sees which row, the links, the search, the stars, the refusals. */
+import { existsSync } from "node:fs";
 import { ROLES, flatNavigationFor, mayReach } from "../../core/menu.ts";
 import {
   BUILT, GROUPS, PAGES, REPORTS_REFUSED, TOTAL, matches, notYourRole, phoneHref, reachable, refusalFor, shownGroups,
@@ -65,6 +66,9 @@ eq(starredRows("gm", ["/reports/manager"], "no"), []);
 eq(phoneHref("/reports/manager", "5EL"), "/reports/5EL/manager");
 eq(phoneHref("/reports/gst-sales", "AGR"), "/reports/AGR/gst-sales");
 eq(all.every((x) => /^\/reports\/5EL\/[a-z0-9-]+$/.test(phoneHref(x.path, "5EL"))), true);
+/* ...and every one of them is a screen the phone has (the three report lanes, merged 20 Nov):
+   a route lost at a merge fails here, not on a tap (MEMORY 15). Run from the copy's root, as gates.sh does. */
+eq(all.filter((x) => !existsSync(`app/reports/[code]/${phoneHref(x.path, "5EL").split("/").pop()}.tsx`)).map((x) => x.path), []);
 
 /* The pages' guards and the API's sentence (roleGate.ts refusalFor, REPORTS). */
 eq(ROLES.filter((r) => PAGES.index.may(r)), ROLES.filter((r) => mayReach(r, "/reports")));

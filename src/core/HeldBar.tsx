@@ -6,6 +6,7 @@ import { currentSubject, sendHeld } from "./api";
 import { drain, isOnline, watchConnection, type OutboxEntry } from "./offline";
 import { list, NO_STORE, remove, subscribe, update } from "./outbox";
 import { c, face, space, t } from "./theme";
+import { ripple } from "./ui";
 
 /* ══════════════════════════════════════════════════════════════════
    WHAT IS HELD ON THIS PHONE — the web's OfflineBar
@@ -144,7 +145,7 @@ function Band({ tone, icon, children }: { tone: keyof typeof TONES; icon: ReactN
 /** A text button, 44px tall to the touch. */
 function Link({ label, color, onPress, disabled }: { label: string; color: string; onPress: () => void; disabled?: boolean }) {
   return (
-    <Pressable onPress={onPress} disabled={disabled} accessibilityRole="button" hitSlop={12} style={{ minHeight: 24, justifyContent: "center", opacity: disabled ? 0.6 : 1 }}>
+    <Pressable android_ripple={ripple} onPress={onPress} disabled={disabled} accessibilityRole="button" hitSlop={12} style={{ minHeight: 24, justifyContent: "center", opacity: disabled ? 0.6 : 1 }}>
       <Text style={[t.caption, { color, textDecorationLine: "underline", ...face[600] }]}>{label}</Text>
     </Pressable>
   );

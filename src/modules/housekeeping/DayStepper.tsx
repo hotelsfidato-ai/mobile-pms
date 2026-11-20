@@ -2,7 +2,7 @@ import { Minus, Plus } from "lucide-react-native";
 import { Pressable, Text, View } from "react-native";
 import { dateLong } from "../../core/format";
 import { c, t } from "../../core/theme";
-import { s } from "../../core/ui";
+import { s, ripple, shade } from "../../core/ui";
 import { addDays } from "./block";
 
 /** The day stepper, for every date on the housekeeping forms (M-7: no
@@ -23,9 +23,9 @@ export function Day({ label, value, min, off, onChange }: {
 
 function Step({ icon: Icon, a11y, disabled, onPress }: { icon: typeof Plus; a11y: string; disabled: boolean; onPress: () => void }) {
   return (
-    <Pressable
+    <Pressable android_ripple={ripple}
       onPress={onPress} disabled={disabled} accessibilityRole="button" accessibilityLabel={a11y}
-      style={({ pressed }) => [s.capsule, { width: 44, paddingHorizontal: 0 }, disabled ? { backgroundColor: c.grey50, borderColor: c.grey200 } : pressed && { backgroundColor: c.grey100 }]}
+      style={shade(({ pressed }) => [s.capsule, { width: 44, paddingHorizontal: 0 }, disabled ? { backgroundColor: c.grey50, borderColor: c.grey200 } : pressed && { backgroundColor: c.grey100 }])}
     >
       <Icon size={18} color={disabled ? c.grey300 : c.grey700} />
     </Pressable>

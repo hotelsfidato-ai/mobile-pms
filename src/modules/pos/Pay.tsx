@@ -9,7 +9,7 @@ import { ApiError, HeldError, api, send, type Hotel } from "../../core/api";
 import { cash as money } from "../../core/format";
 import { roleAt, useSession } from "../../core/session";
 import { c, face, space, t } from "../../core/theme";
-import { Row, s, useRead } from "../../core/ui";
+import { Row, s, useRead, ripple, shade, modalEdge, useSheetPad, keys } from "../../core/ui";
 import { billHtml, logoSrc, offlineAsk, sentWords, type BillHeading, type GroupLogo } from "./bill";
 import {
   anotherRow, asksCashId, billsOn, firstRow, onFunctionWords, partBody, partButton, partSums, roomAsk, setMethod, settleBody,
@@ -215,9 +215,9 @@ export function PayActions({ hotel, order, role, onChanged }: PayProps) {
           {matches.length > 0 && other == null ? (
             <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 6 }}>
               {matches.map((r) => (
-                <Pressable
+                <Pressable android_ripple={ripple}
                   key={r.folioId} onPress={() => setRoom(r.room)} accessibilityRole="button" accessibilityLabel={`Room ${r.room}, ${r.guest}`}
-                  style={({ pressed }) => ({ minHeight: 44, paddingHorizontal: 12, justifyContent: "center", borderRadius: 999, borderWidth: 1, borderColor: c.grey200, backgroundColor: pressed ? c.grey100 : c.grey50 })}
+                  style={shade(({ pressed }) => ({ minHeight: 44, paddingHorizontal: 12, justifyContent: "center", borderRadius: 999, borderWidth: 1, borderColor: c.grey200, backgroundColor: pressed ? c.grey100 : c.grey50 }))}
                 >
                   <Text style={[t.caption, { color: c.grey700 }]}><Text style={[t.tab, { color: c.ink900 }]}>{r.room}</Text> · {r.guest}</Text>
                 </Pressable>
@@ -271,7 +271,7 @@ function PartPanel({ order, cashId, setCashId, busy, onSettle, onCancel }: {
         <View key={i} style={{ gap: 6, paddingBottom: 8, borderBottomWidth: 1, borderBottomColor: c.grey100 }}>
           <View style={{ flexDirection: "row", gap: 6 }} accessibilityRole="radiogroup">
             {(["cash", "card", "upi"] as PartMethod[]).map((m) => (
-              <Pressable
+              <Pressable android_ripple={ripple}
                 key={m} onPress={() => setRows((rs) => rs.map((x, n) => (n === i ? setMethod(x, m) : x)))}
                 accessibilityRole="radio" accessibilityState={{ checked: r.method === m }} accessibilityLabel={`Payment ${i + 1}: ${METHODS.find((x) => x.key === m)!.label}`}
                 style={{ flex: 1, minHeight: 44, borderRadius: 999, borderWidth: 1, alignItems: "center", justifyContent: "center",
@@ -284,9 +284,9 @@ function PartPanel({ order, cashId, setCashId, busy, onSettle, onCancel }: {
           <View style={{ flexDirection: "row", gap: 6, alignItems: "center" }}>
             <Amount value={r.amount} onChange={(amount) => set(i, { amount })} placeholder="Amount" label={`Payment ${i + 1}: amount`} />
             {rows.length > 1 ? (
-              <Pressable
+              <Pressable android_ripple={ripple}
                 onPress={() => setRows((rs) => rs.filter((_, n) => n !== i))} accessibilityRole="button" accessibilityLabel="Remove this payment"
-                style={({ pressed }) => ({ width: 44, height: 44, borderRadius: 22, alignItems: "center", justifyContent: "center", backgroundColor: pressed ? c.red50 : "transparent" })}
+                style={shade(({ pressed }) => ({ width: 44, height: 44, borderRadius: 22, alignItems: "center", justifyContent: "center", backgroundColor: pressed ? c.red50 : "transparent" }))}
               >
                 <X size={16} color={c.grey500} />
               </Pressable>
@@ -323,7 +323,7 @@ function PartPanel({ order, cashId, setCashId, busy, onSettle, onCancel }: {
 
 function CashIdFields({ value, onChange }: { value: CashId; onChange: (next: CashId) => void }) {
   const tick = (key: "form97" | "nonResident", label: string) => (
-    <Pressable
+    <Pressable android_ripple={ripple}
       onPress={() => onChange({ ...value, [key]: !value[key] })} accessibilityRole="checkbox"
       accessibilityState={{ checked: value[key] === true }} accessibilityLabel={label}
       style={{ minHeight: 44, flexDirection: "row", alignItems: "center", gap: 10 }}
@@ -414,15 +414,15 @@ export function PrintBill({ hotel, orderId, onPrinted, round }: { hotel: Hotel; 
   return (
     <View style={{ gap: 8 }}>
       {round ? (
-        <Pressable
+        <Pressable android_ripple={ripple}
           /* Refused: the API's sentence, said when tapped (rule 1), as the tile's own buttons. */
           onPress={() => (why ? setSaid({ tone: "warn", title: "Not printed", text: why }) : void print())} disabled={busy}
           accessibilityRole="button" accessibilityLabel="Print the bill" accessibilityHint={why ?? undefined}
           accessibilityState={{ disabled: busy || why != null, busy: busy && ask == null }}
-          style={({ pressed }) => ({
+          style={shade(({ pressed }) => ({
             width: 44, height: 44, borderRadius: 22, borderWidth: 1, borderColor: c.grey300, alignItems: "center", justifyContent: "center",
             backgroundColor: pressed ? c.grey50 : c.white, opacity: why != null ? 0.4 : 1,
-          })}
+          }))}
         >
           {busy && ask == null ? <ActivityIndicator size="small" color={c.grey600} /> : <Printer size={16} color={c.grey600} />}
         </Pressable>
@@ -448,16 +448,16 @@ function Btn({ label, icon: Icon, onPress, disabled, busy, primary, ghost }: {
 }) {
   const fg = primary ? (disabled ? c.grey600 : c.white) : disabled ? c.grey500 : ghost ? c.grey600 : c.ink900;
   return (
-    <Pressable
+    <Pressable android_ripple={ripple}
       onPress={onPress} disabled={disabled} accessibilityRole="button" accessibilityLabel={label}
       accessibilityState={{ disabled: Boolean(disabled), busy: Boolean(busy) }}
-      style={({ pressed }) => ({
+      style={shade(({ pressed }) => ({
         minHeight: 44, paddingHorizontal: 12, borderRadius: 999, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 6,
         borderWidth: primary || ghost ? 0 : 1, borderColor: c.grey300,
         backgroundColor: primary
           ? disabled ? c.grey300 : pressed ? c.orange700 : c.orange600
           : ghost ? (pressed ? c.grey100 : "transparent") : disabled ? c.grey50 : pressed ? c.grey100 : c.white,
-      })}
+      }))}
     >
       {busy ? <ActivityIndicator size="small" color={fg} /> : Icon ? <Icon size={16} color={fg} /> : null}
       <Text style={[t.heading, { color: fg, ...face[primary ? 600 : 500] }]} numberOfLines={1}>{label}</Text>
@@ -485,7 +485,7 @@ function Amount({ value, onChange, placeholder, label }: { value: string; onChan
   return (
     <TextInput
       value={value} onChangeText={onChange} placeholder={placeholder} placeholderTextColor={c.grey500}
-      keyboardType="decimal-pad" accessibilityLabel={label}
+      {...keys.amount} accessibilityLabel={label}
       style={{ flex: 1, minHeight: 44, paddingHorizontal: 12, borderRadius: 8, borderWidth: 1, borderColor: c.grey300, backgroundColor: c.white, fontSize: 16, color: c.ink900, ...face[500], ...t.tab }}
     />
   );
@@ -497,6 +497,7 @@ function Sheet({ open, title, body, refused, busy, confirm, onConfirm, choices, 
   open: boolean; title: string; body?: string; refused?: string | null; busy: boolean;
   confirm?: string; onConfirm?: () => void; choices?: { label: string; onChoose: () => void }[]; onClose: () => void;
 }) {
+  const pad = useSheetPad();
   const answers: ReactNode = choices ? (
     <View style={{ gap: 8 }}>
       {choices.map((ch) => <Btn key={ch.label} label={ch.label} disabled={busy} onPress={ch.onChoose} />)}
@@ -509,10 +510,10 @@ function Sheet({ open, title, body, refused, busy, confirm, onConfirm, choices, 
     </View>
   );
   return (
-    <Modal visible={open} transparent animationType="fade" onRequestClose={onClose}>
+    <Modal visible={open} transparent animationType="fade" onRequestClose={onClose} {...modalEdge}>
       <View style={{ flex: 1, backgroundColor: "rgba(3,23,40,0.4)" }}>
         <Pressable style={{ flex: 1 }} onPress={onClose} accessibilityRole="button" accessibilityLabel="Close" />
-        <View style={{ backgroundColor: c.white, borderTopLeftRadius: 16, borderTopRightRadius: 16, paddingHorizontal: space.side, paddingTop: 18, paddingBottom: 28, gap: 14 }}>
+        <View style={{ backgroundColor: c.white, borderTopLeftRadius: 16, borderTopRightRadius: 16, paddingHorizontal: space.side, paddingTop: 18, paddingBottom: pad.bottom + 12, gap: 14 }}>
           <Text style={t.heading} accessibilityRole="header">{title}</Text>
           {body ? <Text style={[t.label, { color: c.grey700 }]}>{body}</Text> : null}
           {refused ? <Text style={[t.label, { color: c.red700 }]} accessibilityRole="alert">{refused}</Text> : null}

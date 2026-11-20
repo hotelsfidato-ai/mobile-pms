@@ -8,7 +8,7 @@ import { AppState, Pressable, Text, View } from "react-native";
 import { api, HeldError, outcomeUnknown, send, type Hotel } from "../../core/api";
 import { isOnline } from "../../core/offline";
 import { c, face, space, t } from "../../core/theme";
-import { Capsule, Card, Head, ReadFailed, Row, Screen, useRead } from "../../core/ui";
+import { Capsule, Card, Head, ReadFailed, Row, Screen, useRead, ripple, shade } from "../../core/ui";
 import {
   addonBreakdown, clearAct, closeButton, discountButton, fewerAct, figures, finished, headerSummary, holdAct, isOpen, kotWords,
   lineActs, lineAmount, lineName, live, orderPath, roundAct, roundButton, sendAct, sendButton, strikeAct, takenAct,
@@ -167,7 +167,7 @@ export function Order({ hotel, id, role, onBack }: { hotel: Hotel; id: string; r
           <View style={{ paddingHorizontal: space.cardX, paddingVertical: space.cardY, gap: 12 }}>
             {/* The header: covers, waiter, customer; Hold. */}
             <View style={{ flexDirection: "row", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-              <Pressable
+              <Pressable android_ripple={ripple}
                 disabled={!open}
                 onPress={() => (ringWhy ? setWhy({ at: "head", text: ringWhy }) : setSheet("header"))}
                 accessibilityRole="button" accessibilityLabel={headerSummary(order)} accessibilityState={{ disabled: !open }}
@@ -348,13 +348,13 @@ function Round({ label, Icon, why, onRefused, onPress }: {
   label: string; Icon: typeof X; why: string | null; onRefused: (why: string) => void; onPress: () => void;
 }) {
   return (
-    <Pressable
+    <Pressable android_ripple={ripple}
       onPress={() => (why ? onRefused(why) : onPress())}
       accessibilityRole="button" accessibilityLabel={label} accessibilityState={{ disabled: why != null }} accessibilityHint={why ?? undefined}
-      style={({ pressed }) => ({
+      style={shade(({ pressed }) => ({
         width: 44, height: 44, borderRadius: 22, alignItems: "center", justifyContent: "center",
         backgroundColor: why ? c.grey100 : pressed ? c.grey100 : "transparent",
-      })}
+      }))}
     >
       <Icon size={18} color={why ? c.grey300 : c.grey600} />
     </Pressable>

@@ -7,7 +7,7 @@ import { ApiError, HeldError, api, currentSubject, outcomeUnknown, send, type Ho
 import { dateLong } from "../../core/format";
 import { isOnline, newKey } from "../../core/offline";
 import { c, space, t } from "../../core/theme";
-import { ReadFailed, s, useRead } from "../../core/ui";
+import { ReadFailed, s, useRead, ripple } from "../../core/ui";
 import {
   BLOCK_REASONS, PRIORITIES, REPAIR_KINDS, blankForm, blockBody, formKeeper, heldSentence, needsLine, offerTakeOut,
   whyNotRaise, workOrderBody, type HouseNow, type RepairForm,
@@ -161,7 +161,7 @@ export function ReportRepair({ hotel, room, role, onDone }: {
       ) : null}
       {offered ? (
         <View style={{ borderWidth: 1, borderColor: c.grey200, borderRadius: 10, padding: 12, gap: 12 }}>
-          <Pressable
+          <Pressable android_ripple={ripple}
             onPress={() => set({ takeOut: !f.takeOut })}
             disabled={blockRefused != null}
             accessibilityRole="checkbox"

@@ -6,6 +6,7 @@ import { AppState, Pressable, Text, TextInput, View } from "react-native";
 import { HeldError } from "../../core/api";
 import { isOnline } from "../../core/offline";
 import { c, face, space, t } from "../../core/theme";
+import { ripple, shade } from "../../core/ui";
 
 /* ══════════════════════════════════════════════════════════════════
    THE WEB KIT'S PIECES APPROVALS USES, ported from src/components/ui
@@ -94,7 +95,7 @@ export function Segmented<T extends string>({ value, onChange, options, label }:
       {options.map((o) => {
         const on = o.value === value;
         return (
-          <Pressable
+          <Pressable android_ripple={ripple}
             key={o.value} onPress={() => onChange(o.value)} accessibilityRole="tab" accessibilityState={{ selected: on }}
             style={{
               flex: 1, minHeight: 44, paddingHorizontal: 12, borderRadius: 7, alignItems: "center", justifyContent: "center",
@@ -114,14 +115,14 @@ export function Segmented<T extends string>({ value, onChange, options, label }:
 
 export function Btn({ label, a11y, onPress, disabled }: { label: string; a11y?: string; onPress: () => void; disabled?: boolean }) {
   return (
-    <Pressable
+    <Pressable android_ripple={ripple}
       onPress={onPress} disabled={disabled} accessibilityRole="button" accessibilityLabel={a11y ?? label}
       accessibilityState={{ disabled: Boolean(disabled) }}
-      style={({ pressed }) => ({
+      style={shade(({ pressed }) => ({
         minHeight: 44, paddingHorizontal: 18, borderRadius: 999, borderWidth: 1, borderColor: c.grey300,
         alignItems: "center", justifyContent: "center",
         backgroundColor: disabled ? c.grey50 : pressed ? c.grey100 : c.white,
-      })}
+      }))}
     >
       <Text style={[t.label, { color: disabled ? c.grey500 : c.ink900 }]}>{label}</Text>
     </Pressable>
@@ -182,9 +183,9 @@ export function Failed({ error, onRetry }: { error: string; onRetry: () => void 
           {off ? "What is waiting has not been read on this phone yet. It shows once the line is back." : error}
         </Text>
         <View style={{ marginTop: 20, flexDirection: "row" }}>
-          <Pressable
+          <Pressable android_ripple={ripple}
             onPress={onRetry} accessibilityRole="button" accessibilityLabel="Try again"
-            style={({ pressed }) => ({ minHeight: 44, paddingHorizontal: 16, borderRadius: 999, borderWidth: 1, borderColor: c.grey300, flexDirection: "row", gap: 8, alignItems: "center", backgroundColor: pressed ? c.grey100 : c.white })}
+            style={shade(({ pressed }) => ({ minHeight: 44, paddingHorizontal: 16, borderRadius: 999, borderWidth: 1, borderColor: c.grey300, flexDirection: "row", gap: 8, alignItems: "center", backgroundColor: pressed ? c.grey100 : c.white }))}
           >
             <RotateCw size={16} color={c.ink900} />
             <Text style={[t.label, { color: c.ink900 }]}>Try again</Text>

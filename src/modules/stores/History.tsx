@@ -6,7 +6,7 @@ import { useRef, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import type { Hotel } from "../../core/api";
 import { c, face, space, t } from "../../core/theme";
-import { Head, Screen, useRead } from "../../core/ui";
+import { Head, Screen, useRead, ripple, shade } from "../../core/ui";
 import { LoadFailed } from "../laundry/kit";
 import { Back, Box, Btn, body, Dialog, Empty, Foot, InDialog, Loading, NotYours, Pill, Stale, Toast, saidOf, type Said } from "../guest-services/kit";
 import { isRefused, readHistory, readStore, undoMovement } from "./data";
@@ -114,9 +114,9 @@ export function ItemHistory({ hotel, role, id, onBack }: { hotel: Hotel; role: s
                   {rowFacts(m) ? <Text style={[body, t.tab, { color: c.grey600 }]}>{rowFacts(m)}</Text> : null}
                 </View>
                 {mayUndo && undoable(m) ? (
-                  <Pressable
+                  <Pressable android_ripple={ripple}
                     onPress={() => { setInDialog(null); setAsking(m); }} accessibilityRole="button" accessibilityLabel={`Undo this ${nounOf(m)}`}
-                    style={({ pressed }) => ({ width: 44, height: 44, borderRadius: 22, alignItems: "center", justifyContent: "center", backgroundColor: pressed ? c.red50 : "transparent" })}
+                    style={shade(({ pressed }) => ({ width: 44, height: 44, borderRadius: 22, alignItems: "center", justifyContent: "center", backgroundColor: pressed ? c.red50 : "transparent" }))}
                   >
                     <Undo2 size={16} color={c.grey500} />
                   </Pressable>

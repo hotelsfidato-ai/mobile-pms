@@ -11,6 +11,7 @@ import { ShellAccount } from "./ShellAccount";
 import { ShellMenu, type Modules } from "./ShellMenu";
 import { NotesDrawer, forgetRead, unreadOf, useNotes } from "./ShellNotes";
 import { c, face, t } from "./theme";
+import { ripple, shade } from "./ui";
 
 /* ══════════════════════════════════════════════════════════════════
    THE FRAME — the web's TopBar, BusinessDateBehind and TestHotelStripe
@@ -70,16 +71,16 @@ export function Shell() {
     <>
       {hotel?.testOf ? <TestStripe /> : null}
       <View style={styles.bar}>
-        <Pressable
+        <Pressable android_ripple={ripple}
           onPress={() => setOpen("menu")} accessibilityRole="button" accessibilityLabel="Open navigation"
-          style={({ pressed }) => [styles.icon, { marginLeft: -10 }, pressed && styles.pressed]}
+          style={shade(({ pressed }) => [styles.icon, { marginLeft: -10 }, pressed && styles.pressed])}
         >
           <Menu size={20} color={c.grey500} />
         </Pressable>
 
-        <Pressable
+        <Pressable android_ripple={ripple}
           onPress={() => setOpen("search")} accessibilityRole="button" accessibilityLabel={`Find a screen. ${ON_THE_WEBSITE}`}
-          style={({ pressed }) => [styles.icon, { marginLeft: 12 }, pressed && styles.pressed]}
+          style={shade(({ pressed }) => [styles.icon, { marginLeft: 12 }, pressed && styles.pressed])}
         >
           <Search size={16} color={GREY_400} />
         </Pressable>
@@ -87,10 +88,10 @@ export function Shell() {
         <View style={styles.right}>
           <BellButton unread={unreadOf(notes.data)} onPress={() => setOpen("bell")} />
           <View style={styles.rule} />
-          <Pressable
+          <Pressable android_ripple={ripple}
             onPress={() => setOpen("account")} accessibilityRole="button"
             accessibilityLabel={`${who!.scope.fullName}, ${ROLE_LABELS[role]}. Account and property`}
-            style={({ pressed }) => [styles.account, pressed && styles.pressed]}
+            style={shade(({ pressed }) => [styles.account, pressed && styles.pressed])}
           >
             <View style={styles.avatar}>
               <Text style={[t.caption, { color: c.white, ...face[600] }]}>{initials(who!.scope.fullName)}</Text>
@@ -117,9 +118,9 @@ export function Shell() {
 
 function BellButton({ unread, onPress }: { unread: number; onPress: () => void }) {
   return (
-    <Pressable
+    <Pressable android_ripple={ripple}
       onPress={onPress} accessibilityRole="button" accessibilityLabel={`Notifications${unread ? `, ${unread} unread` : ""}`}
-      style={({ pressed }) => [styles.icon, pressed && styles.pressed]}
+      style={shade(({ pressed }) => [styles.icon, pressed && styles.pressed])}
     >
       <Bell size={18} color={c.grey500} />
       {unread > 0 ? (

@@ -4,7 +4,7 @@ import type { Hotel } from "../../core/api";
 import { ExportButtons } from "../../core/Export";
 import { useSession } from "../../core/session";
 import { c, face, space, t } from "../../core/theme";
-import { Card, Head, Screen, useRead } from "../../core/ui";
+import { Card, Head, Screen, ripple, shade, useRead } from "../../core/ui";
 import { readGroupReport } from "./opsData";
 import { exportOf, monthWords, plusMonths } from "./opsDoc";
 import { DocView, Kept, NotRead, NotYours, Quiet, Reading } from "./OpsDocView";
@@ -73,9 +73,9 @@ export function GroupReports({ hotel, role }: { hotel: Hotel; role: string | nul
               return (
                 <Pressable
                   key={x.key} onPress={() => setKey(x.key)} accessibilityRole="radio" accessibilityState={{ checked: on }} accessibilityLabel={x.title}
-                  android_ripple={{ color: c.grey200 }}
-                  style={({ pressed }) => ({ minHeight: 44, paddingHorizontal: 14, borderRadius: 22, borderWidth: 1, justifyContent: "center", overflow: "hidden",
-                    borderColor: on ? c.ink900 : c.grey300, backgroundColor: on ? c.ink900 : pressed && Platform.OS === "ios" ? c.grey100 : c.white })}
+                  android_ripple={ripple}
+                  style={shade(({ pressed }) => ({ minHeight: 44, paddingHorizontal: 14, borderRadius: 22, borderWidth: 1, justifyContent: "center", overflow: "hidden",
+                    borderColor: on ? c.ink900 : c.grey300, backgroundColor: on ? c.ink900 : pressed ? c.grey100 : c.white }))}
                 >
                   <Text style={[t.label, face[500], { color: on ? c.white : c.grey700 }]}>{x.title}</Text>
                 </Pressable>

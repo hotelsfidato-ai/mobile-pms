@@ -1,12 +1,12 @@
 import { Minus, Plus, type LucideIcon } from "lucide-react-native";
 import { useState, type ReactNode } from "react";
-import { Platform, Pressable, Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import type { Hotel } from "../../core/api";
 import { ExportButtons } from "../../core/Export";
 import { asRole } from "../../core/menu";
 import { useSession } from "../../core/session";
 import { c, t } from "../../core/theme";
-import { Head, Screen, s as kit, useRead } from "../../core/ui";
+import { Head, Screen, ripple, s as kit, shade, useRead } from "../../core/ui";
 import { readReport, type OpsReportKey } from "./opsData";
 import { dayWords, exportOf, monthFrom, monthWords, plusDays, rangeWords, type ReportQuery } from "./opsDoc";
 import { DocView, Kept, NotRead, NotYours, Quiet, Reading } from "./OpsDocView";
@@ -136,9 +136,9 @@ export function DayStep({ label, value, min, max, onChange, words = dayWords, st
   const button = (Icon: LucideIcon, a11y: string, off: boolean, next: string) => (
     <Pressable
       onPress={() => onChange(next)} disabled={off} accessibilityRole="button" accessibilityLabel={a11y} accessibilityState={{ disabled: off }}
-      android_ripple={{ color: c.grey200, borderless: true }}
-      style={({ pressed }) => [kit.capsule, { width: 44, paddingHorizontal: 0 },
-        off ? { backgroundColor: c.grey50, borderColor: c.grey200 } : pressed && Platform.OS === "ios" && { backgroundColor: c.grey100 }]}
+      android_ripple={{ ...ripple, borderless: true }}
+      style={shade(({ pressed }) => [kit.capsule, { width: 44, paddingHorizontal: 0 },
+        off ? { backgroundColor: c.grey50, borderColor: c.grey200 } : pressed && { backgroundColor: c.grey100 }])}
     >
       <Icon size={18} color={off ? c.grey300 : c.grey700} />
     </Pressable>

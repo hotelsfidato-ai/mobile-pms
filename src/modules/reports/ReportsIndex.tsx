@@ -7,11 +7,11 @@ import {
   Wallet, Wine, type LucideIcon,
 } from "lucide-react-native";
 import { useEffect, useState } from "react";
-import { Platform, Pressable, Text, TextInput, View } from "react-native";
+import { Pressable, Text, TextInput, View } from "react-native";
 import type { Hotel } from "../../core/api";
 import { asRole } from "../../core/menu";
 import { c, face, space, t } from "../../core/theme";
-import { Card, Head, Screen } from "../../core/ui";
+import { Card, Head, Screen, ripple, shade } from "../../core/ui";
 import { IconChip } from "./kit";
 import { keepStars, readModules, readStars } from "./opsData";
 import { NotYours } from "./OpsDocView";
@@ -113,16 +113,16 @@ function ReportCard({ report, starred, onToggle, onOpen }: { report: ReportLink;
   return (
     <Pressable
       onPress={onOpen} accessibilityRole="button" accessibilityLabel={report.title} accessibilityHint={`Opens ${report.title}`}
-      android_ripple={{ color: c.grey100 }}
-      style={({ pressed }) => [{ backgroundColor: pressed && Platform.OS === "ios" ? c.grey50 : c.white, borderRadius: 12, borderWidth: 1, borderColor: c.grey200,
-        paddingHorizontal: space.cardX, paddingVertical: space.cardY, overflow: "hidden", gap: 6 }]}
+      android_ripple={ripple}
+      style={shade(({ pressed }) => [{ backgroundColor: pressed ? c.grey50 : c.white, borderRadius: 12, borderWidth: 1, borderColor: c.grey200,
+        paddingHorizontal: space.cardX, paddingVertical: space.cardY, overflow: "hidden", gap: 6 }])}
     >
       <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
         <IconChip icon={ICONS[report.icon]} />
         <Text style={[t.heading, { flex: 1 }]}>{report.title}</Text>
         <Pressable
           onPress={onToggle} hitSlop={8} accessibilityRole="button" accessibilityLabel={starred ? `Unstar ${report.title}` : `Star ${report.title}`}
-          accessibilityState={{ selected: starred }}
+          accessibilityState={{ selected: starred }} android_ripple={{ ...ripple, borderless: true }}
           style={{ width: 44, height: 44, marginRight: -10, marginVertical: -8, alignItems: "center", justifyContent: "center" }}
         >
           <Star size={18} color={starred ? c.yellow : c.grey400} fill={starred ? c.yellow : "none"} />

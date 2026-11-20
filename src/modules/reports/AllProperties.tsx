@@ -5,7 +5,7 @@ import { api, orNull, type Hotel } from "../../core/api";
 import { DASH, cash, dateShort, daysBehind, monthStart, pct, yearBack } from "../../core/format";
 import { isOnline } from "../../core/offline";
 import { c, face, space, t } from "../../core/theme";
-import { Capsule, Card, Head, ReadFailed, Screen, s, useRead } from "../../core/ui";
+import { Capsule, Card, Head, ReadFailed, Screen, s, useRead, ripple, shade } from "../../core/ui";
 import { addUp, change, dateYear, type Notification, type PeriodStatistics } from "./figures";
 import { IconChip, InfoButton, more } from "./kit";
 
@@ -120,7 +120,7 @@ export function AllProperties({ hotels, onOpen, onSignOut }: {
         ) : waiting.map((w, i) => (
           /* The picture's arrow opens the list behind it, on the website for
              now: greyed, and a tap says so (the web's D17-8). */
-          <Pressable
+          <Pressable android_ripple={ripple}
             key={w.key} onPress={() => setAsked(w.key)}
             accessibilityRole="button" accessibilityState={{ disabled: true }} accessibilityHint={WEBSITE}
             style={[{ flexDirection: "row", alignItems: "center", gap: 14, minHeight: 56, paddingVertical: 12 }, i > 0 && { borderTopWidth: 1, borderTopColor: c.grey100 }]}
@@ -139,16 +139,16 @@ export function AllProperties({ hotels, onOpen, onSignOut }: {
       {/* ── Each property: today on top, the month so far under it ── */}
       <Card style={{ paddingHorizontal: 0, paddingVertical: 0 }}>
         {(read.data ?? real.map((hotel): Partial<Line> & { hotel: Hotel } => ({ hotel }))).map((l, i) => (
-          <Pressable
+          <Pressable android_ripple={ripple}
             key={l.hotel.code}
             onPress={() => onOpen(l.hotel)}
             accessibilityRole="button"
             accessibilityHint="Opens this property's Dashboard"
-            style={({ pressed }) => [
+            style={shade(({ pressed }) => [
               { paddingHorizontal: space.cardX, paddingVertical: 12, borderTopLeftRadius: 12, borderTopRightRadius: 12 },
               i > 0 && { borderTopWidth: 1, borderTopColor: c.grey100, borderTopLeftRadius: 0, borderTopRightRadius: 0 },
               pressed && { backgroundColor: c.grey50 },
-            ]}
+            ])}
           >
             <Text style={[t.label, { color: c.ink900, ...face[600] }]}>{l.hotel.name}</Text>
             <Text style={[t.caption, t.tab]}>{dateYear(l.hotel.businessDate)}</Text>
