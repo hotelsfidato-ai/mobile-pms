@@ -12,7 +12,7 @@ import { PageFrame, Read, StuckLine, refusedPage, usePage, useWrites, type Write
 import { chooseStep, readSetup } from "./propertyData";
 import {
   ON_A_FILE, REMIND_IN, SETUP_GROUPS, STATE_TONE, STEPS, addDays, dayCompact, deviceDay, doneIn, mayUndo, openStep, rowOf,
-  stateText, summaryOf, type SetupStepInfo, type SetupStepState, type SetupView, type StepChoice, type StepId,
+  stateText, stepInfo, summaryOf, type SetupStepInfo, type SetupStepState, type SetupView, type StepChoice, type StepId,
 } from "./propertyRules";
 
 /* ══════════════════════════════════════════════════════════════════
@@ -50,7 +50,7 @@ export function PropSetup({ hotel, role }: AdminProps) {
   const [chosen, setChosen] = useState<string | undefined>(asked);
   const view = q.data ?? undefined;
   /* The first step still to do, fixed once, so a choice made on the way does not move the page under the finger. */
-  useEffect(() => { if (view && chosen === undefined) setChosen(openStep(view)); }, [view, chosen]);
+  useEffect(() => { if (view && !stepInfo(chosen)) setChosen(openStep(view)); }, [view, chosen]);
   /* Asked again each time the page comes into view: a step ticks itself when the PMS sees it done. */
   const reload = q.reload;
   useFocusEffect(useCallback(() => { if (!refused) reload(); }, [refused]));
