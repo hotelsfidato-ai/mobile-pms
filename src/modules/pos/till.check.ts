@@ -20,8 +20,8 @@ const ROLES = ["owner", "admin", "gm", "hotel_manager", "revenue_manager", "fron
 eq(ROLES.filter((r) => ringWhy(r) === null), ["owner", "admin", "gm", "hotel_manager", "front_desk", "pos", "bar", "finance"], "who rings up");
 eq(ringWhy(null), RING_REFUSAL, "nobody signed in rings nothing");
 eq(ringWhy("read_only"), RING_REFUSAL, "a viewer reads the till, rings nothing");
-/* Every role but the Bar person answers as roles.ts does: a drift shows here. */
-for (const r of ROLES) if (r !== "bar") eq(ringWhy(r) === null, whyNotRing(r) === null, `the same as roles.ts for ${r}`);
+/* Every role answers as roles.ts does: a drift shows here. */
+for (const r of ROLES) eq(ringWhy(r), whyNotRing(r), `the same as roles.ts for ${r}`);
 eq(RING_REFUSAL.includes("a waiter, a bar person or the accountant"), true, "today's words");
 
 const row = (more: Partial<TillRow>): TillRow => ({
