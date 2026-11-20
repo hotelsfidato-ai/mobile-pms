@@ -275,26 +275,29 @@ export const Back = ({ onPress }: { onPress: () => void }) => (
 
 /** The web's Dialog: centred, 16px from each side, a hairline under the head; clear of the notch and
     the home indicator, lifted over the keyboard, closed by Android's back (docs/NATIVE.md). */
-export function Dialog({ title, description, onClose, children }: {
-  title: string; description?: string; onClose: () => void; children: ReactNode;
+export function Dialog({ title, description, onClose, locked, children }: {
+  title: string; description?: string; onClose: () => void;
+  /** A write is on its way: back, the backdrop and ✕ do nothing, so it cannot be sent again from a reopened dialog (m13-stops). */
+  locked?: boolean; children: ReactNode;
 }) {
   const { height } = useWindowDimensions();
   const pad = useSheetPad();
+  const close = () => { if (!locked) onClose(); };
   return (
-    <Modal visible transparent animationType="fade" onRequestClose={onClose} {...modalEdge}>
+    <Modal visible transparent animationType="fade" onRequestClose={close} {...modalEdge}>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={{ flex: 1, backgroundColor: "rgba(3,23,40,0.25)", justifyContent: "center", paddingHorizontal: 16, paddingTop: pad.top + 16, paddingBottom: pad.bottom }}
       >
-        <Pressable style={{ position: "absolute", top: 0, bottom: 0, left: 0, right: 0 }} onPress={onClose} accessibilityLabel="Close" />
+        <Pressable style={{ position: "absolute", top: 0, bottom: 0, left: 0, right: 0 }} onPress={close} accessibilityLabel="Close" />
         <View style={{ backgroundColor: c.white, borderRadius: 12, borderWidth: 1, borderColor: c.grey200, maxHeight: height - pad.top - pad.bottom - 32 }}>
           <View style={{ flexDirection: "row", gap: 16, paddingHorizontal: 20, paddingVertical: 16, borderBottomWidth: 1, borderBottomColor: c.grey200 }}>
             <View style={{ flex: 1 }}>
               <Text style={t.heading} accessibilityRole="header">{title}</Text>
               {description ? <Text style={[t.label, { color: c.grey500, marginTop: 4 }]}>{description}</Text> : null}
             </View>
-            <Pressable android_ripple={ripple} onPress={onClose} accessibilityRole="button" accessibilityLabel="Close" hitSlop={14} style={{ width: 24, height: 24, alignItems: "center", justifyContent: "center" }}>
-              <X size={16} color={c.grey500} />
+            <Pressable android_ripple={ripple} onPress={close} disabled={locked} accessibilityRole="button" accessibilityLabel="Close" accessibilityState={{ disabled: Boolean(locked) }} hitSlop={14} style={{ width: 24, height: 24, alignItems: "center", justifyContent: "center" }}>
+              <X size={16} color={locked ? c.grey300 : c.grey500} />
             </Pressable>
           </View>
           <ScrollView keyboardShouldPersistTaps="handled" keyboardDismissMode="interactive" contentContainerStyle={{ paddingHorizontal: 20, paddingVertical: 16, gap: 16 }}>

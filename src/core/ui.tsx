@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useRef, useState, type ReactNode } from "react";
+import { useRef, useState, useSyncExternalStore, type ReactNode } from "react";
 import {
   Alert, Linking, Platform, Pressable, RefreshControl, ScrollView, StyleSheet, Text, View,
   type PressableAndroidRippleConfig, type PressableStateCallbackType, type StyleProp, type TextInputProps,
@@ -7,6 +7,7 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { outcomeUnknown } from "./api";
+import { stops } from "./stop";
 import { c, face, space, t } from "./theme";
 
 /* The few pieces every screen shares, after the web kit (src/components/ui). */
@@ -42,6 +43,41 @@ export function useStuck() {
       on.current = true;
       setStuck(true);
       return true;
+    },
+  };
+}
+
+/** THE SCREEN'S STOP (m13-stops, 20 Nov; stop.ts): `useStuck` kept inside a sheet is let go by closing
+    and reopening it. This one is kept by `name` (the hotel and the record the screen reads, e.g.
+    `stores/5EL`) outside every sheet and screen. A sheet sends through `guard(write)` (stopped while
+    it is on its way, lost on an unknown outcome) or calls `stop(e)` in its catch; the screen
+    wraps the read that shows the record in `watch(read)` and greys every act that could repeat the
+    write while `stuck`. Only a read wrapped by `watch` that BEGAN after the loss and came back good
+    lets it go - one on its way at the loss, or one that failed, lets nothing go. */
+export function useScreenStop(name: string) {
+  const stuck = useSyncExternalStore(stops.subscribe, () => stops.stuck(name));
+  return {
+    stuck,
+    isStuck: () => stops.stuck(name),
+    stop: (e: unknown) => {
+      if (!outcomeUnknown(e)) return false;
+      stops.lost(name);
+      return true;
+    },
+    /** The write itself: stopped while it is on its way, and lost if its outcome is unknown. */
+    guard: async <T,>(write: () => Promise<T>): Promise<T> => {
+      const done = stops.sending(name);
+      try { return await write(); }
+      catch (e) { if (outcomeUnknown(e)) stops.lost(name); throw e; }
+      finally { done(); }
+    },
+    /* react-query hands its queryFn a signal; a read it cancelled (a newer one replaced it) is
+       thrown away, so it lets nothing go. */
+    watch: <T,>(read: () => Promise<T>) => async (ctx?: { signal?: AbortSignal }): Promise<T> => {
+      const ticket = stops.begin();
+      const got = await read();
+      if (!ctx?.signal?.aborted) stops.good(name, ticket);
+      return got;
     },
   };
 }
@@ -178,6 +214,17 @@ export function ReadFailed({ what, error, onRetry }: { what: string; error: stri
       <Text style={[t.heading, { color: c.red700 }]}>Could not read {what}</Text>
       <Text style={[t.label, { color: c.grey700 }]}>{error}</Text>
       <View style={{ flexDirection: "row" }}><Capsule label="Try again" onPress={onRetry} /></View>
+    </View>
+  );
+}
+
+/** A screen stopped by `useScreenStop`: why its acts are grey (`notKnown(...).line`), and a way to read
+    the record again - the read that lets it go. */
+export function Stopped({ line, onRead }: { line: string; onRead: () => void }) {
+  return (
+    <View accessibilityRole="alert" style={{ gap: 8, padding: space.cardX, borderRadius: 12, backgroundColor: c.red50 }}>
+      <Text style={[t.label, face[600], { color: c.red700 }]}>{line}</Text>
+      <View style={{ flexDirection: "row" }}><Capsule label="Read it again" onPress={onRead} /></View>
     </View>
   );
 }
