@@ -1,18 +1,20 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { AlertTriangle, ArrowRightLeft, Check, Lock, Plus, Wallet } from "lucide-react-native";
+import { AlertTriangle, ArrowRightLeft, Camera, Check, Image as ImageIcon, Lock, Plus, Wallet } from "lucide-react-native";
 import { useState } from "react";
 import { Text, View } from "react-native";
 import type { Hotel } from "../../core/api";
-import { ON_THE_WEBSITE } from "../../core/menu";
+import type { Picked } from "../../core/files";
 import { c, face, space, t } from "../../core/theme";
 import { Card, Screen } from "../../core/ui";
 import {
   DENOMINATIONS, EXPENSE_CATEGORIES, MOVEMENTS, approvalLine, cashTaken, closeState, closedWords, countBody, dateDay, handedWords,
   lastClose, movementAmount, movementLine, movementOf, movementState, noteLine, openLabel, openingOf, receiptWords, rupees, saveLabel,
   seedCounts, varianceWords, whyNotClose, whyNotReadDrawer, whyNotRunDrawer,
-  type CashierDrawer, type CashierDrawerView, type Counts, type MovementKind,
+  type CashierDrawer, type CashierDrawerView, type CashierMovement, type Counts, type MovementKind,
 } from "./desk";
-import { closeDrawer, countDrawer, openDrawer, readDrawer, recordMovement } from "./deskData";
+import { addExpensePhoto, closeDrawer, countDrawer, expensePhotoPath, openDrawer, readDrawer, recordMovement } from "./deskData";
+import { pickBill } from "./billPick";
+import { BillField, useOpenStored } from "./BillPhoto";
 import { CardHead, DeskSheet, Hair, Line, PageHead, ReadState, RefusedCard, TextAct, failedSaid, useWrite, StopCard, useDeskRead, usePull, useStop, type Stop } from "./DeskKit";
 import { Btn, Choice, Field, Input, Refused, SaidCard, type Said } from "./Kit";
 
@@ -29,6 +31,8 @@ import { Btn, Choice, Field, Input, Refused, SaidCard, type Said } from "./Kit";
    exactly as the web's CloseDialog (desk.ts closeState). Every write is
    refused offline with the web's Payment sentence (core offline.ts), and
    stops once its outcome is unknown until the drawer is read again.
+   A paid-out's bill photo (D27-370, M-16): added in Record or later from its
+   line, opened from its line - a form, never held offline (deskData.ts).
    ══════════════════════════════════════════════════════════════════ */
 
 export function Cashiering({ hotel, role }: { hotel: Hotel; role: string | null }) {
@@ -168,7 +172,7 @@ function Shift({ stop, code, shift, colleagues, mayNot, onSaid, onDone }: Acts &
                   <Text style={[t.caption, { lineHeight: 16 }]}>{movementLine(m)}</Text>
                   {m.kind === "expense" ? (
                     <View style={{ flexDirection: "row" }}>
-                      <TextAct label={m.photo ? "Bill photo" : "Add the bill's photo"} why={ON_THE_WEBSITE} onRefused={refused(m.photo ? "Bill photo" : "Add the bill's photo")} onPress={() => undefined} />
+                      <ExpensePhoto stop={stop} code={code} m={m} mayNot={mayNot} onSaid={onSaid} onDone={onDone} />
                     </View>
                   ) : null}
                   {waits ? <Text style={[t.caption, { color: m.approval === "rejected" ? c.red700 : c.yellow800 }]}>{waits}</Text> : null}
@@ -203,6 +207,32 @@ function Shift({ stop, code, shift, colleagues, mayNot, onSaid, onDone }: Acts &
   );
 }
 
+/* A paid-out's photo on its line (flows/ExpenseFields.tsx ExpensePhoto): open it, or add one. The
+   photo is added through the drawer's door (DRAWER, `payment` create); opened by whoever reads the
+   drawer (`payment` or `invoice` see). Its outcome unknown, the drawer's stop holds (MEMORY 16, 22). */
+const PHOTO_WHERE = "the paid-out's line on your drawer";
+function ExpensePhoto({ stop, code, m, mayNot, onSaid, onDone }: Acts & { m: CashierMovement }) {
+  const w = useWrite(stop, "saved", PHOTO_WHERE);
+  const stored = useOpenStored((title, text) => onSaid({ tone: "refused", title, text }));
+  if (m.photo) {
+    const path = expensePhotoPath(code, m.id);
+    return <TextAct label={stored.opening === path ? "Opening…" : "Photo of the bill"} Icon={ImageIcon}
+      onPress={() => void stored.open(path, "The photo needs the connection.")} />;
+  }
+  const add = async () => {
+    if (stop.isBusy() || stop.isStuck()) return;
+    const got = await pickBill("Add the bill's photo");
+    if (!got) return;
+    if ("problem" in got) return onSaid({ tone: "refused", title: "Photo not saved", text: got.problem });
+    void w.run(async () => {
+      await addExpensePhoto(code, m.id, got.file);
+      onDone({ tone: "ok", title: "Photo saved" });
+    }, (e) => { onSaid(failedSaid(e, "Photo not saved", "saved", PHOTO_WHERE)); onDone(null); });
+  };
+  return <TextAct label={w.busy ? "Saving…" : "Add the bill's photo"} Icon={Camera} why={mayNot ?? (w.stuck ? stop.line : null)}
+    onRefused={(why) => onSaid({ tone: "refused", title: "Add the bill's photo", text: why })} onPress={() => void add()} />;
+}
+
 function VarianceBox({ v }: { v: ReturnType<typeof varianceWords> }) {
   const look = v.tone === "none" ? { backgroundColor: c.grey50, borderColor: c.grey200 }
     : v.tone === "ok" ? { backgroundColor: c.success50, borderColor: c.success } : { backgroundColor: c.yellow50, borderColor: c.yellow };
@@ -222,6 +252,7 @@ function MovementSheet({ stop, code, onClose, onDone }: { stop: Stop; code: stri
   const [amount, setAmount] = useState("");
   const [reason, setReason] = useState("");
   const [category, setCategory] = useState("");
+  const [file, setFile] = useState<Picked | null>(null);
   const [problem, setProblem] = useState<string | null>(null);
   const w = useWrite(stop, "recorded", "the drawer");
   const state = movementState(kind, amount, reason, category);
@@ -231,10 +262,20 @@ function MovementSheet({ stop, code, onClose, onDone }: { stop: Stop; code: stri
     if (!state.body) return;
     const sent = state.body;
     setProblem(null);
+    const photo = kind === "expense" ? file : null;
     void w.run(async () => {
-      await recordMovement(code, sent);
+      const r = await recordMovement(code, sent);
+      /* The web's order: the paid-out first, then its photo to the new line; it stands without it. */
+      let without: Said | null = null;
+      if (photo && r.id) {
+        try { await addExpensePhoto(code, r.id, photo); } catch (e) {
+          without = stop.lose(e, "saved", PHOTO_WHERE)
+            ? { tone: "warn", title: "Recorded. Not known whether its photo was saved", text: `${e instanceof Error ? e.message : String(e)} Look at ${PHOTO_WHERE} before adding it again.` }
+            : { tone: "refused", title: "Recorded, without its photo", text: e instanceof Error ? e.message : String(e) };
+        }
+      }
       onClose();
-      onDone({ tone: "ok", title: "Recorded", text: `${chosen.label} - ${rupees(sent.amount)}` });
+      onDone(without ?? { tone: "ok", title: "Recorded", text: `${chosen.label} - ${rupees(sent.amount)}` });
     }, (e, lost) => {
       const s = failedSaid(e, "Not recorded", "recorded", "the drawer");
       if (lost) { onClose(); onDone(s); return; }
@@ -263,9 +304,7 @@ function MovementSheet({ stop, code, onClose, onDone }: { stop: Stop; code: stri
           <Field label="Category">
             <Choice label="Category" value={category} onPick={setCategory} options={EXPENSE_CATEGORIES.map((x) => ({ value: x, label: x }))} />
           </Field>
-          <Field label="Photo of the bill" hint={`${ON_THE_WEBSITE}: a photo needs a picker the phone app does not have yet. It can be added later on the website.`}>
-            <Btn label="Take or pick a photo" off onPress={() => undefined} a11y={`Photo of the bill: ${ON_THE_WEBSITE}`} />
-          </Field>
+          <BillField label="Photo of the bill" hint="Take it with the phone's camera, or pick a file. It can be added later." file={file} onFile={setFile} off={w.out} />
         </>
       ) : null}
       <Refused text={problem} />

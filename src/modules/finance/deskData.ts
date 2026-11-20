@@ -1,5 +1,7 @@
 import { keyKeeper, type KeyKeeper } from "../../core/keys";
 import { api, currentSubject, send } from "../../core/api";
+import type { Picked } from "../../core/files";
+import { filePart, sendForm } from "../../core/upload";
 import type {
   CashDeposits, CashierDrawerView, CompanyPaymentsView, FilingKind, FormCRegister, ReportDoc, SupplierDues,
 } from "./desk";
@@ -47,6 +49,21 @@ export const recordMovement = (code: string, body: { kind: string; amount: numbe
   drawer<{ ok: true; id?: string }>(code, "movements", body);
 export const closeDrawer = (code: string, body: { varianceReason: string; handOverTo: string | null; keptCash: number }) =>
   drawer<{ ok: true; variance: number; toDeposit: number }>(code, "close", body);
+
+/* ── The bills' photos (M-16): forms, never held offline (core upload.ts, files.ts' sentence). The
+   server keeps one file per record per bytes (attachments_no_duplicate): the same photo sent twice
+   is refused ("That photo is already on this expense."), another photo is a second file, and the
+   newest is the one shown. ── */
+/** A paid-out's photo (finance/data/expenses.ts expensePhotoPath, "desk"): POST to add, GET to open. */
+export const expensePhotoPath = (code: string, movementId: string) => `${H(code)}/cashier-shift/movements/${movementId}/photo`;
+export const addExpensePhoto = (code: string, movementId: string, file: Picked) =>
+  sendForm<{ ok: true; id: string }>("POST", expensePhotoPath(code, movementId), [filePart("file", file)]);
+/** A deposit's slip (deposits.ts attachSlip): the shared attachments route, table cash_deposits. */
+export const attachSlip = (code: string, depositId: string, file: Picked) =>
+  sendForm<{ ok: true; id: string }>("POST", `${H(code)}/attachments`,
+    [{ name: "table", value: "cash_deposits" }, { name: "id", value: depositId }, filePart("file", file)]);
+/** The slip's photo back (deposits.ts slipAddress). */
+export const slipPath = (code: string, attachmentId: string) => `${H(code)}/attachments/${attachmentId}/file`;
 
 /* ── Cash deposits ── */
 export const readDeposits = (code: string) => seen(code, "deposits", () => api<CashDeposits>(`${H(code)}/cash-deposits`));

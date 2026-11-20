@@ -4,6 +4,7 @@ import { HandCoins } from "lucide-react-native";
 import { useState } from "react";
 import { Text, View } from "react-native";
 import type { Hotel } from "../../core/api";
+import { DateField } from "../../core/DateField";
 import { c, face, t } from "../../core/theme";
 import { Card, Screen } from "../../core/ui";
 import { suggestedDue } from "../purchasing/purchase";
@@ -76,9 +77,9 @@ export function SupplierDues({ hotel, role }: { hotel: Hotel; role: string | nul
             ))}
           </>
         )}
-      {sheet?.kind === "pay" && d ? <PaySheet stop={stop} code={code} bill={sheet.bill} today={d.today} onClose={() => setSheet(null)} onDone={done} /> : null}
-      {sheet?.kind === "credit" && d ? <CreditSheet stop={stop} code={code} target={sheet} today={d.today} onClose={() => setSheet(null)} onDone={done} /> : null}
-      {sheet?.kind === "reverse" ? <ReverseSheet stop={stop} code={code} entry={sheet.entry} onClose={() => setSheet(null)} onDone={done} /> : null}
+      {sheet?.kind === "pay" && d ? <PaySheet stop={stop} code={code} hotel={hotel} bill={sheet.bill} today={d.today} onClose={() => setSheet(null)} onDone={done} /> : null}
+      {sheet?.kind === "credit" && d ? <CreditSheet stop={stop} code={code} hotel={hotel} target={sheet} today={d.today} onClose={() => setSheet(null)} onDone={done} /> : null}
+      {sheet?.kind === "reverse" ? <ReverseSheet stop={stop} code={code} hotel={hotel} entry={sheet.entry} onClose={() => setSheet(null)} onDone={done} /> : null}
     </Screen>
   );
 }
@@ -158,7 +159,7 @@ function Entry({ text, reversed, why, onRefused, onReverse }: { text: string; re
   );
 }
 
-function PaySheet({ stop, code, bill, today, onClose, onDone }: { stop: Stop; code: string; bill: SupplierDue; today: string; onClose: () => void; onDone: (s: Said | null) => void }) {
+function PaySheet({ stop, code, hotel, bill, today, onClose, onDone }: { stop: Stop; code: string; hotel: Hotel; bill: SupplierDue; today: string; onClose: () => void; onDone: (s: Said | null) => void }) {
   const [f, setF] = useState<PayForm>({ amount: bill.owed, method: "", reference: "", paidOn: today, handedOverBy: "", withTds: false, section: "", rate: "", tdsAmount: "", seen: false });
   const set = <K extends keyof PayForm>(k: K) => (v: PayForm[K]) => setF((o) => ({ ...o, [k]: v }));
   const [problem, setProblem] = useState<string | null>(null);
@@ -204,9 +205,7 @@ function PaySheet({ stop, code, bill, today, onClose, onDone }: { stop: Stop; co
       <Field label="Reference" hint={f.method === "cash" ? "Optional for cash." : "Cheque, UTR or UPI number."}>
         <Input value={f.reference} onChange={set("reference")} label="Reference" />
       </Field>
-      <Field label="Paid on" hint="As YYYY-MM-DD.">
-        <Input value={f.paidOn} onChange={set("paidOn")} label="Paid on" keyboard="numbers-and-punctuation" placeholder="YYYY-MM-DD" tabular />
-      </Field>
+      <DateField label="Paid on" value={f.paidOn} onChange={set("paidOn")} hotel={hotel} disabled={w.out} />
       <Field label="Handed over by" hint="Who gave the supplier the money or cheque.">
         <Input value={f.handedOverBy} onChange={set("handedOverBy")} label="Handed over by" />
       </Field>
@@ -229,8 +228,8 @@ function PaySheet({ stop, code, bill, today, onClose, onDone }: { stop: Stop; co
   );
 }
 
-function CreditSheet({ stop, code, target, today, onClose, onDone }: {
-  stop: Stop; code: string; target: { bill: SupplierDue | null; supplierId: string; supplier: string }; today: string; onClose: () => void; onDone: (s: Said | null) => void;
+function CreditSheet({ stop, code, hotel, target, today, onClose, onDone }: {
+  stop: Stop; code: string; hotel: Hotel; target: { bill: SupplierDue | null; supplierId: string; supplier: string }; today: string; onClose: () => void; onDone: (s: Said | null) => void;
 }) {
   const [f, setF] = useState({ issuedBy: "supplier" as "supplier" | "hotel", noteNo: "", noteDate: today, amount: "", reason: "" });
   const set = <K extends keyof typeof f>(k: K) => (v: (typeof f)[K]) => setF((o) => ({ ...o, [k]: v }));
@@ -266,7 +265,7 @@ function CreditSheet({ stop, code, target, today, onClose, onDone }: {
           options={[{ value: "supplier", label: "The supplier's" }, { value: "hotel", label: "Ours (a debit note to the supplier)" }]} />
       </Field>
       <Field label="Number"><Input value={f.noteNo} onChange={set("noteNo")} label="Number" /></Field>
-      <Field label="Date" hint="As YYYY-MM-DD."><Input value={f.noteDate} onChange={set("noteDate")} label="Date" keyboard="numbers-and-punctuation" placeholder="YYYY-MM-DD" tabular /></Field>
+      <DateField label="Date" value={f.noteDate} onChange={set("noteDate")} hotel={hotel} disabled={w.out} />
       <Field label="Amount"><Input value={f.amount} onChange={set("amount")} label="Amount" keyboard="decimal-pad" tabular /></Field>
       <Field label="What it is for"><Input value={f.reason} onChange={set("reason")} label="What it is for" maxLength={200} /></Field>
       <Refused text={problem} />
@@ -274,7 +273,7 @@ function CreditSheet({ stop, code, target, today, onClose, onDone }: {
   );
 }
 
-function ReverseSheet({ stop, code, entry, onClose, onDone }: { stop: Stop; code: string; entry: Reversing; onClose: () => void; onDone: (s: Said | null) => void }) {
+function ReverseSheet({ stop, code, hotel, entry, onClose, onDone }: { stop: Stop; code: string; hotel: Hotel; entry: Reversing; onClose: () => void; onDone: (s: Said | null) => void }) {
   const [reason, setReason] = useState("");
   /* A wrong bill may be followed by its right one (D27-372): optional. */
   const [right, setRight] = useState({ billNo: "", billDate: "", amount: "", dueOn: "" });
@@ -306,14 +305,10 @@ function ReverseSheet({ stop, code, entry, onClose, onDone }: { stop: Stop; code
         <>
           <Text style={[t.label, { color: c.grey600 }]}>The right bill, if there is one (leave its number empty if not):</Text>
           <Field label="Bill number"><Input value={right.billNo} onChange={(v) => setRight((o) => ({ ...o, billNo: v }))} label="Bill number" /></Field>
-          <Field label="Bill date" hint="As YYYY-MM-DD.">
-            <Input value={right.billDate} label="Bill date" keyboard="numbers-and-punctuation" placeholder="YYYY-MM-DD" tabular
-              onChange={(v) => setRight((o) => ({ ...o, billDate: v, dueOn: o.dueOn || suggestedDue(v) }))} />
-          </Field>
+          <DateField label="Bill date" value={right.billDate} hotel={hotel} disabled={w.out} clearable
+            onChange={(v) => setRight((o) => ({ ...o, billDate: v, dueOn: o.dueOn || suggestedDue(v) }))} />
           <Field label="Amount"><Input value={right.amount} onChange={(v) => setRight((o) => ({ ...o, amount: v }))} label="Amount" keyboard="decimal-pad" tabular /></Field>
-          <Field label="Due on" hint="As YYYY-MM-DD.">
-            <Input value={right.dueOn} onChange={(v) => setRight((o) => ({ ...o, dueOn: v }))} label="Due on" keyboard="numbers-and-punctuation" placeholder="YYYY-MM-DD" tabular />
-          </Field>
+          <DateField label="Due on" value={right.dueOn} hotel={hotel} disabled={w.out} clearable onChange={(v) => setRight((o) => ({ ...o, dueOn: v }))} />
         </>
       ) : null}
       <Refused text={problem} />
