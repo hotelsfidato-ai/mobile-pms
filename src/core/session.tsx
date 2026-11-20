@@ -3,6 +3,7 @@ import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { api, currentSubject, setDevSubject, type HotelsResponse } from "./api";
 import { auth, endSession, forget, keptNotice, notSetUp, remember, reopen, signInRefusal } from "./firebase";
+import { freshHotels } from "./hotels";
 import { list } from "./outbox";
 import { PasswordDue } from "./SignIn";
 
@@ -30,6 +31,10 @@ interface Session {
       audit closes a day on this phone (the web's session refresh, NightAudit.tsx
       97-108; the review of 4 Nov, N-1). A failed read keeps what is shown. */
   refresh: () => Promise<void>;
+  /** The frame's read of GET /api/hotels (Shell.tsx, every screen), taken into the session so each
+      screen's today, business date and desk rules are current (the web's refreshDates; hotels.ts).
+      True when a business date moved. */
+  adopt: (answer: HotelsResponse) => boolean;
 }
 
 const SessionContext = createContext<Session | null>(null);
@@ -107,6 +112,13 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     try { setWho(await api<HotelsResponse>("/api/hotels")); } catch { /* kept: the screens say their own reads */ }
   }
 
+  function adopt(answer: HotelsResponse): boolean {
+    const fresh = who ? freshHotels(who, answer) : null;
+    if (!fresh) return false;
+    setWho((now) => (now && now.scope.staffId === answer.scope.staffId ? fresh.who : now));
+    return fresh.moved;
+  }
+
   async function signOut() {
     const me = currentSubject();
     const kept = (await list().catch(() => [])).filter((e) => e.status === "waiting" && (!e.subject || e.subject === me));
@@ -119,7 +131,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <SessionContext.Provider value={{ who, busy, error, notice, starting, signIn, signInAs, signOut, refresh }}>
+    <SessionContext.Provider value={{ who, busy, error, notice, starting, signIn, signInAs, signOut, refresh, adopt }}>
       {children}
       {who ? <PasswordDue staffId={who.scope.staffId} email={who.scope.email} /> : null}
     </SessionContext.Provider>

@@ -1169,10 +1169,16 @@ export const PHONE_ROUTES: Readonly<Record<string, string>> = {
   "/pos/:code/kitchen-stock": "/stores/:code/kitchen-stock",
 };
 
-/** The phone's route for a web address, null where the phone has none. */
+/** The phone's route for a web address, null where the phone has none. A web address's query is
+    dropped, but for the setup reminder's ?step= (the bell links /h/:code/setup?step=<id>, api
+    notifications.ts), which Set up this hotel opens on; only a step's own letters are carried. */
 export function phoneRoute(to: string, code: string): string | null {
-  const route = PHONE_ROUTES[to.split("?")[0]!.replace(/^\/(h|pos)\/[^/]+/, "/$1/:code")];
-  return route ? resolve(route, code) : null;
+  const [bare, query] = to.split("?");
+  const key = bare!.replace(/^\/(h|pos)\/[^/]+/, "/$1/:code");
+  const route = PHONE_ROUTES[key];
+  if (!route) return null;
+  const step = key === "/h/:code/setup" ? /(?:^|&)step=([a-z-]+)(?:&|$)/.exec(query ?? "")?.[1] : undefined;
+  return resolve(route, code) + (step ? `?step=${step}` : "");
 }
 
 /** The space of the phone screen in view (MADM-1): the web's spaceOf of the

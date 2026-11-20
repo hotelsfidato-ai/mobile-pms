@@ -64,7 +64,8 @@ the page hook, the latch, the frame and the four states, links, the text editor,
   amenity some hotel has on, deleting a photo (the web asks inline "Delete it?"), undoing an import (the web's
   own dialog words).
 - **Set up this hotel**: the web's "Back to setup" bar on the opened screen (`?setup=`) is not on the phone;
-  the back gesture returns. The open step does not scroll itself into view.
+  the back gesture returns. The open step does not scroll itself into view. The bell's reminder (`/h/:code/setup?step=<id>`) opens its
+  step: `phoneRoute` carries that one query (and only a step's letters).
 - A page the phone has not built yet opens nothing: its "Open …" button (setup) or link (checklist,
   Documents) is greyed "On the website for now".
 - A typed child age that is not a whole number goes as typed, so the server refuses it in its words

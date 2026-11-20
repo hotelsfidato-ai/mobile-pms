@@ -32,6 +32,9 @@ import {
    app.manages_hotel; the server's refusal in its own words). Nothing is
    switched on or locked by this page; step 18 is a summary.
 
+   The open step is the address's ?step= (the bell's reminder, carried
+   through phoneRoute), else the first still to do, fixed once.
+
    Differences: the reminder's own date is a date picker
    (@react-native-community/datetimepicker 9.1.0, not installed): greyed;
    Tomorrow, In 3 days and In a week are here. The web's "Back to setup"
@@ -51,6 +54,8 @@ export function PropSetup({ hotel, role }: AdminProps) {
   const view = q.data ?? undefined;
   /* The first step still to do, fixed once, so a choice made on the way does not move the page under the finger. */
   useEffect(() => { if (view && !stepInfo(chosen)) setChosen(openStep(view)); }, [view, chosen]);
+  /* The bell's reminder opens its own step (/h/:code/setup?step=<id>, carried by phoneRoute). */
+  useEffect(() => { if (stepInfo(asked)) setChosen(asked); }, [asked]);
   /* Asked again each time the page comes into view: a step ticks itself when the PMS sees it done. */
   const reload = q.reload;
   useFocusEffect(useCallback(() => { if (!refused) reload(); }, [refused]));

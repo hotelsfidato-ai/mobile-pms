@@ -194,7 +194,11 @@ eq([phoneRoute("/reports/item-sales", "5EL"), phoneRoute("/settings/messages/sch
 eq(["profile", "set-up-this-hotel", "old-data", "photos", "highlights", "amenities", "group", "policies", "documents"]
   .map((x) => phoneRoute(`/settings/property/${x}`, "5EL")),
   ["profile", "set-up-this-hotel", "old-data", "photos", "highlights", "amenities", "group", "policies", "documents"].map((x) => `/settings/5EL/${x}`));
-eq(phoneRoute("/h/5EL/setup?step=taxes", "5EL"), "/settings/5EL/set-up-this-hotel");
+/* The bell's setup reminder keeps its step; nothing else rides along. */
+eq(phoneRoute("/h/5EL/setup?step=taxes", "5EL"), "/settings/5EL/set-up-this-hotel?step=taxes");
+eq(phoneRoute("/h/5EL/setup?x=1&step=room-types", "5EL"), "/settings/5EL/set-up-this-hotel?step=room-types");
+eq([phoneRoute("/h/5EL/setup", "5EL"), phoneRoute("/h/5EL/setup?step=<b>", "5EL"), phoneRoute("/settings/property/profile?step=taxes", "5EL")],
+  ["/settings/5EL/set-up-this-hotel", "/settings/5EL/set-up-this-hotel", "/settings/5EL/profile"]);
 eq(["/settings/5EL/profile", "/settings/5EL/old-data", "/settings/5EL/set-up-this-hotel"].map(spaceHere), ["settings", "settings", "settings"]);
 eq(phoneRoute("/settings/people/signing-in", "5EL"), "/admin/5EL/signing-in");
 eq(phoneRoute("/settings", "5EL"), "/admin/5EL");
