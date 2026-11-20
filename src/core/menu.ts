@@ -912,6 +912,9 @@ export const PHONE_ROUTES: Readonly<Record<string, string>> = {
   "/h/:code/approvals": "/approvals/:code",
   /* mobile/m13-rooms (19 Nov): Rooms, the house as tiles for today. */
   "/h/:code/stay": "/front-desk/:code/rooms",
+  /* mobile/m13-till (19 Nov): the Till and the Terminal, each its own twin. */
+  "/pos/:code/till": "/pos/:code/till",
+  "/pos/:code/terminal": "/pos/:code/terminal",
   /* mobile/t2-revenue (4 Nov) */
   "/h/:code/revenue-outlook": "/revenue/:code",
   /* mobile/t2-crs (4 Nov) */
