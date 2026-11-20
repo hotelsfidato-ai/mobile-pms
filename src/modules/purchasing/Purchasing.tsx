@@ -9,6 +9,7 @@ import { Head, Screen, Stopped, useRead, useScreenStop, ripple, shade } from "..
 import { Back, Box, Btn, body, Empty, Loading, NotYours, Segmented, Stale, Toast, type Said } from "../guest-services/kit";
 import { Fact, LoadFailed, Note } from "../laundry/kit";
 import { Ask } from "./Ask";
+import { BarBills } from "./BarBills";
 import { ASK_UNKNOWN, isRefused, listStop, readPurchasing } from "./data";
 import { StatePill, useBackInView } from "./kit";
 import { askedDay, dayOf, raisedWords, rupees, STATE_TONE, STATE_WORDS, when, type PurchaseRequest } from "./purchase";
@@ -24,9 +25,9 @@ import { MAY_NOT_ASK, ON_THE_WEBSITE, seesSupplierDues, whyNotAct, whyNotRead } 
    in a store. The list as the web's DataTable draws it at phone width: one
    card a request, its columns as labelled lines, a chevron to the order.
 
-   Restaurant and hotel is this screen. The Bar's bills (D27-354, a photo of
-   each bill) and Supplier dues (D27-370, accounts) are the web's other two
-   tabs: they stay on the website, said so in their place. "Who may ask"
+   Restaurant and hotel is this screen; the Bar's bills (D27-354, a photo of
+   each bill) are its Bar tab (BarBills.tsx, M-16). Supplier dues (D27-370,
+   accounts), the web's third tab, keeps its note here (not a picker). "Who may ask"
    (set-up, D18-2) is the web's button for the owner and an administrator:
    it opens its screen (WhoMayAsk.tsx, lane U).
    ══════════════════════════════════════════════════════════════════ */
@@ -76,7 +77,7 @@ export function Purchasing({ hotel, role, onBack }: { hotel: Hotel; role: string
 
   return (
     <View style={{ flex: 1 }}>
-      <Screen refreshing={pulled && q.loading} onRefresh={() => { setPulled(true); q.reload(); }}>
+      <Screen refreshing={pulled && q.loading} onRefresh={() => { setPulled(true); q.reload(); void cache.invalidateQueries({ queryKey: ["purchasing", code, "bar"] }); }}>
         <Head title="Purchasing" under={UNDER[tab]} action={<Back onPress={onBack} />} />
 
         {tab === "hotel" ? (
@@ -112,9 +113,7 @@ export function Purchasing({ hotel, role, onBack }: { hotel: Hotel; role: string
         />
 
         {tab === "bar" ? (
-          <Note title={`The bar's bills: ${ON_THE_WEBSITE}`}>
-            Recording a bar bill takes a photo of it, which this phone app cannot do yet. Record and read the bar's bills on the website.
-          </Note>
+          <BarBills hotel={hotel} role={role} onSaid={setSaid} />
         ) : tab === "dues" ? (
           <Note title={`Supplier dues: ${ON_THE_WEBSITE}`}>
             Paying a supplier, a credit note and a reversal are the accounts' work, done on the website.

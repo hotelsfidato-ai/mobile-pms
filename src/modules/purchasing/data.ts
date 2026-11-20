@@ -1,5 +1,8 @@
 import { api, ApiError, currentSubject, send } from "../../core/api";
 import { keyKeeper, type KeyKeeper } from "../../core/keys";
+import type { Picked } from "../../core/files";
+import { filePart, sendForm } from "../../core/upload";
+import type { BarBill, BarBillBody, BarDrinks } from "./barBills";
 import {
   approvalFor, type AskBody, type DeliveryBody, type PurchaseApproval, type PurchaseRequest, type PurchasingList, type RequestDetail,
 } from "./purchase";
@@ -100,3 +103,20 @@ export const cancelRequest = (code: string, id: string, reason: string) =>
 export const recordDelivery = (code: string, id: string, body: DeliveryBody) =>
   send<{ ok: true; received: { item: string; quantity: number; store: string; onHandHere: number }[] }>(
     "POST", `${one(code, id)}/delivery`, body, keysOf(`${code}/${id}`));
+
+/* ── The bar's bills (D27-354; M-16 row 1.9): purchasing/data/barBills.ts. BAR_VIEW reads them (a 403 is
+   the server's sentence, as the list's); BAR_RECORDERS records. The bill is JSON (send(): unlisted,
+   refused offline); its photo a form after it, to the new bill's id, never held (core upload.ts).
+   POST /bar/purchases reads no key; a repeat of the same supplier and number is refused by the server. ── */
+export const barStop = (code: string) => `purchasing/${code}/bar`;
+export const readBarDrinks = (code: string) => read<BarDrinks>(`${at(code)}/bar/drinks`);
+export async function readBarBills(code: string) {
+  const out = await read<{ purchases: BarBill[] }>(`${at(code)}/bar/purchases`);
+  return isRefused(out) ? out : out.purchases;
+}
+export const recordBarBill = (code: string, body: BarBillBody) =>
+  send<{ ok: true; id: string }>("POST", `${at(code)}/bar/purchases`, body, keysOf(`${code}/bar`));
+/** The bill's photo: POST to add, GET to open (the newest). */
+export const barPhotoPath = (code: string, billId: string) => `${at(code)}/bar/purchases/${encodeURIComponent(billId)}/photo`;
+export const addBarPhoto = (code: string, billId: string, file: Picked) =>
+  sendForm<{ ok: true; id: string }>("POST", barPhotoPath(code, billId), [filePart("file", file)]);
