@@ -41,7 +41,7 @@ export function CityLedger({ hotel, role }: { hotel: Hotel; role: string | null 
   const asOn = hotel.businessDate;
   const doc = useDeskRead(() => (refused ? Promise.resolve(null) : readLedger(code, from, asOn)), ["finance", code, "desk", "city-ledger", from, asOn]);
   const paid = useDeskRead(() => (refused ? Promise.resolve(null) : readCompanyPayments(code)), ["finance", code, "desk", "company-payments"]);
-  const stop = useStop(`${code}/company-accounts`, paid.began);
+  const stop = useStop(`${code}/company-accounts`, paid.began, paid.reload);
   const [said, setSaid] = useState<Said | null>(null);
   const [sheet, setSheet] = useState<{ kind: "record" } | { kind: "reverse"; p: CompanyPayment } | null>(null);
   const pulling = usePull(doc.loading || paid.loading, () => { doc.reload(); paid.reload(); });

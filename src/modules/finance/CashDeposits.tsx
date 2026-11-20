@@ -43,7 +43,7 @@ export function CashDeposits({ hotel, role }: { hotel: Hotel; role: string | nul
   const cache = useQueryClient();
   const refused = whyNotReadDeposits(role);
   const q = useDeskRead(() => (refused ? Promise.resolve(null) : readDeposits(code)), ["finance", code, "desk", "deposits"]);
-  const stop = useStop(`${code}/deposits`, q.began);
+  const stop = useStop(`${code}/deposits`, q.began, q.reload);
   const [said, setSaid] = useState<Said | null>(null);
   const [sheet, setSheet] = useState<Sheet | null>(null);
   const pulling = usePull(q.loading, () => { q.reload(); });

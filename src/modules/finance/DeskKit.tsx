@@ -7,6 +7,7 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ApiError, HeldError, outcomeUnknown } from "../../core/api";
+import { settleMs } from "../../core/stop";
 import { ExportButtons } from "../../core/Export";
 import type { ExportTable } from "../../core/exportDoc";
 import { isOnline } from "../../core/offline";
@@ -137,7 +138,9 @@ const ping = (key: string) => { for (const fn of watchers.get(key) ?? []) fn(); 
       on the screen waits until a read of it that BEGAN after that moment has come back - not when
       a sheet closes, not when the screen is opened again. None of these routes reads an
       idempotency key, so a second tap could be a second deposit or payment. */
-export function useStop(key: string, began: number) {
+export function useStop(key: string, began: number, reload?: () => void) {
+  const again = useRef(reload);
+  again.current = reload;
   const [, tick] = useState(0);
   useEffect(() => {
     const fn = () => tick((n) => n + 1);
@@ -159,8 +162,12 @@ export function useStop(key: string, began: number) {
     end: () => { deskStop.end(key); ping(key); },
     lose: (e: unknown, done: string, where: string) => {
       if (!outcomeUnknown(e)) return false;
-      deskStop.lose(key, { at: Date.now(), done, where });
+      const status = e instanceof ApiError ? e.status : 0;
+      deskStop.lose(key, { at: Date.now(), done, where }, status);
       ping(key);
+      /* The server may still be writing: a read only frees it once begun after the wait, so one is begun then. */
+      const wait = settleMs(status);
+      if (wait > 0) setTimeout(() => again.current?.(), wait + 100);
       return true;
     },
   };

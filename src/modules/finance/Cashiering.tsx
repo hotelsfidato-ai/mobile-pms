@@ -40,7 +40,7 @@ export function Cashiering({ hotel, role }: { hotel: Hotel; role: string | null 
   const cache = useQueryClient();
   const refused = whyNotReadDrawer(role);
   const q = useDeskRead(() => (refused ? Promise.resolve(null) : readDrawer(code)), ["finance", code, "desk", "drawer"]);
-  const stop = useStop(`${code}/drawer`, q.began);
+  const stop = useStop(`${code}/drawer`, q.began, q.reload);
   const [said, setSaid] = useState<Said | null>(null);
   /* Pulling down reads the drawer again: what was stuck on an unknown outcome is seen, and starts afresh. */
   const pulling = usePull(q.loading, () => { q.reload(); });

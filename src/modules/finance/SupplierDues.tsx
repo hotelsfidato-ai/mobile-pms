@@ -39,7 +39,7 @@ export function SupplierDues({ hotel, role }: { hotel: Hotel; role: string | nul
   const cache = useQueryClient();
   const refused = whyNotReadDues(role);
   const q = useDeskRead(() => (refused ? Promise.resolve(null) : readDues(code)), ["finance", code, "desk", "dues"]);
-  const stop = useStop(`${code}/dues`, q.began);
+  const stop = useStop(`${code}/dues`, q.began, q.reload);
   const today = q.data?.today ?? null;
   const rep = useDeskRead(() => (refused || !today ? Promise.resolve(null) : readDuesReport(code, today)), ["finance", code, "desk", "dues-report", today ?? ""]);
   const [said, setSaid] = useState<Said | null>(null);
