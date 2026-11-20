@@ -1,12 +1,12 @@
-import { Minus, Plus } from "lucide-react-native";
 import { useState } from "react";
-import { Pressable, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import { api } from "../../core/api";
+import { DateField } from "../../core/DateField";
 import { c, face, t } from "../../core/theme";
 import { Card, useRead } from "../../core/ui";
 import { costShown, firstRange, M, marginPctShown, profitLine, type DishProfit } from "./menuEdit";
 import { Fig } from "./SetupScreen";
-import { dayShort, paise, shiftDay } from "./setup";
+import { paise } from "./setup";
 import { Loading, Part } from "./SetupKit";
 import { ReadProblem, ty } from "./TablesKit";
 
@@ -16,7 +16,7 @@ import { ReadProblem, ty } from "./TablesKit";
    server's: a dish's cost is its recipe at the Store's average today; no
    recipe or an unpriced ingredient is a dash with its reason, never zero.
    The web's two tables become cards of labelled figures, in its order.
-   The days are moved a day at a time (M-7's stepper: no date picker).
+   The two days with the phone's own date picker (M-16), as the web's date boxes.
    ══════════════════════════════════════════════════════════════════ */
 
 export function DishProfitTab({ code, businessDate }: { code: string; businessDate: string }) {
@@ -30,32 +30,12 @@ export function DishProfitTab({ code, businessDate }: { code: string; businessDa
         priced, shows a dash: it has no cost yet, which is not the same as costing nothing.
       </Text>
       <View style={{ flexDirection: "row", gap: 12 }}>
-        <Stepper label="From" day={from} onDay={setFrom} />
-        <Stepper label="To" day={to} onDay={setTo} />
+        <View style={{ flex: 1 }}><DateField label="From" value={from} onChange={setFrom} hotel={{ businessDate }} /></View>
+        <View style={{ flex: 1 }}><DateField label="To" value={to} onChange={setTo} hotel={{ businessDate }} /></View>
       </View>
       {from <= to ? <Figures key={`${from}${to}`} code={code} from={from} to={to} />
         : <Text style={[t.label, ty.sm, { color: c.red700 }]}>From is after To.</Text>}
     </>
-  );
-}
-
-function Stepper({ label, day, onDay }: { label: string; day: string; onDay: (d: string) => void }) {
-  const step = (n: number) => (
-    <Pressable onPress={() => onDay(shiftDay(day, n))} accessibilityRole="button" accessibilityLabel={`${label}: a day ${n < 0 ? "earlier" : "later"}`}
-      android_ripple={{ color: c.grey200, borderless: true }}
-      style={{ width: 44, height: 44, borderRadius: 22, borderWidth: 1, borderColor: c.grey300, alignItems: "center", justifyContent: "center", backgroundColor: c.white }}>
-      {n < 0 ? <Minus size={16} color={c.grey600} /> : <Plus size={16} color={c.grey600} />}
-    </Pressable>
-  );
-  return (
-    <View style={{ flex: 1, gap: 6 }}>
-      <Text style={[t.label, ty.sm, { color: c.grey700 }]}>{label}</Text>
-      <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
-        {step(-1)}
-        <Text style={[t.label, ty.sm, t.tab, { flex: 1, textAlign: "center", color: c.ink900 }]}>{dayShort(day)}</Text>
-        {step(1)}
-      </View>
-    </View>
   );
 }
 

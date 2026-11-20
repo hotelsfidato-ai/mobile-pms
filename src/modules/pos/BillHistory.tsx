@@ -3,6 +3,7 @@ import { ChevronRight, Search } from "lucide-react-native";
 import { useState } from "react";
 import { Platform, Pressable, Text, View } from "react-native";
 import type { Hotel } from "../../core/api";
+import { DateField } from "../../core/DateField";
 import { ExportButtons } from "../../core/Export";
 import type { ExportTable } from "../../core/exportDoc";
 import { dateLong } from "../../core/format";
@@ -10,13 +11,13 @@ import { c, face, space, t } from "../../core/theme";
 import { Screen } from "../../core/ui";
 import { billRows } from "./bill";
 import {
-  EMPTY, MODE_CHOICES, MODE_WORD, askProblem, countWords, guestOf, headingOf, modesWords, opening, stateOf, stepDay, totalCell,
+  EMPTY, MODE_CHOICES, MODE_WORD, askProblem, countWords, guestOf, headingOf, modesWords, opening, stateOf, totalCell,
   type Ask, type BillHistory as History, type BillHistoryRow,
 } from "./billHistory";
 import { precise } from "./dayEnd";
 import { PrintBill } from "./Pay";
 import { readBillHistory, readOrder, readWaiters } from "./serviceData";
-import { BottomSheet, Btn, DayField, Empty, Field, Input, Labelled, Loading, PageHead, Panel, Pill, Select } from "./ServiceKit";
+import { BottomSheet, Btn, Empty, Field, Input, Labelled, Loading, PageHead, Panel, Pill, Select } from "./ServiceKit";
 import { whyNotReadBills, whyNotWideSearch } from "./serviceRoles";
 import { ReadProblem, Refused, Stale, ty, useAccess } from "./TablesKit";
 
@@ -79,8 +80,9 @@ export function BillHistoryScreen({ hotel, role }: { hotel: Hotel; role: string 
       {head}
       <Panel>
         <View style={{ gap: 12 }}>
-          <DayField label="From" value={draft.from} onChange={set("from")} step={(by) => set("from")(stepDay(draft.from, by, hotel.businessDate))} />
-          <DayField label="To" value={draft.to} onChange={set("to")} step={(by) => set("to")(stepDay(draft.to, by, hotel.businessDate))} />
+          {/* The phone's own pickers (M-16): no later than the business date, as the web's max; blank is no bound. */}
+          <DateField label="From" clearable value={draft.from} onChange={set("from")} max={hotel.businessDate} hotel={hotel} />
+          <DateField label="To" clearable value={draft.to} onChange={set("to")} max={hotel.businessDate} hotel={hotel} />
           <Field label="Bill number">
             <Input value={draft.no} onChangeText={set("no")} maxLength={40} placeholder="R-0012" autoCapitalize="characters" autoCorrect={false} accessibilityLabel="Bill number" />
           </Field>

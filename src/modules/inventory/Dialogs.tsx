@@ -1,10 +1,11 @@
 import { useRef, useState } from "react";
 import { Text, View } from "react-native";
+import { DateField } from "../../core/DateField";
 import { c } from "../../core/theme";
 import { setBase, setRestriction } from "./data";
-import { Btn, DayStep, Dialog, Field, InDialog, Input, Select, Tick, Toggle, body, saidOf, type Said } from "./kit";
+import { Btn, Dialog, Field, InDialog, Input, Select, Tick, Toggle, body, saidOf, type Said } from "./kit";
 import {
-  addDays, baseBody, baseDone, dateShort, daysThrough, priceOf, restrictionBody, spanWords, typedNights, typedPrice,
+  baseBody, baseDone, dateShort, daysThrough, priceOf, restrictionBody, spanWords, typedNights, typedPrice,
   type Restriction,
 } from "./rates";
 
@@ -62,18 +63,14 @@ export function BaseDialog({ code, target, types, onClose, onDone }: {
           <Field label="Room type">
             <Select label="Room type" value={typeId} onChange={setTypeId} options={types.map((x) => ({ value: x.id, label: x.name }))} />
           </Field>
-          <Field label="From" hint="The first day this base applies to.">
-            <DayStep label="From" value={from} step={addDays} onChange={(d) => { setFrom(d); if (until < d) setUntil(d); }} />
-          </Field>
+          <DateField label="From" hint="The first day this base applies to." value={from} hotel={{ businessDate: from }} onChange={(d) => { setFrom(d); if (until < d) setUntil(d); }} />
         </>
       ) : null}
       <Field label="Base per night" hint="One guest, room only. The add-ons follow it.">
         <Input label="Base per night" big autoFocus keyboardType="decimal-pad" value={free ? "0" : text} disabled={free} onChangeText={(v) => setText(typedPrice(v))} />
       </Field>
       <Tick label="Free" on={free} onChange={setFree} />
-      <Field label="Through" hint="The last day this base applies to.">
-        <DayStep label="Through" value={until} min={from} step={addDays} onChange={setUntil} />
-      </Field>
+      <DateField label="Through" hint="The last day this base applies to." value={until} min={from} hotel={{ businessDate: until }} onChange={setUntil} />
       <Text style={[body, { color: c.grey600 }]}>{spanWords(from, until)}</Text>
       <InDialog said={said} />
       <View style={{ flexDirection: "row", gap: 8 }}>
@@ -139,9 +136,7 @@ export function RestrictionDialog({ code, target, existing, onClose, onDone }: {
           <Field label="Maximum nights"><Input label="Maximum nights" keyboardType="number-pad" value={max} onChangeText={(v) => setMax(typedNights(v))} /></Field>
         </View>
       </View>
-      <Field label="Through" hint="Apply the same rules to every day up to here.">
-        <DayStep label="Through" value={until} min={target.date} step={addDays} onChange={setUntil} />
-      </Field>
+      <DateField label="Through" hint="Apply the same rules to every day up to here." value={until} min={target.date} hotel={{ businessDate: until }} onChange={setUntil} />
       <Text style={[body, { color: c.grey600 }]}>
         {spanWords(target.date, until)} Clearing everything removes the rule rather than storing a row that says nothing.
       </Text>

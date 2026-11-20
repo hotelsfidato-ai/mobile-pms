@@ -1,10 +1,11 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { router, useFocusEffect } from "expo-router";
-import { Calendar, Plus, ShoppingBag } from "lucide-react-native";
+import { Plus, ShoppingBag } from "lucide-react-native";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { AppState, Pressable, Text, View } from "react-native";
+import { AppState, Text, View } from "react-native";
 import { api, HeldError, send, type Hotel } from "../../core/api";
-import { c, face, space, t } from "../../core/theme";
+import { DateField } from "../../core/DateField";
+import { c, space, t } from "../../core/theme";
 import { notKnown, Screen, useScreenStop } from "../../core/ui";
 import { openStop, parcelsStop } from "./floor";
 import { Btn, Field, Input, ReadProblem, Refused, SaidBar, Stale, ty, useAccess, web, type Said } from "./TablesKit";
@@ -157,7 +158,7 @@ export function Till({ hotel, role }: { hotel: Hotel; role: string | null }) {
           </ListCard>
         ) : null}
 
-        <EarlierBills code={code} onSay={setSaid} />
+        <EarlierBills code={code} today={orders.data?.businessDate ?? null} hotel={hotel} />
       </Screen>
 
       {said ? <SaidBar said={said} onDone={() => setSaid(null)} style={{ position: "absolute", left: space.side, right: space.side, bottom: 16 }} /> : null}
@@ -246,15 +247,16 @@ function StartAnOrder({ code, role, onOpened, onSay, onParcel }: {
 }
 
 /** An earlier day's bill (Till.tsx 533-581): to print a paid bill again,
-    its number; it opens on the order screen, whose Print the bill prints
-    BILL · DUPLICATE. The Day is the web's date picker: not installed on
-    the phone, so it is shown and says where it is. */
-function EarlierBills({ code, onSay }: { code: string; onSay: (said: Said) => void }) {
+    its day (the phone's own date picker, M-16: no later than the till's
+    business date, as the web's max) or its number; it opens on the order
+    screen, whose Print the bill prints BILL · DUPLICATE. */
+function EarlierBills({ code, today, hotel }: { code: string; today: string | null; hotel: Hotel }) {
+  const [date, setDate] = useState("");
   const [no, setNo] = useState("");
-  const asked = earlierAsked(no);
+  const asked = earlierAsked(date, no);
   const bills = useQuery({
-    queryKey: ["pos", code, "till", "earlier", no.trim()],
-    queryFn: async () => (await api<{ bills: TillRow[] }>(earlierPath(code, no))).bills,
+    queryKey: ["pos", code, "till", "earlier", date, no.trim()],
+    queryFn: async () => (await api<{ bills: TillRow[] }>(earlierPath(code, date, no))).bills,
     enabled: asked,
   });
   return (
@@ -265,16 +267,7 @@ function EarlierBills({ code, onSay }: { code: string; onSay: (said: Said) => vo
         <Text style={[t.label, ty.sm]}>To print a paid bill again: pick its day, or type its number. It prints as BILL · DUPLICATE.</Text>
         <View style={{ flexDirection: "row", gap: 8 }}>
           <View style={{ flex: 1 }}>
-            <Field label="Day">
-              <Pressable
-                onPress={() => onSay({ title: "Day", body: "On the website for now", tone: "held" })}
-                accessibilityRole="button" accessibilityLabel="Day" accessibilityHint="On the website for now" accessibilityState={{ disabled: true }}
-                style={{ minHeight: 44, paddingHorizontal: 12, borderRadius: 10, borderWidth: 1, borderColor: c.grey300, backgroundColor: c.grey50, flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}
-              >
-                <Text style={[{ fontSize: 16, ...face[500], color: web.grey400 }]}>dd-mm-yyyy</Text>
-                <Calendar size={16} color={web.grey400} />
-              </Pressable>
-            </Field>
+            <DateField label="Day" value={date} onChange={setDate} max={today ?? undefined} clearable hotel={hotel} />
           </View>
           <View style={{ flex: 1 }}>
             <Field label="Bill number">
@@ -285,7 +278,7 @@ function EarlierBills({ code, onSay }: { code: string; onSay: (said: Said) => vo
         </View>
         {asked && bills.isError ? <Problem text={EARLIER_FAILED} /> : null}
         {asked && bills.isLoading ? <Text style={[t.label, ty.sm]}>Looking for the bill…</Text> : null}
-        {asked && bills.data && bills.data.length === 0 ? <Text style={[t.label, ty.sm]}>{earlierNone(no)}</Text> : null}
+        {asked && bills.data && bills.data.length === 0 ? <Text style={[t.label, ty.sm]}>{earlierNone(date, no)}</Text> : null}
       </View>
       {asked && bills.data && bills.data.length > 0
         ? bills.data.map((o) => <OrderRow key={o.id} row={o} withDate onOpen={() => router.push(orderHref(code, o.id))} />)

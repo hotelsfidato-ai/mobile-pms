@@ -114,12 +114,17 @@ const taxSetup = { servesAlcohol: false, kinds: [rooms, food, { kind: "bar" as c
 eq(orphaned(taxSetup), ["A9 Bar", "New"], "orphaned");
 eq(orphanedLine(["A9 Bar"]), "One menu category sells under a heading with no rate set - A9 Bar. The till will refuse those items rather than bill them at nothing.", "orphaned line");
 const rows = slabRows(rooms);
-eq(slabsBody([...rows, { overAmount: "", rate: " ", note: "", validFrom: null, validTo: null }]), { slabs: [
+eq(rows[1]!.lastDay, "2027-03-31", "the Last day shown is the day before the server's validTo");
+eq(slabsBody([...rows, { overAmount: "", rate: " ", note: "", validFrom: "", lastDay: "" }]), { slabs: [
   { overAmount: 0, rate: 5, note: null, validFrom: null, validTo: null },
   { overAmount: 7500, rate: 18, note: "Rooms above 7,500", validFrom: "2026-04-01", validTo: "2027-04-01" },
 ] }, "slabs body: blank rate left out, dates kept");
 eq([slabsBad(rows), slabsBad([{ ...rows[0]!, rate: "5%" }])], [false, true], "a rate that is not a figure");
-eq(slabRows({ kind: "bar", sac: null, slabs: [] }), [{ overAmount: "0", rate: "", note: "", validFrom: null, validTo: null }], "an unset kind: one empty row, no rate suggested");
+eq(slabRows({ kind: "bar", sac: null, slabs: [] }), [{ overAmount: "0", rate: "", note: "", validFrom: "", lastDay: "" }], "an unset kind: one empty row, no rate suggested");
+/* A band's dates picked (M-16, PICKERS 2.6): the Last day goes as the day after it; across a month and a year. */
+eq(slabsBody([{ overAmount: "0", rate: "5", note: "", validFrom: "2026-04-01", lastDay: "2026-12-31" }]).slabs[0],
+  { overAmount: 0, rate: 5, note: null, validFrom: "2026-04-01", validTo: "2027-01-01" }, "the day after the Last day is sent");
+eq(slabsBody([{ overAmount: "0", rate: "5", note: "", validFrom: "", lastDay: "2028-02-28" }]).slabs[0]!.validTo, "2028-02-29", "a leap day");
 eq(taxHeadings(false, "alcohol").map((h) => h.value), ["", "restaurant", "bar", "banquet", "alcohol", "other"], "alcohol still drawn when set");
 eq(taxHeadings(false, null).some((h) => h.value === "alcohol"), false, "alcohol not offered where not served");
 

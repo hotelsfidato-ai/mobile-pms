@@ -71,9 +71,13 @@ eq(padHref("5EL", "o1", "Parcel · Rahul"), "/pos/5EL/pad?order=o1&table=Parcel%
 eq(padHref("5EL", "o1", null), "/pos/5EL/pad?order=o1", "no table: by the order alone");
 
 /* An earlier day's bill: by its number, two characters at least. */
-eq([earlierAsked("R"), earlierAsked(" R-"), earlierAsked("R-0012")], [false, true, true], "two characters ask");
-eq(earlierPath("5EL", " R-0012 "), "/api/hotels/5EL/till/bills?no=R-0012", "the bills' question");
-eq(earlierNone(" R-9 "), 'No paid bill with "R-9" in its number.', "none found");
+eq([earlierAsked("", "R"), earlierAsked("", " R-"), earlierAsked("", "R-0012"), earlierAsked("2026-10-09", "")], [false, true, true, true], "two characters, or a day, ask");
+eq(earlierPath("5EL", "", " R-0012 "), "/api/hotels/5EL/till/bills?no=R-0012", "the bills' question");
+eq(earlierPath("5EL", "2026-10-09", ""), "/api/hotels/5EL/till/bills?date=2026-10-09", "by its day");
+eq(earlierPath("5EL", "2026-10-09", "R 1"), "/api/hotels/5EL/till/bills?date=2026-10-09&no=R%201", "both, the web's order");
+eq(earlierNone("", " R-9 "), 'No paid bill with "R-9" in its number.', "none found");
+eq(earlierNone("2026-10-09", ""), "No paid bill on 9 Oct.", "none that day");
+eq(earlierNone("2026-10-09", "R-9"), 'No paid bill on 9 Oct with "R-9" in its number.', "none that day with that number");
 
 /* The Terminal. */
 const outlets = [{ code: "REST", name: "Fidato Restaurant", isActive: true }, { code: "OLD", name: "Old bar", isActive: false }];

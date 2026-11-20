@@ -188,7 +188,7 @@ export function Item({ hotel, role, id, onBack }: { hotel: Hotel; role: string |
       </Screen>
       <Toast said={said} onClose={unsay} />
 
-      {open === "edit" ? <EditDialog code={code} item={item} onClose={close} onDone={done} onLost={setLostAt} /> : null}
+      {open === "edit" ? <EditDialog code={code} hotel={hotel} item={item} onClose={close} onDone={done} onLost={setLostAt} /> : null}
       {open === "move" ? <MoveDialog code={code} item={item} mayEdit={may(role, "edit")} onClose={close} onDone={done} onLost={setLostAt} /> : null}
       {open === "status" ? <StatusDialog code={code} item={item} onClose={close} onDone={done} onLost={setLostAt} /> : null}
       {open === "retire" ? <RetireDialog code={code} item={item} waits={retireWaits(item, role)} onClose={close} onDone={done} onLost={setLostAt} /> : null}

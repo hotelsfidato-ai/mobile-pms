@@ -115,8 +115,8 @@ function's read; core `keys.ts`) carries the payment, the bill, reopening and th
 1. **A Back capsule** beside each title (the web's "← Diary" button on a function, and no breadcrumb).
 2. **Rights:** grey with the API's sentence where the web shows the button and the server refuses, or
    leaves the bill's buttons out.
-3. **From and Until** are a day stepper and a 24-hour time box (M-7: no date-picker package), sent
-   as the web's datetime-local text on the property's clock.
+3. **From and Until** are each a day and a time with the phone's own pickers (M-16), sent as the
+   web's datetime-local text on the property's clock.
 4. **Registering ends on the function**, which says "Registered" or "Registered as an enquiry" with
    the server's warning (the web's toast, then its navigation): the route's `registered` and `warning`.
 5. **A refusal stays on the screen** in a card, its title as the web's toast ("The hall is not free"
@@ -191,3 +191,10 @@ it (the GM's picture has none); (c) buttons are 44 px tall (the picture's 36); (
 phone's own (iPhone's or Android's) in the theme's green; (e) a hall's capacity must be a whole number
 ("Not a whole number.": the server casts it to int and would fail on 12.5). **1 of 1 pictured
 screen matches**; the two dialogs are not pictured, built from the web's code.
+
+## m16 pickers (20 Nov) — lane m16-pick-pos, PICKERS.md 2.14
+
+Register a function's **From** and **Until** (`Register.tsx`): each a `DateField` (Until no earlier than
+From; From moving past Until carries Until with it) and a `TimeField` ("Starts at", "Ends at"), sent as
+before: `"YYYY-MM-DDTHH:MM"` (`rules.ts` registerBody). The housekeeping day stepper is no longer used
+here. Not opened on a phone or a preview.

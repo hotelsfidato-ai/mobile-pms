@@ -230,3 +230,28 @@ once the order is not open).
 open orders, never on the floor, so it has its own name (`openStop`), let go only by a /till/orders read;
 parcels keep `parcelsStop`, let go by either read. A new table's first round is kept by its table
 (`roundStop(code, undefined, table)`), and a floor read lets go each table it shows.
+
+## m16 pickers (20 Nov) — lane m16-pick-pos
+
+### MPOS-P1 · A stored bill that is a PDF opens named as a picture (20 Nov) — open, a core question
+**What:** a paid-out's bill may be a photo or a PDF (BILL takes both), but the list says only `photo: true`,
+and the core's `downloadToShare` needs the type before it downloads. The phone names it `bill-….jpg`,
+`image/jpeg`, as the web shows it (an `<img>`, which breaks for a PDF too). **Found:** writing 2.1.
+**Done:** named as a picture (the common case, the web's own assumption); said in `BillPhoto.tsx` and
+in the lane's report. **Rule:** the core's download should take the server's Content-Type (or the
+file's first bytes) when the caller cannot know it — asked of the mobile chat.
+
+### MPOS-P2 · A coupon's limit typed with a comma would have saved "no limit" (20 Nov) — fixed before the merge
+**What:** the coupon's "Bills it may go on" and "Least bill" went through `Number(text)`: "1,500" or "999,50"
+is NaN, which JSON writes as null, and the server (till.ts 3532-3541) saves null as NO limit - and skips its
+"cannot take off more than its least bill" guard (till.ts 3576). **Found:** the independent review of
+0d933d5. **Done:** `couponPart` reads each with `typed()`: not a figure is said under the box ("Not a
+figure: type it as 1500, with no commas.") and Save stays grey; nothing is sent. Checked, broken once.
+**For docs/api-requests.md (through the mobile chat):** the web's Menu.tsx 466-470 has the same gap, and
+the server should refuse a limit that is present but not a number rather than read it as none.
+**Rule:** never `Number(text)` into a body whose null means "none".
+
+### MPOS-P3 · A chosen bill photo could be dropped without a word (20 Nov) — fixed
+**What:** in Record, a photo was sent only when the server answered with the movement's id; with no id it
+was dropped and "Recorded" said. **Found:** the review. **Done:** "Recorded, without its photo" and the way
+to add it on the paid-out in the list.

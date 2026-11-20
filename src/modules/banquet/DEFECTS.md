@@ -67,3 +67,12 @@ dialogs cannot close while their write is on its way. Left: the hall price (a PA
 Cancel (refused once cancelled), Add a hall / a package (names are unique: a repeat is refused), Register,
 the bill, payments and the invoice (the server reads their keys; the keepers are already per function, in
 data.ts). **The rule:** a write on a route that reads no idempotency key keeps its stop OUTSIDE the sheet and the screen (core `useScreenStop`, by name), stopped while it is on its way, and let go only by a read of the record that BEGAN after the loss and came back good.
+
+## m16 pickers (20 Nov) — lane m16-pick-pos
+
+### MBQ-P1 · A function ending before it starts, the same day, could be registered (20 Nov) — fixed before the merge
+**What:** with the pickers, Starts at 18:00 and Ends at 17:00 on one day still built a body. Registering is
+HELD offline, so the server's refusal ("A function ends after it starts.") would come after the person had
+gone. **Found:** the independent review of 0d933d5. **Done:** `whyNotWhen` says the server's sentence under
+Until and `registerBody` sends nothing (text compare of "YYYY-MM-DDTHH:MM"); checked, broken once.
+**Rule:** a held write checks on the phone what the server would refuse later.

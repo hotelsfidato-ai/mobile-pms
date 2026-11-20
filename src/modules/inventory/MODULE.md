@@ -79,7 +79,7 @@ the API refuses: the API's "Reading prices is for …" sentence and nothing read
 2. **Edit and Remove** are disabled for the rate setters too: "On the website for now" (set-up, the brief).
 3. **Paise are shown** where the server sends them (ADR is usually not whole: ₹3,222.22 where the
    web shows ₹3,222) — MEMORY 9.
-4. **Dates are stepped** (− / +, M-7), not typed in a date input.
+4. **Dates** are the phone's own date picker (M-16), as the web's date inputs.
 5. **The toolbar's arrows are 44 px**, the web's 36 (touch targets).
 6. A read that fails says so (the web's `getInventory` turns every failure into "No room types").
 
@@ -197,10 +197,9 @@ Compared by reading the code against the pictures, never seen running.
 
 Differences left, each with its reason:
 
-1. **Import** is grey, "On the website for now": a file picker (`expo-document-picker`, not installed).
+1. **Import** and a type's **Photos**: on the phone since M-16 (below).
 2. **The rooms are not dragged into order**: the grip is not drawn; the line under Rooms says
-   putting them in order is on the website. **Photos** (the type's third tab) the same:
-   `expo-image-picker`. The **colour** is typed (#1f6f5c) beside a swatch: no colour picker.
+   putting them in order is on the website. The **colour** is typed (#1f6f5c) beside a swatch: no colour picker.
 3. **Edit and the room tiles for a role that may not change the setup** are grey with the gate's
    sentence (the settings console only lets the owner, admin and GM in, so this is only seen if the
    matrix changes).
@@ -233,3 +232,18 @@ What I saw      nothing: never opened on a screen
 Accessibility   44 px targets, icon buttons labelled, native Switch and Alert, safe areas in every sheet
 Packages        none (expo-document-picker, expo-image-picker asked)
 ```
+
+## m16 pickers (20 Nov) — lane m16-pick-pos, PICKERS.md 2.9, 2.10
+
+Nothing here was opened on a phone or a preview: built from the web's code at c9394cb.
+
+| Row | Control | Where | How |
+|---|---|---|---|
+| 2.9 | Import (room types, then rooms) | `RoomTypes.tsx`, pos `ImportSheet.tsx` | The shared sheet with core `ROOM_TYPE_SPEC` / `ROOM_SPEC`; POST `/room-types/import`, `/rooms/import` `{ rows, dryRun }` (`configData.ts` importSetup). After room types land, closing the sheet offers the rooms file, as the web. Grey with SETUP_ADD's sentence. |
+| 2.10 | A room type's photos | `TypePhotos.tsx` (the type's Photos tab) | Take or choose (`pickPhoto` at PHOTO_QUALITY) → `base64For(PHOTO)`: a JPEG of 1600 px at most on its long side, a larger one refused plainly (expo-image-manipulator is the owner's question) → POST `…/photos { data }`; Earlier / Later (PUT `…/photos/order`, the whole list), Delete asked first (the phone's own dialog, M-16); shown from `{ type, data }` with `dataUrl`. Changing is SETUP_CHANGE's. |
+| opt. | Group rates' From / Through; the rate dialogs' From / Through | `GroupRates.tsx`, `Dialogs.tsx` | `DateField` (the M-7 stepper gone). |
+
+**Repeats (the API, read 20 Nov):** POST a photo reads no key and adds a SECOND photo on a repeat, so
+an add whose reply was lost greys Add until the list is read again (`photosStop`); a landed order or
+delete greys the arrows until a read begun after it (`<name>/fresh`, MEMORY 24). An import of room
+types or rooms updates on a repeat; the real import is still one per tap (`setupImportStop`).

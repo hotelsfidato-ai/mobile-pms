@@ -15,7 +15,7 @@
 import { DASH } from "../../core/format.ts";
 import { msAt } from "../../core/format.ts";
 import { chooseRule, typesOf } from "./pad.ts";
-import { paise } from "./setup.ts";
+import { paise, typed } from "./setup.ts";
 import type { AddonGroup, MenuCategory, MenuItem, MenuVariation, NumberedAddon, SectionHeading, VariationKind } from "./types";
 
 /* ── The shapes the menu screen reads beyond the till's (data/till.ts) ── */
@@ -63,7 +63,13 @@ export const M = {
   numberedOff: (code: string, id: string, act: "off" | "on") => `${T(code)}/numbered-addons/${id}/${act}`,
   customUsed: (code: string) => `${T(code)}/custom-addons-used`,
   profit: (code: string, from: string, to: string) => `${T(code)}/dish-profit?from=${from}&to=${to}`,
+  /** POST `{ rows, dryRun }` (the web's till.ts importMenu, importAddons). */
+  imports: (code: string, which: "menu" | "addons") => `${T(code)}/menu/${which === "menu" ? "" : "addon-groups/"}import`,
 };
+
+/** The stop an import's lost reply puts on the Menu (ImportSheet.tsx): let go by the read that shows what
+    it imported - the dishes for the menu file, the sides (add-on groups) for the sides file. */
+export const importStop = (code: string, which: "menu" | "addons") => `pos/${code}/menu/import/${which}`;
 
 /* ── A new dish (CategoryCard add, POS-14, D27-120) ─────────────────── */
 
@@ -322,6 +328,21 @@ export function promoForm(isNew: boolean, code: string, name: string, kind: "per
     error: value.trim() !== "" && bad ? (kind === "percent" ? "Between 0 and 100." : "More than nothing.") : undefined,
     ready: name.trim().length > 0 && (!isNew || code.trim().length > 0) && !bad,
     amount,
+  };
+}
+/** A coupon's part of a new promotion (Menu.tsx PromotionDialog, 261): both days chosen before Save;
+    a blank limit is none (null), never a number nobody typed; the days as the API's text.
+    A limit that is not a figure ("1,500") is said and nothing is sent: the web's Number() would make
+    it NaN, JSON null, and the server would save "no limit" (MPOS-P2). */
+export const NOT_A_FIGURE = "Not a figure: type it as 1500, with no commas.";
+export function couponPart(isCoupon: boolean, l: { from: string; to: string; maxUses: string; minBill: string }) {
+  if (!isCoupon) return { ready: true, body: {}, maxUsesError: undefined, minBillError: undefined };
+  const uses = typed(l.maxUses), least = typed(l.minBill);
+  return {
+    ready: l.from !== "" && l.to !== "" && !uses.bad && !least.bad,
+    maxUsesError: uses.bad ? NOT_A_FIGURE : undefined,
+    minBillError: least.bad ? NOT_A_FIGURE : undefined,
+    body: { coupon: { from: l.from, to: l.to, maxUses: uses.value, minBill: least.value } },
   };
 }
 export const promoValue = (p: Promo) => (p.kind === "percent" ? `${p.value}%` : rupeesWhole(p.value));

@@ -4,7 +4,7 @@
 import {
   billActs, billRows, choosePackage, clockText, confirmedWords, courseBody, courseWords, figure, fromToday, hallCount,
   mayCancel, mayChangeFood, mayConfirm, momentOf, moneyLines, orderWords, overfull, packageWords, priceAct, priceBody,
-  registerBody, rupees, shift, statusOf, timeOf, usualHint, whenLabel, type CourseDraft, type Fn, type RegisterDraft,
+  registerBody, whyNotWhen, rupees, shift, statusOf, timeOf, usualHint, whenLabel, type CourseDraft, type Fn, type RegisterDraft,
 } from "./rules.ts";
 
 const eq = (got: unknown, want: unknown, what: string) => {
@@ -58,6 +58,11 @@ eq(registerBody(draft), {
 eq(registerBody({ ...draft, amount: "0", free: true })?.agreedAmount, 0, "Free sends 0");
 eq(registerBody({ ...draft, untilTime: "" }), null, "no end: not ready (the module's whole question)");
 eq(registerBody({ ...draft, venueId: "" }), null, "no hall: not ready");
+/* Ends before (or as) it starts, the same day: not sent, the server's sentence said first (held offline). */
+eq(registerBody({ ...draft, untilDay: draft.fromDay, fromTime: "18:00", untilTime: "17:00" }), null, "ends before it starts: not ready");
+eq(registerBody({ ...draft, untilDay: draft.fromDay, fromTime: "18:00", untilTime: "18:00" }), null, "ends as it starts: not ready");
+eq(whyNotWhen({ fromDay: "2026-11-20", fromTime: "18:00", untilDay: "2026-11-20", untilTime: "17:00" }), "A function ends after it starts.", "the server's words");
+eq(whyNotWhen({ fromDay: "2026-11-20", fromTime: "23:00", untilDay: "2026-11-21", untilTime: "01:00" }), null, "past midnight into the next day: fine");
 eq(registerBody({ ...draft, amount: "fifty" }), null, "a word as the amount: not ready, never sent as unpriced");
 eq(overfull({ seated: 200, floating: 300 }, "320"), 300, "more than the hall holds");
 eq(overfull({ seated: 200, floating: null }, "150"), null, "fits");

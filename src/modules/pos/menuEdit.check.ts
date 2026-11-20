@@ -9,6 +9,9 @@ import {
   variationLine, variationsBody, variationsReady, type Dish, type Section,
 } from "./menuEdit.ts";
 import type { NumberedAddon } from "./types";
+import { M, couponPart, importStop } from "./menuEdit.ts";
+import { ADDON_SPEC } from "./addonSpec.ts";
+import { MENU_SPEC, parseCsv, templateCsv } from "../../core/importSpec.ts";
 
 const eq = (got: unknown, want: unknown, what = "") => {
   if (JSON.stringify(got) !== JSON.stringify(want)) throw new Error(`${what}: got ${JSON.stringify(got)}, want ${JSON.stringify(want)}`);
@@ -140,3 +143,27 @@ eq(dishRows(sections)[1]!.slice(3, 8), ["-", "Oil 300, Butter 400, Extra pau 30,
 eq(dishRows(sections)[2]!.at(-1), "No", "taken off the card");
 
 console.log("menuEdit: all checks pass");
+
+/* The imports (m16-pick-pos): the web's two routes; the sides file's template reads back as it was made. */
+eq([M.imports("5EL", "menu"), M.imports("5EL", "addons")], ["/api/hotels/5EL/till/menu/import", "/api/hotels/5EL/till/menu/addon-groups/import"], "the import routes");
+eq(importStop("5EL", "menu") !== importStop("5EL", "addons"), true, "each file its own stop");
+{
+  const back = parseCsv(templateCsv(ADDON_SPEC), ADDON_SPEC);
+  eq([back.missing, back.unknown, back.rows.length], [[], [], ADDON_SPEC.examples.length], "the add-ons template reads back whole");
+  eq(back.rows[0], { group: "Choice of raita", option: "Plain raita", price: "40", minSelect: "0", maxSelect: "1" }, "each value in its field");
+  eq(parseCsv(templateCsv(ADDON_SPEC), MENU_SPEC).missing, ["Section", "Dish"], "the add-ons file read as the menu says what it lacks");
+}
+
+/* A coupon (2.5): both days before Save; a blank limit is null, never 0; the days sent as picked. */
+eq(couponPart(false, { from: "", to: "", maxUses: "5", minBill: "" }).body, {}, "not a coupon: nothing of it is sent");
+eq(couponPart(true, { from: "2026-11-20", to: "", maxUses: "", minBill: "" }).ready, false, "a coupon waits for its Until");
+eq(couponPart(true, { from: "2026-11-20", to: "2026-12-31", maxUses: " ", minBill: "" }),
+  { ready: true, maxUsesError: undefined, minBillError: undefined, body: { coupon: { from: "2026-11-20", to: "2026-12-31", maxUses: null, minBill: null } } }, "blank limits are none");
+/* MPOS-P2: a limit typed with a comma is not a figure - said, Save grey, never sent as null ("no limit"). */
+{
+  const bad = couponPart(true, { from: "2026-11-20", to: "2026-12-31", maxUses: "1,500", minBill: "999,50" });
+  eq([bad.ready, bad.maxUsesError, bad.minBillError], [false, "Not a figure: type it as 1500, with no commas.", "Not a figure: type it as 1500, with no commas."], "1,500 and 999,50 refused");
+  eq(couponPart(true, { from: "2026-11-20", to: "2026-12-31", maxUses: "", minBill: "abc" }).ready, false, "a word as the least bill keeps Save grey");
+}
+eq(couponPart(true, { from: "2026-11-20", to: "2026-12-31", maxUses: "50", minBill: "999.50" }).body,
+  { coupon: { from: "2026-11-20", to: "2026-12-31", maxUses: 50, minBill: 999.5 } }, "typed limits as numbers, paise kept");

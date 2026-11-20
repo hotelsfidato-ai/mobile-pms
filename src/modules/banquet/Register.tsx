@@ -1,13 +1,13 @@
 import { useRef, useState } from "react";
 import { Text, View } from "react-native";
 import { HeldError, outcomeUnknown } from "../../core/api";
+import { DateField, TimeField } from "../../core/DateField";
 import { c, t } from "../../core/theme";
 import { useRead } from "../../core/ui";
 import { Field, Input, Tick } from "../finance/Kit";
 import { Btn, body, Dialog, Foot, InDialog, Loading, Select, message, saidOf, type Said } from "../guest-services/kit";
-import { Day } from "../housekeeping/DayStepper";
 import { isRefused, readSetup, register } from "./data";
-import { clockText, figure, hallWords, overfull, registerBody, usualHint } from "./rules";
+import { figure, hallWords, overfull, registerBody, usualHint, whyNotWhen } from "./rules";
 
 /* ══════════════════════════════════════════════════════════════════
    REGISTER A FUNCTION — the web's RegisterDialog (pages/Banquet.tsx).
@@ -18,8 +18,8 @@ import { clockText, figure, hallWords, overfull, registerBody, usualHint } from 
    UNPRICED, the hall's usual is OFFERED ("Use usual"), 0 only with Free
    (D27-120). Not pictured: built from the code.
 
-   The web's datetime-local is a day stepper and a 24-hour time here (M-7:
-   no date-picker package), sent as the same "YYYY-MM-DDTHH:MM" on the
+   The web's datetime-local is a day and a time here, each with the phone's
+   own picker (M-16), sent as the same "YYYY-MM-DDTHH:MM" on the
    property's clock. OFFLINE it is HELD (the web's "Function enquiry" tier)
    with the key it was given at the tap: one call is one enquiry (062).
    One tap, one write (MEMORY 8).
@@ -68,8 +68,6 @@ export function Register({ code, businessDate, onClose, onDone, onHeld }: {
     }
   }
 
-  const timeHint = (text: string) => (text.trim() !== "" && !clockText(text) ? "Not a time: 24-hour, as 18:00." : "24-hour, as 18:00.");
-
   return (
     <Dialog title="Register a function" description="This holds nothing yet. Confirming it takes the hall." onClose={onClose}>
       <Field label="Hall" required>
@@ -90,20 +88,23 @@ export function Register({ code, businessDate, onClose, onDone, onHeld }: {
         <Input label="What is the function?" value={title} onChange={setTitle} placeholder="Sharma sangeet" />
       </Field>
 
-      <Field label="From" required hint={timeHint(fromTime)}>
-        <View style={{ gap: 8 }}>
-          <Day label="From" value={fromDay} off={false} onChange={(v) => { setFromDay(v); if (untilDay < v) setUntilDay(v); }} />
-          <Input label="From, the time" value={fromTime} onChange={setFromTime} keyboard="numbers-and-punctuation" placeholder="18:00" maxLength={5} tabular />
+      <View style={{ flexDirection: "row", gap: 8 }}>
+        <View style={{ flex: 3 }}>
+          <DateField label="From" required value={fromDay} hotel={{ businessDate }} onChange={(v) => { setFromDay(v); if (untilDay < v) setUntilDay(v); }} />
         </View>
-      </Field>
+        <View style={{ flex: 2 }}><TimeField label="Starts at" required value={fromTime} onChange={setFromTime} opensAt="18:00" /></View>
+      </View>
 
       {/* The question the whole module exists to make somebody answer; the hint says why. */}
-      <Field label="Until" required hint={`A hall booked with no end is a hall nobody else can be sold. ${timeHint(untilTime)}`}>
-        <View style={{ gap: 8 }}>
-          <Day label="Until" value={untilDay} min={fromDay} off={false} onChange={setUntilDay} />
-          <Input label="Until, the time" value={untilTime} onChange={setUntilTime} keyboard="numbers-and-punctuation" placeholder="23:00" maxLength={5} tabular />
+      <View style={{ gap: 6 }}>
+        <View style={{ flexDirection: "row", gap: 8 }}>
+          <View style={{ flex: 3 }}><DateField label="Until" required value={untilDay} min={fromDay} hotel={{ businessDate }} onChange={setUntilDay} /></View>
+          <View style={{ flex: 2 }}><TimeField label="Ends at" required value={untilTime} onChange={setUntilTime} opensAt="23:00" /></View>
         </View>
-      </Field>
+        {whyNotWhen({ fromDay, fromTime, untilDay, untilTime })
+          ? <Text style={[t.caption, { lineHeight: 17, color: c.red700 }]} accessibilityRole="alert">{whyNotWhen({ fromDay, fromTime, untilDay, untilTime })}</Text>
+          : <Text style={[t.caption, { lineHeight: 17 }]}>A hall booked with no end is a hall nobody else can be sold.</Text>}
+      </View>
 
       <Field label="Host" required>
         <Input label="Host" value={hostName} onChange={setHostName} placeholder="Mr Sharma" />

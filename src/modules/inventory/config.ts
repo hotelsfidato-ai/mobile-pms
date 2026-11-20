@@ -446,3 +446,22 @@ export const priceOrDash = (v: number | null) => (v === null ? DASH : rupees(v))
 export const propertiesWord = (n: number) => `${n} ${n === 1 ? "property" : "properties"}`;
 export const saveLine = (toSave: number, of: number) =>
   toSave === 0 ? "Nothing to save." : `${toSave} of ${propertiesWord(of)} change.`;
+
+/* ── A room type's photos (RoomSetup.tsx TypePhotos, D27-258; M-16, PICKERS 2.10) ──
+   Ten a type (the server's `most`), the first shown first. Earlier / Later
+   send the whole order (PUT …/photos/order); after one LANDS the arrows
+   wait for a read begun after it (MEMORY 24). An add whose reply was lost
+   stops Add a photo until such a read (a repeat is a second photo). */
+
+/** The order with the photo at `from` moved to `to` (the web's move). */
+export function movedOrder(ids: readonly string[], from: number, to: number): string[] {
+  const next = [...ids];
+  if (from < 0 || from >= next.length || to < 0 || to >= next.length) return next;
+  next.splice(to, 0, next.splice(from, 1)[0]!);
+  return next;
+}
+export const photosLine = (n: number, most: number) => `${n} of ${most}. The first is shown first.`;
+/** The stop on a type's photos (core stop.ts): its adds and its order. */
+export const photosStop = (code: string, typeId: string) => `inventory/${code}/room-types/${typeId}/photos`;
+/** The stop on the room set-up's imports: let go by the read of the room set-up. */
+export const setupImportStop = (code: string) => `inventory/${code}/room-setup/import`;

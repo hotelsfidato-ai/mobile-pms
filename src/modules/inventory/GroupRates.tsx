@@ -3,6 +3,7 @@ import { Check, TriangleAlert } from "lucide-react-native";
 import { useRef, useState } from "react";
 import { Text, View } from "react-native";
 import { outcomeUnknown, type Hotel, type HotelsResponse } from "../../core/api";
+import { DateField } from "../../core/DateField";
 import { dateShort } from "../../core/format";
 import { c, face, space, t } from "../../core/theme";
 import { Head, Screen, notKnown, useRead } from "../../core/ui";
@@ -13,8 +14,7 @@ import {
 import { previewRateChange, saveRateChange } from "./configData";
 import { Btn, Failed, Field, Loading, NotYourRole, Select, SwitchLine, TextBox } from "./configKit";
 import { priceHotels, seesGroupRates } from "./configRoles";
-import { DayStep, Segmented, Toast, body, saidOf, type Said } from "./kit";
-import { addDays } from "./rates";
+import { Segmented, Toast, body, saidOf, type Said } from "./kit";
 
 /* ══════════════════════════════════════════════════════════════════
    GROUP RATE CHANGE on a phone — the web's /group-rates (new in the
@@ -30,8 +30,8 @@ import { addDays } from "./rates";
 
    The figure is typed and sent as typed (no minus on a new price); a save
    whose reply was lost empties it and says so (MEMORY 16) - the server's
-   check against what was shown refuses a blind repeat too. Dates are
-   stepped (M-7: no date-picker package).
+   check against what was shown refuses a blind repeat too. Dates with
+   the phone's own picker (M-16).
    ══════════════════════════════════════════════════════════════════ */
 
 export function GroupRates({ hotel, role, who }: { hotel: Hotel; role: string | null; who: HotelsResponse }) {
@@ -109,12 +109,8 @@ function GroupRatesScreen({ code, hotels }: { code: string; hotels: ReturnType<t
           </Field>
           {first ? (
             <>
-              <Field label="From" hint="The first day changed.">
-                <DayStep label="From" value={first} step={addDays} onChange={setFrom} />
-              </Field>
-              <Field label="Through" hint="The last day changed.">
-                <DayStep label="Through" value={last} min={first} step={addDays} onChange={setThrough} />
-              </Field>
+              <DateField label="From" hint="The first day changed." value={first} hotel={{ businessDate: first }} onChange={setFrom} />
+              <DateField label="Through" hint="The last day changed." value={last} min={first} hotel={{ businessDate: last }} onChange={setThrough} />
             </>
           ) : null}
           <Field label="Change">

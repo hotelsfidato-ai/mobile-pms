@@ -92,7 +92,7 @@ function Whole({ hotel, role }: { hotel: Hotel; role: string | null }) {
             label="Service charge, %" saved={d.restaurant.serviceChargePct ?? null} path={P.serviceCharge(code)} field="percent"
             words={(v) => (v === null ? "No service charge" : "Service charge saved")} /> : null}
           {d.restaurant ? <Allowance code={code} acts={acts} /> : null}
-          {d.restaurant ? <TaxesPart code={code} role={role} acts={acts} /> : null}
+          {d.restaurant ? <TaxesPart code={code} role={role} acts={acts} hotel={hotel} /> : null}
           <Sections code={code} role={role} setup={d} acts={acts} />
           <KotPart code={code} role={role} acts={acts} />
           <Hours code={code} role={role} acts={acts} />

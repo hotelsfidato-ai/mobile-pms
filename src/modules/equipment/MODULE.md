@@ -62,11 +62,6 @@ the whole form (`formKeeper`, MHK-3), held offline as the web holds a work order
 
 ## Left out, each with its reason
 
-- **Import** — it reads a spreadsheet file: no document picker on the phone (`expo-document-picker` ~57.0.3, the
-  owner's yes needed). Drawn grey "On the website for now".
-- **The three dates** (bought on, warranty ends, service contract ends) on Add and Change details — a date
-  picker (`@react-native-community/datetimepicker` 9.1.0, not approved). Add leaves them blank (a dash); Change
-  sends only what changed, so they stay as they are. Said in each form.
 - **The CSV of every line, retired ones included** (`GET /equipment/export`): the core's export makes the list's
   own rows into PDF / Excel; the separate CSV door is not used.
 - **Take the room out of service too**, from an item's repair (RepairFlow's take-out): the repair is raised
@@ -87,7 +82,7 @@ grey under it, and TAG OR COUNT · WHERE · STATUS (the green "In use" pill with
 WARRANTY ENDS (a dash) as labelled rows in small capitals, a chevron on the right. Differences left:
 1. **Export is the core's two buttons** (PDF or print / share, now real PDF and Excel files, M-14) instead of the
    web's one "Export": the core's ExportButtons, the same on every screen.
-2. **Import is grey "On the website for now"** (a file picker) — the picture's Import opens the web's import.
+2. **Import** opens the phone's import sheet (M-16, below), as the picture's Import opens the web's.
 3. **The three buttons are stacked** (export row, Import with its sentence, Add an item) rather than one row: a
    grey button carries its sentence under it (AGENTS rule 1).
 4. **The picture is of 31 Oct;** today's page adds the waiting tile (not pictured: built from the code).
@@ -105,3 +100,17 @@ after the failure unlocks it), not each dialog's; no dialog closes while busy; t
 screen's, kept across reopening until such a read.
 **Amended again 20 Nov (MHK-K3):** the item's doubt and its repair's key are kept outside React by hotel and
 item, the register's Add by hotel (`doubtStore`), so leaving and coming back keeps them.
+
+## m16 pickers (20 Nov) — lane m16-pick-pos, PICKERS.md 2.11-2.13
+
+Nothing here was opened on a phone or a preview: built from the web's code at c9394cb.
+
+| Row | Control | Where | How |
+|---|---|---|---|
+| 2.11 | Import | `Register.tsx`, `importSpec.ts`, pos `ImportSheet.tsx` | `EQUIPMENT_SPEC` (the web's importColumns.ts); POST `/equipment/import` `{ rows, dryRun }` (`data.ts` importEquipment). Grey with ADD_REFUSED for one who may not create. |
+| 2.12 | Bought on, Warranty ends, Service contract (AMC) ends in Add | `Register.tsx` AddDialog | `DateField` ×3, clearable; the two ends no earlier than the purchase; blank left out of the body (`addBody`). |
+| 2.13 | The same three in Change the details | `ItemDialogs.tsx` EditDialog | `DateField` ×3, clearable; only a changed day sent, emptied as null (`changesOf`). |
+
+**Repeats:** every row of an equipment file is a NEW thing (a blank Tag takes the next EQ-number), so a
+repeated import would add the register twice: the real import is one per tap and, after a lost reply,
+grey until the register is read again (`importStop`). See MEQ-P1 for the sheet's words.

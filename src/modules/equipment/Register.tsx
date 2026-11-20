@@ -4,16 +4,18 @@ import { AlertTriangle, Armchair, ChevronRight, Plus, Upload } from "lucide-reac
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Platform, Pressable, Text, View } from "react-native";
 import type { Hotel } from "../../core/api";
+import { DateField } from "../../core/DateField";
 import { ExportButtons } from "../../core/Export";
-import { ON_THE_WEBSITE } from "../../core/menu";
 import { c, face, space, t } from "../../core/theme";
-import { Head, notKnown, ripple, Screen, useRead, useStuck } from "../../core/ui";
+import { Head, notKnown, ripple, Screen, useRead, useScreenStop, useStuck } from "../../core/ui";
+import { ImportSheet } from "../pos/ImportSheet";
 import { doubtStore, stillUnknown } from "../housekeeping/care";
 import {
   Act, Back, body, Box, Btn, Dialog, Empty, Failed, Fact, Field, Foot, IconChip, InDialog, Input, Loading, NotYours, Pill,
   Refused, saidOf, Segmented, Select, Stale, Toast, type Said,
 } from "../housekeeping/careKit";
-import { addEquipment, readEquipment, readEquipmentApprovals, readOptions } from "./data";
+import { addEquipment, importEquipment, readEquipment, readEquipmentApprovals, readOptions } from "./data";
+import { EQUIPMENT_SPEC, importStop } from "./importSpec";
 import { DecideButtons } from "./Decide";
 import {
   ADD_REFUSED, addBody, askedLine, costText, endsText, EXPORT_REFUSED, headLine, heldText, ITEM_COLUMNS, itemRow, may,
@@ -33,8 +35,9 @@ import {
    person may not use is grey with who may (register.ts whoMay), never
    hidden. A cost or a warranty nobody typed is a dash. Every write is
    refused offline in the web's words (data.ts).
-   Left on the website: Import (it reads a file - no picker on the phone)
-   and the add form's three dates (no date picker): MODULE.md.
+   Import (the phone's file picker, the shared ImportSheet: the dry run
+   first) and the add form's three dates (the phone's own date picker) came
+   with M-16 (20 Nov).
    ══════════════════════════════════════════════════════════════════ */
 
 /** Adds whose outcome is unknown, by hotel. */
@@ -49,7 +52,10 @@ export function Register({ hotel, role, onBack }: { hotel: Hotel; role: string |
   const code = hotel.code;
   const cache = useQueryClient();
   /* Stamped with when the read BEGAN: an unknown Add waits for a read begun after it (H3). */
-  const q = useRead(async () => { const began = Date.now(); return { began, items: await readEquipment(code) }; }, ["equipment", code, "list"]);
+  /* An import whose reply was lost (every row of it is a new thing) is let go by this read, begun after it. */
+  const imports = useScreenStop(importStop(code));
+  const q = useRead(imports.watch(async () => { const began = Date.now(); return { began, items: await readEquipment(code) }; }), ["equipment", code, "list"]);
+  const [importing, setImporting] = useState(false);
   const inbox = useRead(() => readEquipmentApprovals(code), ["equipment", code, "approvals"]);
   const [place, setPlace] = useState("all");
   const [status, setStatus] = useState<StatusFilter>("all");
@@ -90,7 +96,7 @@ export function Register({ hotel, role, onBack }: { hotel: Hotel; role: string |
             } : null} />
           ) : <Text style={[t.caption, { color: c.grey600 }]}>{EXPORT_REFUSED()}</Text>}
           <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8, alignItems: "flex-start" }}>
-            <Refused label="Import" icon={Upload} reason={mayCreate ? ON_THE_WEBSITE : ADD_REFUSED()} />
+            {mayCreate ? <Btn label="Import" icon={Upload} onPress={() => setImporting(true)} /> : <Refused label="Import" icon={Upload} reason={ADD_REFUSED()} />}
           </View>
           <Act label="Add an item" icon={Plus} variant="primary"
             reason={!mayCreate ? ADD_REFUSED() : addUnknown ? notKnown("added", "the register once it is read again (pull down)").line : null}
@@ -152,9 +158,13 @@ export function Register({ hotel, role, onBack }: { hotel: Hotel; role: string |
           </>
         )}
       </Screen>
+      {importing ? (
+        <ImportSheet spec={EQUIPMENT_SPEC} stopName={importStop(code)} where="the register"
+          load={(rows, dryRun) => importEquipment(code, rows, dryRun)} onClose={() => setImporting(false)} onImported={refresh} />
+      ) : null}
       <Toast said={said} onClose={unsay} />
       {adding ? (
-        <AddDialog code={code} onLost={setAddLost} onClose={() => { setAdding(false); refresh(); }}
+        <AddDialog code={code} hotel={hotel} onLost={setAddLost} onClose={() => { setAdding(false); refresh(); }}
           onAdded={(id, s) => { setAdding(false); setSaid(s); refresh(); router.push(`/equipment/${code}/${id}`); }} />
       ) : null}
     </View>
@@ -189,13 +199,14 @@ function Line({ i, today, onPress }: { i: EquipmentItem; today: string; onPress:
 
 /* ── Adding a thing to the register (AddEquipmentDialog) ─────────── */
 
-function AddDialog({ code, onLost, onClose, onAdded }: {
-  code: string; onLost: (at: number) => void; onClose: () => void; onAdded: (id: string, s: Said) => void;
+function AddDialog({ code, hotel, onLost, onClose, onAdded }: {
+  code: string; hotel: Hotel; onLost: (at: number) => void; onClose: () => void; onAdded: (id: string, s: Said) => void;
 }) {
   const options = useRead(() => readOptions(code), ["equipment", code, "options"]);
   const o = options.data;
   const [f, setF] = useState<AddForm>({
     name: "", category: "", heldAs: "tagged", tag: "", quantity: "", whereKind: "room", roomId: "", locationId: "", supplierId: "", unitCost: "", status: "in_use",
+    purchaseDate: "", warrantyEnds: "", amcEnds: "",
   });
   const set = (patch: Partial<AddForm>) => setF((x) => ({ ...x, ...patch }));
   /* The offered tag arrives with the options, once: a label typed over it is kept. */
@@ -285,9 +296,10 @@ function AddDialog({ code, onLost, onClose, onAdded }: {
           <Field label={f.heldAs === "counted" ? "Cost of one, in rupees" : "Cost, in rupees"} hint="Blank if nobody knows. It shows a dash, never zero.">
             <Input label="Cost, in rupees" value={f.unitCost} onChangeText={(v) => set({ unitCost: v })} keyboardType="decimal-pad" inputMode="decimal" />
           </Field>
-          <Field label="Bought on · Warranty ends · Service contract (AMC) ends" hint={`${ON_THE_WEBSITE}: a date needs a date picker on the phone. Left blank they show a dash; add them on the website.`}>
-            <Input label="Dates" value="" onChangeText={() => undefined} placeholder={ON_THE_WEBSITE} editable={false} />
-          </Field>
+          {/* The phone's own date picker (M-16); blank is "not known" (a dash), the two ends no earlier than the purchase, as the web. */}
+          <DateField label="Bought on" clearable value={f.purchaseDate} onChange={(v) => set({ purchaseDate: v })} hotel={hotel} />
+          <DateField label="Warranty ends" clearable value={f.warrantyEnds} min={f.purchaseDate || undefined} onChange={(v) => set({ warrantyEnds: v })} hotel={hotel} />
+          <DateField label="Service contract (AMC) ends" clearable value={f.amcEnds} min={f.purchaseDate || undefined} onChange={(v) => set({ amcEnds: v })} hotel={hotel} />
         </>
       )}
       <InDialog said={said} />

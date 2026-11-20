@@ -1,4 +1,5 @@
 import { api, send } from "../../core/api";
+import type { ImportReport } from "../../core/importSpec";
 import type {
   AriState, BookingSource, BookingSourceKind, CancellationPolicy, ChannelBooking, PlaceKind, PlacesData,
   RateChangePreview, RatePlan, RateQuestion, RoomSetupView, SendResult, SuContent, SuStatus,
@@ -47,6 +48,27 @@ export const removeRoom = (code: string, number: string) =>
   send<{ ok: true; unlinked: string | null }>("DELETE", `${H(code)}/rooms/${encodeURIComponent(number)}`);
 
 export interface Amenity { id: string; name: string; isActive: boolean }
+/* ── A room type's photos (roomSetup.ts 122-132; M-16, PICKERS 2.10) and the imports (2.9) ── */
+
+export interface TypePhoto { id: string; caption: string | null; width: number; height: number }
+export const readTypePhotos = (code: string, typeId: string) =>
+  api<{ photos: TypePhoto[]; most: number }>(`${H(code)}/room-types/${encodeURIComponent(typeId)}/photos`);
+/** One photo, as base64 JPEG ({ type, data }): shown with files.ts dataUrl. */
+export const readTypePhoto = (code: string, typeId: string, photoId: string) =>
+  api<{ type: string; data: string }>(`${H(code)}/room-types/${encodeURIComponent(typeId)}/photos/${encodeURIComponent(photoId)}`);
+/** `data`: the JPEG's bytes, base64 (core base64For with PHOTO). A repeat adds a second photo (no key read). */
+export const addTypePhoto = (code: string, typeId: string, data: string) =>
+  send<{ ok: true; id: string }>("POST", `${H(code)}/room-types/${encodeURIComponent(typeId)}/photos`, { data });
+export const removeTypePhoto = (code: string, typeId: string, photoId: string) =>
+  send<{ ok: true }>("DELETE", `${H(code)}/room-types/${encodeURIComponent(typeId)}/photos/${encodeURIComponent(photoId)}`);
+/** The whole order, each of the type's photos once. */
+export const orderTypePhotos = (code: string, typeId: string, ids: string[]) =>
+  send<{ ok: true }>("PUT", `${H(code)}/room-types/${encodeURIComponent(typeId)}/photos/order`, { ids });
+
+/** Room types or rooms from a file (roomSetup.ts importSetup): `{ rows, dryRun }`, the dry run first. */
+export const importSetup = (code: string, what: "room-types" | "rooms", rows: Record<string, string>[], dryRun: boolean) =>
+  send<ImportReport>("POST", `${H(code)}/${what}/import`, { rows, dryRun });
+
 export const readAmenities = (code: string) => api<{ amenities: Amenity[] }>(`${H(code)}/amenities`);
 export const readTypeAmenities = (code: string, typeId: string) =>
   api<{ amenityIds: string[] }>(`${H(code)}/room-types/${encodeURIComponent(typeId)}/amenities`);

@@ -1,20 +1,23 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
-  AlertTriangle, ArrowDownLeft, ArrowUpRight, Banknote, Check, DoorOpen, Gift, HandCoins, Lock, Percent, Plus, Receipt, Store, Wallet,
+  AlertTriangle, ArrowDownLeft, ArrowUpRight, Banknote, Camera, Check, DoorOpen, Gift, HandCoins, Image as ImageIcon, Lock, Percent, Plus, Receipt, Store, Wallet,
   type LucideIcon,
 } from "lucide-react-native";
 import { useRef, useState, type ReactNode } from "react";
 import { Alert, Platform, Pressable, Text, View } from "react-native";
 import { ApiError, HeldError, outcomeUnknown, type Hotel } from "../../core/api";
+import type { Picked } from "../../core/files";
 import { dateLong } from "../../core/format";
-import { ON_THE_WEBSITE } from "../../core/menu";
 import { useSession } from "../../core/session";
 import { c, face, space, t } from "../../core/theme";
 import { Screen, notKnown, useScreenStop } from "../../core/ui";
+import { filePart, sendForm } from "../../core/upload";
+import { BillChoice, chooseBill, openBill } from "./BillPhoto";
 import { drawerStop } from "./floor";
 import {
   DENOMINATIONS, EXPENSE_CATEGORIES, MOVEMENTS, STEPS, approvalWords, badRow, closeBody, dayAt, hotelNameOf, mayRecord,
-  methodWord, methodsByAmount, movementBody, movementOf, needsReason, precise, rowFigure, rupees, seedCounts, signed, stillUnknown, typed,
+  methodWord, methodsByAmount, movementBody, movementOf, needsReason, PHOTO_NOT_REACHED, photoPath, photoStop, precise, recordedWords, rowFigure,
+  rupees, seedCounts, signed, stillUnknown, typed,
   variance, waitsOrRefused, whyNotClose, whyNotSave, type Counts, type DayEnd, type MovementKind, type Step,
 } from "./dayEnd";
 import { closeDay, countDrawer, openDay, readDayEnd, recordMovement } from "./serviceData";
@@ -41,6 +44,11 @@ import { ReadProblem, Refused, SaidBar, Stale, ty, useAccess, type Said } from "
    day read again; Close empties the float, says so, and stays grey until
    the day has been read again. Count and Open are safe to repeat (the
    count is replaced whole; a second open is refused).
+   A paid-out's bill (D27-370; M-16): chosen with the phone's camera,
+   library or file picker in Record (sent to the new movement after it is
+   recorded, as the web), added or opened on each paid-out (BillPhoto.tsx);
+   never held offline; a lost reply greys Add photo until the day is read
+   again (its own stop, photoStop).
    ══════════════════════════════════════════════════════════════════ */
 
 const KEY = (code: string) => ["pos", code, "day-end"] as const;
@@ -66,7 +74,9 @@ export function DayEndScreen({ hotel, role }: { hotel: Hotel; role: string | nul
   /* A Record whose reply was lost (MPOS-S4, MPOS-U4): kept by name outside this screen and every sheet,
      let go only by a read of the day that BEGAN after it and came back good. */
   const drawer = useScreenStop(drawerStop(code));
-  const q = useQuery({ queryKey: KEY(code), queryFn: drawer.watch(() => readDayEnd(code)), enabled: !refusedRead });
+  /* A bill's photo whose reply was lost (M-16): the same, by its own name, so Record is not greyed by it. */
+  const photos = useScreenStop(photoStop(code));
+  const q = useQuery({ queryKey: KEY(code), queryFn: drawer.watch(photos.watch(() => readDayEnd(code))), enabled: !refusedRead });
   const refresh = () => { void cache.invalidateQueries({ queryKey: ["pos", code] }); };
   const reload = () => { setPulled(true); void q.refetch(); };
 
@@ -424,11 +434,7 @@ function Movements({ code, role, day, onDone, lost }: {
                 <Text style={[t.label, ty.sm, { color: c.grey500 }]}>
                   {spec?.label ?? m.kind}{m.kind === "expense" ? ` · ${m.category ?? "-"}` : ""} · {m.recordedBy ?? "-"} · {m.at}
                 </Text>
-                {m.kind === "expense" ? (
-                  <Text style={[t.label, ty.sm, { color: c.grey500 }]}>
-                    {m.photo ? "Photo of the bill: attached." : "No photo of the bill."} Opening or adding it: {ON_THE_WEBSITE.toLowerCase()}.
-                  </Text>
-                ) : null}
+                {m.kind === "expense" ? <BillOnMovement code={code} role={role} id={m.id} photo={Boolean(m.photo)} onAdded={onDone} /> : null}
                 {told ? <Text style={[t.label, ty.sm, { color: m.approval === "rejected" ? c.red700 : c.yellow800 }]}>{told}</Text> : null}
               </View>
               <Text style={[t.label, t.tab, ty.md, { color: c.ink900, ...face[500] }]}>{signed(spec?.sign, m.amount)}</Text>
@@ -443,13 +449,63 @@ function Movements({ code, role, day, onDone, lost }: {
   );
 }
 
+/** A paid-out's bill in the list (ExpensePhoto): open it, or add one now. Adding is the Day end's grant
+    (DAY_END); opening, whoever reads the day. */
+function BillOnMovement({ code, role, id, photo, onAdded }: { code: string; role: string | null; id: string; photo: boolean; onAdded: () => void }) {
+  const stop = useScreenStop(photoStop(code));
+  const latch = useRef(false);
+  const [busy, setBusy] = useState(false);
+  const [said, setSaid] = useState<Said | null>(null);
+  const why = whyNotCloseDay(role) ?? (stop.unknown ? notKnown("saved", "the paid-outs, read the day again").line : null);
+  const go = async (act: () => Promise<Said | null>) => {
+    if (latch.current) return;
+    latch.current = true;
+    setSaid(null);
+    try { const s = await act(); if (s) setSaid(s); } finally { latch.current = false; setBusy(false); }
+  };
+  const open = () => void go(async () => {
+    setBusy(true);
+    try { await openBill(photoPath(code, id), id, PHOTO_NOT_REACHED); return null; }
+    catch (e) { return { tone: "bad", title: "Not opened", body: e instanceof Error ? e.message : String(e) }; }
+  });
+  const add = () => void go(async () => {
+    if (stop.isStuck()) return null;
+    let problem: string | null = null;
+    const file = await chooseBill((p) => { problem = p; });
+    if (!file) return problem ? { tone: "bad", title: "Photo not saved", body: problem } : null;
+    setBusy(true);
+    try {
+      await stop.guard(() => sendForm("POST", photoPath(code, id), [filePart("file", file)]));
+      onAdded();
+      return { tone: "ok", title: "Photo saved" };
+    } catch (e) {
+      if (outcomeUnknown(e)) { const n = notKnown("saved", "the paid-outs, read the day again", e); return { tone: "bad", title: n.title, body: n.body }; }
+      return { tone: "bad", title: "Photo not saved", body: e instanceof Error ? e.message : String(e) };
+    }
+  });
+  return (
+    <View style={{ marginTop: 4, gap: 4 }}>
+      <View style={{ flexDirection: "row" }}>
+        {photo ? <Btn label="Photo of the bill" icon={ImageIcon} busy={busy} a11y="Open the photo of the bill" onPress={open} />
+          : <Btn label={busy ? "Saving…" : "Add photo"} icon={Camera} busy={busy} disabled={why !== null} a11y="Add a photo of the bill" onPress={add} />}
+      </View>
+      {!photo ? <Why>{why}</Why> : null}
+      {said ? <SaidBar said={said} onDone={() => setSaid(null)} /> : null}
+    </View>
+  );
+}
+
 function MovementSheet({ code, onClose }: { code: string; onClose: (said?: Said) => void }) {
   const [kind, setKind] = useState<MovementKind>("expense");
   const [amount, setAmount] = useState("");
   const [reason, setReason] = useState("");
   const [category, setCategory] = useState("");
+  /* The bill's photo (ExpenseFields): optional; its limit checked when chosen. */
+  const [file, setFile] = useState<Picked | null>(null);
+  const [problem, setProblem] = useState<string | null>(null);
   const w = useWrite();
   const stuck = useScreenStop(drawerStop(code));
+  const photos = useScreenStop(photoStop(code));
   const [dead, setDead] = useState(false);
   const chosen = MOVEMENTS.find((m) => m.kind === kind)!;
   const expense = kind === "expense";
@@ -458,8 +514,17 @@ function MovementSheet({ code, onClose }: { code: string; onClose: (said?: Said)
     if (dead || stuck.isStuck()) return;
     const sent = movementBody(kind, amount, reason, category);
     void w.run(async () => {
-      await stuck.guard(() => recordMovement(code, sent));
-      const said: Said = { tone: "ok", title: "Recorded", body: `${chosen.label} - ${rupees(sent.amount)}` };
+      const res = await stuck.guard(() => recordMovement(code, sent));
+      /* Then its photo, to the new movement's id, as the web does; the movement stands whatever the photo does. */
+      let photo: Parameters<typeof recordedWords>[2] = { ok: true };
+      if (expense && file && res.id) {
+        try { await photos.guard(() => sendForm("POST", photoPath(code, res.id!), [filePart("file", file)])); }
+        catch (e) { photo = outcomeUnknown(e) ? { unknown: true } : { ok: false, reason: e instanceof Error ? e.message : String(e) }; }
+      } else if (expense && file) {
+        /* The server named no movement to put it on: never dropped silently (the review, 20 Nov). */
+        photo = { ok: false, reason: "The paid-out came back without its number. Add the photo on it in the list." };
+      }
+      const said: Said = recordedWords(chosen.label, rupees(sent.amount), photo);
       setTimeout(() => onClose(said), 0);
       return said;
     }, (e) => {
@@ -496,10 +561,7 @@ function MovementSheet({ code, onClose }: { code: string; onClose: (said?: Said)
             <Select label="Category" value={category} onChange={setCategory}
               options={[{ value: "", label: "Choose one" }, ...EXPENSE_CATEGORIES.map((x) => ({ value: x, label: x }))]} />
           </Field>
-          {/* The camera or a file needs expo-image-picker (~57.0.20), not approved. */}
-          <Field label="Photo of the bill" hint={`${ON_THE_WEBSITE}. It can be added there later.`}>
-            <Btn label="Take or pick a photo" disabled onPress={() => {}} />
-          </Field>
+          <BillChoice file={file} onFile={setFile} problem={problem} onProblem={setProblem} disabled={w.busy} />
         </>
       ) : null}
       {w.said ? <SaidBar said={w.said} onDone={() => w.setSaid(null)} /> : null}

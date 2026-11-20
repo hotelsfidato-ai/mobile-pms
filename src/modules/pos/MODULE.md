@@ -219,9 +219,8 @@ GM, the outlet's choice); **never seen running**.
    625) is newer than the 31 Oct picture (MEMORY 14).
 3. **A figure with paise keeps them** (₹1,481.50) where the web's money() rounds (MEMORY 9); whole
    figures look as the picture.
-4. **Day** (the web's date picker) is drawn, greyed, and says "On the website for now": a date
-   picker needs `@react-native-community/datetimepicker` 9.1.0 (not installed). The bill number asks
-   alone (two characters, as the web).
+4. **Day** is the phone's own date picker (M-16, 20 Nov), no later than the till's business date as
+   the web's max; the day, the number (two characters), or both ask, as the web.
 5. **The open order beside the lists** (OrderPanel and the menu, at a tablet's width) is the order
    screen and the pad on the phone (above).
 6. **Start here** (the waiter's and the Bar person's) is not in the GM's picture: drawn from
@@ -327,19 +326,18 @@ wins (MEMORY 14).
 2. Close restaurant day: the money rows above (server's figures only). The NC card's line is today's
    code ("Bills given free, at their menu prices…", with each value) not the picture's ("no value is
    counted for them"). The step tiles truncate their words at 375 px as the picture does. The movement's
-   photo (take, pick, open) is "On the website for now" (`expo-image-picker` ~57.0.20). The Record sheet,
+   photo is taken, chosen or opened on the phone (M-16, below). The Record sheet,
    the Cash and Finalize steps, a closed day and a blocker are **not pictured**: built from the code.
 3. Charges to rooms: the picture's single amount ("₹294") is "₹<before tax> + ₹<tax> tax" on the phone (the server's two figures);
    no "₹3,343 on folios" pill; the Till link in "This is the outside door" is plain words (the Till is
    another lane's screen). The refusals box and an empty list are not pictured.
 4. Bill history: "Download to Excel" (picture) is today's ExportButtons (PDF or print, share) — the
    web's CSV/Excel file itself waits for `expo-file-system` ~57.0.7 + `expo-sharing` ~57.0.23 (or the
-   core's export, M-14). From / To are typed (2026-10-27) with − / + day steppers, not the web's date
-   picker (`@react-native-community/datetimepicker` 9.1.0). An NC bill reads "NC ₹336.00" (today's code,
+   core's export, M-14). From / To are the phone's own date picker (M-16). An NC bill reads "NC ₹336.00" (today's code,
    D27-394), the picture "NC". The opened bill and its reprint are not pictured.
 5. Table bookings: the description is today's longer sentence; New booking, the day stepper and every
    card are not pictured. The acts are drawn **greyed with the API's sentence** for anyone who may not
-   answer (a viewer), where the web hides them (AGENTS rule 1). The time is typed (20:30), not picked.
+   answer (a viewer), where the web hides them (AGENTS rule 1). The Day and Time are the phone's own pickers (M-16).
 
 **4 of 4 screens match their pictures apart from the differences above.**
 
@@ -372,11 +370,9 @@ held; everything else here is refused offline (send()).
 
 **What the phone leaves on the website, said in place ("On the website for now"):** This computer
 (naming a KOT computer, ticking what it prints, the Fidato Printer download, the test prints and the
-Reprints - a phone prints through no printer and names no device, as the Kitchen board); Import the
-menu and Import sides (a file picker: `expo-document-picker` ~57.0.3, not installed); a coupon's two
-days and a tax band's dates (a date picker: `@react-native-community/datetimepicker` 9.1.0, not
-installed - a band's dates are shown and kept as they are when its rate is saved). Profit per dish moves
-its days a day at a time (M-7's stepper). The web's Menu has no dish photo, so none is built.
+Reprints - a phone prints through no printer and names no device, as the Kitchen board). Import the
+menu, Import sides, a coupon's two days, a tax band's dates and Profit per dish's days came with M-16
+(below). The web's Menu has no dish photo, so none is built.
 
 ### Picture match (20 Nov)
 
@@ -414,3 +410,27 @@ round itself. (4) **Free** is the phone's Switch. (5) The frame, as above.
 **Questions for the owner (in the lane's report):** the new-dish row starts at 5% as the web's select
 does - keep, or start with no rate chosen; Switch off a KOT kind, Remove a computer and Remove a side
 ask nothing first on the web - keep, or ask with the phone's own Alert.
+
+## m16 pickers (20 Nov) — lane m16-pick-pos, PICKERS.md 2.1-2.8
+
+Nothing here was opened on a phone or a preview (the cloud has none): built from the web's code at c9394cb.
+
+| Row | Control | Where | How |
+|---|---|---|---|
+| 2.1 | A paid-out's bill: open it, or Add photo | `DayEnd.tsx` BillOnMovement | `BillPhoto.tsx` chooseBill (iPhone's action sheet / Android's dialog: Camera, Photos, File) → BILL's 9 MB check → `sendForm` POST `/till/day-end/movements/:id/photo`; open with `downloadToShare` (named `.jpg`, MPOS-P1). Add is DAY_END's (`whyNotCloseDay`). |
+| 2.2 | Photo of the bill in Record | `DayEnd.tsx` MovementSheet, `BillChoice` | Chosen in the sheet, sent to the new movement's id after it is recorded, as the web; "Recorded, without its photo" with the reason when it fails (`recordedWords`). |
+| 2.3 | The Till's earlier bill: Day | `Till.tsx` EarlierBills | `DateField`, max the till's business date; `?date=&no=` as the web (`till.ts` earlierPath). |
+| 2.4 | Import the menu, Import sides | `MenuScreen.tsx`, `ImportSheet.tsx`, `addonSpec.ts` | The shared sheet (the web's ImportDialog): the template to the share sheet, `pickFile(CSV_IMPORT)` + `readText`, core `importSpec.ts` reads it, the server's dry run first, then the same rows. Grey with `whyNotMenu` (MENU). |
+| 2.5 | A coupon the guest brings | `MenuSides.tsx` PromotionSheet | Switch, then From / Until (`DateField`) and the two limits; blank limits null (`couponPart`). |
+| 2.6 | A tax band's From and Last day | `SetupTaxes.tsx` SlabsSheet | `DateField` ×2, clearable; the Last day shown is the day before `validTo`, the day after it is sent (`setup.ts` slabRows / slabsBody). |
+| 2.7 | Table bookings' Day, a booking's Day and Time | `TableBookings.tsx` | `DateField` (min the hotel's today in a booking), `TimeField`. |
+| 2.8 | Bill history's From, To | `BillHistory.tsx` | `DateField` ×2, clearable, max the business date. |
+| opt. | Profit per dish's From, To | `MenuProfit.tsx` | `DateField` ×2 (the M-7 stepper gone). |
+
+**Uploads and repeats (the API, read 20 Nov):** a paid-out's photo is never held offline (the core's
+sentence, "The photo needs the connection. …"); the server refuses the SAME file twice ("That photo is
+already on this expense.", attachments are unique by their bytes) but another file adds a second photo
+(GET serves the newest). A lost reply greys Add photo until the day is read again (`photoStop`, its own
+name so Record is not greyed by it). An import: the menu, sides, room types and rooms files update on a
+repeat; the real import is still one per tap (the sheet's stop, `importStop`), let go by the dishes' or
+the sides' read begun after it.
