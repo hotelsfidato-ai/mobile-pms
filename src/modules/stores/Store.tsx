@@ -13,9 +13,10 @@ import { Act, Transfer } from "./Act";
 import { isRefused, readStore } from "./data";
 import { ActionSheet, Figure, GroupHead, Tiles, type MenuChoice } from "./kit";
 import { LOOK_ONLY, ON_THE_WEBSITE, whyNotChange, whyNotCorrect, whyNotSee } from "./roles";
+import { ListExport } from "../reports/ListExport";
 import {
   averageText, belowLine, byCategory, cardLine, depositLine, headline, heldText, NEVER_MOVED, NOTHING_ON_HAND, ONLY_ONE_STORE,
-  placesOf, rupees, shownItems, shownOnHand, storeLine, tileCounts, TILES, worthLabel, DASH,
+  dayText, placesOf, rupees, shownItems, shownOnHand, storeLine, tileCounts, TILES, worthLabel, DASH,
   type StockItem, type StockKind, type StoreList, type StoreSummary, type Tile,
 } from "./shelf";
 
@@ -91,6 +92,21 @@ export function Store({ hotel, role, onBack }: { hotel: Hotel; role: string | nu
           </Text>
           {mayChange && notCorrect ? <Text style={[t.caption, { color: c.grey600 }]}>Count a store: {notCorrect}</Text> : null}
         </View>
+
+        {/* The web's itemExport: what the screen shows, each figure the server's (the value as the card shows it). */}
+        <ListExport
+          screen="store" role={role}
+          table={list ? {
+            subtitle: `Place ${picked?.name ?? "every place"}${tile ? ` · Showing ${TILES.find((x) => x.key === tile)?.label ?? ""}` : ""}`,
+            columns: ["Item", "Category", "Unit", "On hand", "Below level in", "Unit cost", worthLabel(picked), "Last movement", "In use"],
+            rows: items.map((i) => [
+              i.name, i.category ?? DASH, i.unit, heldText(shownOnHand(i, picked), i.sizeMl),
+              i.lowIn.map((id) => places.find((p) => p.id === id)?.name ?? id).join(", ") || DASH,
+              i.unitCost === null ? DASH : rupees(i.unitCost), i.value === null ? DASH : rupees(i.value),
+              i.lastMovement ? dayText(i.lastMovement) : DASH, i.isActive ? "Yes" : "No",
+            ]),
+          } : null}
+        />
 
         {!mayChange ? <Text style={[body, { color: c.grey600 }]}>{LOOK_ONLY}</Text> : null}
 

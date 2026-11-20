@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { Text, TextInput, View } from "react-native";
 import { c, face, space, t } from "../../core/theme";
 import { body } from "../guest-services/kit";
+import { keys } from "../../core/ui";
 
 /* ══════════════════════════════════════════════════════════════════
    THE FEW PIECES LOYALTY NEEDS that the kits it imports (guest-services,
@@ -40,7 +41,8 @@ export function Typed({ label, value, onChangeText, keyboard = "default", editab
 }) {
   return (
     <TextInput
-      value={value} onChangeText={onChangeText} accessibilityLabel={label} keyboardType={keyboard}
+      value={value} onChangeText={onChangeText} accessibilityLabel={label}
+      {...(keyboard === "number-pad" ? keys.count : keyboard === "decimal-pad" ? keys.amount : null)} keyboardType={keyboard}
       editable={editable} maxLength={maxLength} autoFocus={autoFocus} placeholderTextColor={c.grey400}
       accessibilityState={{ disabled: !editable }}
       style={{

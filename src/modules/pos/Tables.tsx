@@ -7,7 +7,7 @@ import { ApiError, api, HeldError, send, type Hotel } from "../../core/api";
 import { cash, DASH } from "../../core/format";
 import { newKey } from "../../core/offline";
 import { c, face, space, t } from "../../core/theme";
-import { Capsule, notKnown, Screen, useStuck } from "../../core/ui";
+import { Capsule, notKnown, Screen, useStuck, ripple, shade, keys } from "../../core/ui";
 import {
   CLOSE_FOR, closedLine, closure, kotLines, LEGEND, LOOK, maySetUpKots, openLabel, padHref, parcelTile, READY, startCard, takenLabel, tileLabel, tileOffers,
   type FloorNow, type KotKind, type Tile as Table,
@@ -234,7 +234,7 @@ export function Tables({ hotel, role, onBack, onSignOut }: {
                 <Printer size={16} color={k.printing ? c.grey600 : c.red700} />
                 <Text style={[t.label, ty.sm, { flex: 1, color: k.printing ? c.grey600 : c.red700 }]}>{k.text}</Text>
                 {!k.printing && maySetUpKots(role) ? (
-                  <Pressable
+                  <Pressable android_ripple={ripple}
                     onPress={() => setSaid({ title: "Set up", body: "On the website for now", tone: "held" })}
                     accessibilityRole="link" accessibilityHint="On the website for now"
                     style={{ minHeight: 44, marginVertical: -11, justifyContent: "center" }}
@@ -345,11 +345,11 @@ function Tile({ hotel, table: tb, closed, busy, drafted, ringReason, onRefused, 
         </>
       ) : (
         <>
-          <Pressable
+          <Pressable android_ripple={ripple}
             onPress={open} disabled={!offer.tap || busy}
             accessibilityRole="button" accessibilityLabel={tileLabel(tb)} accessibilityState={{ disabled: !offer.tap }}
             accessibilityHint={offer.tap && ringReason ? ringReason : undefined}
-            style={({ pressed }) => [{ flexGrow: 1, justifyContent: tb.state === "blank" ? "center" : "flex-start", opacity: pressed ? 0.7 : 1 }]}
+            style={shade(({ pressed }) => [{ flexGrow: 1, justifyContent: tb.state === "blank" ? "center" : "flex-start", opacity: pressed ? 0.7 : 1 }])}
           >
             {tb.state === "blank" ? (
               <>
@@ -375,14 +375,14 @@ function Tile({ hotel, table: tb, closed, busy, drafted, ringReason, onRefused, 
           </Pressable>
 
           {offer.ready > 0 ? (
-            <Pressable
+            <Pressable android_ripple={ripple}
               onPress={() => (ringReason ? onRefused("Not taken", ringReason) : onTake())} disabled={busy}
               accessibilityRole="button" accessibilityLabel={takenLabel(tb, offer.ready)}
               accessibilityState={{ disabled: ringReason != null || busy }} accessibilityHint={ringReason ?? undefined}
-              style={({ pressed }) => ({
+              style={shade(({ pressed }) => ({
                 marginTop: 8, minHeight: 44, borderRadius: 999, borderWidth: 1, borderColor: pressed ? web.success : READY.ring,
                 backgroundColor: READY.fill, alignItems: "center", justifyContent: "center", opacity: busy ? 0.5 : 1,
-              })}
+              }))}
             >
               <Text style={[t.label, ty.sm, t.tab, { ...face[600], color: READY.text }]}>{offer.ready} ready</Text>
             </Pressable>
@@ -520,10 +520,10 @@ function NewParcel({ code, onCancel, onHeld, onOpened }: {
       )}
     >
       <Field label="Customer's name">
-        <Input value={name} onChangeText={setName} maxLength={60} autoFocus accessibilityLabel="Customer's name" />
+        <Input value={name} onChangeText={setName} maxLength={60} autoFocus accessibilityLabel="Customer's name" {...keys.name} />
       </Field>
       <Field label="Phone" hint="To call when it is ready. Not needed.">
-        <Input value={phone} onChangeText={setPhone} keyboardType="phone-pad" accessibilityLabel="Phone" />
+        <Input value={phone} onChangeText={setPhone} {...keys.phone} accessibilityLabel="Phone" />
       </Field>
       {problem ? <Text style={[t.label, ty.sm, { color: c.red700 }]} accessibilityRole="alert">{problem}</Text> : null}
     </Sheet>

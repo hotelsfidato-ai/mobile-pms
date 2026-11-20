@@ -8,7 +8,7 @@ import { DASH } from "../../core/format";
 import { isOnline, type OutboxEntry } from "../../core/offline";
 import { list, subscribe } from "../../core/outbox";
 import { c, face, space, t } from "../../core/theme";
-import { Capsule, ReadFailed, useRead } from "../../core/ui";
+import { Capsule, ReadFailed, useRead, ripple, shade } from "../../core/ui";
 import {
   alarm, byTable, clock, COLUMNS, columnOf, dish, EMPTY_COLUMN, estimate, heldMove, kindShown, maySetUpKots, movePath,
   inColumn, ofKind, plusLine, printingKinds, statusOf, waited, waitNow, where, whyNotMove, working,
@@ -272,7 +272,7 @@ export function KitchenBoard({ hotel, role, startHere, tableView, onView, onCons
             <Text style={[t.label, { flex: 1, minWidth: 160, color: c.yellow800 }]}>
               Not up to date: {offline ? "no connection" : board.error.replace(/\.$/, "")}. Showing what loaded at {clock(new Date(data.at))}.
             </Text>
-            <Pressable onPress={refresh} accessibilityRole="button" accessibilityLabel="Try again" style={{ minHeight: 44, justifyContent: "center" }}>
+            <Pressable android_ripple={ripple} onPress={refresh} accessibilityRole="button" accessibilityLabel="Try again" style={{ minHeight: 44, justifyContent: "center" }}>
               <Text style={[t.label, { color: c.yellow800, textDecorationLine: "underline" }]}>Try again</Text>
             </Pressable>
           </View>
@@ -311,12 +311,12 @@ const ink = (a: "late" | "warm" | null) => (a === "late" ? c.red700 : a === "war
 /** The header's way out: the web's Console, 48 px high, ink words. */
 function Way({ label, icon, onPress }: { label: string; icon?: ReactNode; onPress: () => void }) {
   return (
-    <Pressable
+    <Pressable android_ripple={ripple}
       onPress={onPress} accessibilityRole="button" accessibilityLabel={label}
-      style={({ pressed }) => ({
+      style={shade(({ pressed }) => ({
         height: 48, paddingHorizontal: 16, borderRadius: 999, borderWidth: 1, borderColor: c.grey300, flexDirection: "row",
         alignItems: "center", gap: 8, backgroundColor: pressed ? c.grey50 : c.white,
-      })}
+      }))}
     >
       {icon}
       <Text style={[t.label, { color: c.ink900 }]}>{label}</Text>
@@ -333,7 +333,7 @@ function Segmented({ label, value, options, onChange }: {
       {options.map((o) => {
         const on = o.id === value;
         return (
-          <Pressable
+          <Pressable android_ripple={ripple}
             key={o.id || "all"} onPress={() => onChange(o.id)} accessibilityRole="button" accessibilityLabel={o.name} accessibilityState={{ selected: on }}
             style={{
               minHeight: 44, paddingHorizontal: 14, borderRadius: 7, justifyContent: "center",
@@ -368,7 +368,7 @@ function KotLines({ kinds, role, now, onSetUp }: { kinds: KotKind[]; role: strin
             <Text style={[t.label, { flex: 1, color: s.printing ? c.grey600 : c.red700 }]}>{s.text}</Text>
             {/* The web's link to Restaurant setup: that screen is not on the phone. */}
             {!s.printing && maySetUpKots(role) ? (
-              <Pressable
+              <Pressable android_ripple={ripple}
                 onPress={onSetUp} accessibilityRole="button" accessibilityLabel="Set up" accessibilityState={{ disabled: true }}
                 accessibilityHint="On the website for now" style={{ minHeight: 44, justifyContent: "center" }}
               >
@@ -462,14 +462,14 @@ function Ticket({ line, action, busy, heldTo, reason, onMove }: {
         </View>
       </View>
       {heldAs ? <Text style={[t.caption, { color: c.yellow800, marginTop: 8 }]}>Queued: {heldAs}</Text> : null}
-      <Pressable
+      <Pressable android_ripple={ripple}
         onPress={() => (busy ? undefined : blocked ? setWhy(blocked) : onMove())}
         accessibilityRole="button" accessibilityLabel={`${action}: ${dish(line)}, ${where(line)}`}
         accessibilityState={{ disabled: blocked != null || busy, busy }} accessibilityHint={blocked ?? undefined}
-        style={({ pressed }) => ({
+        style={shade(({ pressed }) => ({
           height: 56, marginTop: 12, borderRadius: 999, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 8,
           backgroundColor: blocked ? c.grey100 : pressed ? INK_800 : c.ink900, opacity: busy ? 0.5 : 1,
-        })}
+        }))}
       >
         <Check size={16} color={blocked ? c.grey500 : c.white} />
         <Text style={[t.label, { ...face[600], color: blocked ? c.grey500 : c.white }]}>{action}</Text>

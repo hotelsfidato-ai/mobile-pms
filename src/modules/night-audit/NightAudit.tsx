@@ -4,13 +4,14 @@ import { AlertTriangle, ArrowRight, Check, MoonStar } from "lucide-react-native"
 import { useRef, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { ApiError, HeldError, type Hotel } from "../../core/api";
-import { DASH, dateLong } from "../../core/format";
+import { DASH, count, dateLong } from "../../core/format";
+import { ListExport } from "../reports/ListExport";
 import { useSession } from "../../core/session";
 import { ON_THE_WEBSITE, phoneRoute } from "../../core/menu";
 import { c, face, space, t } from "../../core/theme";
-import { Card, Screen, useRead } from "../../core/ui";
+import { Card, Screen, useRead, ripple } from "../../core/ui";
 import {
-  TICK, alreadyMade, closeWords, closedDaysNote, dateTime, dayPills, dayRows, dayYear, earlyWords, firstCorrectable,
+  TICK, alreadyMade, closeWords, closedDaysNote, dateTime, dayPills, dayRows, dayYear, earlyWords, firstCorrectable, rupees,
   headPill, lastRunWords, mayConfirm, openOf, recordLine, resultLines, runBody, stops, undoLines,
   type AuditCheck, type ClosedDay, type NightAuditResult, type NightAuditState,
 } from "./audit";
@@ -213,6 +214,9 @@ export function NightAudit({ hotel, role }: { hotel: Hotel; role: string | null 
             <View style={{ paddingHorizontal: space.cardX, paddingVertical: space.cardY, gap: 4 }}>
               <Text style={t.heading} accessibilityRole="header">Closed days</Text>
               <Text style={[body, { color: c.grey600 }]}>{closedDaysNote(mayCorrect(role), firstCorrectable(data?.businessDate))}</Text>
+              <View style={{ marginTop: 8 }}>
+                <ListExport screen="night-audit-runs" role={role} table={days.data ? daysTable(days.data) : null} />
+              </View>
             </View>
             {days.data === undefined ? (
               days.error
@@ -268,7 +272,7 @@ function CheckRow({ x, code, first }: { x: AuditCheck; code: string; first: bool
         {open && !open.route ? <Text style={[small, { marginTop: 4 }]}>Open: {ON_THE_WEBSITE}</Text> : null}
       </View>
       {open?.route ? (
-        <Pressable
+        <Pressable android_ripple={ripple}
           onPress={() => router.push(open.route as never)} accessibilityRole="link" accessibilityLabel={`Open ${x.label}`}
           style={{ minHeight: 44, marginTop: -11, flexDirection: "row", alignItems: "center", gap: 6 }}
         >
@@ -347,4 +351,17 @@ function DayCard({ d, corrector }: { d: ClosedDay; corrector: boolean }) {
       </View>
     </View>
   );
+}
+
+/** The closed days as a file: the web's DAY_EXPORT, each figure as the server sent it, a dash for none. */
+function daysTable(days: ClosedDay[]) {
+  const or = (v: string | null | undefined) => (v ? v : DASH);
+  return {
+    columns: ["Day", "Run by", "Started", "Finished", "Rooms charged", "Room revenue posted", "No shows", "Corrections",
+      "Room revenue corrected", "Closed early because", "Closed early by"],
+    rows: days.map((d) => [
+      dayYear(d.businessDate), or(d.ranBy), dateTime(d.startedAt), dateTime(d.completedAt), count(d.roomsPosted), rupees(d.revenuePosted),
+      count(d.noShows), count(d.corrections), rupees(d.correctedRevenue), or(d.earlyReason), or(d.earlyBy),
+    ]),
+  };
 }

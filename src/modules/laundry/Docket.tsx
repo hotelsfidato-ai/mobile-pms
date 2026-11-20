@@ -5,7 +5,7 @@ import { Pressable, Text, View } from "react-native";
 import { HeldError, type Hotel } from "../../core/api";
 import { DASH } from "../../core/format";
 import { c, face, space, t } from "../../core/theme";
-import { Head, Screen, useRead } from "../../core/ui";
+import { Head, Screen, useRead, ripple, keys } from "../../core/ui";
 import {
   Back, Btn, body, Dialog, Foot, InDialog, Input, Loading, NotYours, Stale, Toast, message, saidOf, type Said,
 } from "../guest-services/kit";
@@ -118,7 +118,7 @@ export function Docket({ hotel, role, id, collected, onBack }: {
             <View style={{ gap: 6, marginTop: -8 }}>
               <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
                 <StatePill tone={STATUS_TONE[d.status]}>{STATUS_WORDS[d.status]}</StatePill>
-                <Pressable
+                <Pressable android_ripple={ripple}
                   onPress={() => setNoteOpen(!noteOpen)} accessibilityRole="button" accessibilityLabel={NOT_IN_THIS_VERSION}
                   accessibilityState={{ expanded: noteOpen }}
                   style={{ width: 44, height: 44, marginVertical: -10, alignItems: "center", justifyContent: "center" }}
@@ -308,7 +308,7 @@ function ReturnDialog({ code, d, onClose, onDone }: { code: string; d: DocketDet
           </View>
           <View style={{ width: 100 }}>
             <Input
-              label={`How many ${l.description} have come back`} keyboardType="numbers-and-punctuation" maxLength={4}
+              label={`How many ${l.description} have come back`} {...keys.count} maxLength={4}
               value={counts[l.id] ?? ""} onChangeText={(v) => setCounts((all) => ({ ...all, [l.id]: v }))}
             />
           </View>

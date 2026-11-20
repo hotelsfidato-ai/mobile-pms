@@ -6,7 +6,10 @@ import { isOnline, type OutboxEntry } from "../../core/offline";
 import { list, subscribe } from "../../core/outbox";
 import { cash } from "../../core/format";
 import { c, face, t } from "../../core/theme";
-import { Capsule, Card, ReadFailed, useRead } from "../../core/ui";
+import { roleAt, useSession } from "../../core/session";
+import { Capsule, Card, ReadFailed, useRead, ripple, shade } from "../../core/ui";
+import { ListExport } from "../reports/ListExport";
+import type { ListScreenKey } from "../reports/listExport";
 import { checkInPath, readBlacklist, type DeskStay } from "./data";
 import { day, matches, statusOf } from "./desk";
 import { body, Button, Empty, Pill } from "./kit";
@@ -47,14 +50,28 @@ function Value({ s, col }: { s: DeskStay; col: Column }) {
   }
 }
 
+/** The card's own words as text, for the list as a file (the web's StayTable EXPORT, written as the card writes it). */
+function valueText(s: DeskStay, col: Column): string {
+  switch (col) {
+    case "type": return s.roomType;
+    case "plan": return s.ratePlan;
+    case "source": return s.source ?? "-";
+    case "arrival": return day(s.arrival);
+    case "departure": return day(s.departure);
+    case "nights": return s.isDayUse ? "Day use" : String(s.nights);
+    case "rate": return s.isComplimentary ? "Comp" : cash(s.offeredTariff);
+    case "balance": return s.balance === undefined ? "-" : `${cash(Math.abs(s.balance))}${s.balance < 0 ? " over" : ""}`;
+  }
+}
+
 function StayCard({ s, columns, held, onOpen }: { s: DeskStay; columns: Column[]; held: boolean; onOpen: () => void }) {
   const state = statusOf(s);
   return (
-    <Pressable
+    <Pressable android_ripple={ripple}
       onPress={onOpen} accessibilityRole="button" accessibilityLabel={`${s.roomNumber ? `Room ${s.roomNumber}, ` : ""}${s.guest}, ${state.label}`}
-      style={({ pressed }) => ({
+      style={shade(({ pressed }) => ({
         borderRadius: 12, borderWidth: 1, borderColor: held ? c.yellow800 : c.grey200, backgroundColor: pressed ? c.grey50 : held ? c.yellow50 : c.white, paddingHorizontal: 14, paddingVertical: 12,
-      })}
+      }))}
     >
       <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
         <Text style={[t.figure, !s.roomNumber ? { color: c.grey500 } : null]}>{s.roomNumber || "-"}</Text>
@@ -91,7 +108,7 @@ export function useHeld() {
 export const isHeldCheckIn = (held: OutboxEntry[], code: string, id: string) =>
   held.some((e) => e.status === "waiting" && e.path === checkInPath(code, id));
 
-export function StayList({ code, rows, read, columns, emptyTitle, emptyLine, what, offerCheckIn, toBill }: {
+export function StayList({ code, rows, read, columns, emptyTitle, emptyLine, what, offerCheckIn, toBill, exportAs }: {
   code: string;
   rows: DeskStay[] | undefined;
   read: { error: string | undefined; loading: boolean; reload: () => void };
@@ -104,8 +121,11 @@ export function StayList({ code, rows, read, columns, emptyTitle, emptyLine, wha
   offerCheckIn?: boolean;
   /** Due out opens on the Bill (the web's `defaultTab="folio"`), for a role with bills. */
   toBill?: boolean;
+  /** The list as a file (the web's `exportAs`): which list screen, and what it shows. */
+  exportAs?: { screen: ListScreenKey; facts: string };
 }) {
   const [query, setQuery] = useState("");
+  const { who } = useSession();
   const held = useHeld();
   const filtered = (rows ?? []).filter((s) => matches(s, query));
   const open = (id: string) => router.push((toBill ? `/folio/${code}/${id}` : `/front-desk/${code}/stay/${id}${offerCheckIn ? "?offer=1" : ""}`) as Href);
@@ -131,16 +151,26 @@ export function StayList({ code, rows, read, columns, emptyTitle, emptyLine, wha
           <Search size={16} color={c.grey500} />
           <TextInput
             value={query} onChangeText={setQuery} placeholder="Guest, reference or room…" placeholderTextColor={c.grey400}
-            accessibilityLabel="Filter this list" style={{ flex: 1, minHeight: 42, fontSize: 16, color: c.ink900, ...face[500] }}
+            accessibilityLabel="Filter this list" autoCorrect={false} returnKeyType="search" clearButtonMode="never" style={{ flex: 1, minHeight: 42, fontSize: 16, color: c.ink900, ...face[500] }}
           />
           {query ? (
-            <Pressable onPress={() => setQuery("")} accessibilityRole="button" accessibilityLabel="Clear" hitSlop={12}>
+            <Pressable android_ripple={ripple} onPress={() => setQuery("")} accessibilityRole="button" accessibilityLabel="Clear" hitSlop={12}>
               <X size={16} color={c.grey500} />
             </Pressable>
           ) : null}
         </View>
         <Text style={[t.label, t.tab, { color: c.grey500 }]}>{`${filtered.length} of ${(rows ?? []).length}`}</Text>
       </View>
+      {exportAs ? (
+        <ListExport
+          screen={exportAs.screen} role={who ? roleAt(who, code) : null}
+          table={rows && !read.error ? {
+            subtitle: `${exportAs.facts}${query.trim() ? ` · Search: ${query.trim()}` : ""}`,
+            columns: ["Room", "Guest", "Reference", "Status", ...columns.map((col) => HEADER[col])],
+            rows: filtered.map((s) => [s.roomNumber || "-", s.guest, s.reference, statusOf(s).label, ...columns.map((col) => valueText(s, col))]),
+          } : null}
+        />
+      ) : null}
       {list}
     </View>
   );

@@ -6,7 +6,7 @@ import { Pressable, ScrollView, Text, View } from "react-native";
 import { ApiError, HeldError, type Hotel } from "../../core/api";
 import { cash } from "../../core/format";
 import { c, face, t } from "../../core/theme";
-import { useRead } from "../../core/ui";
+import { useRead, ripple } from "../../core/ui";
 import { Companions, IdPhoto } from "./Companions";
 import {
   checkIn, readAssignable, readDesk, readEarly, readExpress, readStay, readTaxRate, rulesOf, said, type DeskStay,
@@ -293,7 +293,7 @@ function RoomChoice({ room, booked, selected, onPick }: { room: Assignable; book
   const [why, setWhy] = useState(false);
   return (
     <View style={{ gap: 2 }}>
-      <Pressable
+      <Pressable android_ripple={ripple}
         onPress={() => (room.allowed ? onPick() : setWhy(true))} accessibilityRole="button"
         accessibilityLabel={`Room ${room.number}, ${room.label ?? room.housekeeping}`} accessibilityState={{ selected, disabled: !room.allowed }} accessibilityHint={room.reason}
         style={{
@@ -326,7 +326,7 @@ function Changeable({ what, children, onChange }: { what: string; children: Reac
   return (
     <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
       <Text style={[t.label, body, { flex: 1, color: c.ink900 }]}>{children}</Text>
-      <Pressable onPress={onChange} accessibilityRole="button" accessibilityLabel={`Change ${what}`} hitSlop={10} style={{ minHeight: 44, justifyContent: "center" }}>
+      <Pressable android_ripple={ripple} onPress={onChange} accessibilityRole="button" accessibilityLabel={`Change ${what}`} hitSlop={10} style={{ minHeight: 44, justifyContent: "center" }}>
         <Text style={[t.label, { color: c.orange700 }]}>Change</Text>
       </Pressable>
     </View>
@@ -338,7 +338,7 @@ function Explained({ title, children }: { title: string; children: ReactNode }) 
   const [open, setOpen] = useState(false);
   return (
     <View style={{ gap: 4 }}>
-      <Pressable onPress={() => setOpen(!open)} accessibilityRole="button" accessibilityLabel={`About ${title.toLowerCase()}`} accessibilityState={{ expanded: open }} style={{ minHeight: 44, alignSelf: "flex-start", flexDirection: "row", alignItems: "center", gap: 6 }}>
+      <Pressable android_ripple={ripple} onPress={() => setOpen(!open)} accessibilityRole="button" accessibilityLabel={`About ${title.toLowerCase()}`} accessibilityState={{ expanded: open }} style={{ minHeight: 44, alignSelf: "flex-start", flexDirection: "row", alignItems: "center", gap: 6 }}>
         <Text style={[t.label, { color: c.ink900 }]}>{title}</Text>
         <Info size={14} color={c.grey400} />
       </Pressable>

@@ -12,6 +12,8 @@ import { Avatar, Line, OwedText } from "./kit";
 import { rupees } from "../laundry/docket";
 import { backWords, byName, guestCount, lastStayWords, OVERLAP_NOTE, overlapTitle, owed, type GuestRecord } from "./lookup";
 import { whyNotGuests } from "./roles";
+import { ListExport } from "../reports/ListExport";
+import { guestTable } from "./exports";
 
 /* ══════════════════════════════════════════════════════════════════
    GUESTS on a phone — the web's /guests (src/modules/guests/pages/
@@ -52,9 +54,10 @@ export function Guests({ hotel, role }: { hotel: Hotel; role: string | null }) {
         description={all === null && !list.error ? "Loading…" : "Grouped by name from every stay. Repeat guests rise to the top."}
       >
         <View style={{ width: 256, maxWidth: "100%" }}>
-          <Input label="Find a guest by name" placeholder="Find a guest by name" value={search} onChangeText={setSearch} />
+          <Input label="Find a guest by name" placeholder="Find a guest by name" value={search} onChangeText={setSearch} autoCorrect={false} autoComplete="off" />
         </View>
       </PageHead>
+      <ListExport screen="guests" role={role} table={all ? guestTable(shown, search) : null} />
       {dupes > 0 ? (
         <View style={{ flexDirection: "row", gap: 12, alignItems: "flex-start", borderRadius: 12, borderWidth: 1, borderColor: c.yellow100, backgroundColor: c.yellow50, paddingHorizontal: 16, paddingVertical: 14 }}>
           <AlertTriangle size={16} color={c.yellow} style={{ marginTop: 3 }} />

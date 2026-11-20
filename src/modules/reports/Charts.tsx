@@ -8,6 +8,7 @@ import {
   dayWritten, nightsAhead, nightsOf, revenueSplit, sparkLine, stripState, weekdayOf,
   type DayStatistics, type HouseRoom, type LineKey, type MonthDay, type Night, type ReportDoc, type StripState,
 } from "./figures";
+import { ripple } from "../../core/ui";
 
 /* ══════════════════════════════════════════════════════════════════
    THE DASHBOARD'S DRAWINGS (the owner's D27-217 to D27-219, D27-365): the
@@ -59,7 +60,7 @@ export function Spark({ name, days, line, loading }: { name: string; days: Month
     setAt(Math.max(0, Math.min(n - 1, Math.round(((e.nativeEvent.locationX - SPARK.inset) / inner) * (n - 1)))));
 
   return (
-    <Pressable
+    <Pressable android_ripple={ripple}
       onPressIn={read} onPressOut={() => setAt(-1)} accessibilityRole="image" accessibilityLabel={label}
       style={{ width: SPARK.w, height: SPARK.h }}
     >
@@ -121,7 +122,7 @@ export function OccupancyByDay({ days, date, loading, month }: { days: MonthDay[
 
   return (
     <>
-      <Pressable
+      <Pressable android_ripple={ripple}
         onLayout={(e) => setWidth(e.nativeEvent.layout.width)}
         onPress={(e) => {
           const i = Math.floor((e.nativeEvent.locationX - CHART.axis) / band);

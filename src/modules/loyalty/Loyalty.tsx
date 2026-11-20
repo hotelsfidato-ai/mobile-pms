@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { outcomeUnknown, type Hotel } from "../../core/api";
 import { c, face, space, t } from "../../core/theme";
-import { Head, Screen, useRead } from "../../core/ui";
+import { Head, Screen, useRead, ripple, shade } from "../../core/ui";
 import { Btn, body, Empty, Field, InDialog, Loading, message, NotYours, saidOf, Stale, Toast, type Said } from "../guest-services/kit";
 import { Fact, LoadFailed, Note } from "../laundry/kit";
 import { Join, Leave, Spend } from "./Acts";
@@ -15,6 +15,7 @@ import {
   rupees, shiftMonth, type LoyaltyScreen, type LoyaltyStay,
 } from "./loyalty";
 import { MANAGERS_ONLY, mayJoin as mayJoinOf, RULES_REFUSED, whyNotRead } from "./roles";
+import { ListExport } from "../reports/ListExport";
 
 /* ══════════════════════════════════════════════════════════════════
    LOYALTY on a phone — the web's /h/:code/loyalty
@@ -70,6 +71,13 @@ export function Loyalty({ hotel, role }: { hotel: Hotel; role: string | null }) 
           <>
             <Stale error={q.error} />
             {!s.isOn ? <Note>{OFF_NOTE}</Note> : null}
+            {/* The web's STAY_EXPORT: who is in house, member or not, their points. */}
+            <ListExport screen="loyalty" role={role} table={{
+              subtitle: "Showing in house",
+              columns: ["Room", "Guest", "Booking", "Member", "Points", "Points usable on it"],
+              rows: s.stays.map((r) => [r.room ?? "-", r.name, r.reference, r.member ? "Yes" : "No", r.points == null ? "-" : String(r.points),
+                r.direct ? "Yes" : "No: a booking site's or an agent's"]),
+            }} />
             <InHouse code={code} screen={s} mayJoin={mayJoinOf(role)} onSaid={setSaid} />
             <Rules key={`${s.name ?? ""}|${s.pointsPer100 ?? ""}`} code={code} screen={s} onSaid={setSaid} />
             <ByHotel code={code} isManager={s.isManager} />
@@ -183,9 +191,9 @@ function ByHotel({ code, isManager }: { code: string; isManager: boolean }) {
   const rows = Array.isArray(q.data) ? q.data : null;
 
   const step = (by: number, words: string, Icon: typeof ChevronLeft) => (
-    <Pressable
+    <Pressable android_ripple={ripple}
       onPress={() => setMonth(shiftMonth(month, by))} accessibilityRole="button" accessibilityLabel={words}
-      style={({ pressed }) => ({ width: 44, height: 44, borderRadius: 22, borderWidth: 1, borderColor: c.grey300, alignItems: "center", justifyContent: "center", backgroundColor: pressed ? c.grey100 : c.white })}
+      style={shade(({ pressed }) => ({ width: 44, height: 44, borderRadius: 22, borderWidth: 1, borderColor: c.grey300, alignItems: "center", justifyContent: "center", backgroundColor: pressed ? c.grey100 : c.white }))}
     >
       <Icon size={16} color={c.grey700} />
     </Pressable>

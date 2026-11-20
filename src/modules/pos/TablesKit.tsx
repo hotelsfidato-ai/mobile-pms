@@ -7,7 +7,7 @@ import {
 } from "react-native";
 import { api, ApiError } from "../../core/api";
 import { c, face, space, t } from "../../core/theme";
-import { Capsule } from "../../core/ui";
+import { Capsule, ripple, shade, modalEdge, useSheetPad } from "../../core/ui";
 import { timeOnly } from "./floor";
 
 /* ══════════════════════════════════════════════════════════════════
@@ -103,7 +103,7 @@ export function Stale({ error, loadedAt, onRetry }: { error: unknown; loadedAt: 
       <Text style={[t.label, ty.sm, { color: c.yellow800, flexShrink: 1 }]}>
         Not up to date: {cause}.{loadedAt > 0 ? ` Showing what loaded at ${timeOnly(new Date(loadedAt))}.` : ""}
       </Text>
-      <Pressable onPress={onRetry} accessibilityRole="button" style={{ minHeight: 44, justifyContent: "center" }}>
+      <Pressable android_ripple={ripple} onPress={onRetry} accessibilityRole="button" style={{ minHeight: 44, justifyContent: "center" }}>
         <Text style={[t.label, { color: c.yellow800, textDecorationLine: "underline" }]}>Try again</Text>
       </Pressable>
     </View>
@@ -133,17 +133,17 @@ export function Btn({ label, onPress, primary, disabled, busy, icon, a11y, hint,
   const S = SIZES[size];
   const fg = primary ? (off ? c.grey600 : c.white) : off ? c.grey500 : c.ink900;
   return (
-    <Pressable
+    <Pressable android_ripple={ripple}
       onPress={onPress} disabled={busy}
       accessibilityRole="button" accessibilityLabel={a11y ?? label} accessibilityHint={hint}
       accessibilityState={{ disabled: off, busy: Boolean(busy) }}
       hitSlop={(44 - S.height) / 2}
-      style={({ pressed }) => [{
+      style={shade(({ pressed }) => [{
         minHeight: S.height, paddingHorizontal: S.paddingHorizontal, gap: S.gap, borderRadius: 999,
         flexDirection: "row", alignItems: "center", justifyContent: "center",
         backgroundColor: primary ? (off ? c.grey300 : pressed ? c.orange700 : c.orange600) : off ? c.grey50 : pressed ? c.grey100 : c.white,
         borderWidth: primary ? 0 : 1, borderColor: c.grey300,
-      }, style]}
+      }, style])}
     >
       {busy ? <ActivityIndicator size="small" color={fg} /> : icon}
       <Text style={[S.text, face[500], { color: fg }]} numberOfLines={1}>{label}</Text>
@@ -156,13 +156,13 @@ export function RoundBtn({ a11y, onPress, children, disabled, tone }: {
   a11y: string; onPress: () => void; children: ReactNode; disabled?: boolean; tone?: "danger";
 }) {
   return (
-    <Pressable
+    <Pressable android_ripple={ripple}
       onPress={onPress} disabled={disabled} accessibilityRole="button" accessibilityLabel={a11y} accessibilityState={{ disabled: Boolean(disabled) }}
-      style={({ pressed }) => ({
+      style={shade(({ pressed }) => ({
         width: 44, height: 44, borderRadius: 22, borderWidth: 1, alignItems: "center", justifyContent: "center",
         borderColor: pressed && tone ? c.red100 : c.grey300, backgroundColor: pressed ? (tone ? c.red50 : c.grey50) : c.white,
         opacity: disabled ? 0.4 : 1,
-      })}
+      }))}
     >
       {children}
     </Pressable>
@@ -208,14 +208,15 @@ export const sheetFooter: ViewStyle = {
 export function Sheet({ open, onClose, title, description, footer, children, gap = 16 }: {
   open: boolean; onClose: () => void; title: string; description?: string; footer: ReactNode; children: ReactNode; gap?: number;
 }) {
+  const pad = useSheetPad();
   return (
-    <Modal visible={open} transparent animationType="fade" onRequestClose={onClose}>
-      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : undefined}
-        style={{ flex: 1, backgroundColor: OVERLAY, justifyContent: "center", paddingHorizontal: 16, paddingVertical: 32 }}>
+    <Modal visible={open} transparent animationType="fade" onRequestClose={onClose} {...modalEdge}>
+      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ flex: 1, backgroundColor: OVERLAY, justifyContent: "center", paddingHorizontal: 16, paddingTop: pad.top + 16, paddingBottom: pad.bottom + 16 }}>
         <Pressable style={StyleSheet.absoluteFill} onPress={onClose} accessibilityLabel="Close" />
         <View style={sheetCard}>
           <SheetHead title={title} description={description} onClose={onClose} />
-          <ScrollView contentContainerStyle={{ paddingHorizontal: space.side, paddingVertical: 16, gap }} keyboardShouldPersistTaps="handled">{children}</ScrollView>
+          <ScrollView contentContainerStyle={{ paddingHorizontal: space.side, paddingVertical: 16, gap }} keyboardShouldPersistTaps="handled" keyboardDismissMode="interactive">{children}</ScrollView>
           <View style={sheetFooter}>{footer}</View>
         </View>
       </KeyboardAvoidingView>
@@ -230,7 +231,7 @@ export function SheetHead({ title, description, onClose }: { title: string; desc
         <Text style={[t.heading, ty.md]} accessibilityRole="header">{title}</Text>
         {description ? <Text style={[t.label, ty.sm, { color: c.grey500, marginTop: 4 }]}>{description}</Text> : null}
       </View>
-      <Pressable onPress={onClose} accessibilityRole="button" accessibilityLabel="Close" style={{ width: 44, height: 44, alignItems: "center", justifyContent: "center", margin: -14 }}>
+      <Pressable android_ripple={ripple} onPress={onClose} accessibilityRole="button" accessibilityLabel="Close" style={{ width: 44, height: 44, alignItems: "center", justifyContent: "center", margin: -14 }}>
         <X size={16} color={c.grey500} />
       </Pressable>
     </View>
@@ -265,7 +266,7 @@ const SAID = {
 
 export function SaidBar({ said, onDone, style }: { said: Said; onDone: () => void; style?: StyleProp<ViewStyle> }) {
   return (
-    <Pressable
+    <Pressable android_ripple={ripple}
       onPress={onDone} accessibilityLiveRegion="polite" accessibilityRole={said.tone === "bad" ? "alert" : "text"}
       style={[{ borderRadius: 12, borderWidth: 1, paddingHorizontal: space.cardX, paddingVertical: 12, gap: 2, ...SAID[said.tone].box }, style]}
     >

@@ -75,6 +75,7 @@ export function InHouse({ hotel, role, view }: { hotel: Hotel; role: string | nu
       <Kept error={active.data ? active.error : undefined} what={out ? "the departures" : "the house"} />
       <StayList
         code={code} rows={active.data} read={active} columns={COLUMNS} what={out ? "the departures" : "the house"} toBill={out && bills}
+        exportAs={out ? { screen: "due-out", facts: `Departing ${dateLong(date)}` } : { screen: "in-house", facts: `In house on ${dateLong(date)}` }}
         emptyTitle={out ? "Nobody departing today" : "Nobody in house"}
         emptyLine={out ? "Every room stays another night." : "The house is empty tonight."}
       />

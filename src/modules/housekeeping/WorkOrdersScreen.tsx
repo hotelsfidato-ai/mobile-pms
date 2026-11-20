@@ -12,8 +12,10 @@ import { cash, DASH } from "../../core/format";
 import { isOnline, type OutboxEntry } from "../../core/offline";
 import { list, subscribe } from "../../core/outbox";
 import { c, face, space, t } from "../../core/theme";
-import { Capsule, Card, Head, ReadFailed, Screen, useRead } from "../../core/ui";
+import { Capsule, Card, Head, ReadFailed, Screen, useRead, ripple, shade, modalEdge, useSheetPad } from "../../core/ui";
 import { whyNotRepair } from "./roles";
+import { ListExport } from "../reports/ListExport";
+import { orderTable } from "./exports";
 import {
   cancelCostPath, closeBody, closedWords, empty, foot, heldStatus, isClosed, listPath, longDay, meta, ON_WEBSITE, orderPath, paise,
   pills, queued, SAY_WHAT, SENDING, startBody, startLabel, UPDATE_WHO, whyNotCancel, whyNotRecord, whyNotUpdate,
@@ -145,6 +147,7 @@ export function WorkOrders({ hotel, role, onBack }: { hotel: Hotel; role: string
             onPress={() => router.push(`/housekeeping/${code}/repair`)} onRefused={setRaiseSaid} />
           {raiseSaid ? <Text style={[t.label, line]} accessibilityLiveRegion="polite">{raiseSaid}</Text> : null}
         </View>
+        <ListExport screen="work-orders" role={role} table={data ? orderTable(orders, view === "open" ? "open" : "closed") : null} />
 
         {/* The web's Segmented: 44px under a finger (its own pointer-coarse). */}
         <View style={{ flexDirection: "row", alignSelf: "flex-start", padding: 3, gap: 2, backgroundColor: c.grey100, borderRadius: 10, marginBottom: 8 }} accessibilityRole="tablist">
@@ -152,7 +155,7 @@ export function WorkOrders({ hotel, role, onBack }: { hotel: Hotel; role: string
             const on = view === v;
             const n = data ? ` ${v === "open" ? data.open : data.closed}` : "";
             return (
-              <Pressable
+              <Pressable android_ripple={ripple}
                 key={v} onPress={() => setView(v)} accessibilityRole="tab" accessibilityState={{ selected: on }}
                 style={[{ minHeight: 44, paddingHorizontal: 12, borderRadius: 7, justifyContent: "center" }, on ? tabOn : null]}
               >
@@ -424,10 +427,11 @@ const input = {
 /** The web's DialogContent: centred, 16px from the sides, a head with its X.
     The X and the shade close it. */
 function Dialog({ title, under, onClose, children }: { title: string; under: string; onClose: () => void; children: ReactNode }) {
+  const pad = useSheetPad();
   return (
-    <Modal visible transparent animationType="fade" onRequestClose={onClose}>
-      <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : undefined}>
-        <View style={{ flex: 1, backgroundColor: web.shade, justifyContent: "center", paddingHorizontal: 16, paddingVertical: 32 }}>
+    <Modal visible transparent animationType="fade" onRequestClose={onClose} {...modalEdge}>
+      <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : "height"}>
+        <View style={{ flex: 1, backgroundColor: web.shade, justifyContent: "center", paddingHorizontal: 16, paddingTop: pad.top + 16, paddingBottom: pad.bottom + 16 }}>
           <Pressable style={StyleSheet.absoluteFill} onPress={onClose} accessibilityRole="button" accessibilityLabel="Close" />
           <View style={{ backgroundColor: c.white, borderRadius: 12, borderWidth: 1, borderColor: c.grey200, maxHeight: "100%", width: "100%", maxWidth: 560, alignSelf: "center" }}>
             <View style={{ flexDirection: "row", alignItems: "flex-start", gap: 16, paddingLeft: 20, paddingRight: 6, paddingTop: 16, paddingBottom: 12, borderBottomWidth: 1, borderBottomColor: c.grey200 }}>
@@ -435,12 +439,12 @@ function Dialog({ title, under, onClose, children }: { title: string; under: str
                 <Text style={t.heading} accessibilityRole="header">{title}</Text>
                 <Text style={[t.label, line, { color: c.grey500 }]}>{under}</Text>
               </View>
-              <Pressable onPress={onClose} accessibilityRole="button" accessibilityLabel="Close"
+              <Pressable android_ripple={ripple} onPress={onClose} accessibilityRole="button" accessibilityLabel="Close"
                 style={{ width: 44, height: 44, alignItems: "center", justifyContent: "center", marginTop: -10 }}>
                 <X size={16} color={c.grey500} />
               </Pressable>
             </View>
-            <ScrollView contentContainerStyle={{ paddingHorizontal: 20, paddingVertical: 16, gap: 16 }} keyboardShouldPersistTaps="handled">
+            <ScrollView contentContainerStyle={{ paddingHorizontal: 20, paddingVertical: 16, gap: 16 }} keyboardShouldPersistTaps="handled" keyboardDismissMode="interactive">
               {children}
             </ScrollView>
           </View>
@@ -488,14 +492,14 @@ function Btn({ label, Icon, a11y, reason, onPress, onRefused, kind = "secondary"
   const k = KIND[kind];
   const fg = ready ? k.fg : k.offFg;
   return (
-    <Pressable
+    <Pressable android_ripple={ripple}
       onPress={() => (ready ? onPress() : onRefused?.(reason))}
       accessibilityRole="button" accessibilityLabel={a11y ?? label} accessibilityState={{ disabled: !ready }} accessibilityHint={reason ?? undefined}
-      style={({ pressed }) => ({
+      style={shade(({ pressed }) => ({
         minHeight: tall ? 48 : 44, paddingHorizontal: 14, borderRadius: 999, borderWidth: 1, flexDirection: "row", alignItems: "center",
         justifyContent: "center", gap: 8, ...(grow ? { flex: 1 } : null),
         borderColor: ready ? k.ring : k.offRing, backgroundColor: !ready ? k.offBg : pressed ? k.down : k.bg,
-      })}
+      }))}
     >
       {Icon ? <Icon size={16} color={fg} /> : null}
       <Text style={[t.label, { color: fg }]} numberOfLines={1}>{label}</Text>

@@ -7,6 +7,7 @@ import { Btn, body, Dialog, Field, Foot, InDialog, Input, saidOf, Select, type S
 import { raise } from "./data";
 import { askBody, EMPTY_DRAFT, firstStore, type AskDraft, type PurchaseRequest, type PurchasingList } from "./purchase";
 import { Tick } from "./kit";
+import { ripple, shade, keys } from "../../core/ui";
 
 /* ══════════════════════════════════════════════════════════════════
    ASKING FOR SOMETHING — the web's AskDialog (pages/Purchasing.tsx).
@@ -78,10 +79,10 @@ export function Ask({ code, data, onClose, onAsked }: {
                 <Select label={`Item on line ${i + 1}`} value={l.itemId} onChange={(v) => set(i, { itemId: v })} options={items} />
               </View>
               {lines.length > 1 ? (
-                <Pressable
+                <Pressable android_ripple={ripple}
                   onPress={() => setLines((all) => all.filter((_, n) => n !== i))} accessibilityRole="button"
                   accessibilityLabel={`Take line ${i + 1} off`}
-                  style={({ pressed }) => ({ width: 44, height: 44, borderRadius: 999, alignItems: "center", justifyContent: "center", backgroundColor: pressed ? c.grey200 : "transparent" })}
+                  style={shade(({ pressed }) => ({ width: 44, height: 44, borderRadius: 999, alignItems: "center", justifyContent: "center", backgroundColor: pressed ? c.grey200 : "transparent" }))}
                 >
                   <Trash2 size={16} color={c.grey600} />
                 </Pressable>
@@ -89,7 +90,7 @@ export function Ask({ code, data, onClose, onAsked }: {
             </View>
             <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
               <View style={{ flex: 1 }}>
-                <Input label={`How much on line ${i + 1}`} keyboardType="numbers-and-punctuation" value={l.quantity} onChangeText={(v) => set(i, { quantity: v })} placeholder="How much" />
+                <Input label={`How much on line ${i + 1}`} {...keys.amount} value={l.quantity} onChangeText={(v) => set(i, { quantity: v })} placeholder="How much" />
               </View>
               <View style={{ flex: 1 }}>
                 {l.free ? (
@@ -98,7 +99,7 @@ export function Ask({ code, data, onClose, onAsked }: {
                     <Text style={{ fontSize: 16, color: c.grey500, ...face[500] }}>0</Text>
                   </View>
                 ) : (
-                  <Input label={`Agreed price on line ${i + 1}`} keyboardType="numbers-and-punctuation" value={l.unitPrice} onChangeText={(v) => set(i, { unitPrice: v })} placeholder="Price, if agreed" />
+                  <Input label={`Agreed price on line ${i + 1}`} {...keys.amount} value={l.unitPrice} onChangeText={(v) => set(i, { unitPrice: v })} placeholder="Price, if agreed" />
                 )}
               </View>
               <Tick label="Free" on={l.free} onChange={(v) => set(i, { free: v })} />

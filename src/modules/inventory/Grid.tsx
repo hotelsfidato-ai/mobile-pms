@@ -11,6 +11,7 @@ import {
   type DayRules, type InventoryCell, type Pricing, type RateDay, type Restriction,
 } from "./rates";
 import type { DayTarget, PriceTarget } from "./Dialogs";
+import { ripple, shade } from "../../core/ui";
 
 /* ══════════════════════════════════════════════════════════════════
    THE TWO GRIDS — Rates.tsx GridShell (235-296), BaseGrid (618-786),
@@ -154,10 +155,10 @@ export function BaseGrid({ code, nav, dates, pricing, left, days, mayEdit, onTap
         );
         if (!editable) return content;
         return (
-          <Pressable
+          <Pressable android_ripple={ripple}
             onPress={() => onTap({ roomTypeId: rt.id, roomType: rt.name, date: d, price: tappedPrice(cell) })}
             accessibilityRole="button" accessibilityLabel={`${rt.name} on ${d}`}
-            style={({ pressed }) => ({ flex: 1, justifyContent: "center", backgroundColor: pressed ? c.grey100 : undefined })}
+            style={shade(({ pressed }) => ({ flex: 1, justifyContent: "center", backgroundColor: pressed ? c.grey100 : undefined }))}
           >
             {content}
           </Pressable>
@@ -225,11 +226,11 @@ export function RoomsGrid({ nav, dates, cells, restrictions, mayEdit, onTap }: {
       const tone = toneOf(cell, rule);
       const nights = rule ? nightsMark(rule) : "";
       return (
-        <Pressable
+        <Pressable android_ripple={ripple}
           disabled={!mayEdit} onPress={() => onTap({ roomTypeId: rt.id, roomType: rt.name, date: d })}
           accessibilityRole="button" accessibilityLabel={`${rt.name} on ${d}`} accessibilityState={{ disabled: !mayEdit }}
-          style={({ pressed }) => ({ flex: 1, alignItems: "center", justifyContent: "center", paddingVertical: 6,
-            backgroundColor: pressed ? c.grey100 : tone === "closed" ? c.red50 : tone === "none" ? c.yellow50 : undefined })}
+          style={shade(({ pressed }) => ({ flex: 1, alignItems: "center", justifyContent: "center", paddingVertical: 6,
+            backgroundColor: pressed ? c.grey100 : tone === "closed" ? c.red50 : tone === "none" ? c.yellow50 : undefined }))}
         >
           {/* Available is the number a person acts on. */}
           <Text style={{ fontSize: 18, ...face[600], ...t.tab, color: tone === "closed" ? c.red700 : tone === "none" ? c.yellow800 : c.ink900 }}>
