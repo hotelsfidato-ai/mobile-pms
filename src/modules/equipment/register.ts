@@ -323,7 +323,7 @@ export const whyNotRetire = (reason: string) => (reason.trim() ? null : RETIRE_W
 export const retireWaits = (i: Pick<EquipmentItem, "heldAs">, role: string | null) => i.heldAs === "tagged" && !may(role, "approve");
 
 /** Only what changed is sent, so the history names only that; emptied is null, never zero (EditItemDialog). */
-export interface EditForm { name: string; category: string; tag: string; supplierId: string; unitCost: string }
+export interface EditForm { name: string; category: string; tag: string; supplierId: string; unitCost: string; purchaseDate: string; warrantyEnds: string; amcEnds: string }
 export function changesOf(i: EquipmentItem, f: EditForm): Record<string, string | null> {
   const blank = (v: string) => (v.trim() === "" ? null : v.trim());
   const out: Record<string, string | null> = {};
@@ -331,7 +331,10 @@ export function changesOf(i: EquipmentItem, f: EditForm): Record<string, string 
   if (blank(f.category) !== i.category) out.category = blank(f.category);
   if (i.heldAs === "tagged" && f.tag.trim() !== i.tag) out.tag = f.tag.trim();
   if ((f.supplierId || null) !== i.supplierId) out.supplierId = f.supplierId || null;
+  if (blank(f.purchaseDate) !== i.purchaseDate) out.purchaseDate = blank(f.purchaseDate);
   if (blank(f.unitCost) !== (i.unitCost === null ? null : String(i.unitCost))) out.unitCost = blank(f.unitCost);
+  if (blank(f.warrantyEnds) !== i.warrantyEnds) out.warrantyEnds = blank(f.warrantyEnds);
+  if (blank(f.amcEnds) !== i.amcEnds) out.amcEnds = blank(f.amcEnds);
   return out;
 }
 
@@ -339,6 +342,8 @@ export interface AddForm {
   name: string; category: string; heldAs: HeldAs; tag: string; quantity: string;
   whereKind: "room" | "place"; roomId: string; locationId: string; supplierId: string; unitCost: string;
   status: "in_use" | "under_repair";
+  /** The three days, "" for none (the phone's own picker since M-16): left out of the body when blank. */
+  purchaseDate: string; warrantyEnds: string; amcEnds: string;
 }
 export function whyNotAdd(f: AddForm): string | null {
   if (!f.name.trim()) return "What is it called?";
@@ -346,7 +351,7 @@ export function whyNotAdd(f: AddForm): string | null {
   if (!(f.whereKind === "room" ? f.roomId : f.locationId)) return "Where is it? Choose a room or a place - one of the two.";
   return null;
 }
-/** POST /equipment's body, as AddEquipmentDialog sends it (no dates from the phone: no date picker). */
+/** POST /equipment's body, as AddEquipmentDialog sends it, in its order; a blank day is left out. */
 export function addBody(f: AddForm) {
   return {
     name: f.name.trim(),
@@ -355,7 +360,10 @@ export function addBody(f: AddForm) {
     ...(f.heldAs === "tagged" ? { tag: f.tag.trim() } : { quantity: Number(f.quantity) }),
     ...(f.whereKind === "room" ? { roomId: f.roomId } : { locationId: f.locationId }),
     ...(f.supplierId ? { supplierId: f.supplierId } : {}),
+    ...(f.purchaseDate ? { purchaseDate: f.purchaseDate } : {}),
     ...(f.unitCost.trim() ? { unitCost: f.unitCost.trim() } : {}),
+    ...(f.warrantyEnds ? { warrantyEnds: f.warrantyEnds } : {}),
+    ...(f.amcEnds ? { amcEnds: f.amcEnds } : {}),
     status: f.status,
   };
 }

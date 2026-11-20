@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { Text, View } from "react-native";
 import { HeldError, outcomeUnknown } from "../../core/api";
 import type { KeyKeeper } from "../../core/keys";
-import { ON_THE_WEBSITE } from "../../core/menu";
+import { DateField } from "../../core/DateField";
 import { c, t } from "../../core/theme";
 import { notKnown, useRead, useStuck } from "../../core/ui";
 import { body, Btn, Dialog, Field, Foot, InDialog, Input, Loading, saidOf, Segmented, Select, type Said } from "../housekeeping/careKit";
@@ -75,12 +75,13 @@ function Why({ text }: { text: string | null }) {
 
 /* ── Details ──────────────────────────────────────────────────────── */
 
-export function EditDialog({ code, item, onClose, onDone, onLost }: Props) {
+export function EditDialog({ code, item, hotel, onClose, onDone, onLost }: Props & { hotel: { today?: string; businessDate: string } }) {
   const options = useRead(() => readOptions(code), ["equipment", code, "options"]);
   const o = options.data;
   const [f, setF] = useState({
     name: item.name, category: item.category ?? "", tag: item.tag ?? "", supplierId: item.supplierId ?? "",
     unitCost: item.unitCost === null ? "" : String(item.unitCost),
+    purchaseDate: item.purchaseDate ?? "", warrantyEnds: item.warrantyEnds ?? "", amcEnds: item.amcEnds ?? "",
   });
   const set = (patch: Partial<typeof f>) => setF((x) => ({ ...x, ...patch }));
   const w = useWrite("Not saved", "saved", onLost);
@@ -112,7 +113,10 @@ export function EditDialog({ code, item, onClose, onDone, onLost }: Props) {
           <Field label={item.heldAs === "counted" ? "Cost of one, in rupees" : "Cost, in rupees"} hint="Blank if nobody knows. It shows a dash, never zero.">
             <Input label="Cost, in rupees" value={f.unitCost} onChangeText={(v) => set({ unitCost: v })} keyboardType="decimal-pad" inputMode="decimal" />
           </Field>
-          <Text style={[t.caption, { color: c.grey600 }]}>{`Bought on, warranty and service contract dates: ${ON_THE_WEBSITE} (a date needs a date picker). They are left as they are.`}</Text>
+          {/* The phone's own date picker (M-16); emptied is null ("nobody knows"), and only a changed day is sent. */}
+          <DateField label="Bought on" clearable value={f.purchaseDate} onChange={(v) => set({ purchaseDate: v })} hotel={hotel} />
+          <DateField label="Warranty ends" clearable value={f.warrantyEnds} onChange={(v) => set({ warrantyEnds: v })} hotel={hotel} />
+          <DateField label="Service contract (AMC) ends" clearable value={f.amcEnds} onChange={(v) => set({ amcEnds: v })} hotel={hotel} />
         </>
       )}
       <InDialog said={w.said} />

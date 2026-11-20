@@ -1,4 +1,5 @@
 import { api, send } from "../../core/api";
+import type { ImportReport } from "../../core/importSpec";
 import type { KeyKeeper } from "../../core/keys";
 import { listApprovals } from "../approvals/data";
 import type { Approval } from "../approvals/rules";
@@ -44,6 +45,10 @@ export async function readEquipmentApprovals(code: string): Promise<Approval[]> 
 
 export const addEquipment = (code: string, body: Record<string, unknown>) =>
   send<{ ok: true; id: string }>("POST", listPath(code), body);
+
+/** The opening register from a file (equipment.ts importEquipment): `{ rows, dryRun }`, the dry run first. */
+export const importEquipment = (code: string, rows: Record<string, string>[], dryRun: boolean) =>
+  send<ImportReport>("POST", `${listPath(code)}/import`, { rows, dryRun });
 
 export const editEquipment = (code: string, id: string, changes: Record<string, string | null>) =>
   send<{ ok: true; id: string; changed: boolean }>("PATCH", itemPath(code, id), changes);

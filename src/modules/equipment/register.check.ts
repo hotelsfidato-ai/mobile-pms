@@ -94,10 +94,10 @@ eq(retireWaits(item({}), "stores"), false);
 eq(retireWaits(item({ heldAs: "counted" }), "hotel_manager"), false);
 
 /* Only what changed is sent; an emptied cost is null, never zero. */
-eq(changesOf(item({}), { name: "Split AC 1.5 ton", category: "Appliance", tag: "EQ-0001", supplierId: "", unitCost: "38000" }), {});
-eq(changesOf(item({}), { name: "AC", category: "", tag: "EQ-0001", supplierId: "", unitCost: "" }), { name: "AC", category: null, unitCost: null });
+eq(changesOf(item({}), { name: "Split AC 1.5 ton", category: "Appliance", tag: "EQ-0001", supplierId: "", unitCost: "38000", purchaseDate: "", warrantyEnds: "", amcEnds: "" }), {});
+eq(changesOf(item({}), { name: "AC", category: "", tag: "EQ-0001", supplierId: "", unitCost: "", purchaseDate: "", warrantyEnds: "", amcEnds: "" }), { name: "AC", category: null, unitCost: null });
 
-const f: AddForm = { name: " Kettle ", category: "", heldAs: "counted", tag: "EQ-0002", quantity: "12", whereKind: "room", roomId: "", locationId: "", supplierId: "", unitCost: "", status: "in_use" };
+const f: AddForm = { name: " Kettle ", category: "", heldAs: "counted", tag: "EQ-0002", quantity: "12", whereKind: "room", roomId: "", locationId: "", supplierId: "", unitCost: "", status: "in_use", purchaseDate: "", warrantyEnds: "", amcEnds: "" };
 eq(whyNotAdd(f), "Where is it? Choose a room or a place - one of the two.");
 eq(whyNotAdd({ ...f, roomId: "r1" }), null);
 eq(whyNotAdd({ ...f, name: " " }), "What is it called?");
@@ -129,3 +129,26 @@ eq(decisionLine(h({ decision: { status: "clarify", by: null, at: "x", note: "Whi
 eq(itemRow(item({ unitCost: null, totalCost: null })), ["Split AC 1.5 ton", "Appliance", "Tag", "EQ-0001", "1", "Room 205", "In use", "-", "-", "-", "-", "-", "-"]);
 
 console.log("register: all checks pass");
+
+/* The import (M-16, PICKERS 2.11): the web's columns read back from the template whole; a cost or a date left blank stays blank. */
+{
+  const { EQUIPMENT_SPEC } = await import("./importSpec.ts");
+  const { parseCsv, templateCsv } = await import("../../core/importSpec.ts");
+  const back = parseCsv(templateCsv(EQUIPMENT_SPEC), EQUIPMENT_SPEC);
+  eq([back.missing, back.unknown, back.rows.length], [[], [], 3]);
+  eq(back.rows[2], { name: "Sofa, three seater", category: "Furniture", heldAs: "tag", tag: "", quantity: "", room: "", place: "Example lobby",
+    supplier: "", purchaseDate: "", unitCost: "", warrantyEnds: "", amcEnds: "", status: "under repair" });
+}
+
+/* The three days (M-16, PICKERS 2.12, 2.13): sent in Add when chosen, left out when blank; Edit sends only a changed
+   day, and an emptied one as null ("nobody knows"), never anything else. */
+eq(addBody({ ...f, roomId: "r1", purchaseDate: "2025-03-14", amcEnds: "2027-03-31" }),
+  { name: "Kettle", heldAs: "counted", quantity: 12, roomId: "r1", purchaseDate: "2025-03-14", amcEnds: "2027-03-31", status: "in_use" });
+{
+  const { changesOf } = await import("./register.ts");
+  const item = { name: "AC", category: null, heldAs: "tagged", tag: "EQ-1", supplierId: null, unitCost: null,
+    purchaseDate: "2025-03-14", warrantyEnds: null, amcEnds: "2026-01-01" } as unknown as EquipmentItem;
+  const same = { name: "AC", category: "", tag: "EQ-1", supplierId: "", unitCost: "", purchaseDate: "2025-03-14", warrantyEnds: "", amcEnds: "2026-01-01" };
+  eq(changesOf(item, same), {});
+  eq(changesOf(item, { ...same, purchaseDate: "", warrantyEnds: "2028-03-14" }), { purchaseDate: null, warrantyEnds: "2028-03-14" });
+}
