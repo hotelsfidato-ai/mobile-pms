@@ -109,11 +109,15 @@ export const padHref = (code: string, id: string, table: string | null) =>
 
 /* ── An earlier day's bill (Till.tsx 533-581; till.ts bills 2159) ─── */
 
-/** The Day is the web's date picker: on the phone it waits for a package
-    (BRIEF-T3), so only the number asks; two characters, as the web. */
-export const earlierAsked = (no: string) => no.trim().length >= 2;
-export const earlierPath = (code: string, no: string) => `/api/hotels/${code}/till/bills?no=${encodeURIComponent(no.trim())}`;
-export const earlierNone = (no: string) => `No paid bill with "${no.trim()}" in its number.`;
+/** The Day (the phone's own date picker, M-16; max the till's business date) or two characters of the
+    number ask, as the web; both may be given. */
+export const earlierAsked = (date: string, no: string) => date !== "" || no.trim().length >= 2;
+export function earlierPath(code: string, date: string, no: string) {
+  const q = [date ? `date=${encodeURIComponent(date)}` : "", no.trim() ? `no=${encodeURIComponent(no.trim())}` : ""].filter(Boolean).join("&");
+  return `/api/hotels/${code}/till/bills?${q}`;
+}
+export const earlierNone = (date: string, no: string) =>
+  `No paid bill ${date ? `on ${dateShort(date)}` : ""}${date && no.trim() ? " " : ""}${no.trim() ? `with "${no.trim()}" in its number` : ""}.`;
 export const EARLIER_FAILED = "The bills could not be read. Try again.";
 
 /* ── The Terminal (Terminal.tsx) ───────────────────────────────────── */
