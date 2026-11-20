@@ -5,11 +5,11 @@ import { useCallback, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import type { Hotel } from "../../core/api";
 import { c, space, t } from "../../core/theme";
-import { Head, Screen, useRead, ripple, shade } from "../../core/ui";
+import { Head, Screen, Stopped, useRead, useScreenStop, ripple, shade } from "../../core/ui";
 import { Back, Box, Btn, body, Empty, Loading, NotYours, Segmented, Stale, Toast, type Said } from "../guest-services/kit";
 import { Fact, LoadFailed, Note } from "../laundry/kit";
 import { Ask } from "./Ask";
-import { isRefused, readPurchasing } from "./data";
+import { ASK_UNKNOWN, isRefused, listStop, readPurchasing } from "./data";
 import { StatePill, useBackInView } from "./kit";
 import { askedDay, dayOf, raisedWords, rupees, STATE_TONE, STATE_WORDS, when, type PurchaseRequest } from "./purchase";
 import { ListExport } from "../reports/ListExport";
@@ -51,7 +51,10 @@ export function Purchasing({ hotel, role, onBack }: { hotel: Hotel; role: string
   const [said, setSaid] = useState<Said | null>(null);
   const unsay = useCallback(() => setSaid(null), []);
 
-  const q = useRead(() => (refused ? Promise.resolve(null) : readPurchasing(code)), ["purchasing", code, "list"]);
+  /* An Ask whose outcome is unknown (MPUR-U1): Ask to buy stays grey until a read of the list begun after it. */
+  const stop = useScreenStop(listStop(code));
+  const ask = () => { if (!stop.isStuck()) setAsking(true); };
+  const q = useRead(stop.watch(() => (refused ? Promise.resolve(null) : readPurchasing(code))), ["purchasing", code, "list"]);
   useBackInView(["purchasing", code, "list"]);
   const off = isRefused(q.data) ? q.data.refused : null;
   const data = q.data && !isRefused(q.data) ? q.data : null;
@@ -69,7 +72,7 @@ export function Purchasing({ hotel, role, onBack }: { hotel: Hotel; role: string
     );
   }
 
-  const askButton = <Btn label="Ask to buy" variant="primary" icon={Plus} disabled={!data || mayAsk != null} onPress={() => setAsking(true)} />;
+  const askButton = <Btn label="Ask to buy" variant="primary" icon={Plus} disabled={!data || mayAsk != null || stop.stuck} onPress={ask} />;
 
   return (
     <View style={{ flex: 1 }}>
@@ -82,6 +85,7 @@ export function Purchasing({ hotel, role, onBack }: { hotel: Hotel; role: string
               {data?.me.maySetRequesters ? <Btn label="Who may ask" icon={ShieldCheck} onPress={() => router.push(`/purchasing/${code}/who-may-ask`)} /> : null}
               {askButton}
             </View>
+            {stop.stuck ? <Stopped line={ASK_UNKNOWN} onRead={q.reload} /> : null}
             {/* The web's REQUEST_EXPORT; purchasing's own export right. */}
             <ListExport screen="purchasing" role={role} table={data ? {
               subtitle: "Showing restaurant and hotel",
@@ -139,7 +143,7 @@ export function Purchasing({ hotel, role, onBack }: { hotel: Hotel; role: string
                   description={"A purchase starts here: what is needed, how much of it, which store it is for, and why. The "
                     + "general manager approves it, the order goes to a supplier on paper, and what arrives lands in that store."}
                 />
-                {mayAsk ? null : <Btn label="Ask to buy something" variant="primary" onPress={() => setAsking(true)} />}
+                {mayAsk ? null : <Btn label="Ask to buy something" variant="primary" disabled={stop.stuck} onPress={ask} />}
               </Box>
             ) : (
               <>
@@ -182,7 +186,7 @@ export function Purchasing({ hotel, role, onBack }: { hotel: Hotel; role: string
 
       {asking && data ? (
         <Ask
-          code={code} data={data} onClose={() => setAsking(false)}
+          code={code} data={data} onClose={() => { setAsking(false); if (stop.isStuck()) q.reload(); }}
           onAsked={(r) => {
             /* The dialog closes and the list changes: the end of the act (the web, MEMORY 291). */
             setAsking(false);

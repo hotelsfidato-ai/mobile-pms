@@ -72,6 +72,12 @@ export async function readApproval(code: string, id: string): Promise<PurchaseAp
   return approvalFor(out.rows, id);
 }
 
+/** The name of the list's stop (core useScreenStop, MPUR-U1). POST …/purchasing/requests reads no key
+    (the keeper here is not read by this server), so an Ask whose outcome is unknown greys Ask to buy
+    until a read of the list begun after the loss is back - kept outside the dialog. */
+export const listStop = (code: string) => `purchasing/${code}/list`;
+export const ASK_UNKNOWN = "Not known whether the ask was sent: look at the list before asking again.";
+
 /* ── Writes ── */
 
 export const raise = (code: string, body: AskBody) =>
