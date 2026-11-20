@@ -115,3 +115,45 @@ pictured.
 
 Linen par levels per room type, an outside laundry's bills, express surcharges, and a guest sending a
 bag from their own page.
+
+## Lane U — the Laundry price list (m13-setups, 19 Nov)
+
+**Web twin:** `/h/:code/laundry/price-list`, `src/modules/laundry/pages/PriceList.tsx` (ItemRow,
+AddDialog, PRICE_EXPORT), `data/laundry.ts` lines 106-154; the API `api/src/modules/laundry/laundry.ts`
+lines 95-205; gates `api/src/roleGate.ts`: the read LAUNDRY (`laundry` view), add LAUNDRY_PRICE_ADD
+(`laundry` create), a price or retiring LAUNDRY_PRICE (`laundry` edit) — today the same six as taking
+in a bag. Offline: no laundry path is on the web's list, each write **refused** (UNLISTED). Read at
+`c9394cb` (16 Nov).
+
+| Screen | Route → file | Picture | Reads / writes |
+|---|---|---|---|
+| Laundry price list | `app/laundry/[code]/price-list.tsx` → `PriceList.tsx` | `new/n-h-laundry-price-list` (dev-gm) | `GET /laundry/price-list` (data.ts `readPriceList`, key `["laundry", code, "price-list"]`, shared with Collect); `POST /price-list`, `POST /price-list/:id` (`priceData.ts`) |
+| Add an item (dialog) | on it | not pictured | name, service, price, Free |
+
+Rules `prices.ts` (`prices.check.ts`); pieces from `../banquet/setupKit.tsx`. The Dockets' "Price list"
+button opens it. **Left for the mobile chat:** Collect.tsx's empty-list sentence still ends "Price
+list: On the website for now." (outside this lane's one allowed edit; it can now be dropped).
+
+- **NO DEFAULT PRICES:** blank is null ("-"), never 0; emptying a box unprices the line; 0 only with
+  Free (ticked, it saves at once; unticked, it unprices); a word is "A price is zero or more, or nothing
+  at all." and not sent; the same figure as the server holds is not sent again. Paise kept.
+- **The price is typed in the row and saved when the box is left** (`onEndEditing`, the web's
+  `onBlur`); a refusal is the server's words in the toast; an unknown outcome is said and the list read
+  again at once.
+- **Retire asks first** (`Alert.alert`, the web's own toast words for what it keeps); Put back does not.
+- **The yellow tile** counts the active unpriced lines, in the web's words.
+- **Export:** the core's ExportButtons from the rows (the web's PRICE_EXPORT columns; the API's
+  `laundry-prices` asks no download right).
+- **Rights:** Add grey with LAUNDRY_PRICE_ADD's sentence; the boxes, Free and Retire grey with
+  LAUNDRY_PRICE's (said once at the top of the list).
+
+### Picture match (19 Nov)
+
+Read against `new/n-h-laundry-price-list` (31 Oct), never seen running; the page changed on 16 Nov
+(PDF and Excel), after the picture. **Matches in words, order and the yellow tile**, with these
+differences left: (a) the web's three-column table runs off the card at 390 px (its "On the list"
+column and Retire are clipped, as the picture shows): here each line is a row - name · service, then
+the price box, Free and Retire - unclipped, and the ITEM / PRICE / ON THE LIST heads are left out;
+(b) a Back capsule beside the title instead of the "Dockets › Price list" breadcrumb; (c) the export
+row (PDF or print, Share) under Add an item; (d) buttons 44 px. **1 of 1 pictured screen matches
+(with these differences)**; the dialog is not pictured.
