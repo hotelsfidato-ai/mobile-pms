@@ -29,8 +29,9 @@ export function ReportPage({ title, period, controls, files, refreshing, onRefre
   return (
     <Screen refreshing={refreshing} onRefresh={onRefresh}>
       <Head title={title} under={period} />
-      {controls ? <View style={{ gap: 12 }}>{controls}</View> : null}
+      {/* The web's order: the page's buttons, then the report's own settings (ReportShell). */}
       {files}
+      {controls ? <View style={{ gap: 12 }}>{controls}</View> : null}
       {children}
     </Screen>
   );

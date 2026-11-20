@@ -18,3 +18,26 @@ routes. **What was done:** nothing in the frozen core; the exact change is asked
 **Fixed** by the mobile chat at the merge (4 Nov): `app/index.tsx` sends the group's owner to `/all`
 and anybody else to `landing(role, code)` (`src/core/menu.ts`, pinned by `menu.check.ts`).
 **The rule:** a role's first screen is its picture's (`roles/r-<role>-home`), not one screen for all.
+
+---
+
+## Lane m13-rep-money (MRP-A)
+
+### MRP-A1 · The web's accounting export writes ₹0.00 for a figure it does not have (20 Nov) — the phone differs
+
+**What happened:** `src/modules/accounting/pages/Accounting.tsx` writes `cash(d.companyReceipt ?? 0)`
+and `book.total.companyReceipt ?? 0`: an answer without the field (kept from before D27-242, its own
+comment says) shows "Received from companies ₹0.00", a zero for a figure not held. **How it was found:**
+porting the day book's columns. **What was done:** the phone writes a dash (`bookFigure`, checked);
+the web's fault is in the lane's report for `docs/api-requests.md`. **The rule:** `?? 0` on a money
+figure is a zero invented; a missing figure is a dash.
+
+### MRP-A2 · Three web reports add their totals up in the browser, in whole rupees (20 Nov) — the phone draws none
+
+**What happened:** the Guest ledger, the Cashier shift and the GST sales register (Compliance.tsx) sum
+the server's rows in the browser (`rows.reduce`) and write every amount with `money` (whole rupees):
+the GST register's CGST/SGST total is the browser's, not the server's, and ₹38,782.28 prints ₹38,782.
+**How it was found:** reading the pages against the API (`reports.ts` sends rows, no total). **What was
+done:** the phone shows each row as sent, paise kept, and no total, saying so on the screen and in the
+export (`NO_TOTAL`); asked of the PMS: the server to send the totals rows. **The rule:** a statutory
+total is the server's or it is not drawn.
