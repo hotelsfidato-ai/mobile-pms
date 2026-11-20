@@ -29,8 +29,8 @@ export function MsgRivals(props: AdminProps) {
   const cache = useQueryClient();
   const { said, say, close } = useSaid();
   const key = ["settings", code, "rivals"];
-  const read = useRead(() => (refusedPage(props.role, "rivals") ? Promise.resolve(null) : getRivalsSwitch(code)), key);
   const write = usePageWrite(code, "rivals");
+  const read = useRead(write.watch(() => (refusedPage(props.role, "rivals") ? Promise.resolve(null) : getRivalsSwitch(code))), key);
   const again = () => void cache.invalidateQueries({ queryKey: key });
   const flip = (isOn: boolean) => write.run(() => setRivalsSwitch(code, isOn), {
     ok: () => { say({ title: "Saved", tone: "ok" }); again(); },
@@ -51,7 +51,7 @@ export function MsgRivals(props: AdminProps) {
               </Text>
               {data.lastRunOn ? <Text style={[body, { color: c.grey600 }]}>Last checked {dayShort(data.lastRunOn)}.</Text> : null}
               <ChangedBy who={data.changedBy} />
-              <StuckLine stuck={write.stuck} where="this switch" />
+              <StuckLine stuck={write.stuck} where="this switch" onRead={read.reload} />
             </View>
             <Switch value={data.isOn} onValueChange={(v) => void flip(v)} disabled={write.busy || write.stuck || writeRefused !== null}
               accessibilityLabel={LABEL} trackColor={{ false: c.grey300, true: c.orange }} thumbColor={c.white} ios_backgroundColor={c.grey300} />

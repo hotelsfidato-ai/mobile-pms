@@ -205,35 +205,10 @@ export const onSince = (m: MessageSwitch): string | null =>
 export const catchUpLine = (c: MessageSwitches["catchUp"]) =>
   `A booking made before sending was first switched on is confirmed only from ${c.from} to ${c.until}, the hotel's time (fixed).`;
 
-/* ── One page's stop, kept outside React (MEMORY 16, 22; BRIEF-T4) ──
-   None of these routes reads an idempotency key. While a write is on its
-   way the page sends nothing else (and its sheet cannot close); after an
-   unknown outcome its writes stay grey until a read that BEGAN after the
-   loss has come back. Kept by hotel and page (`${code}/${page}`), so
-   leaving the page and coming back, or closing a sheet, does not drop it. */
+/* ── The page's name in the core's stop book (src/core/stop.ts; MEMORY 16, 22) ──
+   None of these routes reads an idempotency key (POST /report-schedules adds
+   one, with no unique index behind it). Each page is one name in the core's
+   book: "settings/<code>/<slug>". */
 
-export const stillUnknown = (lostAt: number | null, began: number) => lostAt !== null && began <= lostAt;
-
-export function pageStops(now: () => number = Date.now) {
-  const lost = new Map<string, number>();
-  const flying = new Map<string, number>();
-  /* A page drawn again after leaving and coming back hears the change too. */
-  const watchers = new Set<() => void>();
-  const told = () => { for (const fn of watchers) fn(); };
-  return {
-    /** A write's outcome is unknown, from now. */
-    lose: (k: string) => { lost.set(k, now()); told(); },
-    /** A read that began at `began` came back: the doubt is over when it began after the loss. */
-    seen: (k: string, began: number) => {
-      if (lost.has(k) && !stillUnknown(lost.get(k)!, began)) { lost.delete(k); told(); }
-    },
-    lost: (k: string) => lost.has(k),
-    begin: (k: string) => { flying.set(k, (flying.get(k) ?? 0) + 1); told(); },
-    end: (k: string) => { const n = (flying.get(k) ?? 1) - 1; if (n > 0) flying.set(k, n); else flying.delete(k); told(); },
-    flying: (k: string) => (flying.get(k) ?? 0) > 0,
-    watch: (fn: () => void) => { watchers.add(fn); return () => { watchers.delete(fn); }; },
-    now,
-  };
-}
-/** The app's one store of these four pages' stops. */
-export const stops = pageStops();
+/** "settings/5EL/scheduled-reports": by hotel and page. */
+export const stopName = (code: string, page: PageKey) => `settings/${code}/${PAGES[page].path.split("/").pop()}`;

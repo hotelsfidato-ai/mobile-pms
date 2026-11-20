@@ -27,8 +27,8 @@ export function MsgSwitches(props: AdminProps) {
   const cache = useQueryClient();
   const { said, say, close } = useSaid();
   const key = ["settings", code, "switches"];
-  const read = useRead(() => (refusedPage(props.role, "switches") ? Promise.resolve(null) : getMessageSwitches(code)), key);
   const write = usePageWrite(code, "switches");
+  const read = useRead(write.watch(() => (refusedPage(props.role, "switches") ? Promise.resolve(null) : getMessageSwitches(code))), key);
   const again = () => void cache.invalidateQueries({ queryKey: key });
   const flip = (m: MessageSwitch, isOn: boolean) => write.run(() => setMessageSwitch(code, m.kind, isOn), {
     ok: () => { say({ title: "Saved", tone: "ok" }); again(); },
@@ -47,7 +47,7 @@ export function MsgSwitches(props: AdminProps) {
               <Row key={m.kind} m={m} first={i === 0} disabled={write.busy || write.stuck || writeRefused !== null} onSave={(v) => void flip(m, v)} />
             ))}
             <View style={{ paddingVertical: 12, borderTopWidth: 1, borderColor: c.grey100, gap: 4 }}>
-              <StuckLine stuck={write.stuck} where="the switches" />
+              <StuckLine stuck={write.stuck} where="the switches" onRead={read.reload} />
               <Text style={[body, { color: c.grey600 }]}>{catchUpLine(data.catchUp)}</Text>
             </View>
           </View>

@@ -1,6 +1,6 @@
 import { ApiError, api, send } from "../../core/api";
 import {
-  stops, type MessageSwitches, type PageKey, type ReportEmails, type RivalsSwitch, type ScheduleInput, type Schedules, type EmailsDraft, emailsBody,
+  type MessageSwitches, type ReportEmails, type RivalsSwitch, type ScheduleInput, type Schedules, type EmailsDraft, emailsBody,
 } from "./msgRules";
 
 /* ══════════════════════════════════════════════════════════════════
@@ -21,9 +21,10 @@ import {
    KEYS: none of these routes reads an idempotency key (api/src/server.ts
    only lets it through CORS). The PUTs set a state, so a repeat is
    harmless; POST /report-schedules adds one, so a repeat after a lost
-   reply would add a second. What stops it is the page's stop (msgRules
-   `stops`): after an unknown outcome the page's writes stay grey until a
-   read that BEGAN after the loss has come back.
+   reply would add a second. What stops it is the page's stop in the
+   core's book (src/core/stop.ts, MsgKit usePageWrite): after an unknown
+   outcome the page's writes stay grey until a read that BEGAN after the
+   loss (and, when nothing came back, 5 s after it) has come back good.
    ══════════════════════════════════════════════════════════════════ */
 
 const H = (code: string) => `/api/hotels/${encodeURIComponent(code)}`;
@@ -31,16 +32,10 @@ const H = (code: string) => `/api/hotels/${encodeURIComponent(code)}`;
 /** What a page reads: the answer, or the server's refusal of this person (403, 404) in its words. */
 export type Readout<T> = { ok: T } | { refused: string };
 
-/** The page's stop key: by hotel and page. */
-export const stopKey = (code: string, page: PageKey) => `${code}/${page}`;
-
-/** A read that lifts the page's doubt once it is back, if it BEGAN after the loss. */
-async function readOf<T>(code: string, page: PageKey, path: string): Promise<Readout<T>> {
-  const began = stops.now();
+/** A page's read; the screen wraps it in its stop's `watch` (MsgKit), which lets a loss go. */
+async function readOf<T>(path: string): Promise<Readout<T>> {
   try {
-    const answer = await api<T>(path);
-    stops.seen(stopKey(code, page), began);
-    return { ok: answer };
+    return { ok: await api<T>(path) };
   } catch (e) {
     if (e instanceof ApiError && (e.status === 403 || e.status === 404)) return { refused: e.message };
     throw e;
@@ -49,24 +44,24 @@ async function readOf<T>(code: string, page: PageKey, path: string): Promise<Rea
 
 /* ── Guest messages on/off ── */
 export const getMessageSwitches = (code: string) =>
-  readOf<MessageSwitches>(code, "switches", `${H(code)}/guest-message-settings`);
+  readOf<MessageSwitches>(`${H(code)}/guest-message-settings`);
 export const setMessageSwitch = (code: string, kind: string, isOn: boolean) =>
   send<{ ok: true }>("PUT", `${H(code)}/guest-message-settings/${encodeURIComponent(kind)}`, { isOn });
 
 /* ── Daily report emails: all of them, as a whole (D27-280) ── */
-export const getReportEmails = (code: string) => readOf<ReportEmails>(code, "reportEmails", `${H(code)}/report-emails`);
+export const getReportEmails = (code: string) => readOf<ReportEmails>(`${H(code)}/report-emails`);
 export const setReportEmails = (code: string, draft: EmailsDraft) =>
   send<{ ok: true }>("PUT", `${H(code)}/report-emails`, emailsBody(draft));
 
 /* ── Scheduled reports ── */
 const S = (code: string) => `${H(code)}/report-schedules`;
-export const getSchedules = (code: string) => readOf<Schedules>(code, "schedules", S(code));
+export const getSchedules = (code: string) => readOf<Schedules>(S(code));
 export const saveSchedule = (code: string, id: string | null, body: ScheduleInput): Promise<unknown> =>
   id ? send<{ ok: true }>("PUT", `${S(code)}/${encodeURIComponent(id)}`, body) : send<{ id: string }>("POST", S(code), body);
 export const removeSchedule = (code: string, id: string) =>
   send<{ ok: true }>("DELETE", `${S(code)}/${encodeURIComponent(id)}`);
 
 /* ── Rivals' prices ── */
-export const getRivalsSwitch = (code: string) => readOf<RivalsSwitch>(code, "rivals", `${H(code)}/market-rates/switch`);
+export const getRivalsSwitch = (code: string) => readOf<RivalsSwitch>(`${H(code)}/market-rates/switch`);
 export const setRivalsSwitch = (code: string, isOn: boolean) =>
   send<{ ok: true }>("PUT", `${H(code)}/market-rates/switch`, { isOn });

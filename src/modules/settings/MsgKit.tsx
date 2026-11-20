@@ -1,43 +1,41 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { Text, View } from "react-native";
 import { outcomeUnknown } from "../../core/api";
 import { c, face, t } from "../../core/theme";
-import { Head, Screen, notKnown, useRead } from "../../core/ui";
+import { Head, Screen, Stopped, notKnown, useRead, useScreenStop } from "../../core/ui";
 import { Failed, Loading, Refused, Stale, Toast, body, type Said } from "../admin/kit";
 import type { AdminProps } from "../admin/Route";
-import { stopKey, type Readout } from "./msgData";
-import { refusedPage, refusedWrite, stops, type PageKey } from "./msgRules";
+import type { Readout } from "./msgData";
+import { refusedPage, refusedWrite, stopName, type PageKey } from "./msgRules";
 
 /* ══════════════════════════════════════════════════════════════════
    THE PIECES THE FOUR PAGES SHARE (lane m13-set-messages): the page with
    its four states (loading · failed or offline · refused · the page), the
-   page's write with its stop kept outside React (msgRules `stops`,
-   MEMORY 16, 22), the yellow "Nothing is sent yet" card, the grey
+   page's write with its stop in the core's book (src/core/stop.ts
+   useScreenStop, MEMORY 16, 22), the yellow "Nothing is sent yet" card, the grey
    "Last changed by" line. Built on the admin kit (src/modules/admin/kit.tsx).
    ══════════════════════════════════════════════════════════════════ */
 
 /** The page's write: one at a time for the whole page (none of its routes reads a key), and none
-    after an unknown outcome until a read that BEGAN after it has come back. Kept by hotel and page,
-    so leaving and coming back keeps it; the page is drawn again whenever it changes. */
+    after an unknown outcome until a read that BEGAN after it (5 s after, when nothing came back) has
+    come back good. The core's stop book keeps it by hotel and page ("settings/<code>/<page>"), so
+    leaving and coming back keeps it. `watch` wraps the page's read: the read that lets it go. */
 export function usePageWrite(code: string, page: PageKey) {
-  const key = stopKey(code, page);
-  const [, setTick] = useState(0);
-  useEffect(() => stops.watch(() => setTick((n) => n + 1)), []);
+  const stop = useScreenStop(stopName(code, page));
   async function run<T>(fn: () => Promise<T>, on: { ok: (r: T) => void; no: (e: unknown) => void; unknown: (e: unknown) => void }) {
-    /* The latch at the tap (MEMORY 8): the store answers at once, before any state reaches the button. */
-    if (stops.flying(key) || stops.lost(key)) return;
-    stops.begin(key);
+    /* The latch at the tap (MEMORY 8): the book answers at once, before any state reaches the button. */
+    if (stop.isStuck()) return;
+    let r: T;
     try {
-      const r = await fn();
-      stops.end(key);
-      on.ok(r);
+      r = await stop.guard(fn);
     } catch (e) {
-      if (outcomeUnknown(e)) stops.lose(key);
-      stops.end(key);
       if (outcomeUnknown(e)) on.unknown(e); else on.no(e);
+      return;
     }
+    on.ok(r);
   }
-  return { busy: stops.flying(key), stuck: stops.lost(key), run };
+  /* `busy`: on its way; `stuck`: lost, not known (the Stopped line). Either greys the page's writes. */
+  return { busy: stop.stuck && !stop.unknown, stuck: stop.unknown, run, watch: stop.watch };
 }
 
 /** The unknown outcome's toast: what was not known, where to look (core ui.tsx notKnown). */
@@ -89,6 +87,6 @@ export function NotSent({ sentence }: { sentence: string | null }) {
 export const ChangedBy = ({ who }: { who: string | null }) =>
   who ? <Text style={[t.caption, { lineHeight: 17 }]}>Last changed by {who}</Text> : null;
 
-/** The stop's line under a page's controls, while its writes are grey. */
-export const StuckLine = ({ stuck, where }: { stuck: boolean; where: string }) =>
-  stuck ? <Text style={[t.caption, { color: c.red700, lineHeight: 17 }]} accessibilityRole="alert">{notKnown("saved", where).line}</Text> : null;
+/** The stop's card while the page's writes are grey: why, and the read that lets it go. */
+export const StuckLine = ({ stuck, where, onRead }: { stuck: boolean; where: string; onRead: () => void }) =>
+  stuck ? <Stopped line={notKnown("saved", where).line} onRead={onRead} /> : null;

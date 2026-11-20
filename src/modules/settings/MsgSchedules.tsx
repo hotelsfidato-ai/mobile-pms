@@ -42,8 +42,8 @@ export function MsgSchedules(props: AdminProps) {
   const cache = useQueryClient();
   const { said, say, close } = useSaid();
   const key = ["settings", code, "report-schedules"];
-  const read = useRead(() => (refusedPage(props.role, "schedules") ? Promise.resolve(null) : getSchedules(code)), key);
   const write = usePageWrite(code, "schedules");
+  const read = useRead(write.watch(() => (refusedPage(props.role, "schedules") ? Promise.resolve(null) : getSchedules(code))), key);
   const [editing, setEditing] = useState<Editing | null>(null);
   /* Which row's Pause is on its way, for its words. */
   const [pausing, setPausing] = useState<string | null>(null);
@@ -78,7 +78,7 @@ export function MsgSchedules(props: AdminProps) {
               <Btn label="Add a schedule" variant="primary" disabled={off} icon={<Plus size={16} color={off ? c.grey500 : c.white} />}
                 onPress={() => setEditing({ id: null, draft: NEW })} />
             </View>
-            <StuckLine stuck={write.stuck} where="the list of schedules" />
+            <StuckLine stuck={write.stuck} where="the list of schedules" onRead={read.reload} />
             {data.schedules.length === 0
               ? <Empty title="No report goes on a schedule yet" description="Add one: the report, the days it covers, how often it goes, and who gets it." />
               : (

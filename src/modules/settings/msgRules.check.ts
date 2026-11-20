@@ -3,8 +3,8 @@
    schedules' bodies and words, the invoice's moment, and the page's stop. Made-up rows chosen so a
    wrong rule gives a different answer (MEMORY 11). */
 import {
-  NEW, addressesIn, catchUpLine, dayShort, draftOf, emailsBody, emailsDraftOf, lastLine, mayAdd, onSince, pageStops, pausedInput,
-  periodLine, periodsFor, periodsHint, pickReport, refusedPage, refusedWrite, removeWords, schedulable, sendToHint, stampIn, toInput,
+  NEW, addressesIn, catchUpLine, dayShort, draftOf, emailsBody, emailsDraftOf, lastLine, mayAdd, onSince, pausedInput,
+  periodLine, periodsFor, periodsHint, pickReport, refusedPage, refusedWrite, removeWords, schedulable, sendToHint, stampIn, stopName, toInput,
   toLine, type MessageSwitch, type Schedule, type Schedules,
 } from "./msgRules.ts";
 
@@ -98,26 +98,9 @@ eq([onSince(inv({ isOn: false })), onSince(inv({ switchedOnAt: null })), onSince
 eq(catchUpLine({ from: "09:00", until: "21:00" }),
   "A booking made before sending was first switched on is confirmed only from 09:00 to 21:00, the hotel's time (fixed).", "the catch-up line");
 
-/* ── The page's stop (MEMORY 16, 22) ── */
-let clock = 100;
-const st = pageStops(() => clock);
-const k = "5EL/schedules";
-let heard = 0;
-const stopWatching = st.watch(() => { heard += 1; });
-st.begin(k);
-eq(st.flying(k), true, "a write on its way");
-clock = 200; st.lose(k); st.end(k);
-eq([st.flying(k), st.lost(k)], [false, true], "lost when nothing came back");
-st.seen(k, 150);
-eq(st.lost(k), true, "a read that began BEFORE the loss, though it came back after, does not lift it");
-st.seen(k, 200);
-eq(st.lost(k), true, "nor one begun the same moment");
-st.seen(k, 201);
-eq(st.lost(k), false, "a read begun after the loss lifts it");
-st.lose("AGR/schedules");
-eq([st.lost("AGR/schedules"), st.lost(k)], [true, false], "kept by hotel and page");
-eq(heard, 5, "a page coming back hears each change: begin, lose, end, the lift, the other hotel's loss");
-stopWatching(); st.lose(k);
-eq(heard, 5, "a page gone hears nothing");
+/* ── The page's name in the core's stop book ── */
+eq([stopName("5EL", "switches"), stopName("5EL", "reportEmails"), stopName("5EL", "schedules"), stopName("AGR", "rivals")],
+  ["settings/5EL/switches", "settings/5EL/daily-report-emails", "settings/5EL/scheduled-reports", "settings/AGR/rivals-prices"],
+  "by hotel and page, as settings/<code>/<page>");
 
 console.log("msgRules.check: ok");

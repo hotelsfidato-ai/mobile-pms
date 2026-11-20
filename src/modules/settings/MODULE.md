@@ -32,9 +32,9 @@ owner, an administrator and the GM — exactly the three `app.manages_hotel` let
 | Scheduled reports | `app/settings/[code]/scheduled-reports.tsx` | `MsgSchedules.tsx` | getSchedules / saveSchedule / removeSchedule |
 | Rivals' prices | `app/settings/[code]/rivals-prices.tsx` | `MsgRivals.tsx` | getRivalsSwitch / setRivalsSwitch |
 
-Shared: `MsgKit.tsx` (the page with its states, the page's write and stop, the yellow "Nothing is
+Shared: `MsgKit.tsx` (the page with its states, the page's write on the core's stop book, the yellow "Nothing is
 sent yet" card, "Last changed by"); `msgRules.ts` (pure: shapes, who may, addresses, the schedules'
-bodies and words, the invoice's "On since", the page stops) with `msgRules.check.ts`. Each route goes
+bodies and words, the invoice's "On since", the page's stop name) with `msgRules.check.ts`. Each route goes
 through the admin module's `AdminRoute` (signed in, a property the API listed).
 
 ### Rules, per control
@@ -61,11 +61,15 @@ through the admin module's `AdminRoute` (signed in, a property the API listed).
   the period when it may, else takes its first (`pickReport`). Save needs a report and an address.
   "Delete" asks first with each phone's own dialog in the web's words ("Take this schedule off?" …
   "Keep it" / "Take it off").
-- **One write at a time, and the unknown outcome** (MEMORY 8, 16, 22): no route here reads a key. Each
-  page keeps a stop outside React, by hotel and page (`msgRules.stops`): while a write is on its way the
-  page sends nothing else and a sheet cannot close; after an unknown outcome (nothing came back, or a
-  5xx) the page says "Not known whether it was …", reads again, and its writes stay grey until a read
-  that BEGAN after the loss is back. Leaving the page and coming back keeps the stop. On Scheduled
+- **One write at a time, and the unknown outcome** (MEMORY 8, 16, 22): no route here reads a key
+  (POST /report-schedules adds one, with no unique index behind it, so its stop matters). Each page is
+  one name in the core's stop book (`src/core/stop.ts`, `useScreenStop`; `settings/<code>/<page>`,
+  msgRules `stopName`): while a write is on its way the page sends nothing else and a sheet cannot
+  close; after an unknown outcome (nothing came back, or a 5xx) the page says "Not known whether it
+  was …", reads again, and shows the core's `Stopped` card with "Read it again"; its writes stay grey
+  until a read that BEGAN after the loss comes back good (when nothing came back or a gateway gave up,
+  one begun 5 s after it: the server may still be committing). Leaving the page and coming back keeps
+  the stop. On Scheduled
   reports an unknown outcome closes the sheet (the typed schedule goes, MEMORY 16), so the person sees
   the list before adding again.
 - **Offline:** none of these writes is on the web's list, so `send` refuses each with the web's

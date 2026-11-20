@@ -30,8 +30,8 @@ export function MsgReportEmails(props: AdminProps) {
   const cache = useQueryClient();
   const { said, say, close } = useSaid();
   const key = ["settings", code, "report-emails"];
-  const read = useRead(() => (refusedPage(props.role, "reportEmails") ? Promise.resolve(null) : getReportEmails(code)), key);
   const write = usePageWrite(code, "reportEmails");
+  const read = useRead(write.watch(() => (refusedPage(props.role, "reportEmails") ? Promise.resolve(null) : getReportEmails(code))), key);
   const [draft, setDraft] = useState<EmailsDraft>({});
   /* react-query keeps the same answer object when a read brings nothing new, so typing survives a pull. */
   const answer = read.data && "ok" in read.data ? read.data.ok : undefined;
@@ -77,7 +77,7 @@ export function MsgReportEmails(props: AdminProps) {
                     );
                   })}
                   <View style={{ paddingVertical: 12, borderTopWidth: 1, borderColor: c.grey100, gap: 8 }}>
-                    <StuckLine stuck={write.stuck} where="the daily report emails" />
+                    <StuckLine stuck={write.stuck} where="the daily report emails" onRead={read.reload} />
                     <Btn label={write.busy ? "Saving…" : "Save"} variant="primary" disabled={off} onPress={() => void save()} />
                   </View>
                 </View>
