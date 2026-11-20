@@ -150,6 +150,10 @@ eq(["/settings/rooms/room-types", "/h/5EL/room-types", "/h/5EL/booking-sources",
   .map((to) => phoneRoute(to, "5EL")), ["/inventory/5EL/room-types", "/inventory/5EL/room-types", "/inventory/5EL/booking-sources",
   "/inventory/5EL/cancellation-terms", "/inventory/5EL/channels", "/inventory/5EL/places", "/inventory/5EL/group-rates"]);
 eq(["/h/5EL/folios", "/h/5EL/invoices", "/h/5EL/payments"].map((to) => phoneRoute(to, "5EL")), ["/finance/5EL/folios", "/finance/5EL/invoices", "/finance/5EL/payments"]);
+eq(phoneRoute("/pos/5EL/bill-history", "5EL"), "/pos/5EL/bill-history");
+eq(phoneRoute("/pos/5EL/day-end", "5EL"), "/pos/5EL/day-end");
+eq(phoneRoute("/pos/5EL/room-charges", "5EL"), "/pos/5EL/room-charges");
+eq(phoneRoute("/pos/5EL/table-bookings", "5EL"), "/pos/5EL/table-bookings");
 eq(phoneRoute("/h/5EL/revenue-outlook", "5EL"), "/revenue/5EL");
 eq(phoneRoute("/h/5EL/crs-bookings", "5EL"), "/crs/5EL");
 eq(phoneRoute("/h/5EL/loyalty", "5EL"), "/loyalty/5EL");
@@ -168,7 +172,7 @@ eq(phoneRoute("/h/5EL/reservations", "5EL"), "/reservations/5EL");
 eq(phoneRoute("/h/5EL/book", "5EL"), "/reservations/5EL/book");
 eq(phoneRoute("/h/5EL/rates", "5EL"), "/inventory/5EL");
 /* Only the routes the merged app has (the brief's route map). */
-const MERGED = /^\/(hotel\/[^/]+|all|approvals\/[^/]+|inventory\/[^/]+\/(room-types|booking-sources|cancellation-terms|channels|places|group-rates)|pos\/[^/]+\/(till|terminal)|front-desk\/[^/]+\/rooms|reports\/[^/]+\/(stock-consumption|stock-count-differences|stock-cover|stock-dead|stock-movements|stock-on-hand|stock-wastage|bar-stock|flr-daily|flr-monthly|supplier-spend|supplier-statement|supplier-dues|equipment)|finance\/[^/]+\/(folios|invoices|payments|invoice|vat-bill)|revenue\/[^/]+|crs\/[^/]+|loyalty\/[^/]+|reputation\/[^/]+|guest-messages\/[^/]+|connections\/[^/]+|stores\/[^/]+(\/(count|inventory|bar-stock|kitchen-stock|history\/[^/]+))?|spa\/[^/]+|banquet\/[^/]+(\/[^/]+)?|guests\/[^/]+(\/(companies|find(\/[^/]+)?))?|purchasing\/[^/]+(\/[^/]+)?|laundry\/[^/]+(\/[^/]+)?|night-audit\/[^/]+|reservations\/[^/]+(\/(calendar|book))?|inventory\/[^/]+|notifications\/[^/]+|housekeeping\/[^/]+(\/(repair|out-of-service|work-orders))?|pos\/[^/]+\/(tables|pad|kitchen|order\/[^/]+)|front-desk\/[^/]+(\/(in-house|walk-ins|walk-in|take-walk-in|stay\/[^/]+|check-in\/[^/]+))?|folio\/[^/]+\/[^/]+|guest-services\/[^/]+(\/(requests|wake-up-calls|lost-property|online-checkin|messages))?)(\?.*)?$/;
+const MERGED = /^\/(hotel\/[^/]+|all|approvals\/[^/]+|finance\/[^/]+\/(folios|invoices|payments|invoice|vat-bill)|reports\/[^/]+\/(stock-consumption|stock-count-differences|stock-cover|stock-dead|stock-movements|stock-on-hand|stock-wastage|bar-stock|flr-daily|flr-monthly|supplier-spend|supplier-statement|supplier-dues|equipment)|front-desk\/[^/]+\/rooms|pos\/[^/]+\/(till|terminal)|inventory\/[^/]+\/(room-types|booking-sources|cancellation-terms|channels|places|group-rates)|pos\/[^/]+\/(bill-history|day-end|room-charges|table-bookings)|revenue\/[^/]+|crs\/[^/]+|loyalty\/[^/]+|reputation\/[^/]+|guest-messages\/[^/]+|connections\/[^/]+|stores\/[^/]+(\/(count|inventory|bar-stock|kitchen-stock|history\/[^/]+))?|spa\/[^/]+|banquet\/[^/]+(\/[^/]+)?|guests\/[^/]+(\/(companies|find(\/[^/]+)?))?|purchasing\/[^/]+(\/[^/]+)?|laundry\/[^/]+(\/[^/]+)?|night-audit\/[^/]+|reservations\/[^/]+(\/(calendar|book))?|inventory\/[^/]+|notifications\/[^/]+|housekeeping\/[^/]+(\/(repair|out-of-service|work-orders))?|pos\/[^/]+\/(tables|pad|kitchen|order\/[^/]+)|front-desk\/[^/]+(\/(in-house|walk-ins|walk-in|take-walk-in|stay\/[^/]+|check-in\/[^/]+))?|folio\/[^/]+\/[^/]+|guest-services\/[^/]+(\/(requests|wake-up-calls|lost-property|online-checkin|messages))?)(\?.*)?$/;
 for (const role of ROLES) {
   for (const item of flatNavigationFor(role, "5EL", ALL_ON)) {
     const route = phoneRoute(item.to, "5EL");

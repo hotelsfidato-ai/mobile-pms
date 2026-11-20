@@ -944,6 +944,11 @@ export const PHONE_ROUTES: Readonly<Record<string, string>> = {
   "/h/:code/folios": "/finance/:code/folios",
   "/h/:code/invoices": "/finance/:code/invoices",
   "/h/:code/payments": "/finance/:code/payments",
+  /* mobile/m13-pos-service (19 Nov) */
+  "/pos/:code/bill-history": "/pos/:code/bill-history",
+  "/pos/:code/day-end": "/pos/:code/day-end",
+  "/pos/:code/room-charges": "/pos/:code/room-charges",
+  "/pos/:code/table-bookings": "/pos/:code/table-bookings",
   /* mobile/t2-revenue (4 Nov) */
   "/h/:code/revenue-outlook": "/revenue/:code",
   /* mobile/t2-crs (4 Nov) */

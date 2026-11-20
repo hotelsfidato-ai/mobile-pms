@@ -102,3 +102,47 @@ prints it (`Terminal.tsx` 1066-1083). **How found:** following a Till row to the
 **What was done:** nothing here (the order lane's files, never edited from this lane); for the
 mobile chat. **The rule:** a list that opens another lane's screen is followed through every
 status it can show.
+
+## The service lane (Bill history, Close restaurant day, Charges to rooms, Table bookings), 20 Nov
+
+### MPOS-S1 · The module's roles.ts predates the Bar role (20 Nov)
+
+**What happened.** `src/modules/pos/roles.ts` (15 Oct) lists TILL and TILL_READ without `bar` and its
+sentences say "a till operator"; today's API (roleGate TILL, TILL_READ; the Bar role D27-324) lets a bar
+person in and its refusal says "a waiter, a bar person". A bar person would see the till's controls grey
+with an old sentence. **How found:** mapping this lane's gates from today's `roleGate.ts`. **What was
+done:** this lane's own rights are in `serviceRoles.ts` with today's lists and sentences (checked in
+`roomCharges.check.ts`); `roles.ts` is not this lane's to edit — asked of the mobile chat (report).
+**The rule:** a role list is read from today's `roleGate.ts` and `permissions.ts`, not copied from an
+older module file.
+
+### MPOS-S2 · A Record whose reply is lost could put a second paid-out in the tin (20 Nov, before it shipped)
+
+**What happened.** `POST /till/day-end/movements` reads no idempotency key; a second tap after a lost
+reply inserts a second movement (and a second approval request for an expense). **How found:** reading
+till.ts 4728-4800 while porting the sheet. **What was done:** the sheet empties its amount, says "Not
+known whether it was recorded" and is stuck until closed (useStuck); the close re-reads the day; the
+API fault goes to the PMS (report). **The rule:** a write on a route without a key that makes a new
+record stops on an unknown outcome (MEMORY 16).
+
+### MPOS-S3 · Save the count could be tapped with nothing typed, and the server took it as ₹0 counted (20 Nov, the independent review)
+
+**What happened.** With a blank grid the Cash step offered "Save the count - ₹0"; it sends an empty list of
+notes and the server writes counted ₹0, which unlocks the close as short by the whole of Expected. **The web
+does the same** (DayEnd.tsx CashStep: the button is enabled with nothing typed; till.ts `day-end/count`
+records `coalesce(sum, 0)` from no rows) - for `docs/api-requests.md`: the count route should refuse an
+empty list. **How found:** the mobile chat's independent review of this lane. **What was done:** `whyNotSave`
+in `dayEnd.ts` greys Save, with its reason, until something is typed (a typed 0 is an answer), as Open the
+day already waited; `dayEnd.check.ts` holds it (broken once: without the blank guard it answers null).
+**The rule:** a blank is never a zero, in what the phone sends as much as in what it shows (MEMORY 9).
+
+### MPOS-S4 · Closing a stuck Record sheet let a fresh sheet record the same paid-out again (20 Nov, the independent review)
+
+**What happened.** MPOS-S2's stop lived inside the sheet: closing it started a re-read, but Record opened a
+fresh, un-stuck sheet at once, so on poor Wi-Fi a lost ₹500 paid-out could be recorded twice (and a second
+approval raised). **How found:** the independent review. **What was done:** the lost moment is kept by the
+screen (above the Cash step, which remounts) and Record stays grey with "Not known whether it was recorded"
+until a read of the day that came back after it (`stillUnknown`, checked; Close uses the same rule). Also
+found: Close's `Alert.alert` buttons do nothing on react-native-web, so the PC preview asks with the
+browser's own confirm, same words. **The rule:** an unknown outcome is held where the record is read, not
+in the dialog that sent it.
