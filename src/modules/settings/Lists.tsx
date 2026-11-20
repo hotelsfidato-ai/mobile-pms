@@ -1,4 +1,4 @@
-import { useQueryClient } from "@tanstack/react-query";
+import { useQueryClient, type QueryClient } from "@tanstack/react-query";
 import { ArrowDown, ArrowUp, Plus, Trash2 } from "lucide-react-native";
 import { useState } from "react";
 import { Pressable, Switch, Text, View } from "react-native";
@@ -8,8 +8,8 @@ import { notKnown, ripple, s as core, shade, useRead } from "../../core/ui";
 import { Btn, Empty, Failed, Field, Loading, Segmented, Sheet, Stale, body, confirm, saidOf, useSaid, type Said } from "../admin/kit";
 import type { AdminProps } from "../admin/Route";
 import {
-  HOLIDAY_COLOUR, ID_TYPES, LIST_PAGES, STATES, UNKNOWN_LINE, doubtKey, emptyWords, isDay, mayAddHoliday, mayMove, nextOff,
-  shownRows, swapSorts, typedColour, type ListItem, type ListPane, type ListSource,
+  HOLIDAY_COLOUR, ID_TYPES, LIST_PAGES, STATES, UNKNOWN_LINE, emptyWords, pageName, isDay, mayAddHoliday, mayMove, nextOff,
+  shownRows, swapSorts, typedColour, type DeskRules, type ListItem, type ListPane, type ListSource,
 } from "./lists";
 import {
   addHoliday, addToList, changeListItem, readDeskRules, readHolidays, readList, removeHoliday, removeListItem, saveDeskSettings,
@@ -43,7 +43,13 @@ import { ColourField, IconBtn, Page, Swatch, Why, usePageWrite, whyNotChange } f
 
 const ADDRESS = (slug: string) => `/settings/lists/${slug}`;
 const sourceKey = (code: string, source: ListSource) => ["settings", "vip" in source ? "group" : code, "list", "vip" in source ? "vip" : source.kind];
-const doubtOf = (code: string, source: ListSource) => doubtKey(code, "vip" in source ? "vip" : `list:${source.kind}`);
+/** The list's name in the core's stop book: by hotel and kind, the VIP levels by the group. */
+const nameOf = (code: string, source: ListSource) => pageName(code, "vip" in source ? "vip" : source.kind);
+
+/** What a control shows after its write landed, until the read comes back: the cached answer, changed. */
+function shown<T>(cache: QueryClient, key: readonly unknown[], change: (old: T) => T) {
+  cache.setQueryData<T>(key, (old) => (old === undefined ? old : change(old)));
+}
 
 /* ── Market segments, Ready reasons, VIP levels ───────────────────── */
 
@@ -53,7 +59,9 @@ export function ListScreen({ hotel, role, slug }: AdminProps & { slug: keyof typ
   const pane = (page.panes.find((p) => p.tab === tab) ?? page.panes[0]!).pane;
   const { said, say, close } = useSaid();
   const [pulled, setPulled] = useState(false);
-  const read = useRead(() => readList(hotel.code, pane.source), sourceKey(hotel.code, pane.source));
+  const name = nameOf(hotel.code, pane.source);
+  const w = usePageWrite([name]);
+  const read = useRead(w.watch(name, () => readList(hotel.code, pane.source)), sourceKey(hotel.code, pane.source));
   return (
     <Page role={role} address={ADDRESS(slug)} title={page.title} eyebrow={hotel.name} explain={page.explain}
       refreshing={pulled && read.loading} onRefresh={() => { setPulled(true); read.reload(); }} said={said} onSaidClose={close}>
@@ -61,7 +69,7 @@ export function ListScreen({ hotel, role, slug }: AdminProps & { slug: keyof typ
         <Segmented label={page.title} value={tab} onChange={setTab} options={page.panes.map((p) => ({ value: p.tab!, label: p.tab! }))} />
       ) : null}
       {pane.why ? <Text style={[body, { color: c.grey600 }]}>{pane.why}</Text> : null}
-      <ListEditor key={doubtOf(hotel.code, pane.source)} code={hotel.code} role={role} pane={pane} read={read} say={say} />
+      <ListEditor key={name} name={name} w={w} code={hotel.code} role={role} pane={pane} read={read} say={say} />
     </Page>
   );
 }
@@ -71,21 +79,20 @@ export const MarketSegments = (p: AdminProps) => <ListScreen {...p} slug="market
 export const Reasons = (p: AdminProps) => <ListScreen {...p} slug="reasons" />;
 export const VipLevels = (p: AdminProps) => <ListScreen {...p} slug="vip" />;
 
-type Read<T> = { data: { began: number; data: T } | undefined; error: string | undefined; loading: boolean; reload: () => void };
+type Read<T> = { data: T | undefined; error: string | undefined; loading: boolean; reload: () => void };
+type Writer = ReturnType<typeof usePageWrite>;
 
-function ListEditor({ code, role, pane, read, say }: {
-  code: string; role: AdminProps["role"]; pane: ListPane; read: Read<ListItem[]>; say: (s: Said) => void;
+function ListEditor({ name: key, w, code, role, pane, read, say }: {
+  name: string; w: Writer; code: string; role: AdminProps["role"]; pane: ListPane; read: Read<ListItem[]>; say: (s: Said) => void;
 }) {
   const cache = useQueryClient();
-  const key = doubtOf(code, pane.source);
-  const w = usePageWrite({ [key]: read.data?.began });
   const refusal = whyNotChange(role);
   const [find, setFind] = useState("");
   const [adding, setAdding] = useState("");
   const [editing, setEditing] = useState<ListItem | null>(null);
   const refresh = () => void cache.invalidateQueries({ queryKey: sourceKey(code, pane.source) });
   const unknown = (e: unknown) => { say({ ...notKnown("saved", "this list", e), tone: "bad" }); refresh(); };
-  const all = read.data?.data ?? [];
+  const all = read.data ?? [];
   const rows = shownRows(all, find);
   const off = w.blocked || refusal !== null;
 
@@ -101,14 +108,14 @@ function ListEditor({ code, role, pane, read, say }: {
   const swap = (i: number, j: number) => {
     const a = all[i], b = all[j];
     if (!a || !b) return;
-    const [ra, rb] = swapSorts(a, b);
     void w.run(key, async () => {
-      await changeListItem(code, pane.source, ra.id, { sort: ra.sort });
-      await changeListItem(code, pane.source, rb.id, { sort: rb.sort });
+      for (const x of swapSorts(a, b, j < i)) await changeListItem(code, pane.source, x.id, { sort: x.sort });
     }, { ok: refresh, no: (e) => { say(saidOf(e, "Not moved")); refresh(); }, unknown });
   };
+  /* The switch shows what was sent until the list is read again (grey meanwhile). */
   const flip = (r: ListItem, active: boolean) => void w.run(key, () => changeListItem(code, pane.source, r.id, { active }), {
-    ok: refresh, no: (e) => say(saidOf(e, "Not changed")), unknown,
+    ok: () => { shown(cache, sourceKey(code, pane.source), (l: ListItem[]) => l.map((x) => (x.id === r.id ? { ...x, active } : x))); refresh(); },
+    no: (e) => say(saidOf(e, "Not changed")), unknown,
   });
 
   if (read.data === undefined) return read.error ? <Failed error={read.error} onRetry={read.reload} /> : <Loading what={`the ${pane.noun}s`} />;
@@ -122,7 +129,7 @@ function ListEditor({ code, role, pane, read, say }: {
             input={{ returnKeyType: "done", onSubmitEditing: add }}
             right={<Btn label="Add" a11y={`Add ${pane.noun}`} variant="primary" disabled={off || !adding.trim()} onPress={add} icon={<Plus size={16} color={off || !adding.trim() ? c.grey500 : c.white} />} />} />
           <Why text={refusal} />
-          <Why text={w.stuck ? UNKNOWN_LINE : null} tone="red" />
+          <Why text={w.unknown ? UNKNOWN_LINE : null} tone="red" />
         </View>
         {rows.length === 0 ? (
           <Text style={[body, { color: c.grey500, padding: space.cardX }]}>{emptyWords(all.length, pane.noun)}</Text>
@@ -200,9 +207,9 @@ export function HolidaysScreen({ hotel, role }: AdminProps) {
   const { said, say, close } = useSaid();
   const [pulled, setPulled] = useState(false);
   const queryKey = ["settings", code, "holidays"];
-  const read = useRead(() => readHolidays(code), queryKey);
-  const key = doubtKey(code, "holidays");
-  const w = usePageWrite({ [key]: read.data?.began });
+  const key = pageName(code, "holidays");
+  const w = usePageWrite([key]);
+  const read = useRead(w.watch(key, () => readHolidays(code)), queryKey);
   const refusal = whyNotChange(role);
   const off = w.blocked || refusal !== null;
   const [day, setDay] = useState("");
@@ -219,7 +226,7 @@ export function HolidaysScreen({ hotel, role }: AdminProps) {
       ok: () => { setDay(""); setName(""); after(); }, no: (e) => say(saidOf(e, "Not added")), unknown,
     });
   };
-  const list = read.data?.data ?? [];
+  const list = read.data ?? [];
   return (
     <Page role={role} address={ADDRESS("holidays")} title="Holidays" eyebrow={hotel.name}
       explain="Days the Calendar and Rates shade like a weekend, with the holiday's name on the Calendar. No price reads them."
@@ -231,7 +238,7 @@ export function HolidaysScreen({ hotel, role }: AdminProps) {
         <ColourField label="Colour" value={colour} onChangeText={setColour} editable={!off} />
         <Btn label={w.busy ? "Adding…" : "Add"} variant="primary" disabled={off || !mayAddHoliday(day, name) || !typed} onPress={add} />
         <Why text={refusal} />
-        <Why text={w.stuck ? UNKNOWN_LINE : null} tone="red" />
+        <Why text={w.unknown ? UNKNOWN_LINE : null} tone="red" />
       </View>
       {read.data === undefined ? (read.error ? <Failed error={read.error} onRetry={read.reload} /> : <Loading what="the holidays" />) : (
         <>
@@ -262,14 +269,15 @@ export const RULES_KEY = (code: string) => ["settings", code, "desk-rules"];
 
 export function IdTypesScreen({ hotel, role }: AdminProps) {
   const code = hotel.code;
-  const desk = useDesk(code, "id-types");
+  const desk = useDesk(code);
   const refusal = whyNotChange(role);
   const off = desk.w.blocked || refusal !== null;
-  const rules = desk.read.data?.data;
+  const rules = desk.read.data;
   const offList = rules?.idTypesOff ?? [];
-  const set = (type: string, on: boolean) => void desk.w.run(desk.key, () => saveDeskSettings(code, { idTypesOff: nextOff(offList, type, on) }), {
-    ok: desk.after, no: (e) => desk.say(saidOf(e, "Not changed")), unknown: desk.unknown,
-  });
+  const set = (type: string, on: boolean) => {
+    const change = { idTypesOff: nextOff(offList, type, on) };
+    void desk.w.run(desk.key, () => saveDeskSettings(code, change), { ok: () => desk.after(change), no: (e) => desk.say(saidOf(e, "Not changed")), unknown: desk.unknown });
+  };
   return (
     <Page role={role} address={ADDRESS("id-types")} title="ID types" eyebrow={hotel.name}
       explain="The documents this hotel takes. One switched Off leaves the check-in, New booking and the guest's online form; a document already recorded stays as it was."
@@ -287,7 +295,7 @@ export function IdTypesScreen({ hotel, role }: AdminProps) {
             ))}
           </View>
           <Why text={refusal} />
-          <Why text={desk.w.stuck ? UNKNOWN_LINE : null} tone="red" />
+          <Why text={desk.w.unknown ? UNKNOWN_LINE : null} tone="red" />
         </>
       )}
     </Page>
@@ -296,14 +304,14 @@ export function IdTypesScreen({ hotel, role }: AdminProps) {
 
 export function ReservationTypesScreen({ hotel, role }: AdminProps) {
   const code = hotel.code;
-  const desk = useDesk(code, "reservation-types");
+  const desk = useDesk(code);
   const refusal = whyNotChange(role);
   const off = desk.w.blocked || refusal !== null;
-  const colours = desk.read.data?.data?.statusColours ?? {};
+  const colours = desk.read.data?.statusColours ?? {};
   const [editing, setEditing] = useState<{ k: string; label: string; built: string } | null>(null);
   const save = (next: Record<string, string> | null, done?: () => void, fail?: (s: Said) => void) =>
     void desk.w.run(desk.key, () => saveDeskSettings(code, { statusColours: next }), {
-      ok: () => { done?.(); desk.after(); },
+      ok: () => { done?.(); desk.after({ statusColours: next }); },
       no: (e) => (fail ?? desk.say)(saidOf(e, "Not changed")),
       unknown: (e) => { done?.(); desk.unknown(e); },
     });
@@ -333,7 +341,7 @@ export function ReservationTypesScreen({ hotel, role }: AdminProps) {
             <Btn label="Back to the built-in colours" onPress={back} disabled={off} />
           </View>
           <Why text={refusal} />
-          <Why text={desk.w.stuck ? UNKNOWN_LINE : null} tone="red" />
+          <Why text={desk.w.unknown ? UNKNOWN_LINE : null} tone="red" />
         </>
       )}
       {editing ? (
@@ -366,15 +374,22 @@ function StateColourSheet({ label, start, busy, off, onClose, onSave }: {
 
 /** The desk's rules read again for a page that saves them (the web reads them from the hotel list and
     fetches it again after a save; here the frame's list is fetched again too, so every screen uses them). */
-export function useDesk(code: string, page: string) {
+export function useDesk(code: string, more: readonly string[] = []) {
   const cache = useQueryClient();
   const session = useSession();
   const { said, say, close } = useSaid();
   const [pulled, setPulled] = useState(false);
-  const read = useRead(() => readDeskRules(code), RULES_KEY(code));
-  const key = doubtKey(code, page);
-  const w = usePageWrite({ [key]: read.data?.began });
-  const after = () => { void cache.invalidateQueries({ queryKey: RULES_KEY(code) }); void session.refresh(); };
+  /* One name for every write built from the desk's rules (ID types, the booking colours, Front desk
+     rules' sections and the rules card): they are one record, sent from one read. */
+  const key = pageName(code, "desk-rules");
+  const w = usePageWrite([key, ...more]);
+  const read = useRead(w.watch(key, () => readDeskRules(code)), RULES_KEY(code));
+  /** After a write landed: the controls show what was sent (grey) until the rules are read again. */
+  const after = (change?: Partial<DeskRules>) => {
+    if (change) shown<DeskRules | null>(cache, RULES_KEY(code), (old) => (old ? { ...old, ...change } : old));
+    void cache.invalidateQueries({ queryKey: RULES_KEY(code) });
+    void session.refresh();
+  };
   return {
     read, w, key, said, say, close, after,
     refreshing: pulled && read.loading,

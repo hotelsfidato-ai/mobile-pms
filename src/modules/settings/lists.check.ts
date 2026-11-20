@@ -4,10 +4,11 @@
    and hours, who may, and the unknown-outcome doubt. */
 import { ROLES, mayReach } from "../../core/menu.ts";
 import { SETUP_CHANGE, whoMay } from "../inventory/configRoles.ts";
+import { SETTLE_MS, stopBook } from "../../core/stop.ts";
 import {
-  AUDIT_TIME_REFUSED, COLOUR, FIELDS, LIST_PAGES, REASON_TABS, START, STATES, charge, doubtKey, doubts, emptyWords,
+  AUDIT_TIME_REFUSED, COLOUR, FIELDS, LIST_PAGES, REASON_TABS, START, STATES, charge, emptyWords, freshName, pageName,
   hoursBody, hoursProblem, isDay, listPath, mayAddHoliday, mayMove, nextOff, ruleFigures, rulesBody, shownRows,
-  stillUnknown, swapSorts, timeProblem, toggleDay, typedColour, whyNotAuditTime, withField, type ListItem,
+  pageStuck, pageSending, pageUnknown, swapSorts, timeProblem, watchPage, writeOnce, toggleDay, typedColour, whyNotAuditTime, withField, type ListItem,
 } from "./lists.ts";
 
 const eq = (got: unknown, want: unknown, what = "") => {
@@ -32,9 +33,17 @@ const items: ListItem[] = [
 eq(shownRows(items, "  corp ").map((r) => r.id), ["a"], "search");
 eq(shownRows(items, "").length, 3, "no search shows all");
 eq([mayMove(0, 3, "", true), mayMove(0, 3, "", false), mayMove(2, 3, "", false), mayMove(1, 3, "x", true)], [false, true, false, false], "moves");
-/* The swap: a takes b's sort, one more when they tie (ListEditor), b takes a's. */
-eq(swapSorts(items[0]!, items[1]!), [{ id: "a", sort: 11 }, { id: "b", sort: 10 }], "a tie");
-eq(swapSorts(items[2]!, items[1]!), [{ id: "c", sort: 10 }, { id: "b", sort: 30 }], "a swap");
+/* A move: two sorts traded (the web's swap); on a tie (the server orders it by name) the row to come
+   first keeps the sort and the other takes one more - so Move up on a tie moves (MSET-L3). */
+eq(swapSorts(items[2]!, items[1]!, true), [{ id: "c", sort: 10 }, { id: "b", sort: 30 }], "a swap");
+eq(swapSorts(items[1]!, items[0]!, true), [{ id: "a", sort: 11 }], "up on a tie: the other goes after");
+eq(swapSorts(items[0]!, items[1]!, false), [{ id: "a", sort: 11 }], "down on a tie: the mover goes after");
+/* Applied to the server's order (sort, then name), each move does what it says. */
+const order = (l: ListItem[]) => [...l].sort((x, y) => x.sort - y.sort || x.label.localeCompare(y.label)).map((x) => x.id);
+const apply = (l: ListItem[], sent: { id: string; sort: number }[]) => l.map((x) => ({ ...x, sort: sent.find((y) => y.id === x.id)?.sort ?? x.sort }));
+const tied = items.slice(0, 2); // Corporate, Leisure: both 10, Corporate first by name
+eq(order(apply(tied, swapSorts(tied[1]!, tied[0]!, true))), ["b", "a"], "Leisure moved up");
+eq(order(apply(tied, swapSorts(tied[0]!, tied[1]!, false))), ["b", "a"], "Corporate moved down");
 eq([emptyWords(0, "segment"), emptyWords(3, "reason")], ["No segments yet.", "Nothing matches."], "empty");
 
 /* Colours: typed, sent as the web's colour box gives them (capitals, "#"). */
@@ -87,14 +96,46 @@ for (const p of pages) eq(ROLES.filter((r) => mayReach(r, `/settings/${p}`)), wh
 eq(ROLES.filter((r) => whyNotAuditTime(r) === null), ["owner", "admin"], "the night audit's time");
 eq(whyNotAuditTime("gm"), AUDIT_TIME_REFUSED);
 
-/* The doubt: kept by hotel and page (VIP by the group), lifted only by a read BEGUN after the loss. */
-eq([doubtKey("5el", "holidays"), doubtKey("5EL", "vip"), doubtKey("AGR", "vip")], ["5EL:holidays", "group:vip", "group:vip"]);
-eq([stillUnknown(null, undefined), stillUnknown(100, undefined), stillUnknown(100, 100), stillUnknown(100, 101)], [false, true, true, false], "still unknown");
-doubts.lost("5EL:holidays", 100);
-eq(doubts.settle("5EL:holidays", 90), false, "a read begun before the loss does not lift it");
-eq(doubts.at("5EL:holidays"), 100);
-eq(doubts.at("AGR:holidays"), null, "another hotel is not held");
-eq(doubts.settle("5EL:holidays", 101), true, "a read begun after it does");
-eq(doubts.at("5EL:holidays"), null);
+/* The page's stop, in the core's book (names settings/<code>/<page>, the VIP levels by the group). */
+eq([pageName("5el", "holidays"), pageName("5EL", "vip"), pageName("AGR", "vip")], ["settings/5EL/holidays", "settings/group/vip", "settings/group/vip"]);
+{
+  let now = 1_000;
+  const book = stopBook({ now: () => now });
+  const names = ["settings/5EL/desk-rules"];
+  const [n] = names as [string];
+  const unknownOf = (e: unknown) => ((e as { status?: number }).status === 409 ? null : (e as { status?: number }).status === 0 ? SETTLE_MS : 0);
+  const reads = (name: string) => watchPage(book, name, async () => "read");
+  /* A write on its way stops the page: a second tap is refused, a sheet cannot close. */
+  let land!: (v: string) => void;
+  const first = writeOnce(book, names, n, () => new Promise<string>((r) => { land = r; }), unknownOf);
+  eq([pageStuck(book, names), pageSending(book, names), pageUnknown(book, names)], [true, true, false], "on its way");
+  eq((await writeOnce(book, names, n, async () => "second", unknownOf)).kind, "stopped", "no second write while one is out");
+  /* MSET-L1: a read already on its way when the write lands does not free the page... */
+  const early = reads(n);
+  land("ok");
+  eq((await first).kind, "ok");
+  eq([pageStuck(book, names), pageSending(book, names), pageUnknown(book, names)], [true, false, false], "landed, not yet read again");
+  await early;
+  eq(pageStuck(book, names), true, "a read begun before the write's end lets nothing go");
+  eq((await writeOnce(book, names, n, async () => "too soon", unknownOf)).kind, "stopped", "a second whole list waits for the read");
+  /* ...one begun after it does. */
+  await reads(n)();
+  eq(pageStuck(book, names), false, "read again: live");
+  /* The server's own no stops nothing. */
+  eq((await writeOnce(book, names, n, async () => { throw { status: 409 }; }, unknownOf)).kind, "no");
+  eq(pageStuck(book, names), false, "a refusal leaves the page live");
+  /* Nothing came back: lost, and only a read begun SETTLE_MS later lets it go. */
+  eq((await writeOnce(book, names, n, async () => { throw { status: 0 }; }, unknownOf)).kind, "unknown");
+  eq([pageStuck(book, names), pageUnknown(book, names)], [true, true], "lost");
+  await reads(n)();
+  eq(pageUnknown(book, names), true, "a read at once may miss a write still committing");
+  now += SETTLE_MS;
+  await reads(n)();
+  eq([pageStuck(book, names), pageUnknown(book, names)], [false, false], "read after the wait: live");
+  /* Another page's name is not stopped by this one. */
+  book.lost("settings/AGR/desk-rules");
+  eq(pageStuck(book, names), false, "another hotel is not held");
+  eq(book.stuck(freshName("settings/AGR/desk-rules")), false);
+}
 
 console.log("settings lists: all checks pass");

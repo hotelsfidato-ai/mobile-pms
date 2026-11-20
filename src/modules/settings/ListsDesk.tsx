@@ -7,12 +7,12 @@ import { notKnown, ripple, s as core, shade, useRead } from "../../core/ui";
 import { Btn, Choose, Failed, Field, Labelled, Loading, Segmented, Sheet, Stale, SwitchRow, body, saidOf, useSaid, type Said } from "../admin/kit";
 import type { AdminProps } from "../admin/Route";
 import {
-  ADVANCE, DAYS, FIELDS, IDS, START, TITLES, UNKNOWN_LINE, charge, doubtKey, hoursBody, hoursProblem, ruleFigures, rulesBody,
+  ADVANCE, DAYS, FIELDS, IDS, TITLES, UNKNOWN_LINE, charge, pageName, hoursBody, hoursProblem, ruleFigures, rulesBody,
   toggleDay, whyNotAuditTime, withField, type DeskRules, type FrontDeskHours,
 } from "./lists";
 import { readHours, saveDeskSettings, saveFrontDesk } from "./listsData";
 import { useDesk } from "./Lists";
-import { Page, Section, Why, usePageWrite, whyNotChange } from "./listsKit";
+import { Page, Section, Why, type usePageWrite, whyNotChange } from "./listsKit";
 
 /* ══════════════════════════════════════════════════════════════════
    SETTINGS › FRONT DESK on a phone (lane m13-set-lists) — the web's two
@@ -45,14 +45,14 @@ const HOURS_KEY = (code: string) => ["settings", code, "front-desk-hours"];
 
 export function FrontDeskRulesScreen({ hotel, role }: AdminProps) {
   const code = hotel.code;
-  const desk = useDesk(code, "desk-settings");
-  const rulesKey = doubtKey(code, "front-desk-rules");
-  const w = usePageWrite({ [desk.key]: desk.read.data?.began, [rulesKey]: desk.read.data?.began });
+  const desk = useDesk(code);
+  const w = desk.w;
   const refusal = whyNotChange(role);
   const off = w.blocked || refusal !== null;
-  const r = desk.read.data?.data;
+  const r = desk.read.data;
+  /* Each control shows what it sent, grey, until the rules are read again (MSET-L1). */
   const save = (change: Partial<DeskRules>) => void w.run(desk.key, () => saveDeskSettings(code, change), {
-    ok: desk.after, no: (e) => desk.say(saidOf(e, "Not saved")), unknown: desk.unknown,
+    ok: () => desk.after(change), no: (e) => desk.say(saidOf(e, "Not saved")), unknown: desk.unknown,
   });
   return (
     <Page role={role} address="/settings/front-desk/front-desk" title="Front desk rules" eyebrow={hotel.name}
@@ -63,8 +63,8 @@ export function FrontDeskRulesScreen({ hotel, role }: AdminProps) {
           <>
             <Stale error={desk.read.error} />
             <Why text={refusal} />
-            <Why text={w.stuck ? UNKNOWN_LINE : null} tone="red" />
-            <RulesCard code={code} rules={r} w={w} rulesKey={rulesKey} off={off} onSaid={desk.say} onDone={desk.after} />
+            <Why text={w.unknown ? UNKNOWN_LINE : null} tone="red" />
+            <RulesCard code={code} rules={r} w={w} rulesKey={desk.key} off={off} onSaid={desk.say} onDone={desk.after} />
 
             <Section title="A new booking starts as" why="New booking opens on these; the desk can still change them on each booking.">
               <Grey off={off}><Segmented label="A new booking starts as" value={r.defaultGuarantee} onChange={(v) => { if (!off) save({ defaultGuarantee: v }); }}
@@ -139,10 +139,10 @@ function Grey({ off, children }: { off: boolean; children: ReactNode }) {
 export function TimesAndRulesScreen({ hotel, role }: AdminProps) {
   const code = hotel.code;
   const cache = useQueryClient();
-  const desk = useDesk(code, "front-desk-rules");
-  const hours = useRead(() => readHours(code), HOURS_KEY(code));
-  const hoursKey = doubtKey(code, "front-desk-hours");
-  const w = usePageWrite({ [desk.key]: desk.read.data?.began, [hoursKey]: hours.data?.began });
+  const hoursKey = pageName(code, "front-desk-hours");
+  const desk = useDesk(code, [hoursKey]);
+  const w = desk.w;
+  const hours = useRead(w.watch(hoursKey, () => readHours(code)), HOURS_KEY(code));
   const refusal = whyNotChange(role);
   const off = w.blocked || refusal !== null;
   const [pulled, setPulled] = useState(false);
@@ -152,18 +152,20 @@ export function TimesAndRulesScreen({ hotel, role }: AdminProps) {
     <Page role={role} address="/settings/front-desk/times-and-rules" title="Times and rules" eyebrow={hotel.name}
       refreshing={pulled && (desk.read.loading || hours.loading)} onRefresh={pull} said={desk.said} onSaidClose={desk.close}>
       <Why text={refusal} />
-      <Why text={w.stuck ? UNKNOWN_LINE : null} tone="red" />
+      <Why text={w.unknown ? UNKNOWN_LINE : null} tone="red" />
       {hours.data === undefined ? (hours.error ? <Failed error={hours.error} onRetry={hours.reload} /> : <Loading what="the front desk's hours" />) : (
         <>
           <Stale error={hours.error} />
-          <HoursCard code={code} role={role} hours={hours.data.data} w={w} hoursKey={hoursKey} off={off} onSaid={desk.say}
+          <HoursCard code={code} role={role} hours={hours.data} w={w} hoursKey={hoursKey} off={off} onSaid={desk.say}
             onDone={hoursDone} onUnknown={(e) => { desk.say({ ...notKnown("saved", "the front desk's hours", e), tone: "bad" }); hoursDone(); }} />
         </>
       )}
       {desk.read.data === undefined ? (desk.read.error ? <Failed error={desk.read.error} onRetry={desk.read.reload} /> : <Loading what="the front desk's rules" />) : (
         <>
           <Stale error={desk.read.error} />
-          <RulesCard code={code} rules={desk.read.data.data ?? START} w={w} rulesKey={desk.key} off={off} onSaid={desk.say} onDone={desk.after} />
+          {/* MSET-L4: no rules from the server, no card - never the web's START sent back as if they were the hotel's. */}
+          {desk.read.data === null ? <Text style={[body, { color: c.grey500 }]}>The server sent no front desk settings for this property.</Text>
+            : <RulesCard code={code} rules={desk.read.data} w={w} rulesKey={desk.key} off={off} onSaid={desk.say} onDone={desk.after} />}
         </>
       )}
     </Page>
@@ -194,7 +196,7 @@ function FigureCard({ figures, onEdit, off }: { figures: [string, string][]; onE
 
 /** The front desk's rules (FrontDeskRules.tsx): the figures, and the dialog as a sheet. */
 function RulesCard({ code, rules, w, rulesKey, off, onSaid, onDone }: {
-  code: string; rules: DeskRules; w: Writer; rulesKey: string; off: boolean; onSaid: (s: Said) => void; onDone: () => void;
+  code: string; rules: DeskRules; w: Writer; rulesKey: string; off: boolean; onSaid: (s: Said) => void; onDone: (change?: Partial<DeskRules>) => void;
 }) {
   const [editing, setEditing] = useState(false);
   return (
@@ -203,7 +205,7 @@ function RulesCard({ code, rules, w, rulesKey, off, onSaid, onDone }: {
       {editing ? (
         <RulesSheet current={rules} busy={w.busy} off={off} onClose={() => setEditing(false)}
           onSave={(r, fail) => void w.run(rulesKey, () => saveFrontDesk(code, rulesBody(r)), {
-            ok: () => { setEditing(false); onSaid({ title: "Saved", tone: "ok" }); onDone(); },
+            ok: () => { setEditing(false); onSaid({ title: "Saved", tone: "ok" }); onDone(rulesBody(r)); },
             no: (e) => fail(saidOf(e, "Not saved")),
             unknown: (e) => { setEditing(false); onSaid({ ...notKnown("saved", "the front desk's rules", e), tone: "bad" }); onDone(); },
           })} />

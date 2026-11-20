@@ -48,7 +48,7 @@ phase 5's sections. Both are built, one phone screen each, sharing the card.
 
 Files: `lists.ts` (the pure rules: the table of kinds `LIST_PAGES`, REASON_TABS, ID_TYPES, STATES,
 the editor's search, move and swap, colours, days, the rules' figures and body, the hours, who may
-set the night audit time, the doubt), `lists.check.ts`, `listsData.ts` (the calls), `listsKit.tsx`
+set the night audit time, the page's stop on the core's book), `lists.check.ts`, `listsData.ts` (the calls), `listsKit.tsx`
 (the page frame, one write at a time, the colour field), `Lists.tsx`, `ListsDesk.tsx`.
 
 The three list-pattern pages are ONE screen (`ListScreen` + `ListEditor`) driven by the table of
@@ -61,11 +61,17 @@ kinds, as the web drives `ListEditor` with its four calls.
   not change the set-up (SETUP_CHANGE, inventory `configRoles.ts`). The night audit's opening time
   is drawn read-only for the GM with the route's own sentence ("…for the owner or an administrator.
   Ask one of them."); the hours still save without it, as on the web.
-- **One write at a time** (MEMORY 8, 22): a page sends nothing while a write is out; its sheet
-  cannot close meanwhile. **An unknown outcome** (nothing came back, or a 5xx): the page's writes
-  stay grey ("Not known whether the last change was saved…") until a read BEGUN after the loss has
-  come back. The doubt lives outside React (`lists.ts doubts`), by hotel and page; the VIP levels by
-  the group (one list). The page reads again at once.
+- **One write at a time** (MEMORY 8, 22), kept in the core's stop book (`src/core/stop.ts`, the
+  review of 20 Nov), by name `settings/<code>/<page>` (the VIP levels `settings/group/vip`; every page
+  built from the desk's rules shares `settings/<code>/desk-rules`, and Times and rules adds
+  `…/front-desk-hours`): a page sends nothing while a write is out, leaving and coming back included;
+  its sheet cannot close meanwhile. **An unknown outcome** (nothing came back, or a 5xx): the page's
+  writes stay grey ("Not known whether the last change was saved…") until a read BEGUN after the loss
+  (and the book's 5 s settle when nothing came back) has come back good. The page reads again at once.
+- **After a write that landed** (MSET-L1) the page's controls stay grey until a read begun after the
+  write's end has come back (`<name>/fresh` in the same book): ID types, the booking colours, the
+  required fields and the rules are sent as whole lists built from the last read, and a second tap
+  before it would drop the first change. Meanwhile each control shows the value it sent.
 - **After a save** the page reads again; ID types, Reservation types, Front desk rules, Times and
   rules and Holidays also read the frame's hotel list again (`useSession().refresh`, the web's
   `refreshHotels`), so the desk, the Calendar and Rates use it at once.
@@ -97,8 +103,15 @@ kinds, as the web drives `ListEditor` with its four calls.
    title, the GM's undo); the web sends the whole rules record less the way of paying. The route
    reads only these, so the change is the same.
 7. **Reasons' four tabs** are a segmented control (each phone's width); the web's Tabs.
-8. **A hotel the server sent no desk settings for:** Front desk rules says so in a line (the web
-   shows its title alone); ID types and Reservation types start on the web's defaults, as the web.
+8. **A hotel the server sent no desk settings for:** Front desk rules and Times and rules say so in a
+   line, with no rules card and no Save (MSET-L4; the web shows Front desk rules' title alone, and on
+   Times and rules draws its built-in defaults, START, as if they were the hotel's, and Save sends
+   them); ID types and Reservation types start on the web's defaults, as the web.
+9. **Move up / down on two rows of the same order** (MSET-L3) moves them: the row to come first
+   keeps the order and the other takes one more. The web gives the moving row one more either way,
+   so its Move up on a tie does nothing.
+10. **After each change the page waits for the read** (MSET-L1): its controls are grey until the
+   change has been read back; the web leaves them live.
 
 ### Not built
 

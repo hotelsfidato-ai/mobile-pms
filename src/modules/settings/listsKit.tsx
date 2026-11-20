@@ -1,13 +1,14 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useSyncExternalStore, type ReactNode } from "react";
 import { Pressable, Text, View } from "react-native";
-import { outcomeUnknown } from "../../core/api";
+import { ApiError, outcomeUnknown } from "../../core/api";
+import { settleMs, stops } from "../../core/stop";
 import { mayReach, type Role } from "../../core/menu";
 import { c, face, space, t } from "../../core/theme";
 import { Head, Screen, ripple, shade } from "../../core/ui";
 import { Field, Refused, Toast, body, type Said } from "../admin/kit";
 import { notYourRole } from "../admin/roles";
 import { whyNot, SETUP_CHANGE } from "../inventory/configRoles";
-import { doubts, stillUnknown, typedColour, COLOUR_WRONG, NO_COLOUR } from "./lists";
+import { COLOUR_WRONG, NO_COLOUR, freshName, pageSending, pageStuck, pageUnknown, typedColour, watchPage, writeOnce } from "./lists";
 
 /* ══════════════════════════════════════════════════════════════════
    THE PIECES THE LISTS AND FRONT DESK PAGES SHARE (lane m13-set-lists)
@@ -19,8 +20,10 @@ import { doubts, stillUnknown, typedColour, COLOUR_WRONG, NO_COLOUR } from "./li
    - one write at a time, and the unknown outcome (MEMORY 16, 22): while a
      write is on its way the page sends nothing else and its sheet cannot
      close; when nothing came back or the server failed, the page's writes
-     stay grey until a read BEGUN after the loss has come back - the doubt
-     is kept outside React (lists.ts `doubts`), by hotel and page;
+     stay grey until a read BEGUN after the loss has come back; and after a
+     write that landed, until the page has read it again (MSET-L1). All of
+     it is the core's stop book (src/core/stop.ts), outside React, by name
+     (lists.ts pageName), so leaving and coming back mid-write lets nothing go;
    - a colour, typed (the phone has no colour box), with its swatch.
    ══════════════════════════════════════════════════════════════════ */
 
@@ -46,34 +49,30 @@ export function Page({ role, address, title, eyebrow, explain, action, refreshin
 
 type On<T> = { ok: (r: T) => void; no: (e: unknown) => void; unknown: (e: unknown) => void };
 
-/** One write at a time on a page, and its doubts. `began`: for each doubt key the page holds, when the
-    read that answers it BEGAN. `stuck` while any of them is unknown; `run(key, …)` writes under one. */
-export function usePageWrite(began: Readonly<Record<string, number | undefined>>) {
-  const latch = useRef(false);
-  const [busy, setBusy] = useState(false);
-  const [, redraw] = useState(0);
-  const keys = Object.keys(began);
-  const stuck = keys.some((k) => stillUnknown(doubts.at(k), began[k]));
-  /* A doubt whose answer has been read again goes; the page redraws without it. */
-  const settleable = keys.filter((k) => doubts.at(k) !== null && !stillUnknown(doubts.at(k), began[k])).join("|");
-  useEffect(() => {
-    if (!settleable) return;
-    if (settleable.split("|").map((k) => doubts.settle(k, began[k])).some(Boolean)) redraw((n) => n + 1);
-  }, [settleable, began]);
-  async function run<T>(key: string, fn: () => Promise<T>, on: On<T>): Promise<void> {
-    if (latch.current || stuck) return;
-    latch.current = true;
-    setBusy(true);
-    try {
-      on.ok(await fn());
-    } catch (e) {
-      if (outcomeUnknown(e)) { doubts.lost(key, Date.now()); redraw((n) => n + 1); on.unknown(e); } else on.no(e);
-    } finally {
-      latch.current = false;
-      setBusy(false);
-    }
-  }
-  return { busy, stuck, blocked: busy || stuck, run };
+/** One write at a time on a page, by the core's stop book. `names`: the page's names in it (lists.ts
+    pageName; fixed for the page). A read is wrapped with `watch(name, read)`; a write goes through
+    `run(name, write, on)`. */
+export function usePageWrite(names: readonly string[]) {
+  /* Redrawn whenever the book changes (any page's): the page reads its own state from it. */
+  const snap = () => names.map((n) => `${stops.stuck(n) ? 1 : 0}${stops.unknown(n) ? 1 : 0}${stops.stuck(freshName(n)) ? 1 : 0}`).join(",");
+  useSyncExternalStore(stops.subscribe, snap);
+  const stuck = pageStuck(stops, names);
+  const busy = pageSending(stops, names);
+  return {
+    /** A write on its way: "Saving…", and its sheet cannot close. */
+    busy,
+    /** Lost: the "not known" line. */
+    unknown: pageUnknown(stops, names),
+    /** Every control grey: on its way, lost, or landed and not yet read again. */
+    blocked: stuck,
+    watch: <T,>(name: string, read: (ctx?: { signal?: AbortSignal }) => Promise<T>) => watchPage(stops, name, read),
+    run: async <T,>(name: string, write: () => Promise<T>, on: On<T>): Promise<void> => {
+      const got = await writeOnce(stops, names, name, write, (e) => (outcomeUnknown(e) ? settleMs(e instanceof ApiError ? e.status : 0) : null));
+      if (got.kind === "ok") on.ok(got.r);
+      else if (got.kind === "no") on.no(got.e);
+      else if (got.kind === "unknown") on.unknown(got.e);
+    },
+  };
 }
 
 /** A colour's square, as the web's swatch (size-4 rounded, or the colour box's size-7). */

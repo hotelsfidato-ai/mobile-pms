@@ -9,7 +9,7 @@ import { listPath, type DeskRules, type FrontDeskHours, type Holiday, type ListI
    one of these is refused offline, "This cannot be done offline yet").
    The server answers a refusal 409 { ok: false, reason }: `send` throws
    it as an ApiError with the server's sentence. None of these routes
-   reads an idempotency key (lists.ts holds the doubt instead).
+   reads an idempotency key (the page's stop is the core's book: lists.ts pageName).
 
    Who (api/src/roleGate.ts): every read below is `anyone` at the hotel
    (GET room-setup is SETUP, room_config view); every write is
@@ -22,15 +22,9 @@ import { listPath, type DeskRules, type FrontDeskHours, type Holiday, type ListI
 const H = (code: string) => `/api/hotels/${encodeURIComponent(code)}`;
 type Saved = { ok: true; id?: string };
 
-/** A read, with the moment it BEGAN (an unknown outcome lifts only on a read begun after it). */
-async function stamped<T>(read: () => Promise<T>): Promise<{ began: number; data: T }> {
-  const began = Date.now();
-  return { began, data: await read() };
-}
-
 /* ── The lists, and the group's VIP levels ───────────────────────── */
 
-export const readList = (code: string, source: ListSource) => stamped(() => api<ListItem[]>(listPath(code, source)));
+export const readList = (code: string, source: ListSource) => api<ListItem[]>(listPath(code, source));
 export const addToList = (code: string, source: ListSource, item: { label: string; colour?: string | null }) =>
   send<Saved>("POST", listPath(code, source), item);
 export const changeListItem = (code: string, source: ListSource, id: string, change: Partial<Omit<ListItem, "id">>) =>
@@ -40,7 +34,7 @@ export const removeListItem = (code: string, source: ListSource, id: string) =>
 
 /* ── Holidays ────────────────────────────────────────────────────── */
 
-export const readHolidays = (code: string) => stamped(() => api<Holiday[]>(`${H(code)}/holidays`));
+export const readHolidays = (code: string) => api<Holiday[]>(`${H(code)}/holidays`);
 export const addHoliday = (code: string, h: { day: string; name: string; colour?: string | null }) =>
   send<Saved>("POST", `${H(code)}/holidays`, h);
 export const removeHoliday = (code: string, id: string) =>
@@ -49,11 +43,11 @@ export const removeHoliday = (code: string, id: string) =>
 /* ── The desk's rules, as GET /api/hotels sends them with the hotel ── */
 
 /** The hotel's rules, read again (the web reads them from its hotel list, fetched again after a save). */
-export const readDeskRules = (code: string) => stamped(async () => {
+export const readDeskRules = async (code: string) => {
   const who = await api<HotelsResponse>("/api/hotels");
   const hotel = who.hotels.find((h) => h.code === code) as (HotelsResponse["hotels"][number] & { deskRules?: DeskRules }) | undefined;
   return hotel?.deskRules ?? null;
-});
+};
 
 /** PATCH /desk-settings (lists.ts saveDeskSettings): only what is sent changes. */
 export const saveDeskSettings = (code: string, change: Partial<DeskRules>) =>
@@ -63,5 +57,4 @@ export const saveDeskSettings = (code: string, change: Partial<DeskRules>) =>
 export const saveFrontDesk = (code: string, change: object) => send<Saved>("PATCH", `${H(code)}/front-desk`, change);
 
 /** GET /room-setup's frontDesk (inventorySetup.ts): the hours and the two charges. */
-export const readHours = (code: string) =>
-  stamped(async () => (await api<{ frontDesk: FrontDeskHours }>(`${H(code)}/room-setup`)).frontDesk);
+export const readHours = async (code: string) => (await api<{ frontDesk: FrontDeskHours }>(`${H(code)}/room-setup`)).frontDesk;

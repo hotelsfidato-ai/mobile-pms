@@ -20,6 +20,7 @@
 
 import { DASH } from "../../core/format.ts";
 import type { Role } from "../../core/menu.ts";
+import { watched, type StopBook } from "../../core/stop.ts";
 
 /* ── The hotel's lists (lists.ts data) ───────────────────────────── */
 
@@ -76,12 +77,15 @@ export const shownRows = (all: readonly ListItem[], find: string) =>
 export const mayMove = (i: number, length: number, find: string, up: boolean) =>
   !find && i >= 0 && (up ? i > 0 : i < length - 1);
 
-/** ListEditor `swap`: the two PATCHes, in order - a takes b's place (one more when they tie), b takes a's. */
-export function swapSorts(a: Pick<ListItem, "id" | "sort">, b: Pick<ListItem, "id" | "sort">) {
-  return [
-    { id: a.id, sort: b.sort === a.sort ? b.sort + 1 : b.sort },
-    { id: b.id, sort: a.sort },
-  ] as const;
+/** Moving a row: the sorts sent (only those that change). Two rows on different sorts trade them (the
+    web's ListEditor `swap`). Two rows on the SAME sort (the server orders a tie by name) cannot trade:
+    the one that is to come first keeps it and the other takes one more (MSET-L3: the web gives the
+    moving row one more whichever way it moves, so Move up on a tie does nothing). */
+export function swapSorts(moving: Pick<ListItem, "id" | "sort">, other: Pick<ListItem, "id" | "sort">, up: boolean) {
+  const sent = moving.sort !== other.sort
+    ? [{ id: moving.id, sort: other.sort }, { id: other.id, sort: moving.sort }]
+    : up ? [{ id: other.id, sort: other.sort + 1 }] : [{ id: moving.id, sort: moving.sort + 1 }];
+  return sent;
 }
 
 /** ListEditor's empty line: none at all, or none matching. */
@@ -259,27 +263,54 @@ export function hoursProblem(cin: string, cout: string, audit: string): string |
 export const AUDIT_TIME_REFUSED = "The night audit's opening time is for the owner or an administrator. Ask one of them.";
 export const whyNotAuditTime = (role: Role) => (role === "owner" || role === "admin" ? null : AUDIT_TIME_REFUSED);
 
-/* ── An unknown outcome (MEMORY 16, 22) ─────────────────────────────
-   None of these routes reads an idempotency key. When nothing came back,
-   or the server failed, the page's writes stay grey until a read that
-   BEGAN after the loss has come back. The doubt is kept here, outside
-   React, by hotel and page (the VIP levels by the group: one list), so
-   leaving the screen and coming back finds it. */
+/* ── A page's stop (MEMORY 16, 22; the core's stop book, src/core/stop.ts) ──
+   None of these routes reads an idempotency key. A page's writes are kept
+   by NAME in the core's book, outside React: while one is on its way
+   nothing else is sent (leaving and coming back included), and when its
+   outcome is unknown the page stays stopped until a read BEGUN after the
+   loss (and the book's settle wait) comes back good.
+   AND AFTER A WRITE THAT LANDED (MSET-L1): ID types, the booking colours
+   and the required fields are sent as a whole list built from the last
+   read, which the server puts in place of its own. So until a read begun
+   after the write's end has come back, the page's controls stay grey - a
+   second tap would send a list without the first change. That wait is a
+   second name in the same book, `<name>/fresh`, marked when the write
+   lands and let go by the same read. */
 
-const DOUBTS = new Map<string, number>();
-export const doubtKey = (code: string, page: string) => (page === "vip" ? "group:vip" : `${code.toUpperCase()}:${page}`);
-/** True while nothing read since `lostAt` has come back (a read must BEGIN after it). */
-export const stillUnknown = (lostAt: number | null, began: number | undefined) =>
-  lostAt !== null && (began === undefined || began <= lostAt);
-export const doubts = {
-  at: (key: string): number | null => DOUBTS.get(key) ?? null,
-  lost: (key: string, at: number) => { DOUBTS.set(key, at); },
-  /** Forgotten once a read begun after the loss has come back; true when it went. */
-  settle: (key: string, began: number | undefined): boolean => {
-    const at = DOUBTS.get(key);
-    if (at === undefined || stillUnknown(at, began)) return false;
-    DOUBTS.delete(key);
-    return true;
-  },
-};
+/** A page's name in the core's stop book: `settings/<code>/<page>`, the VIP levels by the group (one list). */
+export const pageName = (code: string, page: string) => (page === "vip" ? "settings/group/vip" : `settings/${code.toUpperCase()}/${page}`);
+export const freshName = (name: string) => `${name}/fresh`;
+
+/** Stopped: a write on its way, its outcome unknown, or one landed and not yet read again. */
+export const pageStuck = (book: StopBook, names: readonly string[]) => names.some((n) => book.stuck(n) || book.stuck(freshName(n)));
+/** Lost: what the "not known" line says. */
+export const pageUnknown = (book: StopBook, names: readonly string[]) => names.some((n) => book.unknown(n));
+/** A write on its way (a sheet cannot close). */
+export const pageSending = (book: StopBook, names: readonly string[]) => names.some((n) => book.stuck(n) && !book.unknown(n));
+
+/** The page's read of `name`: a good one lets go both a loss and a landed write's wait, if it began after them. */
+export const watchPage = <T,>(book: StopBook, name: string, read: (ctx?: { signal?: AbortSignal }) => Promise<T>) =>
+  watched(book, name, watched(book, freshName(name), read));
+
+export type Wrote<T> = { kind: "ok"; r: T } | { kind: "no"; e: unknown } | { kind: "unknown"; e: unknown } | { kind: "stopped" };
+/** One write under `name`, when nothing on the page is stopped. `lostWait(e)`: null when the server
+    answered (its own no), else the book's wait for that loss (stop.ts settleMs). */
+export async function writeOnce<T>(
+  book: StopBook, names: readonly string[], name: string, write: () => Promise<T>, lostWait: (e: unknown) => number | null,
+): Promise<Wrote<T>> {
+  if (pageStuck(book, names)) return { kind: "stopped" };
+  const done = book.sending(name);
+  try {
+    const r = await write();
+    book.lost(freshName(name));
+    done();
+    return { kind: "ok", r };
+  } catch (e) {
+    const wait = lostWait(e);
+    if (wait !== null) book.lost(name, wait);
+    done();
+    return wait !== null ? { kind: "unknown", e } : { kind: "no", e };
+  }
+}
+
 export const UNKNOWN_LINE = "Not known whether the last change was saved: the page reads it again before anything else is changed. Pull down to read it.";
