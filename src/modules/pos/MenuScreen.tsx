@@ -2,16 +2,18 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Plus, Upload, UtensilsCrossed } from "lucide-react-native";
 import { useState } from "react";
 import { Text, View } from "react-native";
-import { api, type Hotel } from "../../core/api";
+import { api, send, type Hotel } from "../../core/api";
 import { ExportButtons } from "../../core/Export";
-import { ON_THE_WEBSITE } from "../../core/menu";
+import { MENU_SPEC, type ImportReport } from "../../core/importSpec";
 import { c, t } from "../../core/theme";
-import { Card, Head, Screen, useRead } from "../../core/ui";
+import { Card, Head, Screen, useRead, useScreenStop } from "../../core/ui";
+import { ADDON_SPEC } from "./addonSpec";
+import { ImportSheet } from "./ImportSheet";
 import { CategoryCard } from "./MenuDishes";
 import { NumberedAddons } from "./MenuAddons";
 import { DishProfitTab } from "./MenuProfit";
 import { Promotions, Sides } from "./MenuSides";
-import { DISH_COLUMNS, dishesByGroup, dishRows, M, type Section } from "./menuEdit";
+import { DISH_COLUMNS, dishesByGroup, dishRows, importStop, M, type Section } from "./menuEdit";
 import { P, seesProfit, whyNotMenu } from "./setup";
 import { Btn, Field, Input, Loading, Pill, Seg, useActs } from "./SetupKit";
 import { ReadProblem, Refused, SaidBar, Stale, ty, useAccess } from "./TablesKit";
@@ -24,8 +26,9 @@ import { ReadProblem, Refused, SaidBar, Stale, ty, useAccess } from "./TablesKit
    course, minutes, variations, sides, Out of stock and Take off; Sides;
    Promotions), Add-ons (the numbered list), and Profit per dish for the
    owner, an Admin and the GM. The dishes in a file go out through the
-   phone's own PDF and share sheets; reading a file IN (Import the menu,
-   Import sides) needs a file picker (expo-document-picker, not installed).
+   phone's own PDF and share sheets; a file comes IN (Import the menu,
+   Import sides, M-16) through the phone's file picker, read on the phone
+   and shown as the server's dry run first (ImportSheet.tsx), as the web.
    PRICES ARE THE HOTEL'S: nothing is shipped, a blank is never zero, and a
    price changed today applies to the next order.
    ══════════════════════════════════════════════════════════════════ */
@@ -38,13 +41,16 @@ export function MenuEditor({ hotel, role }: { hotel: Hotel; role: string | null 
   const acts = useActs(code);
   const cache = useQueryClient();
   const [view, setView] = useState<View3>("dishes");
-  const menu = useRead(async () => (await api<{ categories: Section[] }>(M.menu(code))).categories, ["pos", code, "menu", "dishes"]);
+  const [importing, setImporting] = useState<"menu" | "addons" | null>(null);
+  /* A menu import whose reply was lost is let go only by a read of the dishes begun after it (ImportSheet.tsx). */
+  const menuImport = useScreenStop(importStop(code, "menu"));
+  const menu = useRead(menuImport.watch(async () => (await api<{ categories: Section[] }>(M.menu(code))).categories), ["pos", code, "menu", "dishes"]);
   /* Whether this property serves alcohol, which opens the Alcohol heading (D21-90). The server refuses it either way. */
   const modules = useRead(async () => Object.fromEntries(
     (await api<{ modules: { module: string; enabled: boolean }[] }>(P.modules(code))).modules.map((m) => [m.module, m.enabled])) as Record<string, boolean>,
     ["pos", code, "menu", "modules"]);
   const [category, setCategory] = useState("");
-  const ctx = { code, role, acts };
+  const ctx = { code, role, acts, hotel };
   const refusal = whyNotMenu(role);
   const refresh = () => { acts.unstick(); void cache.invalidateQueries({ queryKey: ["pos", code, "menu"] }); };
 
@@ -78,8 +84,9 @@ export function MenuEditor({ hotel, role }: { hotel: Hotel; role: string | null 
           {/* The dishes in a file (D27-383 item 1), the web's columns, from the rows read. */}
           <ExportButtons table={menu.data ? { title: "Menu", subtitle: hotel.name, columns: DISH_COLUMNS, rows: dishRows(sections) } : null} />
           <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
-            <Btn label="Import sides" Icon={Upload} why={ON_THE_WEBSITE} onRefused={acts.refused} onPress={() => undefined} />
-            <Btn label="Import the menu" Icon={Upload} why={ON_THE_WEBSITE} onRefused={acts.refused} onPress={() => undefined} />
+            {/* The web shows both to whoever sees the menu; the API's MENU grant decides (menu edit). */}
+            <Btn label="Import sides" Icon={Upload} why={refusal} onRefused={acts.refused} onPress={() => setImporting("addons")} />
+            <Btn label="Import the menu" Icon={Upload} why={refusal} onRefused={acts.refused} onPress={() => setImporting("menu")} />
           </View>
         </View>
       ) : null}
@@ -125,6 +132,12 @@ export function MenuEditor({ hotel, role }: { hotel: Hotel; role: string | null 
             <Promotions ctx={ctx} />
           </>
         )}
+      {importing ? (
+        <ImportSheet key={importing} spec={importing === "menu" ? MENU_SPEC : ADDON_SPEC} stopName={importStop(code, importing)}
+          where={importing === "menu" ? "the menu's dishes" : "the menu's sides"}
+          load={(rows, dryRun) => send<ImportReport>("POST", M.imports(code, importing), { rows, dryRun })}
+          onClose={() => setImporting(null)} onImported={refresh} />
+      ) : null}
     </Screen>
   );
 }

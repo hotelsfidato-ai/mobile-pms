@@ -2,11 +2,11 @@ import { Plus, TicketPercent } from "lucide-react-native";
 import { useState } from "react";
 import { Text, View } from "react-native";
 import { api } from "../../core/api";
-import { ON_THE_WEBSITE } from "../../core/menu";
+import { DateField } from "../../core/DateField";
 import { c, face, space, t } from "../../core/theme";
-import { Card, useRead } from "../../core/ui";
+import { Card, useRead, useScreenStop } from "../../core/ui";
 import {
-  couponLine, dishesSaved, groupForm, groupOn, groupRule, M, optionForm, promoForm, promoValue, usedLine,
+  couponLine, couponPart, dishesSaved, groupForm, groupOn, groupRule, importStop, M, optionForm, promoForm, promoValue, usedLine,
   type AddonGroupSetup, type Promo, type Section,
 } from "./menuEdit";
 import { paise, whyNotMenu } from "./setup";
@@ -23,12 +23,14 @@ import type { Addon } from "./types";
    SEEDED: every price and every rate here is typed by somebody at the hotel.
    ══════════════════════════════════════════════════════════════════ */
 
-type Ctx = { code: string; role: string | null; acts: Acts };
+type Ctx = { code: string; role: string | null; acts: Acts; hotel: { today?: string; businessDate: string } };
 const said = (acts: Acts) => (acts.said && acts.said.tone !== "ok" ? <SaidBar said={acts.said} onDone={() => acts.setSaid(null)} /> : null);
 
 export function Sides({ sections, ctx }: { sections: Section[]; ctx: Ctx }) {
   const { code, role, acts } = ctx;
-  const q = useRead(async () => (await api<{ groups: AddonGroupSetup[] }>(M.groups(code))).groups, ["pos", code, "menu", "groups"]);
+  /* A sides import whose reply was lost (ImportSheet.tsx) is let go by this read, begun after it. */
+  const sidesImport = useScreenStop(importStop(code, "addons"));
+  const q = useRead(sidesImport.watch(async () => (await api<{ groups: AddonGroupSetup[] }>(M.groups(code))).groups), ["pos", code, "menu", "groups"]);
   const [editing, setEditing] = useState<AddonGroupSetup | "new" | null>(null);
   const [dishesFor, setDishesFor] = useState<AddonGroupSetup | null>(null);
   const [option, setOption] = useState<{ group: AddonGroupSetup; addon?: Addon } | null>(null);
@@ -237,13 +239,18 @@ function PromotionSheet({ promotion, ctx, onClose }: { promotion?: Promo; ctx: C
   const [kind, setKind] = useState<"percent" | "fixed">(promotion?.kind ?? "percent");
   const [value, setValue] = useState(promotion ? String(promotion.value) : "");
   const [active, setActive] = useState(promotion?.isActive ?? true);
+  /* A COUPON (261): a code the guest brings, with its two days and its limits (M-16: the phone's own picker). */
+  const [isCoupon, setIsCoupon] = useState(false);
+  const [limits, setLimits] = useState({ from: "", to: "", maxUses: "", minBill: "" });
+  const limit = (k: keyof typeof limits) => (v: string) => setLimits((l) => ({ ...l, [k]: v }));
   const f = promoForm(!promotion, code, name, kind, value);
+  const coupon = couponPart(!promotion && isCoupon, limits);
   const id = promotion ? `promo:${promotion.id}` : "promo:new";
   const save = async () => {
     const ran = promotion
       ? await acts.run(id, "PATCH", M.promotion(hotel, promotion.id), { name: name.trim(), value: f.amount, isActive: active },
         { done: `${name.trim()} saved`, not: "Not saved", what: "saved", where: "the promotions" })
-      : await acts.run(id, "POST", M.promotions(hotel), { code: code.trim().toUpperCase(), name: name.trim(), kind, value: f.amount },
+      : await acts.run(id, "POST", M.promotions(hotel), { code: code.trim().toUpperCase(), name: name.trim(), kind, value: f.amount, ...coupon.body },
         { done: `${name.trim()} added`, not: "Not saved", what: "added", where: "the promotions" });
     if (ran === "done") onClose();
   };
@@ -252,7 +259,7 @@ function PromotionSheet({ promotion, ctx, onClose }: { promotion?: Promo; ctx: C
       about={promotion ? "The code cannot change - bills already printed name it." : "A named discount a biller applies by typing its code."}
       footer={<View style={{ flexDirection: "row", gap: 8 }}>
         <Btn label="Cancel" grow onPress={onClose} />
-        <Btn label="Save" kind="primary" grow off={!f.ready} busy={acts.busy === id} why={acts.why(id, whyNotMenu(role))} onRefused={acts.refused} onPress={() => void save()} />
+        <Btn label="Save" kind="primary" grow off={!f.ready || !coupon.ready} busy={acts.busy === id} why={acts.why(id, whyNotMenu(role))} onRefused={acts.refused} onPress={() => void save()} />
       </View>}>
       {!promotion ? (
         <Field label="Code" hint="What the biller types. Short - a terminal has a queue behind it.">
@@ -272,13 +279,33 @@ function PromotionSheet({ promotion, ctx, onClose }: { promotion?: Promo; ctx: C
         <Input label={kind === "percent" ? "Percent off" : "Amount off"} value={value} onChange={setValue} keys="decimal" placeholder={kind === "percent" ? "50" : "200.00"} />
       </Field>
       {!promotion ? (
-        /* A coupon needs its two days chosen: a date picker, not installed. */
         <Toggle label="A coupon the guest brings" about="Typed from the guest's code at the Till or the Terminal, on the days you set; never a button."
-          on={false} onChange={() => undefined} why={ON_THE_WEBSITE} onRefused={acts.refused} />
-      ) : (
+          on={isCoupon} onChange={setIsCoupon} />
+      ) : null}
+      {!promotion && isCoupon ? (
+        <View style={{ gap: 12 }}>
+          <View style={{ flexDirection: "row", gap: 12 }}>
+            <View style={{ flex: 1 }}><DateField label="From" required value={limits.from} onChange={limit("from")} hotel={ctx.hotel} /></View>
+            <View style={{ flex: 1 }}><DateField label="Until" required value={limits.to} onChange={limit("to")} hotel={ctx.hotel} /></View>
+          </View>
+          <View style={{ flexDirection: "row", gap: 12 }}>
+            <View style={{ flex: 1 }}>
+              <Field label="Bills it may go on" hint="Blank: no limit.">
+                <Input label="Bills it may go on" value={limits.maxUses} onChange={limit("maxUses")} keys="number" />
+              </Field>
+            </View>
+            <View style={{ flex: 1 }}>
+              <Field label="Least bill, ₹" hint="Blank: any bill.">
+                <Input label="Least bill, ₹" value={limits.minBill} onChange={limit("minBill")} keys="decimal" />
+              </Field>
+            </View>
+          </View>
+        </View>
+      ) : null}
+      {promotion ? (
         <Toggle label="Offer this at the till" on={active} onChange={setActive}
           about="Switching it off hides it from the discount dialog. Bills that already used it keep it - a promotion is never deleted." />
-      )}
+      ) : null}
       {said(acts)}
     </Sheet>
   );

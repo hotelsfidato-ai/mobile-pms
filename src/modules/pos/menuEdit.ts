@@ -63,7 +63,13 @@ export const M = {
   numberedOff: (code: string, id: string, act: "off" | "on") => `${T(code)}/numbered-addons/${id}/${act}`,
   customUsed: (code: string) => `${T(code)}/custom-addons-used`,
   profit: (code: string, from: string, to: string) => `${T(code)}/dish-profit?from=${from}&to=${to}`,
+  /** POST `{ rows, dryRun }` (the web's till.ts importMenu, importAddons). */
+  imports: (code: string, which: "menu" | "addons") => `${T(code)}/menu/${which === "menu" ? "" : "addon-groups/"}import`,
 };
+
+/** The stop an import's lost reply puts on the Menu (ImportSheet.tsx): let go by the read that shows what
+    it imported - the dishes for the menu file, the sides (add-on groups) for the sides file. */
+export const importStop = (code: string, which: "menu" | "addons") => `pos/${code}/menu/import/${which}`;
 
 /* ── A new dish (CategoryCard add, POS-14, D27-120) ─────────────────── */
 
@@ -322,6 +328,19 @@ export function promoForm(isNew: boolean, code: string, name: string, kind: "per
     error: value.trim() !== "" && bad ? (kind === "percent" ? "Between 0 and 100." : "More than nothing.") : undefined,
     ready: name.trim().length > 0 && (!isNew || code.trim().length > 0) && !bad,
     amount,
+  };
+}
+/** A coupon's part of a new promotion (Menu.tsx PromotionDialog, 261): both days chosen before Save;
+    a blank limit is none (null), never a number nobody typed; the days as the API's text. */
+export function couponPart(isCoupon: boolean, l: { from: string; to: string; maxUses: string; minBill: string }) {
+  if (!isCoupon) return { ready: true, body: {} };
+  return {
+    ready: l.from !== "" && l.to !== "",
+    body: { coupon: {
+      from: l.from, to: l.to,
+      maxUses: l.maxUses.trim() === "" ? null : Number(l.maxUses),
+      minBill: l.minBill.trim() === "" ? null : Number(l.minBill),
+    } },
   };
 }
 export const promoValue = (p: Promo) => (p.kind === "percent" ? `${p.value}%` : rupeesWhole(p.value));
