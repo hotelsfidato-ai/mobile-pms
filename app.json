@@ -24,7 +24,16 @@
     "plugins": [
       "expo-router",
       "expo-sqlite",
-      "expo-font"
+      "expo-font",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Fidato uses your photos to add a hotel's logo, its pictures, a bill or a deposit slip, only when you choose one.",
+          "cameraPermission": "Fidato uses the camera to photograph a bill or a deposit slip, only when you take one.",
+          "microphonePermission": false
+        }
+      ],
+      "expo-document-picker"
     ]
   }
 }

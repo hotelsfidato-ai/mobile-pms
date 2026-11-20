@@ -33,10 +33,14 @@ installed (no new package without the owner's yes).
   `pressed`), never both.
 - **Text** follows the phone's text size (`allowFontScaling` stays on); a figure that must fit uses
   `adjustsFontSizeToFit` with `minimumFontScale={0.8}` rather than clipping.
-- Not installed, asked of the owner when wanted: haptics (`expo-haptics` ~57.0.3), date and time
-  pickers (`@react-native-community/datetimepicker` 9.1.0), photos (`expo-image-picker` ~57.0.20),
-  copy to the clipboard (`expo-clipboard` ~57.0.2). Installed 19 Nov (M-14): `expo-file-system`,
-  `expo-sharing`.
+- **Pickers (M-16, 20 Nov):** photos and the camera through `expo-image-picker` ~57.0.20, files
+  through `expo-document-picker` ~57.0.3, dates and times through
+  `@react-native-community/datetimepicker` 9.1.0 — each phone's own picker (iOS's inline / spinner,
+  Android's dialog). Installed 19 Nov (M-14): `expo-file-system`, `expo-sharing`. Not installed,
+  asked of the owner when wanted: haptics (`expo-haptics` ~57.0.3), the clipboard (`expo-clipboard`
+  ~57.0.2).
+- **Nothing automatic (M-17):** no `expo-updates`, no over-the-air update, no store; testing is in
+  Expo Go from the PC.
 
 ## Designed for a phone, with room
 - The side margin is `space.side` (20); cards `space.cardX` / `space.cardY` (16 / 14); between
