@@ -910,6 +910,16 @@ export const PHONE_ROUTES: Readonly<Record<string, string>> = {
   "/h/:code/requests": "/guest-services/:code/requests",
   /* mobile/t2-approvals (4 Nov) */
   "/h/:code/approvals": "/approvals/:code",
+  /* mobile/m13-rep-ops (19 Nov): All reports, the day's reports, No show, Item sales, Group reports. */
+  "/reports": "/reports/:code",
+  "/reports/manager": "/reports/:code/manager",
+  "/reports/night-audit": "/reports/:code/night-audit",
+  "/reports/monthly-occupancy": "/reports/:code/monthly-occupancy",
+  "/reports/monthly-stats": "/reports/:code/monthly-stats",
+  "/reports/yearly-stats": "/reports/:code/yearly-stats",
+  "/reports/no-show": "/reports/:code/no-show",
+  "/reports/item-sales": "/reports/:code/item-sales",
+  "/group-reports": "/reports/:code/group-reports",
   /* mobile/t2-revenue (4 Nov) */
   "/h/:code/revenue-outlook": "/revenue/:code",
   /* mobile/t2-crs (4 Nov) */
