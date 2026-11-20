@@ -3,7 +3,8 @@ import { useState, type ReactNode } from "react";
 import { Text, View } from "react-native";
 import type { Hotel } from "../../core/api";
 import { c, face, space, t } from "../../core/theme";
-import { Capsule, Head, Screen, useRead } from "../../core/ui";
+import { Capsule, Contact, Head, Screen, useRead } from "../../core/ui";
+import { ListExport } from "../reports/ListExport";
 import { whyNotDesk } from "../guest-services/roles";
 import { getGuestMessages } from "./data";
 import { Empty, Failed, Loading, Pill, Refused, Sheet, SheetHead, Stale, body, small } from "./kit";
@@ -70,6 +71,15 @@ export function GuestMessages({ hotel, role, reservation, onOpenDesk }: {
           : (
             <>
               <Stale error={q.error} />
+              {/* The web's MESSAGE_EXPORT: every attempt shown, with where it went. */}
+              <ListExport screen="guest-messages" role={role} table={{
+                columns: ["Sent", "Message", "By", "To", "Phone", "Email", "Booking", "Document", "Status", "Detail", "Sent by"],
+                rows: data.messages.map((m) => [
+                  `${dayShort(m.sentAt)}, ${m.sentAt.slice(11, 16) || "-"}`, m.kindLabel,
+                  m.channel === "whatsapp" ? "WhatsApp" : m.channel === "email" ? "Email" : m.channel, m.to.name ?? "-", m.to.phone ?? "-",
+                  m.to.email ?? "-", bookingOf(m), m.document?.name ?? "-", statusWord(m.status), cameBack(m), m.byAPerson ? sentByWord(m) : "The system",
+                ]),
+              }} />
 
               {/* THE SENDER'S OWN SENTENCE, not a second one written here. */}
               {note ? (
@@ -137,7 +147,10 @@ function Sent({ m, last }: { m: SentMessage; last: boolean }) {
         <Line label="To">
           <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
             <Icon size={14} color={c.grey400} accessibilityLabel={m.channel === "email" ? "Email" : "Telephone"} />
-            <Text style={[body, { color: c.ink900, flexShrink: 1 }]}>{wentTo(m)}</Text>
+            {/* The number or address it went to opens the dialler or the mail (docs/NATIVE.md). */}
+            {wentTo(m) === m.to.email && m.to.email ? <Contact kind="mailto" value={m.to.email} style={[body, { color: c.ink900, flexShrink: 1 }]} />
+              : wentTo(m) === m.to.phone && m.to.phone ? <Contact kind="tel" value={m.to.phone} style={[body, { color: c.ink900, flexShrink: 1 }]} />
+                : <Text style={[body, { color: c.ink900, flexShrink: 1 }]}>{wentTo(m)}</Text>}
           </View>
         </Line>
         <Line label="State"><Pill tone={statusTone(m.status)}>{statusWord(m.status)}</Pill></Line>

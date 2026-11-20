@@ -1,8 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { useRef, useState, type ReactNode } from "react";
 import {
-  Pressable, RefreshControl, ScrollView, StyleSheet, Text, View, type StyleProp, type ViewStyle,
+  Alert, Linking, Platform, Pressable, RefreshControl, ScrollView, StyleSheet, Text, View,
+  type PressableAndroidRippleConfig, type PressableStateCallbackType, type StyleProp, type TextInputProps,
+  type TextStyle, type ViewStyle,
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { outcomeUnknown } from "./api";
 import { c, face, space, t } from "./theme";
 
@@ -51,12 +54,83 @@ export function notKnown(done: string, where: string, e?: unknown) {
   return { title, body: `${said}Look at ${where} before trying again.`, line: `${title}: look at ${where} before trying again.` };
 }
 
+/* ── Native on both phones (docs/NATIVE.md, the owner's 19 Nov) ─────
+   The few helpers every screen and kit uses so each phone behaves as its
+   own: the ripple on Android, the pressed shade on iPhone (never both),
+   a sheet's room round the notch and the home indicator, the right
+   keyboard per field, each phone's own "are you sure", a number or an
+   address that opens the dialler or the mail. */
+
+/** Android's own press feedback (a Pressable's `android_ripple`): ink at 10%, seen on white and on orange alike. */
+export const ripple: PressableAndroidRippleConfig = { color: "rgba(3,23,40,0.10)" };
+
+/** A Pressable's style function, with its pressed shade on iPhone (and the web preview) only:
+    Android shows `ripple` instead, never both. `style={shade(({ pressed }) => [...])}`. */
+export function shade<S>(style: (state: PressableStateCallbackType) => S) {
+  return (state: PressableStateCallbackType): S => style({ ...state, pressed: state.pressed && Platform.OS !== "android" });
+}
+
+/** A sheet's or a dialog's room inside a Modal: the bottom clear of the home indicator and Android's
+    gesture bar (at least 16), the top clear of the notch for a full-screen one. */
+export function useSheetPad() {
+  const i = useSafeAreaInsets();
+  return { top: i.top, bottom: Math.max(i.bottom, 16), left: i.left, right: i.right };
+}
+
+/** What every Modal sets (docs/NATIVE.md): drawn under Android's status and gesture bars, edge to edge as
+    the app is, so the sheet pads itself with `useSheetPad`. Spread it: `<Modal {...modalEdge} …>`. */
+export const modalEdge = { statusBarTranslucent: true, navigationBarTranslucent: true } as const;
+
+/** The keyboard per field (docs/NATIVE.md). Only the keyboard changes: what is typed and sent is the same.
+    A guest's phone or email turns the phone's own autofill off, which would offer the person at the
+    desk their own number. */
+export const keys = {
+  /** An amount or a price: digits and a point. */
+  amount: { keyboardType: "decimal-pad", inputMode: "decimal" },
+  /** A count: digits only. */
+  count: { keyboardType: "number-pad", inputMode: "numeric" },
+  phone: { keyboardType: "phone-pad", inputMode: "tel", autoComplete: "off", textContentType: "none" },
+  email: { keyboardType: "email-address", inputMode: "email", autoCapitalize: "none", autoCorrect: false, autoComplete: "off", textContentType: "none" },
+  /** A code typed in capitals (GSTIN, PAN, a document number). */
+  code: { autoCapitalize: "characters", autoCorrect: false },
+  /** A person's or a company's name. */
+  name: { autoCapitalize: "words", autoComplete: "off", textContentType: "none" },
+} as const satisfies Record<string, TextInputProps>;
+
+/** Each phone's own "are you sure" for a destructive act, in the web's words: Cancel, and the act in red.
+    The web preview has no native dialog, so it asks with the browser's. */
+export function confirmAct(title: string, message: string | undefined, act: string, onYes: () => void, cancel = "Cancel") {
+  if (Platform.OS === "web") {
+    const ask = (globalThis as { confirm?: (m: string) => boolean }).confirm;
+    if (!ask || ask(message ? `${title}\n\n${message}` : title)) onYes();
+    return;
+  }
+  Alert.alert(title, message, [{ text: cancel, style: "cancel" }, { text: act, style: "destructive", onPress: onYes }], { cancelable: true });
+}
+
+/** Open the dialler or the mail with what the screen shows. */
+export const dial = (phone: string) => { void Linking.openURL(`tel:${phone.replace(/[^\d+]/g, "")}`).catch(() => undefined); };
+export const mail = (email: string) => { void Linking.openURL(`mailto:${email.trim()}`).catch(() => undefined); };
+
+/** A phone number or an email the screen already shows, in its own style, that opens the dialler or
+    the mail (underlined, so it reads as a link). Inside a Text it runs on with the sentence. */
+export function Contact({ kind, value, style, numberOfLines }: { kind: "tel" | "mailto"; value: string; style?: StyleProp<TextStyle>; numberOfLines?: number }) {
+  return (
+    <Text
+      style={[style, { textDecorationLine: "underline" }]} numberOfLines={numberOfLines}
+      onPress={() => (kind === "tel" ? dial(value) : mail(value))} accessibilityRole="link"
+      accessibilityHint={kind === "tel" ? "Calls this number" : "Writes an email"}
+    >{value}</Text>
+  );
+}
+
 /** A screen: the page's grey, the sides' 20px, pull down to read again. */
 export function Screen({ children, refreshing, onRefresh }: { children: ReactNode; refreshing: boolean; onRefresh: () => void }) {
   return (
     <ScrollView
       style={{ backgroundColor: c.grey50 }}
       contentContainerStyle={{ paddingTop: 16, paddingHorizontal: space.side, paddingBottom: 40, gap: space.card }}
+      keyboardShouldPersistTaps="handled" keyboardDismissMode={Platform.OS === "ios" ? "interactive" : "on-drag"}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={c.orange} colors={[c.orange]} />}
     >
       {children}
@@ -87,7 +161,7 @@ export function Card({ children, style }: { children: ReactNode; style?: StylePr
 /** A capsule button: 44px on a touch screen, a grey-300 ring, an icon before the words. */
 export function Capsule({ label, onPress, icon }: { label: string; onPress: () => void; icon?: ReactNode }) {
   return (
-    <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={label} style={({ pressed }) => [s.capsule, pressed && { backgroundColor: c.grey100 }]}>
+    <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={label} android_ripple={ripple} style={shade(({ pressed }) => [s.capsule, pressed && { backgroundColor: c.grey100 }])}>
       <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
         {icon}
         <Text style={[t.label, { color: c.grey700 }]}>{label}</Text>
@@ -126,7 +200,7 @@ export const s = StyleSheet.create({
   navy: { backgroundColor: c.ink900, borderRadius: 12, paddingHorizontal: space.cardX, paddingVertical: space.cardY },
   capsule: {
     minHeight: 44, paddingHorizontal: 16, borderRadius: 999, borderWidth: 1, borderColor: c.grey300,
-    backgroundColor: c.white, alignItems: "center", justifyContent: "center",
+    backgroundColor: c.white, alignItems: "center", justifyContent: "center", overflow: "hidden",
   },
   row: { flexDirection: "row", justifyContent: "space-between", alignItems: "baseline", gap: 12, paddingVertical: 4 },
   hairline: { height: 1, backgroundColor: c.grey100, marginVertical: 8 },

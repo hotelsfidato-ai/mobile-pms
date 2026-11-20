@@ -6,7 +6,7 @@ import type { Hotel } from "../../core/api";
 import { dateLong } from "../../core/format";
 import { ON_THE_WEBSITE } from "../../core/menu";
 import { c, face, t } from "../../core/theme";
-import { Card, Screen, notKnown, useRead } from "../../core/ui";
+import { Card, Screen } from "../../core/ui";
 import {
   RECORD_DEPOSIT_REFUSED, dateDay, dayHint, depositActs, depositLine, depositState, depositTitle, depositsTable, differenceTone,
   explainHead, explanationLine, pointsLine, rupees, whyNotExport, whyNotReadDeposits,
@@ -14,8 +14,7 @@ import {
 } from "./desk";
 import { explainDay, readDeposits, recordDeposit, reverseDeposit, verifyDeposit } from "./deskData";
 import {
-  CardHead, DeskExport, DeskSheet, Figure, Hair, PageHead, ReadState, RefusedCard, TonePill, failedSaid, useWrite,
-} from "./DeskKit";
+  CardHead, DeskExport, DeskSheet, Figure, Hair, PageHead, ReadState, RefusedCard, TonePill, failedSaid, useWrite, StopCard, useDeskRead, useStop, type Stop } from "./DeskKit";
 import { Btn, Choice, Field, Input, Refused, SaidCard, type Said } from "./Kit";
 
 /* ══════════════════════════════════════════════════════════════════
@@ -38,12 +37,12 @@ export function CashDeposits({ hotel, role }: { hotel: Hotel; role: string | nul
   const code = hotel.code;
   const cache = useQueryClient();
   const refused = whyNotReadDeposits(role);
-  const q = useRead(() => (refused ? Promise.resolve(null) : readDeposits(code)), ["finance", code, "deposits"]);
+  const q = useDeskRead(() => (refused ? Promise.resolve(null) : readDeposits(code)), ["finance", code, "desk", "deposits"]);
+  const stop = useStop(q.began);
   const [said, setSaid] = useState<Said | null>(null);
   const [sheet, setSheet] = useState<Sheet | null>(null);
-  const [round, setRound] = useState(0);
   const [pulled, setPulled] = useState(false);
-  const pull = () => { setPulled(true); setRound((n) => n + 1); q.reload(); };
+  const pull = () => { setPulled(true); q.reload(); };
   const done = (s: Said | null) => { if (s) setSaid(s); void cache.invalidateQueries({ queryKey: ["finance", code] }); };
   const refusedSaid = (title: string) => (why: string) => setSaid({ tone: "refused", title, text: why });
   const d = q.data;
@@ -55,6 +54,7 @@ export function CashDeposits({ hotel, role }: { hotel: Hotel; role: string | nul
         <>
           <DeskExport why={whyNotExport(role, "money")} table={d ? depositsTable(d, hotel.name) : null} />
           {said ? <SaidCard said={said} /> : null}
+      <StopCard stop={stop} />
           {!d ? <ReadState what="the cash deposits log" reading="Reading the cash deposits…" error={q.error} onRetry={q.reload} /> : (
             <>
               <Card style={{ gap: 12 }}>
@@ -76,7 +76,7 @@ export function CashDeposits({ hotel, role }: { hotel: Hotel; role: string | nul
                 <Hair />
                 {d.deposits.length === 0 ? <Text style={[t.label, { color: c.grey500 }]}>No deposit has been recorded yet.</Text>
                   : d.deposits.map((x, i) => (
-                    <DepositRow key={`${round}-${x.id}`} code={code} x={x} first={i === 0} d={d} onSaid={setSaid} onDone={done}
+                    <DepositRow key={x.id} stop={stop} code={code} x={x} first={i === 0} d={d} onSaid={setSaid} onDone={done}
                       onRefused={refusedSaid} onReverse={() => setSheet({ kind: "reverse", x })} />
                   ))}
               </Card>
@@ -84,9 +84,9 @@ export function CashDeposits({ hotel, role }: { hotel: Hotel; role: string | nul
           )}
         </>
       )}
-      {sheet?.kind === "record" && d ? <RecordSheet code={code} days={d.days} date={sheet.date} onClose={() => setSheet(null)} onDone={done} /> : null}
-      {sheet?.kind === "explain" ? <ExplainSheet code={code} day={sheet.day} onClose={() => setSheet(null)} onDone={done} /> : null}
-      {sheet?.kind === "reverse" ? <ReverseSheet code={code} x={sheet.x} onClose={() => setSheet(null)} onDone={done} /> : null}
+      {sheet?.kind === "record" && d ? <RecordSheet stop={stop} code={code} days={d.days} date={sheet.date} onClose={() => setSheet(null)} onDone={done} /> : null}
+      {sheet?.kind === "explain" ? <ExplainSheet stop={stop} code={code} day={sheet.day} onClose={() => setSheet(null)} onDone={done} /> : null}
+      {sheet?.kind === "reverse" ? <ReverseSheet stop={stop} code={code} x={sheet.x} onClose={() => setSheet(null)} onDone={done} /> : null}
     </Screen>
   );
 }
@@ -117,11 +117,11 @@ function DayRow({ day, first, canRecord, onRecord, onExplain, onRefused }: {
   );
 }
 
-function DepositRow({ code, x, first, d, onSaid, onDone, onRefused, onReverse }: {
-  code: string; x: Deposit; first: boolean; d: Deposits; onSaid: (s: Said) => void; onDone: (s: Said | null) => void;
+function DepositRow({ stop, code, x, first, d, onSaid, onDone, onRefused, onReverse }: {
+  stop: Stop; code: string; x: Deposit; first: boolean; d: Deposits; onSaid: (s: Said) => void; onDone: (s: Said | null) => void;
   onRefused: (title: string) => (why: string) => void; onReverse: () => void;
 }) {
-  const w = useWrite();
+  const w = useWrite(stop, "verified", "this deposit");
   const acts = depositActs(x, d);
   const verify = () => void w.run(async () => {
     await verifyDeposit(code, x.id);
@@ -147,16 +147,15 @@ function DepositRow({ code, x, first, d, onSaid, onDone, onRefused, onReverse }:
           {acts.reverse ? <Btn label="Reverse" Icon={Undo2} why={acts.reverse.why} onRefused={onRefused("Not reversed")} onPress={onReverse} /> : null}
         </View>
       ) : null}
-      {w.stuck ? <Text style={t.caption}>{notKnown("verified", "this deposit").line} Pull down to read it again.</Text> : null}
     </View>
   );
 }
 
-function RecordSheet({ code, days, date, onClose, onDone }: { code: string; days: DepositDay[]; date: string; onClose: () => void; onDone: (s: Said | null) => void }) {
+function RecordSheet({ stop, code, days, date, onClose, onDone }: { stop: Stop; code: string; days: DepositDay[]; date: string; onClose: () => void; onDone: (s: Said | null) => void }) {
   const [f, setF] = useState({ day: date, amount: "", depositedOn: "", bank: "", slipNo: "" });
   const set = (k: keyof typeof f) => (v: string) => setF({ ...f, [k]: v });
   const [problem, setProblem] = useState<string | null>(null);
-  const w = useWrite();
+  const w = useWrite(stop, "recorded", "the deposits");
   const s = depositState(f);
   const close = () => { onClose(); onDone(null); };
   const submit = () => {
@@ -167,9 +166,9 @@ function RecordSheet({ code, days, date, onClose, onDone }: { code: string; days
       await recordDeposit(code, sent);
       onClose();
       onDone({ tone: "ok", title: "Deposit recorded", text: `${rupees(sent.amount)} for ${dateDay(sent.businessDate)}.` });
-    }, (e) => {
+    }, (e, lost) => {
       const x = failedSaid(e, "Not recorded", "recorded", "the deposits");
-      if (x.tone === "warn") setF((o) => ({ ...o, amount: "" }));
+      if (lost) { onClose(); onDone(x); return; }
       setProblem(x.text ? `${x.title}. ${x.text}` : x.title);
     });
   };
@@ -198,16 +197,15 @@ function RecordSheet({ code, days, date, onClose, onDone }: { code: string; days
       <Field label="Photo of the slip" hint={`${ON_THE_WEBSITE}: it can be added later from its line on the website; it is verified only once it is there.`}>
         <Btn label="Take or pick a photo" Icon={FileImage} off onPress={() => undefined} a11y={`Photo of the slip: ${ON_THE_WEBSITE}`} />
       </Field>
-      {w.stuck ? <Text style={t.caption}>{notKnown("recorded", "the deposits").line} Close this and read the list again.</Text> : null}
       <Refused text={problem} />
     </DeskSheet>
   );
 }
 
-function ExplainSheet({ code, day, onClose, onDone }: { code: string; day: DepositDay; onClose: () => void; onDone: (s: Said | null) => void }) {
+function ExplainSheet({ stop, code, day, onClose, onDone }: { stop: Stop; code: string; day: DepositDay; onClose: () => void; onDone: (s: Said | null) => void }) {
   const [reason, setReason] = useState("");
   const [problem, setProblem] = useState<string | null>(null);
-  const w = useWrite();
+  const w = useWrite(stop, "saved", "the day");
   const close = () => { onClose(); onDone(null); };
   const submit = () => {
     setProblem(null);
@@ -215,7 +213,7 @@ function ExplainSheet({ code, day, onClose, onDone }: { code: string; day: Depos
       await explainDay(code, day.date, reason);
       onClose();
       onDone({ tone: "ok", title: "Explained", text: dateLong(day.date) });
-    }, (e) => { const x = failedSaid(e, "Not saved", "saved", "the day"); setProblem(x.text ? `${x.title}. ${x.text}` : x.title); });
+    }, (e, lost) => { const x = failedSaid(e, "Not saved", "saved", "the day"); if (lost) { onClose(); onDone(x); return; } setProblem(x.text ? `${x.title}. ${x.text}` : x.title); });
   };
   return (
     <DeskSheet title={`Why ${dateDay(day.date)} differs`} description={explainHead(day)} onClose={close} footer={(
@@ -227,16 +225,15 @@ function ExplainSheet({ code, day, onClose, onDone }: { code: string; day: Depos
       <Field label="Why" hint="What the owner or the accountant needs, in a sentence.">
         <Input value={reason} onChange={setReason} label="Why" multiline />
       </Field>
-      {w.stuck ? <Text style={t.caption}>{notKnown("saved", "the day").line} Close this and read the list again.</Text> : null}
       <Refused text={problem} />
     </DeskSheet>
   );
 }
 
-function ReverseSheet({ code, x, onClose, onDone }: { code: string; x: Deposit; onClose: () => void; onDone: (s: Said | null) => void }) {
+function ReverseSheet({ stop, code, x, onClose, onDone }: { stop: Stop; code: string; x: Deposit; onClose: () => void; onDone: (s: Said | null) => void }) {
   const [reason, setReason] = useState("");
   const [problem, setProblem] = useState<string | null>(null);
-  const w = useWrite();
+  const w = useWrite(stop, "reversed", "the deposits");
   const close = () => { onClose(); onDone(null); };
   const submit = () => {
     setProblem(null);
@@ -244,7 +241,7 @@ function ReverseSheet({ code, x, onClose, onDone }: { code: string; x: Deposit; 
       await reverseDeposit(code, x.id, reason);
       onClose();
       onDone({ tone: "ok", title: "Reversed", text: "Record it again with the right figures." });
-    }, (e) => { const f = failedSaid(e, "Not reversed", "reversed", "the deposits"); setProblem(f.text ? `${f.title}. ${f.text}` : f.title); });
+    }, (e, lost) => { const f = failedSaid(e, "Not reversed", "reversed", "the deposits"); if (lost) { onClose(); onDone(f); return; } setProblem(f.text ? `${f.title}. ${f.text}` : f.title); });
   };
   return (
     <DeskSheet title="Reverse this deposit?" onClose={close}
@@ -258,7 +255,6 @@ function ReverseSheet({ code, x, onClose, onDone }: { code: string; x: Deposit; 
       <Field label="Why" hint="This is the line somebody asks about.">
         <Input value={reason} onChange={setReason} label="Why" multiline />
       </Field>
-      {w.stuck ? <Text style={t.caption}>{notKnown("reversed", "the deposits").line} Close this and read the list again.</Text> : null}
       <Refused text={problem} />
     </DeskSheet>
   );

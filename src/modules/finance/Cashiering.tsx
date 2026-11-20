@@ -5,7 +5,7 @@ import { Text, View } from "react-native";
 import type { Hotel } from "../../core/api";
 import { ON_THE_WEBSITE } from "../../core/menu";
 import { c, face, space, t } from "../../core/theme";
-import { Card, Screen, notKnown, useRead } from "../../core/ui";
+import { Card, Screen } from "../../core/ui";
 import {
   DENOMINATIONS, EXPENSE_CATEGORIES, MOVEMENTS, approvalLine, cashTaken, closeState, closedWords, countBody, dateDay, handedWords,
   lastClose, movementAmount, movementLine, movementOf, movementState, noteLine, openLabel, openingOf, receiptWords, rupees, saveLabel,
@@ -13,7 +13,7 @@ import {
   type CashierDrawer, type CashierDrawerView, type Counts, type MovementKind,
 } from "./desk";
 import { closeDrawer, countDrawer, openDrawer, readDrawer, recordMovement } from "./deskData";
-import { CardHead, DeskSheet, Hair, Line, PageHead, ReadState, RefusedCard, TextAct, failedSaid, useWrite } from "./DeskKit";
+import { CardHead, DeskSheet, Hair, Line, PageHead, ReadState, RefusedCard, TextAct, failedSaid, useWrite, StopCard, useDeskRead, useStop, type Stop } from "./DeskKit";
 import { Btn, Choice, Field, Input, Refused, SaidCard, type Said } from "./Kit";
 
 /* ══════════════════════════════════════════════════════════════════
@@ -35,12 +35,12 @@ export function Cashiering({ hotel, role }: { hotel: Hotel; role: string | null 
   const code = hotel.code;
   const cache = useQueryClient();
   const refused = whyNotReadDrawer(role);
-  const q = useRead(() => (refused ? Promise.resolve(null) : readDrawer(code)), ["finance", code, "drawer"]);
+  const q = useDeskRead(() => (refused ? Promise.resolve(null) : readDrawer(code)), ["finance", code, "desk", "drawer"]);
+  const stop = useStop(q.began);
   const [said, setSaid] = useState<Said | null>(null);
   /* Pulling down reads the drawer again: what was stuck on an unknown outcome is seen, and starts afresh. */
-  const [round, setRound] = useState(0);
   const [pulled, setPulled] = useState(false);
-  const pull = () => { setPulled(true); setRound((n) => n + 1); q.reload(); };
+  const pull = () => { setPulled(true); q.reload(); };
   const done = (s: Said | null) => { if (s) setSaid(s); void cache.invalidateQueries({ queryKey: ["finance", code] }); };
   const mayNot = whyNotRunDrawer(role);
   const data = q.data;
@@ -49,21 +49,22 @@ export function Cashiering({ hotel, role }: { hotel: Hotel; role: string | null 
     <Screen refreshing={pulled && q.loading} onRefresh={pull}>
       <PageHead title="Cashiering" under={data ? `Your drawer · ${dateDay(data.businessDate)}` : "Your drawer"} />
       {said ? <SaidCard said={said} /> : null}
+      <StopCard stop={stop} />
       {refused ? <RefusedCard title="Cashiering" why={refused} />
         : !data ? <ReadState what="your drawer" reading="Reading your drawer…" error={q.error} onRetry={q.reload} />
         : !data.shift
-          ? <OpenDrawer key={round} code={code} view={data} mayNot={mayNot} onSaid={setSaid} onDone={done} />
-          : <Shift key={`${round}-${data.shift.id}`} code={code} shift={data.shift} colleagues={data.colleagues} mayNot={mayNot} onSaid={setSaid} onDone={done} />}
+          ? <OpenDrawer stop={stop} code={code} view={data} mayNot={mayNot} onSaid={setSaid} onDone={done} />
+          : <Shift key={data.shift.id} stop={stop} code={code} shift={data.shift} colleagues={data.colleagues} mayNot={mayNot} onSaid={setSaid} onDone={done} />}
     </Screen>
   );
 }
 
-type Acts = { code: string; mayNot: string | null; onSaid: (s: Said) => void; onDone: (s: Said | null) => void };
+type Acts = { stop: Stop; code: string; mayNot: string | null; onSaid: (s: Said) => void; onDone: (s: Said | null) => void };
 
 /* ── No drawer open: a real state, not an error ── */
-function OpenDrawer({ code, view, mayNot, onSaid, onDone }: Acts & { view: CashierDrawerView }) {
+function OpenDrawer({ stop, code, view, mayNot, onSaid, onDone }: Acts & { view: CashierDrawerView }) {
   const [counts, setCounts] = useState<Counts>({});
-  const w = useWrite();
+  const w = useWrite(stop, "opened", "your drawer");
   const open = () => {
     const o = openingOf(counts);
     if (!o) return;
@@ -85,7 +86,6 @@ function OpenDrawer({ code, view, mayNot, onSaid, onDone }: Acts & { view: Cashi
           label={w.busy ? "Opening…" : openLabel(counts)} kind="primary" Icon={Wallet} wide busy={w.busy}
           off={openingOf(counts) === null || w.stuck} why={mayNot} onRefused={(why) => onSaid({ tone: "refused", title: "Not opened", text: why })} onPress={open}
         />
-        {w.stuck ? <Text style={t.caption}>{notKnown("opened", "your drawer").line} Pull down to read it again.</Text> : null}
       </Card>
       {last ? <Text style={[t.label, { color: c.grey600, lineHeight: 21 }]}>{last}</Text> : null}
     </>
@@ -112,10 +112,10 @@ function NoteGrid({ counts, onChange }: { counts: Counts; onChange: (c: Counts) 
 }
 
 /* ── The shift ── */
-function Shift({ code, shift, colleagues, mayNot, onSaid, onDone }: Acts & { shift: CashierDrawer; colleagues: { id: string; name: string }[] }) {
+function Shift({ stop, code, shift, colleagues, mayNot, onSaid, onDone }: Acts & { shift: CashierDrawer; colleagues: { id: string; name: string }[] }) {
   const [counts, setCounts] = useState<Counts>(() => seedCounts(shift.denominations));
   const [sheet, setSheet] = useState<"movement" | "close" | null>(null);
-  const w = useWrite();
+  const w = useWrite(stop, "saved", "the drawer's count");
   const refused = (title: string) => (why: string) => onSaid({ tone: "refused", title, text: why });
   const body = countBody(counts);
   const save = () => {
@@ -149,7 +149,6 @@ function Shift({ code, shift, colleagues, mayNot, onSaid, onDone }: Acts & { shi
         <CardHead title="Count the drawer" under="Notes and coins, as they come out." />
         <NoteGrid counts={counts} onChange={setCounts} />
         <Btn label={w.busy ? "Saving…" : saveLabel(counts)} kind="primary" wide busy={w.busy} off={!body || w.stuck} why={mayNot} onRefused={refused("Not saved")} onPress={save} />
-        {w.stuck ? <Text style={t.caption}>{notKnown("saved", "the drawer's count").line} Pull down to read it again.</Text> : null}
       </Card>
 
       <Card style={{ gap: 12 }}>
@@ -194,8 +193,8 @@ function Shift({ code, shift, colleagues, mayNot, onSaid, onDone }: Acts & { shi
         </View>
       </Card>
 
-      {sheet === "movement" ? <MovementSheet code={code} onClose={() => setSheet(null)} onDone={onDone} /> : null}
-      {sheet === "close" ? <CloseSheet code={code} shift={shift} colleagues={colleagues} onClose={() => setSheet(null)} onDone={onDone} /> : null}
+      {sheet === "movement" ? <MovementSheet stop={stop} code={code} onClose={() => setSheet(null)} onDone={onDone} /> : null}
+      {sheet === "close" ? <CloseSheet stop={stop} code={code} shift={shift} colleagues={colleagues} onClose={() => setSheet(null)} onDone={onDone} /> : null}
     </>
   );
 }
@@ -214,13 +213,13 @@ function VarianceBox({ v }: { v: ReturnType<typeof varianceWords> }) {
   );
 }
 
-function MovementSheet({ code, onClose, onDone }: { code: string; onClose: () => void; onDone: (s: Said | null) => void }) {
+function MovementSheet({ stop, code, onClose, onDone }: { stop: Stop; code: string; onClose: () => void; onDone: (s: Said | null) => void }) {
   const [kind, setKind] = useState<MovementKind>("expense");
   const [amount, setAmount] = useState("");
   const [reason, setReason] = useState("");
   const [category, setCategory] = useState("");
   const [problem, setProblem] = useState<string | null>(null);
-  const w = useWrite();
+  const w = useWrite(stop, "recorded", "the drawer");
   const state = movementState(kind, amount, reason, category);
   const chosen = movementOf(kind)!;
   const close = () => { onClose(); onDone(null); };
@@ -232,10 +231,9 @@ function MovementSheet({ code, onClose, onDone }: { code: string; onClose: () =>
       await recordMovement(code, sent);
       onClose();
       onDone({ tone: "ok", title: "Recorded", text: `${chosen.label} - ${rupees(sent.amount)}` });
-    }, (e) => {
+    }, (e, lost) => {
       const s = failedSaid(e, "Not recorded", "recorded", "the drawer");
-      /* Not known whether it went: the amount is emptied, so a repeat is typed on purpose (MEMORY 16). */
-      if (s.tone === "warn") setAmount("");
+      if (lost) { onClose(); onDone(s); return; }
       setProblem(s.text ? `${s.title}. ${s.text}` : s.title);
     });
   };
@@ -265,20 +263,19 @@ function MovementSheet({ code, onClose, onDone }: { code: string; onClose: () =>
           </Field>
         </>
       ) : null}
-      {w.stuck ? <Text style={t.caption}>{notKnown("recorded", "the drawer").line} Close this and read the drawer again.</Text> : null}
       <Refused text={problem} />
     </DeskSheet>
   );
 }
 
-function CloseSheet({ code, shift, colleagues, onClose, onDone }: {
-  code: string; shift: CashierDrawer; colleagues: { id: string; name: string }[]; onClose: () => void; onDone: (s: Said | null) => void;
+function CloseSheet({ stop, code, shift, colleagues, onClose, onDone }: {
+  stop: Stop; code: string; shift: CashierDrawer; colleagues: { id: string; name: string }[]; onClose: () => void; onDone: (s: Said | null) => void;
 }) {
   const [why, setWhy] = useState(shift.varianceReason ?? "");
   const [handOverTo, setHandOverTo] = useState("");
   const [kept, setKept] = useState("");
   const [problem, setProblem] = useState<string | null>(null);
-  const w = useWrite();
+  const w = useWrite(stop, "closed", "your drawer");
   const s = closeState(shift, kept, handOverTo, why);
   const close = () => { onClose(); onDone(null); };
   const submit = () => {
@@ -289,9 +286,9 @@ function CloseSheet({ code, shift, colleagues, onClose, onDone }: {
       const r = await closeDrawer(code, sent);
       onClose();
       onDone({ tone: "ok", title: "Shift closed", text: closedWords(colleagues.find((x) => x.id === sent.handOverTo)?.name ?? (sent.handOverTo ? "the next shift" : null), r.toDeposit) });
-    }, (e) => {
+    }, (e, lost) => {
       const f = failedSaid(e, "Not closed", "closed", "your drawer");
-      if (f.tone === "warn") setKept("");
+      if (lost) { onClose(); onDone(f); return; }
       setProblem(f.text ? `${f.title}. ${f.text}` : f.title);
     });
   };
@@ -315,7 +312,6 @@ function CloseSheet({ code, shift, colleagues, onClose, onDone }: {
       <Field label="Float kept for the next shift" hint={s.hint}>
         <Input value={kept} onChange={setKept} label="Float kept for the next shift" keyboard="decimal-pad" tabular />
       </Field>
-      {w.stuck ? <Text style={t.caption}>{notKnown("closed", "your drawer").line} Close this and read the drawer again.</Text> : null}
       <Refused text={problem} />
     </DeskSheet>
   );

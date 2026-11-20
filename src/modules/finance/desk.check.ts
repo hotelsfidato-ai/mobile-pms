@@ -5,7 +5,7 @@ import {
   cardLines, cashTaken, closeState, closedWords, companyPaymentState, countBody, creditBody, depositActs, depositState, depositTitle,
   differenceText, differenceTone, dueGroups, duesTotals, filing, filingBody, formCPill, formCTable, guestLine, handedWords, isDay,
   lastClose, ledgerOwed, ledgerRows, ledgerTable, maskId, money, movementAmount, movementState, noteLine, openLabel, openingOf,
-  owedPill, payBody, peopleWords, reverseBody, saveLabel, tally, unrecordedLine, varianceWords, whyNotClose, whyNotExport,
+  owedPill, payBody, stillUnknown, peopleWords, reverseBody, saveLabel, tally, unrecordedLine, varianceWords, whyNotClose, whyNotExport,
   whyNotPaySupplier, whyNotReadDeposits, whyNotReadDrawer, whyNotReadDues, whyNotReadFormC, whyNotRecordCompanyPayment,
   whyNotReverseCompanyPayment, whyNotRunDrawer, DASH, type CashierDrawer, type FormCRegister, type FormCRow, type ReportDoc,
   type SupplierDue, type SupplierDues,
@@ -15,6 +15,12 @@ import {
 const eq = (got: unknown, want: unknown, what: string) => {
   if (JSON.stringify(got) !== JSON.stringify(want)) throw new Error(`${what}: got ${JSON.stringify(got)}, want ${JSON.stringify(want)}`);
 };
+
+/* ── An unknown outcome stops the screen until a read begun after it is back ── */
+eq(stillUnknown(null, 0), false, "nothing lost");
+eq(stillUnknown(1000, 900), true, "the record on screen was read before the loss");
+eq(stillUnknown(1000, 1000), true, "a read begun at the same moment proves nothing");
+eq(stillUnknown(1000, 1001), false, "a read begun after it came back: the person sees the record");
 
 /* ── Who may: the API's lists and sentences ── */
 eq(whyNotRunDrawer("front_desk"), null, "reception runs a drawer");

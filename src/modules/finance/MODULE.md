@@ -147,10 +147,13 @@ existing `Kit.tsx` (Btn, Field, Input, Choice, Tick, SaidCard, Refused) is impor
 | `/h/:code/form-c` | guests `pages/FormC.tsx`, `data/formC.ts` | `GET /form-c` · `POST /form-c/:reservationId`, `PUT /form-c/:reservationId/details` | read GUEST_ID, write FORM_C (`customer` edit: owner, admin, GM, hotel manager, reception) | refused, "This change" (`/form-c`) |
 | `/h/:code/supplier-dues` | purchasing `pages/SupplierDuesPage.tsx`, `components/SupplierDues.tsx`, `data/purchasing.ts` | `GET /purchasing/dues`, `GET /reports/supplier-dues` (totals) · `POST /purchasing/dues/:id/payment`, `/credit-notes`, `/reverse` | DUES_ROLES (owner, admin, GM, accountant), PURCHASING_REFUSED's words | refused, unlisted |
 
-None of these write routes reads an idempotency key: every write here is latched at the tap and
-STOPS once its outcome is unknown (`useWrite` in DeskKit: the core's `useStuck`, MEMORY 16) until
-the sheet is closed or the screen pulled down and the record read again; a money form empties
-its amount. A keeper per screen per hotel (`deskData.ts`) is passed to `send()` all the same.
+None of these write routes reads an idempotency key: every write here is latched at the tap
+(`useWrite`), and once its outcome is unknown THE SCREEN STOPS (`useStop` in DeskKit, MEMORY 16,
+the reviews of 20 Nov): its sheet closes - the amount typed goes with it - the screen says "Not
+known whether it was …: look at … before trying again", reads the record again, and every write
+on the screen stays grey until a read that BEGAN after the loss has come back
+(`desk.ts stillUnknown`, as pos `dayEnd.ts`; checked and broken once). Closing a sheet unlocks
+nothing. A keeper per screen per hotel (`deskData.ts`) is passed to `send()` all the same.
 
 ## Money: what the server gives, what the phone shows
 
@@ -180,9 +183,11 @@ mistyped box is sent for the server to refuse, QA FI-10).
 4. **A refused act is grey with the server's words** where the web hides it (AGENTS rule 1):
    Verify for the GM ("That is for the owner or the accountant."), Record deposit / Explain /
    Reverse for the accountant and a viewer, Record payment and Reverse on Company accounts.
-5. **On the website for now** (a package or a screen the phone lacks): a paid-out's bill photo
-   and the slip's photo (`expo-image-picker` ~57.0.20), the account's Statement and "Money owed by
-   age" (reports not on the phone), the supplier's Statement. Each is drawn grey; a tap says why.
+5. **On the website for now** (a package the phone lacks): a paid-out's bill photo and the slip's
+   photo, to add or to open (`expo-image-picker` ~57.0.20). Drawn grey; a tap says why. The
+   account's Statement, "Money owed by age" and the supplier's Statement open the reports lanes'
+   screens (`/reports/:code/company-statement?account=`, `/dues-by-age`,
+   `/supplier-statement?supplier=`), on main since 20 Nov.
 6. **Dates are typed YYYY-MM-DD** (M-7: no date-picker package): Deposited on, Received on, Paid
    on, a credit note's date, the right bill's dates; the server checks each.
 7. **Selects are capsules** (Kit `Choice`); **TDS deducted is a Switch** (docs/NATIVE.md).
@@ -206,10 +211,116 @@ Compared by reading the code against the pictures and their words, **never seen 
 | Screen | Picture | Result |
 |---|---|---|
 | Cashiering, no drawer open | `all/39-finance-cashiering` | **Matches** in words, order and grouping: the title, "Your drawer · 11 Oct 2026", the card's title and line, the handed float's sentence (₹2,000.00, paise as the picture), eight note rows ₹500…₹2 with ×, a box showing 0 and a dash, the grey "Count a float to open by hand" with the wallet. Left: the box is 96 px where the picture's is wider. The open shift, the movement and close sheets are **not pictured** (built from the web's code). |
-| Company accounts | `all/40-finance-company-accounts` | **Matches** in words and order: title with the yellow pill, the period line, Record payment (orange), each account a card of OPENING / SENT TO THE ACCOUNT / RECEIVED / BALANCE, the footnote, Payments received and its empty words. Left, on purpose: figures to the paisa (₹7,768.00, MFIN-4); the pill is the report's Total; the export row (M-13); the grey Statement and "Money owed by age" links (the web's code of 16 Nov, newer than the picture: MEMORY 14). |
+| Company accounts | `all/40-finance-company-accounts` | **Matches** in words and order: title with the yellow pill, the period line, Record payment (orange), each account a card of OPENING / SENT TO THE ACCOUNT / RECEIVED / BALANCE, the footnote, Payments received and its empty words. Left, on purpose: figures to the paisa (₹7,768.00, MFIN-4); the pill is the report's Total; the export row (M-13); the Statement and "Money owed by age" links (the web's code of 16 Nov, newer than the picture: MEMORY 14). |
 | Form III | `all/41-finance-form-c` | **Matches**: title and red pill, the line under, the yellow "does not file" notice, the unrecorded adults' sentence, the guest's card (name; nationality · room · in the room; adults recorded in yellow; PASSPORT; ARRIVAL with the time, the overdue pill and "by …"; Record number; DEPARTURE In house; Complete details and the printer). Left: the export row. |
 | Cash deposits | `new/n-h-cash-deposits` | **Matches**: the title and line, Cash to deposit with each day (long date, the points, To deposit / Deposited / Difference in red, Record deposit, Explain), Deposits with the line, the recorded line, the amount, Add slip photo and Reverse. Left: Add slip photo is grey (no picker); Verify shows grey for the GM with the server's words, where the web hides it; the export row. |
-| Supplier dues | `new/n-h-supplier-dues` | **Matches** in words and order: the title and line, "Owed to suppliers: ₹2,152.50 · 1 bill", the supplier's card with Statement, Credit note and its total, the bill with its order's reference, dates, Amount, Left, overdue in red, Record payment, Credit note, Reverse. Left, on purpose: the web's table is a card of labelled figures (it scrolled sideways in the picture); the totals are the report's; Statement grey. |
+| Supplier dues | `new/n-h-supplier-dues` | **Matches** in words and order: the title and line, "Owed to suppliers: ₹2,152.50 · 1 bill", the supplier's card with Statement, Credit note and its total, the bill with its order's reference, dates, Amount, Left, overdue in red, Record payment, Credit note, Reverse. Left, on purpose: the web's table is a card of labelled figures (it scrolled sideways in the picture); the totals are the report's. |
 
 **5 of 5 screens match their pictures** in words, order and grouping, each with the differences
 listed and their reasons; the states the pictures do not show are built from the web's code.
+
+---
+
+# Lane B, m13-fin-bills (19-20 Nov): Folios, Invoices, Payments, an invoice's page
+
+**Web twin:** `src/modules/finance/pages/Folios.tsx`, `Billing.tsx` (PaymentsPage), `Invoices.tsx`,
+`Invoice.tsx`, `VatBill.tsx`, `flows/CreditNoteFlow.tsx`, `flows/IssueInvoiceDialog.tsx`; data
+`data/folios.ts`, `data/billing.ts`; the API `api/src/modules/finance/folios.ts` (GET /folios),
+`billing.ts` (GET /payments, /billable), `invoices.ts` (GET /invoices, /invoices/:number,
+/invoice-series, /vat-bills, /vat-bills/:number; POST /stays/:id/invoice, /invoices/:number/credit-note,
+/vat-bills/:number/cancel), `front-desk/stays.ts` (GET /stays?owing=1). **Gates** (`roleGate.ts`):
+every read here is BILLS (`invoice` view: owner, admin, GM, hotel manager, reception, accountant,
+viewer) except GET /payments, MONEY (`payment` view, the same seven); Issue is TAX_INVOICE (`invoice`
+create: the six without the viewer); a credit note CREDIT_NOTE and a VAT bill's cancellation VAT_CANCEL
+(`invoice` approve: owner, admin, GM, accountant). **Offline** (`core/offline.ts`): Issue and a credit
+note refused, "An invoice cannot be raised offline…"; a VAT bill's cancellation refused, unlisted,
+"This cannot be done offline yet…". Nothing is held.
+
+## Screens
+
+| Screen | Route → file | Web twin |
+|---|---|---|
+| Folios | `app/finance/[code]/folios.tsx` → `Folios.tsx` | `/h/:code/folios` |
+| Invoices | `app/finance/[code]/invoices.tsx` → `Invoices.tsx` | `/h/:code/invoices` |
+| Payments | `app/finance/[code]/payments.tsx` → `Payments.tsx` | `/h/:code/payments` |
+| A tax invoice or credit note | `app/finance/[code]/invoice.tsx?number=…` → `InvoiceDoc.tsx` | `/h/:code/invoices/doc/*` |
+| A VAT bill | `app/finance/[code]/vat-bill.tsx?number=…` → `InvoiceDoc.tsx` | `/h/:code/invoices/vat/*` |
+
+A document's number carries slashes (5EL/2026-27/00001): it rides as `?number=`, because the gate's
+route check reads only lower-case `[segments]` and a catch-all would never match (MEMORY 10). A folio
+row opens the stay's own bill, `/folio/<code>/<stay id>` (Folio.tsx, unchanged). Menu: PHONE_ROUTES
+`/h/:code/folios|invoices|payments` → `/finance/:code/…`.
+
+Files (new): `books.ts` + `books.check.ts` (the rules, the API's sentences, the write paths),
+`booksData.ts` (reads and writes), `BooksKit.tsx` (Act, BookSheet with safe areas, More, Note),
+`Folios.tsx`, `Payments.tsx`, `Invoices.tsx`, `InvoiceDoc.tsx`. Imported, never edited: finance's
+`bill.ts` (`rupees`), `data.ts` (`issueInvoice`, the stay's key keeper), `Kit.tsx`, `roles.ts`; the
+front desk's `desk.ts`, `kit.tsx`, `StayList.tsx` (`NotRead`, `Kept`); guests' `Tile`, `Line`;
+reports' `IconChip`; guest-services' `dateTime`; the core's `ExportButtons`.
+
+## Money: where each rule is enforced
+
+| Rule | Where |
+|---|---|
+| Every figure the server's, to the paisa | `bill.ts` `rupees` everywhere; `books.ts` `balanceShown` (checked at ₹7,582.50, ₹0.20, an overpaid ₹784 that is never ₹0, a real ₹0.00, a dash for not sent) |
+| The phone sums no money | `books.ts` `openCounts`, `methodCounts` COUNT rows (checked: no amount field is made); no total anywhere |
+| Never clamped | `balanceShown` (`Math.abs` with "over" and the colour, as StayTable; the clamp broken once and seen to fail) |
+| Who may, in the API's words, disabled with its reason | `books.ts` `whyNotReadBills`, `whyNotReadPayments`, `whyNotCreditNote`, `whyNotCancelVat`; finance `roles.ts` `whyNotInvoice` (checked; the credit note's list widened once and seen to fail) |
+| Refused offline in the web's sentence | `books.check.ts` runs `ruleFor` on each write path |
+| One tap, one write; an unknown outcome stops the button | `Invoices.tsx` IssueSheet and `InvoiceDoc.tsx` CancelSheet: a `useRef` latch at the tap, `useStuck` + `notKnown` on `outcomeUnknown`, closed → the list read again. The server also answers a repeat with the document already made (invoices.ts "duplicate") |
+| A key per document | `booksData.ts` one keeper per invoice / VAT bill, `seen()` after its read; Issue uses the stay's keeper in `data.ts` |
+| A server time read as ISO | Payments' `at` through guest-services `dateTime` → `instant()` (checked) |
+
+## Where the phone differs from the web, and why
+
+1. **Folios' three tiles** (Outstanding, Overpaid, Net position) and the overpaid banner's "₹X to
+   return" are the browser's sums of the balances. The server sends no total: the tiles keep their
+   counts ("12 folios owing", "Nothing to refund") and show a dash, with a line saying why. Asked of
+   the PMS (a total on GET /folios).
+2. **Payments' tile per way of paying and Total received** are the browser's sums. The phone counts
+   the live receipts per method ("290 receipts", reversals out) and shows a dash for the figure;
+   the tiles are ordered by count, where the web orders by the summed amount. Asked of the PMS.
+3. **Every figure to the paisa** (₹1,050.00) where the web's money() prints whole rupees (finance
+   difference 8, MFIN-4).
+4. **A settled bill's balance on Invoices is ₹0.00**, where the web prints a dash: a dash means
+   "not sent" (MFIN-4).
+5. **An invoice's page** prints each line's own taxable value and its own GST (rate and amount, as the
+   server sent them) and the invoice's stored Taxable value, SGST, CGST, Total tax and Total. The web's
+   per-line CGST/SGST split (`splitByLine`), the rate-wise tax table (`rateWise`), Total charges, Total
+   discount, Total payment and Balance are worked out in the browser, so they are not drawn; the
+   payments received are listed, not totalled. No logos, no signature lines, no UPI QR (a package).
+6. **Print and Send invoice** are grey, "On the website for now": the printed tax invoice is the
+   legal document and carries the browser's per-line split (Rule 46); Send needs guest messaging's
+   connection state, not on the phone. Asked of the owner.
+7. **GST and VAT rates** (TaxRulesCard, for the four who may set one): a note "On the website for
+   now", not the form.
+8. **Long lists page by 50** with "Show more" and "N of M shown" (Invoices' ready-to-bill list ran
+   to 765 rows in the picture); the web draws every row.
+9. **Group bills** are listed with their balance but are not links: a group's page is not on the
+   phone.
+10. **Cancel this invoice / VAT bill** for a role the API refuses is grey with the server's sentence
+    ("Issuing a credit note is for…"), where the web's button carries its own words ("Cancelling an
+    invoice is for…"). Not offered on a credit note or a cancelled document, as the web.
+11. Not offered on Payments, as the web: a refund (it is taken on the stay's bill, FolioPanel).
+
+## States
+
+Each screen: loading ("Reading the open folios…", "Reading the invoices…", "Reading the payments…",
+"Reading the invoice…"), failed (the server's words and Try again), offline ("No connection … once
+the line is back", the front desk's `NotRead`; a failed re-read over rows shown says so, `Kept`),
+empty (the web's words: "Every folio is settled", "Nothing has departed yet", "No invoice has been
+issued", "No payments yet"), refused (the API's sentence, no read).
+
+## Picture match (20 Nov)
+
+Compared by reading the code against the pictures and their words, **never seen running**.
+
+| Screen | Pictures | Result |
+|---|---|---|
+| Folios | `all/36-finance-folios` (dev-gm) | **Differences left:** (1) the three tiles show a dash for the figure (difference 1); (2) balances to the paisa (₹1,050.00, difference 3); (3) "Show more" past 50 rows; (4) export buttons at the foot (the web's are in the table's head). The rest matches: title and "12 open" pill, the description, the tiles' labels, chips and notes in order, the search box with "12 of 12", each card (room, state pill, chevron, guest, reference, Type / Arrival / Departure / Balance in red), the closing note. |
+| Invoices | `all/37-finance-invoices` (dev-gm) | **Differences left:** (1) figures to the paisa; (2) a settled balance ₹0.00, not "-" (difference 4); (3) "Show more" past 50 (the picture's list is 765 rows); (4) the GST and VAT rates note (the picture, as the GM, ends with the web's tax card). The rest matches: the pill "765 ready to bill", the two notes with the series line, each bill's card (guest, room · reference, BILLED TO, NIGHTS, CHARGES, TAX, BALANCE, Issue), Issued with its description and cards. |
+| Payments | `all/38-finance-payments` (dev-gm) | **Differences left:** (1) the method tiles and Total received show a dash (difference 2); (2) amounts to the paisa; (3) "Show more" past 50. The rest matches: the description, the tiles' labels and "N receipts" / "Reversals excluded" notes, each receipt's card (time, GUEST with room · reference, struck when reversed, METHOD pill with "Reversed", NARRATION, TAKEN BY, AMOUNT struck when reversed), the closing note on reversals. |
+| An invoice's page, a VAT bill's page | **None** (no picture of `/invoices/doc/…` or `/invoices/vat/…`) | Not pictured: built from `Invoice.tsx` and `VatBill.tsx`. |
+
+**3 of 5 screens have pictures; none of the 3 matches exactly** — every difference left is one of the
+money rules (no phone sum, paise kept, a dash only for "not sent") or the phone's paging.

@@ -9,7 +9,7 @@ import { orNull, type Hotel } from "../../core/api";
 import { DASH, cash, count, dateLong, monthStart, pct } from "../../core/format";
 import { isOnline } from "../../core/offline";
 import { c, face, space, t } from "../../core/theme";
-import { Capsule, Card, Head, ReadFailed, Screen, s, useRead } from "../../core/ui";
+import { Capsule, Card, Head, ReadFailed, Screen, s, useRead, ripple, shade } from "../../core/ui";
 import { NightsAhead, OccupancyByDay, RevenueSplit, RoomStrip, Spark } from "./Charts";
 import {
   LAST_DAYS, addDays, dateYear, houseRooms, lastDays, methodsToday, monthDays, monthName, pick, todaysWork,
@@ -314,12 +314,12 @@ function WorkTile({ icon, chip, label, n, left, state, note, loading, onPress }:
 }) {
   const tone = TILE[state];
   return (
-    <Pressable
+    <Pressable android_ripple={ripple}
       disabled={!onPress}
       onPress={onPress}
       accessibilityRole={onPress ? "button" : undefined}
       accessibilityHint={onPress ? `Opens ${label.toLowerCase()}` : undefined}
-      style={({ pressed }) => ({ flexBasis: "47%", flexGrow: 1, backgroundColor: pressed ? c.grey100 : tone.bg, borderColor: tone.ring, borderWidth: 1, borderRadius: 12, paddingHorizontal: 14, paddingVertical: 12, gap: 6 })}
+      style={shade(({ pressed }) => ({ flexBasis: "47%", flexGrow: 1, backgroundColor: pressed ? c.grey100 : tone.bg, borderColor: tone.ring, borderWidth: 1, borderRadius: 12, paddingHorizontal: 14, paddingVertical: 12, gap: 6 }))}
     >
       <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
         <IconChip icon={icon} tone={chip} size={24} />
@@ -356,7 +356,7 @@ function MoneyItem({ icon, tone = "neutral", label, term, value, note, bar, warn
         <View style={{ flex: 1, gap: 2 }}>
           {term ? <Term name={term} style={t.label}>{label}</Term> : elsewhere ? (
             /* Not `disabled`: the tap is when a person asks why (the web's D17-8). */
-            <Pressable
+            <Pressable android_ripple={ripple}
               onPress={() => setWhy(true)} accessibilityRole="button" accessibilityLabel={label} accessibilityState={{ disabled: true }} accessibilityHint={WEBSITE}
               style={{ minHeight: 44, marginVertical: -12, flexDirection: "row", alignItems: "center", gap: 4, alignSelf: "flex-start" }}
             >

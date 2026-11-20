@@ -4,7 +4,7 @@ import { Pressable, Text, View } from "react-native";
 import { api, type Hotel } from "../../core/api";
 import { cash } from "../../core/format";
 import { c, face, t } from "../../core/theme";
-import { notKnown, useRead } from "../../core/ui";
+import { notKnown, useRead, ripple, shade } from "../../core/ui";
 import { MOST_OF_A_CUSTOM, MOST_OF_ONE, customiseAct, whyNotCustom } from "./order";
 import { Btn, Choice, Field, Input, Refused, Sheet, type Write } from "./OrderSheets";
 import type { CustomAddon, LineAddon, NumberedAddon, Order, OrderLine } from "./types";
@@ -112,7 +112,7 @@ export function CustomiseSheet({ hotel, order, line, onClose, write }: {
               const off = Boolean(a.offUntil && Date.parse(a.offUntil) > Date.now());
               const n = chosen.find((x) => x.id === a.id)?.qty ?? 0;
               return (
-                <Pressable
+                <Pressable android_ripple={ripple}
                   key={a.id} disabled={off} onPress={() => add(a)} accessibilityRole="button"
                   accessibilityLabel={`Add-on ${a.number}, ${a.name}${n ? `, ${n} on this dish` : ""}`} accessibilityState={{ disabled: off }}
                   style={{
@@ -159,12 +159,12 @@ export function CustomiseSheet({ hotel, order, line, onClose, write }: {
 
 function Round({ label, Icon, onPress, off }: { label: string; Icon: typeof X; onPress: () => void; off?: boolean }) {
   return (
-    <Pressable
+    <Pressable android_ripple={ripple}
       onPress={onPress} disabled={off} accessibilityRole="button" accessibilityLabel={label} accessibilityState={{ disabled: Boolean(off) }}
-      style={({ pressed }) => ({
+      style={shade(({ pressed }) => ({
         width: 44, height: 44, borderRadius: 22, borderWidth: 1, borderColor: c.grey300, alignItems: "center", justifyContent: "center",
         backgroundColor: pressed ? c.grey100 : c.white, opacity: off ? 0.4 : 1,
-      })}
+      }))}
     >
       <Icon size={16} color={c.grey600} />
     </Pressable>
@@ -193,7 +193,7 @@ function CustomForm({ onAdd }: { onAdd: (x: CustomAddon) => void }) {
       <Field label="Price" required={!free} hint="Taxed at the dish's own rate.">
         <Input label="Price" value={free ? "" : price} onChangeText={setPrice} placeholder={free ? "Free" : "40"} number editable={!free} />
       </Field>
-      <Pressable
+      <Pressable android_ripple={ripple}
         onPress={() => setFree(!free)} accessibilityRole="checkbox" accessibilityState={{ checked: free }} accessibilityLabel="Free"
         style={{ minHeight: 44, flexDirection: "row", alignItems: "center", gap: 10 }}
       >

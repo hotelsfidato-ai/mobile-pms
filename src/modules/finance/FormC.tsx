@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Text, View } from "react-native";
 import type { Hotel } from "../../core/api";
 import { c, face, t } from "../../core/theme";
-import { Card, Screen, notKnown, useRead } from "../../core/ui";
+import { Card, Screen } from "../../core/ui";
 import {
   GENDERS, ID_TYPES, PERSON, PURPOSES, VISIT, idNumberProblem, particularsPayload, requiredKeys, type Spec,
 } from "../front-desk/guestId";
@@ -15,7 +15,7 @@ import {
   type FilingKind, type FormCRegister, type FormCRow,
 } from "./desk";
 import { completeDetails, readFormC, recordFiling } from "./deskData";
-import { DeskExport, DeskSheet, PageHead, ReadState, RefusedCard, TextAct, TonePill, failedSaid, useWrite } from "./DeskKit";
+import { DeskExport, DeskSheet, PageHead, ReadState, RefusedCard, TextAct, TonePill, failedSaid, useWrite, StopCard, useDeskRead, useStop, type Stop } from "./DeskKit";
 import { Btn, Choice, Field, IconBtn, Input, Refused, SaidCard, type Said } from "./Kit";
 
 /* ══════════════════════════════════════════════════════════════════
@@ -40,13 +40,13 @@ export function FormC({ hotel, role }: { hotel: Hotel; role: string | null }) {
   const code = hotel.code;
   const cache = useQueryClient();
   const refused = whyNotReadFormC(role);
-  const q = useRead(() => (refused ? Promise.resolve(null) : readFormC(code)), ["finance", code, "form-c"]);
+  const q = useDeskRead(() => (refused ? Promise.resolve(null) : readFormC(code)), ["finance", code, "desk", "form-c"]);
+  const stop = useStop(q.began);
   const [said, setSaid] = useState<Said | null>(null);
   const [editing, setEditing] = useState<FormCRow | null>(null);
   const [card, setCard] = useState<FormCRow | null>(null);
-  const [round, setRound] = useState(0);
   const [pulled, setPulled] = useState(false);
-  const pull = () => { setPulled(true); setRound((n) => n + 1); q.reload(); };
+  const pull = () => { setPulled(true); q.reload(); };
   const done = (s: Said | null) => { if (s) setSaid(s); void cache.invalidateQueries({ queryKey: ["finance", code] }); };
   const d = q.data;
   const pill = d ? formCPill(d) : null;
@@ -68,6 +68,7 @@ export function FormC({ hotel, role }: { hotel: Hotel; role: string | null }) {
           </View>
           {d && unrecordedLine(d) ? <Text style={[t.label, { color: c.yellow800, lineHeight: 21 }]}>{unrecordedLine(d)}</Text> : null}
           {said ? <SaidCard said={said} /> : null}
+      <StopCard stop={stop} />
           {!d ? <ReadState what="the Form III register" reading="Reading the Form III register…" error={q.error} onRetry={q.reload} />
             : d.rows.length === 0 ? (
               <Card style={{ alignItems: "center", gap: 6, paddingVertical: 24 }}>
@@ -75,7 +76,7 @@ export function FormC({ hotel, role }: { hotel: Hotel; role: string | null }) {
                 <Text style={t.heading}>No foreign nationals have stayed</Text>
                 <Text style={[t.label, { textAlign: "center", lineHeight: 20 }]}>Nothing is owed to the FRRO. A guest whose nationality is anything other than IN appears here on arrival.</Text>
               </Card>
-            ) : <Register key={round} code={code} d={d} why={whyNotRecordFormC(role)} onSaid={setSaid} onDone={done} onEdit={setEditing} onCard={setCard} />}
+            ) : <Register stop={stop} code={code} d={d} why={whyNotRecordFormC(role)} onSaid={setSaid} onDone={done} onEdit={setEditing} onCard={setCard} />}
           {d && allFiled(d) ? (
             <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
               <Check size={16} color={c.success} />
@@ -84,7 +85,7 @@ export function FormC({ hotel, role }: { hotel: Hotel; role: string | null }) {
           ) : null}
         </>
       )}
-      {editing ? <CompleteDetails code={code} row={editing} idsOff={(hotel as Hotel & { deskRules?: DeskRules }).deskRules?.idTypesOff ?? []} onClose={() => setEditing(null)} onDone={done} /> : null}
+      {editing ? <CompleteDetails stop={stop} code={code} row={editing} idsOff={(hotel as Hotel & { deskRules?: DeskRules }).deskRules?.idTypesOff ?? []} onClose={() => setEditing(null)} onDone={done} /> : null}
       {card && d ? <CardSheet hotel={hotel} row={card} premises={d.premises} onClose={() => setCard(null)} /> : null}
     </Screen>
   );
@@ -92,13 +93,13 @@ export function FormC({ hotel, role }: { hotel: Hotel; role: string | null }) {
 
 /* The rows, and the portal's number typed where the button was. Keyed by the screen's pulls:
    a filing whose outcome is unknown stays stuck until the register is read again. */
-function Register({ code, d, why, onSaid, onDone, onEdit, onCard }: {
-  code: string; d: FormCRegister; why: string | null; onSaid: (s: Said) => void; onDone: (s: Said | null) => void;
+function Register({ stop, code, d, why, onSaid, onDone, onEdit, onCard }: {
+  stop: Stop; code: string; d: FormCRegister; why: string | null; onSaid: (s: Said) => void; onDone: (s: Said | null) => void;
   onEdit: (r: FormCRow) => void; onCard: (r: FormCRow) => void;
 }) {
   const [open, setOpen] = useState<{ id: string; kind: FilingKind } | null>(null);
   const [reference, setReference] = useState("");
-  const w = useWrite();
+  const w = useWrite(stop, "recorded", "the register");
   const refused = (why: string) => onSaid({ tone: "refused", title: "Not recorded", text: why });
   const save = (r: FormCRow, kind: FilingKind) => void w.run(async () => {
     await recordFiling(code, r.reservationId, filingBody(r, kind, reference));
@@ -115,7 +116,6 @@ function Register({ code, d, why, onSaid, onDone, onEdit, onCard }: {
           <Btn label="Save" kind="primary" busy={w.busy} off={!reference.trim() || w.stuck} onPress={() => save(r, kind)} />
           <Btn label="Cancel" kind="ghost" onPress={() => setOpen(null)} />
         </View>
-        {w.stuck ? <Text style={t.caption}>{notKnown("recorded", "the register").line} Pull down to read it again.</Text> : null}
       </View>
     ) : (
       <View style={{ flexDirection: "row" }}>
@@ -172,14 +172,14 @@ function Register({ code, d, why, onSaid, onDone, onEdit, onCard }: {
 }
 
 /* ── Complete details: what check-in left blank, filled in later ── */
-function CompleteDetails({ code, row, idsOff, onClose, onDone }: {
-  code: string; row: FormCRow; idsOff: string[]; onClose: () => void; onDone: (s: Said | null) => void;
+function CompleteDetails({ stop, code, row, idsOff, onClose, onDone }: {
+  stop: Stop; code: string; row: FormCRow; idsOff: string[]; onClose: () => void; onDone: (s: Said | null) => void;
 }) {
   const [value, setValue] = useState<Record<string, string>>(() => particularsOf(row));
   const [idType, setIdType] = useState(typeof row["idType"] === "string" ? (row["idType"] as string) : "");
   const [idNumber, setIdNumber] = useState(row.passport ?? "");
   const [problem, setProblem] = useState<string | null>(null);
-  const w = useWrite();
+  const w = useWrite(stop, "saved", "the guest's details");
   const doc = documentChange(row, idType, idNumber, idNumberProblem);
   const required = new Set(requiredKeys(row.nationality, Boolean(idType && idNumber.trim())));
   const close = () => { onClose(); onDone(null); };
@@ -195,7 +195,7 @@ function CompleteDetails({ code, row, idsOff, onClose, onDone }: {
       await completeDetails(code, row.reservationId, body);
       onClose();
       onDone(null);
-    }, (e) => { const x = failedSaid(e, "Nothing was saved", "saved", "the guest's details"); setProblem(x.text ? `${x.title}. ${x.text}` : x.title); });
+    }, (e, lost) => { const x = failedSaid(e, "Nothing was saved", "saved", "the guest's details"); if (lost) { onClose(); onDone(x); return; } setProblem(x.text ? `${x.title}. ${x.text}` : x.title); });
   };
   const box = ([key, label, kind]: Spec) => {
     if (key === "purposeOther" && value["purpose"] !== "others") return null;
@@ -235,7 +235,6 @@ function CompleteDetails({ code, row, idsOff, onClose, onDone }: {
         {VISIT.map(box)}
         {row.status === "checked_out" ? box(["nextDestination", "Next destination", "text"]) : null}
       </View>
-      {w.stuck ? <Text style={t.caption}>{notKnown("saved", "the guest's details").line} Close this and read the register again.</Text> : null}
     </DeskSheet>
   );
 }

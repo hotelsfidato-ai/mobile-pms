@@ -2,14 +2,15 @@ import { ChevronDown, ChevronRight, Lightbulb, TrendingUp } from "lucide-react-n
 import { useState, type ReactNode } from "react";
 import { Pressable, Text, View } from "react-native";
 import type { Hotel } from "../../core/api";
-import { DASH } from "../../core/format";
+import { DASH, count, pct } from "../../core/format";
+import { ListExport } from "../reports/ListExport";
 import { c, space, t } from "../../core/theme";
-import { Capsule, Head, Screen, useRead } from "../../core/ui";
+import { Capsule, Head, Screen, useRead, ripple } from "../../core/ui";
 import { readNearby, readOutlook, readPace, readPickup } from "./data";
 import { CardHead, Empty, Failed, Frame, Pill, Refused, Skeleton, Stale, body, small, strong } from "./kit";
 import {
   TONE, WORD, aheadBy, dateLines, dayYear, datesWorthALook, nearbyLine, nearbySummary, onTheBooksAWeekAgo, paceTiles,
-  pickupNote, rivalPrice, suggestions, temperOf, whyNoPickup, type CheckedNight, type Tile,
+  pickupNote, pickupOn, rivalPrice, suggestions, temperOf, whyNoPickup, type CheckedNight, type Tile,
 } from "./outlook";
 import { mayOpen, notYourRole, whyNotRead } from "./roles";
 
@@ -86,6 +87,15 @@ export function Outlook({ hotel, role }: { hotel: Hotel; role: string | null }) 
   return (
     <Screen refreshing={refreshing} onRefresh={reload}>
       <Head title="Revenue outlook" under={DESCRIPTION} />
+      {/* The web's nightExport: every night ahead the outlook read, with its pickup (a dash where it is not counted). */}
+      <ListExport screen="revenue-outlook" role={role} table={reading ? null : {
+        subtitle: [today ? `From ${dayYear(today)}` : "", noPickup ? `Pickup ${noPickup}` : ""].filter(Boolean).join(" · "),
+        columns: ["Date", "Days out", "Rooms left", "Of", "Sold", "New 1 day", "New 7 days", "New 30 days", "Reads"],
+        rows: days.map((d) => {
+          const p = pickupOn(picked, d.date);
+          return [dayYear(d.date), count(d.daysOut), count(d.left), count(d.available), pct(d.occupancyPct), count(p.last1), count(p.last7), count(p.last30), WORD[temperOf(d)]];
+        }),
+      }} />
       <Stale error={stale} />
 
       {/* Pace - this month, against the same month last year. */}
@@ -209,7 +219,7 @@ function Nearby({ night, failed }: { night: CheckedNight | undefined; failed: bo
   const Chevron = open ? ChevronDown : ChevronRight;
   return (
     <View>
-      <Pressable
+      <Pressable android_ripple={ripple}
         onPress={() => setOpen(!open)} accessibilityRole="button" accessibilityLabel={line} accessibilityState={{ expanded: open }}
         style={{ minHeight: 44, flexDirection: "row", alignItems: "center", gap: 4 }}
       >

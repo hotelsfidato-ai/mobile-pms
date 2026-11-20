@@ -4,9 +4,8 @@ import { HandCoins } from "lucide-react-native";
 import { useState } from "react";
 import { Text, View } from "react-native";
 import type { Hotel } from "../../core/api";
-import { ON_THE_WEBSITE } from "../../core/menu";
 import { c, face, t } from "../../core/theme";
-import { Card, Screen, notKnown, useRead } from "../../core/ui";
+import { Card, Screen } from "../../core/ui";
 import { suggestedDue } from "../purchasing/purchase";
 import {
   PAY_METHODS, TDS_SECTIONS, billFrom, creditBody, creditText, dateDay, differenceText, dueGroups, duesHead, duesTotals, isOverdue,
@@ -14,7 +13,7 @@ import {
   type DueGroup, type PayForm, type Reversing, type SupplierDue,
 } from "./desk";
 import { addCreditNote, paySupplier, readDues, readDuesReport, reverseDueEntry } from "./deskData";
-import { DeskSheet, Figure, OnOff, PageHead, ReadState, RefusedCard, TextAct, failedSaid, useWrite } from "./DeskKit";
+import { DeskSheet, Figure, OnOff, PageHead, ReadState, RefusedCard, TextAct, failedSaid, useWrite, StopCard, useDeskRead, useStop, type Stop } from "./DeskKit";
 import { Btn, Choice, Field, Input, Refused, SaidCard, Tick, type Said } from "./Kit";
 
 /* ══════════════════════════════════════════════════════════════════
@@ -38,9 +37,10 @@ export function SupplierDues({ hotel, role }: { hotel: Hotel; role: string | nul
   const code = hotel.code;
   const cache = useQueryClient();
   const refused = whyNotReadDues(role);
-  const q = useRead(() => (refused ? Promise.resolve(null) : readDues(code)), ["finance", code, "dues"]);
+  const q = useDeskRead(() => (refused ? Promise.resolve(null) : readDues(code)), ["finance", code, "desk", "dues"]);
+  const stop = useStop(q.began);
   const today = q.data?.today ?? null;
-  const rep = useRead(() => (refused || !today ? Promise.resolve(null) : readDuesReport(code, today)), ["finance", code, "dues-report", today ?? ""]);
+  const rep = useDeskRead(() => (refused || !today ? Promise.resolve(null) : readDuesReport(code, today)), ["finance", code, "desk", "dues-report", today ?? ""]);
   const [said, setSaid] = useState<Said | null>(null);
   const [sheet, setSheet] = useState<Sheet | null>(null);
   const [pulled, setPulled] = useState(false);
@@ -55,6 +55,7 @@ export function SupplierDues({ hotel, role }: { hotel: Hotel; role: string | nul
     <Screen refreshing={pulled && q.loading} onRefresh={pull}>
       <PageHead title="Supplier dues" under="What we owe suppliers: the bills taken on credit, what is paid and what is left." />
       {said ? <SaidCard said={said} /> : null}
+      <StopCard stop={stop} />
       {refused ? <RefusedCard title="Supplier dues" why={refused} />
         : !d ? <ReadState what="the supplier dues" reading="Reading the supplier dues…" error={q.error} onRetry={q.reload} />
         : d.bills.length === 0 && d.credits.length === 0 ? (
@@ -76,9 +77,9 @@ export function SupplierDues({ hotel, role }: { hotel: Hotel; role: string | nul
             ))}
           </>
         )}
-      {sheet?.kind === "pay" && d ? <PaySheet code={code} bill={sheet.bill} today={d.today} onClose={() => setSheet(null)} onDone={done} /> : null}
-      {sheet?.kind === "credit" && d ? <CreditSheet code={code} target={sheet} today={d.today} onClose={() => setSheet(null)} onDone={done} /> : null}
-      {sheet?.kind === "reverse" ? <ReverseSheet code={code} entry={sheet.entry} onClose={() => setSheet(null)} onDone={done} /> : null}
+      {sheet?.kind === "pay" && d ? <PaySheet stop={stop} code={code} bill={sheet.bill} today={d.today} onClose={() => setSheet(null)} onDone={done} /> : null}
+      {sheet?.kind === "credit" && d ? <CreditSheet stop={stop} code={code} target={sheet} today={d.today} onClose={() => setSheet(null)} onDone={done} /> : null}
+      {sheet?.kind === "reverse" ? <ReverseSheet stop={stop} code={code} entry={sheet.entry} onClose={() => setSheet(null)} onDone={done} /> : null}
     </Screen>
   );
 }
@@ -94,7 +95,7 @@ function Group({ code, g, today, total, why, onRefused, onSheet }: {
         <Text style={[t.heading, { flex: 1, minWidth: 140 }]}>{g.name}</Text>
         {g.supplierId ? (
           <>
-            <TextAct label="Statement" underline tone="grey" why={ON_THE_WEBSITE} onRefused={onRefused("Statement")} onPress={() => undefined} />
+            <TextAct label="Statement" underline tone="grey" onPress={() => router.push(`/reports/${code}/supplier-statement?supplier=${g.supplierId}`)} />
             <TextAct label="Credit note" tone="grey" why={why} onRefused={onRefused("Not recorded")}
               onPress={() => onSheet({ kind: "credit", bill: null, supplierId: g.supplierId!, supplier: g.name })} />
           </>
@@ -158,11 +159,11 @@ function Entry({ text, reversed, why, onRefused, onReverse }: { text: string; re
   );
 }
 
-function PaySheet({ code, bill, today, onClose, onDone }: { code: string; bill: SupplierDue; today: string; onClose: () => void; onDone: (s: Said | null) => void }) {
+function PaySheet({ stop, code, bill, today, onClose, onDone }: { stop: Stop; code: string; bill: SupplierDue; today: string; onClose: () => void; onDone: (s: Said | null) => void }) {
   const [f, setF] = useState<PayForm>({ amount: bill.owed, method: "", reference: "", paidOn: today, handedOverBy: "", withTds: false, section: "", rate: "", tdsAmount: "", seen: false });
   const set = <K extends keyof PayForm>(k: K) => (v: PayForm[K]) => setF((o) => ({ ...o, [k]: v }));
   const [problem, setProblem] = useState<string | null>(null);
-  const w = useWrite();
+  const w = useWrite(stop, "recorded", "the bill");
   const close = () => { onClose(); onDone(null); };
   const submit = () => {
     const r = payBody(bill, f);
@@ -173,10 +174,9 @@ function PaySheet({ code, bill, today, onClose, onDone }: { code: string; bill: 
       await paySupplier(code, bill.id, sent);
       onClose();
       onDone({ tone: "ok", title: `Payment recorded on bill ${bill.billNo}`, text: `${rupees(sent.amount)} to ${bill.supplier}.` });
-    }, (e) => {
+    }, (e, lost) => {
       const x = failedSaid(e, "Not recorded", "recorded", "the bill");
-      /* Not known whether it went: the amount is emptied, so a repeat is typed on purpose (MEMORY 16). */
-      if (x.tone === "warn") setF((o) => ({ ...o, amount: "" }));
+      if (lost) { onClose(); onDone(x); return; }
       setProblem(x.text ? `${x.title}. ${x.text}` : x.title);
     });
   };
@@ -225,19 +225,18 @@ function PaySheet({ code, bill, today, onClose, onDone }: { code: string; bill: 
           </Field>
         </>
       ) : null}
-      {w.stuck ? <Text style={t.caption}>{notKnown("recorded", "the bill").line} Close this and read the dues again.</Text> : null}
       <Refused text={problem} />
     </DeskSheet>
   );
 }
 
-function CreditSheet({ code, target, today, onClose, onDone }: {
-  code: string; target: { bill: SupplierDue | null; supplierId: string; supplier: string }; today: string; onClose: () => void; onDone: (s: Said | null) => void;
+function CreditSheet({ stop, code, target, today, onClose, onDone }: {
+  stop: Stop; code: string; target: { bill: SupplierDue | null; supplierId: string; supplier: string }; today: string; onClose: () => void; onDone: (s: Said | null) => void;
 }) {
   const [f, setF] = useState({ issuedBy: "supplier" as "supplier" | "hotel", noteNo: "", noteDate: today, amount: "", reason: "" });
   const set = <K extends keyof typeof f>(k: K) => (v: (typeof f)[K]) => setF((o) => ({ ...o, [k]: v }));
   const [problem, setProblem] = useState<string | null>(null);
-  const w = useWrite();
+  const w = useWrite(stop, "recorded", "the dues");
   const close = () => { onClose(); onDone(null); };
   const submit = () => {
     const r = creditBody(target, f);
@@ -248,9 +247,9 @@ function CreditSheet({ code, target, today, onClose, onDone }: {
       await addCreditNote(code, sent);
       onClose();
       onDone({ tone: "ok", title: `Credit note ${sent.noteNo} recorded`, text: `${rupees(sent.amount)} off what is owed to ${target.supplier}.` });
-    }, (e) => {
+    }, (e, lost) => {
       const x = failedSaid(e, "Not recorded", "recorded", "the dues");
-      if (x.tone === "warn") setF((o) => ({ ...o, amount: "" }));
+      if (lost) { onClose(); onDone(x); return; }
       setProblem(x.text ? `${x.title}. ${x.text}` : x.title);
     });
   };
@@ -271,18 +270,17 @@ function CreditSheet({ code, target, today, onClose, onDone }: {
       <Field label="Date" hint="As YYYY-MM-DD."><Input value={f.noteDate} onChange={set("noteDate")} label="Date" keyboard="numbers-and-punctuation" placeholder="YYYY-MM-DD" tabular /></Field>
       <Field label="Amount"><Input value={f.amount} onChange={set("amount")} label="Amount" keyboard="decimal-pad" tabular /></Field>
       <Field label="What it is for"><Input value={f.reason} onChange={set("reason")} label="What it is for" maxLength={200} /></Field>
-      {w.stuck ? <Text style={t.caption}>{notKnown("recorded", "the dues").line} Close this and read the dues again.</Text> : null}
       <Refused text={problem} />
     </DeskSheet>
   );
 }
 
-function ReverseSheet({ code, entry, onClose, onDone }: { code: string; entry: Reversing; onClose: () => void; onDone: (s: Said | null) => void }) {
+function ReverseSheet({ stop, code, entry, onClose, onDone }: { stop: Stop; code: string; entry: Reversing; onClose: () => void; onDone: (s: Said | null) => void }) {
   const [reason, setReason] = useState("");
   /* A wrong bill may be followed by its right one (D27-372): optional. */
   const [right, setRight] = useState({ billNo: "", billDate: "", amount: "", dueOn: "" });
   const [problem, setProblem] = useState<string | null>(null);
-  const w = useWrite();
+  const w = useWrite(stop, "reversed", "the dues");
   const close = () => { onClose(); onDone(null); };
   const submit = () => {
     const r = reverseBody(entry, reason, right);
@@ -293,7 +291,7 @@ function ReverseSheet({ code, entry, onClose, onDone }: { code: string; entry: R
       await reverseDueEntry(code, sent);
       onClose();
       onDone({ tone: "ok", title: `Reversed ${entry.what}` });
-    }, (e) => { const x = failedSaid(e, "Not reversed", "reversed", "the dues"); setProblem(x.text ? `${x.title}. ${x.text}` : x.title); });
+    }, (e, lost) => { const x = failedSaid(e, "Not reversed", "reversed", "the dues"); if (lost) { onClose(); onDone(x); return; } setProblem(x.text ? `${x.title}. ${x.text}` : x.title); });
   };
   return (
     <DeskSheet title={`Reverse ${entry.what}`} onClose={close}
@@ -319,7 +317,6 @@ function ReverseSheet({ code, entry, onClose, onDone }: { code: string; entry: R
           </Field>
         </>
       ) : null}
-      {w.stuck ? <Text style={t.caption}>{notKnown("reversed", "the dues").line} Close this and read the dues again.</Text> : null}
       <Refused text={problem} />
     </DeskSheet>
   );

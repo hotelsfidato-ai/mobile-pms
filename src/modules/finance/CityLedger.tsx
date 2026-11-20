@@ -1,19 +1,19 @@
 import { useQueryClient } from "@tanstack/react-query";
+import { router } from "expo-router";
 import { Building2, Plus, Undo2 } from "lucide-react-native";
 import { useState } from "react";
 import { Text, View } from "react-native";
 import type { Hotel } from "../../core/api";
 import { dateLong, monthStart } from "../../core/format";
-import { ON_THE_WEBSITE } from "../../core/menu";
 import { c, face, t } from "../../core/theme";
-import { Card, Screen, notKnown, useRead } from "../../core/ui";
+import { Card, Screen } from "../../core/ui";
 import {
   accountKey, companyPaymentState, ledgerOwed, ledgerRows, ledgerTable, owedPill, paymentLine, paymentTitle, rupees, dateDay,
   whyNotExport, whyNotReadLedger, whyNotRecordCompanyPayment, whyNotReverseCompanyPayment,
   type CompanyPayment, type CompanyPaymentsView, type LedgerRow,
 } from "./desk";
 import { readCompanyPayments, readLedger, recordCompanyPayment, reverseCompanyPayment } from "./deskData";
-import { CardHead, DeskExport, DeskSheet, Hair, PageHead, ReadState, RefusedCard, TextAct, TonePill, failedSaid, useWrite } from "./DeskKit";
+import { CardHead, DeskExport, DeskSheet, Hair, PageHead, ReadState, RefusedCard, TextAct, TonePill, failedSaid, useWrite, StopCard, useDeskRead, useStop, type Stop } from "./DeskKit";
 import { Btn, Choice, Field, Input, Refused, SaidCard, type Said } from "./Kit";
 
 /* ══════════════════════════════════════════════════════════════════
@@ -38,8 +38,9 @@ export function CityLedger({ hotel, role }: { hotel: Hotel; role: string | null 
   const refused = whyNotReadLedger(role);
   const from = monthStart(hotel.businessDate);
   const asOn = hotel.businessDate;
-  const doc = useRead(() => (refused ? Promise.resolve(null) : readLedger(code, from, asOn)), ["finance", code, "city-ledger", from, asOn]);
-  const paid = useRead(() => (refused ? Promise.resolve(null) : readCompanyPayments(code)), ["finance", code, "company-payments"]);
+  const doc = useDeskRead(() => (refused ? Promise.resolve(null) : readLedger(code, from, asOn)), ["finance", code, "desk", "city-ledger", from, asOn]);
+  const paid = useDeskRead(() => (refused ? Promise.resolve(null) : readCompanyPayments(code)), ["finance", code, "desk", "company-payments"]);
+  const stop = useStop(paid.began);
   const [said, setSaid] = useState<Said | null>(null);
   const [sheet, setSheet] = useState<{ kind: "record" } | { kind: "reverse"; p: CompanyPayment } | null>(null);
   const [pulled, setPulled] = useState(false);
@@ -65,6 +66,7 @@ export function CityLedger({ hotel, role }: { hotel: Hotel; role: string | null 
           </View>
           <DeskExport why={whyNotExport(role, "money")} table={doc.data ? ledgerTable(rows, owed, `${hotel.name} · ${period}`) : null} />
           {said ? <SaidCard said={said} /> : null}
+      <StopCard stop={stop} />
           {!doc.data ? <ReadState what="the company accounts" reading="Reading the company accounts…" error={doc.error} onRetry={doc.reload} />
             : rows.length === 0 ? (
               <Card style={{ gap: 6, alignItems: "center", paddingVertical: 24 }}>
@@ -72,26 +74,26 @@ export function CityLedger({ hotel, role }: { hotel: Hotel; role: string | null 
                 <Text style={t.heading}>Nothing sent to an account yet</Text>
                 <Text style={[t.label, { textAlign: "center", lineHeight: 20 }]}>Each company, agent and booking site shows here once a bill is settled "Bill to company".</Text>
               </Card>
-            ) : rows.map((r, i) => <Account key={`${r.account}-${i}`} r={r} onRefused={refusedSaid("Statement")} />)}
+            ) : rows.map((r, i) => <Account key={`${r.account}-${i}`} r={r} onStatement={() => router.push(`/reports/${code}/company-statement?account=${encodeURIComponent(r.account)}`)} />)}
           <View style={{ gap: 2 }}>
             <Text style={[t.caption, { lineHeight: 18 }]}>
               {`The same figures as the City ledger report under Reports. Opening is what was owed before ${dateLong(from)}; Received is what the account paid, by the day it reached the hotel. How old each balance is:`}
             </Text>
             <View style={{ flexDirection: "row" }}>
-              <TextAct label="Money owed by age" underline tone="grey" why={ON_THE_WEBSITE} onRefused={refusedSaid("Money owed by age")} onPress={() => undefined} />
+              <TextAct label="Money owed by age" underline tone="grey" onPress={() => router.push(`/reports/${code}/dues-by-age`)} />
             </View>
           </View>
           {!paid.data ? <ReadState what="the payments received" reading="Reading the payments received…" error={paid.error} onRetry={paid.reload} />
             : <Received view={paid.data} role={role} onReverse={(p) => setSheet({ kind: "reverse", p })} onRefused={refusedSaid("Not reversed")} />}
         </>
       )}
-      {sheet?.kind === "record" && paid.data ? <RecordSheet code={code} view={paid.data} onClose={() => setSheet(null)} onDone={done} /> : null}
-      {sheet?.kind === "reverse" ? <ReverseSheet code={code} p={sheet.p} onClose={() => setSheet(null)} onDone={done} /> : null}
+      {sheet?.kind === "record" && paid.data ? <RecordSheet stop={stop} code={code} view={paid.data} onClose={() => setSheet(null)} onDone={done} /> : null}
+      {sheet?.kind === "reverse" ? <ReverseSheet stop={stop} code={code} p={sheet.p} onClose={() => setSheet(null)} onDone={done} /> : null}
     </Screen>
   );
 }
 
-function Account({ r, onRefused }: { r: LedgerRow; onRefused: (why: string) => void }) {
+function Account({ r, onStatement }: { r: LedgerRow; onStatement: () => void }) {
   const fig = (label: string, value: number | null, strong?: boolean) => (
     <View style={{ flexDirection: "row", alignItems: "baseline", gap: 12, paddingVertical: 3 }}>
       <Text style={[LABEL, { width: 170 }]}>{label}</Text>
@@ -102,8 +104,8 @@ function Account({ r, onRefused }: { r: LedgerRow; onRefused: (why: string) => v
     <Card style={{ gap: 4 }}>
       <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
         <Text style={[t.heading, { flex: 1, ...face[500] }]}>{r.account}</Text>
-        {/* D27-383: the account's statement - a report the phone does not have yet. */}
-        <TextAct label="Statement" underline tone="grey" why={ON_THE_WEBSITE} onRefused={onRefused} onPress={() => undefined} />
+        {/* D27-383: the account's statement, read by the same people as this screen (the reports lane's screen). */}
+        <TextAct label="Statement" underline tone="grey" onPress={onStatement} />
       </View>
       {fig("Opening", r.opening)}
       {fig("Sent to the account", r.debit)}
@@ -142,11 +144,11 @@ function Received({ view, role, onReverse, onRefused }: {
   );
 }
 
-function RecordSheet({ code, view, onClose, onDone }: { code: string; view: CompanyPaymentsView; onClose: () => void; onDone: (s: Said | null) => void }) {
+function RecordSheet({ stop, code, view, onClose, onDone }: { stop: Stop; code: string; view: CompanyPaymentsView; onClose: () => void; onDone: (s: Said | null) => void }) {
   const [f, setF] = useState({ account: "", amount: "", receivedOn: "", method: "", reference: "", note: "" });
   const set = (k: keyof typeof f) => (v: string) => setF({ ...f, [k]: v });
   const [problem, setProblem] = useState<string | null>(null);
-  const w = useWrite();
+  const w = useWrite(stop, "recorded", "Payments received");
   const s = companyPaymentState(view, f);
   const close = () => { onClose(); onDone(null); };
   const submit = () => {
@@ -157,10 +159,9 @@ function RecordSheet({ code, view, onClose, onDone }: { code: string; view: Comp
       await recordCompanyPayment(code, sent);
       onClose();
       onDone({ tone: "ok", title: "Payment recorded", text: `${rupees(sent.amount)} from ${s.chosen?.name ?? "the account"}.` });
-    }, (e) => {
+    }, (e, lost) => {
       const x = failedSaid(e, "Not recorded", "recorded", "Payments received");
-      /* Not known whether it went: the amount is emptied (MEMORY 16). */
-      if (x.tone === "warn") setF((o) => ({ ...o, amount: "" }));
+      if (lost) { onClose(); onDone(x); return; }
       setProblem(x.text ? `${x.title}. ${x.text}` : x.title);
     });
   };
@@ -189,16 +190,15 @@ function RecordSheet({ code, view, onClose, onDone }: { code: string; view: Comp
       <Field label="Note" hint="Optional.">
         <Input value={f.note} onChange={set("note")} label="Note" multiline />
       </Field>
-      {w.stuck ? <Text style={t.caption}>{notKnown("recorded", "Payments received").line} Close this and read the list again.</Text> : null}
       <Refused text={problem} />
     </DeskSheet>
   );
 }
 
-function ReverseSheet({ code, p, onClose, onDone }: { code: string; p: CompanyPayment; onClose: () => void; onDone: (s: Said | null) => void }) {
+function ReverseSheet({ stop, code, p, onClose, onDone }: { stop: Stop; code: string; p: CompanyPayment; onClose: () => void; onDone: (s: Said | null) => void }) {
   const [reason, setReason] = useState("");
   const [problem, setProblem] = useState<string | null>(null);
-  const w = useWrite();
+  const w = useWrite(stop, "reversed", "Payments received");
   const close = () => { onClose(); onDone(null); };
   const submit = () => {
     setProblem(null);
@@ -206,7 +206,7 @@ function ReverseSheet({ code, p, onClose, onDone }: { code: string; p: CompanyPa
       await reverseCompanyPayment(code, p.id, reason);
       onClose();
       onDone({ tone: "ok", title: "Reversed", text: "Record it again with the right figures." });
-    }, (e) => { const x = failedSaid(e, "Not reversed", "reversed", "Payments received"); setProblem(x.text ? `${x.title}. ${x.text}` : x.title); });
+    }, (e, lost) => { const x = failedSaid(e, "Not reversed", "reversed", "Payments received"); if (lost) { onClose(); onDone(x); return; } setProblem(x.text ? `${x.title}. ${x.text}` : x.title); });
   };
   return (
     <DeskSheet title="Reverse this payment?" onClose={close}
@@ -220,7 +220,6 @@ function ReverseSheet({ code, p, onClose, onDone }: { code: string; p: CompanyPa
       <Field label="Why" hint="This is the line somebody asks about.">
         <Input value={reason} onChange={setReason} label="Why" multiline />
       </Field>
-      {w.stuck ? <Text style={t.caption}>{notKnown("reversed", "Payments received").line} Close this and read the list again.</Text> : null}
       <Refused text={problem} />
     </DeskSheet>
   );

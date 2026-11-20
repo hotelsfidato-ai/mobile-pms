@@ -5,7 +5,9 @@ import { Pressable, ScrollView, Text, TextInput, View } from "react-native";
 import type { Hotel } from "../../core/api";
 import { cash, dateLong } from "../../core/format";
 import { c, face, space, t } from "../../core/theme";
-import { Card, s, Screen, useRead } from "../../core/ui";
+import { roleAt, useSession } from "../../core/session";
+import { Card, s, Screen, useRead, ripple, shade } from "../../core/ui";
+import { ListExport } from "../reports/ListExport";
 import type { DeskStay } from "../front-desk/data";
 import { addDays, day, statusOf } from "../front-desk/desk";
 import { body, Empty, PageHead, Pill } from "../front-desk/kit";
@@ -50,6 +52,7 @@ export function AllBookings({ hotel }: { hotel: Hotel }) {
   const rows = shown(data ?? [], filter, search);
   const searching = search.trim() !== "";
   const empty = emptyOf(searching);
+  const { who } = useSession();
 
   return (
     <Screen refreshing={pulled && read.loading} onRefresh={() => { setPulled(true); read.reload(); }}>
@@ -65,10 +68,10 @@ export function AllBookings({ hotel }: { hotel: Hotel }) {
             <Search size={16} color={c.grey500} />
             <TextInput
               value={search} onChangeText={setSearch} placeholder="Guest, reference or room" placeholderTextColor={c.grey400}
-              accessibilityLabel="Search bookings" style={{ flex: 1, minHeight: 42, fontSize: 16, color: c.ink900, ...face[500] }}
+              accessibilityLabel="Search bookings" autoCorrect={false} returnKeyType="search" style={{ flex: 1, minHeight: 42, fontSize: 16, color: c.ink900, ...face[500] }}
             />
             {search ? (
-              <Pressable onPress={() => setSearch("")} accessibilityRole="button" accessibilityLabel="Clear" hitSlop={12}>
+              <Pressable android_ripple={ripple} onPress={() => setSearch("")} accessibilityRole="button" accessibilityLabel="Clear" hitSlop={12}>
                 <X size={16} color={c.grey500} />
               </Pressable>
             ) : null}
@@ -83,9 +86,9 @@ export function AllBookings({ hotel }: { hotel: Hotel }) {
           const on = filter === f.key;
           const n = data ? countFor(data, f) : undefined;
           return (
-            <Pressable key={f.key} onPress={() => setFilter(f.key)} accessibilityRole="tab" accessibilityState={{ selected: on }} accessibilityLabel={`${f.label}, ${n ?? "not read"}`}
-              style={({ pressed }) => ({ minWidth: 116, borderRadius: 12, borderWidth: 1, paddingHorizontal: 14, paddingVertical: 12, gap: 4,
-                backgroundColor: on ? c.ink900 : pressed ? c.grey50 : c.white, borderColor: on ? c.ink900 : c.grey200 })}>
+            <Pressable android_ripple={ripple} key={f.key} onPress={() => setFilter(f.key)} accessibilityRole="tab" accessibilityState={{ selected: on }} accessibilityLabel={`${f.label}, ${n ?? "not read"}`}
+              style={shade(({ pressed }) => ({ minWidth: 116, borderRadius: 12, borderWidth: 1, paddingHorizontal: 14, paddingVertical: 12, gap: 4,
+                backgroundColor: on ? c.ink900 : pressed ? c.grey50 : c.white, borderColor: on ? c.ink900 : c.grey200 }))}>
               <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
                 <IconChip icon={ICON[f.key]!} tone={on ? "glass" : CHIP[f.chip]} size={24} />
                 <Text style={[t.figure, { lineHeight: 24, color: on ? c.white : data ? c.ink900 : c.grey500 }]}>{n === undefined ? "-" : n}</Text>
@@ -95,6 +98,17 @@ export function AllBookings({ hotel }: { hotel: Hotel }) {
           );
         })}
       </ScrollView>
+
+      {/* The web's StayTable export for All bookings: the cards' own words, the rows shown. */}
+      <ListExport screen="all-bookings" role={who ? roleAt(who, code) : null} table={data && !read.error ? {
+        subtitle: [`Showing ${FILTERS.find((f) => f.key === filter)?.label ?? filter}`, searching ? `Search ${search.trim()}` : "",
+          asked ? "Searched every booking" : `Leaving from ${dateLong(since)}`, "Sorted arrival, latest first"].filter(Boolean).join(" · "),
+        columns: ["Room", "Guest", "Reference", "Status", "Type", "Plan", "Source", "Arrival", "Departure", "Nights", "Rate"],
+        rows: rows.map((x) => [
+          x.roomNumber || "-", x.guest, x.reference, statusOf(x).label, x.roomType, x.ratePlan, x.source ?? "-", day(x.arrival), day(x.departure),
+          x.isDayUse ? "Day use" : String(x.nights), x.isComplimentary ? "Comp" : cash(x.offeredTariff),
+        ]),
+      } : null} />
 
       <Kept error={data ? read.error : undefined} what="the bookings" />
       {data ? <Text style={[t.label, t.tab, { color: c.grey500, textAlign: "right" }]}>{`${rows.length} of ${data.length}`}</Text> : null}
@@ -111,8 +125,8 @@ export function AllBookings({ hotel }: { hotel: Hotel }) {
 function Since({ value, max, onChange }: { value: string; max: string; onChange: (d: string) => void }) {
   const atMax = value >= max;
   const step = (Icon: LucideIcon, a11y: string, off: boolean, next: string) => (
-    <Pressable onPress={() => onChange(next)} disabled={off} accessibilityRole="button" accessibilityLabel={a11y} accessibilityState={{ disabled: off }}
-      style={({ pressed }) => [s.capsule, { width: 44, paddingHorizontal: 0 }, off ? { backgroundColor: c.grey50, borderColor: c.grey200 } : pressed && { backgroundColor: c.grey100 }]}>
+    <Pressable android_ripple={ripple} onPress={() => onChange(next)} disabled={off} accessibilityRole="button" accessibilityLabel={a11y} accessibilityState={{ disabled: off }}
+      style={shade(({ pressed }) => [s.capsule, { width: 44, paddingHorizontal: 0 }, off ? { backgroundColor: c.grey50, borderColor: c.grey200 } : pressed && { backgroundColor: c.grey100 }])}>
       <Icon size={18} color={off ? c.grey300 : c.grey700} />
     </Pressable>
   );
@@ -138,9 +152,9 @@ function BookingCard({ s: x, held, onOpen }: { s: DeskStay; held: boolean; onOpe
     ["Arrival", day(x.arrival), t.tab], ["Departure", day(x.departure), t.tab], ["Nights", x.isDayUse ? "Day use" : String(x.nights), t.tab],
   ];
   return (
-    <Pressable
+    <Pressable android_ripple={ripple}
       onPress={onOpen} accessibilityRole="button" accessibilityLabel={`${x.roomNumber ? `Room ${x.roomNumber}, ` : ""}${x.guest}, ${state.label}`}
-      style={({ pressed }) => ({ borderRadius: 12, borderWidth: 1, borderColor: held ? c.yellow800 : c.grey200, backgroundColor: pressed ? c.grey50 : held ? c.yellow50 : c.white, paddingHorizontal: 14, paddingVertical: 12 })}
+      style={shade(({ pressed }) => ({ borderRadius: 12, borderWidth: 1, borderColor: held ? c.yellow800 : c.grey200, backgroundColor: pressed ? c.grey50 : held ? c.yellow50 : c.white, paddingHorizontal: 14, paddingVertical: 12 }))}
     >
       <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
         <Text style={[t.figure, !x.roomNumber ? { color: c.grey500 } : null]}>{x.roomNumber || "-"}</Text>

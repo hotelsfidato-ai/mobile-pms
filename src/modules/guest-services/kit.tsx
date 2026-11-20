@@ -6,12 +6,12 @@ import {
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import {
   AppState, KeyboardAvoidingView, Modal, Platform, Pressable, ScrollView, Text, TextInput, View,
-  useWindowDimensions, type StyleProp, type ViewStyle,
+  useWindowDimensions, type StyleProp, type TextInputProps, type ViewStyle,
 } from "react-native";
 import { HeldError } from "../../core/api";
 import { isOnline } from "../../core/offline";
 import { c, face, space, t } from "../../core/theme";
-import { Capsule } from "../../core/ui";
+import { Capsule, modalEdge, ripple, shade, useSheetPad } from "../../core/ui";
 
 /* ══════════════════════════════════════════════════════════════════
    THE WEB KIT'S PIECES THESE SCREENS USE, ported from src/components/ui
@@ -127,7 +127,7 @@ export function Segmented<T extends string>({ value, onChange, options, label, s
       {options.map((o) => {
         const on = o.value === value;
         return (
-          <Pressable
+          <Pressable android_ripple={ripple}
             key={o.value} onPress={() => onChange(o.value)} accessibilityRole="tab" accessibilityState={{ selected: on }}
             style={{
               minHeight: 44, paddingHorizontal: 12, borderRadius: 7, alignItems: "center", justifyContent: "center",
@@ -154,11 +154,11 @@ export function Btn({ label, a11y, variant = "secondary", icon: Icon, onPress, d
     ? { primary: c.grey600, secondary: c.grey500, ghost: c.grey500, danger: c.white }[variant]
     : { primary: c.white, secondary: c.ink900, ghost: c.grey600, danger: c.white }[variant];
   return (
-    <Pressable
+    <Pressable android_ripple={ripple}
       onPress={onPress} disabled={disabled} accessibilityRole="button" accessibilityLabel={a11y ?? label}
       accessibilityState={{ disabled: Boolean(disabled) }}
-      style={({ pressed }) => [{
-        minHeight: tall ? 48 : 44, paddingHorizontal: 14, borderRadius: 999, flexDirection: "row", gap: 8,
+      style={shade(({ pressed }) => [{
+        minHeight: tall ? 48 : 44, paddingHorizontal: 14, borderRadius: 999, flexDirection: "row", gap: 8, overflow: "hidden",
         alignItems: "center", justifyContent: "center", ...(grow ? { flex: 1 } : null),
         backgroundColor: {
           primary: disabled ? c.grey300 : pressed ? c.orange700 : c.orange600,
@@ -167,7 +167,7 @@ export function Btn({ label, a11y, variant = "secondary", icon: Icon, onPress, d
           danger: disabled ? c.grey300 : pressed ? c.red700 : brandRed,
         }[variant],
         borderWidth: variant === "secondary" ? 1 : 0, borderColor: c.grey300,
-      }, style]}
+      }, style])}
     >
       {Icon ? <Icon size={16} color={fg} /> : null}
       <Text style={[t.label, { color: fg }]}>{label}</Text>
@@ -196,7 +196,7 @@ export function SectionHead({ title, note, action }: { title: string; note?: str
       <View style={{ flexDirection: "row", alignItems: "center", gap: 4, minHeight: 24 }}>
         <Text style={t.heading} accessibilityRole="header">{title}</Text>
         {note ? (
-          <Pressable
+          <Pressable android_ripple={ripple}
             onPress={() => setOpen(!open)} accessibilityRole="button" accessibilityLabel={note} accessibilityState={{ expanded: open }}
             style={{ width: 44, height: 44, marginVertical: -10, alignItems: "center", justifyContent: "center" }}
           >
@@ -273,29 +273,31 @@ export const Back = ({ onPress }: { onPress: () => void }) => (
   <Capsule label="Back" icon={<ChevronLeft size={16} color={c.grey700} />} onPress={onPress} />
 );
 
-/** The web's Dialog: centred, 16px from each side, a hairline under the head. */
+/** The web's Dialog: centred, 16px from each side, a hairline under the head; clear of the notch and
+    the home indicator, lifted over the keyboard, closed by Android's back (docs/NATIVE.md). */
 export function Dialog({ title, description, onClose, children }: {
   title: string; description?: string; onClose: () => void; children: ReactNode;
 }) {
   const { height } = useWindowDimensions();
+  const pad = useSheetPad();
   return (
-    <Modal visible transparent animationType="fade" onRequestClose={onClose}>
+    <Modal visible transparent animationType="fade" onRequestClose={onClose} {...modalEdge}>
       <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
-        style={{ flex: 1, backgroundColor: "rgba(3,23,40,0.25)", justifyContent: "center", paddingHorizontal: 16 }}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ flex: 1, backgroundColor: "rgba(3,23,40,0.25)", justifyContent: "center", paddingHorizontal: 16, paddingTop: pad.top + 16, paddingBottom: pad.bottom }}
       >
         <Pressable style={{ position: "absolute", top: 0, bottom: 0, left: 0, right: 0 }} onPress={onClose} accessibilityLabel="Close" />
-        <View style={{ backgroundColor: c.white, borderRadius: 12, borderWidth: 1, borderColor: c.grey200, maxHeight: height - 64 }}>
+        <View style={{ backgroundColor: c.white, borderRadius: 12, borderWidth: 1, borderColor: c.grey200, maxHeight: height - pad.top - pad.bottom - 32 }}>
           <View style={{ flexDirection: "row", gap: 16, paddingHorizontal: 20, paddingVertical: 16, borderBottomWidth: 1, borderBottomColor: c.grey200 }}>
             <View style={{ flex: 1 }}>
               <Text style={t.heading} accessibilityRole="header">{title}</Text>
               {description ? <Text style={[t.label, { color: c.grey500, marginTop: 4 }]}>{description}</Text> : null}
             </View>
-            <Pressable onPress={onClose} accessibilityRole="button" accessibilityLabel="Close" hitSlop={14} style={{ width: 24, height: 24, alignItems: "center", justifyContent: "center" }}>
+            <Pressable android_ripple={ripple} onPress={onClose} accessibilityRole="button" accessibilityLabel="Close" hitSlop={14} style={{ width: 24, height: 24, alignItems: "center", justifyContent: "center" }}>
               <X size={16} color={c.grey500} />
             </Pressable>
           </View>
-          <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingHorizontal: 20, paddingVertical: 16, gap: 16 }}>
+          <ScrollView keyboardShouldPersistTaps="handled" keyboardDismissMode="interactive" contentContainerStyle={{ paddingHorizontal: 20, paddingVertical: 16, gap: 16 }}>
             {children}
           </ScrollView>
         </View>
@@ -330,11 +332,12 @@ export function Field({ label, required, hint, children }: { label: string; requ
   );
 }
 
-/** The web's Input and Textarea: 44 on a touch screen, 16px type. */
+/** The web's Input and Textarea: 44 on a touch screen, 16px type. The keyboard per field
+    (docs/NATIVE.md): spread one of the core's `keys` (amount, count, phone, email…). */
 export function Input({ label, rows, icon: Icon, ...props }: {
   label: string; value: string; onChangeText: (v: string) => void; rows?: number; maxLength?: number; icon?: LucideIcon;
-  autoFocus?: boolean; placeholder?: string; keyboardType?: "default" | "numbers-and-punctuation"; autoCapitalize?: "characters";
-}) {
+  autoFocus?: boolean; placeholder?: string;
+} & Pick<TextInputProps, "keyboardType" | "inputMode" | "autoCapitalize" | "autoCorrect" | "autoComplete" | "textContentType">) {
   return (
     <View style={{ justifyContent: "center" }}>
       <TextInput
@@ -358,27 +361,28 @@ export function Select<T extends string>({ label, value, options, onChange, icon
   label: string; value: T; options: { value: T; label: string }[]; onChange: (v: T) => void; icon?: LucideIcon;
 }) {
   const [open, setOpen] = useState(false);
+  const pad = useSheetPad();
   const shown = options.find((o) => o.value === value)?.label ?? "";
   return (
     <>
-      <Pressable
+      <Pressable android_ripple={ripple}
         onPress={() => setOpen(true)} accessibilityRole="button" accessibilityLabel={`${label}: ${shown}`}
         style={{ minHeight: 44, flexDirection: "row", alignItems: "center", gap: 8, paddingLeft: 12, paddingRight: 10, borderRadius: 10, borderWidth: 1, borderColor: c.grey300, backgroundColor: c.white }}
       >
         <Text style={{ flex: 1, fontSize: 16, color: c.ink900, ...face[500] }} numberOfLines={1}>{shown}</Text>
         <Icon size={16} color={Icon === ChevronDown ? c.grey500 : c.ink900} />
       </Pressable>
-      <Modal visible={open} transparent animationType="fade" onRequestClose={() => setOpen(false)}>
+      <Modal visible={open} transparent animationType="fade" onRequestClose={() => setOpen(false)} {...modalEdge}>
         <View style={{ flex: 1, backgroundColor: "rgba(3,23,40,0.4)" }}>
           <Pressable style={{ flex: 1 }} onPress={() => setOpen(false)} accessibilityRole="button" accessibilityLabel="Close" />
-          <View style={{ backgroundColor: c.white, borderTopLeftRadius: 16, borderTopRightRadius: 16, paddingHorizontal: space.side, paddingTop: 16, paddingBottom: 24, gap: 4, maxHeight: "75%" }}>
+          <View style={{ backgroundColor: c.white, borderTopLeftRadius: 16, borderTopRightRadius: 16, paddingHorizontal: space.side, paddingTop: 16, paddingBottom: pad.bottom + 8, gap: 4, maxHeight: "75%" }}>
             <Text style={[t.heading, { marginBottom: 4 }]} accessibilityRole="header">{label}</Text>
             <ScrollView>
               {options.map((o) => (
-                <Pressable
+                <Pressable android_ripple={ripple}
                   key={o.value} onPress={() => { onChange(o.value); setOpen(false); }}
                   accessibilityRole="button" accessibilityLabel={o.label} accessibilityState={{ selected: o.value === value }}
-                  style={({ pressed }) => ({ minHeight: 48, flexDirection: "row", alignItems: "center", gap: 8, borderTopWidth: 1, borderTopColor: c.grey100, backgroundColor: pressed ? c.grey50 : c.white })}
+                  style={shade(({ pressed }) => ({ minHeight: 48, flexDirection: "row", alignItems: "center", gap: 8, borderTopWidth: 1, borderTopColor: c.grey100, backgroundColor: pressed ? c.grey50 : c.white }))}
                 >
                   <Text style={[t.label, { flex: 1, color: c.ink900 }]}>{o.label}</Text>
                   {o.value === value ? <Check size={18} color={c.orange} /> : null}

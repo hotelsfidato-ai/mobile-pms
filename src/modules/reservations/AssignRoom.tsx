@@ -4,7 +4,7 @@ import { Pressable, Text, View } from "react-native";
 import { ApiError, HeldError, type Hotel } from "../../core/api";
 import { cash, dateLong } from "../../core/format";
 import { c, face, t } from "../../core/theme";
-import { useRead } from "../../core/ui";
+import { useRead, ripple } from "../../core/ui";
 import { assignRoom } from "../front-desk/data";
 import { Button, Empty, Field, FormSheet, Pick, Pill, type Said } from "../front-desk/kit";
 import { NotRead } from "../front-desk/StayList";
@@ -76,7 +76,7 @@ export function AssignRoom({ hotel, onClose, onDone }: { hotel: Hotel; onClose: 
               {waiting.map((s) => {
                 const on = s.id === stayId;
                 return (
-                  <Pressable key={s.id} onPress={() => { setStayId(s.id); setRoom(""); }} accessibilityRole="radio" accessibilityState={{ selected: on }} accessibilityLabel={`${s.guest}, ${s.roomType}`}
+                  <Pressable android_ripple={ripple} key={s.id} onPress={() => { setStayId(s.id); setRoom(""); }} accessibilityRole="radio" accessibilityState={{ selected: on }} accessibilityLabel={`${s.guest}, ${s.roomType}`}
                     style={{ minHeight: 56, borderRadius: 10, borderWidth: 1, padding: 12, gap: 2, borderColor: on ? c.orange : c.grey200, backgroundColor: on ? c.orange50 : c.white }}>
                     <View style={{ flexDirection: "row", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
                       <Text style={[t.label, face[500], { color: c.ink900 }]}>{s.guest}</Text>

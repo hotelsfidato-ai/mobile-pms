@@ -29,6 +29,11 @@ import { dateDay, rupees } from "./bill.ts";
 
 export { DASH, dateDay, rupees };
 
+/** A write whose outcome was lost (MEMORY 16) stays unknown until a read that BEGAN after the loss
+    has come back (pos dayEnd.ts stillUnknown, the reviews of 20 Nov): `stuckAt` the moment it was
+    lost, `began` when the read now on screen began. */
+export const stillUnknown = (stuckAt: number | null, began: number) => stuckAt !== null && began <= stuckAt;
+
 /* ── Who may (the API's lists and sentences) ─────────────────────── */
 
 const DESK = ["owner", "admin", "gm", "hotel_manager", "front_desk", "finance"];

@@ -12,6 +12,7 @@ import {
   ACTION_LABEL, blankMove, bookIn, correctionWords, heldText, moveBody, movedWords, NOT_AN_OUTLET, NOT_KNOWN,
   offeredFor, startingStore, transferBody, type MoveDraft, type StockItem, type StockKind, type StoreList, type StoreSummary,
 } from "./shelf";
+import { ripple, keys } from "../../core/ui";
 
 /* ══════════════════════════════════════════════════════════════════
    ONE ACT ON ONE ITEM — the web's MoveDialog and TransferDialog
@@ -38,7 +39,7 @@ const storeChoice = (s: StoreSummary, i: StockItem) =>
 /** A checkbox, 44 tall: the web's Checkbox. */
 function Tick({ label, on, onChange }: { label: string; on: boolean; onChange: (v: boolean) => void }) {
   return (
-    <Pressable onPress={() => onChange(!on)} accessibilityRole="checkbox" accessibilityState={{ checked: on }} accessibilityLabel={label}
+    <Pressable android_ripple={ripple} onPress={() => onChange(!on)} accessibilityRole="checkbox" accessibilityState={{ checked: on }} accessibilityLabel={label}
       style={{ minHeight: 44, flexDirection: "row", alignItems: "center", gap: 10 }}>
       <View style={{ width: 20, height: 20, borderRadius: 5, borderWidth: 1, borderColor: on ? c.orange600 : c.grey300, backgroundColor: on ? c.orange600 : c.white, alignItems: "center", justifyContent: "center" }}>
         {on ? <Check size={14} color={c.white} /> : null}
@@ -107,7 +108,7 @@ export function Act({ code, list, item, kind, startStoreId, onClose, onDone }: {
         label={isCount ? `What the shelf holds now, in ${item.unit}` : `How many ${item.unit}`} required
         {...(isCount && store ? { hint: `The book says ${here} ${item.unit} in ${store.name}. Count what is there; the difference is recorded.` } : {})}
       >
-        <Input label={isCount ? "What the shelf holds now" : `How many ${item.unit}`} keyboardType="numbers-and-punctuation" value={d.qty} onChangeText={(v) => set({ qty: v })} maxLength={12} />
+        <Input label={isCount ? "What the shelf holds now" : `How many ${item.unit}`} {...keys.amount} value={d.qty} onChangeText={(v) => set({ qty: v })} maxLength={12} />
       </Field>
 
       {needsOutlet ? (
@@ -124,7 +125,7 @@ export function Act({ code, list, item, kind, startStoreId, onClose, onDone }: {
           label={isReceipt ? "Empties the supplier took back" : "Empties back from the kitchen"} required
           hint={isReceipt && store ? `${item.emptiesByStore[store.id] ?? 0} empty in ${store.name}. 0 if none went back.` : "0 if none came back."}
         >
-          <Input label={isReceipt ? "Empties the supplier took back" : "Empties back from the kitchen"} keyboardType="numbers-and-punctuation" value={d.empties} onChangeText={(v) => set({ empties: v })} maxLength={6} />
+          <Input label={isReceipt ? "Empties the supplier took back" : "Empties back from the kitchen"} {...keys.count} value={d.empties} onChangeText={(v) => set({ empties: v })} maxLength={6} />
         </Field>
       ) : null}
 
@@ -153,18 +154,18 @@ export function Act({ code, list, item, kind, startStoreId, onClose, onDone }: {
           >
             {d.free
               ? <Text style={[body, { color: c.grey500 }]}>₹0 - ticked Free</Text>
-              : <Input label="What it cost, before GST" keyboardType="numbers-and-punctuation" value={d.cost} onChangeText={(v) => set({ cost: v })} maxLength={12} />}
+              : <Input label="What it cost, before GST" {...keys.amount} value={d.cost} onChangeText={(v) => set({ cost: v })} maxLength={12} />}
           </Field>
           <Tick label="Free - it cost nothing" on={d.free} onChange={(v) => set({ free: v })} />
           <View style={{ flexDirection: "row", gap: 12 }}>
             <View style={{ flex: 1 }}>
               <Field label="GST rate, %" hint="0, 5, 18 or 40; 12 or 28 on an older bill.">
-                <Input label="GST rate, %" keyboardType="numbers-and-punctuation" value={d.gstRate} onChangeText={(v) => set({ gstRate: v })} maxLength={5} />
+                <Input label="GST rate, %" {...keys.amount} value={d.gstRate} onChangeText={(v) => set({ gstRate: v })} maxLength={5} />
               </Field>
             </View>
             <View style={{ flex: 1 }}>
               <Field label="GST amount" hint="As the bill says.">
-                <Input label="GST amount" keyboardType="numbers-and-punctuation" value={d.gstAmount} onChangeText={(v) => set({ gstAmount: v })} maxLength={12} />
+                <Input label="GST amount" {...keys.amount} value={d.gstAmount} onChangeText={(v) => set({ gstAmount: v })} maxLength={12} />
               </Field>
             </View>
           </View>
@@ -176,7 +177,7 @@ export function Act({ code, list, item, kind, startStoreId, onClose, onDone }: {
           </Field>
           <Text style={[t.caption, { color: c.grey600 }]}>Use by: {ON_THE_WEBSITE}</Text>
           <Field label="Who from">
-            <Input label="Who from" placeholder="Kirana Bros" value={d.supplier} onChangeText={(v) => set({ supplier: v })} maxLength={120} />
+            <Input label="Who from" placeholder="Kirana Bros" {...keys.name} value={d.supplier} onChangeText={(v) => set({ supplier: v })} maxLength={120} />
           </Field>
           <Field label="Delivery note or bill number" hint="What somebody holds in their hand when they ask why the count is what it is.">
             <Input label="Delivery note or bill number" value={d.reference} onChangeText={(v) => set({ reference: v })} maxLength={120} />
@@ -186,7 +187,7 @@ export function Act({ code, list, item, kind, startStoreId, onClose, onDone }: {
 
       {kind === "return" ? (
         <Field label="Who it goes back to">
-          <Input label="Who it goes back to" placeholder="Kirana Bros" value={d.supplier} onChangeText={(v) => set({ supplier: v })} maxLength={120} />
+          <Input label="Who it goes back to" placeholder="Kirana Bros" {...keys.name} value={d.supplier} onChangeText={(v) => set({ supplier: v })} maxLength={120} />
         </Field>
       ) : null}
 
@@ -263,7 +264,7 @@ export function Transfer({ code, list, item, startFromId, onClose, onDone }: {
         />
       </Field>
       <Field label={`How many ${item.unit}`} required>
-        <Input label={`How many ${item.unit}`} keyboardType="numbers-and-punctuation" value={qty} onChangeText={setQty} maxLength={12} />
+        <Input label={`How many ${item.unit}`} {...keys.amount} value={qty} onChangeText={setQty} maxLength={12} />
       </Field>
       <Field label="Why" hint="What it is for.">
         <Input label="Why" value={why} onChangeText={setWhy} maxLength={300} />

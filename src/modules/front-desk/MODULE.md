@@ -97,3 +97,65 @@ every screen. The top bar, the business-date banner and the menu are the shell's
 
 **4 of 6 pictures match with nothing left** (04, 05, 06, 07); 08 matches but for where Open
 Calendar goes; 14 keeps the five differences above. The stay and Check in have no picture here.
+
+## m13-rooms (19 Nov): Rooms, the house as tiles
+
+**Web twin:** `/h/:code/stay` — `src/modules/front-desk/pages/StayView.tsx` (view `floor`: the head,
+`FilterTiles`, `StaleRooms`, the skeleton, `todaysStays`, `bookRoom`) and `flows/HouseFloor.tsx` (the
+tiles); data `data/stayview.ts` `getStayView` and `data/stays.ts` `fetchStays`, `getHouseNow`.
+Reads: `GET /rooms`, `/stays?from=<today>&to=<today+13>&board=1`, `/house-now` (the house, D21-36),
+`/stays?from=<today>&to=<today>` (who is in each room today) — all `STAYS` (`reservation` view) or the
+rooms read; the web also reads `/calendar-prices` and the open bills there, which only the Calendar
+draws (left out here). Picture: `all/02-home-rooms` (dev-gm, 375 px). Offline: reads only; the two
+writes below are the web's tiers through `send()`.
+
+| | |
+|---|---|
+| Route | `/front-desk/<code>/rooms` (`app/front-desk/[code]/rooms.tsx`); PHONE_ROUTES `"/h/:code/stay"` |
+| Files | `Rooms.tsx` (the screen, its read), `rooms.ts` + `rooms.check.ts` (the tile rules) |
+| Reused, imported | reservations' `chart.ts` (`buildChart`, `groupsOf`, `roomVisible`, `PILLS`, `PILL_LABEL`: the Calendar's port of getStayView, so one house, one answer), `data.ts` `rememberGrouping`, `AssignRoom.tsx`; this module's `readRooms`, `readHouse`, kit, `roles.ts`; reports' `IconChip` |
+| A tile with a guest | `/front-desk/<code>/stay/<id>?offer=1` (the web's panel offers Check in by default, `StayDrawer` `offerCheckIn = true`); Check in itself is `/check-in/<id>` from there |
+| A free or needs-cleaning tile | `/front-desk/<code>/walk-in?room=<n>` (the web's `/h/:code/book?room=&date=<business date>`); refused (`reservation` create): no arrow, the tap says the API's sentence |
+| Out of service | opens nothing, a guest in it or not (the web's button is disabled) |
+| Assign room | reservations' `AssignRoom` (`POST /stays/:id/assign`, held offline, warned); greyed with `whyNotRoom` where the web hides it |
+| Room type / Floor | `PUT /api/me/preferences {roomGrouping}` (sets a value: safe to repeat; refused offline, "Not remembered") |
+| Calendar | the switch opens `/reservations/<code>/calendar` |
+
+**Rooms is not the housekeeping board.** `/housekeeping/<code>` (the web's `/h/:code/housekeeping`,
+picture `all/10`) is housekeeping's job list: rooms grouped by cleaning state (Needs cleaning, Clean,
+Inspected, In house, Out of service), Mine / All / Unassigned, and it WRITES on the room (Clean,
+Inspected, who has it, Repair). Rooms is the desk's view of who is in the house today: grouped by
+room type or floor, coloured by the guest's state (Free, In house, Arriving, Due out, Needs cleaning,
+Out of service), and its taps lead to the stay or a walk-in; it marks nothing on a room.
+
+**The four states:** loading, the tiles' shape (10 and 7); failed, "The rooms did not load" and the
+server's words, Try again; offline with nothing read, the web's "No connection" sentence; no rooms,
+"No rooms set up yet / Add them in Room types."; a filter leaving none, "No rooms are <tile> today."
+(the phone's, as the Calendar; the web draws nothing). A failed re-read keeps the tiles with the
+web's StaleRooms line above them.
+
+### Picture match (19 Nov)
+
+Compared by reading the code against `all/02-home-rooms.png` and its words; **never seen running**.
+
+| Section | Result |
+|---|---|
+| Head | **Matches**: BUSINESS DATE · <day>, "Rooms", the property's name. |
+| Calendar · Rooms switch, full width | **Matches** (Rooms chosen). |
+| Room type · Floor and "+ Assign room" | **Matches**; Assign room greyed with the API's sentence for a role the web hides it from. |
+| The count tiles | **Matches**: Sellable navy when chosen, Empty, In house, …, each icon chip, scrolling inside its row, 116 px wide. |
+| Group heads | **Matches**: the type and its grey count pill. |
+| The tiles | **Matches**: two across, the odd last one taking the row (307); the number, the pill (white, dot, the state's ink and ring), the red "dirty" mark, the guest, "to 13 Oct 2026" / "out today" in yellow, the type in grey, "Free" plain, the chevron; the six tints. |
+
+**1 of 1 picture matches.** Not pictured, built from the web's code: Floor grouping, a chosen filter,
+the four states, the stale line, out of service. **Differences left:** (1) the web's StartHere card
+(a new clerk's first jobs, by role) is not drawn (nor on the Calendar); (2) "No rooms are … today."
+is the phone's own (the web shows nothing); (3) the stale line has no time "as they were at 4:10 pm"
+(the core's read gives no time) and keeps Try again offline (the phone cannot tell the read will
+resume by itself); (4) the grouping chosen here is remembered for this run, not handed to the
+Calendar's own (each screen keeps its own until the session's scope carries it).
+
+**Native (docs/NATIVE.md, 19 Nov):** the tiles and the count tiles ripple on Android and shade on
+iPhone, never both; every tap is 44 px or more (tiles 92); the room number shrinks to fit (0.8) rather
+than clip; pull down reads again (the core's `Screen`); no sheet of its own (Assign room is
+reservations'). **Export:** the web's Rooms offers no download or print, so no `ExportButtons` here.

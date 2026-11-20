@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { Text, TextInput, View } from "react-native";
 import type { Hotel } from "../../core/api";
 import { c, face, space, t } from "../../core/theme";
-import { Head, Screen, useRead } from "../../core/ui";
+import { Head, Screen, useRead, keys } from "../../core/ui";
 import { LoadFailed } from "../laundry/kit";
 import { Back, Box, Btn, body, Empty, InDialog, Loading, NotYours, SectionHead, Select, Toast, saidOf, type Said } from "../guest-services/kit";
 import { isRefused, readStore, saveStoreCount } from "./data";
@@ -182,7 +182,7 @@ function Box44({ label, value, onChange, placeholder, width }: { label: string; 
   return (
     <TextInput
       accessibilityLabel={label} value={value} onChangeText={onChange} placeholder={placeholder} placeholderTextColor={c.grey400}
-      keyboardType="decimal-pad" maxLength={10}
+      {...keys.amount} maxLength={10}
       style={{ width, minHeight: 44, paddingHorizontal: 10, borderRadius: 10, borderWidth: 1, borderColor: c.grey300, backgroundColor: c.white, fontSize: 16, color: c.ink900, textAlign: "right", ...face[500], ...t.tab }}
     />
   );

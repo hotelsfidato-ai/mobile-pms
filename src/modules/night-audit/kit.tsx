@@ -6,6 +6,7 @@ import {
 } from "react-native";
 import { isOnline } from "../../core/offline";
 import { c, face, t } from "../../core/theme";
+import { modalEdge, ripple, shade, useSheetPad } from "../../core/ui";
 
 /* ══════════════════════════════════════════════════════════════════
    THE WEB KIT'S PIECES THE NIGHT AUDIT USES, from src/components/ui
@@ -59,17 +60,17 @@ export function Btn({ label, a11y, variant = "secondary", icon: Icon, onPress, d
 }) {
   const fg = disabled ? (variant === "primary" ? c.grey600 : c.grey500) : variant === "primary" ? c.white : c.ink900;
   return (
-    <Pressable
+    <Pressable android_ripple={ripple}
       onPress={onPress} disabled={disabled} accessibilityRole="button" accessibilityLabel={a11y ?? label}
       accessibilityState={{ disabled: Boolean(disabled) }}
-      style={({ pressed }) => [{
+      style={shade(({ pressed }) => [{
         minHeight: 44, paddingHorizontal: 14, borderRadius: 999, flexDirection: "row", gap: 8,
         alignItems: "center", justifyContent: "center", ...(grow ? { flex: 1 } : null),
         backgroundColor: variant === "primary"
           ? (disabled ? c.grey300 : pressed ? c.orange700 : c.orange600)
           : (disabled ? c.grey50 : pressed ? c.grey100 : c.white),
         borderWidth: variant === "secondary" ? 1 : 0, borderColor: c.grey300,
-      }, style]}
+      }, style])}
     >
       {Icon ? <Icon size={16} color={fg} /> : null}
       <Text style={[t.label, { color: fg }]}>{label}</Text>
@@ -80,21 +81,22 @@ export function Btn({ label, a11y, variant = "secondary", icon: Icon, onPress, d
 /* ── Dialog (Overlays.tsx): centred, 16 from each side, a hairline under the head ── */
 export function Dialog({ title, onClose, children }: { title: string; onClose: () => void; children: ReactNode }) {
   const { height } = useWindowDimensions();
+  const pad = useSheetPad();
   return (
-    <Modal visible transparent animationType="fade" onRequestClose={onClose}>
+    <Modal visible transparent animationType="fade" onRequestClose={onClose} {...modalEdge}>
       <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
-        style={{ flex: 1, backgroundColor: "rgba(3,23,40,0.25)", justifyContent: "center", paddingHorizontal: 16 }}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ flex: 1, backgroundColor: "rgba(3,23,40,0.25)", justifyContent: "center", paddingHorizontal: 16, paddingTop: pad.top + 16, paddingBottom: pad.bottom }}
       >
         <Pressable style={{ position: "absolute", top: 0, bottom: 0, left: 0, right: 0 }} onPress={onClose} accessibilityLabel="Close" />
-        <View style={{ backgroundColor: c.white, borderRadius: 12, borderWidth: 1, borderColor: c.grey200, maxHeight: height - 64 }}>
+        <View style={{ backgroundColor: c.white, borderRadius: 12, borderWidth: 1, borderColor: c.grey200, maxHeight: height - pad.top - pad.bottom - 32 }}>
           <View style={{ flexDirection: "row", gap: 16, alignItems: "center", paddingLeft: 20, paddingRight: 8, paddingVertical: 6, borderBottomWidth: 1, borderBottomColor: c.grey200 }}>
             <Text style={[t.heading, { flex: 1 }]} accessibilityRole="header">{title}</Text>
-            <Pressable onPress={onClose} accessibilityRole="button" accessibilityLabel="Close" style={{ width: 44, height: 44, alignItems: "center", justifyContent: "center" }}>
+            <Pressable android_ripple={ripple} onPress={onClose} accessibilityRole="button" accessibilityLabel="Close" style={{ width: 44, height: 44, alignItems: "center", justifyContent: "center" }}>
               <X size={16} color={c.grey500} />
             </Pressable>
           </View>
-          <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingHorizontal: 20, paddingVertical: 16, gap: 16 }}>
+          <ScrollView keyboardShouldPersistTaps="handled" keyboardDismissMode="interactive" contentContainerStyle={{ paddingHorizontal: 20, paddingVertical: 16, gap: 16 }}>
             {children}
           </ScrollView>
         </View>
@@ -106,7 +108,7 @@ export function Dialog({ title, onClose, children }: { title: string; onClose: (
 /* ── Checkbox: the box and its words, one 44-tall target ── */
 export function Tick({ on, onChange, label }: { on: boolean; onChange: (v: boolean) => void; label: string }) {
   return (
-    <Pressable
+    <Pressable android_ripple={ripple}
       onPress={() => onChange(!on)} accessibilityRole="checkbox" accessibilityState={{ checked: on }} accessibilityLabel={label}
       style={{ minHeight: 44, flexDirection: "row", alignItems: "flex-start", gap: 10, paddingVertical: 4 }}
     >

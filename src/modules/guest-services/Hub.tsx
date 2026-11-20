@@ -2,7 +2,7 @@ import { AlarmClock, ChevronRight, ConciergeBell, MessageSquare, PackageSearch, 
 import { Pressable, Text, View } from "react-native";
 import type { Hotel } from "../../core/api";
 import { c, t } from "../../core/theme";
-import { Head, Screen } from "../../core/ui";
+import { Head, Screen, ripple, shade } from "../../core/ui";
 import { Back, Box, IconChip } from "./kit";
 import { whyNotDesk, whyNotLost, whyNotRequests, whyNotWakeUps } from "./roles";
 
@@ -35,13 +35,13 @@ export function Hub({ hotel, role, onBack, onOpen }: {
         {ENTRIES.map((e, i) => {
           const why = e.why(role);
           return (
-            <Pressable
+            <Pressable android_ripple={ripple}
               key={e.path} onPress={() => onOpen(e.path)} disabled={why != null}
               accessibilityRole="button" accessibilityLabel={e.label} accessibilityState={{ disabled: why != null }} accessibilityHint={why ?? e.line}
-              style={({ pressed }) => ({
+              style={shade(({ pressed }) => ({
                 flexDirection: "row", gap: 14, alignItems: "center", paddingHorizontal: 16, paddingVertical: 12, minHeight: 56,
                 borderTopWidth: i ? 1 : 0, borderTopColor: c.grey100, backgroundColor: pressed ? c.grey50 : "transparent",
-              })}
+              }))}
             >
               <IconChip Icon={e.Icon} />
               <View style={{ flex: 1, minWidth: 0 }}>

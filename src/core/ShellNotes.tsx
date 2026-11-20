@@ -9,7 +9,7 @@ import { ON_THE_WEBSITE, phoneRoute, relative } from "./menu";
 import { isOnline } from "./offline";
 import { body, regular, Slide } from "./Shell";
 import { c, face, t } from "./theme";
-import { Capsule, Card, Screen } from "./ui";
+import { Capsule, Card, Screen, ripple, shade } from "./ui";
 
 /* ══════════════════════════════════════════════════════════════════
    THE BELL AND THE NOTIFICATIONS SCREEN — the web's NotificationBell.tsx,
@@ -95,7 +95,7 @@ export function NotesDrawer({ hotel, onClose }: { hotel: Hotel | null; onClose: 
               {!notes ? "-" : unread > 0 ? `${unread} unread` : "You are all caught up"}
             </Text>
           </View>
-          <Pressable onPress={onClose} accessibilityRole="button" accessibilityLabel="Close" hitSlop={14} style={{ padding: 4 }}>
+          <Pressable android_ripple={ripple} onPress={onClose} accessibilityRole="button" accessibilityLabel="Close" hitSlop={14} style={{ padding: 4 }}>
             <X size={16} color={c.grey500} />
           </Pressable>
         </View>
@@ -108,9 +108,9 @@ export function NotesDrawer({ hotel, onClose }: { hotel: Hotel | null; onClose: 
             ) : notes.map((n) => {
               const route = n.link ? phoneRoute(n.link, hotel.code) : null;
               return (
-                <Pressable
+                <Pressable android_ripple={ripple}
                   key={n.id} onPress={() => open(n, route)} accessibilityRole="button" accessibilityLabel={n.title}
-                  style={({ pressed }) => [styles.row, !n.isRead && { backgroundColor: "rgba(253,241,235,0.4)" }, pressed && { backgroundColor: c.grey50 }]}
+                  style={shade(({ pressed }) => [styles.row, !n.isRead && { backgroundColor: "rgba(253,241,235,0.4)" }, pressed && { backgroundColor: c.grey50 }])}
                 >
                   <View style={{ flexDirection: "row", alignItems: "flex-start", gap: 12 }}>
                     <Text style={[{ flex: 1, fontSize: 14, lineHeight: 19, color: n.isRead ? c.grey600 : c.ink900 }, n.isRead ? regular : face[500]]}>{n.title}</Text>
@@ -174,7 +174,7 @@ export function NotesScreen({ hotel }: { hotel: Hotel }) {
               <View style={{ flexDirection: "row", alignItems: "center", gap: 12, marginLeft: "auto" }}>
                 <Text style={[t.caption, t.tab, regular]}>{relative(n.at)}</Text>
                 {route ? (
-                  <Pressable onPress={() => router.push(route as never)} accessibilityRole="link" hitSlop={12}>
+                  <Pressable android_ripple={ripple} onPress={() => router.push(route as never)} accessibilityRole="link" hitSlop={12}>
                     <Text style={[body, { color: c.orange700, ...face[500] }]}>Open</Text>
                   </Pressable>
                 ) : null}

@@ -1,3 +1,4 @@
+import { useQuery } from "@tanstack/react-query";
 import type { LucideIcon } from "lucide-react-native";
 import { CloudOff } from "lucide-react-native";
 import { useRef, useState, type ReactNode } from "react";
@@ -10,7 +11,8 @@ import { ExportButtons } from "../../core/Export";
 import type { ExportTable } from "../../core/exportDoc";
 import { isOnline } from "../../core/offline";
 import { c, face, space, t } from "../../core/theme";
-import { Card, ReadFailed, notKnown, useStuck } from "../../core/ui";
+import { Card, ReadFailed, notKnown } from "../../core/ui";
+import { stillUnknown } from "./desk";
 import type { Said } from "./Kit";
 
 /* ══════════════════════════════════════════════════════════════════
@@ -113,19 +115,64 @@ export function failedSaid(e: unknown, title: string, done: string, where: strin
   return { tone: "refused", title, text: e instanceof ApiError || e instanceof Error ? e.message : String(e) };
 }
 
-/** One intent, one write (MEMORY 8, 16): latched at the tap; once its outcome is unknown, stuck
-    until this sheet or screen is closed and the record read again. `onError` hears every failure. */
-export function useWrite() {
-  const stuck = useStuck();
+/** A read that also says when the answer now on screen BEGAN, so an unknown outcome can wait
+    for a read begun after it (stillUnknown). The core's useRead, with that one time added. */
+export function useDeskRead<T>(read: () => Promise<T>, key: readonly unknown[]) {
+  const q = useQuery({ queryKey: key, queryFn: async () => { const began = Date.now(); return { value: await read(), began }; } });
+  return {
+    data: q.data?.value, error: q.error ? q.error.message : undefined, loading: q.isFetching,
+    reload: () => { void q.refetch(); }, began: q.data?.began ?? 0,
+  };
+}
+
+/** THE SCREEN'S STOP (MEMORY 16; the reviews of 20 Nov): once a write's outcome is unknown
+    (`outcomeUnknown`: nothing came back, or a 5xx), every write on this screen waits until a read
+    of it that began after that moment has come back - not when a sheet closes. None of these
+    routes reads an idempotency key, so a second tap could be a second deposit or payment. */
+export function useStop(began: number) {
+  const [lost, setLost] = useState<{ at: number; done: string; where: string } | null>(null);
+  const now = useRef({ lost, began });
+  now.current = { lost, began };
+  const stuck = lost !== null && stillUnknown(lost.at, began);
+  return {
+    stuck,
+    line: stuck ? notKnown(lost!.done, lost!.where).line : null,
+    isStuck: () => now.current.lost !== null && stillUnknown(now.current.lost.at, now.current.began),
+    lose: (e: unknown, done: string, where: string) => {
+      if (!outcomeUnknown(e)) return false;
+      const v = { at: Date.now(), done, where };
+      now.current = { ...now.current, lost: v };
+      setLost(v);
+      return true;
+    },
+  };
+}
+export type Stop = ReturnType<typeof useStop>;
+
+/** The screen's stop said where the person looks, with the screen's grey buttons. */
+export function StopCard({ stop }: { stop: Stop }) {
+  if (!stop.line) return null;
+  return (
+    <Card style={{ backgroundColor: c.yellow50, borderColor: c.yellow100, gap: 4 }}>
+      <Text style={[t.label, { color: c.ink900, lineHeight: 20, ...face[500] }]} accessibilityRole="alert">{stop.line}</Text>
+      <Text style={[t.caption, { lineHeight: 16 }]}>It is being read again; nothing here can be done until it has been.</Text>
+    </Card>
+  );
+}
+
+/** One intent, one write (MEMORY 8, 16): latched at the tap, and refused while the screen's stop
+    is on. `done` and `where` are the words of an unknown outcome: "Not known whether it was
+    <done>: look at <where> before trying again." `onError` hears every failure. */
+export function useWrite(stop: Stop, done: string, where: string) {
   const latch = useRef(false);
   const [busy, setBusy] = useState(false);
-  const run = async (write: () => Promise<void>, onError: (e: unknown) => void) => {
-    if (latch.current || stuck.isStuck()) return;
+  const run = async (write: () => Promise<void>, onError: (e: unknown, unknown: boolean) => void) => {
+    if (latch.current || stop.isStuck()) return;
     latch.current = true;
     setBusy(true);
-    try { await write(); } catch (e) { stuck.stop(e); onError(e); } finally { latch.current = false; setBusy(false); }
+    try { await write(); } catch (e) { onError(e, stop.lose(e, done, where)); } finally { latch.current = false; setBusy(false); }
   };
-  return { run, busy, stuck: stuck.stuck };
+  return { run, busy, stuck: stop.stuck };
 }
 
 /** A sheet from the bottom: the web's Dialog at phone width, clear of the home indicator and
