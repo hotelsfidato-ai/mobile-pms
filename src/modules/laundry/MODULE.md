@@ -131,8 +131,8 @@ in a bag. Offline: no laundry path is on the web's list, each write **refused** 
 | Add an item (dialog) | on it | not pictured | name, service, price, Free |
 
 Rules `prices.ts` (`prices.check.ts`); pieces from `../banquet/setupKit.tsx`. The Dockets' "Price list"
-button opens it. **Left for the mobile chat:** Collect.tsx's empty-list sentence still ends "Price
-list: On the website for now." (outside this lane's one allowed edit; it can now be dropped).
+button opens it. Collect.tsx's empty-list sentence now links to it in the web's words
+(m13-fixes, 20 Nov, MLDY-3).
 
 - **NO DEFAULT PRICES:** blank is null ("-"), never 0; emptying a box unprices the line; 0 only with
   Free (ticked, it saves at once; unticked, it unprices); a word is "A price is zero or more, or nothing
