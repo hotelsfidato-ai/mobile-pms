@@ -5,6 +5,13 @@ module's `DEFECTS.md` instead. Read the newest first.
 
 ---
 
+### 19 · On Linux, Metro's cache follows TMPDIR, not TEMP/TMP (20 Nov)
+
+`gates.sh` gave each copy its own Metro cache through `TEMP`/`TMP` (MEMORY 5), which is what
+Windows reads. In the cloud (Linux) Metro read `TMPDIR`, so every helper's export shared
+`/tmp/metro-cache`, and one copy's bundle lacked its new route file (found by the Rooms helper; the
+routes gate caught it, so nothing wrong was merged). **The rule:** `gates.sh` sets all three.
+
 ### 18 · "Break it once" on an uncommitted file, restored with git, restored nothing (19 Nov)
 
 The mobile chat broke `exportDoc.ts`'s escaping to prove its check, then ran `git checkout` to put
