@@ -3,14 +3,14 @@ import { Phone } from "lucide-react-native";
 import { useRef, useState } from "react";
 import { Linking, Text, View } from "react-native";
 import { HeldError, outcomeUnknown, type Hotel } from "../../core/api";
+import { DateField, TimeField } from "../../core/DateField";
 import { ExportButtons } from "../../core/Export";
 import type { ExportTable } from "../../core/exportDoc";
 import { c, t } from "../../core/theme";
 import { Screen, Stopped, notKnown, useScreenStop } from "../../core/ui";
 import { tableBookingStop } from "./floor";
-import { stepDay } from "./billHistory";
 import { actOnBooking, bookOutsideDiner, readTableBookings } from "./serviceData";
-import { BottomSheet, Btn, DayField, Field, Input, Loading, PageHead, Panel, Pill, Select, Why } from "./ServiceKit";
+import { BottomSheet, Btn, Field, Input, Loading, PageHead, Panel, Pill, Select, Why } from "./ServiceKit";
 import { whyNotAnswerTable, whyNotReadBills } from "./serviceRoles";
 import {
   ACT, answer, dayWords, detailLine, lists, offers, people, statusOf, tableLabel,
@@ -88,8 +88,7 @@ export function TableBookingsScreen({ hotel, role }: { hotel: Hotel; role: strin
       {head}
       {said ? <SaidBar said={said} onDone={() => setSaid(null)} /> : null}
       <View style={{ gap: 8 }}>
-        <DayField label="Day" value={shown} placeholder={today || "2026-11-06"}
-          onChange={(v) => setDay(v === today ? "" : v)} step={(by) => { const v = stepDay(shown, by, today); setDay(v === today ? "" : v); }} />
+        <DateField label="Day" value={shown} onChange={(v) => setDay(v === today ? "" : v)} hotel={today ? { today, businessDate: today } : hotel} />
         {day ? <Btn ghost label="Back to today" onPress={() => setDay("")} style={{ alignSelf: "flex-start" }} /> : null}
       </View>
       {q.error && q.data ? <Stale error={q.error} loadedAt={q.dataUpdatedAt} onRetry={reload} /> : null}
@@ -102,7 +101,7 @@ export function TableBookingsScreen({ hotel, role }: { hotel: Hotel; role: strin
         </>
       )}
       {booking > 0 && q.data ? (
-        <NewBooking key={booking} code={code} today={today} tables={tables} sections={q.data.sections ?? []}
+        <NewBooking key={booking} code={code} hotel={hotel} today={today} tables={tables} sections={q.data.sections ?? []}
           onClose={(s) => { setBooking(0); if (s) setSaid(s); changed(); }} />
       ) : null}
     </Screen>
@@ -251,8 +250,8 @@ function AnswerSheet({ b, code, tables, act, onClose }: { b: TableBooking; code:
 }
 
 /* A table for somebody not staying (259): confirmed as it is taken; every refusal is the server's sentence. */
-function NewBooking({ code, today, tables, sections, onClose }: {
-  code: string; today: string; tables: Tables; sections: { id: string; name: string }[]; onClose: (s?: Said) => void;
+function NewBooking({ code, hotel, today, tables, sections, onClose }: {
+  code: string; hotel: Hotel; today: string; tables: Tables; sections: { id: string; name: string }[]; onClose: (s?: Said) => void;
 }) {
   const [v, setV] = useState<Diner>({ name: "", phone: "", party: "", date: today, time: "", tableId: "", sectionId: "", note: "" });
   const [busy, setBusy] = useState(false);
@@ -293,11 +292,9 @@ function NewBooking({ code, today, tables, sections, onClose }: {
       <Field label="Name *"><Input value={v.name} onChangeText={set("name")} maxLength={60} autoFocus textContentType="name" autoComplete="name" accessibilityLabel="Name" /></Field>
       <Field label="Phone *"><Input value={v.phone} onChangeText={set("phone")} keyboardType="phone-pad" inputMode="tel" textContentType="telephoneNumber" accessibilityLabel="Phone" /></Field>
       <Field label="People *"><Input value={v.party} onChangeText={set("party")} keyboardType="number-pad" inputMode="numeric" maxLength={2} accessibilityLabel="People" /></Field>
-      <DayField label="Day *" value={v.date} onChange={set("date")} step={(by) => set("date")(stepDay(v.date, by, today))} />
-      {/* A time picker needs @react-native-community/datetimepicker (9.1.0), not approved: typed as the web's input sends it. */}
-      <Field label="Time *" hint="Written 20:30, on the hotel's clock.">
-        <Input value={v.time} onChangeText={set("time")} placeholder="20:30" keyboardType="numbers-and-punctuation" maxLength={5} accessibilityLabel="Time" />
-      </Field>
+      {/* The phone's own pickers (M-16): no earlier than the hotel's today, as the web's min; the time on the hotel's clock. */}
+      <DateField label="Day" required value={v.date} onChange={set("date")} min={today || undefined} hotel={today ? { today, businessDate: today } : hotel} />
+      <TimeField label="Time" required value={v.time} onChange={set("time")} hint="On the hotel's clock." />
       <Field label="Table" hint="If you know it now.">
         <Select label="Table" value={v.tableId} onChange={set("tableId")} options={[{ value: "", label: "Not yet" }, ...tables.map((x) => ({ value: x.id, label: tableLabel(x) }))]} />
       </Field>
