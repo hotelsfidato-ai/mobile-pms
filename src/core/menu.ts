@@ -958,6 +958,11 @@ export const PHONE_ROUTES: Readonly<Record<string, string>> = {
   "/admin/sign-ins": "/admin/:code/sign-ins",
   "/settings/people/roles": "/admin/:code/roles",
   "/admin/roles": "/admin/:code/roles",
+  /* mobile/m13-hk (19 Nov): Equipment (its item is reached from it), and housekeeping's Minibar and
+     Checklists (16 Nov; on the web a search away, in no working menu). */
+  "/h/:code/equipment": "/equipment/:code",
+  "/h/:code/minibar": "/housekeeping/:code/minibar",
+  "/h/:code/checklists": "/housekeeping/:code/checklists",
   /* mobile/m13-rooms (19 Nov): Rooms, the house as tiles for today. */
   "/h/:code/stay": "/front-desk/:code/rooms",
   /* mobile/m13-till (19 Nov): the Till and the Terminal, each its own twin. */
