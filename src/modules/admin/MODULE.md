@@ -87,6 +87,9 @@ Rules: `rules.ts` (`rules.check.ts`); who opens and reads what: `roles.ts` (`rol
    typed as the API takes them (YYYY-MM-DD, checked before asking): the web's date box needs
    `@react-native-community/datetimepicker` 9.1.0, not approved.
 6. **Sparklines are bars** (no chart package), the same figures oldest on the left.
+7a. **Switching a module OFF asks first** (the owner's M-15, 20 Nov), with the phone's own dialog:
+   "Switch off <module>? / Staff at <hotel> lose its screens at once. You can switch it back on." The
+   web switches at one tap and has no words for it. Switching on, and "Two-step required", stay one tap.
 7. **The Settings console opens on its list of pages**; the web opens straight on Profile with the
    list as a sidebar.
 8. **Exports** are the core's (print / save as PDF, share) of the rows on screen, where the web offers

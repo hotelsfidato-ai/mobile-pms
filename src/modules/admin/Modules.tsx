@@ -4,7 +4,7 @@ import { Text, View } from "react-native";
 import { c, t } from "../../core/theme";
 import { Head, Screen, s as core, notKnown, useRead } from "../../core/ui";
 import { getModules, setModule } from "./data";
-import { Failed, Loading, Refused, Stale, SwitchRow, Toast, body, saidOf, useAct, useSaid, type Said } from "./kit";
+import { Failed, Loading, Refused, Stale, SwitchRow, Toast, body, confirm, saidOf, useAct, useSaid, type Said } from "./kit";
 import { refusedScreen } from "./roles";
 import { MODULE_COPY, bookingSection, moduleLabel, switchedWords } from "./rules";
 import type { AdminProps } from "./Route";
@@ -17,8 +17,9 @@ import type { AdminProps } from "./Route";
    (D17-36): the page is not offered to anybody else, and the server asks
    again (MODULE_SWITCH_REFUSED). Turning one off hides its screens AND the
    API refuses them, so after each switch the frame's menu reads the
-   property's modules again (["modules", code], Shell.tsx). Refused
-   offline with the web's sentence. Not pictured (no picture of it).
+   property's modules again (["modules", code], Shell.tsx). Switching
+   OFF asks first (the owner's M-15); on is one tap. Refused offline with
+   the web's sentence. Not pictured (no picture of it).
    ══════════════════════════════════════════════════════════════════ */
 
 export function Modules({ hotel, role }: AdminProps) {
@@ -52,9 +53,9 @@ export function Modules({ hotel, role }: AdminProps) {
             <>
               <Stale error={read.error} />
               <Card title="Modules" line="What this property runs." info="Off means the screens go and the API refuses them."
-                rows={all.filter((m) => !bookingSection(m.module))} seenAt={seenAt} code={code} onSaid={say} onDone={done} />
+                rows={all.filter((m) => !bookingSection(m.module))} seenAt={seenAt} code={code} hotelName={hotel.name} onSaid={say} onDone={done} />
               <Card title="New booking" line="The sections that fold open on New booking." info="Off hides one at this property; nothing already booked changes."
-                rows={all.filter((m) => bookingSection(m.module))} seenAt={seenAt} code={code} onSaid={say} onDone={done} />
+                rows={all.filter((m) => bookingSection(m.module))} seenAt={seenAt} code={code} hotelName={hotel.name} onSaid={say} onDone={done} />
             </>
           )}
       </Screen>
@@ -63,8 +64,8 @@ export function Modules({ hotel, role }: AdminProps) {
   );
 }
 
-function Card({ title, line, info, rows, seenAt, code, onSaid, onDone }: {
-  title: string; line: string; info: string; rows: { module: string; enabled: boolean }[]; seenAt: number; code: string;
+function Card({ title, line, info, rows, seenAt, code, hotelName, onSaid, onDone }: {
+  title: string; line: string; info: string; rows: { module: string; enabled: boolean }[]; seenAt: number; code: string; hotelName: string;
   onSaid: (s: Said) => void; onDone: (s: Said) => void;
 }) {
   return (
@@ -75,20 +76,27 @@ function Card({ title, line, info, rows, seenAt, code, onSaid, onDone }: {
         {/* The web's (i): said here, a phone has no hover. */}
         <Text style={[t.caption, { lineHeight: 17 }]}>{info}</Text>
       </View>
-      {rows.map((m, i) => <One key={m.module} m={m} first={i === 0} seenAt={seenAt} code={code} onSaid={onSaid} onDone={onDone} />)}
+      {rows.map((m, i) => <One key={m.module} m={m} first={i === 0} seenAt={seenAt} code={code} hotelName={hotelName} onSaid={onSaid} onDone={onDone} />)}
     </View>
   );
 }
 
-function One({ m, first, seenAt, code, onSaid, onDone }: {
-  m: { module: string; enabled: boolean }; first: boolean; seenAt: number; code: string; onSaid: (s: Said) => void; onDone: (s: Said) => void;
+function One({ m, first, seenAt, code, hotelName, onSaid, onDone }: {
+  m: { module: string; enabled: boolean }; first: boolean; seenAt: number; code: string; hotelName: string; onSaid: (s: Said) => void; onDone: (s: Said) => void;
 }) {
   const act = useAct(seenAt);
-  const flip = (next: boolean) => act.run(() => setModule(code, m.module, next), {
+  const write = (next: boolean) => act.run(() => setModule(code, m.module, next), {
     ok: () => { const w = switchedWords(m.module, next); onDone({ title: w.title, body: w.body, tone: "ok" }); },
     no: (e) => onSaid(saidOf(e, "Not changed")),
     unknown: (e) => onDone({ ...notKnown(`turned ${next ? "on" : "off"}`, `${moduleLabel(m.module)} here`, e), tone: "bad" }),
   });
+  /* The owner's M-15 (20 Nov): switching OFF asks first, each phone's own dialog (the web has no words
+     for it, switching at one tap); switching on stays one tap. */
+  const flip = async (next: boolean) => {
+    if (act.busy || act.stuck) return;
+    if (!next) await confirm(`Switch off ${moduleLabel(m.module)}?`, `Staff at ${hotelName} lose its screens at once. You can switch it back on.`, "Switch off");
+    await write(next);
+  };
   return (
     <View style={{ paddingVertical: 12, borderTopWidth: first ? 0 : 1, borderColor: c.grey100, gap: 4 }}>
       <SwitchRow label={moduleLabel(m.module)} description={MODULE_COPY[m.module]?.note} value={m.enabled}
