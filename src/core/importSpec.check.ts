@@ -2,7 +2,7 @@
    The web's own round trip (src/lib/importSpec.test.ts): the template parses back into exactly the rows
    it was made from; and the phone's one difference (a byte-order mark taken off before the headers). */
 import {
-  MENU_SPEC, ROOM_SPEC, ROOM_TYPE_SPEC, acceptedOf, importAbout, importLabel, importedWords, parseCsv, readImport, rejectedOf,
+  MENU_SPEC, ROOM_SPEC, ROOM_TYPE_SPEC, acceptedOf, importAbout, importLabel, importedWords, parseCsv, previewNote, readImport, rejectedOf,
   templateCsv, templateName, type ImportReport, type ImportSpec,
 } from "./importSpec.ts";
 
@@ -64,5 +64,13 @@ eq(importedWords(ROOM_SPEC, r), {
   saved: "Saved. The rejected rows below did not land - correct them in the file and import it again, which updates rather than duplicates.",
 }, "applied with a rejection: the web's toast and box");
 eq(importedWords(MENU_SPEC, report({ creates: 3 })).saved, "Saved. Every row landed.", "applied clean");
+
+/* A file whose rows are always added (the equipment register): never "import it again" (MEQ-P1). */
+const adds: ImportSpec = { ...ROOM_SPEC, what: "equipment", repeats: "adds" };
+eq(importedWords(adds, r).saved,
+  "Saved. The rejected rows below did not land - send only the corrected rows: the rows that landed would be added again.", "adds: the done box");
+eq(importedWords(adds, r).body, "1 rows were rejected and are listed - send only the corrected rows: the rows that landed would be added again.", "adds: the toast");
+eq(previewNote(adds), "Nothing above has been saved. Send only the corrected rows: the rows that landed would be added again.", "adds: the preview");
+eq(previewNote(MENU_SPEC), "Nothing above has been saved. Importing the same file again later corrects prices rather than adding a second copy.", "updates: the web's line");
 
 console.log("importSpec.check: ok");

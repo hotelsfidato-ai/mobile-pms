@@ -152,3 +152,7 @@ eq(addBody({ ...f, roomId: "r1", purchaseDate: "2025-03-14", amcEnds: "2027-03-3
   eq(changesOf(item, same), {});
   eq(changesOf(item, { ...same, purchaseDate: "", warrantyEnds: "2028-03-14" }), { purchaseDate: null, warrantyEnds: "2028-03-14" });
 }
+{
+  const { EQUIPMENT_SPEC } = await import("./importSpec.ts");
+  eq(EQUIPMENT_SPEC.repeats, "adds"); // MEQ-P1: the sheet never says "import it again" for this file
+}

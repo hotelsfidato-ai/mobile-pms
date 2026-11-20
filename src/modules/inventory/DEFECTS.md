@@ -67,3 +67,10 @@ The channel manager's times (`lastLogin.at`, `sentAt`, `receivedAt`, a push's `a
 Postgres text. `config.ts whenOf` reads every one through the core's `msAt` (MEMORY 7);
 `config.check.ts` makes `Date.parse` ISO-only for the test, as Hermes is (MEMORY 17), and was broken
 once (a raw `Date.parse`) to see it fail. **The rule:** as MEMORY 7.
+
+## m16 pickers (20 Nov) — lane m16-pick-pos
+
+### MINV-P1 · A failed re-read after a photo was moved left the arrows grey with no way on (20 Nov) — fixed
+**What:** after a landed move or delete the arrows wait for a fresh read; if that read failed, the screen
+said "Reading the photos again…" for ever. **Found:** the independent review of 0d933d5. **Done:** while
+waiting (or after a lost add), a failed read is said with "Read them again".

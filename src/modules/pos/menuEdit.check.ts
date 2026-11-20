@@ -155,9 +155,15 @@ eq(importStop("5EL", "menu") !== importStop("5EL", "addons"), true, "each file i
 }
 
 /* A coupon (2.5): both days before Save; a blank limit is null, never 0; the days sent as picked. */
-eq(couponPart(false, { from: "", to: "", maxUses: "5", minBill: "" }), { ready: true, body: {} }, "not a coupon: nothing of it is sent");
+eq(couponPart(false, { from: "", to: "", maxUses: "5", minBill: "" }).body, {}, "not a coupon: nothing of it is sent");
 eq(couponPart(true, { from: "2026-11-20", to: "", maxUses: "", minBill: "" }).ready, false, "a coupon waits for its Until");
 eq(couponPart(true, { from: "2026-11-20", to: "2026-12-31", maxUses: " ", minBill: "" }),
-  { ready: true, body: { coupon: { from: "2026-11-20", to: "2026-12-31", maxUses: null, minBill: null } } }, "blank limits are none");
+  { ready: true, maxUsesError: undefined, minBillError: undefined, body: { coupon: { from: "2026-11-20", to: "2026-12-31", maxUses: null, minBill: null } } }, "blank limits are none");
+/* MPOS-P2: a limit typed with a comma is not a figure - said, Save grey, never sent as null ("no limit"). */
+{
+  const bad = couponPart(true, { from: "2026-11-20", to: "2026-12-31", maxUses: "1,500", minBill: "999,50" });
+  eq([bad.ready, bad.maxUsesError, bad.minBillError], [false, "Not a figure: type it as 1500, with no commas.", "Not a figure: type it as 1500, with no commas."], "1,500 and 999,50 refused");
+  eq(couponPart(true, { from: "2026-11-20", to: "2026-12-31", maxUses: "", minBill: "abc" }).ready, false, "a word as the least bill keeps Save grey");
+}
 eq(couponPart(true, { from: "2026-11-20", to: "2026-12-31", maxUses: "50", minBill: "999.50" }).body,
   { coupon: { from: "2026-11-20", to: "2026-12-31", maxUses: 50, minBill: 999.5 } }, "typed limits as numbers, paise kept");

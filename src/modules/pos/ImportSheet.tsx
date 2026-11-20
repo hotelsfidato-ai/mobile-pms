@@ -6,7 +6,7 @@ import { Modal, Pressable, ScrollView, Text, View } from "react-native";
 import { ApiError, outcomeUnknown } from "../../core/api";
 import { CSV_IMPORT } from "../../core/files";
 import {
-  acceptedOf, importAbout, importedWords, importLabel, readImport, rejectedOf, templateCsv, templateName,
+  acceptedOf, importAbout, importedWords, importLabel, previewNote, readImport, rejectedOf, templateCsv, templateName,
   type ImportReport, type ImportSpec,
 } from "../../core/importSpec";
 import { pickFile } from "../../core/pickers";
@@ -221,9 +221,7 @@ export function ImportSheet({ spec, load, stopName, where, onClose, onImported }
                   </View>
                 ) : null}
                 {!applied ? (
-                  <Text style={[t.label, ty.sm, { color: c.grey500 }]}>
-                    Nothing above has been saved. Importing the same file again later corrects prices rather than adding a second copy.
-                  </Text>
+                  <Text style={[t.label, ty.sm, { color: c.grey500 }]}>{previewNote(spec)}</Text>
                 ) : null}
               </>
             ) : null}

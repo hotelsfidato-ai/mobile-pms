@@ -39,6 +39,10 @@ export interface ImportSpec {
   columns: Column[];
   /** Worked rows. Real-looking, and clearly examples. */
   examples: string[][];
+  /** What the server does with a row sent again: "updates" (the web's dialog says so, true for the
+      menu, sides, room types and rooms) or "adds" (the equipment register: every row is a new thing,
+      so the dialog's words would be false - MEQ-P1). Absent: "updates". */
+  repeats?: "updates" | "adds";
 }
 
 /** What an import would do, or did (the web's data/repositories/importReport.ts). */
@@ -259,15 +263,25 @@ export const importAbout = (applied: boolean, previewed: boolean) =>
 export const importLabel = (report: ImportReport | null, accepted: number) =>
   report ? `Import ${accepted} ${accepted === 1 ? "row" : "rows"}` : "Import";
 
+/** For a file whose rows are always added (`repeats: "adds"`): the web's "send it again" would add twice. */
+export const SEND_ONLY_CORRECTED = "Send only the corrected rows: the rows that landed would be added again.";
+
+/** The line under the preview (ImportDialog): the web's, or for a file that adds, the true one. */
+export const previewNote = (spec: ImportSpec) => (spec.repeats === "adds"
+  ? `Nothing above has been saved. ${SEND_ONLY_CORRECTED}`
+  : "Nothing above has been saved. Importing the same file again later corrects prices rather than adding a second copy.");
+
 /** What the web's toast says once applied, and the saved box under the tallies. */
 export function importedWords(spec: ImportSpec, done: ImportReport) {
+  const adds = spec.repeats === "adds";
   return {
     title: `${done.creates + done.updates} ${spec.what} imported`,
     body: done.rejected > 0
-      ? `${done.rejected} rows were rejected and are listed - fix them and send the file again.`
+      ? `${done.rejected} rows were rejected and are listed - ${adds ? SEND_ONLY_CORRECTED.replace(/^S/, "s") : "fix them and send the file again."}`
       : "Nothing was rejected.",
     saved: `Saved. ${done.rejected > 0
-      ? "The rejected rows below did not land - correct them in the file and import it again, which updates rather than duplicates."
+      ? `The rejected rows below did not land - ${adds ? SEND_ONLY_CORRECTED.replace(/^S/, "s")
+        : "correct them in the file and import it again, which updates rather than duplicates."}`
       : "Every row landed."}`,
   };
 }

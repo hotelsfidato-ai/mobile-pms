@@ -109,7 +109,13 @@ export function TypePhotos({ code, typeId, cannotChange }: { code: string; typeI
           </Text>
         </View>
       ) : null}
-      {waiting && !stop.unknown ? <Text style={[t.caption, { color: c.grey500 }]}>Reading the photos again…</Text> : null}
+      {(waiting || stop.unknown) && q.error && !q.loading ? (
+        /* The read that would let the stop go failed: said, with a way to read again (the review, 20 Nov). */
+        <View style={{ gap: 6 }} accessibilityRole="alert">
+          <Text style={[t.caption, { color: c.red700 }]}>{`The photos could not be read again: ${q.error}`}</Text>
+          <View style={{ flexDirection: "row" }}><Btn label="Read them again" onPress={q.reload} /></View>
+        </View>
+      ) : waiting && !stop.unknown ? <Text style={[t.caption, { color: c.grey500 }]}>Reading the photos again…</Text> : null}
       <InDialog said={said} />
     </View>
   );

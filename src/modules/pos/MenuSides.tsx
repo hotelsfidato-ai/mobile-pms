@@ -290,12 +290,12 @@ function PromotionSheet({ promotion, ctx, onClose }: { promotion?: Promo; ctx: C
           </View>
           <View style={{ flexDirection: "row", gap: 12 }}>
             <View style={{ flex: 1 }}>
-              <Field label="Bills it may go on" hint="Blank: no limit.">
+              <Field label="Bills it may go on" hint="Blank: no limit." error={coupon.maxUsesError}>
                 <Input label="Bills it may go on" value={limits.maxUses} onChange={limit("maxUses")} keys="number" />
               </Field>
             </View>
             <View style={{ flex: 1 }}>
-              <Field label="Least bill, ₹" hint="Blank: any bill.">
+              <Field label="Least bill, ₹" hint="Blank: any bill." error={coupon.minBillError}>
                 <Input label="Least bill, ₹" value={limits.minBill} onChange={limit("minBill")} keys="decimal" />
               </Field>
             </View>

@@ -15,7 +15,7 @@
 import { DASH } from "../../core/format.ts";
 import { msAt } from "../../core/format.ts";
 import { chooseRule, typesOf } from "./pad.ts";
-import { paise } from "./setup.ts";
+import { paise, typed } from "./setup.ts";
 import type { AddonGroup, MenuCategory, MenuItem, MenuVariation, NumberedAddon, SectionHeading, VariationKind } from "./types";
 
 /* ── The shapes the menu screen reads beyond the till's (data/till.ts) ── */
@@ -331,16 +331,18 @@ export function promoForm(isNew: boolean, code: string, name: string, kind: "per
   };
 }
 /** A coupon's part of a new promotion (Menu.tsx PromotionDialog, 261): both days chosen before Save;
-    a blank limit is none (null), never a number nobody typed; the days as the API's text. */
+    a blank limit is none (null), never a number nobody typed; the days as the API's text.
+    A limit that is not a figure ("1,500") is said and nothing is sent: the web's Number() would make
+    it NaN, JSON null, and the server would save "no limit" (MPOS-P2). */
+export const NOT_A_FIGURE = "Not a figure: type it as 1500, with no commas.";
 export function couponPart(isCoupon: boolean, l: { from: string; to: string; maxUses: string; minBill: string }) {
-  if (!isCoupon) return { ready: true, body: {} };
+  if (!isCoupon) return { ready: true, body: {}, maxUsesError: undefined, minBillError: undefined };
+  const uses = typed(l.maxUses), least = typed(l.minBill);
   return {
-    ready: l.from !== "" && l.to !== "",
-    body: { coupon: {
-      from: l.from, to: l.to,
-      maxUses: l.maxUses.trim() === "" ? null : Number(l.maxUses),
-      minBill: l.minBill.trim() === "" ? null : Number(l.minBill),
-    } },
+    ready: l.from !== "" && l.to !== "" && !uses.bad && !least.bad,
+    maxUsesError: uses.bad ? NOT_A_FIGURE : undefined,
+    minBillError: least.bad ? NOT_A_FIGURE : undefined,
+    body: { coupon: { from: l.from, to: l.to, maxUses: uses.value, minBill: least.value } },
   };
 }
 export const promoValue = (p: Promo) => (p.kind === "percent" ? `${p.value}%` : rupeesWhole(p.value));

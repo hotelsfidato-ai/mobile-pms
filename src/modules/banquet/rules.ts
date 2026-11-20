@@ -199,10 +199,18 @@ export interface RegisterInput {
 /** The body the web sends, or null while it is not ready (its `ready`, and
     a time or a figure that is not one). The end must follow the start: the
     server's own refusal says so ("A function ends after it starts."). */
+export const ENDS_FIRST = "A function ends after it starts.";
+/** The server's sentence when the end is not after the start, said BEFORE Register: the write is HELD
+    offline, so the server's refusal would come after the person has gone. "YYYY-MM-DDTHH:MM" compares as text. */
+export function whyNotWhen(d: Pick<RegisterDraft, "fromDay" | "fromTime" | "untilDay" | "untilTime">): string | null {
+  const startsAt = momentOf(d.fromDay, d.fromTime), endsAt = momentOf(d.untilDay, d.untilTime);
+  return startsAt && endsAt && endsAt <= startsAt ? ENDS_FIRST : null;
+}
 export function registerBody(d: RegisterDraft): RegisterInput | null {
   const startsAt = momentOf(d.fromDay, d.fromTime), endsAt = momentOf(d.untilDay, d.untilTime);
   const pax = figure(d.pax), amount = figure(d.amount);
   if (!d.venueId || !d.title.trim() || !d.hostName.trim() || !startsAt || !endsAt || pax === "bad" || amount === "bad") return null;
+  if (whyNotWhen(d)) return null;
   return {
     venueId: d.venueId, title: d.title, hostName: d.hostName,
     ...(d.hostPhone ? { hostPhone: d.hostPhone } : {}),

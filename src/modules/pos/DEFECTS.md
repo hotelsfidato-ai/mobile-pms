@@ -240,3 +240,18 @@ and the core's `downloadToShare` needs the type before it downloads. The phone n
 **Done:** named as a picture (the common case, the web's own assumption); said in `BillPhoto.tsx` and
 in the lane's report. **Rule:** the core's download should take the server's Content-Type (or the
 file's first bytes) when the caller cannot know it — asked of the mobile chat.
+
+### MPOS-P2 · A coupon's limit typed with a comma would have saved "no limit" (20 Nov) — fixed before the merge
+**What:** the coupon's "Bills it may go on" and "Least bill" went through `Number(text)`: "1,500" or "999,50"
+is NaN, which JSON writes as null, and the server (till.ts 3532-3541) saves null as NO limit - and skips its
+"cannot take off more than its least bill" guard (till.ts 3576). **Found:** the independent review of
+0d933d5. **Done:** `couponPart` reads each with `typed()`: not a figure is said under the box ("Not a
+figure: type it as 1500, with no commas.") and Save stays grey; nothing is sent. Checked, broken once.
+**For docs/api-requests.md (through the mobile chat):** the web's Menu.tsx 466-470 has the same gap, and
+the server should refuse a limit that is present but not a number rather than read it as none.
+**Rule:** never `Number(text)` into a body whose null means "none".
+
+### MPOS-P3 · A chosen bill photo could be dropped without a word (20 Nov) — fixed
+**What:** in Record, a photo was sent only when the server answered with the movement's id; with no id it
+was dropped and "Recorded" said. **Found:** the review. **Done:** "Recorded, without its photo" and the way
+to add it on the paid-out in the list.

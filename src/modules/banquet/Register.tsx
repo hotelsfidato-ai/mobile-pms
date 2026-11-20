@@ -7,7 +7,7 @@ import { useRead } from "../../core/ui";
 import { Field, Input, Tick } from "../finance/Kit";
 import { Btn, body, Dialog, Foot, InDialog, Loading, Select, message, saidOf, type Said } from "../guest-services/kit";
 import { isRefused, readSetup, register } from "./data";
-import { figure, hallWords, overfull, registerBody, usualHint } from "./rules";
+import { figure, hallWords, overfull, registerBody, usualHint, whyNotWhen } from "./rules";
 
 /* ══════════════════════════════════════════════════════════════════
    REGISTER A FUNCTION — the web's RegisterDialog (pages/Banquet.tsx).
@@ -101,7 +101,9 @@ export function Register({ code, businessDate, onClose, onDone, onHeld }: {
           <View style={{ flex: 3 }}><DateField label="Until" required value={untilDay} min={fromDay} hotel={{ businessDate }} onChange={setUntilDay} /></View>
           <View style={{ flex: 2 }}><TimeField label="Ends at" required value={untilTime} onChange={setUntilTime} opensAt="23:00" /></View>
         </View>
-        <Text style={[t.caption, { lineHeight: 17 }]}>A hall booked with no end is a hall nobody else can be sold.</Text>
+        {whyNotWhen({ fromDay, fromTime, untilDay, untilTime })
+          ? <Text style={[t.caption, { lineHeight: 17, color: c.red700 }]} accessibilityRole="alert">{whyNotWhen({ fromDay, fromTime, untilDay, untilTime })}</Text>
+          : <Text style={[t.caption, { lineHeight: 17 }]}>A hall booked with no end is a hall nobody else can be sold.</Text>}
       </View>
 
       <Field label="Host" required>

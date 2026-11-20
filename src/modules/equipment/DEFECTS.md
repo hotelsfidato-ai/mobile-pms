@@ -41,7 +41,9 @@ unknown outcome says "Not known whether it was raised" with "Raise it again send
 ### MEQ-P1 · The import's preview says a repeat "corrects prices rather than adding a second copy" (20 Nov) — the web's words, kept
 **What:** the shared ImportDialog says it under every preview; for the equipment file it is untrue (every
 row is created, never updated: api equipment.ts import). **Found:** reading the API for 2.11's repeat.
-**Done:** the phone keeps the web's words (one sheet, as the web) and guards the repeat itself (one
-import per tap, the screen's stop). For the PMS: the dialog's line should follow the file (a request
+**Done:** at first the phone kept the web's words; after the review of 0d933d5 the spec carries
+`repeats: "adds"` (core importSpec.ts) and, for this file only, the preview and the done box say "Send
+only the corrected rows: the rows that landed would be added again." (checked); the repeat is also
+guarded (one import per tap, the screen's stop). For the PMS: the dialog's line should follow the file (a request
 for docs/api-requests.md, through the mobile chat). **Rule:** check what a repeat does on the server,
 not what the dialog says.

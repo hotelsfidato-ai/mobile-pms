@@ -520,6 +520,9 @@ function MovementSheet({ code, onClose }: { code: string; onClose: (said?: Said)
       if (expense && file && res.id) {
         try { await photos.guard(() => sendForm("POST", photoPath(code, res.id!), [filePart("file", file)])); }
         catch (e) { photo = outcomeUnknown(e) ? { unknown: true } : { ok: false, reason: e instanceof Error ? e.message : String(e) }; }
+      } else if (expense && file) {
+        /* The server named no movement to put it on: never dropped silently (the review, 20 Nov). */
+        photo = { ok: false, reason: "The paid-out came back without its number. Add the photo on it in the list." };
       }
       const said: Said = recordedWords(chosen.label, rupees(sent.amount), photo);
       setTimeout(() => onClose(said), 0);

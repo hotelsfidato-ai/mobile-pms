@@ -12,6 +12,8 @@ import type { ImportSpec } from "../../core/importSpec";
 export const EQUIPMENT_SPEC: ImportSpec = {
   what: "equipment",
   filename: "equipment-template",
+  /* Every row is a new thing (api equipment.ts import only inserts): the sheet says so (MEQ-P1). */
+  repeats: "adds",
   columns: [
     { header: "Item", field: "name", required: true,
       note: "Split AC 1.5 ton, LED TV 43 inch, Electric kettle." },
