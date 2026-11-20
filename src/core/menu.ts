@@ -1031,6 +1031,18 @@ export const PHONE_ROUTES: Readonly<Record<string, string>> = {
   "/settings/money/discounts": "/settings/:code/discounts",
   "/settings/money/commission": "/settings/:code/commission",
   "/settings/money/pickup": "/settings/:code/pickup",
+  /* settings (mobile/m13-set-property, 20 Nov): Settings → Property's own pages; the bell's and "Back to
+     setup"'s /h/:code/setup lands on Set up this hotel, as the web's does. */
+  "/settings/property/profile": "/settings/:code/profile",
+  "/settings/property/set-up-this-hotel": "/settings/:code/set-up-this-hotel",
+  "/h/:code/setup": "/settings/:code/set-up-this-hotel",
+  "/settings/property/old-data": "/settings/:code/old-data",
+  "/settings/property/photos": "/settings/:code/photos",
+  "/settings/property/highlights": "/settings/:code/highlights",
+  "/settings/property/amenities": "/settings/:code/amenities",
+  "/settings/property/group": "/settings/:code/group",
+  "/settings/property/policies": "/settings/:code/policies",
+  "/settings/property/documents": "/settings/:code/documents",
   "/properties": "/admin/:code/properties",
   "/people": "/admin/:code/people",
   "/admin/users": "/admin/:code/users",
@@ -1180,10 +1192,16 @@ export const PHONE_ROUTES: Readonly<Record<string, string>> = {
   "/pos/:code/kitchen-stock": "/stores/:code/kitchen-stock",
 };
 
-/** The phone's route for a web address, null where the phone has none. */
+/** The phone's route for a web address, null where the phone has none. A web address's query is
+    dropped, but for the setup reminder's ?step= (the bell links /h/:code/setup?step=<id>, api
+    notifications.ts), which Set up this hotel opens on; only a step's own letters are carried. */
 export function phoneRoute(to: string, code: string): string | null {
-  const route = PHONE_ROUTES[to.split("?")[0]!.replace(/^\/(h|pos)\/[^/]+/, "/$1/:code")];
-  return route ? resolve(route, code) : null;
+  const [bare, query] = to.split("?");
+  const key = bare!.replace(/^\/(h|pos)\/[^/]+/, "/$1/:code");
+  const route = PHONE_ROUTES[key];
+  if (!route) return null;
+  const step = key === "/h/:code/setup" ? /(?:^|&)step=([a-z-]+)(?:&|$)/.exec(query ?? "")?.[1] : undefined;
+  return resolve(route, code) + (step ? `?step=${step}` : "");
 }
 
 /** The space of the phone screen in view (MADM-1): the web's spaceOf of the

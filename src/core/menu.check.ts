@@ -189,11 +189,21 @@ eq(phoneRoute("/people", "5EL"), "/admin/5EL/people");
 eq(phoneRoute("/admin/users", "5EL"), "/admin/5EL/users");
 eq(phoneRoute("/settings/money/bank", "5EL"), "/admin/5EL/bank");
 eq([phoneRoute("/reports/item-sales", "5EL"), phoneRoute("/settings/property/old-data", "5EL"), phoneRoute("/settings/messages/scheduled-reports", "5EL")],
-  ["/reports/5EL/item-sales", null, "/settings/5EL/scheduled-reports"]);
+  ["/reports/5EL/item-sales", "/settings/5EL/old-data", "/settings/5EL/scheduled-reports"]);
 /* mobile/m13-set-messages (20 Nov): Messages' own pages and Rivals' prices. */
 eq(phoneRoute("/settings/messages/switches", "5EL"), "/settings/5EL/switches");
 eq(phoneRoute("/settings/messages/daily-report-emails", "5EL"), "/settings/5EL/daily-report-emails");
 eq(phoneRoute("/settings/connections/rivals-prices", "5EL"), "/settings/5EL/rivals-prices");
+/* mobile/m13-set-property (20 Nov): Settings → Property's pages, and the setup's old address. */
+eq(["profile", "set-up-this-hotel", "old-data", "photos", "highlights", "amenities", "group", "policies", "documents"]
+  .map((x) => phoneRoute(`/settings/property/${x}`, "5EL")),
+  ["profile", "set-up-this-hotel", "old-data", "photos", "highlights", "amenities", "group", "policies", "documents"].map((x) => `/settings/5EL/${x}`));
+/* The bell's setup reminder keeps its step; nothing else rides along. */
+eq(phoneRoute("/h/5EL/setup?step=taxes", "5EL"), "/settings/5EL/set-up-this-hotel?step=taxes");
+eq(phoneRoute("/h/5EL/setup?x=1&step=room-types", "5EL"), "/settings/5EL/set-up-this-hotel?step=room-types");
+eq([phoneRoute("/h/5EL/setup", "5EL"), phoneRoute("/h/5EL/setup?step=<b>", "5EL"), phoneRoute("/settings/property/profile?step=taxes", "5EL")],
+  ["/settings/5EL/set-up-this-hotel", "/settings/5EL/set-up-this-hotel", "/settings/5EL/profile"]);
+eq(["/settings/5EL/profile", "/settings/5EL/old-data", "/settings/5EL/set-up-this-hotel"].map(spaceHere), ["settings", "settings", "settings"]);
 eq(phoneRoute("/settings/people/signing-in", "5EL"), "/admin/5EL/signing-in");
 eq(phoneRoute("/settings", "5EL"), "/admin/5EL");
 eq(phoneRoute("/settings/property/backfill-data", "5EL"), "/admin/5EL/backfill");
@@ -281,7 +291,6 @@ for (const [web, route] of Object.entries(PHONE_ROUTES)) {
    the phone has not built. */
 const NOT_ON_PHONE = [
   "/coming-soon/payments", "/coming-soon/room-systems", "/reports/store",
-  ...["profile", "set-up-this-hotel", "old-data", "photos", "highlights", "amenities", "group", "policies", "documents"].map((x) => `/settings/property/${x}`),
 ];
 const everywhere = new Set(ROLES.flatMap((role) => flatNavigationFor(role, ":code", ALL_ON, groupAdmin).map((i) => i.to)));
 eq([...everywhere].filter((to) => phoneRoute(to, "5EL") === null).sort(), [...NOT_ON_PHONE].sort());

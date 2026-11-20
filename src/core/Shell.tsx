@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { router, useGlobalSearchParams, usePathname } from "expo-router";
 import { AlertTriangle, Bell, ChevronDown, Menu, Search } from "lucide-react-native";
 import { useEffect, useRef, useState, type ReactNode } from "react";
@@ -43,6 +43,13 @@ export function Shell() {
      on showing yesterday. */
   const fresh = useQuery({ queryKey: ["shell", "hotels"], queryFn: () => api<HotelsResponse>("/api/hotels") });
   useEffect(() => { void fresh.refetch(); }, [path]); // eslint-disable-line react-hooks/exhaustive-deps
+  /* …and kept by the session (the web's refreshDates; hotels.ts), so every screen's today, business date
+     and desk rules are current; a moved business date reads every list again, as the web does. */
+  const { adopt } = useSession();
+  const cache = useQueryClient();
+  useEffect(() => {
+    if (fresh.data && adopt(fresh.data)) void cache.invalidateQueries();
+  }, [fresh.data]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const last = useRef(routed);
   if (routed) last.current = routed;
