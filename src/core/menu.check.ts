@@ -144,6 +144,7 @@ eq(phoneRoute("/h/5EL/online-checkin", "5EL"), "/guest-services/5EL/online-check
 eq(phoneRoute("/h/5EL/approvals", "5EL"), "/approvals/5EL");
 eq(phoneRoute("/people", "5EL"), "/admin/5EL/people");
 eq(phoneRoute("/admin/users", "5EL"), "/admin/5EL/users");
+eq(phoneRoute("/settings/people/signing-in", "5EL"), "/admin/5EL/signing-in");
 eq(phoneRoute("/settings", "5EL"), "/admin/5EL");
 eq(phoneRoute("/settings/property/backfill-data", "5EL"), "/admin/5EL/backfill");
 eq(phoneRoute("/h/5EL/backfill", "5EL"), "/admin/5EL/backfill");
@@ -177,7 +178,7 @@ eq(phoneRoute("/h/5EL/reservations", "5EL"), "/reservations/5EL");
 eq(phoneRoute("/h/5EL/book", "5EL"), "/reservations/5EL/book");
 eq(phoneRoute("/h/5EL/rates", "5EL"), "/inventory/5EL");
 /* Only the routes the merged app has (the brief's route map). */
-const MERGED = /^\/(hotel\/[^/]+|all|approvals\/[^/]+|admin\/[^/]+(\/(people|users|roles|sign-ins|activity|audit-log|integrations|system-health|properties|backfill|modules))?|revenue\/[^/]+|crs\/[^/]+|loyalty\/[^/]+|reputation\/[^/]+|guest-messages\/[^/]+|connections\/[^/]+|stores\/[^/]+(\/(count|inventory|bar-stock|kitchen-stock|history\/[^/]+))?|spa\/[^/]+|banquet\/[^/]+(\/[^/]+)?|guests\/[^/]+(\/(companies|find(\/[^/]+)?))?|purchasing\/[^/]+(\/[^/]+)?|laundry\/[^/]+(\/[^/]+)?|night-audit\/[^/]+|reservations\/[^/]+(\/(calendar|book))?|inventory\/[^/]+|notifications\/[^/]+|housekeeping\/[^/]+(\/(repair|out-of-service|work-orders))?|pos\/[^/]+\/(tables|pad|kitchen|order\/[^/]+)|front-desk\/[^/]+(\/(in-house|walk-ins|walk-in|take-walk-in|stay\/[^/]+|check-in\/[^/]+))?|folio\/[^/]+\/[^/]+|guest-services\/[^/]+(\/(requests|wake-up-calls|lost-property|online-checkin|messages))?)(\?.*)?$/;
+const MERGED = /^\/(hotel\/[^/]+|all|approvals\/[^/]+|admin\/[^/]+(\/(people|users|roles|sign-ins|activity|audit-log|integrations|system-health|properties|backfill|modules|signing-in))?|revenue\/[^/]+|crs\/[^/]+|loyalty\/[^/]+|reputation\/[^/]+|guest-messages\/[^/]+|connections\/[^/]+|stores\/[^/]+(\/(count|inventory|bar-stock|kitchen-stock|history\/[^/]+))?|spa\/[^/]+|banquet\/[^/]+(\/[^/]+)?|guests\/[^/]+(\/(companies|find(\/[^/]+)?))?|purchasing\/[^/]+(\/[^/]+)?|laundry\/[^/]+(\/[^/]+)?|night-audit\/[^/]+|reservations\/[^/]+(\/(calendar|book))?|inventory\/[^/]+|notifications\/[^/]+|housekeeping\/[^/]+(\/(repair|out-of-service|work-orders))?|pos\/[^/]+\/(tables|pad|kitchen|order\/[^/]+)|front-desk\/[^/]+(\/(in-house|walk-ins|walk-in|take-walk-in|stay\/[^/]+|check-in\/[^/]+))?|folio\/[^/]+\/[^/]+|guest-services\/[^/]+(\/(requests|wake-up-calls|lost-property|online-checkin|messages))?)(\?.*)?$/;
 for (const role of ROLES) {
   for (const item of flatNavigationFor(role, "5EL", ALL_ON)) {
     const route = phoneRoute(item.to, "5EL");

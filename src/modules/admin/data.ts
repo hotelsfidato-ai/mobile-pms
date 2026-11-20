@@ -127,3 +127,11 @@ export const setModule = (code: string, module: string, enabled: boolean) =>
 export const getBackfill = (code: string) => read<BackfillView>(`backfill ${code}`, `${H(code)}/backfill`);
 export const removeBackfill = (code: string, kind: BackfillKind, id: string, reason: string) =>
   send<Done>("POST", `${H(code)}/backfill/${kind}/${enc(id)}/remove`, { reason }, keysOf(`backfill ${code}`));
+
+/* ── Signing in (TwoStep.tsx TwoStepRequiredCard) ────────────────── */
+
+/** GET /api/me/two-step (SELF): where the signed-in person stands, and the group's `required`. */
+export const getTwoStep = () =>
+  read<{ state: string; on: boolean; recoveryLeft: number | null; required: boolean }>("two-step", "/api/me/two-step");
+export const setTwoStepRequired = (required: boolean) =>
+  send<Done & { required: boolean }>("PUT", "/api/admin/two-step-required", { required }, keysOf("two-step"));
