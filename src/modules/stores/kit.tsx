@@ -6,6 +6,7 @@ import { ROLE_LABELS, asRole } from "../../core/menu";
 import { c, face, space, t } from "../../core/theme";
 import { Box, Empty, type Said } from "../guest-services/kit";
 import { TILES, type Tile } from "./shelf";
+import { modalEdge, ripple, shade, useSheetPad } from "../../core/ui";
 
 /* ══════════════════════════════════════════════════════════════════
    THE FEW PIECES THE STORE NEEDS THAT THE GUEST-SERVICES KIT (imported,
@@ -32,7 +33,7 @@ export function Tiles({ counts, picked, onPick }: { counts: Record<Tile, number>
         const warm = !on && job && n > 0;
         const Icon = ICON[key];
         return (
-          <Pressable
+          <Pressable android_ripple={ripple}
             key={key} onPress={() => onPick(on ? null : key)} accessibilityRole="button"
             accessibilityLabel={`${label}: ${n}`} accessibilityState={{ selected: on }}
             style={{
@@ -81,22 +82,23 @@ export interface MenuChoice { label: string; icon: LucideIcon; onPress: () => vo
 /** The web kit's Menu at the foot of the screen: each act with its word; a
     grey one says why, under it (the web's `reason`). */
 export function ActionSheet({ title, choices, onClose }: { title: string; choices: MenuChoice[]; onClose: () => void }) {
+  const pad = useSheetPad();
   return (
-    <Modal visible transparent animationType="fade" onRequestClose={onClose}>
+    <Modal visible transparent animationType="fade" onRequestClose={onClose} {...modalEdge}>
       <View style={{ flex: 1, backgroundColor: "rgba(3,23,40,0.4)" }}>
         <Pressable style={{ flex: 1 }} onPress={onClose} accessibilityRole="button" accessibilityLabel="Close" />
-        <View style={{ backgroundColor: c.white, borderTopLeftRadius: 16, borderTopRightRadius: 16, paddingHorizontal: space.side, paddingTop: 16, paddingBottom: 24, gap: 4 }}>
+        <View style={{ backgroundColor: c.white, borderTopLeftRadius: 16, borderTopRightRadius: 16, paddingHorizontal: space.side, paddingTop: 16, paddingBottom: pad.bottom + 8, gap: 4 }}>
           <Text style={[t.heading, { marginBottom: 4 }]} accessibilityRole="header">{title}</Text>
           {choices.map((m) => {
             const off = m.reason != null;
             return (
-              <Pressable
+              <Pressable android_ripple={ripple}
                 key={m.label} disabled={off} onPress={() => { onClose(); later(m.onPress); }}
                 accessibilityRole="button" accessibilityLabel={off ? `${m.label}: ${m.reason}` : m.label} accessibilityState={{ disabled: off }}
-                style={({ pressed }) => ({
+                style={shade(({ pressed }) => ({
                   minHeight: 48, flexDirection: "row", alignItems: "center", gap: 12, paddingVertical: 8,
                   borderTopWidth: 1, borderTopColor: m.gap ? c.grey200 : c.grey100, backgroundColor: pressed ? c.grey50 : c.white,
-                })}
+                }))}
               >
                 <m.icon size={16} color={off ? c.grey400 : c.grey600} />
                 <View style={{ flex: 1 }}>

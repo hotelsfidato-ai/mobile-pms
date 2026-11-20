@@ -41,6 +41,7 @@ export const LIST_SCREENS = {
   "online-checkin": { title: "Online check-in", holds: "guests" },
   "crs-bookings": { title: "CRS bookings", holds: "money" },
   "store": { title: "Store", right: { action: "export", resource: "stock" } },
+  "kitchen-stock": { title: "Kitchen stock" },
   "purchasing": { title: "Purchasing", right: { action: "export", resource: "purchasing" } },
   "laundry-dockets": { title: "Laundry dockets", right: { action: "export", resource: "laundry" } },
   "spa-diary": { title: "Spa diary", right: { action: "export", resource: "spa" } },
