@@ -1,7 +1,7 @@
 /* Run: node --experimental-strip-types mobile/src/modules/pos/order.check.ts
    The order's rules: the web's Till card, the API's sentences, the server's figures. */
 import {
-  SENT_STRIKE, closeButton, customiseAct, discountBody, fewerAct, figures, finished, headerBody, headerForm, headerSummary,
+  SENT_STRIKE, closeButton, customiseAct, discountBody, fewerAct, figures, finished, headerBody, headerForm, headerSummary, printable, statusWord,
   kotWords, lineActs, roundAct, sendButton, strikeAct, takenAct, whyNotCustom,
 } from "./order.ts";
 import { whyNotRing, whyNotStrikeSent } from "./roles.ts";
@@ -100,6 +100,20 @@ eq("waiterId" in headerBody(headerForm(order({}))), false, "the waiter stays unl
 /* What a finished bill says. */
 eq(finished(order({ status: "settled", paymentMethod: "cash", settledBy: "Ravi" })), "Paid by cash, taken by Ravi.", "settled");
 eq(finished(order({ status: "abandoned", abandonedReason: "Walkout" })), "Closed unpaid - Walkout", "closed");
+/* A voided or NC bill in the web's words (Till.tsx 1593-1609), never "Closed unpaid - null" (MPOS-T2). */
+eq(finished(order({ status: "void", voidReason: "Wrong table", voidedBy: "Meera", voidedAt: "21:40", voidReference: "UPI 4471" })),
+  "VOID - Wrong table. Voided by Meera at 21:40; refund reference UPI 4471.", "void");
+eq(finished(order({ status: "void", voidReason: "Cash refunded" })), "VOID - Cash refunded. Voided by - at -.", "void, no name or time");
+eq(finished(order({ status: "no_charge", ncReason: "Owner's guest", ncBy: "Meera", ncAt: "22:05" })),
+  "NC · No charge - Owner's guest. Approved by Meera at 22:05.", "nc");
+eq(finished(order({ status: "joined" })), "Joined to another table: its dishes and KOTs are on that table's bill.", "joined");
+eq(["settled", "void", "no_charge", "abandoned", "joined"].map((s) => printable(order({ status: s as Order["status"] }))),
+  [true, true, true, false, false], "a paid, voided or NC bill prints");
+eq(statusWord("no_charge"), "NC", "the pill says NC");
+/* An NC bill: what it came to (the server's net, as the web's money() writes it, not
+   its payable), and nothing to pay (Till.tsx 1547-1551). */
+eq(figures(order({ status: "no_charge", net: 1234, payable: 1296 })).map((f) => `${f.label}: ${f.value}`),
+  ["Bill total: \u20b91,234", "NC · No charge: \u20b90 to pay"], "nc figures");
 
 /* Customise: before Send folded in (one split off); after, lines of their own. */
 eq(customiseAct("5EL", order({}), pending, [{ id: "A", qty: 2 }], "one", [{ name: "Extra papad", price: 0, qty: 1 }]).body(),

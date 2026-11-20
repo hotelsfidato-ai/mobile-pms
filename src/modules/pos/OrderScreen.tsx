@@ -11,7 +11,8 @@ import { c, face, space, t } from "../../core/theme";
 import { Capsule, Card, Head, ReadFailed, Row, Screen, useRead, ripple, shade } from "../../core/ui";
 import {
   addonBreakdown, clearAct, closeButton, discountButton, fewerAct, figures, finished, headerSummary, holdAct, isOpen, kotWords,
-  lineActs, lineAmount, lineName, live, orderPath, roundAct, roundButton, sendAct, sendButton, strikeAct, takenAct,
+  lineActs, lineAmount, lineName, live, orderPath, printable, roundAct, roundButton, sendAct, sendButton, statusWord, strikeAct,
+  takenAct,
   type Act, type Ask,
 } from "./order";
 import { CustomiseSheet } from "./OrderCustomise";
@@ -225,7 +226,7 @@ export function Order({ hotel, id, role, onBack }: { hotel: Hotel; id: string; r
             {!open ? (
               <View style={{ gap: 8 }}>
                 <Text style={t.label}>{finished(order)}</Text>
-                {order.status === "settled" ? <PrintBill hotel={hotel} orderId={order.id} /> : null}
+                {printable(order) ? <PrintBill hotel={hotel} orderId={order.id} /> : null}
                 <Btn
                   label="Clear" busy={busy}
                   onPress={() => go(clearAct(code, order), "Not cleared", () => ({ tone: "ok", title: `${order.table ?? order.orderNo} is clear` }))}
@@ -288,12 +289,12 @@ const Said = ({ text }: { text: string }) => (
   <Text style={[t.label, { color: c.grey600 }]} accessibilityLiveRegion="polite">{text}</Text>
 );
 
-/** open · settled · abandoned, as the web's pill says them. */
+/** The order's status, as the web's pill says it (NC for no_charge). */
 function Status({ status }: { status: TheOrder["status"] }) {
   const [bg, fg] = status === "open" ? [c.yellow100, c.yellow800] : status === "settled" ? [c.grey100, c.success600] : [c.grey100, c.grey700];
   return (
     <View style={{ paddingHorizontal: 8, paddingVertical: 2, borderRadius: 999, backgroundColor: bg }}>
-      <Text style={[t.caption, { color: fg, ...face[600] }]}>{status}</Text>
+      <Text style={[t.caption, { color: fg, ...face[600] }]}>{statusWord(status)}</Text>
     </View>
   );
 }
