@@ -2,11 +2,12 @@ import { AlertTriangle, Plus, Receipt, X } from "lucide-react-native";
 import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { api } from "../../core/api";
+import { DateField } from "../../core/DateField";
 import { DASH } from "../../core/format";
 import { c, t } from "../../core/theme";
 import { Card, useRead } from "../../core/ui";
 import {
-  dayShort, newBand, orphaned, orphanedLine, P, sacShown, shiftDay, slabRows, slabsBad, slabsBody, slabsSaved, slabWords, TAX_LABEL, TAX_WHAT,
+  newBand, orphaned, orphanedLine, P, sacShown, slabRows, slabsBad, slabsBody, slabsSaved, slabWords, TAX_LABEL, TAX_WHAT,
   taxHeadings, taxName, whyNotGst, whyNotModules, type SlabRow, type TaxKind, type TaxKindRules, type TaxSetup,
 } from "./setup";
 import { Btn, Chooser, Field, Input, Part, Pill, Sheet, Toggle, type Acts, Loading } from "./SetupKit";
@@ -20,11 +21,13 @@ import { ReadProblem, SaidBar, ty } from "./TablesKit";
    rates and each menu section's heading roleGate GST's (the owner, an
    administrator, the GM, the accountant). UNSET IS NOT ZERO: a heading
    with no rate shows a dash and refuses to bill.
-   A band's dates need a date picker (not installed): they are shown and
-   kept as they are, and changed on the website.
+   A band's From and Last day are the phone's own date picker (M-16): the
+   server keeps the day after the Last day (TaxRulesCard.tsx 265-266).
    ══════════════════════════════════════════════════════════════════ */
 
-export function TaxesPart({ code, role, acts }: { code: string; role: string | null; acts: Acts }) {
+type Day = { today?: string; businessDate: string };
+
+export function TaxesPart({ code, role, acts, hotel }: { code: string; role: string | null; acts: Acts; hotel: Day }) {
   const modules = useRead(async () => Object.fromEntries(
     (await api<{ modules: { module: string; enabled: boolean }[] }>(P.modules(code))).modules.map((m) => [m.module, m.enabled])) as Record<string, boolean>,
     ["pos", code, "setup", "modules"]);
@@ -41,12 +44,12 @@ export function TaxesPart({ code, role, acts }: { code: string; role: string | n
           onChange={(on) => void acts.run(id, "POST", P.module(code, "alcohol"), { enabled: on },
             { done: on ? "Alcohol is sold under VAT" : "Alcohol is switched off", not: "Not changed", what: "changed", where: "the alcohol switch" })} />
       </Card>
-      <TaxCard code={code} role={role} acts={acts} />
+      <TaxCard code={code} role={role} acts={acts} hotel={hotel} />
     </Part>
   );
 }
 
-function TaxCard({ code, role, acts }: { code: string; role: string | null; acts: Acts }) {
+function TaxCard({ code, role, acts, hotel }: { code: string; role: string | null; acts: Acts; hotel: Day }) {
   const q = useRead(() => api<TaxSetup>(P.tax(code)), ["pos", code, "setup", "tax"]);
   const [editing, setEditing] = useState<TaxKind | null>(null);
   const d = q.data;
@@ -88,7 +91,7 @@ function TaxCard({ code, role, acts }: { code: string; role: string | null; acts
           })}
         </View>
       ) : null}
-      {current ? <SlabsSheet key={current.kind} code={code} rules={current} acts={acts} why={refusal} onClose={() => setEditing(null)} /> : null}
+      {current ? <SlabsSheet key={current.kind} code={code} hotel={hotel} rules={current} acts={acts} why={refusal} onClose={() => setEditing(null)} /> : null}
     </Card>
   );
 }
@@ -117,7 +120,7 @@ function KindTile({ rules, why, onRefused, onEdit }: { rules: TaxKindRules; why:
   );
 }
 
-function SlabsSheet({ code, rules, acts, why, onClose }: { code: string; rules: TaxKindRules; acts: Acts; why: string | null; onClose: () => void }) {
+function SlabsSheet({ code, hotel, rules, acts, why, onClose }: { code: string; hotel: Day; rules: TaxKindRules; acts: Acts; why: string | null; onClose: () => void }) {
   /* VAT on alcohol is one rate on everything (D21-91): no bands. */
   const single = rules.kind === "alcohol";
   const [rows, setRows] = useState<SlabRow[]>(() => slabRows(rules));
@@ -171,9 +174,14 @@ function SlabsSheet({ code, rules, acts, why, onClose }: { code: string; rules: 
               <X size={16} color={c.grey500} />
             </Pressable>
           </View>
-          <Text style={[t.caption, ty.xs, { color: c.grey600 }]}>
-            {`From ${r.validFrom ? dayShort(r.validFrom) : "always"} · Last day ${r.validTo ? dayShort(shiftDay(r.validTo, -1)) : "current"}. Dates are set on the website for now.`}
-          </Text>
+          <View style={{ flexDirection: "row", gap: 8 }}>
+            <View style={{ flex: 1 }}>
+              <DateField label="From" hint="Empty: always." clearable value={r.validFrom} onChange={(validFrom) => set(i, { validFrom })} hotel={hotel} />
+            </View>
+            <View style={{ flex: 1 }}>
+              <DateField label="Last day" hint="Empty: current." clearable value={r.lastDay} onChange={(lastDay) => set(i, { lastDay })} hotel={hotel} />
+            </View>
+          </View>
           <Field label="Note" hint={single ? "Who confirmed it, and when. It shows on this card." : "Why this band exists. It shows on this card."}>
             <Input label="Note" value={r.note} placeholder={single ? undefined : "Rooms above 7,500 a night"} onChange={(note) => set(i, { note })} />
           </Field>

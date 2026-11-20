@@ -378,22 +378,24 @@ export function orphaned(setup: TaxSetup): string[] {
 export const orphanedLine = (names: string[]) =>
   `${names.length === 1 ? "One menu category sells" : `${names.length} menu categories sell`} under a heading with no rate set - ${names.join(", ")}. The till will refuse those items rather than bill them at nothing.`;
 
-/** One band being edited. The dates are the phone's to keep, never to change:
-    a date needs a picker, which is on the website for now. */
-export interface SlabRow { overAmount: string; rate: string; note: string; validFrom: string | null; validTo: string | null }
+/** One band being edited (TaxRulesCard.tsx Draft): its From and its LAST DAY as the person sees them
+    ("" for none, the phone's own picker since M-16). The server keeps `validTo` as the day AFTER the
+    last day, so the last day shown is the day before it, and the day after it is sent. */
+export interface SlabRow { overAmount: string; rate: string; note: string; validFrom: string; lastDay: string }
 export const slabRows = (rules: TaxKindRules): SlabRow[] => (rules.slabs.length > 0
-  ? rules.slabs.map((s) => ({ overAmount: String(s.overAmount), rate: String(s.rate), note: s.note ?? "", validFrom: s.validFrom, validTo: s.validTo }))
-  : [{ overAmount: "0", rate: "", note: "", validFrom: null, validTo: null }]);
+  ? rules.slabs.map((s) => ({ overAmount: String(s.overAmount), rate: String(s.rate), note: s.note ?? "", validFrom: s.validFrom ?? "", lastDay: s.validTo ? shiftDay(s.validTo, -1) : "" }))
+  : [{ overAmount: "0", rate: "", note: "", validFrom: "", lastDay: "" }]);
 /** A new band (the web's "Add a band" row: above 7,500, no rate). */
-export const newBand = (): SlabRow => ({ overAmount: "7500", rate: "", note: "", validFrom: null, validTo: null });
-/** What is sent (SlabsDialog save): a row with no rate is left out; its dates as they were. */
+export const newBand = (): SlabRow => ({ overAmount: "7500", rate: "", note: "", validFrom: "", lastDay: "" });
+/** What is sent (SlabsDialog save): a row with no rate is left out; an empty From is none, the Last day
+    goes as the day after it. */
 export const slabsBody = (rows: SlabRow[]) => ({
   slabs: rows.filter((r) => r.rate.trim() !== "").map((r) => ({
     overAmount: Number(r.overAmount) || 0,
     rate: Number(r.rate),
     note: r.note.trim() || null,
-    validFrom: r.validFrom,
-    validTo: r.validTo,
+    validFrom: r.validFrom || null,
+    validTo: r.lastDay ? shiftDay(r.lastDay, 1) : null,
   })),
 });
 /** A rate typed that is not a figure: nothing is sent (the web would send NaN as null). */
