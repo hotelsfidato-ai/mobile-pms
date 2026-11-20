@@ -20,6 +20,7 @@
    Pure: no React Native here, so config.check.ts runs under node.
    ══════════════════════════════════════════════════════════════════ */
 
+import { msAt } from "../../core/format.ts";
 import { DASH, rupees, typedPrice } from "./rates.ts";
 
 /* ── What a person types ─────────────────────────────────────────── */
@@ -379,6 +380,17 @@ export const needsDealing = (b: ChannelBooking) => !b.handled && !["created", "c
 
 /** A figure the server sends as text ("4099.50"): the rupees it says, paise kept; none a dash. */
 export const textRupees = (v: string | null) => (v === null || v.trim() === "" || !Number.isFinite(Number(v)) ? DASH : rupees(Number(v)));
+
+const MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+/** The web's dateTime ("d MMM yyyy, h:mm a"), in the phone's own time; a server
+    time read through the core's ISO reader first (MEMORY 7). Unreadable: a dash. */
+export function whenOf(text: string | null | undefined): string {
+  const ms = msAt(text);
+  if (ms === null) return DASH;
+  const d = new Date(ms);
+  const h = d.getHours();
+  return `${d.getDate()} ${MON[d.getMonth()]} ${d.getFullYear()}, ${h % 12 || 12}:${String(d.getMinutes()).padStart(2, "0")} ${h < 12 ? "AM" : "PM"}`;
+}
 
 /** SuSetup.tsx 435-436 and 505-506: when the sends are blocked. */
 export const ariBlocked = (d: SuContent) =>

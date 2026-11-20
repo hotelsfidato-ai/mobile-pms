@@ -14,7 +14,8 @@ import {
   addRoom, addRoomType, amendRoom, amendRoomType, readAmenities, readRoomSetup, readTypeAmenities, removeRoom, removeRoomType,
   setTypeAmenities,
 } from "./configData";
-import { Btn, Failed, Field, Loading, Pill, Refused, Select, Sheet, SwitchLine, TextBox, confirm } from "./configKit";
+import { asRole, mayReach } from "../../core/menu";
+import { Btn, Failed, Field, Loading, NotYourRole, Pill, Refused, Select, Sheet, SwitchLine, TextBox, confirm } from "./configKit";
 import { SETUP_ADD, SETUP_CHANGE, SETUP_READ, whyNot } from "./configRoles";
 import { Empty, InDialog, Segmented, Stale, Toast, body, saidOf, type Said } from "./kit";
 import { ON_THE_WEBSITE } from "./roles";
@@ -36,6 +37,14 @@ import { ON_THE_WEBSITE } from "./roles";
    ══════════════════════════════════════════════════════════════════ */
 
 export function RoomTypes({ hotel, role }: { hotel: Hotel; role: string | null }) {
+  /* The settings console's page: whoever its menu shows it to (the owner, an Administrator, the GM). */
+  if (!mayReach(asRole(role), "/settings/rooms/room-types")) {
+    return <Screen refreshing={false} onRefresh={() => undefined}><Head title="Room types" /><NotYourRole role={role} screen="Room types" /></Screen>;
+  }
+  return <RoomTypesScreen hotel={hotel} role={role} />;
+}
+
+function RoomTypesScreen({ hotel, role }: { hotel: Hotel; role: string | null }) {
   const code = hotel.code;
   const cache = useQueryClient();
   const cannotRead = whyNot(SETUP_READ, role);

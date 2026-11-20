@@ -6,7 +6,7 @@ import {
   commissionNote, commissionOf, commissionValue, describe, figureOf, freeUntil, policyBody, policyForm,
   rateQuestion, roomBody, roomLine, roomRange, roomsOf, severalWords, setupLine, siteLine, sleepsOf, sourcesLine,
   textRupees, typeFirstBody, typeForm, typeMoreBody, typeReady, typedChange, typedCount, typedFigure, typedSigned,
-  maxError, baseError, priceOrDash, needsDealing,
+  maxError, baseError, priceOrDash, needsDealing, whenOf,
   type BookingSource, type ChannelBooking, type RoomSetup, type RoomTypeSetup,
 } from "./config.ts";
 
@@ -108,6 +108,16 @@ eq(siteLine("189", "Agoda"), "SU code 189 (Agoda)", "SU's");
 /* ── Channels ── */
 eq(textRupees("4099.50"), "₹4,099.50", "a total in text keeps paise");
 eq(textRupees(null), "-", "no total");
+/* Postgres's own text, which Hermes cannot read raw (MEMORY 7): read through instant(). */
+{
+  /* Hermes reads only ISO (MEMORY 17): Date.parse made ISO-only for this test. */
+  const parse = Date.parse;
+  Date.parse = (x: string) => (/^\d{4}-\d\d-\d\dT\d\d:\d\d(:\d\d(\.\d{1,3})?)?(Z|[+-]\d\d:\d\d)$/.test(x) ? parse(x) : NaN);
+  eq(whenOf("2026-11-16 12:00:00.215147+05:30").startsWith("16 Nov 2026, "), true, "a Postgres time");
+  Date.parse = parse;
+}
+eq(whenOf("not a time"), "-", "an unreadable time is a dash");
+eq(whenOf(null), "-", "no time");
 const b = { handled: false, outcome: "needs_attention" } as ChannelBooking;
 eq(needsDealing(b), true, "a booking waiting for a person");
 eq(needsDealing({ ...b, outcome: "created" }), false, "a booked one");

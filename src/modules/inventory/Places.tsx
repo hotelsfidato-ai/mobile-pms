@@ -7,7 +7,8 @@ import { c, t } from "../../core/theme";
 import { Head, Screen, notKnown, useRead, useStuck } from "../../core/ui";
 import { PLACE_KIND, PLACE_KINDS, type Place, type PlaceKind, type Supplier } from "./config";
 import { readPlaces, savePlace, saveSupplier, type SupplierBody } from "./configData";
-import { Btn, Failed, Field, Loading, Pill, Select, SectionHead, Sheet, Table, TableRow, TextBox, confirm } from "./configKit";
+import { asRole, mayReach } from "../../core/menu";
+import { Btn, Failed, Field, Loading, NotYourRole, Pill, Select, SectionHead, Sheet, Table, TableRow, TextBox, confirm } from "./configKit";
 import { Empty, InDialog, Stale, Toast, body, saidOf, type Said } from "./kit";
 
 /* ══════════════════════════════════════════════════════════════════
@@ -28,7 +29,15 @@ import { Empty, InDialog, Stale, Toast, body, saidOf, type Said } from "./kit";
 const dash = (v: string | null) => v ?? "-";
 const StatePill = ({ on }: { on: boolean }) => (on ? <Pill tone="success">In use</Pill> : <Pill>Switched off</Pill>);
 
-export function Places({ hotel }: { hotel: Hotel }) {
+export function Places({ hotel, role }: { hotel: Hotel; role: string | null }) {
+  /* RequireAccess path="/h/:code/places": whoever the menu shows it to (the Store's or equipment's readers). */
+  if (!mayReach(asRole(role), "/h/:code/places")) {
+    return <Screen refreshing={false} onRefresh={() => undefined}><Head title="Places and suppliers" /><NotYourRole role={role} screen="Places and suppliers" /></Screen>;
+  }
+  return <PlacesScreen hotel={hotel} />;
+}
+
+function PlacesScreen({ hotel }: { hotel: Hotel }) {
   const code = hotel.code;
   const cache = useQueryClient();
   const q = useRead(() => readPlaces(code), ["inventory", code, "places"]);

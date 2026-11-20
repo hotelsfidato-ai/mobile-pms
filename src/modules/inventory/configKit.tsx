@@ -5,9 +5,10 @@ import {
   type KeyboardTypeOptions, type StyleProp, type ViewStyle,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { ROLE_LABELS, asRole } from "../../core/menu";
 import { isOnline } from "../../core/offline";
 import { c, face, space, t } from "../../core/theme";
-import { body } from "./kit";
+import { Empty, body } from "./kit";
 
 /* ══════════════════════════════════════════════════════════════════
    THE SET-UP SCREENS' PIECES (lane m13-config, 19 Nov): the web kit's
@@ -289,5 +290,15 @@ export function Failed({ title, what, error, onRetry }: { title: string; what: s
       </Text>
       <View style={{ marginTop: 20 }}><Btn label="Try again" onPress={onRetry} /></View>
     </View>
+  );
+}
+
+/** RequireAccess's page (src/components/app/RequireAccess.tsx): a role the web's
+    menu does not give this screen; its words, as stores/kit.tsx NotYourRole. */
+export function NotYourRole({ role, screen }: { role: string | null; screen: string }) {
+  const name = role ? ROLE_LABELS[asRole(role)] : "nobody here";
+  return (
+    <Empty title="This page is not part of your role"
+      description={`You are signed in as ${name}, which does not include ${screen}. If you need it, the person who set up your account can change your role.`} />
   );
 }
