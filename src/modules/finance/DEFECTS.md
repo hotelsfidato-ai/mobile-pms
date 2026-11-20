@@ -148,7 +148,7 @@ list…", and reads the list again on close. **The rule:** every write's sheet u
 was issued" (the error's words, where to look, and that issuing again takes no second number), cannot be
 closed while the request is on its way (back, the backdrop and Keep it do nothing), and closing it reads
 the bill's rows again, so a number taken shows. No stop is held: POST …/invoice reads no key, but answers
-a repeat for the same bill with the invoice already made (invoices.ts, a lock and a unique index), so
+a repeat for the same bill with the invoice already made (invoices.ts, under a per-folio advisory lock), so
 Issue again is safe and says the number.
 
 ## MFIN-B2 · The web's money tiles are the browser's sums (a difference, asked of the PMS)

@@ -54,7 +54,7 @@ export function TaxInvoices({ code, stayId, role, onSaid, onDone }: {
 
 /** D27-117: a legal number is taken only after "are you sure" (IssueInvoiceDialog).
     AN UNKNOWN OUTCOME (MFIN-B1): POST …/invoice reads no key but answers a repeat for the same bill with
-    the invoice already made (invoices.ts "duplicate", under a lock and a unique index), so Issue again
+    the invoice already made (invoices.ts "duplicate", under a per-folio advisory lock), so Issue again
     takes no second number and says the one taken; the sheet says "Not known whether it was issued", it
     cannot be closed while the request is on its way, and closing it reads the rows again. */
 function IssueSheet({ code, row, onClose, onDone }: { code: string; row: Billable; onClose: () => void; onDone: (said: Said) => void }) {

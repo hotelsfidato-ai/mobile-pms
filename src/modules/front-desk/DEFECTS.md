@@ -136,3 +136,9 @@ begun after the loss; closing reads them; the sheet cannot close mid-write (Edit
 POST /bookings reads no key; the walk-in's stop was its screen's. **Done:** `walkInStop`: the walk-in's
 three buttons stay grey, with "Open Arrivals", until a read of today's Arrivals begun after the loss (a
 walk-in is always today's).
+
+**The review of 20 Nov (on 5fc5064):** an exchange is symmetric, so its doubt is now both stays' (the other
+stay's Exchange would swap them back): `guard`/`stop` mark `stayStop(code, withId)` too. Inclusions: the
+sheet stays dead until closed and the line typed is emptied (the read that refresh() starts used to give
+Add back ~100 ms later in the same view). A walk-in's loss marks New booking's name too (the same POST
+/bookings), and All bookings lets both go.

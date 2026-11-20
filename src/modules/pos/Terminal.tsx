@@ -7,7 +7,7 @@ import { ActivityIndicator, AppState, Pressable, Text, View } from "react-native
 import { api, ApiError, HeldError, outcomeUnknown, send, type Hotel } from "../../core/api";
 import { c, face, space, t } from "../../core/theme";
 import { notKnown, Screen, useScreenStop } from "../../core/ui";
-import { parcelsStop } from "./floor";
+import { openStop, parcelsStop } from "./floor";
 import { Btn, Field, Input, ReadProblem, Refused, SaidBar, Stale, ty, useAccess, web, type Said } from "./TablesKit";
 import {
   activeOutlets, declineTitle, guestDishes, guestTitle, lockedLine, openBody, orderHref, outletKey, outletName, precise, ringWhy,
@@ -135,10 +135,11 @@ function TheTerminal({ hotel, role, outlet, outlets, onConsole, onChange }: {
   const code = hotel.code;
   const cache = useQueryClient();
   /* An order or a parcel whose outcome is unknown (MPOS-U1): let go by a read of the open orders begun after it. */
-  const opening = useScreenStop(parcelsStop(code, outlet));
+  const opening = useScreenStop(openStop(code, outlet));
+  const parcels = useScreenStop(parcelsStop(code, outlet));
   const orders = useQuery({
     queryKey: ["pos", code, "till", "orders"],
-    queryFn: opening.watch(() => api<{ businessDate: string; orders: TillRow[] }>(`/api/hotels/${code}/till/orders`)),
+    queryFn: opening.watch(parcels.watch(() => api<{ businessDate: string; orders: TillRow[] }>(`/api/hotels/${code}/till/orders`))),
   });
   const [said, setSaid] = useState<Said | null>(null);
   const [parcel, setParcel] = useState(false);
@@ -290,9 +291,12 @@ function StartBig({ code, outlet, role, onOpened, onSay, onParcel }: {
   const inFlight = useRef(false);
   /* Kept by the outlet, outside this card (MPOS-U1): leaving the screen and coming back lets nothing go;
      a read of the open orders begun after the loss does. */
-  const once = useScreenStop(parcelsStop(code, outlet));
+  const once = useScreenStop(openStop(code, outlet));
+  /* New parcel greys on the parcels' own stop (both reads show a parcel). */
+  const parcel = useScreenStop(parcelsStop(code, outlet));
   const where = "the open orders below - they are read again by pulling down";
   const unknown = notKnown("opened", where);
+  const parcelLine = notKnown("opened", "the open parcels").line;
   const why = ringWhy(role);
 
   async function start() {
@@ -325,8 +329,8 @@ function StartBig({ code, outlet, role, onOpened, onSay, onParcel }: {
         style={{ minHeight: 64, paddingHorizontal: 16, fontSize: 18 }}
       />
       <Big label="Open the order" primary busy={busy} off={why != null || once.stuck} hint={why ?? (once.stuck ? unknown.line : undefined)} onPress={() => void start()} />
-      <Big label="New parcel" icon={<ShoppingBag size={20} color={why || once.stuck ? c.grey500 : c.ink900} />} off={why != null || once.stuck} hint={why ?? (once.stuck ? unknown.line : undefined)}
-        onPress={() => (why ? setProblem(why) : once.isStuck() ? setProblem(unknown.line) : onParcel())} />
+      <Big label="New parcel" icon={<ShoppingBag size={20} color={why || parcel.stuck ? c.grey500 : c.ink900} />} off={why != null || parcel.stuck} hint={why ?? (parcel.stuck ? parcelLine : undefined)}
+        onPress={() => (why ? setProblem(why) : parcel.isStuck() ? setProblem(parcelLine) : onParcel())} />
       {problem ? <Problem text={problem} /> : null}
     </View>
   );

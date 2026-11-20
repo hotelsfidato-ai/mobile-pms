@@ -1,5 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Text, View } from "react-native";
 import type { Hotel } from "../../core/api";
 import { c, face, t } from "../../core/theme";
@@ -63,8 +63,12 @@ export function Messages({ hotel, role, reservation, onBack, onOpen }: {
      latched at the tap, and after an unknown outcome Send reply takes no more
      taps until this thread is left and read again (MGS-3). */
   const latch = useRef(false);
+  /* Dead after an unknown reply until the thread is left: the read refresh() starts must not give Send
+     reply back in this same view with the text still typed (MGS-U2, the review). */
+  const [dead, setDead] = useState(false);
+  useEffect(() => { setDead(false); }, [reservation]);
   async function sendReply() {
-    if (latch.current || once.isStuck()) return;
+    if (latch.current || dead || once.isStuck()) return;
     latch.current = true;
     setBusy(true);
     setRefusal(null);
@@ -74,6 +78,8 @@ export function Messages({ hotel, role, reservation, onBack, onOpen }: {
       await refresh();
     } catch (e) {
       if (once.stop(e)) {
+        setDead(true);
+        setReply("");
         setRefusal({ ...notKnown("sent", "the thread once it is opened again", e), tone: "bad" });
         void refresh();
       } else setRefusal(saidOf("Not sent", e));
@@ -144,7 +150,7 @@ export function Messages({ hotel, role, reservation, onBack, onOpen }: {
                     </Field>
                     <InDialog said={refusal} />
                     <View style={{ flexDirection: "row" }}>
-                      <Btn label={busy ? "Sending…" : "Send reply"} disabled={busy || once.stuck || !replyFits(reply)} onPress={() => void sendReply()} />
+                      <Btn label={busy ? "Sending…" : "Send reply"} disabled={busy || dead || once.stuck || !replyFits(reply)} onPress={() => void sendReply()} />
                     </View>
                   </Box>
                 ) : <Text style={body}>This guest has checked out. Replies stop at check-out.</Text>) : null}

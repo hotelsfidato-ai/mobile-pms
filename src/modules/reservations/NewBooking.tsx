@@ -27,6 +27,7 @@ import {
   type Line,
 } from "./book";
 import { takeAdvance, newBookingStop } from "./data";
+import { walkInStop } from "../front-desk/data";
 import { mayGiveComp, OVER_LIMIT_WHO, whyNotBook, whyNotPay } from "./roles";
 
 /* ══════════════════════════════════════════════════════════════════
@@ -242,13 +243,13 @@ export function NewBooking({ hotel, role, room: walkRoom, date: walkDate }: { ho
         ...(show.company && (companyName.trim() || companyGstin.trim() || companyAddress.trim())
           ? { guestCompany: { name: companyName.trim(), gstin: companyGstin.trim(), address: companyAddress.trim() } } : {}),
         lines: linesBody(lines, (l, i) => inclusive(l, quoteOf(i)?.tariff)),
-      }));
+      }), walkInStop(code));
     } catch (e) {
       latch.current = false;
       setSaving(false);
       /* Over the credit limit: said under the buttons, with the allow. */
       if (e instanceof ApiError && e.needs === "credit-limit") { setOverLimit({ reason: e.message, now }); return; }
-      if (once.stop(e)) {
+      if (once.stop(e, walkInStop(code))) {
         const n = notKnown("booked", "All bookings", e);
         setToast({ title: n.title, body: n.body, tone: "bad" });
         return;

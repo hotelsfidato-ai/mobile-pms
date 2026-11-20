@@ -51,15 +51,15 @@ export function Count({ hotel, role, startStoreId, onBack }: {
   const [reasons, setReasons] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
   const latch = useRef(false);
-  const stuck = useRef(false);
   const [said, setSaid] = useState<Said | null>(null);
   const [done, setDone] = useState<Said | null>(null);
 
-  /* The book is taken when the sheet opens: once, from the first good read - and while a save's
-     outcome is unknown, only from a read begun after it (the cached book may be from before). */
+  /* The book is taken when the sheet opens: once, from the first good read - and after a save whose
+     outcome is unknown (the sheet is emptied then), again, only from the read that let the stop go: the
+     cached book may be from before, and a count typed on it could be saved twice (MST-U1, the review). */
   useEffect(() => {
     if (!list || lines !== null || stop.stuck) return;
-    const id = startingStore(placesOf(list), startStoreId);
+    const id = storeId || startingStore(placesOf(list), startStoreId);
     setStoreId(id);
     setLines(linesOf(list.items, id));
   }, [list, stop.stuck]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -100,8 +100,13 @@ export function Count({ hotel, role, startStoreId, onBack }: {
       const fresh = await readStore(code).catch(() => null);
       if (fresh && !isRefused(fresh)) setLines(linesOf(fresh.items, store.id));
     } catch (e) {
-      if (outcomeUnknown(e)) { stuck.current = true; setSaid(unknownSaid("Not saved", e)); }
-      else setSaid(saidOf("Not saved", e));
+      if (outcomeUnknown(e)) {
+        setSaid(unknownSaid("Not saved", e));
+        /* Emptied: the book and the counts come back only from a read begun after the loss. */
+        setLines(null); setCounts({}); setMls({}); setReasons({});
+        return;
+      }
+      setSaid(saidOf("Not saved", e));
       /* The lines whose book moved take the new book and lose their count. */
       try {
         const fresh = await readStore(code);
@@ -115,7 +120,7 @@ export function Count({ hotel, role, startStoreId, onBack }: {
         }
       } catch { /* the refusal is already said */ }
     } finally {
-      latch.current = stuck.current;
+      latch.current = false;
       setBusy(false);
     }
   }
@@ -123,7 +128,7 @@ export function Count({ hotel, role, startStoreId, onBack }: {
   const saveButton = (
     <Btn
       label={busy ? "Saving…" : `Save the count${typedCount ? ` (${typedCount})` : ""}`} variant="primary"
-      disabled={busy || stuck.current || stop.stuck || !("lines" in out)} onPress={() => void save()}
+      disabled={busy || stop.stuck || !("lines" in out)} onPress={() => void save()}
     />
   );
 

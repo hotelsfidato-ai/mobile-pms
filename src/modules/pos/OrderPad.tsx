@@ -56,7 +56,7 @@ export function OrderPad({ hotel, role, table, orderId, onClose }: {
   /* A round sent twice is two dockets, and the batch route reads no key: after
      an unknown outcome Send takes no more taps until the pad is closed and the
      table read again (MPOS-4). */
-  const once = useScreenStop(roundStop(code, orderId));
+  const once = useScreenStop(roundStop(code, orderId, table));
   /* This pad stays dead after an unknown round until it is closed, even if a read lets the order go. */
   const [dead, setDead] = useState(false);
   const unknownRound = notKnown("sent", "the table's order once the pad is closed");

@@ -48,7 +48,8 @@ export function Company({ hotel, role, id }: { hotel: Hotel; role: string | null
   const cache = useQueryClient();
   /* The page's stop (MCON-1, MCON-U1): kept by name outside this page, so leaving the company and coming
      back lets nothing go; let go only by a read of the company that BEGAN after the loss. */
-  const cstop = useScreenStop(`contracts/${code}/company/${id}`);
+  /* A company is the GROUP's record, read at any of its hotels (the review): the name carries no hotel. */
+  const cstop = useScreenStop(`contracts/company/${id}`);
   const q = useRead(cstop.watch(() => (refusedRead ? Promise.resolve(null) : readCompanyContracts(code, id))), ["contracts", code, "company", id]);
   const [open, setOpen] = useState<Open | null>(null);
   const [said, setSaid] = useState<Said | null>(null);

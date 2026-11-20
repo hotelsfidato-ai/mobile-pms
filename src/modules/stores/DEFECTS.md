@@ -84,3 +84,9 @@ POST /bar/requests reads no key: a second ask is a second request. Switching seg
 **Done:** `STOP.requests`: Ask the store grey until a read of the requests begun after the loss. Approve
 and Reject are refused once decided ("This ask was approved already"): no stop. History's Undo is refused
 once undone ("already reversed"): left as it was.
+
+**The review of 20 Nov (on 5fc5064):** Count a store and the kitchen's, bar's and requests' cards kept a
+never-reset ref beside the screen stop: after the stop was let go, Save stayed grey with no reason, or a
+button looked live and did nothing. The refs are gone (the latch resets in `finally`); on an unknown
+outcome the count, the draft or the ask is emptied, and Count a store takes its book again only from the
+read that let the stop go. The kitchen's Save checks the stop at the tap. `STOP.history` (unused) dropped.

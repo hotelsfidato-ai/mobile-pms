@@ -225,3 +225,8 @@ MPOS-S4 lifted it to the screen in `useState` with `stillUnknown(at, dataUpdated
 `drawerStop`: kept by name, stopped while on its way, let go only by a read of the day begun after the
 loss. Left: Close the day (refused once closed), set-up acts (upserts or unique names), settle (refused
 once the order is not open).
+
+**The review of 20 Nov (on 5fc5064):** an order opened with no table or for the counter shows only in the
+open orders, never on the floor, so it has its own name (`openStop`), let go only by a /till/orders read;
+parcels keep `parcelsStop`, let go by either read. A new table's first round is kept by its table
+(`roundStop(code, undefined, table)`), and a floor read lets go each table it shows.

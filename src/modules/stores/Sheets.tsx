@@ -164,7 +164,6 @@ function KitchenSheetCard({ code, role, onSaid }: { code: string; role: string |
   const [draft, setDraft] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
   const latch = useRef(false);
-  const stuck = useRef(false);
   const [said, setSaid] = useState<Said | null>(null);
 
   if (refused) return <NotYours title="Kitchen stock" sentence={refused} />;
@@ -190,7 +189,7 @@ function KitchenSheetCard({ code, role, onSaid }: { code: string; role: string |
   const typedN = "lines" in out ? out.lines.length : 0;
 
   async function save() {
-    if (latch.current || !("lines" in out)) return;
+    if (latch.current || stop.isStuck() || !("lines" in out)) return;
     latch.current = true;
     setBusy(true);
     setSaid(null);
@@ -200,10 +199,10 @@ function KitchenSheetCard({ code, role, onSaid }: { code: string; role: string |
       void cache.invalidateQueries({ queryKey: ["stores", code] });
       onSaid({ title: "The closing count is saved", body: countSaidWords(res), tone: "ok" });
     } catch (e) {
-      if (outcomeUnknown(e)) { stuck.current = true; setSaid(unknownSaid("Not saved", e)); }
+      if (outcomeUnknown(e)) { setDraft({}); setSaid(unknownSaid("Not saved", e)); }
       else setSaid(saidOf("Not saved", e));
     } finally {
-      latch.current = stuck.current;
+      latch.current = false;
       setBusy(false);
     }
   }
@@ -221,7 +220,7 @@ function KitchenSheetCard({ code, role, onSaid }: { code: string; role: string |
         }} />
         {s.mayCount ? (
           <View style={{ flexDirection: "row" }}>
-            <Btn label={busy ? "Saving…" : `Save the closing count${typedN ? ` (${typedN})` : ""}`} variant="primary" disabled={busy || stuck.current || stop.stuck || typedN === 0} onPress={() => void save()} />
+            <Btn label={busy ? "Saving…" : `Save the closing count${typedN ? ` (${typedN})` : ""}`} variant="primary" disabled={busy || stop.stuck || typedN === 0} onPress={() => void save()} />
           </View>
         ) : null}
         {stop.unknown ? <Stopped line={STOP_LINE} onRead={() => { setDate(undefined); q.reload(); }} /> : null}
@@ -317,7 +316,6 @@ function BarSheetCard({ code, role, onSaid, onRequests }: { code: string; role: 
   const [draft, setDraft] = useState<Draft>({});
   const [busy, setBusy] = useState(false);
   const latch = useRef(false);
-  const stuck = useRef(false);
   const [said, setSaid] = useState<Said | null>(null);
   const [closing, setClosing] = useState<string | null>(null);
 
@@ -348,10 +346,10 @@ function BarSheetCard({ code, role, onSaid, onRequests }: { code: string; role: 
       onSaid(await act());
       void cache.invalidateQueries({ queryKey: ["stores", code] });
     } catch (e) {
-      if (outcomeUnknown(e)) { stuck.current = true; setSaid(unknownSaid(title, e)); }
+      if (outcomeUnknown(e)) { if (counting) setDraft({}); setSaid(unknownSaid(title, e)); }
       else setSaid(saidOf(title, e));
     } finally {
-      latch.current = stuck.current;
+      latch.current = false;
       setBusy(false);
     }
   }
@@ -518,7 +516,6 @@ function Requests({ code, role, onSaid }: { code: string; role: string | null; o
   const [note, setNote] = useState("");
   const [busy, setBusy] = useState<string | null>(null);
   const latch = useRef(false);
-  const stuck = useRef(false);
   const [rejecting, setRejecting] = useState<{ id: string; note: string } | null>(null);
   const [said, setSaid] = useState<Said | null>(null);
 
@@ -545,10 +542,10 @@ function Requests({ code, role, onSaid }: { code: string; role: string | null; o
       onSaid(await act());
       void cache.invalidateQueries({ queryKey: ["stores", code] });
     } catch (e) {
-      if (outcomeUnknown(e)) { stuck.current = true; setSaid(unknownSaid(title, e)); }
+      if (outcomeUnknown(e)) { if (key === "ask") { setLines([{ itemId: "", qty: "" }]); setNote(""); } setSaid(unknownSaid(title, e)); }
       else setSaid(saidOf(title, e));
     } finally {
-      latch.current = stuck.current;
+      latch.current = false;
       setBusy(null);
     }
   }

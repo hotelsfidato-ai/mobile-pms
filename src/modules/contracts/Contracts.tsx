@@ -36,7 +36,9 @@ export function Contracts({ hotel, role }: { hotel: Hotel; role: string | null }
   const cache = useQueryClient();
   /* An add nobody knows the end of (MCON-U1): kept by name outside this screen; Add company stays grey
      until a read of the list that BEGAN after it is back. */
-  const lstop = useScreenStop(`contracts/${code}/list`);
+  /* The list of companies is the group's (the review): a lost Add at one hotel greys Add at every hotel
+     this phone sees, so the name carries no hotel. */
+  const lstop = useScreenStop("contracts/companies");
   const q = useRead(lstop.watch(() => (refusedRead ? Promise.resolve(null) : readCompanyRecords(code))), [...key, "list"]);
   const [adding, setAdding] = useState(false);
   const [said, setSaid] = useState<Said | null>(null);

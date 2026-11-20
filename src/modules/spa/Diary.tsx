@@ -1,9 +1,10 @@
 import { router } from "expo-router";
 import { CalendarDays, Plus, Settings2 } from "lucide-react-native";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { Text, View } from "react-native";
 import type { Hotel } from "../../core/api";
 import { c, face, space, t } from "../../core/theme";
+import { stops } from "../../core/stop";
 import { Head, Screen, Stopped, useRead, useScreenStop } from "../../core/ui";
 import { Btn, body, Empty, Loading, NotYours, Stale, Toast, type Said } from "../guest-services/kit";
 import { LoadFailed, StatePill } from "../laundry/kit";
@@ -44,13 +45,19 @@ export function Diary({ hotel, role }: { hotel: Hotel; role: string | null }) {
   const [charging, setCharging] = useState<SpaAppointment | null>(null);
   const [said, setSaid] = useState<Said | null>(null);
 
-  /* The day on show (the first read opens on the property's business date): its stop (MSPA-U1). */
-  const shown = useRef("");
-  const stop = useScreenStop(dayStop(code, day ?? shown.current));
-  const q = useRead(stop.watch(() => (refusedRead ? Promise.resolve(null) : readDiary(code, day))), ["spa", code, "diary", day ?? ""]);
+  /* A booking whose outcome is unknown stops its DAY (MSPA-U1). The first read opens on the property's
+     business date, which only its answer names, so the read lets go the day it came back with - a good
+     read that began after the loss (and its wait; core stop.ts), not one react-query cancelled. */
+  const q = useRead(async (ctx?: { signal?: AbortSignal }) => {
+    if (refusedRead) return null;
+    const ticket = stops.begin();
+    const got = await readDiary(code, day);
+    if (!isRefused(got) && !ctx?.signal?.aborted) stops.good(dayStop(code, got.from), ticket);
+    return got;
+  }, ["spa", code, "diary", day ?? ""]);
   const off = isRefused(q.data) ? q.data.refused : null;
   const d = q.data && !isRefused(q.data) ? q.data : null;
-  if (d && day === null) shown.current = d.from;
+  const stop = useScreenStop(dayStop(code, d?.from ?? day ?? ""));
   const done = (s: Said) => { setBooking(false); setCancelling(null); setCharging(null); setSaid(s); };
 
   /* The read refused (the spa switched off, or the role): the server's one

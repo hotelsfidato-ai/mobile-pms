@@ -262,11 +262,12 @@ function Exchange({ code, stay, businessDate, onClose, onDone }: { code: string;
     latch.current = true;
     setBusy(true);
     try {
-      const r = await once.guard(() => exchangeRooms(code, stay.id, { withStayId: withId, from, reason: reason.trim() }));
+      /* The exchange is symmetric (stayExtras.ts): the doubt is the OTHER stay's too, whose Exchange would swap them back. */
+      const r = await once.guard(() => exchangeRooms(code, stay.id, { withStayId: withId, from, reason: reason.trim() }), stayStop(code, withId));
       onDone({ title: "Rooms exchanged", body: `${stay.guest} moves to ${r.to}, ${chosen?.guest ?? "the other guest"} to ${r.from}, from ${day(from)}.`, tone: "ok" });
     } catch (e) {
       setBusy(false);
-      const unknown = once.stop(e);
+      const unknown = once.stop(e, stayStop(code, withId));
       if (unknown) setDead(true);
       setBad(unknown ? { ...notKnown("exchanged", `both stays' rooms`, e), tone: "bad" } : { title: "Not exchanged", body: said(e), tone: "bad" });
     } finally { latch.current = false; }
@@ -336,9 +337,12 @@ function Inclusions({ code, stay, onClose }: { code: string; stay: DeskStay; onC
   /* A second add is a second line, and the route reads no key: one tap, and
      none after an unknown outcome until this is closed (MFD-8). */
   const latch = useRef(false);
+  /* Dead after an unknown add until the sheet is closed: the read that refresh() starts must not give
+     Add back in this same open view (MFD-U2, the review). */
+  const [dead, setDead] = useState(false);
 
   const add = async () => {
-    if (latch.current || once.isStuck()) return;
+    if (latch.current || dead || once.isStuck()) return;
     latch.current = true;
     setBusy(true);
     try {
@@ -346,7 +350,10 @@ function Inclusions({ code, stay, onClose }: { code: string; stay: DeskStay; onC
       setAdding(false); setPick(""); setName(""); setQty("1");
       refresh();
     } catch (e) {
-      if (once.stop(e)) { setBad({ ...notKnown("added", "this list once it is opened again", e), tone: "bad" }); refresh(); }
+      if (once.stop(e)) {
+        setDead(true); setPick(""); setName(""); setQty("1");
+        setBad({ ...notKnown("added", "this list once it is opened again", e), tone: "bad" }); refresh();
+      }
       else setBad({ title: "Not added", body: said(e), tone: "bad" });
     }
     latch.current = false;
@@ -403,7 +410,7 @@ function Inclusions({ code, stay, onClose }: { code: string; stay: DeskStay; onC
           ) : null}
           <Field label="How many"><Box value={qty} label="How many" keyboard="number-pad" onChange={setQty} /></Field>
           <View style={{ flexDirection: "row", gap: 8 }}>
-            <Button label={busy ? "Adding…" : "Add"} kind="primary" reason={once.stuck ? notKnown("added", "this list once it is opened again").line : pick || name.trim() ? null : ""} busy={busy} onPress={() => void add()} />
+            <Button label={busy ? "Adding…" : "Add"} kind="primary" reason={dead || once.stuck ? notKnown("added", "this list once it is opened again").line : pick || name.trim() ? null : ""} busy={busy} onPress={() => void add()} />
             <Button label="Cancel" onPress={() => setAdding(false)} />
           </View>
         </View>

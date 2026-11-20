@@ -7,6 +7,7 @@ import { ApiError, api, HeldError, send, type Hotel } from "../../core/api";
 import { cash, DASH } from "../../core/format";
 import { newKey } from "../../core/offline";
 import { c, face, space, t } from "../../core/theme";
+import { stops } from "../../core/stop";
 import { Capsule, notKnown, Screen, Stopped, useScreenStop, ripple, shade, keys } from "../../core/ui";
 import {
   CLOSE_FOR, closedLine, closure, kotLines, LEGEND, LOOK, maySetUpKots, openLabel, padHref, parcelTile, READY, startCard, takenLabel, tileLabel, tileOffers,
@@ -48,11 +49,17 @@ export function Tables({ hotel, role, onBack, onSignOut }: {
   /* A parcel whose outcome is unknown (MPOS-U1): POST till/orders reads no key and a parcel has no
      table to clash on, so New parcel stays grey until a read of the floor begun after it is back. */
   const parcelStop = useScreenStop(parcelsStop(code, OUTLET));
-  /* A round that opened a table, whose outcome is unknown (MPOS-U2): the floor shows whether it runs. */
-  const newRound = useScreenStop(roundStop(code, undefined));
   const floor = useQuery({
     queryKey: ["pos", code, "tables", "floor"],
-    queryFn: parcelStop.watch(newRound.watch(() => api<FloorNow>(`/api/hotels/${code}/till/floor?outlet=${OUTLET}`))),
+    /* A round that opened a table, whose outcome is unknown (MPOS-U2), is kept by its table: a good read of
+       the floor begun after the loss (core stop.ts) shows whether that table runs, so it lets each table
+       it shows go - not a read react-query cancelled. */
+    queryFn: parcelStop.watch(async (ctx?: { signal?: AbortSignal }) => {
+      const ticket = stops.begin();
+      const got = await api<FloorNow>(`/api/hotels/${code}/till/floor?outlet=${OUTLET}`);
+      if (!ctx?.signal?.aborted) for (const s of got.sections) for (const x of s.tables) stops.good(roundStop(code, undefined, x.label), ticket);
+      return got;
+    }),
   });
   const kot = useQuery({
     queryKey: ["pos", code, "tables", "kot"],

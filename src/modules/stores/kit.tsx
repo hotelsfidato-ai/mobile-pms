@@ -146,7 +146,6 @@ export function Figure({ label, value, unit, under, grey }: { label: string; val
     again after it. Kept outside the dialogs, so closing and reopening one lets nothing go. */
 export const STOP = {
   shelf: (code: string) => `stores/${code}/shelf`,
-  history: (code: string, id: string) => `stores/${code}/history/${id}`,
   /** Today's closing count of the kitchen's store. */
   kitchen: (code: string) => `stores/${code}/kitchen`,
   /** Today's count at the bar's counter or its store. */

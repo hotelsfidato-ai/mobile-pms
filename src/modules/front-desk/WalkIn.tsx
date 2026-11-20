@@ -1,5 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { router, type Href } from "expo-router";
+import { newBookingStop } from "../reservations/data";
 import { AlertTriangle, Plus, UserCheck } from "lucide-react-native";
 import { useRef, useState, type ReactNode } from "react";
 import { KeyboardAvoidingView, Platform, Text, View } from "react-native";
@@ -223,13 +224,13 @@ export function WalkIn({ hotel, role, room: walkRoom, onClose }: { hotel: Hotel;
           ...(comp || rate.trim() === "" ? {} : { agreedRate: Number(rate) }),
           ...(!comp && incl && !quote.data?.contractRate ? { rateIncludesGst: true } : {}),
         }],
-      }));
+      }), newBookingStop(code));
     } catch (e) {
       latch.current = false;
       setSaving(false);
       /* Nothing came back, or the server failed: it may be booked. No more
          taps until Arrivals is looked at (MEMORY 16). */
-      if (once.stop(e)) {
+      if (once.stop(e, newBookingStop(code))) {
         const n = notKnown("booked", "Arrivals", e);
         setToast({ title: n.title, body: n.body, tone: "bad" });
         return;

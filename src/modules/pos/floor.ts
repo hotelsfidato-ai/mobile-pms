@@ -212,8 +212,10 @@ export const parcelsStop = (code: string, outlet: string) => `pos/${code}/parcel
 
 /** The name of a round's stop (MPOS-U2): POST till/orders/batch reads no key, so a round whose outcome is
     unknown greys Send on that order's pad - kept outside the pad, whose draft survives a close - until a
-    read of the order begun after the loss is back; a round that opened a table, until a read of the floor. */
-export const roundStop = (code: string, orderId: string | undefined) => `pos/${code}/round/${orderId ?? "new"}`;
+    read of the order begun after the loss is back; a round that opened a table, by that TABLE, until a read
+    of the floor showing it. */
+export const roundStop = (code: string, orderId: string | undefined, table?: string) =>
+  `pos/${code}/round/${orderId ?? `table/${table ?? ""}`}`;
 
 /** The name of the table bookings' stop (MPOS-U3): a booking whose outcome is unknown greys New booking until
     a read of the list as first opened (today and what comes after) begun after the loss is back. */
@@ -223,3 +225,7 @@ export const tableBookingStop = (code: string) => `pos/${code}/table-bookings`;
     outcome is unknown greys Record until a read of the day begun after the loss is back - kept outside the
     screen, so leaving Close restaurant day and coming back lets nothing go. */
 export const drawerStop = (code: string) => `pos/${code}/day-end/movements`;
+
+/** The name of an outlet's open-order stop (MPOS-U1, the review): an order opened with no table, or for the
+    counter, shows only in the open orders (/till/orders), never on the floor - so only that read lets it go. */
+export const openStop = (code: string, outlet: string) => `pos/${code}/open/${outlet}`;

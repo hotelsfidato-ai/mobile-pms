@@ -84,3 +84,6 @@ MRS-G3 lifted the add's moment to the Waitlist screen, but in `useState` (gone o
 a read that FINISHED after it (`stillUnknown`; one on its way at the loss counted). **Done:** kept by name;
 stopped while on its way; let go only by a read that began after the loss; the sheet stays dead until
 closed. `waitlist.ts` stillUnknown stays, with its check, unused by the screen.
+
+**The review of 20 Nov (on 5fc5064):** New booking's loss marks the walk-in's name too (the same POST
+/bookings); All bookings, as first opened, lets both go.

@@ -36,3 +36,7 @@ MCON-1 lifted the moment to the page, in `useState`, released by a read that FIN
 company and coming back gave every write back. **Found** by the m13-stops sweep (grep for `useStuck` / `outcomeUnknown` inside sheets), reading the API to see which routes read the key. **Done:** kept by name
 (`contracts/<code>/company/<id>`, `contracts/<code>/list`), let go only by a read that began after the loss;
 the dialogs hand the error up so the page records it. **The rule:** a write on a route that reads no idempotency key keeps its stop OUTSIDE the sheet and the screen (core `useScreenStop`, by name), stopped while it is on its way, and let go only by a read of the record that BEGAN after the loss and came back good.
+
+**The review of 20 Nov (on 5fc5064):** a company is the group's record: the names carry no hotel
+(`contracts/companies`, `contracts/company/<id>`), so a lost Add at one hotel greys Add at every hotel this
+phone sees.

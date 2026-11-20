@@ -64,3 +64,7 @@ begun after the loss; each dialog stays dead until closed; dialogs cannot close 
 
 The reply's stop was the thread screen's: leaving and opening the thread again gave Send reply back.
 **Done:** kept by the thread's name; a read of the thread begun after the loss lets it go.
+
+**The review of 20 Nov (on 5fc5064):** a reply whose outcome is unknown empties the reply box and leaves
+Send reply dead until the thread is left (the read that refresh() starts used to give it back in the same
+view with the text still typed).

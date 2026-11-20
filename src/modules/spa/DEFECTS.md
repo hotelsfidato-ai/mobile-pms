@@ -57,3 +57,6 @@ the reopened dialog is empty, and a second booking at another time for the same 
 **Found** by the m13-stops sweep (grep for `useStuck` / `outcomeUnknown` inside sheets), reading the API to see which routes read the key. **Done:** `dayStop(code, day)`: Book a treatment greys for that diary day until a read of
 the day begun after the loss; the dialog cannot close mid-write. Left: Cancel (refused once cancelled),
 Charge to room (refused once closed: "already closed and on the bill"). **The rule:** a write on a route that reads no idempotency key keeps its stop OUTSIDE the sheet and the screen (core `useScreenStop`, by name), stopped while it is on its way, and let go only by a read of the record that BEGAN after the loss and came back good.
+
+**The review of 20 Nov (on 5fc5064):** the diary's first read opens on a day only its answer names, and the
+name was computed before it on a remount; the read now lets go the day it came back with.
