@@ -1,8 +1,8 @@
 import { outcomeUnknown } from "../../core/api";
 import { useQueryClient } from "@tanstack/react-query";
-import { Clock } from "lucide-react-native";
 import { useRef, useState } from "react";
 import { Text } from "react-native";
+import { TimeField } from "../../core/DateField";
 import { c, face, t } from "../../core/theme";
 import { useRead, useScreenStop } from "../../core/ui";
 import { Btn, body, Dialog, Field, Foot, InDialog, Input, Loading, Select, saidOf, type Said } from "../guest-services/kit";
@@ -123,12 +123,8 @@ export function Book({ code, day, onClose, onDone }: { code: string; day: string
         )}
       </Field>
 
-      <Field label="What time">
-        <Input label="What time" icon={Clock} value={time} onChangeText={setTime} maxLength={5} placeholder="--:--" keyboardType="numbers-and-punctuation" />
-      </Field>
-      {/* The phone's own: a typed time is said back as the diary will show it, so "4:00" is seen to be the
-          morning before it is booked (MSPA-1; the web's time input shows AM / PM itself). */}
-      {time ? <Text style={t.caption}>{timeWords(day, time)}</Text> : null}
+      {/* The phone's own clock (M-16), "HH:MM" as the web's time input sends; said back as the diary will show it (MSPA-1). */}
+      <TimeField label="What time" value={time} onChange={setTime} hint={time ? timeWords(day, time) : undefined} />
 
       <InDialog said={said} />
       <Foot>
