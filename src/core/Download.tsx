@@ -23,8 +23,9 @@ import { c, face, t as type } from "./theme";
    to the cache, which the phone may clear: nothing is kept (DPDP).
    ══════════════════════════════════════════════════════════════════ */
 
-/** Downloads `path` (the API's, with its query) as `fileName` and opens the share sheet. */
-export async function downloadToShare(path: string, fileName: string, mimeType: string): Promise<void> {
+/** Downloads `path` (the API's, with its query) as `fileName` and opens the share sheet. `offline`: the
+    web's own sentence for this file when nothing comes back (the voucher's), else downloadFile's. */
+export async function downloadToShare(path: string, fileName: string, mimeType: string, offline = DOWNLOAD_OFFLINE): Promise<void> {
   const url = `${API_URL}${path}`;
   const file = new File(Paths.cache, fileName);
   let got: File;
@@ -32,7 +33,7 @@ export async function downloadToShare(path: string, fileName: string, mimeType: 
     got = await File.downloadFileAsync(url, file, { headers: await who(), idempotent: true });
   } catch (e) {
     const status = statusIn(e instanceof Error ? e.message : String(e));
-    if (status === null) { noteUnreachable(); throw new ApiError(0, DOWNLOAD_OFFLINE); }
+    if (status === null) { noteUnreachable(); throw new ApiError(0, offline); }
     noteReachable();
     /* The server's own words for its refusal. */
     let again: Response;
@@ -45,8 +46,8 @@ export async function downloadToShare(path: string, fileName: string, mimeType: 
 }
 
 /** A download as a capsule, in ExportButtons' style: one tap at a time, its failure said under it. */
-export function DownloadButton({ label, a11y, path, fileName, mimeType, disabled }: {
-  label: string; a11y?: string; path: string; fileName: string; mimeType: string; disabled?: boolean;
+export function DownloadButton({ label, a11y, path, fileName, mimeType, offline, disabled }: {
+  label: string; a11y?: string; path: string; fileName: string; mimeType: string; offline?: string; disabled?: boolean;
 }) {
   const [said, setSaid] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -57,7 +58,7 @@ export function DownloadButton({ label, a11y, path, fileName, mimeType, disabled
     going.current = true;
     setBusy(true);
     setSaid(null);
-    try { await downloadToShare(path, fileName, mimeType); }
+    try { await downloadToShare(path, fileName, mimeType, offline); }
     catch (e) { setSaid(e instanceof Error && e.message ? e.message : "The file could not be downloaded."); }
     finally { going.current = false; setBusy(false); }
   };
