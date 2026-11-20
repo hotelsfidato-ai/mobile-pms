@@ -58,6 +58,27 @@ export const dateToTime = (d: Date) => `${two(d.getUTCHours())}:${two(d.getUTCMi
     app's screens already take it (`hotel.today ?? hotel.businessDate`). Never the phone's clock. */
 export const hotelDay = (h: { today?: string; businessDate: string }) => h.today ?? h.businessDate;
 
+/** The zone a hotel is in when the session does not say (every Fidato hotel today), and India's offset:
+    +05:30 all year, no summer time. */
+export const HOTEL_ZONE = "Asia/Kolkata";
+const INDIA_MINUTES = 330;
+
+/** The hotel's clock now, "HH:MM": where a time picker opens with nothing chosen (20 Nov). In the hotel's
+    own zone (GET /api/hotels' `timezone`), else India's - +05:30 also when the phone cannot read that
+    zone. Never the phone's own clock: a phone abroad, or set wrong, would open hours off. */
+export function hotelClock(now: Date, zone?: string | null): string {
+  if (zone && zone !== HOTEL_ZONE && zone !== "Asia/Calcutta") {
+    try {
+      const parts = new Intl.DateTimeFormat("en-GB", { timeZone: zone, hour: "2-digit", minute: "2-digit", hourCycle: "h23" })
+        .formatToParts(now);
+      const h = parts.find((p) => p.type === "hour")?.value ?? "", m = parts.find((p) => p.type === "minute")?.value ?? "";
+      if (/^\d{1,2}$/.test(h) && /^\d{2}$/.test(m)) return `${two(Number(h) % 24)}:${m}`;
+    } catch { /* a zone this phone does not know: India's */ }
+  }
+  const at = new Date(now.getTime() + INDIA_MINUTES * 60_000);
+  return `${two(at.getUTCHours())}:${two(at.getUTCMinutes())}`;
+}
+
 /** The day a picker opens on: the value when it is a day, else the hotel's day, kept inside
     min..max (a bound that is not a day is no bound). Text compares as days do ("YYYY-MM-DD"). */
 export function opensOn(value: string, today: string, min?: string, max?: string): string {

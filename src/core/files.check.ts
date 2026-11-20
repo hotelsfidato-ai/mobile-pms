@@ -1,7 +1,8 @@
 /* files.ts. Run: node --experimental-strip-types src/core/files.check.ts
    Every limit and sentence is the web's or the server's (named in files.ts); these hold them still. */
 import {
-  BILL, CSV_IMPORT, LOGO, OLD_SYSTEM_FILE, PHOTO, ROOMING_FILE, dataUrl, formOffline, formSig, statusIn, typeFromName, utiOf,
+  ANY_FILE, BILL, CSV_IMPORT, LOGO, OLD_SYSTEM_FILE, PHOTO, ROOMING_FILE, dataUrl, formOffline, formSig, isWithin, nameIn, pathOf,
+  statusIn, typeFromName, utiOf,
   type Picked,
 } from "./files.ts";
 
@@ -39,6 +40,16 @@ eq(OLD_SYSTEM_FILE.problem(f({ name: "ids.xlsx", size: 5_000_000 })), null, "5,0
 eq(OLD_SYSTEM_FILE.problem(f({ name: "ids.xlsx", size: 5_000_001 })), "That file is over 5 MB. Split it into smaller files.", "an old file over 5 MB");
 eq(OLD_SYSTEM_FILE.problem(f({ name: `${"a".repeat(196)}.csv`, size: 10 })), null, "a 200-letter name goes");
 eq(OLD_SYSTEM_FILE.problem(f({ name: `${"a".repeat(197)}.csv`, size: 10 })), "That file's name is too long.", "201 letters");
+/* Any file is offered for a sheet or a CSV (Android types a CSV as application/vnd.ms-excel or
+   application/octet-stream); the NAME decides, as the web's accept=".xlsx,.csv,.txt". */
+eq(OLD_SYSTEM_FILE.types, ["*/*"], "the old system's picker greys nothing");
+eq(CSV_IMPORT.types, ANY_FILE, "nor does a CSV import's");
+eq(OLD_SYSTEM_FILE.problem(f({ name: "Guests.XLSX", mimeType: "application/octet-stream" })), null, "an Excel file, whatever Android calls it");
+eq(OLD_SYSTEM_FILE.problem(f({ name: "export.csv", mimeType: "application/vnd.ms-excel" })), null, "a CSV Android calls Excel");
+eq(OLD_SYSTEM_FILE.problem(f({ name: "notes.txt " })), null, "a .txt, a space after its name");
+eq(OLD_SYSTEM_FILE.problem(f({ name: "guests.xls" })), "\"guests.xls\" is not an Excel (.xlsx) or CSV file.", "an old .xls: not what the web's picker takes");
+eq(OLD_SYSTEM_FILE.problem(f({ name: "scan.pdf", size: 9_000_000 })), "\"scan.pdf\" is not an Excel (.xlsx) or CSV file.", "a PDF: its name first");
+eq(CSV_IMPORT.problem(f({ name: "menu.csv", mimeType: "application/octet-stream" })), null, "a CSV with no type the phone knows");
 eq(ROOMING_FILE.problem(f({ name: "group.csv", size: 2_000_001 })), "That file is over 2 MB - far bigger than a rooming list.", "a rooming list over 2 MB");
 
 /* A CSV import (importSpec.ts fileProblem). */
@@ -70,4 +81,25 @@ eq(typeFromName("Slip.JPG"), "image/jpeg", "a type from a name");
 eq(typeFromName("notes"), "application/octet-stream", "no extension: unknown");
 eq(utiOf("application/pdf"), "com.adobe.pdf", "a PDF's iPhone type");
 eq(dataUrl("image/png", "iVBO"), "data:image/png;base64,iVBO", "a data URL");
+/* Where a file sits: a server-named download stays straight inside share/, a picked copy is deleted only
+   inside this app's cache. */
+const SHARE = "file:///data/user/0/app/cache/share/";
+eq(pathOf("file:///a/b%20c/"), "/a/b c", "an address as its path");
+eq(pathOf("file:/data/x.pdf"), "/data/x.pdf", "Android's one-slash form");
+eq(pathOf("file:///a/../b"), null, "a step up is never resolved: refused");
+eq(pathOf("file:///a/%2E%2E/b"), null, "nor written as %2E%2E");
+eq(pathOf("file:///a/%E0%A4"), null, "an address that cannot be read");
+eq(pathOf("content://media/1"), null, "not a file on this phone");
+eq(nameIn(SHARE, "file:///data/user/0/app/cache/share/Bill%20no.%207.heic"), "Bill no. 7.heic", "the server's name, inside");
+eq(nameIn(SHARE, "file:/data/user/0/app/cache/share/slip.pdf"), "slip.pdf", "Android's form of the same folder");
+eq(nameIn(SHARE, "file:///data/user/0/app/cache/share/../x.pdf"), null, "a name that climbs out");
+eq(nameIn(SHARE, "file:///data/user/0/app/cache/x.pdf"), null, "the cache itself is not the folder");
+eq(nameIn(SHARE, "file:///data/user/0/app/cache/share/a/b.pdf"), null, "a folder inside it is not straight inside");
+eq(nameIn(SHARE, "file:///data/user/0/app/cache/share/"), null, "the folder itself is not a file in it");
+eq(nameIn(SHARE, "file:///data/user/0/app/cache/shared.pdf"), null, "a name that only starts like the folder");
+const CACHE = "file:///var/mobile/Containers/Data/Application/A1/Library/Caches/";
+eq(isWithin(CACHE, `${CACHE}DocumentPicker/B2/guests.xlsx`), true, "a picker's copy in the cache");
+eq(isWithin(CACHE, "file:///var/mobile/Media/DCIM/100APPLE/IMG_1.HEIC"), false, "the person's own photo: never deleted");
+eq(isWithin(CACHE, CACHE), false, "the cache itself: never deleted");
+eq(isWithin(CACHE, `${CACHE}../Documents/x`), false, "out of the cache by a step up");
 console.log("core files: all checks pass");

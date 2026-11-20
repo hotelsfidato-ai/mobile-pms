@@ -6,6 +6,30 @@ it, and the rule it leaves. Fixed entries stay.
 
 ---
 
+### MCORE-8 · The picker core kept files and greyed CSVs (20 Nov) — fixed
+
+**What happened.** (1) A download went to the cache's root and stayed there; a picked file's copy stayed
+in the cache once read (DPDP). (2) A blank download name (the server's, for a stored bill) was not on the
+core, and a name the server keeps from the uploader could climb out of the folder ("../x"), and
+`idempotent: true` would have replaced whatever stood at that path, a folder too (iOS removes it). (3) The
+old system's file and a CSV import were filtered by MIME type: Android types a CSV as
+`application/vnd.ms-excel` or `application/octet-stream`, so it was greyed. **How found:** the reviews
+of the three picker lanes (M-16). **What was done (m16-core2):** downloads in `cache/share/`, emptied
+at each download, app start and sign-out; a server-named file must land straight in it (`nameIn`) or is
+deleted and refused; `idempotent` off; `forgetPicked` (only inside the cache) after `base64For` and
+`readText`; `ANY_FILE` and a name rule for the two sheet pickers. Checked in `files.check.ts`, each
+rule broken once. Not opened on a phone. **The rule:** a file name or a type from outside the app is
+never trusted for a path or a filter: check where the file landed, and decide by the name the web
+decides by.
+
+### MCORE-7 · A time picker opened on the phone's clock (20 Nov) — fixed
+
+**What happened.** `TimeField` with nothing chosen opened on the phone's local time: a phone abroad or
+set wrong opened hours off the hotel. **How found:** the picker lanes' review. **What was done:**
+`hotelClock` (dateField.ts): the hotel's `timezone` (GET /api/hotels sends it; now on `Hotel`), India's
++05:30 when none or unknown; checked under New York's zone, broken once each way. **The rule:** as a
+day (MCORE dateField), a time opens on the hotel's clock, never the phone's.
+
 ### MCORE-6 · The longer-password dialog drew under Android's status bar unpadded (20 Nov) — fixed
 
 **What happened.** `SignIn.tsx PasswordDue`'s `Modal` had no `statusBarTranslucent` and no safe-area

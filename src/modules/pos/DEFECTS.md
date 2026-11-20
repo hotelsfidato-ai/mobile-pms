@@ -233,7 +233,7 @@ parcels keep `parcelsStop`, let go by either read. A new table's first round is 
 
 ## m16 pickers (20 Nov) — lane m16-pick-pos
 
-### MPOS-P1 · A stored bill that is a PDF opens named as a picture (20 Nov) — open, a core question
+### MPOS-P1 · A stored bill that is a PDF opens named as a picture (20 Nov) — fixed 20 Nov: opened under the server's own name (m16-core2's safe server-named download)
 **What:** a paid-out's bill may be a photo or a PDF (BILL takes both), but the list says only `photo: true`,
 and the core's `downloadToShare` needs the type before it downloads. The phone names it `bill-….jpg`,
 `image/jpeg`, as the web shows it (an `<img>`, which breaks for a PDF too). **Found:** writing 2.1.

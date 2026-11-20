@@ -44,6 +44,9 @@ installed (no new package without the owner's yes).
 - **The core pieces (M-16):** `src/core/pickers.ts` (pickPhoto, pickFile), `upload.ts` (sendForm,
   base64For) with `files.ts` (the web's and the server's file limits), `DateField.tsx` (DateField,
   TimeField), `Download.tsx` (downloadToShare); what each greyed control needs: `docs/PICKERS.md`.
+- **Nothing kept (DPDP, 20 Nov):** downloads go into the cache's `share/`, emptied at each download,
+  app start and sign-out; a picked file's cached copy is deleted once read or sent (`forgetPicked`);
+  a bill is picked with `pickBill` (iPhone's action sheet, Android's dialog); a time opens on the hotel's clock.
 
 ## Designed for a phone, with room
 - The side margin is `space.side` (20); cards `space.cardX` / `space.cardY` (16 / 14); between

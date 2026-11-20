@@ -101,10 +101,18 @@ export const SHEET_TYPES = [
   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "text/csv", "text/comma-separated-values", "text/plain",
 ];
 
-/** The old system's file (api/src/modules/admin/oldSystem.ts readBody): the server's sentences. */
+/** Any file, for a sheet or a CSV (20 Nov): Android often types a CSV as application/vnd.ms-excel or
+    application/octet-stream, and a type filter greys it. The web's pickers go by the NAME (accept=
+    ".xlsx,.csv,.txt", ".csv,.txt,text/csv"), so the phone takes any file and the rule decides by its
+    name; what is inside is the server's to read (the old system's) or the CSV reader's. */
+export const ANY_FILE = ["*/*"];
+
+/** The old system's file (api/src/modules/admin/oldSystem.ts readBody): the server's sentences, after the
+    web picker's names (OldDataPage.tsx accept=".xlsx,.csv,.txt"), said in a sentence as csvImportProblem's. */
 export const OLD_SYSTEM_FILE: FileRule = {
-  types: SHEET_TYPES,
+  types: ANY_FILE,
   problem(f) {
+    if (!/\.(xlsx|csv|txt)$/i.test(f.name.trim())) return `"${f.name}" is not an Excel (.xlsx) or CSV file.`;
     if (f.name.trim().length > 200) return "That file's name is too long.";
     if (f.size != null && f.size > 5_000_000) return "That file is over 5 MB. Split it into smaller files.";
     return null;
@@ -136,7 +144,8 @@ export function csvImportProblem(f: Pick<Picked, "name" | "size">): string | nul
   }
   return null;
 }
-export const CSV_IMPORT: FileRule = { types: ["text/csv", "text/comma-separated-values", "text/plain"], problem: csvImportProblem };
+/** Any file is offered (ANY_FILE: Android's CSV types vary); the name decides, as the web's accept=".csv,.txt". */
+export const CSV_IMPORT: FileRule = { types: ANY_FILE, problem: csvImportProblem };
 
 /** A picture as an <Image> source, as the web shows the server's { type, data } (gallery.ts photoSrc). */
 export const dataUrl = (type: string, base64: string) => `data:${type};base64,${base64}`;
@@ -196,3 +205,44 @@ export const utiOf = (mimeType: string): string | undefined => ({
   "application/xml": "public.xml", "text/xml": "public.xml",
   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": "org.openxmlformats.spreadsheetml.sheet",
 } as Record<string, string>)[mimeType];
+
+
+/* ── WHERE A FILE SITS ON THIS PHONE (20 Nov) ────────────────────────
+   A downloaded file under the SERVER's name (Download.tsx): the server
+   keeps the uploader's name and strips only ", \, CR and LF
+   (api/src/routes/attachments.ts), so a name could climb out of the
+   folder ("../x"). And a picked file's copy is deleted only inside this
+   app's cache (pickers.ts forgetPicked), never the person's own file. */
+
+/** A file:// address as its plain path ("file:///a/b%20c/" → "/a/b c"), or null: not a local file, not
+    readable, or with a "." or ".." step (never resolved here: refused). */
+export function pathOf(uri: string): string | null {
+  const m = /^file:(.*)$/i.exec(uri);
+  if (!m) return null;
+  let path: string;
+  try { path = decodeURIComponent(m[1]!); } catch { return null; }
+  if (path.includes("\0") || !path.startsWith("/")) return null;
+  const steps = path.split("/").filter((s) => s !== "");
+  if (steps.some((s) => s === "." || s === "..")) return null;
+  return `/${steps.join("/")}`;
+}
+
+/** The file's name when it sits straight inside the folder; else null. */
+export function nameIn(folderUri: string, fileUri: string): string | null {
+  const dir = pathOf(folderUri), file = pathOf(fileUri);
+  if (!dir || !file) return null;
+  const base = dir === "/" ? "/" : `${dir}/`;
+  if (!file.startsWith(base)) return null;
+  const name = file.slice(base.length);
+  return name && !name.includes("/") ? name : null;
+}
+
+/** Whether the address is inside the folder, at any depth (not the folder itself). */
+export function isWithin(folderUri: string, uri: string): boolean {
+  const dir = pathOf(folderUri), file = pathOf(uri);
+  if (!dir || !file) return false;
+  return file.startsWith(dir === "/" ? "/" : `${dir}/`) && file !== dir;
+}
+
+/** Said when a server-named download did not land straight in the downloads folder (deleted, never opened). */
+export const UNSAFE_NAME = "The file's name from the server could not be used on this phone, so it was not kept or opened. Open it on the website.";

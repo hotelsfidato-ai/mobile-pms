@@ -3,6 +3,7 @@ import { API_URL, ApiError, refused, who } from "./api";
 import { formOffline, formSig, type FileRule, type FormPart, type Picked } from "./files";
 import type { KeyKeeper } from "./keys";
 import { newKey, noteReachable, noteUnreachable } from "./offline";
+import { forgetPicked } from "./pickers";
 
 /* ══════════════════════════════════════════════════════════════════
    A FILE TO THE API (M-16, 20 Nov) — the two ways the web sends one
@@ -21,6 +22,8 @@ import { newKey, noteReachable, noteUnreachable } from "./offline";
    anyway, as every write's, and `keeper` keeps it for a repeat.
    An answer: the server's JSON, as send() returns it (the screen reads
    `ok` and `reason`); a refusal: ApiError with the server's sentence.
+   The picked file is read again on a repeat, so the screen deletes its
+   copy (pickers.ts forgetPicked) only once it landed or is given up.
 
    BASE64 IN JSON (`base64For`): the file's bytes for `data`, sent through
    send() with exactly the web's body; the limits checked first.
@@ -62,16 +65,24 @@ export const filePart = (name: string, file: Picked): FormPart => ({ name, file 
 
 /** The file's bytes, base64 (no "data:" head), as the web's FileReader gives `data`. */
 export const readBase64 = (file: Pick<Picked, "uri">) => new File(file.uri).base64();
-/** The file as text (a CSV read on the phone, as the web's file.text()). */
-export const readText = (file: Pick<Picked, "uri">) => new File(file.uri).text();
+/** The file as text (a CSV read on the phone, as the web's file.text()); its picked copy is then deleted
+    (DPDP, forgetPicked) - read it once. */
+export async function readText(file: Pick<Picked, "uri">): Promise<string> {
+  try { return await new File(file.uri).text(); } finally { forgetPicked(file); }
+}
 
-/** A picked file for a JSON route's `data`: its rule checked first (files.ts), then read. */
+/** A picked file for a JSON route's `data`: its rule checked first (files.ts), then read. Its picked copy
+    is deleted either way (DPDP, forgetPicked): keep the base64, never the file. */
 export async function base64For(file: Picked, rule: FileRule): Promise<{ ok: true; data: string } | { ok: false; reason: string }> {
-  const problem = rule.problem(file);
-  if (problem) return { ok: false, reason: problem };
   try {
-    return { ok: true, data: await readBase64(file) };
-  } catch {
-    return { ok: false, reason: "That file could not be read on this phone. Choose it again." };
+    const problem = rule.problem(file);
+    if (problem) return { ok: false, reason: problem };
+    try {
+      return { ok: true, data: await readBase64(file) };
+    } catch {
+      return { ok: false, reason: "That file could not be read on this phone. Choose it again." };
+    }
+  } finally {
+    forgetPicked(file);
   }
 }

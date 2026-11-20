@@ -80,7 +80,8 @@ export function BillChoice({ file, onFile, problem, onProblem, disabled }: {
   );
 }
 
-/** Open a stored bill: fetched with the sign-in and handed to the share sheet (the web shows it as a picture,
-    so it is named as one). `offline`: the web's own sentence for this photo. */
-export const openBill = (path: string, id: string, offline: string) =>
-  downloadToShare(path, `bill-${id.slice(0, 8)}.jpg`, "image/jpeg", offline);
+/** Open a stored bill: fetched with the sign-in and handed to the share sheet under the server's own file
+    name, so a PDF opens as a PDF and a photo as a photo (MPOS-P1; the core checks the name is safe).
+    `offline`: the web's own sentence for this photo. */
+export const openBill = (path: string, _id: string, offline: string) =>
+  downloadToShare(path, "", "*/*", offline);

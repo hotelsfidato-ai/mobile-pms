@@ -6,7 +6,7 @@
 process.env.TZ = "America/New_York";
 Date.parse = () => { throw new Error("Date.parse used: the phone's engine reads only ISO"); };
 const {
-  bounds, dateToDay, dateToTime, dayShown, dayToDate, hotelDay, inRange, isDay, isTime, opensOn, timeShown, timeToDate,
+  bounds, dateToDay, dateToTime, dayShown, dayToDate, hotelClock, hotelDay, inRange, isDay, isTime, opensOn, timeShown, timeToDate,
 } = await import("./dateField.ts");
 
 const eq = (got: unknown, want: unknown, what: string) => {
@@ -47,6 +47,17 @@ eq(inRange("2026-11-20", "2026-11-21"), false, "the day before min is outside");
 eq(inRange("2026-12-01", undefined, "2026-11-30"), false, "the day after max is outside");
 eq(bounds("2026-12-01", "2026-11-01"), {}, "min after max: no bounds (iOS would throw)");
 eq(bounds("2026-11-01", "bad"), { min: "2026-11-01", max: undefined }, "a bound that is not a day is none");
+
+/* A time picker with nothing chosen opens on the HOTEL's clock: India's, or the hotel's own zone - never
+   the phone's (this process is in New York, where 20:45 UTC is 15:45). */
+const late = new Date(Date.UTC(2026, 10, 20, 20, 45));
+eq(hotelClock(late), "02:15", "no zone: India's +05:30, past midnight");
+eq(hotelClock(late, "Asia/Kolkata"), "02:15", "the hotel in India");
+eq(hotelClock(new Date(Date.UTC(2026, 10, 20, 18, 30))), "00:00", "India's midnight is 00:00, never 24:00");
+eq(hotelClock(late, "Asia/Dubai"), "00:45", "a hotel in its own zone");
+eq(hotelClock(new Date(Date.UTC(2026, 6, 1, 12, 0)), "Europe/London"), "13:00", "its summer time too");
+eq(hotelClock(late, "Not/A_Zone"), "02:15", "a zone the phone cannot read: India's, not the phone's");
+eq(hotelClock(late, null), "02:15", "null: India's");
 
 eq(dayShown("2026-11-20"), "Fri, 20 Nov 2026", "a day as shown");
 eq(dayShown("2026-02-30"), "2026-02-30", "not a day: shown as sent, never NaN");

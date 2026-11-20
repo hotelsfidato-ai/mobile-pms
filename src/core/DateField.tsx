@@ -3,7 +3,7 @@ import { CalendarDays, Clock, X } from "lucide-react-native";
 import { useState } from "react";
 import { Modal, Platform, Pressable, Text, TextInput, View } from "react-native";
 import {
-  bounds, dateToDay, dateToTime, dayShown, dayToDate, hotelDay, isDay, isTime, opensOn, PICKER_ZONE, timeShown, timeToDate,
+  bounds, dateToDay, dateToTime, dayShown, dayToDate, hotelClock, hotelDay, isDay, isTime, opensOn, PICKER_ZONE, timeShown, timeToDate,
 } from "./dateField";
 import { c, face, space, t } from "./theme";
 import { modalEdge, ripple, shade, useSheetPad } from "./ui";
@@ -19,7 +19,8 @@ import { modalEdge, ripple, shade, useSheetPad } from "./ui";
    The value is the API's text ("" when none); the picker is shown in UTC
    (dateField.ts), so the day picked is the day seen in any phone zone.
    With nothing chosen a day opens on the HOTEL's day (`hotel`: the
-   session's, GET /api/hotels' today), never the phone's; `min` / `max`
+   session's, GET /api/hotels' today), never the phone's, and a time on
+   the hotel's clock (its `timezone`, India's when none); `min` / `max`
    are days as text. `clearable` draws a clear button where blank is
    allowed. The label above, the error (or a hint) under it, as every
    kit's Field.
@@ -51,15 +52,17 @@ export function DateField({ hotel, min, max, ...p }: Common & {
   );
 }
 
-export function TimeField({ opensAt, ...p }: Common & {
-  /** Where the wheels open with nothing chosen ("HH:MM"); else the phone's clock now. */
+export function TimeField({ opensAt, hotel, ...p }: Common & {
+  /** Where the wheels open with nothing chosen ("HH:MM"); else the hotel's clock now. */
   opensAt?: string;
+  /** The session's hotel: its `timezone` is the clock the wheels open on (India's when it has none). */
+  hotel?: { timezone?: string | null };
 }) {
   const start = () => {
     if (isTime(p.value)) return timeToDate(p.value)!;
     if (isTime(opensAt)) return timeToDate(opensAt)!;
-    const now = new Date();
-    return timeToDate(`${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`)!;
+    /* The hotel's clock, never the phone's (dateField.ts hotelClock, 20 Nov). */
+    return timeToDate(hotelClock(new Date(), hotel?.timezone))!;
   };
   return <Picker {...p} mode="time" shown={isTime(p.value) ? timeShown(p.value) : p.value} placeholder="Choose a time" typed="HH:MM" start={start} done={dateToTime} />;
 }
