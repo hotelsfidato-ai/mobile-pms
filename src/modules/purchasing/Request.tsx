@@ -1,9 +1,10 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { router } from "expo-router";
-import { Ban, FileDown, IndianRupee, Send, Truck } from "lucide-react-native";
+import { Ban, IndianRupee, Send, Truck } from "lucide-react-native";
 import { useCallback, useState } from "react";
 import { Text, View } from "react-native";
 import type { Hotel } from "../../core/api";
+import { DownloadButton } from "../../core/Download";
 import { DASH } from "../../core/format";
 import { c, face, space, t } from "../../core/theme";
 import { Head, Screen, useRead, useScreenStop } from "../../core/ui";
@@ -11,13 +12,13 @@ import { Back, Btn, body, Loading, NotYours, Stale, Toast, type Said } from "../
 import { LoadFailed, Note } from "../laundry/kit";
 import { CancelDialog, PriceDialog, SendDialog } from "./Acts";
 import { Delivery } from "./Delivery";
-import { isRefused, listStop, readApproval, readPurchasing, readRequest } from "./data";
+import { isRefused, listStop, orderPdfPath, readApproval, readPurchasing, readRequest } from "./data";
 import { Fact, StatePill, useBackInView, YellowChip } from "./kit";
 import {
   creditLine, decidedCard, deliveredTitle, factsOf, figure, lineParts, mayCancel, mayDeliver, mayDownload, mayPrice, maySend,
   rupees, STATE_TONE, STATE_WORDS, unpricedTile, type PurchaseLine, type RequestDetail,
 } from "./purchase";
-import { ON_THE_WEBSITE, whyNotAct, whyNotRead, whyNotReceive } from "./roles";
+import { whyNotAct, whyNotRead, whyNotReceive } from "./roles";
 
 /* ══════════════════════════════════════════════════════════════════
    ONE PURCHASE on a phone — the web's /h/:code/purchasing/:id
@@ -116,12 +117,12 @@ export function Request({ hotel, role, id, onBack }: { hotel: Hotel; role: strin
             {/* The web's header actions, in its order. */}
             <View style={{ gap: 4 }}>
               <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
-                {shown!.download ? <Btn label="Download the order" icon={FileDown} disabled onPress={() => undefined} /> : null}
+                {/* M-16: the server's PDF (the shared renderer, D18-3) to the phone's share sheet - print it or attach it. */}
+                {shown!.download ? <DownloadButton label="Download the order" path={orderPdfPath(code, r.id)} fileName={`${r.reference}.pdf`} mimeType="application/pdf" /> : null}
                 {shown!.send ? <Btn label="Send the order" variant="primary" icon={Send} disabled={noAct} onPress={() => setAct("send")} /> : null}
                 {shown!.deliver ? <Btn label="Record the delivery" variant="primary" icon={Truck} disabled={why.receive != null} onPress={() => setAct("deliver")} /> : null}
                 {shown!.cancel ? <Btn label="Cancel" a11y={`Cancel ${r.reference}`} variant="danger" icon={Ban} disabled={noAct} onPress={() => setAct("cancel")} /> : null}
               </View>
-              {shown!.download ? <Text style={[t.caption, { color: c.grey600 }]}>Download the order: {ON_THE_WEBSITE}</Text> : null}
               {reasons.map((x) => <Text key={x} style={[t.caption, { color: c.grey600 }]}>{x}</Text>)}
               {!listed && list.error ? (
                 <Text style={[t.caption, { color: c.red700 }]} accessibilityRole="alert">Could not read who may act on this order: {list.error}</Text>

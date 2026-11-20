@@ -80,6 +80,9 @@ export const ASK_UNKNOWN = "Not known whether the ask was sent: look at the list
 
 /* ── Writes ── */
 
+/** The order as a PDF (the web's downloadOrder): GET, saved under `${reference}.pdf` as the server names it. */
+export const orderPdfPath = (code: string, id: string) => `${at(code)}/purchasing/orders/${encodeURIComponent(id)}.pdf`;
+
 export const raise = (code: string, body: AskBody) =>
   send<{ ok: true; request: PurchaseRequest }>("POST", `${at(code)}/purchasing/requests`, body, keysOf(code));
 
