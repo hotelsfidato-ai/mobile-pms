@@ -6,7 +6,8 @@ import { HeldError, outcomeUnknown, type Hotel } from "../../core/api";
 import { ExportButtons } from "../../core/Export";
 import type { ExportTable } from "../../core/exportDoc";
 import { c, t } from "../../core/theme";
-import { Screen, notKnown, useStuck } from "../../core/ui";
+import { Screen, Stopped, notKnown, useScreenStop } from "../../core/ui";
+import { tableBookingStop } from "./floor";
 import { stepDay } from "./billHistory";
 import { actOnBooking, bookOutsideDiner, readTableBookings } from "./serviceData";
 import { BottomSheet, Btn, DayField, Field, Input, Loading, PageHead, Panel, Pill, Select, Why } from "./ServiceKit";
@@ -51,7 +52,10 @@ export function TableBookingsScreen({ hotel, role }: { hotel: Hotel; role: strin
   const [booking, setBooking] = useState(0);
   const [said, setSaid] = useState<Said | null>(null);
   const [pulled, setPulled] = useState(false);
-  const q = useQuery({ queryKey: ["pos", code, "table-bookings", day], queryFn: () => readTableBookings(code, day), enabled: !refused, refetchInterval: 60_000 });
+  /* A new booking whose outcome is unknown (MPOS-U3), kept outside the sheet. */
+  const stop = useScreenStop(tableBookingStop(code));
+  const readIt = () => readTableBookings(code, day);
+  const q = useQuery({ queryKey: ["pos", code, "table-bookings", day], queryFn: day === "" ? stop.watch(readIt) : readIt, enabled: !refused, refetchInterval: 60_000 });
   const reload = () => { setPulled(true); void q.refetch(); };
   const changed = () => { void cache.invalidateQueries({ queryKey: ["pos", code] }); };
 
@@ -67,8 +71,9 @@ export function TableBookingsScreen({ hotel, role }: { hotel: Hotel; role: strin
       {!refused ? (
         <View style={{ gap: 8 }}>
           <ExportButtons table={q.data ? exportOf(all, shown) : null} />
-          <Btn primary label="New booking" disabled={why !== null || !q.data} onPress={() => { setSaid(null); setBooking((n) => n + 1); }} style={{ alignSelf: "flex-start" }} />
+          <Btn primary label="New booking" disabled={why !== null || !q.data || stop.stuck} onPress={() => { if (stop.isStuck()) return; setSaid(null); setBooking((n) => n + 1); }} style={{ alignSelf: "flex-start" }} />
           <Why>{why}</Why>
+          {stop.unknown ? <Stopped line={notKnown("booked", "the table bookings").line} onRead={() => { setDay(""); void q.refetch(); }} /> : null}
         </View>
       ) : null}
     </PageHead>
@@ -253,19 +258,20 @@ function NewBooking({ code, today, tables, sections, onClose }: {
   const [busy, setBusy] = useState(false);
   const [said, setSaid] = useState<Said | null>(null);
   const latch = useRef(false);
-  const stuck = useStuck();
+  const stuck = useScreenStop(tableBookingStop(code));
+  const [dead, setDead] = useState(false);
   const set = (k: keyof Diner) => (x: string) => setV((o) => ({ ...o, [k]: x }));
   async function book() {
-    if (latch.current || stuck.isStuck()) return;
+    if (latch.current || dead || stuck.isStuck()) return;
     latch.current = true;
     setBusy(true);
     setSaid(null);
     try {
-      await bookOutsideDiner(code, v);
+      await stuck.guard(() => bookOutsideDiner(code, v));
       onClose({ tone: "ok", title: "Booked", body: `${v.name}, ${v.party} at ${v.time}.` });
     } catch (e) {
       /* A second POST books a second table: no more taps until closed and read again. */
-      stuck.stop(e);
+      if (stuck.stop(e)) setDead(true);
       setSaid(failed("Not booked", e, "booked"));
     } finally {
       latch.current = false;
@@ -279,9 +285,9 @@ function NewBooking({ code, today, tables, sections, onClose }: {
         <>
           <View style={{ flexDirection: "row", gap: 8 }}>
             <Btn label="Back" style={{ flex: 1 }} tall disabled={busy} onPress={() => onClose()} />
-            <Btn primary label="Book the table" style={{ flex: 1 }} tall busy={busy} disabled={stuck.stuck} onPress={() => void book()} />
+            <Btn primary label="Book the table" style={{ flex: 1 }} tall busy={busy} disabled={dead || stuck.stuck} onPress={() => void book()} />
           </View>
-          {stuck.stuck ? <Why>{notKnown("booked", "the table bookings").line}</Why> : null}
+          {dead || stuck.unknown ? <Why>{notKnown("booked", "the table bookings").line}</Why> : null}
         </>
       }>
       <Field label="Name *"><Input value={v.name} onChangeText={set("name")} maxLength={60} autoFocus textContentType="name" autoComplete="name" accessibilityLabel="Name" /></Field>
