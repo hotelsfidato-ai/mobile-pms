@@ -24,7 +24,7 @@ installed (no new package without the owner's yes).
   `inputMode` to match; `textContentType` / `autoComplete` where the phone can fill it in.
 - **A phone number or an email on screen** opens the dialler or mail (`Linking.openURL("tel:…")`,
   `mailto:`); an address opens the map (`geo:` on Android, `maps:` on iPhone).
-- **Export and share:** `src/core/Export.tsx` — the print sheet (save as PDF) and the share sheet.
+- **Export:** `src/core/Export.tsx` — PDF and Excel (CSV) files through the share sheet, Print through the print sheet (M-14).
 - **Pull down to read again:** `RefreshControl` (the core's `Screen` has it).
 - **Loading:** `ActivityIndicator` (each phone's own spinner), never a custom one.
 - **Back:** iPhone's swipe from the edge and Android's back gesture walk the stack (expo-router);
@@ -35,8 +35,8 @@ installed (no new package without the owner's yes).
   `adjustsFontSizeToFit` with `minimumFontScale={0.8}` rather than clipping.
 - Not installed, asked of the owner when wanted: haptics (`expo-haptics` ~57.0.3), date and time
   pickers (`@react-native-community/datetimepicker` 9.1.0), photos (`expo-image-picker` ~57.0.20),
-  file attachments to a share (`expo-file-system` ~57.0.7 + `expo-sharing` ~57.0.23), copy to the
-  clipboard (`expo-clipboard` ~57.0.2).
+  copy to the clipboard (`expo-clipboard` ~57.0.2). Installed 19 Nov (M-14): `expo-file-system`,
+  `expo-sharing`.
 
 ## Designed for a phone, with room
 - The side margin is `space.side` (20); cards `space.cardX` / `space.cardY` (16 / 14); between
