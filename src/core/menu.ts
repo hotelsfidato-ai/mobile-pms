@@ -910,6 +910,16 @@ export const PHONE_ROUTES: Readonly<Record<string, string>> = {
   "/h/:code/requests": "/guest-services/:code/requests",
   /* mobile/t2-approvals (4 Nov) */
   "/h/:code/approvals": "/approvals/:code",
+  /* mobile/m13-config (19 Nov): the property's set-up - Room types (the settings console's page;
+     /h/:code/room-types redirects there), Booking sources, Cancellation terms, the Channel manager,
+     Places and suppliers, and Group rate change (above any one hotel: the code places the frame). */
+  "/settings/rooms/room-types": "/inventory/:code/room-types",
+  "/h/:code/room-types": "/inventory/:code/room-types",
+  "/h/:code/booking-sources": "/inventory/:code/booking-sources",
+  "/h/:code/cancellation-terms": "/inventory/:code/cancellation-terms",
+  "/h/:code/channels": "/inventory/:code/channels",
+  "/h/:code/places": "/inventory/:code/places",
+  "/group-rates": "/inventory/:code/group-rates",
   /* mobile/t2-revenue (4 Nov) */
   "/h/:code/revenue-outlook": "/revenue/:code",
   /* mobile/t2-crs (4 Nov) */
