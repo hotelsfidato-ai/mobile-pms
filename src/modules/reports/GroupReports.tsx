@@ -89,7 +89,7 @@ export function GroupReports({ hotel, role }: { hotel: Hotel; role: string | nul
         ) : (
           <>
             {report.asks === "range" ? <DayPick label="From" value={query.from!} max={day} onChange={setFrom} /> : null}
-            <DayPick label={report.asks === "range" ? "To" : "As on"} value={day} max={earliest} onChange={setAsOn} />
+            <DayPick label={report.asks === "range" ? "To" : "As on"} value={day} min={report.asks === "range" ? query.from : undefined} max={earliest} onChange={setAsOn} />
           </>
         )}
 

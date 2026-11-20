@@ -434,6 +434,8 @@ column order (BRIEF-T3), which the web itself does only on the Accounting export
   The web's min and max stay. **A month stays stepped** (MonthStep, the group reports' Month): the
   picker picks days.
 
+- **The money review of 20 Nov (m16)**: the group reports' To is never before From.
+
 Nothing here was opened on a phone or the preview: the cloud runs no API, Expo or simulator. Proved
 by the type check, the module's checks and the gates on a clean commit; the pickers, the share sheet
 and the uploads are the core's (lane m16-core), used as `docs/PICKERS.md` says.

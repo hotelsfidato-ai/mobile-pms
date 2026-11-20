@@ -371,6 +371,9 @@ function CostsDialog({ code, order, mayRecord, stop, onRead, onClose }: {
   const [note, setNote] = useState("");
   const [file, setFile] = useState<Picked | null>(null);
   const [recording, setRecording] = useState(false);
+  /* The cost just recorded: its figure is said as the server read it once the repairs are read again. */
+  const [recordedId, setRecordedId] = useState<string | null>(null);
+  const landed = recordedId ? costs.find((k) => k.id === recordedId) ?? null : null;
   const latch = useRef(false);
   const stored = useOpenStored((title, text) => setSaid({ title: "Proof not opened", body: text || title, tone: "bad" }));
 
@@ -384,10 +387,13 @@ function CostsDialog({ code, order, mayRecord, stop, onRead, onClose }: {
     setSaid(null);
     const typed = amount.trim();
     try {
-      await stop.guard(() => sendForm<{ ok: true; id: string }>("POST", costPath(code), [
+      setRecordedId(null);
+      const r = await stop.guard(() => sendForm<{ ok: true; id: string }>("POST", costPath(code), [
         { name: "workOrderId", value: order.id }, { name: "amount", value: typed }, { name: "note", value: note.trim() }, filePart("file", file),
       ], costKeys(code)));
-      setSaid({ title: "Cost recorded", body: `${order.title} · ${typed}`, tone: "ok" });
+      /* Not the typed text: the server's own figure follows, once read (the money review of 20 Nov). */
+      setRecordedId(r.id);
+      setSaid({ title: "Cost recorded", body: order.title, tone: "ok" });
       setAmount(""); setNote(""); setFile(null);
       void cache.invalidateQueries({ queryKey: ["housekeeping", code] });
     } catch (e) {
@@ -466,6 +472,9 @@ function CostsDialog({ code, order, mayRecord, stop, onRead, onClose }: {
         <View style={{ gap: 2 }} accessibilityLiveRegion="polite">
           <Text style={[t.label, { ...face[600], color: said.tone === "held" ? c.yellow800 : c.ink900 }]}>{said.title}</Text>
           {said.body ? <Text style={[t.label, line]}>{said.body}</Text> : null}
+          {said.title === "Cost recorded" && recordedId ? (
+            <Text style={[t.label, line, t.tab]}>{landed ? `${paise(landed.amount)}, as the server read it.` : "Reading it back…"}</Text>
+          ) : null}
         </View>
       )) : null}
 

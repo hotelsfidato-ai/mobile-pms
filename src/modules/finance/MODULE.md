@@ -369,6 +369,11 @@ pickers. `docs/PICKERS.md` Lane 1, rows 1.1-1.8.
 - The record that landed without its photo says the web's "Recorded, without its photo" / "Deposit
   recorded, photo not saved", with the server's reason.
 
+- **The money review of 20 Nov (m16)**: the desk's stop (`desk.ts` `deskStop`) now waits the core's
+  settle (`settleMs`: 0, 502, 503, 504 -> 5 s) before a read can free a lost write - a 504 while the API
+  is still writing no longer frees Record on a read 1 ms later - and reads again once the wait is over
+  (`useStop`'s `reload`). Every finance desk screen, the photo flows included.
+
 Nothing here was opened on a phone or the preview: the cloud runs no API, Expo or simulator. Proved
 by the type check, the module's checks and the gates on a clean commit; the pickers, the share sheet
 and the uploads are the core's (lane m16-core), used as `docs/PICKERS.md` says.

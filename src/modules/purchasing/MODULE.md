@@ -205,6 +205,11 @@ matches.** The owner's and an administrator's switches are not pictured, built f
   - **Left as the web**: no photo can be added later to a bill recorded without one (the web has no
     such act either).
 
+- **The money review of 20 Nov (m16)**: a bar bill's box that is not a number ("1250,50", words) is
+  refused before it is sent (the desk's COMMA sentence for a comma, else the box named), never sent as
+  null nor counted as 0 by the typed-total check; the Bill date is never after the property's today
+  (the server refuses a future one).
+
 Nothing here was opened on a phone or the preview: the cloud runs no API, Expo or simulator. Proved
 by the type check, the module's checks and the gates on a clean commit; the pickers, the share sheet
 and the uploads are the core's (lane m16-core), used as `docs/PICKERS.md` says.

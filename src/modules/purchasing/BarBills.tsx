@@ -184,7 +184,8 @@ function RecordBill({ hotel, drinks, suppliers, stop, onClose, onDone }: {
       <Text style={[body, { color: c.grey600 }]}>Type it as printed. The lines, the handling and the TCS must make the bill's total.</Text>
       <Field label="Supplier"><Select label="Supplier" value={f.supplierId} options={supplierOptions} onChange={set("supplierId")} /></Field>
       <Field label="Bill number"><Input label="Bill number" value={f.billNo} onChangeText={set("billNo")} maxLength={60} /></Field>
-      <DateField label="Bill date" value={f.billDate} onChange={set("billDate")} hotel={hotel} disabled={busy} />
+      {/* Never after the property's own today: the server refuses "A bill is not dated in the future." */}
+      <DateField label="Bill date" value={f.billDate} onChange={set("billDate")} hotel={hotel} max={hotel.today ?? hotel.businessDate} disabled={busy} />
       <Field label="T.P. number" hint="The transport permit, if printed."><Input label="T.P. number" value={f.tpNo} onChangeText={set("tpNo")} maxLength={60} /></Field>
       <BillField label="Photo of the bill" hint="Take it with the phone's camera, or pick a file." file={file} onFile={setFile} off={busy} />
 

@@ -322,6 +322,10 @@ while its write is on its way; `?room=` asks who may first.
   end date" (was a Set an end date / No end date pair). `DayStepper.tsx`'s `Day` stays for the other
   lanes' screens.
 
+- **The money review of 20 Nov (m16)**: a cost's amount with a comma that is not a thousands'
+  grouping ("18,50", which the server would read as ₹1,850) is refused with the desk's COMMA sentence;
+  once recorded, the figure said is the server's (read back), not the typed text.
+
 Nothing here was opened on a phone or the preview: the cloud runs no API, Expo or simulator. Proved
 by the type check, the module's checks and the gates on a clean commit; the pickers, the share sheet
 and the uploads are the core's (lane m16-core), used as `docs/PICKERS.md` says.

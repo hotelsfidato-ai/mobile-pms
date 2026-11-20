@@ -52,8 +52,10 @@ export const closeDrawer = (code: string, body: { varianceReason: string; handOv
 
 /* ── The bills' photos (M-16): forms, never held offline (core upload.ts, files.ts' sentence). The
    server keeps one file per record per bytes (attachments_no_duplicate): the same photo sent twice
-   is refused ("That photo is already on this expense."), another photo is a second file, and the
-   newest is the one shown. ── */
+   is refused - a paid-out's "That photo is already on this expense." (finance/expenses.ts), a
+   slip's "That exact file is already attached to this record. Nothing was added - the one already
+   there is the same bill." (routes/attachments.ts) - another photo is a second file, and the newest
+   is the one shown. ── */
 /** A paid-out's photo (finance/data/expenses.ts expensePhotoPath, "desk"): POST to add, GET to open. */
 export const expensePhotoPath = (code: string, movementId: string) => `${H(code)}/cashier-shift/movements/${movementId}/photo`;
 export const addExpensePhoto = (code: string, movementId: string, file: Picked) =>
