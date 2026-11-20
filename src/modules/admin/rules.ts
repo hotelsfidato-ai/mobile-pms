@@ -398,3 +398,10 @@ export const live = (rows: readonly { removedAt: string | null }[]) => rows.filt
 export const ID_WORDS: Record<string, string> = {
   aadhaar: "Aadhaar", passport: "Passport", driving_licence: "Driving licence", voter_id: "Voter ID", pan: "PAN card", other: "Other",
 };
+
+/* ── Bank details (data/admin.ts BankDetails) ───────────────────── */
+
+export interface BankDetails {
+  accountName: string; accountNumber: string; bankName: string; branch: string | null; ifsc: string; upi: string | null;
+  changedAt: string; changedBy: string | null;
+}

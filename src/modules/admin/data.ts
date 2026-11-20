@@ -3,7 +3,7 @@ import { keyKeeper, type KeyKeeper } from "../../core/keys";
 import {
   queryOf, staffRecord, taxOf,
   type ActivityPage, type AdminProperty, type ApiStaff, type AuditEntry, type BackfillKind, type BackfillView,
-  type HereAnswer, type PeopleList, type Property, type SignIn, type SuAnswer, type SystemHealth,
+  type BankDetails, type HereAnswer, type PeopleList, type Property, type SignIn, type SuAnswer, type SystemHealth,
 } from "./rules";
 
 /* ══════════════════════════════════════════════════════════════════
@@ -135,3 +135,11 @@ export const getTwoStep = () =>
   read<{ state: string; on: boolean; recoveryLeft: number | null; required: boolean }>("two-step", "/api/me/two-step");
 export const setTwoStepRequired = (required: boolean) =>
   send<Done & { required: boolean }>("PUT", "/api/admin/two-step-required", { required }, keysOf("two-step"));
+
+/* ── Bank details (VoucherSettings.tsx; api/src/modules/admin/bankDetails.ts) ── */
+
+/** `bank` null: none set (the voucher prints none). */
+export const getBankDetails = (code: string) => read<{ bank: BankDetails | null }>(`bank ${code}`, `${H(code)}/bank-details`);
+export const setBankDetails = (code: string, input: { accountName: string; accountNumber: string; bankName: string; branch: string; ifsc: string; upi: string }) =>
+  send<Done>("PUT", `${H(code)}/bank-details`, input, keysOf(`bank ${code}`));
+export const removeBankDetails = (code: string) => send<Done>("DELETE", `${H(code)}/bank-details`, undefined, keysOf(`bank ${code}`));
