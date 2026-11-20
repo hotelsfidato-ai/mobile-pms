@@ -146,6 +146,13 @@ const inrPrecise = new Intl.NumberFormat("en-IN", { style: "currency", currency:
 /** The web's moneyPrecise, "₹1,20,000.00". */
 export const moneyPrecise = (n: number) => inrPrecise.format(n);
 
+/** A rupee figure in the list's file, as the web's StayTable EXPORT hands it
+    over (StayTable.tsx 62-76, "raw values, a balance signed: negative is owed
+    to the guest") and the server prints it (api reportRender.ts formatCell
+    "rupees": to the paisa). Never rounded, never made positive; a figure not
+    sent is a dash (MFD-9). The card keeps the web's whole-rupee money(). */
+export const fileMoney = (n: number | null | undefined) => (n == null ? "-" : inrPrecise.format(n));
+
 /** Nights still to be posted (D27-199): the bill's `nightsToCome`, on a stay
     that pays for its room. Said, never added up (the folio's chargesToCome). */
 export const chargesToCome = (s: { status: string; isComplimentary: boolean; offeredTariff: number }, nights: number) =>

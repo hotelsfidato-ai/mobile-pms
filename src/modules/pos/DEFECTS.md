@@ -171,6 +171,31 @@ setup.check.ts. The web's fault goes to `docs/api-requests.md` through the mobil
 **The rule:** a figure whose blank means none is parsed to number-or-null on the phone, and anything
 else is refused before it leaves.
 
+## m13-fixes (20 Nov)
+
+### MPOS-T1 and MPOS-S1 — fixed (20 Nov)
+
+`roles.ts` now carries today's lists, re-read from the PMS (16 Nov release): roleGate.ts TILL 228
+(`payment` create + `pos`, `bar`) and TILL_READ 878 (`payment` view + `pos`, `bar`), the holders of
+`payment` worked out from permissions.ts's own matrix, and the sentences as refusalFor (1326) words
+them, in ROLES' order with WHO's names: "... reception, a waiter, a bar person or the accountant."
+(and "... a bar person, the accountant or a viewer." for reading). The strike list (till.ts 2996) had
+not changed. `till.ts ringWhy` now simply asks `whyNotRing`, so every till screen answers alike.
+`roles.check.ts` holds both lists over every role of ROLES and both sentences word for word; broken
+once (the Bar person taken out of TILL), it failed; put back, it passes. `serviceRoles.ts` keeps its
+own copies for its lane's gates (equal lists for TILL_READ).
+
+### MPOS-T2 — fixed (20 Nov)
+
+`order.ts finished()` now says a voided, NC or joined bill as the web's OrderPanel (Till.tsx
+1593-1609): "VOID - <reason>. Voided by <name> at <HH:MM>[; refund reference <ref>]." and "NC · No
+charge - <reason>. Approved by <name> at <HH:MM>." (a missing one a dash, as the web), "Joined to
+another table: ...". `types.ts` gains the web's statuses and the void / NC fields (data/till.ts
+287-303). An NC bill's figures are the web's two rows, "Bill total" (the server's net) and "NC · No
+charge ₹0 to pay" (Till.tsx 1547-1551); a voided or NC bill offers Print the bill as the web
+(1617, `printable`); the pill says NC (1413, `statusWord`). `order.check.ts` holds each; broken once
+(the void branch skipped), it failed with "Closed unpaid - null".
+
 ---
 
 # m13-stops (20 Nov)

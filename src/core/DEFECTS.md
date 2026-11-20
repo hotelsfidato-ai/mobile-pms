@@ -6,6 +6,17 @@ it, and the rule it leaves. Fixed entries stay.
 
 ---
 
+### MCORE-6 · The longer-password dialog drew under Android's status bar unpadded (20 Nov) — fixed
+
+**What happened.** `SignIn.tsx PasswordDue`'s `Modal` had no `statusBarTranslucent` and no safe-area
+padding, and its password box had no keyboard lift (docs/NATIVE.md, safe areas). **How found:** the
+mobile chat's sweep of modals against NATIVE.md. **What was done (m13-fixes):** `statusBarTranslucent`,
+its backdrop padded with `useSafeAreaInsets()` (top and bottom at least 16), and a
+`KeyboardAvoidingView` (padding on iPhone, height on Android). `onRequestClose` was already there and
+stays a no-op on purpose: the web's PasswordDue cannot be closed until the password is set, so
+Android's back does nothing. Not opened on a phone here. **The rule:** every `Modal`, a core one too,
+sets `statusBarTranslucent`, pads with the insets and names `onRequestClose`.
+
 ### MCORE-5 · A fault in the build's sign-in settings would read as the person's own mistake (4 Nov) — fixed
 
 **What happened:** a wrong Firebase setting (invalid-api-key, configuration-not-found,

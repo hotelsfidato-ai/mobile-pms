@@ -1,4 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
+import { router } from "expo-router";
 import { Trash2 } from "lucide-react-native";
 import { useRef, useState } from "react";
 import { Pressable, Text, View } from "react-native";
@@ -7,7 +8,6 @@ import { notKnown, useRead, useScreenStop, ripple, shade, keys } from "../../cor
 import { Btn, body, Dialog, Field, Foot, InDialog, Input, Loading, Select, saidOf, type Said } from "../guest-services/kit";
 import { collect, isRefused, readPriceList, readStays, docketsStop } from "./data";
 import { collectBody, itemWords, stayWords, type Draft } from "./docket";
-import { ON_THE_WEBSITE } from "./roles";
 
 /* ══════════════════════════════════════════════════════════════════
    COLLECTING A BAG — the web's CollectDialog (pages/Dockets.tsx).
@@ -96,9 +96,17 @@ export function Collect({ code, onClose, onCollected }: {
           ) : isRefused(prices.data) ? (
             <Text style={[body, { color: c.red700 }]} accessibilityRole="alert">{prices.data.refused}</Text>
           ) : items.length === 0 ? (
+            /* The web's words (Dockets.tsx 455-466), "price list" its orange link: the phone has
+               the price list now, so the dialog closes and opens it (no "On the website for now"). */
             <Text style={[body, { color: c.grey600 }]}>
-              Nothing is on this property's price list yet, so there is nothing to put in a bag. Add what it launders on the
-              price list first - an item with no price is fine, and is how linen belongs on it. Price list: {ON_THE_WEBSITE}.
+              Nothing is on this property's price list yet, so there is nothing to put in a bag. Add what it launders on the{" "}
+              <Text
+                style={{ color: c.orange700, ...face[500] }} accessibilityRole="link" accessibilityLabel="Open the price list"
+                onPress={() => { onClose(); router.push(`/laundry/${code}/price-list`); }}
+              >
+                price list
+              </Text>{" "}
+              first - an item with no price is fine, and is how linen belongs on it.
             </Text>
           ) : (
             <>

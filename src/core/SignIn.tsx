@@ -6,6 +6,7 @@ import {
   ActivityIndicator, KeyboardAvoidingView, Modal, Platform, Pressable, ScrollView, Text, TextInput, View,
   type TextInputProps,
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Svg, { Defs, LinearGradient, Path, Stop } from "react-native-svg";
 import { api, API_URL, send } from "./api";
 import { auth, isConfigured, notSetUp } from "./firebase";
@@ -271,6 +272,7 @@ export function PasswordDue({ staffId, email }: { staffId: string; email: string
   const [value, setValue] = useState("");
   const [busy, setBusy] = useState(false);
   const [refused, setRefused] = useState<string | null>(null);
+  const insets = useSafeAreaInsets();
 
   if (!due.data?.due) return null;
   const min = due.data.min;
@@ -294,8 +296,18 @@ export function PasswordDue({ staffId, email }: { staffId: string; email: string
   };
 
   return (
-    <Modal visible transparent animationType="fade" onRequestClose={() => {}}>
-      <View style={{ flex: 1, justifyContent: "center", padding: 16, backgroundColor: "rgba(3,23,40,0.25)" }}>
+    /* docs/NATIVE.md: drawn under Android's status bar too (statusBarTranslucent), so the
+       dialog keeps clear of the notch and the home bar itself (useSafeAreaInsets), and lifts
+       over the keyboard. Android's back asks onRequestClose: it does nothing on purpose,
+       as the web's PasswordDue cannot be closed until the password is set. */
+    <Modal visible transparent statusBarTranslucent animationType="fade" onRequestClose={() => {}}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{
+          flex: 1, justifyContent: "center", paddingHorizontal: 16, paddingTop: Math.max(insets.top, 16),
+          paddingBottom: Math.max(insets.bottom, 16), backgroundColor: "rgba(3,23,40,0.25)",
+        }}
+      >
         <View style={[s.card, { padding: 0, paddingHorizontal: 0, paddingVertical: 0, overflow: "hidden" }]} accessibilityViewIsModal>
           <View style={{ paddingHorizontal: 20, paddingVertical: 16, borderBottomWidth: 1, borderBottomColor: c.grey200, gap: 4 }}>
             <Text style={t.heading} accessibilityRole="header">Set a longer password</Text>
@@ -323,7 +335,7 @@ export function PasswordDue({ staffId, email }: { staffId: string; email: string
             <Primary label="Set it" onPress={() => void submit()} disabled={value.length < min} busy={busy} />
           </View>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </Modal>
   );
 }

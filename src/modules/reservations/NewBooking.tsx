@@ -794,8 +794,11 @@ function BookedCard({ hotel, done, onAnother }: { hotel: Hotel; done: Done; onAn
           <View style={{ gap: 8, paddingTop: 12, borderTopWidth: 1, borderTopColor: c.grey200 }}>
             {done.arrivesToday && !waiting && done.made.bookings.length === 1 && lead?.id && !inHouse
               ? <Button label="Check in now" onPress={() => router.replace(`/front-desk/${code}/check-in/${lead.id}`)} /> : null}
-            {/* A group opens its group page on the web: on the phone, its lead room. */}
-            {lead?.id ? <Button label="Open the booking" onPress={() => router.replace(`/front-desk/${code}/stay/${lead.id}?offer=1` as Href)} /> : null}
+            {/* BookedCard.tsx: a group opens its group page (/h/:code/groups/:id, the phone's
+                Group screen); one booking, its lead room. */}
+            {done.made.groupId
+              ? <Button label="Open the booking" onPress={() => router.replace(`/reservations/${code}/groups/${encodeURIComponent(done.made.groupId!)}` as Href)} />
+              : lead?.id ? <Button label="Open the booking" onPress={() => router.replace(`/front-desk/${code}/stay/${lead.id}?offer=1` as Href)} /> : null}
             <Button label="Another booking" kind="ghost" onPress={onAnother} />
           </View>
         </Section>

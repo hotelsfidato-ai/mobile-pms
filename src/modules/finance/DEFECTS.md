@@ -61,6 +61,77 @@ the server sent it - never rounded, never clamped - and a dash means only "not s
 
 ---
 
+## Lane m13-fin-desk (letter D)
+
+### MFIN-D1 · The web's drawer read turns every failure into "No drawer open" (avoided, 19 Nov)
+
+`getCashierDrawer` (web `data/cashier.ts`) catches every error and returns null, and the page then
+offers to open a drawer: offline, refused or a server failure all read as "the shift has not
+started". **Found** reading the web twin before porting. **Done:** the phone reads through the
+core's `api()`; a failure is its own state (no connection, or the server's sentence). For the web:
+in the report. **The rule:** a read that failed is never drawn as an empty state.
+
+### MFIN-D2 · A count of nothing is saved as ₹0 counted (avoided, 19 Nov)
+
+The web's Save the count is enabled with nothing typed and sends `{ denominations: [] }`; the
+server (`cashier.ts` /count) then sets `counted_cash` to the sum of nothing, ₹0 - a count nobody
+made, which the close then reads as "short by" the whole drawer. **Found** reading the route
+against the page. **Done:** `countBody` is null until a box is typed, and Save waits for it
+(`desk.check.ts`, broken once: a blank box sent as 0 fails). **The rule:** a blank is never a zero,
+in a count as in a price.
+
+### MFIN-D3 · A mistyped note opens a drawer on a figure nobody counted (avoided, 19 Nov)
+
+The web adds `Number(box) || 0` for the opening float, so "-3" × ₹500 lowers the float and "abc"
+vanishes; the server checks only that the opening is ≥ 0. **Done:** `openingOf` refuses a box that
+is not a whole number with the count's own sentence ("A count is a whole number of notes or coins
+- zero or more."), checked and broken once. **The rule:** what is typed is sent or refused, never
+quietly changed.
+
+### MFIN-D4 · The server's "no" is a 409, which the key keeper reads as "not yet" (noted, 19 Nov)
+
+The cashier, deposits, company payments and Form III routes answer their own refusals with 409
+(`{ ok: false, reason }`); `core/keys.ts` keeps a 409's key 30 s as a "not yet". Harmless today
+(none of these routes reads a key), and the sentence is shown as the server's. **The rule:** if
+the API starts reading keys on these routes, it should answer a refusal with 422, or the keeper
+needs to know these routes.
+
+
+### MFIN-D5 · An unknown outcome unlocked when its sheet closed (fixed 20 Nov)
+
+The first build kept the stop inside each sheet (`useStuck`): closing the sheet unmounted it, and a
+second Record deposit or Pay bill could be sent before the list was read again - a second deposit
+or payment, since none of these routes reads a key. **Found** by the mobile chat's rule from the
+reviews of 20 Nov. **Done:** the stop lives at the screen (`DeskKit useStop`): an unknown outcome
+closes its sheet, says so, re-reads, and every write on the screen waits until a read that began
+after the loss has come back (`desk.ts stillUnknown`, checked; "began < stuckAt" broken once and
+seen to fail). **The rule:** an unknown outcome is lifted by a fresh read, never by a closed dialog.
+
+### MFIN-D6 · A sheet could be closed while its write was on its way (fixed 20 Nov)
+
+The latch lived in the sheet: Cancel, the backdrop or the back gesture closed it mid-write, and a
+new sheet tapped again sent a second POST before the first answered - two deposits, two company
+payments, two paid-outs, as none of these routes reads a key; the first reply then closed the
+second sheet. **Found** by the independent money review (13add26). **Done:** a write on its way is
+counted outside the screen (`deskStop.begin/end`, checked); `useWrite` refuses while any write of
+the screen is out; the sheet's Cancel is grey and its backdrop and back do nothing. **The rule:** a
+write that reads no key holds the whole screen until it has answered.
+
+### MFIN-D7 · Leaving the screen dropped the stop (fixed 20 Nov)
+
+The stop was the screen's state, so leaving and coming back forgot an unknown outcome while the
+cached read was from before it; with the first read failing, every write was live. **Found** by the
+money review. **Done:** the moment of loss is kept by `<code>/<screen>` outside the screen
+(`deskStop`), forgotten only by a read begun after it (checked: a screen opened again with no read
+stays stopped; broken once). **The rule:** an unknown outcome outlives the screen that met it.
+
+### MFIN-D8 · A supplier's total was looked up by its name (fixed 20 Nov)
+
+The report groups owed bills by supplier id (or the typed name) but labels each total "<name>,
+owed"; two suppliers of one name would each show one of the two figures. **Found** by the money
+review. **Done:** a name labelling two totals gives a dash on both (`duesTotals`, checked, broken
+once). Asked of the PMS: the supplier's id in the total rows. **The rule:** a figure is matched by
+its key, never by its words.
 # Lane B, m13-fin-bills (19-20 Nov)
 
 ## MFIN-B1 · The stay's Issue sheet does not stop on an unknown outcome (closed by m13-stops, 20 Nov)

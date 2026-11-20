@@ -33,14 +33,12 @@ export const TILL_OUTLET = "REST";
 export interface TillRow extends OrderSummary { net?: number | null }
 
 /* ── Who may ring up (roleGate.ts 228: `payment` create, plus the
-   waiter and the Bar person by name). roles.ts's list is 15 Oct's: it has
-   no Bar person, and says "a till operator" where today's API says "a
-   waiter" (MPOS-T1). The sentence is today's refusalFor(TILL), the roles
-   in the API's order (permissions.ts ROLES) and words (roleGate.ts WHO). */
+   waiter and the Bar person by name). roles.ts now carries today's list
+   and sentence (MPOS-T1, fixed by m13-fixes on 20 Nov), so the Till and
+   the Terminal ask it as every other till screen does. */
 export const RING_REFUSAL = "Ringing up an order is for the owner, an administrator, the general manager, the hotel manager, "
   + "reception, a waiter, a bar person or the accountant. Ask one of them.";
-export const ringWhy = (role: string | null) =>
-  role === "bar" || (role != null && whyNotRing(role) === null) ? null : RING_REFUSAL;
+export const ringWhy = (role: string | null) => whyNotRing(role);
 
 /* ── Figures, as the web's money() writes them ─────────────────────── */
 

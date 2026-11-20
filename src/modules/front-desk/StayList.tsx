@@ -11,7 +11,7 @@ import { Capsule, Card, ReadFailed, useRead, ripple, shade } from "../../core/ui
 import { ListExport } from "../reports/ListExport";
 import type { ListScreenKey } from "../reports/listExport";
 import { checkInPath, readBlacklist, type DeskStay } from "./data";
-import { day, matches, statusOf } from "./desk";
+import { day, fileMoney, matches, statusOf } from "./desk";
 import { body, Button, Empty, Pill } from "./kit";
 
 /* ══════════════════════════════════════════════════════════════════
@@ -50,7 +50,9 @@ function Value({ s, col }: { s: DeskStay; col: Column }) {
   }
 }
 
-/** The card's own words as text, for the list as a file (the web's StayTable EXPORT, written as the card writes it). */
+/** The card's own words as text, for the list as a file (the web's StayTable EXPORT): the rate and
+    the balance as the server sent them, signed and to the paisa (MFD-9: the file wrote the card's
+    rounded "₹785 over"). */
 function valueText(s: DeskStay, col: Column): string {
   switch (col) {
     case "type": return s.roomType;
@@ -59,8 +61,8 @@ function valueText(s: DeskStay, col: Column): string {
     case "arrival": return day(s.arrival);
     case "departure": return day(s.departure);
     case "nights": return s.isDayUse ? "Day use" : String(s.nights);
-    case "rate": return s.isComplimentary ? "Comp" : cash(s.offeredTariff);
-    case "balance": return s.balance === undefined ? "-" : `${cash(Math.abs(s.balance))}${s.balance < 0 ? " over" : ""}`;
+    case "rate": return s.isComplimentary ? "Comp" : fileMoney(s.offeredTariff);
+    case "balance": return fileMoney(s.balance);
   }
 }
 

@@ -4,14 +4,27 @@
    whole and in the web's order (M-11). Change it in the PMS first, then
    here; menu.check.ts pins every role's list as the web gives it.
 
-   Re-checked entry by entry against today's PMS on 4 Nov (SHELL.md): every
-   role's menu, space, full reach and landing the same as the web's own
-   functions give them.
+   Re-ported entry by entry from the 16 Nov release on 20 Nov (mobile/
+   m13-menu), after the 4 Nov port (SHELL.md): every role's menu, space,
+   full reach and landing the same as the web's own functions give them,
+   and the matrix compared action by action with api/src/permissions.ts.
+   New since 4 Nov: Group reports and Group rate change (Across
+   properties), Minibar and Checklists, Waitlist, Guest feedback,
+   Backfilled records, eight reports (NC bills, Item sales, Money owed by
+   age, Statement of account, Commission owed, GSTR-1, Input tax credit,
+   GST on advances), and the console's Backfill data, Bring in old data,
+   Scheduled reports and "Room discounts" (D27-395).
 
    Left out on purpose: `devOnly` entries (a production build has none: the
    web's "Design system" in System and its admin "Console") and `keywords`
    (Find a screen is on the website for now). The role pictures were taken
    on a development build, so their folded System counts Design system too.
+
+   Two entries ask the session, not the role alone (groupHotels.ts
+   hotelsWhere): Group reports and Group rate change show only for somebody
+   with more than one real property where their role may. The frame passes
+   that question in (`Several`, `severalOf`); without it they stay hidden,
+   as the web's do before its session is read.
 
    Below the port: which of those screens the phone has (PHONE_ROUTES, the
    one table to add to), a property's landing, and two small words of the
@@ -21,6 +34,7 @@
    ══════════════════════════════════════════════════════════════════ */
 
 import { instant } from "./format.ts";
+import type { HotelsResponse } from "./api.ts";
 
 /* ── api/src/permissions.ts ──────────────────────────────────────── */
 
@@ -266,6 +280,24 @@ const SETS_THE_LIST: readonly Role[] = ["owner", "admin", "gm"]; // spa/data/spa
 const BAR_STOCK: readonly Role[] = ["owner", "admin", "gm", "bar"]; // stores/nav.ts
 const KITCHEN_STOCK: readonly Role[] = ["kitchen_manager", "chef"];
 const switchesModules = (role: Role) => role === "owner" || role === "admin"; // admin/moduleSwitchRoles.ts
+const FEEDBACK_ROLES: readonly Role[] = ["owner", "admin", "gm"]; // api/src/modules/reputation/feedbackRoles.ts
+const seesCommission = (role: Role) => can(role, "view", "commission"); // reports/nav.ts Commission owed
+/* admin/nav.ts Backfilled records: whoever reads it (`invoice` approve) and cannot open Settings. */
+const readsBackfillOnly = (role: Role) => can(role, "approve", "invoice") && !canAccess(role, "setting");
+
+/** groupHotels.ts hotelsWhere(may).length > 1, asked of the person's session:
+    more than one real property (a test hotel never) where they work with a
+    role that `may`. The frame passes it (`severalOf`); without it, no. */
+export type Several = (may: (role: Role) => boolean) => boolean;
+
+/** hotelsWhere over GET /api/hotels's answer: a group administrator is the
+    owner everywhere; anybody else only where rostered, with that role. */
+export const severalOf = (who: HotelsResponse | null): Several => (may) =>
+  who !== null && who.hotels.filter((h) => {
+    if (h.testOf) return false;
+    const role = who.scope.isGroupAdmin ? "owner" : who.scope.hotels.find((g) => g.hotelId === h.id)?.role;
+    return role != null && may(asRole(role));
+  }).length > 1;
 
 /* ── The entries ─────────────────────────────────────────────────── */
 
@@ -279,7 +311,7 @@ export interface NavItem {
   resource: Resource;
   matchPrefix?: boolean;
   children?: NavItem[];
-  canSee?: (role: Role) => boolean;
+  canSee?: (role: Role, several?: Several) => boolean;
   module?: string;
   listed?: false;
   workingMenus?: readonly Role[];
@@ -375,10 +407,18 @@ const ENTRIES: readonly Entry[] = [
   { section: "bookings", order: 50, workingMenus: ["front_desk"],
     label: "New booking", to: "/h/:code/book", icon: "BookPlus", resource: "reservation",
     canSee: (role) => can(role, "create", "reservation") },
+  { section: "bookings", order: 60,
+    label: "Waitlist", to: "/h/:code/waitlist", icon: "ListOrdered", resource: "reservation" },
   /* housekeeping/nav.ts */
   { section: "front-desk", order: 40, workingMenus: ["housekeeping"],
     label: "Housekeeping", to: "/h/:code/housekeeping", icon: "ClipboardList", resource: "inventory",
     canSee: (role) => canAccess(role, "reservation") },
+  /* D27-396: in no working menu; the board's room card opens them too. */
+  { section: "front-desk", order: 42,
+    label: "Minibar", to: "/h/:code/minibar", icon: "GlassWater", resource: "inventory",
+    canSee: (role) => canAccess(role, "reservation") || canAccess(role, "invoice") },
+  { section: "front-desk", order: 44,
+    label: "Checklists", to: "/h/:code/checklists", icon: "ListChecks", resource: "inventory" },
   { section: "front-desk", order: 50, workingMenus: ["housekeeping"],
     label: "Work orders", to: "/h/:code/work-orders", icon: "Wrench", resource: "room_config",
     canSee: (role) => canAccess(role, "room_config") || role === "housekeeping" },
@@ -387,6 +427,10 @@ const ENTRIES: readonly Entry[] = [
     label: "Cancellation terms", to: "/h/:code/cancellation-terms", icon: "ShieldAlert", resource: "rate" },
   { section: "inventory", order: 5,
     label: "Rates", to: "/h/:code/rates", icon: "IndianRupee", resource: "rate" },
+  /* D27-383 item 6: for whoever sets prices at more than one real property. */
+  { section: "across-properties", order: 8,
+    label: "Group rate change", to: "/group-rates", icon: "Tags", resource: "rate",
+    canSee: (role, several) => setsRates(role) && (several?.(setsRates) ?? false) },
   /* guests/nav.ts */
   { section: "guests-crm", order: 10, workingMenus: ["front_desk"],
     label: "Guests", to: "/guests", icon: "Users", resource: "customer", matchPrefix: true },
@@ -473,6 +517,10 @@ const ENTRIES: readonly Entry[] = [
   { section: "home", order: 10, workingMenus: ["front_desk"],
     label: "Dashboard", to: "/", icon: "LayoutDashboard", resource: "dashboard" },
   { section: "across-properties", order: 5, label: "All properties", to: "/all-properties", icon: "Hotel", resource: "report", canSee: (role) => can(role, "create", "hotel") },
+  /* D27-383 item 6: for whoever reads reports at more than one real property. */
+  { section: "across-properties", order: 7,
+    label: "Group reports", to: "/group-reports", icon: "Files", resource: "report",
+    canSee: (role, several) => can(role, "view", "report") && (several?.((r) => can(r, "view", "report")) ?? false) },
   { section: "reports", order: 20,
     label: "All reports", to: "/reports", icon: "FileText", resource: "report" },
   { section: "reports", order: 30,
@@ -484,6 +532,11 @@ const ENTRIES: readonly Entry[] = [
     canSee: seesMoney, listed: false },
   { section: "reports", order: 55,
     label: "Voids", to: "/reports/voids", icon: "Ban", resource: "report", listed: false },
+  /* 16 Nov: the restaurant's NC bills and each item sold. */
+  { section: "reports", order: 56,
+    label: "NC bills", to: "/reports/nc-bills", icon: "Ban", resource: "report", listed: false },
+  { section: "reports", order: 57,
+    label: "Item sales", to: "/reports/item-sales", icon: "BarChart3", resource: "report", listed: false },
   { section: "reports", order: 50,
     label: "No show", to: "/reports/no-show", icon: "CalendarCheck", resource: "report", listed: false },
   { section: "reports", order: 60,
@@ -548,6 +601,25 @@ const ENTRIES: readonly Entry[] = [
   { section: "reports", order: 237,
     label: "Supplier statement", to: "/reports/supplier-statement", icon: "HandCoins", resource: "invoice",
     canSee: seesSupplierDues, listed: false },
+  /* D27-383: money owed by age and one account's statement (`invoice` view, D27-145). */
+  { section: "reports", order: 41,
+    label: "Money owed by age", to: "/reports/dues-by-age", icon: "Building2", resource: "invoice",
+    canSee: seesMoney, listed: false },
+  { section: "reports", order: 42,
+    label: "Statement of account", to: "/reports/company-statement", icon: "Building2", resource: "invoice",
+    canSee: seesMoney, listed: false },
+  { section: "reports", order: 43,
+    label: "Commission owed", to: "/reports/commission", icon: "Percent", resource: "commission",
+    canSee: seesCommission, listed: false },
+  /* D27-383 item 4: GST a month at a time. */
+  { section: "reports", order: 101,
+    label: "GSTR-1", to: "/reports/gstr-1", icon: "ScrollText", resource: "report", listed: false },
+  { section: "reports", order: 102,
+    label: "Input tax credit", to: "/reports/input-tax-credit", icon: "ScrollText", resource: "invoice",
+    canSee: seesSupplierDues, listed: false },
+  { section: "reports", order: 103,
+    label: "GST on advances", to: "/reports/gst-advances", icon: "ScrollText", resource: "invoice",
+    canSee: seesMoney, listed: false },
   { section: "reports", order: 240,
     label: "Bar stock", to: "/reports/bar-stock", icon: "Wine", resource: "stock",
     canSee: mayReadStockReports, listed: false,
@@ -571,6 +643,10 @@ const ENTRIES: readonly Entry[] = [
     label: "Users", to: "/admin/users", icon: "UserCog", resource: "user" },
   { section: "system", order: 24, listed: false,
     label: "Integrations", to: "/admin/integrations", icon: "Plug", resource: "integration" },
+  /* D27-398: the Accountant reads Backfill data here, having no Settings. */
+  { section: "finance", order: 97, listed: false,
+    label: "Backfilled records", to: "/h/:code/backfill", icon: "CalendarClock", resource: "invoice",
+    canSee: readsBackfillOnly },
   { section: "system", order: 25,
     label: "System health", to: "/admin/system-health", icon: "Activity", resource: "role" },
   /* channel-manager/nav.ts */
@@ -658,6 +734,10 @@ const ENTRIES: readonly Entry[] = [
   /* reputation/nav.ts */
   { section: "guests-crm", order: 40,
     label: "Reviews", to: "/h/:code/reviews", icon: "Star", resource: "customer" },
+  /* D27-383 item 10: what guests answered after check-out (feedbackRoles.ts). */
+  { section: "guests-crm", order: 45,
+    label: "Guest feedback", to: "/h/:code/feedback", icon: "MessageSquareHeart", resource: "customer",
+    canSee: (role) => FEEDBACK_ROLES.includes(role) },
   /* spa/nav.ts */
   { section: "spa", order: 10,
     label: "Spa diary", to: "/h/:code/spa", icon: "Flower2", resource: "spa" },
@@ -689,6 +769,8 @@ interface Page {
 const PAGES: readonly Page[] = [
   { group: "property", slug: "profile", label: "Profile", icon: "Building2" },
   { group: "property", slug: "set-up-this-hotel", label: "Set up this hotel", icon: "ListChecks" },
+  { group: "property", slug: "backfill-data", label: "Backfill data", icon: "CalendarClock" },
+  { group: "property", slug: "old-data", label: "Bring in old data", icon: "FileUp", canSee: switchesModules },
   { group: "property", slug: "photos", label: "Logo and photos", icon: "Images" },
   { group: "property", slug: "highlights", label: "Highlights", icon: "Sparkles" },
   { group: "property", slug: "cancellation-terms", to: "/h/:code/cancellation-terms" },
@@ -704,7 +786,7 @@ const PAGES: readonly Page[] = [
   { group: "money", slug: "bank", label: "Bank details", icon: "Landmark" },
   { group: "money", slug: "payment-methods", label: "Payment methods", icon: "CreditCard" },
   { group: "money", slug: "extra-charges", label: "Extra charges", icon: "ReceiptText" },
-  { group: "money", slug: "discounts", label: "Discounts", icon: "BadgePercent" },
+  { group: "money", slug: "discounts", label: "Room discounts", icon: "BadgePercent" },
   { group: "money", slug: "commission", label: "Commission", icon: "HandCoins" },
   { group: "money", slug: "pickup", label: "Pickup and drop", icon: "Car" },
   { group: "lists", slug: "booking-sources", to: "/h/:code/booking-sources" },
@@ -721,6 +803,7 @@ const PAGES: readonly Page[] = [
   { group: "messages", slug: "online-checkin", to: "/h/:code/online-checkin" },
   { group: "messages", slug: "switches", label: "Guest messages on/off", icon: "BellRing" },
   { group: "messages", slug: "daily-report-emails", label: "Daily report emails", icon: "FileText" },
+  { group: "messages", slug: "scheduled-reports", label: "Scheduled reports", icon: "CalendarClock" },
   { group: "people", slug: "people", to: "/people" },
   { group: "people", slug: "roles", label: "Roles and permissions", icon: "ShieldCheck", resource: "role" },
   { group: "people", slug: "audit-log", label: "Audit log", icon: "ScrollText", resource: "audit_log" },
@@ -759,8 +842,8 @@ const SECTIONS: NavSection[] = [
   ...CONSOLE_SECTIONS,
 ];
 
-const visible = (role: Role, item: NavItem): boolean =>
-  item.canSee ? item.canSee(role) : canAccess(role, item.resource);
+const visible = (role: Role, item: NavItem, several?: Several): boolean =>
+  item.canSee ? item.canSee(role, several) : canAccess(role, item.resource);
 
 /** An entry behind a per-hotel switch: off only when the answer says off. */
 const switchedOn = (item: { module?: string }, modules?: Record<string, boolean>) =>
@@ -769,8 +852,9 @@ const switchedOn = (item: { module?: string }, modules?: Record<string, boolean>
 const resolve = (path: string, code: string) => path.replace(":code", code);
 
 /** Sections and items the role can reach; a section is kept while the
-    property's modules are unknown (undefined). */
-export function navigationFor(role: Role, code = "", modules?: Record<string, boolean>): NavSection[] {
+    property's modules are unknown (undefined). `several`: the session's
+    question for the two group entries (none given, they are hidden). */
+export function navigationFor(role: Role, code = "", modules?: Record<string, boolean>, several?: Several): NavSection[] {
   return SECTIONS
     .filter((section) => !section.module || modules === undefined || modules[section.module] !== false)
     .filter((section) => !section.receptionNeeds || role !== "front_desk" || modules?.[section.receptionNeeds] !== false)
@@ -781,19 +865,19 @@ export function navigationFor(role: Role, code = "", modules?: Record<string, bo
         .map((item) => ({
           ...item,
           to: resolve(item.to, code),
-          children: item.children?.filter((child) => visible(role, child)).map((child) => ({ ...child, to: resolve(child.to, code) })),
+          children: item.children?.filter((child) => visible(role, child, several)).map((child) => ({ ...child, to: resolve(child.to, code) })),
         }))
-        .filter((item) => visible(role, item) || (item.children?.length ?? 0) > 0),
+        .filter((item) => visible(role, item, several) || (item.children?.length ?? 0) > 0),
     }))
     .filter((section) => section.items.length > 0);
 }
 
 /** Every screen the role may open, listed in its menu or not. */
-export function flatNavigationFor(role: Role, code = "", modules?: Record<string, boolean>): NavItem[] {
+export function flatNavigationFor(role: Role, code = "", modules?: Record<string, boolean>, several?: Several): NavItem[] {
   const out: NavItem[] = [];
-  for (const section of navigationFor(role, code, modules)) {
+  for (const section of navigationFor(role, code, modules, several)) {
     for (const item of section.items) {
-      if (visible(role, item)) out.push(item);
+      if (visible(role, item, several)) out.push(item);
       for (const child of item.children ?? []) {
         if (!out.some((existing) => existing.to === child.to)) out.push(child);
       }
@@ -803,7 +887,8 @@ export function flatNavigationFor(role: Role, code = "", modules?: Record<string
 }
 
 /** Whether the role may reach one menu address (with ":code" in it). */
-export const mayReach = (role: Role, to: string) => flatNavigationFor(role, ":code").some((item) => item.to === to);
+export const mayReach = (role: Role, to: string, several?: Several) =>
+  flatNavigationFor(role, ":code", undefined, several).some((item) => item.to === to);
 
 const WORKING_MENUS: Partial<Record<Role, readonly string[]>> = (() => {
   const out: Partial<Record<Role, string[]>> = {};
@@ -825,6 +910,12 @@ export const spaceOf = (path: string): Space =>
   path === "/settings" || path.startsWith("/settings/") ? "settings"
     : path.startsWith("/pos/") ? "pos" : "front";
 
+/** Where each space opens (SpaceSwitcher.tsx home): the Front office's
+    Dashboard, the Settings console's /settings, the Restaurant's first entry. */
+export const spaceHome = (role: Role, code: string, modules: Record<string, boolean> | undefined, space: Space): string =>
+  space === "front" ? "/" : space === "settings" ? "/settings"
+    : sidebarFor(role, code, modules, "pos")[0]?.items[0]?.to ?? "/";
+
 /** The spaces this person may switch between, in the switcher's order. */
 export function spacesFor(role: Role, code = "", modules?: Record<string, boolean>): Space[] {
   if (RESTAURANT_ONLY.includes(role)) return ["pos"];
@@ -832,8 +923,8 @@ export function spacesFor(role: Role, code = "", modules?: Record<string, boolea
   return (["front", "pos", "settings"] as const).filter((s) => s === "front" || has.has(s));
 }
 
-function consoleMenu(role: Role, code: string, modules?: Record<string, boolean>): NavSection[] {
-  const reach = new Map(flatNavigationFor(role, code, modules).map((item) => [item.to, item]));
+function consoleMenu(role: Role, code: string, modules?: Record<string, boolean>, several?: Several): NavSection[] {
+  const reach = new Map(flatNavigationFor(role, code, modules, several).map((item) => [item.to, item]));
   return CONSOLE_SECTIONS.map((section, i) => ({
     ...section,
     items: PAGES.flatMap((page) => {
@@ -845,13 +936,13 @@ function consoleMenu(role: Role, code: string, modules?: Record<string, boolean>
 }
 
 /** The menu: what this person WORKS from, in the navigation's order, in one space. */
-export function sidebarFor(role: Role, code = "", modules?: Record<string, boolean>, space: Space = "front"): NavSection[] {
-  if (space === "settings") return consoleMenu(role, code, modules);
+export function sidebarFor(role: Role, code = "", modules?: Record<string, boolean>, space: Space = "front", several?: Several): NavSection[] {
+  if (space === "settings") return consoleMenu(role, code, modules, several);
   const only = RESTAURANT_ONLY.includes(role);
   const working = WORKING_MENUS[role];
   const keep = (item: NavItem) =>
     item.listed !== false && (!working || working.some((path) => resolve(path, code) === item.to));
-  return navigationFor(role, code, modules)
+  return navigationFor(role, code, modules, several)
     .filter((section) => only || (section.space ?? "front") === space)
     .map((section) => ({
       ...section,
@@ -863,9 +954,9 @@ export function sidebarFor(role: Role, code = "", modules?: Record<string, boole
 }
 
 /** How many of the person's screens their menu leaves out (Sidebar.tsx). */
-export function hiddenCount(role: Role, code: string, modules: Record<string, boolean> | undefined, space: Space): number {
+export function hiddenCount(role: Role, code: string, modules: Record<string, boolean> | undefined, space: Space, several?: Several): number {
   const n = (sections: NavSection[]) => sections.reduce((a, s) => a + s.items.reduce((m, i) => m + 1 + (i.children?.length ?? 0), 0), 0);
-  return n(navigationFor(role, code, modules)) - n(sidebarFor(role, code, modules, space));
+  return n(navigationFor(role, code, modules, several)) - n(sidebarFor(role, code, modules, space, several));
 }
 
 const WORKING_HOME: Partial<Record<Role, string>> = {
@@ -884,164 +975,209 @@ export function workingHomeFor(role: Role, code: string): string | null {
 
 /* ══════════════════════════════════════════════════════════════════
    WHAT THE PHONE HAS — THE ONE TABLE TO ADD TO
-   The web's address → the phone's route. A menu entry not in this table
-   stays in the menu, greyed: "On the website for now".
+   The web's address → the phone's route, one line each, grouped by the
+   phone's module (the frame first, then A to Z), each group naming the
+   lane that built it. A menu entry not in this table stays in the menu,
+   greyed: "On the website for now". A few keys are the web's OLD
+   addresses, which the web redirects to the line beside them (admin/
+   routes.tsx, inventory/routes.tsx): a link a notification or a screen
+   still carries opens the same phone screen. menu.check.ts pins every
+   line and that each target is a route file of app/.
    ══════════════════════════════════════════════════════════════════ */
 
 export const ON_THE_WEBSITE = "On the website for now";
 
 export const PHONE_ROUTES: Readonly<Record<string, string>> = {
+  /* The frame (main, mobile/shell): the Dashboard, All properties, Notifications. */
   "/": "/hotel/:code",
   "/all-properties": "/all",
   "/notifications": "/notifications/:code",
-  "/h/:code/housekeeping": "/housekeeping/:code",
-  "/h/:code/work-orders": "/housekeeping/:code/work-orders",
-  "/pos/:code/tables": "/pos/:code/tables",
-  "/pos/:code/kitchen": "/pos/:code/kitchen",
-  /* mobile/front-desk: its tabs are a query on the same screen (its MODULE.md). */
+  /* admin (mobile/m13-admin): the Settings console's first screen and its own pages, Administration.
+     The Accountant's Backfilled records is the same Backfill screen. */
+  "/settings": "/admin/:code",
+  "/settings/property/backfill-data": "/admin/:code/backfill",
+  "/h/:code/backfill": "/admin/:code/backfill",
+  "/settings/money/bank": "/admin/:code/bank",
+  "/settings/people/roles": "/admin/:code/roles",
+  "/admin/roles": "/admin/:code/roles",
+  "/settings/people/audit-log": "/admin/:code/audit-log",
+  "/admin/audit-log": "/admin/:code/audit-log",
+  "/settings/people/activity": "/admin/:code/activity",
+  "/admin/activity": "/admin/:code/activity",
+  "/settings/people/devices": "/admin/:code/sign-ins",
+  "/admin/sign-ins": "/admin/:code/sign-ins",
+  "/settings/people/signing-in": "/admin/:code/signing-in",
+  "/settings/connections/modules": "/admin/:code/modules",
+  "/properties": "/admin/:code/properties",
+  "/people": "/admin/:code/people",
+  "/admin/users": "/admin/:code/users",
+  "/admin/integrations": "/admin/:code/integrations",
+  "/admin/system-health": "/admin/:code/system-health",
+  /* approvals (mobile/t2-approvals) */
+  "/h/:code/approvals": "/approvals/:code",
+  /* banquet (mobile/t2-banquet; Halls and packages, mobile/m13-setups) */
+  "/h/:code/banquet": "/banquet/:code",
+  "/h/:code/banquet/setup": "/banquet/:code/setup",
+  /* connections (mobile/t2-messages): Settings → Modules and connections → Connection health, read only. */
+  "/settings/connections/connection-health": "/connections/:code",
+  /* contracts (mobile/m13-sales): a company's page is reached from its list. */
+  "/contracts": "/contracts/:code",
+  /* crs (mobile/t2-crs) */
+  "/h/:code/crs-bookings": "/crs/:code",
+  /* equipment (mobile/m13-hk): its item is reached from it. */
+  "/h/:code/equipment": "/equipment/:code",
+  /* finance (mobile/m13-fin-bills, mobile/m13-fin-desk): an invoice's page is reached from Invoices. */
+  "/h/:code/folios": "/finance/:code/folios",
+  "/h/:code/invoices": "/finance/:code/invoices",
+  "/h/:code/payments": "/finance/:code/payments",
+  "/h/:code/cashiering": "/finance/:code/cashiering",
+  "/h/:code/cash-deposits": "/finance/:code/cash-deposits",
+  "/h/:code/city-ledger": "/finance/:code/city-ledger",
+  "/h/:code/form-c": "/finance/:code/form-c",
+  "/h/:code/supplier-dues": "/finance/:code/supplier-dues",
+  /* front-desk (mobile/front-desk, mobile/m13-rooms): its tabs are a query on the same screen (its MODULE.md). */
+  "/h/:code/stay": "/front-desk/:code/rooms",
   "/h/:code/arrivals": "/front-desk/:code",
   "/h/:code/arrivals/upcoming": "/front-desk/:code?view=upcoming",
   "/h/:code/in-house": "/front-desk/:code/in-house",
   "/h/:code/in-house/due-out": "/front-desk/:code/in-house?view=due-out",
   "/h/:code/walk-ins": "/front-desk/:code/walk-ins",
-  /* mobile/guest-services: each web screen to its own twin, not to the
-     phone's hub (the hub has no web twin; its MODULE.md). Guest messages
-     (what the system sent guests) is its own screen since 4 Nov (mobile/t2-messages). */
+  /* guest-messages (mobile/t2-messages): Guests & CRM, and Settings → Messages, the same page. */
+  "/h/:code/guest-messages": "/guest-messages/:code",
+  /* guest-services (mobile/guest-services): each web screen to its own twin, not to the phone's hub
+     (the hub has no web twin; its MODULE.md). */
   "/h/:code/requests": "/guest-services/:code/requests",
-  /* mobile/t2-approvals (4 Nov) */
-  "/h/:code/approvals": "/approvals/:code",
-  /* mobile/m13-pos-setup (19 Nov): the Menu and Restaurant setup */
-  "/pos/:code/menu": "/pos/:code/menu",
-  "/pos/:code/setup": "/pos/:code/setup",
-  /* mobile/m13-groups (19 Nov): Groups (one group under it) and the Waitlist (16 Nov release) */
-  "/h/:code/groups": "/reservations/:code/groups",
-  "/h/:code/waitlist": "/reservations/:code/waitlist",
-  /* mobile/m13-sales (19 Nov): Guest feedback, Possible same person, Leads and WhatsApp, Marketing,
-     Contracts (a company's page is reached from its list). */
-  "/h/:code/feedback": "/reputation/:code/feedback",
+  "/h/:code/wake-up-calls": "/guest-services/:code/wake-up-calls",
+  "/h/:code/lost-property": "/guest-services/:code/lost-property",
+  "/h/:code/online-checkin": "/guest-services/:code/online-checkin",
+  /* guests (mobile/t2-guests, mobile/m13-sales): the web's four carry no property; Guest 360's page
+     sits under its search. */
+  "/guests": "/guests/:code",
+  "/companies": "/guests/:code/companies",
+  "/crm/guests": "/guests/:code/find",
   "/crm/same-person": "/guests/:code/same-person",
+  /* housekeeping (main, mobile/maintenance, mobile/m13-hk) */
+  "/h/:code/housekeeping": "/housekeeping/:code",
+  "/h/:code/minibar": "/housekeeping/:code/minibar",
+  "/h/:code/checklists": "/housekeeping/:code/checklists",
+  "/h/:code/work-orders": "/housekeeping/:code/work-orders",
+  /* inventory (mobile/t2-rates, mobile/m13-config): Rates; the property's set-up; Group rate change
+     (above any one hotel: the code places the frame). */
+  "/h/:code/rates": "/inventory/:code",
+  "/group-rates": "/inventory/:code/group-rates",
+  "/h/:code/cancellation-terms": "/inventory/:code/cancellation-terms",
+  "/h/:code/booking-sources": "/inventory/:code/booking-sources",
+  "/h/:code/channels": "/inventory/:code/channels",
+  "/h/:code/places": "/inventory/:code/places",
+  "/settings/rooms/room-types": "/inventory/:code/room-types",
+  "/h/:code/room-types": "/inventory/:code/room-types",
+  /* laundry (mobile/t2-laundry; the Price list, mobile/m13-setups) */
+  "/h/:code/laundry": "/laundry/:code",
+  "/h/:code/laundry/price-list": "/laundry/:code/price-list",
+  /* leads, loyalty, marketing (mobile/m13-sales, mobile/t2-loyalty) */
   "/h/:code/leads": "/leads/:code",
+  "/h/:code/loyalty": "/loyalty/:code",
   "/h/:code/marketing": "/marketing/:code",
-  "/contracts": "/contracts/:code",
-  /* mobile/m13-rep-ops (19 Nov): All reports, the day's reports, No show, Item sales, Group reports. */
+  /* night-audit (mobile/t2-night-audit); the banner's link too (Shell.tsx) */
+  "/h/:code/night-audit": "/night-audit/:code",
+  /* pos (mobile/pos-tables, mobile/kitchen, mobile/m13-till, mobile/m13-pos-service, mobile/m13-pos-setup) */
+  "/pos/:code/tables": "/pos/:code/tables",
+  "/pos/:code/table-bookings": "/pos/:code/table-bookings",
+  "/pos/:code/till": "/pos/:code/till",
+  "/pos/:code/bill-history": "/pos/:code/bill-history",
+  "/pos/:code/terminal": "/pos/:code/terminal",
+  "/pos/:code/kitchen": "/pos/:code/kitchen",
+  "/pos/:code/menu": "/pos/:code/menu",
+  "/pos/:code/day-end": "/pos/:code/day-end",
+  "/pos/:code/room-charges": "/pos/:code/room-charges",
+  "/pos/:code/setup": "/pos/:code/setup",
+  /* purchasing (mobile/t2-purchasing, mobile/m13-setups): an order is reached from the list. */
+  "/h/:code/purchasing": "/purchasing/:code",
+  "/h/:code/purchasing/who-may-ask": "/purchasing/:code/who-may-ask",
+  /* reports (mobile/m13-rep-ops, mobile/m13-rep-money, mobile/m13-rep-stock), in the menu's order. */
+  "/group-reports": "/reports/:code/group-reports",
   "/reports": "/reports/:code",
   "/reports/manager": "/reports/:code/manager",
   "/reports/night-audit": "/reports/:code/night-audit",
+  "/reports/city-ledger": "/reports/:code/city-ledger",
+  "/reports/dues-by-age": "/reports/:code/dues-by-age",
+  "/reports/company-statement": "/reports/:code/company-statement",
+  "/reports/commission": "/reports/:code/commission",
+  "/reports/no-show": "/reports/:code/no-show",
+  "/reports/voids": "/reports/:code/voids",
+  "/reports/nc-bills": "/reports/:code/nc-bills",
+  "/reports/item-sales": "/reports/:code/item-sales",
   "/reports/monthly-occupancy": "/reports/:code/monthly-occupancy",
   "/reports/monthly-stats": "/reports/:code/monthly-stats",
   "/reports/yearly-stats": "/reports/:code/yearly-stats",
-  "/reports/no-show": "/reports/:code/no-show",
-  "/reports/item-sales": "/reports/:code/item-sales",
-  "/group-reports": "/reports/:code/group-reports",
-  /* mobile/m13-setups (19 Nov): the set-up screens, each in its own module. */
-  "/h/:code/banquet/setup": "/banquet/:code/setup",
-  "/h/:code/spa/setup": "/spa/:code/setup",
-  "/h/:code/laundry/price-list": "/laundry/:code/price-list",
-  "/h/:code/purchasing/who-may-ask": "/purchasing/:code/who-may-ask",
-  /* mobile/m13-rooms (19 Nov): Rooms, the house as tiles for today. */
-  "/h/:code/stay": "/front-desk/:code/rooms",
-  /* mobile/m13-till (19 Nov): the Till and the Terminal, each its own twin. */
-  "/pos/:code/till": "/pos/:code/till",
-  "/pos/:code/terminal": "/pos/:code/terminal",
-  /* mobile/m13-rep-stock (19 Nov): the store, bar and supplier reports, one screen each. */
-  "/reports/stock-consumption": "/reports/:code/stock-consumption",
-  "/reports/stock-count-differences": "/reports/:code/stock-count-differences",
-  "/reports/stock-cover": "/reports/:code/stock-cover",
-  "/reports/stock-dead": "/reports/:code/stock-dead",
-  "/reports/stock-movements": "/reports/:code/stock-movements",
-  "/reports/stock-on-hand": "/reports/:code/stock-on-hand",
-  "/reports/stock-wastage": "/reports/:code/stock-wastage",
-  "/reports/bar-stock": "/reports/:code/bar-stock",
-  "/reports/flr-daily": "/reports/:code/flr-daily",
-  "/reports/flr-monthly": "/reports/:code/flr-monthly",
-  "/reports/supplier-spend": "/reports/:code/supplier-spend",
-  "/reports/supplier-statement": "/reports/:code/supplier-statement",
-  "/reports/supplier-dues": "/reports/:code/supplier-dues",
-  "/reports/equipment": "/reports/:code/equipment",
-  /* mobile/m13-config (19 Nov): the property's set-up - Room types (the settings console's page;
-     /h/:code/room-types redirects there), Booking sources, Cancellation terms, the Channel manager,
-     Places and suppliers, and Group rate change (above any one hotel: the code places the frame). */
-  "/settings/rooms/room-types": "/inventory/:code/room-types",
-  "/h/:code/room-types": "/inventory/:code/room-types",
-  "/h/:code/booking-sources": "/inventory/:code/booking-sources",
-  "/h/:code/cancellation-terms": "/inventory/:code/cancellation-terms",
-  "/h/:code/channels": "/inventory/:code/channels",
-  "/h/:code/places": "/inventory/:code/places",
-  "/group-rates": "/inventory/:code/group-rates",
-  /* mobile/m13-fin-bills (19 Nov): the finance desk's three lists; an invoice's page is reached from Invoices. */
-  "/h/:code/folios": "/finance/:code/folios",
-  "/h/:code/invoices": "/finance/:code/invoices",
-  "/h/:code/payments": "/finance/:code/payments",
-  /* mobile/m13-pos-service (19 Nov) */
-  "/pos/:code/bill-history": "/pos/:code/bill-history",
-  "/pos/:code/day-end": "/pos/:code/day-end",
-  "/pos/:code/room-charges": "/pos/:code/room-charges",
-  "/pos/:code/table-bookings": "/pos/:code/table-bookings",
-  /* mobile/m13-rep-money (19 Nov): the money and tax reports, one route each. */
+  "/reports/lodging-tax": "/reports/:code/lodging-tax",
   "/reports/gst-sales": "/reports/:code/gst-sales",
   "/reports/gstr-1": "/reports/:code/gstr-1",
   "/reports/input-tax-credit": "/reports/:code/input-tax-credit",
   "/reports/gst-advances": "/reports/:code/gst-advances",
-  "/reports/lodging-tax": "/reports/:code/lodging-tax",
-  "/reports/tds": "/reports/:code/tds",
   "/reports/c-form": "/reports/:code/c-form",
-  "/reports/accounting": "/reports/:code/accounting",
   "/reports/guest-ledger": "/reports/:code/guest-ledger",
-  "/reports/city-ledger": "/reports/:code/city-ledger",
-  "/reports/company-statement": "/reports/:code/company-statement",
-  "/reports/dues-by-age": "/reports/:code/dues-by-age",
-  "/reports/commission": "/reports/:code/commission",
   "/reports/cashier-shift": "/reports/:code/cashier-shift",
   "/reports/petty-cash": "/reports/:code/petty-cash",
-  "/reports/voids": "/reports/:code/voids",
-  "/reports/nc-bills": "/reports/:code/nc-bills",
-  /* mobile/t2-revenue (4 Nov) */
-  "/h/:code/revenue-outlook": "/revenue/:code",
-  /* mobile/t2-crs (4 Nov) */
-  "/h/:code/crs-bookings": "/crs/:code",
-  /* mobile/t2-loyalty (4 Nov) */
-  "/h/:code/loyalty": "/loyalty/:code",
-  /* mobile/t2-reviews (4 Nov) */
+  "/reports/accounting": "/reports/:code/accounting",
+  "/reports/stock-on-hand": "/reports/:code/stock-on-hand",
+  "/reports/stock-movements": "/reports/:code/stock-movements",
+  "/reports/stock-consumption": "/reports/:code/stock-consumption",
+  "/reports/stock-wastage": "/reports/:code/stock-wastage",
+  "/reports/stock-count-differences": "/reports/:code/stock-count-differences",
+  "/reports/stock-dead": "/reports/:code/stock-dead",
+  "/reports/stock-cover": "/reports/:code/stock-cover",
+  "/reports/supplier-spend": "/reports/:code/supplier-spend",
+  "/reports/equipment": "/reports/:code/equipment",
+  "/reports/supplier-dues": "/reports/:code/supplier-dues",
+  "/reports/tds": "/reports/:code/tds",
+  "/reports/supplier-statement": "/reports/:code/supplier-statement",
+  "/reports/bar-stock": "/reports/:code/bar-stock",
+  "/reports/flr-daily": "/reports/:code/flr-daily",
+  "/reports/flr-monthly": "/reports/:code/flr-monthly",
+  /* reputation (mobile/t2-reviews, mobile/m13-sales) */
   "/h/:code/reviews": "/reputation/:code",
-  /* mobile/t2-messages (4 Nov): Guest messages (Guests & CRM, and Settings → Messages, the same page) and
-     Connection health (Settings → Modules and connections), read only. */
-  "/h/:code/guest-messages": "/guest-messages/:code",
-  "/settings/connections/connection-health": "/connections/:code",
-  /* mobile/t2-stores (4 Nov): the Store (the Inventory Manager's landing), Inventory, and the
+  "/h/:code/feedback": "/reputation/:code/feedback",
+  /* reservations (mobile/t2-reservations, mobile/m13-groups): one group is reached from Groups. */
+  "/h/:code/calendar": "/reservations/:code/calendar",
+  "/h/:code/reservations": "/reservations/:code",
+  "/h/:code/groups": "/reservations/:code/groups",
+  "/h/:code/book": "/reservations/:code/book",
+  "/h/:code/waitlist": "/reservations/:code/waitlist",
+  /* revenue (mobile/t2-revenue) */
+  "/h/:code/revenue-outlook": "/revenue/:code",
+  /* spa (mobile/t2-spa; Treatments, mobile/m13-setups) */
+  "/h/:code/spa": "/spa/:code",
+  "/h/:code/spa/setup": "/spa/:code/setup",
+  /* stores (mobile/t2-stores): the Store (the Inventory Manager's landing), Inventory, and the
      Restaurant menu's Bar stock and Kitchen stock - one sheet screen, three doors, as the web. */
   "/h/:code/stores": "/stores/:code",
   "/h/:code/inventory": "/stores/:code/inventory",
   "/pos/:code/bar-stock": "/stores/:code/bar-stock",
   "/pos/:code/kitchen-stock": "/stores/:code/kitchen-stock",
-  /* mobile/t2-spa (4 Nov) */
-  "/h/:code/spa": "/spa/:code",
-  /* mobile/t2-banquet (4 Nov) */
-  "/h/:code/banquet": "/banquet/:code",
-  /* mobile/t2-guests (4 Nov): the web's three carry no property; Guest 360's page sits under its search. */
-  "/guests": "/guests/:code",
-  "/companies": "/guests/:code/companies",
-  "/crm/guests": "/guests/:code/find",
-  /* mobile/t2-purchasing (4 Nov): the list; an order is reached from it. */
-  "/h/:code/purchasing": "/purchasing/:code",
-  /* mobile/t2-laundry (4 Nov) */
-  "/h/:code/laundry": "/laundry/:code",
-  /* mobile/t2-night-audit (4 Nov); the banner's link too (Shell.tsx) */
-  "/h/:code/night-audit": "/night-audit/:code",
-  /* mobile/t2-reservations (4 Nov) */
-  "/h/:code/calendar": "/reservations/:code/calendar",
-  "/h/:code/reservations": "/reservations/:code",
-  "/h/:code/book": "/reservations/:code/book",
-  /* mobile/t2-rates (4 Nov): Rates; the web's /pricing, /grids and /rate-plans open it too. */
-  "/h/:code/rates": "/inventory/:code",
-  "/h/:code/wake-up-calls": "/guest-services/:code/wake-up-calls",
-  "/h/:code/lost-property": "/guest-services/:code/lost-property",
-  "/h/:code/online-checkin": "/guest-services/:code/online-checkin",
 };
 
 /** The phone's route for a web address, null where the phone has none. */
 export function phoneRoute(to: string, code: string): string | null {
   const route = PHONE_ROUTES[to.split("?")[0]!.replace(/^\/(h|pos)\/[^/]+/, "/$1/:code")];
   return route ? resolve(route, code) : null;
+}
+
+/** The space of the phone screen in view (MADM-1): the web's spaceOf of the
+    web address it stands for - the longest PHONE_ROUTES target the path is or
+    sits under; on a tie the Settings console's address, as the web's old
+    addresses redirect into it - else the web's rule on the path itself. So
+    Settings → Roles (/admin/5EL/roles) is in Settings, People in the Front office. */
+export function spaceHere(path: string): Space {
+  const bare = path.split("?")[0]!.replace(/^\/([a-z-]+)\/[^/]+/, "/$1/:code");
+  let best: { length: number; space: Space } | null = null;
+  for (const [web, route] of Object.entries(PHONE_ROUTES)) {
+    const target = route.split("?")[0]!;
+    if (bare !== target && !bare.startsWith(`${target}/`)) continue;
+    const space = spaceOf(web);
+    if (!best || target.length > best.length || (target.length === best.length && space === "settings")) best = { length: target.length, space };
+  }
+  return best?.space ?? spaceOf(path);
 }
 
 /** The one route of a menu that the screen in view belongs to: the exact

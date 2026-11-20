@@ -78,6 +78,27 @@ account-menu picture exists); home bar and banner 5 of 11 match outright (the ot
 difference 3 only); menu 6 of 11 match outright (the other 5 differ by the System count only);
 notifications: matches but for difference 1.
 
+## Menu re-ported from the 16 Nov release (20 Nov, mobile/m13-menu)
+
+Read entry by entry (`navigation.ts`, the 31 `nav.ts`, `settingsConsole.ts` and the 13
+`*.settings.ts`), then the web's own `navigation.ts` run under node again (a throw-away loader in the
+session's scratch folder: icons as names, `DEV` false, the console's glob as the 13 files, the
+session stubbed) against `menu.ts` for every role, four sets of switches and four sessions:
+`spacesFor`, `navigationFor`, `flatNavigationFor`, `sidebarFor` in each space, `workingHomeFor`:
+1,685 comparisons, no difference. The matrix: no difference.
+- **New:** Minibar, Checklists (Front desk); Waitlist (Bookings); Guest feedback (Guests & CRM);
+  Group reports and Group rate change (Across properties: only with more than one real property
+  where the role may, `severalOf`, which the frame passes from GET /api/hotels); Backfilled records
+  (Finance, unlisted, the Accountant's); NC bills, Item sales, Money owed by age, Statement of
+  account, Commission owed, GSTR-1, Input tax credit, GST on advances (Reports, unlisted); the
+  console's Backfill data, Bring in old data (owner, Admin) and Scheduled reports; "Room discounts".
+- **Spaces:** the Settings pill opens `/settings` (the phone's `/admin/<code>`), as the web's
+  SpaceSwitcher; the space in view is read through the web address the phone route stands for
+  (`spaceHere`), so a console screen lights Settings.
+- **PHONE_ROUTES:** one block, grouped by the phone's module; `menu.check.ts` now checks every
+  target is a route file of `app/` (in place of the brief's route regex) and pins the web addresses
+  the phone has no screen for.
+
 ## Menu re-checked against today's PMS (4 Nov)
 
 Read against today's PMS (`hotelsfidato-ai/pms` at `a4527ea`, 2 Nov): `src/components/app/navigation.ts`

@@ -190,9 +190,22 @@ export interface Order {
   /** The hotel's FSSAI licence number (A16), null until typed. */
   hotelFssai?: string | null;
   table: string | null;
-  status: "open" | "settled" | "abandoned";
+  /** `void`: a PAID bill voided by the owner, an administrator or the GM
+      (D27-324); `no_charge`: given free, NC (D27-351); `joined`: its dishes
+      went to another table's bill. The web's data/till.ts 287. */
+  status: "open" | "settled" | "abandoned" | "void" | "no_charge" | "joined";
   businessDate: string;
   paymentMethod: string | null;
+  /** Who voided it, when (the server's HH:MM), why, and the refund's
+      reference; who gave it free, when, why (data/till.ts 295-303). Null on
+      any other bill; optional, as an older answer has no such key. */
+  voidedBy?: string | null;
+  voidedAt?: string | null;
+  voidReason?: string | null;
+  voidReference?: string | null;
+  ncBy?: string | null;
+  ncAt?: string | null;
+  ncReason?: string | null;
   /** Null when the reader may not see that person: a GM reading an order
       the group owner opened (D27-1). Printed as a dash. */
   openedBy: string | null;

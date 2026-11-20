@@ -95,6 +95,22 @@ which is now `/front-desk/<code>/rooms`. **Done:** nothing here (reservations' f
 the exact change is in the lane's report for the mobile chat. **The rule:** a screen that lands
 looks for the greyed links that pointed at it.
 
+## m13-fixes (20 Nov)
+
+### MFD-9 · The stay lists' file rounded the balance and dropped its sign — fixed (20 Nov)
+
+**What happened.** The brief named a rounded `cash` figure in `StayList.tsx`. On the card it is the
+web's own: StayTable.tsx 140-160 writes `money(Math.abs(balance))` (whole rupees) with " over" for a
+negative one, and the phone's `cash` is the web's `money` - so the card was left as the web draws it.
+The rounding that was wrong was in the file: `valueText` wrote the card's "₹785 over" for the export,
+where the web's StayTable EXPORT (62-76) hands over the raw figure, "a balance signed (negative is
+owed to the guest)", and the server prints it to the paisa (reportRender.ts formatCell "rupees"). The
+Rate column the same. **How found:** following the brief's grep to the web's StayTable. **What was
+done:** `desk.ts fileMoney` (the server's figure to the paisa, its sign kept, a dash when not sent)
+for the Rate and Balance cells of the file; `desk.check.ts` holds it (broken once to the rounded
+`Math.abs` form, it failed). **The rule:** a list's file carries the server's figure, not the card's
+words for it (MEMORY 9).
+
 ---
 
 # m13-stops (20 Nov)

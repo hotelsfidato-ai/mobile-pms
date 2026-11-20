@@ -59,3 +59,47 @@ or timestamps. **How it was found:** the maintenance helper, reading the Costs d
 done:** `workOrders.ts` takes the first ten characters (`day`, `longDay`); checked with both forms,
 broken once. **The rule:** a date from the API goes through one helper that accepts a date and a
 timestamp alike; a timestamp's day is then the UTC day (asked of the owner).
+
+---
+
+## Minibar and Checklists (lane m13-hk) — MHK-K1 …
+
+### MHK-K1 · The money check passed with a zero turned into a dash (19 Nov) — fixed before it ran
+
+**What happened:** `care.ts money` was broken on purpose to `!n ? DASH : …` to prove its check; the check still
+passed, because no case held a real zero — a ₹0.00 the server sent would have read "-". Restoring it with
+`git checkout` restored nothing (the file was new and untracked: MEMORY 18 again); it was put back by hand.
+**How it was found:** the lane's own break-once. **What was done:** `care.check.ts` now holds
+`money(0) = "₹0.00"`; broken again, it failed; restored from a copy. **The rule:** a dash is for "not sent" only;
+a check of a figure rule holds a zero, and a file is copied aside before it is broken.
+
+### MHK-K2 · A take's key died with its dialog, so a second refill and charge were one reopen away (20 Nov) — fixed
+
+**What happened:** the take's idempotency key was minted per TakeDialog mount, the dialog could be closed while
+its request was in flight (Cancel, ✕, the shade, Android's back), and Record for a room was never held. After a
+lost reply or a 5xx, close + reopen + Record sent a NEW key: `POST /minibar/records` would issue a second refill
+and post a second charge. After an unknown outcome the room also stayed editable, so a new room + Record replayed
+the old key and the server answered `duplicate: true` with the FIRST take — which the phone toasted as "On room
+205's bill". And the `?room=` link opened the take without asking who may. **How it was found:** the independent
+review of lane m13-hk (H1, H2, H5). **What was done:** the take's keeper lives on the Minibar screen; on an
+unknown outcome the take is locked as sent (room, counts, "not sure"), its button says Try again (the same take,
+the same key), and Record for a room is grey with "Not known whether the last take was recorded…" until a read
+that BEGAN after the failure has come back (`care.ts stillUnknown`, checked); `duplicate` is read and said as
+"This take was already recorded … Nothing more was sent" (checked); no dialog of the lane closes while its write
+is on its way (`careKit Dialog busy`, Cancel grey); the deep link asks `whyNotOpenTake` as the button does. The
+desk's decision waits the same way (a read begun after). **The rule:** a key that guards money lives as long as
+the doubt, not as long as a dialog — hold it where the person can come back to it, and unlock only on a read
+begun after the failure. **The web's MinibarFlow.tsx (40-44) has the same flaw:** it mints a new `pressKey`
+each time the window opens (for `docs/api-requests.md`).
+
+### MHK-K3 · The take's key and the stop lived in the screen's state (20 Nov) — fixed
+
+**What happened:** after MHK-K2 the take {keeper, lostAt} and the desk's stop sat in the Minibar screen's
+`useRef` / `useState`: leaving the screen and coming back (or the route pushed again) dropped them while the
+cache still showed the minibar as read before the loss, and if the opening read failed everything was live
+again — a fresh take, a new key, a second charge. **How it was found:** the money review of 20 Nov (the same
+hole as the finance desk's). **What was done:** `care.ts doubtStore` (checked: kept on return, kept on a failed
+or an older read, gone only on a read begun after the loss or on success; broken once); the takes and the desk's
+doubts live in module-level stores by hotel (and record); the equipment item's doubt and its repair's key by
+hotel and item, the register's Add by hotel (MEQ-3). **The rule:** a doubt about money lives outside React,
+keyed by what it is about, so no screen's coming and going can forget it.

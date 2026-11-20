@@ -41,6 +41,19 @@ cancelled), Charge (a keeper per docket; the server refuses a second, "already o
 - The laundry routes do not read the `idempotency-key`: Collect it tapped again after a lost reply
   makes a second docket. The charge is safe (the docket is locked and "already on the bill").
 
+## m13-fixes (20 Nov)
+
+### MLDY-3 · Collect's empty price list still sent people to the website (20 Nov) — fixed
+
+**What happened.** With nothing on the price list, Collect a bag ended its sentence "Price list: On
+the website for now." - written before the phone had the price list; the price-list lane (MODULE.md,
+"Left for the mobile chat") could not edit Collect.tsx. **How found:** that note. **What was done:**
+the sentence is now the web's (Dockets.tsx 455-466), "... Add what it launders on the price list
+first - an item with no price is fine, and is how linen belongs on it.", with "price list" the web's
+orange link: it closes the dialog and opens `/laundry/<code>/price-list`. Words only; no check (no
+rule). Not opened on a phone here. **The rule:** when a lane brings a screen to the phone, the
+"On the website for now" that pointed at it goes too.
+
 ---
 
 # m13-stops (20 Nov)
