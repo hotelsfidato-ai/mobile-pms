@@ -2,7 +2,7 @@
    The desk's lists and the check-in's rules, on a tiny house. */
 import {
   amendLine, amendWrong, arrivals, assignable, blockedFor, checkInBlocked, day, dueOut, emptyRooms, inHouse, isBigMove, matches, mealPlanChoices, moveWords, footOf,
-  partyProblem, upcoming, walkIns, whyNotYet,
+  partyProblem, upcoming, walkIns, whyNotYet, fileMoney,
 } from "./desk.ts";
 
 const eq = (got: unknown, want: unknown, what: string) => {
@@ -109,4 +109,11 @@ eq(moveWords({ ...stayed, isComplimentary: true }, d, 5), "This moves the arriva
 eq(mealPlanChoices("Room Only").length, 4, "RO kept for a booking already on it");
 eq(mealPlanChoices("CP").length, 3, "RO not offered");
 
+/* The list's file keeps the server's balance to the paisa and its sign (MFD-9): the
+   web's StayTable EXPORT, not the card's rounded "₹785 over". */
+eq(fileMoney(-784.5), "-\u20b9784.50", "an overpaid balance in the file: signed, paise kept");
+eq(fileMoney(120000.25), "\u20b91,20,000.25", "lakh grouping, paise kept");
+eq(fileMoney(0), "\u20b90.00", "a real zero is a zero");
+eq(fileMoney(undefined), "-", "a balance not sent is a dash");
+eq(fileMoney(null), "-", "a tariff not sent is a dash");
 console.log("front-desk desk: all checks pass");

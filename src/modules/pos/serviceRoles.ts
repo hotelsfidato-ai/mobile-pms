@@ -14,9 +14,8 @@
      api/src/permissions.ts   who holds payment and invoice (the matrix)
      api/src/modules/pos/till.ts 2152, 2196-2200  BILL_HISTORY_ROLES and
                               its 403 sentence for a range or a filter
-   The pos module's own roles.ts (15 Oct) predates the Bar role (D27-324):
-   its TILL lists lack `bar` and say "a till operator"; this lane does not
-   edit it and asks the mobile chat to (report). If the PMS changes a
+   The pos module's roles.ts was given the Bar role and today's words by
+   m13-fixes (20 Nov, MPOS-S1); these lists stay this lane's. If the PMS changes a
    role, change it here. Pure: serviceRoles.check.ts runs it under node.
    ══════════════════════════════════════════════════════════════════ */
 

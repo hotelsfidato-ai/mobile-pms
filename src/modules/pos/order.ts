@@ -136,6 +136,10 @@ const inPaise = new Intl.NumberFormat("en-IN", { style: "currency", currency: "I
 export interface Figure { label: string; value: string; strong?: boolean }
 
 export function figures(o: Order): Figure[] {
+  /* An NC bill: what it came to, and nothing to pay (Till.tsx 1547-1551). */
+  if (o.status === "no_charge") {
+    return [{ label: "Bill total", value: cash(o.net) }, { label: "NC · No charge", value: `${cash(0)} to pay`, strong: true }];
+  }
   return [
     { label: "Net", value: cash(o.net) },
     ...(o.discount > 0 ? [
@@ -198,15 +202,32 @@ export function closeButton(o: Order, role: string | null): Button & { act: (cod
 export const clearAct = (code: string, o: Order): Act =>
   ({ method: "POST", path: `${orderPath(code, o.id)}/clear`, body: () => undefined, ask: null });
 
-/** What a finished bill says instead of its buttons. */
+/** What a finished bill says instead of its buttons: Till.tsx OrderPanel
+    1593-1609 (today's PMS). A voided or NC bill (D27-324, D27-351) in the
+    web's words, a missing name or time a dash (MPOS-T2: it read "Closed
+    unpaid - null"). */
 export function finished(o: Order): string {
+  if (o.status === "no_charge") {
+    return `NC · No charge - ${o.ncReason ?? "-"}. Approved by ${o.ncBy ?? "-"} at ${o.ncAt ?? "-"}.`;
+  }
+  if (o.status === "void") {
+    return `VOID - ${o.voidReason ?? "-"}. Voided by ${o.voidedBy ?? "-"} at ${o.voidedAt ?? "-"}`
+      + `${o.voidReference ? `; refund reference ${o.voidReference}` : ""}.`;
+  }
   if (o.status === "settled") {
     return o.paymentMethod === "function"
       ? `On ${o.eventTitle ?? "the function"}'s bill${o.settledBy ? `, settled by ${o.settledBy}` : ""}.`
       : `Paid by ${o.paymentMethod}${o.settledBy ? `, taken by ${o.settledBy}` : ""}.`;
   }
+  if (o.status === "joined") return "Joined to another table: its dishes and KOTs are on that table's bill.";
   return `Closed unpaid - ${o.abandonedReason}`;
 }
+
+/** A bill that prints: paid, voided (it reprints VOID) or NC (Till.tsx 1617). */
+export const printable = (o: Order) => o.status === "settled" || o.status === "void" || o.status === "no_charge";
+
+/** The pill's word: NC in its own words, not the stored "no_charge" (Till.tsx 1413). */
+export const statusWord = (status: Order["status"]) => (status === "no_charge" ? "NC" : status);
 
 /* ── The discount (Till.tsx DiscountDialog) ────────────────────────── */
 

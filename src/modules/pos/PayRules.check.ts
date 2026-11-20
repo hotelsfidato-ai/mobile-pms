@@ -13,11 +13,12 @@ const eq = (got: unknown, want: unknown, what: string) => {
 const line = (voided: boolean) => ({ voided } as OrderLine);
 const order = { lines: [line(false)], eventId: null, eventTitle: null };
 
-/* Who may: the API's sentence for housekeeping; the waiter, reception and the accountant may. */
+/* Who may: the API's sentence for housekeeping (today's refusalFor(TILL), MPOS-T1); the waiter, the
+   Bar person, reception and the accountant may. */
 eq(whyNotSettle(order, "housekeeping"), "Ringing up an order is for the owner, an administrator, the general manager, the hotel manager, "
-  + "reception, a till operator or the accountant. Ask one of them.", "housekeeping refused");
+  + "reception, a waiter, a bar person or the accountant. Ask one of them.", "housekeeping refused");
 eq(whyNotSettle(order, null) != null, true, "no role");
-for (const r of ["pos", "front_desk", "finance", "gm"]) eq(whyNotSettle(order, r), null, `${r} may`);
+for (const r of ["pos", "bar", "front_desk", "finance", "gm"]) eq(whyNotSettle(order, r), null, `${r} may`);
 /* Nothing on it (every line struck): the server's sentence. */
 eq(whyNotSettle({ lines: [line(true)] }, "pos"), NOTHING_ON_IT, "all struck");
 eq(whyNotSettle({ lines: [] }, "pos"), NOTHING_ON_IT, "empty");
