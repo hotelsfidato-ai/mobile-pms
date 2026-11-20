@@ -62,9 +62,9 @@ export function StockReportScreen({ hotel, report, by, supplier, onSupplier, onB
   return (
     <Screen refreshing={read.loading && got !== undefined} onRefresh={() => { read.reload(); if (statement) list.reload(); }}>
       <Head title={doc?.title ?? q.title} under={q.period} action={<Back onPress={onBack} />} />
-      {/* ReportShell's Print, PDF and CSV: the phone's print sheet and share sheet. */}
+      {/* ReportShell's Print, PDF, Excel and CSV: the core's export (M-14: real PDF and Excel-readable files). */}
       <ExportButtons table={table} />
-      <Text style={[t.caption, { color: c.grey600 }]}>Excel and Email: On the website for now.</Text>
+      <Text style={[t.caption, { color: c.grey600 }]}>Email: On the website for now.</Text>
 
       {windowed || statement ? (
         <View style={{ gap: 10 }}>

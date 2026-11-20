@@ -244,8 +244,8 @@ export const TEST_DOCUMENT = "TEST · NOT VALID";
 
 /* ── The export (src/core/exportDoc.ts ExportTable; BRIEF-T3 19 Nov) ─── */
 
-/** The web's Print, PDF and CSV become the phone's print sheet and share sheet,
-    from the cards the screen shows. Sections with the same columns keep them,
+/** The web's Print, PDF, Excel and CSV become the core's export (Print, PDF and
+    an Excel-readable file, M-14), from the cards the screen shows. Sections with the same columns keep them,
     each figure in its column ("Opening Balance 750" for a grouped one); sections
     whose columns differ (the excise registers' sizes) become one line per row,
     its figures said in words. The server's total rows go as rows, as it sent

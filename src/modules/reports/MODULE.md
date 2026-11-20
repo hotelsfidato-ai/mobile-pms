@@ -174,20 +174,19 @@ M-7), `laundry/kit` (`LoadFailed`), `guest-services/kit` (`Back`), `core/Export`
   Try again; refused ("<What> is not available" and the API's own sentence: the role, Bar stock off);
   no report ("This property has no report to show."); nothing asked ("Choose above what the report
   is of."); a read again that fails over a report on screen keeps it and says "Not up to date: …".
-- **The export** (`exportOf`): the phone's print sheet (save as PDF) and share sheet from the cards
+- **The export** (`exportOf`): the core's ExportButtons (PDF, Excel-readable CSV and Print, M-14), from the cards
   shown: sections with the same columns keep them; the excise registers (columns differ by section)
-  go one line per row with their figures in words. The server's totals go as its rows. Excel needs
-  `expo-file-system` ~57.0.7 + `expo-sharing` ~57.0.23 (asked); Email is not built (below).
+  go one line per row with their figures in words. The server's totals go as its rows. Email is not built (below).
 - **Dates** move by the day stepper (M-7, no date-picker package); To never before From.
 - **Rights are the API's:** the route asks the menu (`mayReach`), as RequireAccess; the read's own
   refusal is shown in its words.
 
 ### Left on the website, each with its reason
 
-- **Excel** (a real .xlsx): needs the two packages above. **Email this report** (`EmailReport`,
+- **A real .xlsx** waits for a package (the core's Excel is a CSV Excel opens, M-14). **Email this report** (`EmailReport`,
   D27-383 item 5: `GET`/`POST /reports/:key/email`): a write with its own dialog shared by every
   report of the three report lanes; asked of the mobile chat to build once (not in this lane's
-  prompt). Both say "Excel and Email: On the website for now." under the export.
+  prompt). It says "Email: On the website for now." under the export.
 - **"by <group>" and the group's logo** under the property's name (the group's settings read,
   `useGroupSettings`): not ported; the name alone is drawn.
 
@@ -208,9 +207,8 @@ The top bar, the banner and the menu are the frame's.
 Differences left:
 1. **The web's table is cards** on the phone (the brief's rule): the same sections, rows, figures and
    order; the column headings become each figure's label.
-2. **Print, PDF, Excel, CSV** become "Save as PDF or print" (iPhone: "PDF or print") and "Share" (the
-   core's ExportButtons, live); Excel waits for a package; the web's Email (16 Nov, after the
-   pictures) is not built.
+2. **Print, PDF, Excel, CSV** are the core's PDF, Excel (an Excel-readable CSV) and Print (M-14), in
+   the core's order; no separate CSV button; the web's Email (16 Nov, after the pictures) is not built.
 3. **"by <group>"** under the property's name is not drawn (the pictures show none for 5EL either).
 4. **The total's dashed rules** may draw solid on Android (React Native draws a dashed style only on
    a border all round).
