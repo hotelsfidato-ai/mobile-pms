@@ -218,3 +218,13 @@ export function movementBody(kind: MovementKind, amount: string, reason: string,
 /** Record is grey until these are given (the web's disabled rule). */
 export const mayRecord = (kind: MovementKind, amount: string, reason: string, category: string) =>
   amount.trim() !== "" && reason.trim() !== "" && (kind !== "expense" || category !== "");
+
+const whole = new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 });
+const exact = new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", minimumFractionDigits: 2, maximumFractionDigits: 2 });
+/** The web's money() (₹12,989) - except that a figure with paise keeps them (MEMORY 9). A figure not held: a dash. */
+export const rupees = (n: number | null | undefined) =>
+  n == null || !Number.isFinite(n) ? "-" : Number.isInteger(n) ? whole.format(n) : exact.format(n);
+/** The web's moneyPrecise (₹336.00). */
+export const precise = (n: number | null | undefined) => (n == null || !Number.isFinite(n) ? "-" : exact.format(n));
+/** A movement's figure, signed as the web signs it. */
+export const signed = (sign: -1 | 1 | undefined, n: number) => `${sign === 1 ? "+" : "−"}${rupees(n)}`;

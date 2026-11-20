@@ -1,7 +1,7 @@
 /* Run: node --experimental-strip-types src/modules/pos/dayEnd.check.ts
    Close restaurant day's rules: the notes typed, the tin's words, the close's guards. */
 import {
-  approvalWords, closeBody, dayAt, hotelNameOf, kept, methodsByAmount, mayRecord, movementBody, needsReason, rowFigure, seedCounts,
+  approvalWords, closeBody, precise as exact, rupees as money, signed, dayAt, hotelNameOf, kept, methodsByAmount, mayRecord, movementBody, needsReason, rowFigure, seedCounts,
   typed, variance, waitsOrRefused, whyNotClose, type DayEnd,
 } from "./dayEnd.ts";
 
@@ -74,5 +74,13 @@ eq(mayRecord("withdrawal", "120", "To the safe", ""), true);
 eq(methodsByAmount({ upi: 2343, cash: 5901, card: 1291 }).map(([m]) => m), ["cash", "upi", "card"]);
 eq(dayAt("Sunday, 11 October 2026", "5 Elements Akkalkot"), "Sunday, 11 October 2026 · 5 Elements Akkalkot");
 eq(hotelNameOf([{ code: "AGR", name: "Fidato Agra" }], "5EL"), "5EL"); // never another hotel's name
+
+/* Figures as sent: paise kept, never rounded (MEMORY 9); a dash for none. */
+eq(money(12989), "₹12,989");
+eq(money(7582.5), "₹7,582.50");
+eq(money(null), "-");
+eq(exact(336), "₹336.00");
+eq(signed(-1, 120.5), "−₹120.50");
+eq(signed(1, 500), "+₹500");
 
 console.log("dayEnd.check: ok");
