@@ -81,8 +81,8 @@ function RoomTypesScreen({ hotel, role }: { hotel: Hotel; role: string | null })
         {v.types.length === 0 ? (
           <View style={{ gap: 12 }}>
             <Empty title="No room types yet" description="A room type is what the property sells - Standard, Deluxe, Suite. Rooms are of a type, and rates are set against one." />
-            {cannotAdd ? <Refused label="Add the first" variant="primary" reason={cannotAdd} />
-              : <View style={{ flexDirection: "row" }}><Btn label="Add the first" variant="primary" onPress={() => setAddingType(true)} /></View>}
+            {cannotAdd ? <Refused label="Add the first" reason={cannotAdd} />
+              : <View style={{ flexDirection: "row", justifyContent: "center" }}><Btn label="Add the first" onPress={() => setAddingType(true)} /></View>}
           </View>
         ) : v.types.map((x) => (
           <View key={x.id} style={{ backgroundColor: c.white, borderRadius: 12, borderWidth: 1, borderColor: c.grey200, paddingHorizontal: space.cardX, paddingVertical: space.cardY, gap: 10 }}>
@@ -121,8 +121,9 @@ function RoomTypesScreen({ hotel, role }: { hotel: Hotel; role: string | null })
           <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
             <Refused label="Import" icon={Upload} reason={ON_THE_WEBSITE} />
             {cannotAdd ? <Refused label="Add a room type" icon={Layers} reason={cannotAdd} /> : <Btn label="Add a room type" icon={Layers} onPress={() => setAddingType(true)} />}
-            {cannotAdd ? <Refused label="Add a room" icon={Plus} variant="primary" reason={cannotAdd} />
-              : <Btn label="Add a room" icon={Plus} variant="primary" disabled={v.types.length === 0} onPress={() => setAddingRoom(true)} />}
+            {/* The web's Button is secondary by default (Button.tsx 75), as the picture shows. */}
+            {cannotAdd ? <Refused label="Add a room" icon={Plus} reason={cannotAdd} />
+              : <Btn label="Add a room" icon={Plus} disabled={v.types.length === 0} onPress={() => setAddingRoom(true)} />}
           </View>
         ) : null}
         {main}

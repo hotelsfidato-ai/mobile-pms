@@ -34,3 +34,36 @@ Checked applying MEMORY 16 across the modules: PUT pricing/base sets the price f
 (`app.set_base_price`), POST restrictions upserts each date (`on conflict … do update`), so a second
 tap after a lost reply sets the same values again. **The rule:** a write that sets a value needs no
 stop.
+
+---
+
+## Lane m13-config (19-20 Nov): the property's set-up — prefix MINV-C
+
+### MINV-C1 · Several rooms carried on past a lost reply (19 Nov) — fixed before it ran
+
+**What happened:** the web's "Several rooms" adds 101 to 109 one POST at a time and files every
+failure as "already exists, skipped" or "not added: <reason>" and goes on. Ported as is, a reply
+lost on 104 (the phone on a weak line) would have said "104 not added: Could not reach the server"
+while the server may have made it, and gone on to 105-109. **How it was found:** the helper, asking
+MEMORY 16's question of every POST in the lane. **What was done:** on `outcomeUnknown(e)` the run
+stops at that number, the sheet says "Not known whether room 104 was added; nothing after it was
+tried. Look at the rooms before adding again." and takes no more taps (`useStuck`);
+`config.check.ts` holds the words (`severalWords`). **The rule:** a loop of creates stops at the
+first unknown outcome; it never files one as refused.
+
+### MINV-C2 · A room type added, then said "Not saved" (19 Nov) — fixed before it ran
+
+**What happened:** the web adds a room type in two writes (POST the type, then PATCH its beds,
+view, size, colour…) and answers either failure with "Not saved". When the second fails, the type
+exists but the person reads that nothing was saved, and a second Save is refused ("This property
+already has a type coded DLX"). **How it was found:** the helper, porting `TypeDialog.submit`.
+**What was done:** on the phone the first write's success stands: "Room type added — its other
+details were not saved: <the server's words> Edit it to try again." The web's fault is listed for
+`docs/api-requests.md` in the report. **The rule:** a two-step write says which step stood.
+
+### MINV-C3 · A server time read raw would show NaN on a phone (19 Nov) — guarded, checked
+
+The channel manager's times (`lastLogin.at`, `sentAt`, `receivedAt`, a push's `at`) may be
+Postgres text. `config.ts whenOf` reads every one through the core's `msAt` (MEMORY 7);
+`config.check.ts` makes `Date.parse` ISO-only for the test, as Hermes is (MEMORY 17), and was broken
+once (a raw `Date.parse`) to see it fail. **The rule:** as MEMORY 7.

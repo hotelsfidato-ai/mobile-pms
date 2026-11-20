@@ -130,3 +130,106 @@ What I saw      nothing: never opened on a screen (the cloud has no API or phone
 Accessibility   44 px targets; every icon button labelled (arrows, steppers, close); cells labelled "<type> on <date>"
 Packages        none
 ```
+
+---
+
+# Lane m13-config — the property's set-up (19-20 Nov 2026, M-13)
+
+**Built** by the cloud helper "m13-config" on `mobile/m13-config`, from `main` at `296c018` (main
+merged in twice: `fcd62f6` export and NATIVE.md, `28fb63e` gates). Read against the PMS at
+`c9394cb` (16 Nov) and the pictures; **never opened on a screen** (the cloud has no API, no Expo and
+no phone). New files only: `config.ts` (+check), `configRoles.ts` (+check), `configData.ts`,
+`configKit.tsx`, `suChannels.ts`, `RoomTypes.tsx`, `CancellationTerms.tsx`, `BookingSources.tsx`,
+`Places.tsx`, `Channels.tsx`, `GroupRates.tsx`; routes `app/inventory/[code]/{room-types,
+booking-sources,cancellation-terms,channels,places,group-rates}.tsx`. Defects: MINV-C1 to C3.
+
+## The web twin, mapped first
+
+| Screen | Web page | Reads · writes | Who (api/src/roleGate.ts and the routes) |
+|---|---|---|---|
+| Room types | `/settings/rooms/room-types` (`/h/:code/room-types` redirects), `inventory/pages/RoomSetup.tsx`, `data/roomSetup.ts` | GET `/room-setup`, `/amenities`, `/room-types/:id/amenities` · POST/PATCH/DELETE `/room-types`, `/rooms`; PUT `/room-types/:id/amenities` | read SETUP (`room_config` view); add SETUP_ADD (`room_config` create), change/remove SETUP_CHANGE (`room_config` edit) = owner, admin, GM; the page is the settings console's (owner, admin, GM) |
+| Cancellation terms | `/h/:code/cancellation-terms`, `inventory/pages/CancellationTerms.tsx`, `data/rateSetup.ts` | GET/POST `/cancellation-policies`, DELETE `/:id`, PUT `/:id/default` | read PRICES (`rate` view); write TERMS (`rate` edit: owner, admin, GM, revenue manager) |
+| Booking sources | `/h/:code/booking-sources`, `guests/pages/BookingSources.tsx`, `guests/data/bookingSources.ts` | GET/POST `/booking-sources`, PATCH `/:id`, PUT `/:id/commission` | read `reservation` or `commission` view; add/change `own`: the database's `app.is_manager()` (owner, admin or GM at ANY hotel, or a group administrator; migration 198); commission COMMISSION (owner, admin, GM) |
+| Channel manager | `/h/:code/channels`, `channel-manager/pages/ChannelManager.tsx`, `components/SuSetup.tsx`, `data/su.ts` | GET `/api/channel-manager/su`, `/channel-manager/{content,availability,bookings}` · POST `su/login`, PUT `hotel`, `room-types/:id`, `rate-plans/:plan`, POST `content/send`, `availability/send`, `bookings/:id/done` | the page: the menu's owner, admin, GM (`seesComingSoon`); the SU setup `own`: access.ts SU_ROLES (owner, admin); the bookings CHANNEL_BOOKING_ROLES (+ GM) |
+| Places and suppliers | `/h/:code/places`, `src/pages/PlacesAndSuppliers.tsx` | GET `/places` (with `mayChange`, `whoMay`) · POST/PUT `/places`, `/suppliers` | read anyone rostered; change `own`: routes/places.ts PLACE_KEEPERS (owner, admin, GM, hotel manager, Inventory Manager); the page: the Store's or equipment's readers |
+| Group rate change | `/group-rates`, `inventory/pages/GroupRates.tsx`, `data/groupRates.ts` | GET/POST `/api/group/rate-change` | `own`: groupRates.ts, PUT pricing/base's PRICE rule at every property; the page: a price setter over more than one real property |
+
+**Offline** (`src/lib/offline.ts`, the core's copy checked equal): none of these writes is listed,
+so every one is refused by `send()` with the web's sentence for an unlisted write; nothing is held.
+The right's sentences are the gate's own (`configRoles.ts`, pinned in its check).
+
+## The rules (config.ts, configRoles.ts; each with its source)
+
+- **No price is invented, typed is sent.** A room type is created unpriced (no rate field). A
+  retention, a commission, a group price change are typed into fields that keep only what can be
+  sent (`typedFigure`, `typedCount`, `typedSigned`: a minus only on By ₹ / By %), so NaN never
+  reaches a body (MINV-1). Empty is null, never 0: a blank free window is "no free window", a typed
+  0 is "check-in time"; a blank commission is "no rate agreed" (a dash), 0 is "0%". The money box
+  placeholders are "-", not the web's "1500".
+- **Figures are the server's**: a flat fee, a rack rate, a site's total, a group run's old and new
+  price are shown as sent, paise kept (rates.ts `rupees`, MEMORY 9); missing is a dash. Group rate
+  change shows the server's preview and saves exactly what was shown; the phone works nothing out.
+- **Rights**: every refused control is grey with the API's sentence (Add, Edit, New policy,
+  Commission, the SU setup's card), never hidden. Places use the server's own `mayChange`/`whoMay`.
+- **Asked first** (the brief; each phone's own `Alert`): Remove a room type, Remove a room (the web
+  asks too, in these words), Retire a policy and Switch off a place or a supplier (the web does not
+  ask: the phone does, in the web's toast words).
+- **One tap, one write**: every write latches at the tap. **Unknown outcome** (MEMORY 16): an add
+  whose reply was lost (room type, room, several rooms, policy, source, place, supplier) and a send
+  to SU take no more taps until the screen is read again (`useStuck`, `notKnown`); Group rate
+  change empties its figure and says so. PUTs and PATCHes that set a value need no stop.
+- **Exports**: Cancellation terms and Booking sources carry `ExportButtons` (the web's two list
+  exports; neither holds money or guests, so every reader may export).
+
+## Picture match (19-20 Nov)
+
+Compared by reading the code against the pictures, never seen running.
+
+| Screen | Picture | Result |
+|---|---|---|
+| Room types | `all/23-configuration-room-types` (dev-gm, 31 Oct) | **Matches, with differences 1-4** |
+| Cancellation terms | `all/25-configuration-cancellation-terms` (the empty state) | **Matches, with difference 5**; the list and the form not pictured (built from the code) |
+| Booking sources | `all/26-configuration-booking-sources` | **Matches, with difference 6** |
+| Channel manager | `all/73-coming-soon-channel-manager` (the GM: no SU setup) | **Matches, with difference 7**; the SU setup (owner, admin) not pictured |
+| Places and suppliers | `all/33-store-and-equipment-places-and-suppliers` | **Matches, with difference 8** |
+| Group rate change | none (new on 16 Nov) | built from the code; not pictured |
+| `all/24-configuration-rate-plans` | `/h/5EL/rate-plans` redirects to Rates | the Rates screen's (t2-rates); not this lane's |
+
+Differences left, each with its reason:
+
+1. **Import** is grey, "On the website for now": a file picker (`expo-document-picker`, not installed).
+2. **The rooms are not dragged into order**: the grip is not drawn; the line under Rooms says
+   putting them in order is on the website. **Photos** (the type's third tab) the same:
+   `expo-image-picker`. The **colour** is typed (#1f6f5c) beside a swatch: no colour picker.
+3. **Edit and the room tiles for a role that may not change the setup** are grey with the gate's
+   sentence (the settings console only lets the owner, admin and GM in, so this is only seen if the
+   matrix changes).
+4. A room type's sheet is one column (the web's two-column grid of counts is too narrow at 375).
+5. **New policy and Write the first one** are grey with the gate's sentence for a role that reads
+   prices but may not write terms (reception, the hotel manager); the web shows them and the server
+   refuses. The export buttons sit above New policy (the picture predates the export, D27-383).
+6. **Commission and Edit** are grey for a role the server would refuse, the two sentences said once
+   under the explainer; the export buttons sit above Add a source (newer than the picture). The
+   channel code is picked from SU's list in a searchable sheet (the web's select of 260 sites).
+7. Each section's (i) note is said under its heading (no tooltip on a phone); "Booking sources" in
+   the last card is a link to the phone's own screen. Set-up fields are one column.
+8. A supplier's phone number is a link that opens the dialler (NATIVE.md).
+
+**5 of 5 pictured screens match their pictures** (with the eight differences above); Group rate
+change and the SU setup are not pictured.
+
+## Definition of done
+
+```
+Screens         Room types, Cancellation terms, Booking sources, Channel manager, Places and suppliers, Group rate change
+                app/inventory/[code]/{room-types,cancellation-terms,booking-sources,channels,places,group-rates}.tsx
+Web twins       above; differences above
+Pictures        all/23, 25, 26, 33, 73; compared by reading code only
+Reads/Writes    configData.ts, every call through api()/send()
+Rules           config.ts, configRoles.ts, their checks (each broken once on purpose)
+Offline         every write refused with the web's unlisted sentence; nothing held
+States          loading (spinner, words) · failed (the server's words, Try again) · offline (No connection) · empty (the web's words) · refused (the API's sentence, or "This page is not part of your role")
+What I saw      nothing: never opened on a screen
+Accessibility   44 px targets, icon buttons labelled, native Switch and Alert, safe areas in every sheet
+Packages        none (expo-document-picker, expo-image-picker asked)
+```
