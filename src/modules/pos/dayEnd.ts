@@ -241,3 +241,26 @@ export function whyNotSave(day: Pick<DayEnd, "opened">, n: Pick<Typed, "any" | "
   if (!n.any) return "Type the notes and coins in the tin first. A blank is not a count of zero: type 0 for an empty row.";
   return null;
 }
+
+/* ── A paid-out's bill (D27-370; M-16, PICKERS 2.1, 2.2) ─────────────
+   finance/data/expenses.ts: POST …/till/day-end/movements/:id/photo, a
+   form with `file` (never held: the core says the web's sentence offline),
+   GET the same for the latest. A repeat of the SAME file is refused by the
+   server ("That photo is already on this expense.": attachments are unique
+   by their bytes, 077_attachments.sql); another file adds a second photo
+   and GET serves the newest. A lost reply still stops Add photo until the
+   day is read again (photoStop), as every upload (MEMORY 16, 22). */
+export const photoPath = (code: string, id: string) => `/api/hotels/${encodeURIComponent(code)}/till/day-end/movements/${id}/photo`;
+export const photoStop = (code: string) => `pos/${code}/day-end/photos`;
+/** expensePhoto's sentence when nothing came back. */
+export const PHOTO_NOT_REACHED = "The photo needs the connection.";
+/** The Record sheet's words once the movement is recorded, by how its photo went (DayEnd.tsx Movements submit). */
+export function recordedWords(label: string, amount: string, photo: { ok: true } | { ok: false; reason: string } | { unknown: true }) {
+  if ("unknown" in photo) {
+    return { tone: "bad" as const, title: "Recorded. Not known whether its photo was saved",
+      body: "Read the day again: the paid-out shows \"Photo of the bill\" when it was." };
+  }
+  return photo.ok
+    ? { tone: "ok" as const, title: "Recorded", body: `${label} - ${amount}` }
+    : { tone: "bad" as const, title: "Recorded, without its photo", body: photo.reason };
+}

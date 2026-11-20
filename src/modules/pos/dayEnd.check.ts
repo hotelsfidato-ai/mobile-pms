@@ -96,3 +96,13 @@ eq(stillUnknown(200, 200), true);
 eq(stillUnknown(200, 201), false);
 
 console.log("dayEnd.check: ok");
+
+/* A paid-out's bill (M-16): the web's route, a stop of its own, the words by how the photo went. */
+{
+  const { photoPath, photoStop, recordedWords } = await import("./dayEnd.ts");
+  eq(photoPath("5EL", "9b1c"), "/api/hotels/5EL/till/day-end/movements/9b1c/photo");
+  eq(photoStop("5EL") !== "pos/5EL/day-end/movements", true); // not the Record's own stop
+  eq(recordedWords("Paid out", "₹250", { ok: true }), { tone: "ok", title: "Recorded", body: "Paid out - ₹250" });
+  eq(recordedWords("Paid out", "₹250", { ok: false, reason: "That file is 9.5 MB." }), { tone: "bad", title: "Recorded, without its photo", body: "That file is 9.5 MB." });
+  eq(recordedWords("Paid out", "₹250", { unknown: true }).title, "Recorded. Not known whether its photo was saved");
+}
