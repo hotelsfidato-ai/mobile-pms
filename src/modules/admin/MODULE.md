@@ -83,9 +83,8 @@ Rules: `rules.ts` (`rules.check.ts`); who opens and reads what: `roles.ts` (`rol
 3. **Deactivate, Close and Remove bank details ask first** (above); the web does each at one tap.
 4. **Roles and permissions shows one role's column at a time**, chosen above it, the resources in the
    matrix's order; the web's 15-column table scrolls sideways at phone width.
-5. **The logs' filters apply with Show** (the web filters as each letter is typed), and the dates are
-   typed as the API takes them (YYYY-MM-DD, checked before asking): the web's date box needs
-   `@react-native-community/datetimepicker` 9.1.0, not approved.
+5. **The logs' filters apply with Show** (the web filters as each letter is typed), and From and To are the
+   phone's own date picker (M-16, 20 Nov), clearable, To from From.
 6. **Sparklines are bars** (no chart package), the same figures oldest on the left.
 7a. **Switching a module OFF asks first** (the owner's M-15, 20 Nov), with the phone's own dialog:
    "Switch off <module>? / Staff at <hotel> lose its screens at once. You can switch it back on." The
@@ -100,8 +99,7 @@ Rules: `rules.ts` (`rules.check.ts`); who opens and reads what: `roles.ts` (`rol
 - **Properties:** Add a property (the provisioning key), Edit a property, a test hotel's Make / Open
   / Reset / Re-copy setup (typed RESET, RE-COPY), the owner's full reset (typed code, backup, clear),
   and "Open" (one property's page, `/properties/:code`, not in this lane).
-- **Backfill:** Add and Correct (a day, a room, an outlet, a returning guest, a send tick: a date
-  picker package and a long form), and **Day by day** — the web adds that table up in the browser; the
+- **Backfill:** Add and Correct are on the phone since M-16 (m16 pickers below); left: **Day by day** — the web adds that table up in the browser; the
   phone never totals money (BRIEF-T3).
 - **Settings pages of this module not built:** Profile (and its commissioning checklist, FSSAI,
   registrations), Set up this hotel, Logo and photos (`expo-image-picker` ~57.0.20), Highlights,
@@ -137,3 +135,14 @@ website-only controls left).** Six are not pictured.
 pictures' People, Users, Audit log; refused Integrations, Roles, Sign-ins, Modules), `dev-hotel-manager`
 (People and Users only), `dev-finance` (Backfill read only, "Only the owner, an administrator or the
 general manager enters and corrects these."), `dev-desk` (Properties only).
+
+## m16 pickers (20 Nov)
+
+Lane m16-pick-front (M-16; PICKERS 3.10, 3.11). Nothing opened on a screen.
+
+| Row | Control | Where | How |
+|---|---|---|---|
+| 3.10 | Audit log and Activity: From, To | `Logs.tsx:77-78, 154-155` | `DateField` ×4, clearable (blank is no filter), To from From (the web's min); applied with Show as before |
+| 3.11 | Backfill: Add a stay / a restaurant bill / cash in or out, Correct | `Backfill.tsx:78`, `BackfillForms.tsx` (dates at :149, 150, 190, 212) | the web's StayDialog, BillDialog, CashDialog field for field: a stay's returning guest (New booking's `Returning`, now exported), ID, visa and Form C reference for a foreigner, room, the money (blank a dash, never 0; `typedFig`), Paid by, the send tick with the server's `sending`; a bill's restaurant; cash in or out. Days before the first day (arrival, a bill, cash) and a departure by it. POST `/:code/backfill/:kind`, PUT `…/:kind/:id` with the reason. Rules `rules.ts` (stayBody, billBody, cashBody, sendWhy, backfillSaved …) with checks |
+
+Add reads no key and a repeat makes a SECOND line (and a stay's ticked bill goes again): Add, Correct and Remove now share the core's screen stop (`admin/<code>/backfill`, MADM-K1). Left on the website: Day by day (the web adds it up).

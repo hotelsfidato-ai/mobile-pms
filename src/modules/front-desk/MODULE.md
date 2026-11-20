@@ -68,7 +68,7 @@ web's `priced`, in whole paise); the server charges it.
 3. **Take a walk-in** is the phone's own screen; since 4 Nov Open Calendar opens the Calendar (slice 10, `/reservations/<code>/calendar`).
 4. **A walk-in is one room, tonight:** Another room greyed ("On the website for now"), the Rooms box
    greyed at 1, no group, Arrival fixed; the Departure is the day stepper (M-7). Form III's dates are typed YYYY-MM-DD; the expected times HH:MM.
-5. **Greyed "On the website for now":** Edit guest, View voucher, Change rate, Print registration card,
+5. **Greyed "On the website for now":** Edit guest, Change rate, Print registration card,
    Add the photo (needs `expo-image-picker` ~57.0.20), Send voucher.
 6. **Not on the phone yet, drawn nowhere:** Guest 360, the guest page link, the CRS facts, key cards, a
    company's credit-limit allow (the core's `ApiError` has no `needs`).
@@ -159,3 +159,12 @@ Calendar's own (each screen keeps its own until the session's scope carries it).
 iPhone, never both; every tap is 44 px or more (tiles 92); the room number shrinks to fit (0.8) rather
 than clip; pull down reads again (the core's `Screen`); no sheet of its own (Assign room is
 reservations'). **Export:** the web's Rooms offers no download or print, so no `ExportButtons` here.
+
+## m16 pickers (20 Nov)
+
+Lane m16-pick-front (M-16; PICKERS 3.12, 3.13 and the optional steppers). Nothing opened on a screen.
+
+- **View voucher** (`StayActs.tsx:75`): `viewVoucher` (reservations/data.ts) → GET `/stays/:id/voucher.pdf` to the share sheet; offline "The voucher needs the connection to open." (the web's); a refusal "No voucher" with the server's sentence. Only a booking still to arrive, as the web.
+- **Expected check-in / check-out** (`WalkIn.tsx:423, 425`): `TimeField`, clearable, opening at the hotel's own times.
+- **Day steppers → date picker** where the web has a date box: the walk-in's Departure (`WalkIn.tsx:326`, from the arrival), Amend's Arrival and Departure (`StayActs.tsx:182-183`), Move's and Exchange's "From which night" (`:239`, `:317`, inside the web's min and max).
+- Still greyed: Edit guest, Change rate, Print registration card, Send voucher. The ID photo and the ID / Form C dates stay as they are (DPDP).

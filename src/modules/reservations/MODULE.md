@@ -59,8 +59,9 @@ availability, occupancy percent and tile counts are the web's own counting of th
 2. **Rooms** (the desk's tiles, `/h/:code/stay`) is not on the phone: its segment says "On the website for now".
 3. **No tooltip**: the web's hover over a bar (dates, rate, balance) is the stay's own screen on a tap; the
    open bills are not read for it.
-4. **Dates** are the day stepper (M-7): Arrival, Departure, "Bookings leaving from".
-5. **On the website for now** (greyed): the guest's page link, Send voucher, View voucher (Booked card);
+4. **Dates**: Arrival and Departure (New booking, the waitlist) are the phone's date picker since M-16;
+   "Bookings leaving from" stays the day stepper (M-7).
+5. **On the website for now** (greyed): the guest's page link, Send voucher (Booked card; View voucher is on the phone since M-16);
    left out: the sales-people list's keeper button (KeepListDialog), "Book this lead" (`?lead=`), the
    Start here cards above the chart, the group's page (Open the booking opens the lead room's stay).
 6. **New booking follows the picture and the walk-in**, not the PMS's D27-392 of after the picture (Normal
@@ -158,3 +159,12 @@ Compared by reading the code against the picture and its words; **never seen run
 | Waitlist | none | **Not pictured** (new on 16 Nov): built from `Waitlist.tsx`, `WaitlistDialog.tsx`. |
 
 **0 of 1 pictured screens matches exactly** (Groups, with the two differences above, each with its reason).
+
+## m16 pickers (20 Nov)
+
+Lane m16-pick-front (M-16; PICKERS 3.12, 3.13 and the optional steppers). Nothing opened on a screen.
+
+- **View voucher** on the Booked card (`NewBooking.tsx:800`): `viewVoucher(code, stayId, reference)` in `data.ts` → GET `/stays/:id/voucher.pdf` (`reservation` create) through the core's `downloadToShare`; one at a time; "No voucher" with the server's or the web's offline sentence. A read: safe to tap again.
+- **Expected check-in / check-out** (`NewBooking.tsx:452, 454`): `TimeField`, clearable.
+- **Arrival, Departure** (`NewBooking.tsx:369-370`, `Waitlist.tsx:212, 214`): `DateField`; a new arrival moves the departure as before (`moveArrival`); the waitlist never before today.
+- `Returning` is exported from NewBooking.tsx for Backfill's Add a stay (admin).

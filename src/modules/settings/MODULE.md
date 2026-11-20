@@ -191,11 +191,10 @@ kinds, as the web drives `ListEditor` with its four calls.
 3. **Colours are typed** `#RRGGBB` with their square (no colour box on a phone, no package); checked
    with the server's sentence "A colour is like #DF6128." before they are sent; sent in capitals as
    the web's colour box gives them.
-4. **The holiday's day is typed YYYY-MM-DD** (M-7, no date picker), and must be a real day ("A date
-   is written YYYY-MM-DD."): the web's date box gives no other, and the API would fail (not refuse
-   in words) on a 30 February.
-5. **The hours are typed HH:MM** (no time picker), checked with the route's own sentence ("Check-in
-   time is a 24-hour time, like 13:00.") before they are sent.
+4. **The holiday's day is the phone's own date picker** (M-16, 20 Nov; was typed YYYY-MM-DD under
+   M-7): it gives only a real day, sent as the web's date box sends it.
+5. **The hours are the phone's own clock** (TimeField, M-16; were typed HH:MM), still checked with the
+   route's own sentence ("Check-in time is a 24-hour time, like 13:00.") before they are sent.
 6. **The rules dialog sends only its own fields** (overbooking, advance, weekend, ID, nationality,
    title, the GM's undo); the web sends the whole rules record less the way of paying. The route
    reads only these, so the change is the same.
@@ -264,8 +263,9 @@ and `inventory/kit` pieces; `admin/roles.ts` notYourRole, `admin/Route.tsx` Admi
   Never `Number(x) || 0`. The one sum on the phone is Rate plans' green offset (the web's own: a
   plan's price less the master's, both the server's), done in whole paise.
 - **Taxes, stricter than the web** (MSET-M1): a band with a blank rate is never dropped, a blank
-  amount never sent as 0; clearing a whole heading asks first. A band's dates are shown, not changed
-  (no date picker); a save sends them back exactly as read.
+  amount never sent as 0; clearing a whole heading asks first. A band's From and Last day are the
+  phone's date picker (M-16); the Last day is kept as the day after, as the web, so a band left alone
+  goes back exactly as read.
 - **Rights are the API's**: the grants and the role gate's sentence ported (`whyNot`, checked equal to
   inventory/configRoles.ts for the shared grants); a refused control is grey with that sentence. A
   page the console does not offer says "This page is not part of your role…".
@@ -300,8 +300,7 @@ carries a commission.", a tax heading "Not set" and a dash) · refused: the role
 
 1. **Reorder**: the web drags; the phone has Move up / Move down in a row's editor (the whole order
    is sent, as the web's drop).
-2. **Taxes**: stricter on blanks (MSET-M1); a band's dates cannot be changed on the phone (needs
-   `@react-native-community/datetimepicker` 9.1.0); no placeholder "5" in the GST field (no figure
+2. **Taxes**: stricter on blanks (MSET-M1); a band's dates are picked on the phone (M-16, m16 pickers below); no placeholder "5" in the GST field (no figure
    suggested).
 3. **Delete, clear a heading, make the master, clear a difference** ask first; the web does them at the tap.
 4. **Controls a role may not use are grey with the API's sentence**, where the web hides them (Rate
@@ -384,12 +383,8 @@ the page hook, the latch, the frame and the four states, links, the text editor,
 
 ### Differences from the web (each for a reason)
 
-- **Files** (not installed): the hotel's and the group's logo Upload / Replace and Add photos
-  (`expo-document-picker ~57.0.3`, `expo-image-picker ~57.0.20`), Bring in old data's file and so its steps
-  1 to 3 (`expo-document-picker ~57.0.3`): greyed "On the website for now", said on the card. Set up this
-  hotel's step 14 says its logo and photos are files.
-- **Remind me on this date** needs a date picker (`@react-native-community/datetimepicker 9.1.0`): greyed;
-  Tomorrow, In 3 days and In a week are on the phone.
+- **Files and dates (M-16, 20 Nov):** the logos' Upload / Replace, Add photos, Bring in old data's
+  steps 1 to 3 and Remind me on this date are on the phone now: see "m16 pickers (20 Nov)" below.
 - **Documents' Print a sample**: greyed; the samples are the website's drawings, and the voucher's PDF needs an
   authenticated file download the core's `api()` does not do (asked of the mobile chat).
 - **An SVG logo** is not drawn on the phone (said in words); a PNG is.
@@ -403,3 +398,24 @@ the page hook, the latch, the frame and the four states, links, the text editor,
   Documents) is greyed "On the website for now".
 - A typed child age that is not a whole number goes as typed, so the server refuses it in its words
   (the web sends null and clears the age: MSET-P1).
+
+## m16 pickers (20 Nov)
+
+Lane m16-pick-front (DECISIONS M-16; docs/PICKERS.md lane 3). Nothing opened on a screen: built and checked by reading, the type check and the checks.
+
+| Row | Control | Where | How |
+|---|---|---|---|
+| 3.1 | Add photos | `PropPhotos.tsx:99` | `pickPhoto({ quality: PHOTO_QUALITY })` (the library, one a tap; the web takes several) → `base64For(PHOTO)` → POST `/:code/gallery { data }`. Over 1600 px refused before sending in a plain sentence (no image library; `expo-image-manipulator` ~57.0.21 is the owner's question); the server checks 600 KB. A repeat ADDS A SECOND PHOTO: the page's stop |
+| 3.2 | This hotel's logo Upload / Replace | `PropPhotos.tsx:92, 145` | `pickFile(LOGO)` → `base64For(LOGO)` → PUT `/:code/logo { data }` ("Logo saved"). A repeat replaces with the same |
+| 3.3 | The group's logo Upload / Replace | `PropGroup.tsx:85` | as 3.2, PUT `/:code/group/logo` |
+| 3.4 | Bring in old data, steps 1-3 | `PropOldData.tsx:127, 177, 208` | the web's steps exactly (see the file's head): the system named first, `pickFile(OLD_SYSTEM_FILE)`, POST `…/imports/:kind/check` (nothing saved), the columns and every row (50 at a time), keep / merge / skip, Bring in N rows → POST `…/imports/:kind` through the page's stop: a repeat brings the file in TWICE. Rules: `propertyRules.ts` (savingOf, saveBlocked, countsWords, broughtInWords, rowResult, everyDupe …) with checks |
+| 3.5 | Documents › Print a sample (Booking voucher) | `PropDocuments.tsx:48` | `DownloadButton` → GET `/:code/documents/sample-voucher.pdf` to the share sheet; the other four samples stay "On the website for now" |
+| 3.6 | Remind me on this date | `PropSetup.tsx:215` | `DateField` from the day after the hotel's today (the web's `earliest`), "Pick a day after today." |
+| 3.7 | A tax band's From and Last day | `MoneyTaxes.tsx:236, 238` | `DateField` ×2, clearable; Last day shown as `lastDayOf(validTo)`, kept as `validToOf(day)` = the day after (TaxRulesCard 211), checked in moneyRules.check.ts |
+| 3.8 | Holidays' Day | `Lists.tsx:236` | `DateField` |
+| 3.9 | Rooms ready from, Check-out by, the audit's hour | `ListsDesk.tsx:320-323` | `TimeField` ×3, the route's sentences still checked |
+
+Differences left, each for a reason:
+- **One photo a tap**, from the library only: the camera's photos are larger than 1600 px and would all be refused until the phone can shrink one.
+- **Bring in old data, a save refused with its rows** (a 409 that carries the rows, a fault found at the save): the web shows those rows; the core's `ApiError` keeps only the sentence (no body), so the phone says it and greys Bring in until Check again, which shows them. A core change would carry the body (asked in the report).
+- **The rows come 50 at a time** ("Show N more"): the server allows 5,000.

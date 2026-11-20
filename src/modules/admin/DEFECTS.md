@@ -62,3 +62,9 @@ once (the real-hotel half dropped: an Admin only in a test hotel became allowed;
 **Known difference left, narrower:** a real hotel the person is rostered at but that GET /api/hotels
 does not list (a closed one) is not counted, so such a person sees the switch greyed where the server
 would accept it.
+
+## m16 pickers (20 Nov), lane m16-pick-front
+
+### MADM-K1 · Backfill's stop lived in the screen's state (fixed)
+
+What happened: Remove's unknown-outcome stop was `useStop(seenAt)`, React state of the Backfill screen: leaving the screen and coming back dropped it (MEMORY 22). With Add (a repeat makes a second line, and a stay's bill email goes twice) the gap mattered more. How found: wiring Add and Correct. Done: the three writes share the core's `useScreenStop("admin/<code>/backfill")`, its read wrapped by `watch`, so only a read begun after the loss lets it go. The rule: every new write on an old screen moves that screen's stop to the core's book first.

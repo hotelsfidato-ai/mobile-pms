@@ -176,3 +176,9 @@ business date reads every list again (the web's refreshDates). **For docs/api-re
 refreshDates replaces its hotels only when a business date moved, so the web's `today` and desk rules stay
 stale past midnight the same way (its Remind me sends the old today). **The rule:** a date or rule the server
 sends with the session is kept as current as the frame's read, never only from sign-in.
+
+## m16 pickers (20 Nov), lane m16-pick-front
+
+### MSET-K1 · "Choosing a file … not installed" stayed after the packages were (fixed)
+
+What happened: after M-16 installed the three pickers, the logos, Add photos, Bring in old data, Remind me and a tax band's dates still said the packages were not installed. How found: docs/PICKERS.md lane 3. Done: each is on the phone's own picker now (MODULE.md "m16 pickers"); `NeedsFile` is gone. The rule: when a package arrives, search the module for its name and the sentence that waited for it.

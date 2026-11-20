@@ -92,3 +92,7 @@ own, one a blank picture, one a picture of a part the phone does not have.
 
 `dev-desk`, `dev-gm`: everything. `dev-housekeeping`: requests (housekeeping, something broken), lost
 property (log, not clear). `dev-kitchen`: requests (food and drink). `dev-finance`: nothing.
+
+## m16 pickers (20 Nov)
+
+Lane m16-pick-front (M-16; PICKERS 3.14). A wake-up call's Day is `DateField` from the hotel's today (the web's min; the 31-day list and `daysFrom` are gone) and its Time `TimeField` (`WakeUpCalls.tsx:182-183`), one under the other at phone width. The write, its stop and `timeOf` are unchanged. Nothing opened on a screen.

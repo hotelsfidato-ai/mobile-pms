@@ -47,9 +47,8 @@ edited: front desk's validators (`gstinProblem`, `phoneProblem`, `emailProblem`,
   discount outside 0-100, commission outside 0-100 (only an agent carries one).
 - On screen a price keeps its paise (`moneyPrecise`, MEMORY 9); credit limits are written whole or
   with paise as sent. The phone works out no price for a stay: that is `GET /contract-price`'s.
-- **Dates are typed** "YYYY-MM-DD" (the web's date inputs need a date picker,
-  `@react-native-community/datetimepicker` 9.1.0, not installed); a date typed another way is refused
-  on the phone first ("Valid to: type it as 2026-04-01.").
+- **Dates are each phone's own date picker** (M-16, 20 Nov; were typed "YYYY-MM-DD"); an allotment's
+  nights inside its contract (the web's min and max). The rules' sentences still stand behind them.
 
 ## Rights, offline and an outcome nobody knows
 
@@ -87,3 +86,7 @@ Built: the list, one company, Add company, Edit company, Add contract, Edit cont
 Change, Stop holding, the export. **Left out:** Book from it — greyed, "Booking from an allotment: On
 the website for now": the phone's New booking (`src/modules/reservations/`, another lane's) does not
 read `?allotment=` yet.
+
+## m16 pickers (20 Nov)
+
+Lane m16-pick-front (M-16; PICKERS 3.15). Valid from / to (`Dialogs.tsx:173-174`) and an allotment's First and Last night (`:271, 273`, inside the contract: the web's min and max) are `DateField`, opening on the hotel's today (`data.today`). The rules and their sentences are unchanged. Nothing opened on a screen.
