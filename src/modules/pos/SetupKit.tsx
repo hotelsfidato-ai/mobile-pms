@@ -290,7 +290,9 @@ export function useActs(code: string) {
     setBusy(id);
     try {
       await send(method, path, body);
-      setSaid({ title: w.done, ...(w.doneBody ? { body: w.doneBody } : {}), tone: "ok" });
+      /* An empty `done`: the web says nothing on success (a dish added, taken off): the list shows it. */
+      if (w.done) setSaid({ title: w.done, ...(w.doneBody ? { body: w.doneBody } : {}), tone: "ok" });
+      else setSaid(null);
       void cache.invalidateQueries({ queryKey: ["pos", code] });
       return "done";
     } catch (e) {
