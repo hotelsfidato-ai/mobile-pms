@@ -213,8 +213,8 @@ design): the sections in the web's order and words, Ready to open's six cards wi
 the name card, Parcels, Owner's allowance (disabled boxes and "Set by the owner or an Admin." for the
 GM), Taxes (the switch, the GST card's tiles with Not set and dashed edges, the till's half), the
 section cards with two tiles across, One table / A numbered run, New section, the KOT section. **Differences
-left:** (1) **Service charge** is not in the picture: added to the web on 1 Nov (Setup.tsx 260), built from
-the code (MEMORY 14). (2) **The allowance's bills** are cards of labelled figures, not the web's five-column
+left:** (1) **Service charge** is not in the picture of 31 Oct; today's code has it (Setup.tsx, its "260"), so it is
+built from the code (MEMORY 14; the PMS checkout's history is squashed, so its date cannot be read). (2) **The allowance's bills** are cards of labelled figures, not the web's five-column
 table (too wide for a phone). (3) **Checkboxes are the phone's Switch** (NATIVE.md, 19 Nov). (4) **Selects
 open a sheet of choices** (the phone has no NativeSelect). (5) **This computer** is drawn with its words,
 fields and ticks greyed "On the website for now" (above). (6) **The KOT preview** is drawn in Inter, the
@@ -228,7 +228,7 @@ of the menu, each part's card (course and minutes rounds, the heading select), e
 a dash, MRP, course, minutes, Add / Change variations, Out of stock, Take off), the variation line and
 the sides under a dish, the new-dish row (Dish, Price, Free, 5%, Add), Sides with Change / Remove / Add
 option. **Differences left:** (1) **The export buttons** (PDF or print, Share) are above the tabs; the web's
-ExportButtons sit in its header, added after the picture (D27-383 item 1). (2) **Profit per dish** (a third
+ExportButtons sit in its header and are not in the picture of 31 Oct (D27-383 item 1, today's code). (2) **Profit per dish** (a third
 tab for the owner, an Admin and the GM) and **Promotions'** coupon words are not in the picture: built from
 today's code. (3) **Minutes, course and MRP** open a small sheet with one box; the web types into the
 round itself. (4) **Free** is the phone's Switch. (5) The frame, as above.
