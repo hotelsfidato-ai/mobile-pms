@@ -4,7 +4,7 @@ import { useRef, useState, type ReactNode } from "react";
 import { Text, TextInput, View } from "react-native";
 import { HeldError, outcomeUnknown, type Hotel } from "../../core/api";
 import { c, face, space, t } from "../../core/theme";
-import { Head, Screen, useRead } from "../../core/ui";
+import { Head, Screen, useRead, notKnown, useScreenStop } from "../../core/ui";
 import { Btn, body, Failed, Loading, message, NotYours, saidOf, Stale, Toast, type Said } from "../guest-services/kit";
 import { capsLabel, StatePill } from "../laundry/kit";
 import { InfoButton } from "../reports/kit";
@@ -45,10 +45,16 @@ export function Reviews({ hotel, role }: { hotel: Hotel; role: string | null }) 
   const refusedRead = whyNotView(role);
   const key = ["reputation", code] as const;
   const cache = useQueryClient();
-  const q = useRead(() => (refusedRead ? Promise.resolve(null) : readReviews(code)), key);
+  /* An ask nobody knows the end of (MREP-U1): POST …/ask reads no key and a second ask is a second message
+     to the guest. Kept by name outside this screen - leaving it and coming back lets nothing go - and let go
+     only by a read of the list that BEGAN after the loss (it was screen state, compared with a read's finish). */
+  const rstop = useScreenStop(`reputation/${code}/reviews`);
+  const q = useRead(rstop.watch(() => (refusedRead ? Promise.resolve(null) : readReviews(code))), key);
   const [said, setSaid] = useState<Said | null>(null);
   /* An ask nobody knows the end of: its words, and when, so only a read made after it lets go. */
-  const [unknown, setUnknown] = useState<{ title: string; body: string; guest: string; at: number } | null>(null);
+  const [words, setUnknown] = useState<{ title: string; body: string; guest: string } | null>(null);
+  const general = notKnown("asked", "the guests' rows");
+  const unknown = rstop.unknown ? (words ?? { title: general.title, body: general.body, guest: "The guest" }) : null;
   const [pulled, setPulled] = useState(false);
 
   const refused = isRefused(q.data) ? q.data.refused : null;
@@ -57,8 +63,7 @@ export function Reviews({ hotel, role }: { hotel: Hotel; role: string | null }) 
   /* Read again; a read that landed after the unknown ask lets the ways go, and says to look at the row. */
   const readAgain = async () => {
     await cache.refetchQueries({ queryKey: key, type: "active" });
-    const state = cache.getQueryState(key);
-    if (unknown && state && !state.error && state.dataUpdatedAt > unknown.at) {
+    if (unknown && !rstop.isStuck()) {
       setSaid({ title: "The list is read again", body: `${unknown.guest}'s row says whether they were asked.`, tone: "ok" });
       setUnknown(null);
     }
@@ -96,7 +101,7 @@ export function Reviews({ hotel, role }: { hotel: Hotel; role: string | null }) 
             <Body
               code={code} page={page} test={test} unknown={unknown} setSaid={setSaid}
               /* Said where the tap was too: the card that holds the ways sits at the top of the list. */
-              onUnknown={(u) => { setUnknown({ ...u, at: Date.now() }); setSaid({ title: u.title, body: u.body, tone: "bad" }); }}
+              onUnknown={(u, e) => { rstop.stop(e); setUnknown(u); setSaid({ title: u.title, body: u.body, tone: "bad" }); }}
               onReadAgain={() => void readAgain()}
               refresh={() => void cache.invalidateQueries({ queryKey: key })}
             />
@@ -110,7 +115,7 @@ export function Reviews({ hotel, role }: { hotel: Hotel; role: string | null }) 
 
 function Body({ code, page, test, unknown, setSaid, onUnknown, onReadAgain, refresh }: {
   code: string; page: ReviewsPage; test: boolean; unknown: { title: string; body: string } | null;
-  setSaid: (s: Said) => void; onUnknown: (u: { title: string; body: string; guest: string }) => void;
+  setSaid: (s: Said) => void; onUnknown: (u: { title: string; body: string; guest: string }, e: unknown) => void;
   onReadAgain: () => void; refresh: () => void;
 }) {
   /* What is typed; null until a key is pressed, so Save waits for a change (the web's `typed`). */
@@ -142,16 +147,18 @@ function Body({ code, page, test, unknown, setSaid, onUnknown, onReadAgain, refr
     }
   };
 
+  /* The same stop as the page (MREP-U1): on its way, every ask is grey, even after leaving and coming back. */
+  const asking = useScreenStop(`reputation/${code}/reviews`);
   const ask = async (row: Departure, channel: Channel) => {
-    if (latch.current || unknown) return;
+    if (latch.current || unknown || asking.isStuck()) return;
     latch.current = true;
     setSending(`${row.id}:${channel}`);
     try {
-      await askForReview(code, row.id, channel);
+      await asking.guard(() => askForReview(code, row.id, channel));
       setSaid({ title: askedWords(row.guest), tone: "ok" });
       refresh();
     } catch (e) {
-      if (outcomeUnknown(e)) onUnknown({ ...unknownAsk(row.guest, message(e)), guest: row.guest });
+      if (outcomeUnknown(e)) onUnknown({ ...unknownAsk(row.guest, message(e)), guest: row.guest }, e);
       else setSaid(refusal(e));
     } finally {
       latch.current = false;
@@ -159,7 +166,7 @@ function Body({ code, page, test, unknown, setSaid, onUnknown, onReadAgain, refr
     }
   };
 
-  const held = sending !== null || unknown !== null;
+  const held = sending !== null || unknown !== null || asking.stuck;
 
   return (
     <>
