@@ -182,3 +182,19 @@ offline, the person never read "An invoice cannot be raised offline…". **Found
 **Done:** both say the title and `notKnown(…).body` (the error's words, then where to look), as
 WalkIn, StayActs and LostProperty do; the button stays stuck until the sheet is closed and the record
 read again. **The rule:** an unknown outcome says what came back, not only that it is unknown.
+
+## m16 pickers (20 Nov, lane m16-pick-money)
+
+## MFIN-P1 · A stored bill could only be opened under a name the phone made up (fixed 20 Nov, core)
+
+The core's `downloadToShare(path, fileName, mimeType)` saves the file under the name it is given. A
+paid-out's photo, a deposit slip and a bar bill's photo come back with only their bytes: the phone
+does not know whether each is a JPEG, a HEIC or a PDF (the movement says only `photo: true`, the
+deposit a `slipId`, the bar bill a `photoId`; reception and the bar hold no grant on the
+attachments list that names them). iPhone's share sheet goes by the file's name alone, so a PDF named
+`bill.jpg` would not open. **Found** reading expo-sharing's native code while wiring row 1.1.
+**Done:** one line in `src/core/Download.tsx` - a blank `fileName` downloads into the cache folder,
+where expo-file-system names the file from the server's `Content-Disposition` (iOS
+`suggestedFilename`, Android `URLUtil.guessFileName`); the screens pass `""` and `*/*`
+(`billPick.ts` STORED_NAME, STORED_TYPE). Named in the lane's report for the mobile chat.
+**The rule:** a file the server stores and the phone did not name is opened under the server's name.

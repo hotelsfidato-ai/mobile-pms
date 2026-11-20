@@ -187,8 +187,8 @@ mistyped box is sent for the server to refuse, QA FI-10).
 4. **A refused act is grey with the server's words** where the web hides it (AGENTS rule 1):
    Verify for the GM ("That is for the owner or the accountant."), Record deposit / Explain /
    Reverse for the accountant and a viewer, Record payment and Reverse on Company accounts.
-5. **On the website for now** (a package the phone lacks): a paid-out's bill photo and the slip's
-   photo, to add or to open (`expo-image-picker` ~57.0.20). Drawn grey; a tap says why. The
+5. ~~On the website for now: a paid-out's bill photo and the slip's photo~~ - on the phone since
+   20 Nov (M-16; "m16 pickers" below). The
    account's Statement, "Money owed by age" and the supplier's Statement open the reports lanes'
    screens (`/reports/:code/company-statement?account=`, `/dues-by-age`,
    `/supplier-statement?supplier=`), on main since 20 Nov.
@@ -334,3 +334,41 @@ Compared by reading the code against the pictures and their words, **never seen 
 
 **3 of 5 screens have pictures; none of the 3 matches exactly** — every difference left is one of the
 money rules (no phone sum, paise kept, a dash only for "not sent") or the phone's paging.
+
+## m16 pickers (20 Nov, lane m16-pick-money)
+
+The owner's M-16: the photo and date controls that were "On the website for now" use the phones' own
+pickers. `docs/PICKERS.md` Lane 1, rows 1.1-1.8.
+
+| Row | Control | Where | Route, as the web | Repeat on the server |
+|---|---|---|---|---|
+| 1.1 | Add the bill's photo / Photo of the bill, on a paid-out's line | `Cashiering.tsx` `ExpensePhoto` | POST / GET `…/cashier-shift/movements/:id/photo` (form `file`) | the same bytes refused ("That photo is already on this expense.", `attachments_no_duplicate`); another photo is a second file, the newest shown |
+| 1.2 | Photo of the bill, in Money in or out | `Cashiering.tsx` `MovementSheet` | the paid-out first, then its photo to the new id | as 1.1 |
+| 1.3 | Slip photo (open) | `CashDeposits.tsx` `DepositRow` | GET `…/attachments/:id/file` | a read |
+| 1.4 | Add slip photo | `CashDeposits.tsx` `DepositRow` | POST `…/attachments` (`table=cash_deposits`, `id`, `file`) | the same bytes refused ("That exact file is already attached…") |
+| 1.5 | Photo of the slip, in Record a deposit | `CashDeposits.tsx` `RecordSheet` | the deposit first, then the slip to its id | as 1.4 |
+| 1.6 | Deposited on | `CashDeposits.tsx` `RecordSheet` | unchanged (`depositedOn`, YYYY-MM-DD) | - |
+| 1.7 | Received on | `CityLedger.tsx` `RecordSheet` | unchanged (`receivedOn`) | - |
+| 1.8 | Paid on, a credit note's Date, a right bill's Bill date and Due on | `SupplierDues.tsx` | unchanged; the right bill's two dates clearable (it is optional) | - |
+
+- **The pick** (`billPick.ts`): the web's `accept="image/*,application/pdf"` as a phone's browser
+  offers it - Take a photo, Choose a photo, Choose a file - in each phone's own dialog (Android: three
+  buttons, a tap outside closes; iPhone adds Cancel). The file is sent as picked; the web's 9 MB
+  (`BILL`, its own sentence) is checked before anything goes. A refused camera says so with Settings.
+- **The field and the open** (`BillPhoto.tsx`): the chosen file's name, Choose another, take it out;
+  a stored photo or PDF is downloaded with the sign-in under the server's own name and handed to the
+  share sheet (the web opens it in a tab or a dialog). Used by purchasing and housekeeping too.
+- **Who**: adding a paid-out's photo is the drawer's (`whyNotRunDrawer`); the slip's is greyed with
+  `RECORD_DEPOSIT_REFUSED` where the server's `canRecord` is false (the web hides it); opening is
+  the server's (its refusal said in its words).
+- **Offline**: never held - the web's "The photo needs the connection. Add it when you are back
+  online." (core `files.ts`); opening: "The photo needs the connection." / "… to open.".
+- **An unknown outcome** (nothing came back, a 5xx): the screen's stop (`useStop`, MEMORY 16, 22)
+  greys every write on the drawer or the deposits until a read begun after it; a record that landed
+  with its photo lost says "Recorded. Not known whether its photo was saved" (or the deposit's).
+- The record that landed without its photo says the web's "Recorded, without its photo" / "Deposit
+  recorded, photo not saved", with the server's reason.
+
+Nothing here was opened on a phone or the preview: the cloud runs no API, Expo or simulator. Proved
+by the type check, the module's checks and the gates on a clean commit; the pickers, the share sheet
+and the uploads are the core's (lane m16-core), used as `docs/PICKERS.md` says.

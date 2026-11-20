@@ -74,7 +74,7 @@ there even after its prices are agreed (the PMS's, in the report).
 | Send the order | Ready to order and every line priced (`maySend`); the unpriced tile says why otherwise | `me.mayRaise` | refused |
 | Record the delivery | Ordered (`mayDeliver`) | the Store's `stock` create (RECEIVE_REFUSED) | refused |
 | Cancel | not delivered, not cancelled (`mayCancel`) | `me.mayRaise` | refused |
-| Download the order | Ready, Ordered, Delivered | — | grey: "On the website for now" |
+| Download the order | Ready, Ordered, Delivered | — | the server's PDF to the share sheet (M-16) |
 
 **One tap, one write** (MEMORY 8): every write is latched at the tap (`useRef`) and its button greys
 while it is on its way. **Keepers** (`data.ts`, core `keys.ts`): one per request for the price, the
@@ -110,9 +110,8 @@ null; a price left blank is "not agreed" (null); ₹0 only ticked Free.
    The GST rates are four 44 px choices under the box (the web's datalist).
 9. **Times are read as the server wrote them** (laundry's `dayOf` / `clockOf`, MEMORY 7); the web reads
    them in the device's zone. The same for a device in India.
-10. **Download the order, Who may ask, the Bar tab and Supplier dues** stay on the website: grey or a
-    card with "On the website for now" (the PDF needs `expo-file-system` ~57.0.7 and `expo-sharing`
-    ~57.0.23; the bar's bill a photo, `expo-image-picker` ~57.0.20; the rest is set-up and accounts).
+10. **Supplier dues** stays a card here (accounts). Download the order and the Bar tab are on the
+    phone since 20 Nov (M-16; "m16 pickers" below); Who may ask since lane U.
 11. **Ask to buy is shown grey** to a person the setting leaves out, with the web's card; the web hides
     it. **Back** stays on the module's screens (HANDOVER question 3, open).
 12. **The toasts** are the web's words, one line at the foot of the screen; a refusal stays inside its
@@ -174,3 +173,38 @@ order with "Can / Cannot raise a request" and "Yes" / "-". Differences left: (a)
 Who may ask to buy" breadcrumb (the "Back to purchasing" button does its work); (b) the shield sits
 at the head's right rather than after the title; (c) the button is 44 px. **1 of 1 pictured screen
 matches.** The owner's and an administrator's switches are not pictured, built from the code.
+
+## m16 pickers (20 Nov, lane m16-pick-money)
+
+`docs/PICKERS.md` Lane 1, rows 1.9-1.11 (M-16).
+
+- **1.10 Download the order** (`Request.tsx`): the core's `DownloadButton`, GET
+  `/purchasing/orders/:id.pdf`, saved as `<reference>.pdf` (the server's name), to the share sheet.
+  Shown in the states the web shows it (`mayDownload`); refused offline in the web's download sentence.
+- **1.11 Use by, Bill date, Due on** (`Delivery.tsx`): each phone's own date picker, the same text
+  sent; Use by clearable (it is optional).
+- **1.9 The bar's bills** (`BarBills.tsx`, `barBills.ts` with `barBills.check.ts`, `data.ts`): the
+  web's components/BarBills.tsx on the Bar tab (and on Bar stock's Bills part, as the web). The last
+  60 days' bills as printed - every figure the server's, a dash where none - with "Photo of the
+  bill" (GET `/bar/purchases/:id/photo`, opened under the server's name) or "No photo". **Record a
+  bar bill**: supplier from the hotel's list, number, Bill date (the property's today to start, the
+  web's browser today), T.P. number, the photo (camera, photos or a file), each drink picked or
+  added with its figures, handling, TCS, the printed total, on credit with Due on. The web's check
+  of the TYPED lines against the printed total is shown (lineAmount is the server's own formula,
+  copied as the web copies it); the figures are sent as typed and the server works it out again.
+  POST `/bar/purchases` (JSON, unlisted: refused offline), then POST `/bar/purchases/:id/photo` (a
+  form, never held: "The photo needs the connection. …").
+  - **Who**: `BAR_RECORDERS` (owner, admin, GM, Inventory Manager, bar); anyone else sees the button
+    grey with the server's sentence (`PURCHASING_REFUSED.barBill`) - the web hides it. The bills are
+    `BAR_VIEW`'s; a 403 is said in the server's words. The Bar role cannot open Purchasing (as on the
+    web, `purchasing` view); it reaches the bills on Bar stock's Bills part.
+  - **A repeat**: the server refuses the same supplier and number twice ("Bill … from … is already
+    recorded."), and the same photo twice ("That photo is already on this bill."). An unknown outcome
+    empties the printed total and stops Record (`barStop`, core `useScreenStop`) until the bills are
+    read again after it; the dialog cannot close while the bill is on its way.
+  - **Left as the web**: no photo can be added later to a bill recorded without one (the web has no
+    such act either).
+
+Nothing here was opened on a phone or the preview: the cloud runs no API, Expo or simulator. Proved
+by the type check, the module's checks and the gates on a clean commit; the pickers, the share sheet
+and the uploads are the core's (lane m16-core), used as `docs/PICKERS.md` says.
