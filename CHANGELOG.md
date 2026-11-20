@@ -5,6 +5,39 @@ commits.
 
 ---
 
+## 2026-11-20 (evening) · M-16 and M-17: the phones' own pickers everywhere; testing in Expo Go
+
+**Asked for** (the owner, 20 Nov): "yes to all 4 recommendations", "also use the native features and
+native libraries to make this work and make this live in Expo for testing and make it no auto, just
+for testing" — asked, chose: add all three pickers (M-16), Expo Go from the PC, no over-the-air
+update and no store (M-17).
+
+**Shipped** (gated green, pushed to `main`):
+- `6b4c900` `expo-image-picker` ~57.0.20, `expo-document-picker` ~57.0.3,
+  `@react-native-community/datetimepicker` 9.1.0 (SDK 57's own; `expo-image-loader` came with the
+  image picker; nothing else moved), their plugins and permission words; `9f1962a` docs/TESTING.md.
+- `634a02a` the core: `sendForm` (multipart as the web), `base64For`, `pickPhoto`, `pickFile`,
+  `DateField` / `TimeField` (the hotel's day, never the phone's UTC), `downloadToShare`; the web's and
+  the server's file limits with their sentences; docs/PICKERS.md (44 controls in three lanes).
+- `a846156` the three lanes, each independently reviewed and fixed: paid-out bill photos (desk and
+  restaurant), deposit slips, bar bills, repair cost with proof, purchase order and FLR / GSTR-1
+  downloads; CSV imports (menu, sides, room types, rooms, equipment) through a port of the web's
+  importSpec with its dry run; room-type and gallery photos, hotel and group logos; Bring in old
+  data; Backfill Add / Correct; the voucher; every date the web picks, with the phone's own picker.
+- The m16-core2 follow-ups: server-named downloads checked to stay in their folder; nothing kept
+  (picked copies forgotten, `cache/share/` emptied, Excel exports included); any file for a CSV on
+  Android; TimeField on the hotel's clock; `ApiError.body`; `pickBill`. MEMORY 25-26, R-49, R-50.
+
+**Found by the reviews and fixed:** the finance desk let a lost deposit go before the 5 s settle; a
+coupon limit "1,500" saved as no limit; "4,500" in Backfill saved as a dash; bar bill boxes with a
+comma sent as null; the equipment import told people to import the whole file again; a function
+ending before it starts held offline; the old system's file (full ID numbers) left in the cache.
+**Not proved:** nothing opened on a phone; no picker, upload or download run. **Open for the
+owner:** `expo-image-manipulator` ~57.0.21 (camera photos for the gallery and room types are refused
+over 1600 px until it is added); camera quality as the web; the Bar role and Purchasing's Bar tab.
+
+---
+
 ## 2026-11-19/20 · M-13: every web screen on the phone; real export files (M-14); the menu from the 16 Nov web
 
 **Asked for** (the owner, 19-20 Nov): "START ALL OF THIS OK ALL 70% AT THE SAME TIME" (M-13) — every

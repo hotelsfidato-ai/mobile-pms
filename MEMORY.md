@@ -5,6 +5,24 @@ module's `DEFECTS.md` instead. Read the newest first.
 
 ---
 
+### 26 · A "safe" native option can delete what a name from outside points at (20 Nov)
+
+expo-file-system's `idempotent: true` deletes whatever stands at the destination before moving a
+download in — on iPhone, a folder too — and the destination came from the server's file name, which
+the uploader chose. **The rule:** read the native code before passing an option a name from outside
+can steer; keep server-named files in one folder of their own, check after the download that the
+file sits straight inside it, and refuse otherwise. And iPhone's share sheet goes by the file's
+NAME only: a stored file is saved under the server's name, never one the phone makes up (MPOS-P1).
+
+### 25 · A file picked on the phone stays in the cache unless it is deleted (20 Nov)
+
+The document and image pickers copy the chosen file into the app's cache; nothing deleted it, so an
+old system's guest list (full ID numbers, the server keeps four digits) and downloaded vouchers,
+slips and GSTR-1 files stayed on the phone after sign-out (the reviews of 20 Nov). **The rule:** a
+picked file is read once and its copy forgotten (`forgetPicked`, `base64For`, `readText`); every
+file handed to the share sheet goes into `cache/share/`, emptied before each, on sign-out and at app
+start; never delete straight after `shareAsync` (Android reads late).
+
 ### 24 · A whole list sent from the last read must wait for the next read (20 Nov)
 
 The Settings lists (ID types, booking colours, required fields) and Taxes send a whole list or a
