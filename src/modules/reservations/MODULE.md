@@ -85,3 +85,74 @@ every target here is 44 px or more.
 **1 of 3 pictured screens matches in look** (the Calendar, with three behaviours left); All bookings and
 New booking keep the differences above, each with its reason. Groups (`all/13-bookings-groups`) is not
 this slice: on the website.
+
+---
+
+## Lane m13-groups (19-20 Nov): Groups, one group, the Waitlist
+
+**Web twin** (today's PMS, 16 Nov `c9394cb`):
+
+| Web page | Its data | API routes | Gate (`roleGate.ts`) | Offline |
+|---|---|---|---|---|
+| Groups `/h/:code/groups` — `pages/Groups.tsx` | `data/groups.ts` listGroups, getGroup | `GET /groups?scope=current\|all` (stays.ts 477) · `GET /groups/:id` on opening a card | STAYS (`reservation` view); `masterBalance`, `guestBalance` WITHHELD (null) without `invoice` view | reads |
+| One group `/h/:code/groups/:id` — `pages/GroupPanel.tsx` | `data/groups.ts`; finance's `settleGroupBill`, `issueGroupInvoice`, `SettleDialog`, `IssueInvoiceDialog` | `GET /groups/:id` · `POST /groups/:id/master` · `/lead` · `/stays/:id/routing` · `/groups/:id/payments` · `/groups/:id/invoice` · `GET /invoice-series` | STAYS (`balance`, `guestBalance`, `master` WITHHELD); CHARGE (invoice create); CHANGE_BOOKING (reservation edit); CHANGE_BILL (invoice edit); PAYMENT; TAX_INVOICE | all **refused**: payment and invoice by name, routing "This change", master and lead unlisted |
+| Waitlist `/h/:code/waitlist` — `pages/Waitlist.tsx`, `flows/WaitlistDialog.tsx` (16 Nov, D27-383 item 8) | `data/waitlist.ts`; inventory's `getInventory` (the room types) | `GET /waitlist` · `POST /waitlist` · `POST /waitlist/:id/remove` · `GET /inventory` | STAYS (`phone` WITHHELD without `customer` view); add and remove `reservation` create | add, remove **refused** (unlisted) |
+
+| Screen | Route | File |
+|---|---|---|
+| Groups | `/reservations/<code>/groups` | `Groups.tsx` |
+| One group | `/reservations/<code>/groups/<id>` | `Group.tsx`, `GroupSettle.tsx` |
+| Waitlist | `/reservations/<code>/waitlist` | `Waitlist.tsx` |
+
+Rules with their check (`groups.check.ts`): `groups.ts` (the shapes, the two balances, a dash for null,
+the paisa kept, the pills, a room's state, who the bill is addressed to, `notYet` for the invoice, who
+may lead, routing without a host account, the export's rows), `waitlist.ts` (the three parts, the
+pill, the nights, what Add asks first, the room types, the export's rows), `groupRoles.ts` (the API's
+sentences; finance's and front desk's imported). Calls: `groupsData.ts`. Pieces: `GroupKit.tsx`
+(a sheet clear of the home indicator and over the keyboard, the FigureTile, the Card head, NATIVE.md's
+ripple). Imported, never copied: finance's `bill.ts` (rupees, owedLine, Settle's figures, the server's
+sentences recognised), `Kit.tsx`, `roles.ts`, `readSeries`; front desk's kit, `StayList` (NotRead,
+Kept), `roles.ts`, `desk.ts`; housekeeping's `Day`; book.ts `moveArrival`; guest-services' `dateTime`.
+
+**Money is the server's.** Rooms owe, Host owes, the host's and the guests' tiles, each room's own bill,
+each master line, the Settle sheet's balance: each as the server sent it, never added (the web's TWO
+BALANCES, NEVER ONE), to the paisa (the web's money() rounds: MEMORY 9), a dash for null (no host
+account, or withheld). The only sum is the web's own count of rooms under the title ("2 groups · 4
+rooms"). Settle has no Remaining and no round-off preview (the server's round-off is said after, as it
+sent it); more than the bill and over a credit limit are the server's refusals, then the web's tick or
+"Allow, with reason" (the owner, an administrator, the GM).
+
+**Keys and unknown outcomes.** One keeper per group (`groupsData.ts`, MFIN-1): the payment route reads
+the key; a lost reply keeps it until the group is read again; Settle then EMPTIES its amount and says
+"Not known whether it was taken" (MEMORY 16). Opening the host account, the lead, routing and the
+invoice are safe to repeat (the server answers the same, the invoice `duplicate`): on an unknown
+outcome the phone says "Not known whether it was …" and reads the group again. Add to the waitlist
+reads no key: on an unknown outcome its button stops (`useStuck`) until the sheet is closed (MRS-G1).
+Every write is latched at the tap.
+
+**Where the phone differs from the web**
+1. Greyed with the API's sentence where the web hides: Settle, Issue tax invoice, Open a host account,
+   Host pays, Lead guest, Put a guest on the waitlist, Remove.
+2. The rooms' table is a card per room (Guest, Room, Dates and state, Rate, Own bill, Host pays as a
+   `Switch`, Lead guest), in the web's order; the "Host pays" reason is said once above the cards.
+3. The tax invoice's "are you sure" is the phone's own dialog (`Alert.alert`) with the web's words and
+   the next number; the standing invoice is its number in words, not a link (the invoice page is not
+   on the phone).
+4. **On the website for now:** the Rooming list (`/groups/:id/rooming-list`: typed or read from a file,
+   printed and downloaded - not in this lane); Book on a waitlist entry (the web opens New booking
+   with `?waitlist=`; the phone's New booking does not read an entry yet, MRS-G2).
+5. The waitlist's dates are day steppers (M-7) starting at the business date and one night; the web's
+   date boxes start empty.
+6. Removing from the waitlist is a sheet, not `Alert.alert`: it asks the web's optional "Why".
+
+## Picture match (20 Nov), lane m13-groups
+
+Compared by reading the code against the picture and its words; **never seen running**.
+
+| Screen | Picture | Result |
+|---|---|---|
+| Groups | `all/13-bookings-groups` (31 Oct, dev-gm) | **Differences left:** (1) PDF and Share above the Here and coming / All control - the web added its export after the picture (D27-383 item 1); (2) figures to the paisa, "₹0.00" for the picture's "₹0" (MEMORY 9). **The rest matches:** Groups, "2 groups · 4 rooms", the full-width segmented control, each card's chevron, name, "2 rooms · 4 room-nights · 24 Oct 2026 to 26 Oct 2026", the orange "2 due in" pill, Rooms owe and Host owes on the right with the dash. |
+| One group | none | **Not pictured**: built from `GroupPanel.tsx`. |
+| Waitlist | none | **Not pictured** (new on 16 Nov): built from `Waitlist.tsx`, `WaitlistDialog.tsx`. |
+
+**0 of 1 pictured screens matches exactly** (Groups, with the two differences above, each with its reason).
