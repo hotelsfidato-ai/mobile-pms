@@ -188,8 +188,14 @@ eq(phoneRoute("/h/5EL/purchasing/who-may-ask", "5EL"), "/purchasing/5EL/who-may-
 eq(phoneRoute("/people", "5EL"), "/admin/5EL/people");
 eq(phoneRoute("/admin/users", "5EL"), "/admin/5EL/users");
 eq(phoneRoute("/settings/money/bank", "5EL"), "/admin/5EL/bank");
-eq([phoneRoute("/reports/item-sales", "5EL"), phoneRoute("/settings/property/old-data", "5EL"), phoneRoute("/settings/messages/scheduled-reports", "5EL")],
-  ["/reports/5EL/item-sales", null, null]);
+eq([phoneRoute("/reports/item-sales", "5EL"), phoneRoute("/settings/messages/scheduled-reports", "5EL")],
+  ["/reports/5EL/item-sales", null]);
+/* mobile/m13-set-property (20 Nov): Settings → Property's pages, and the setup's old address. */
+eq(["profile", "set-up-this-hotel", "old-data", "photos", "highlights", "amenities", "group", "policies", "documents"]
+  .map((x) => phoneRoute(`/settings/property/${x}`, "5EL")),
+  ["profile", "set-up-this-hotel", "old-data", "photos", "highlights", "amenities", "group", "policies", "documents"].map((x) => `/settings/5EL/${x}`));
+eq(phoneRoute("/h/5EL/setup?step=taxes", "5EL"), "/settings/5EL/set-up-this-hotel");
+eq(["/settings/5EL/profile", "/settings/5EL/old-data", "/settings/5EL/set-up-this-hotel"].map(spaceHere), ["settings", "settings", "settings"]);
 eq(phoneRoute("/settings/people/signing-in", "5EL"), "/admin/5EL/signing-in");
 eq(phoneRoute("/settings", "5EL"), "/admin/5EL");
 eq(phoneRoute("/settings/property/backfill-data", "5EL"), "/admin/5EL/backfill");
@@ -273,7 +279,6 @@ for (const [web, route] of Object.entries(PHONE_ROUTES)) {
    the phone has not built. */
 const NOT_ON_PHONE = [
   "/coming-soon/payments", "/coming-soon/room-systems", "/reports/store",
-  ...["profile", "set-up-this-hotel", "old-data", "photos", "highlights", "amenities", "group", "policies", "documents"].map((x) => `/settings/property/${x}`),
   ...["plans", "meal-plans", "taxes"].map((x) => `/settings/rates/${x}`),
   ...["payment-methods", "extra-charges", "discounts", "commission", "pickup"].map((x) => `/settings/money/${x}`),
   ...["market-segments", "reservation-types", "reasons", "holidays", "id-types", "vip"].map((x) => `/settings/lists/${x}`),

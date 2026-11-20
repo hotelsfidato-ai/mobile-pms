@@ -34,7 +34,7 @@ export function PropDocuments({ hotel, role }: AdminProps) {
   const rules = (hotel as typeof hotel & { deskRules?: Rules }).deskRules;
   const { when, where } = docWhen(doc, rules, code);
   return (
-    <PageFrame hotel={hotel.name} title="Documents"
+    <PageFrame title="Documents"
       under="What the hotel prints and sends, as the guest gets it. Each sample has a made-up guest and says SAMPLE · NOT VALID."
       refused={refused} refreshing={false} onRefresh={() => undefined}>
       <Tabs label="Documents" value={doc} onChange={setDoc} options={DOCS} />

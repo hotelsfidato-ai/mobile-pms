@@ -28,7 +28,7 @@ export function PropHighlights({ hotel, role }: AdminProps) {
   const label = HIGHLIGHTS.find(([k]) => k === kind)![1];
   return (
     <View style={{ flex: 1 }}>
-      <PageFrame hotel={hotel.name} title="Highlights"
+      <PageFrame title="Highlights"
         under="What guests read about the hotel on their page, after the code. Leave one blank and it is not shown."
         refused={refused} refreshing={pulled && q.loading} onRefresh={() => { setPulled(true); q.reload(); }}>
         <Read q={q} what="the highlights">

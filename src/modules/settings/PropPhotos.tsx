@@ -39,7 +39,7 @@ export function PropPhotos({ hotel, role }: AdminProps) {
   const mayEdit = mayEditHere(role);
   return (
     <View style={{ flex: 1 }}>
-      <PageFrame hotel={hotel.name} title="Logo and photos" under="The logo prints on this hotel's documents; the photos show to guests after the code."
+      <PageFrame title="Logo and photos" under="The logo prints on this hotel's documents; the photos show to guests after the code."
         refused={refused} refreshing={pulled && q.loading} onRefresh={() => { setPulled(true); q.reload(); }}>
         <Read q={q} what="the logo and photos">
           {(d) => {

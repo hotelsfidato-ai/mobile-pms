@@ -68,13 +68,13 @@ export function StuckLine({ stuck }: { stuck: boolean }) {
   );
 }
 
-/** The page's frame: the hotel above, the web's title and line, pull down to read again. */
-export function PageFrame({ hotel, title, under, refused, refreshing, onRefresh, children }: {
-  hotel?: string; title: string; under: string; refused: string | null; refreshing: boolean; onRefresh: () => void; children: ReactNode;
+/** The page's frame: the web's title and its line (as the pictures: no hotel above it), pull down to read again. */
+export function PageFrame({ title, under, refused, refreshing, onRefresh, children }: {
+  title: string; under: string; refused: string | null; refreshing: boolean; onRefresh: () => void; children: ReactNode;
 }) {
   return (
     <Screen refreshing={refreshing} onRefresh={onRefresh}>
-      <Head eyebrow={hotel} title={title} under={under} />
+      <Head title={title} under={under} />
       {refused ? <Refused sentence={refused} /> : children}
     </Screen>
   );

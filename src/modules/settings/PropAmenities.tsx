@@ -45,7 +45,7 @@ export function PropAmenities({ hotel, role }: AdminProps) {
   const mayEdit = mayEditHere(role);
   return (
     <View style={{ flex: 1 }}>
-      <PageFrame hotel={hotel.name} title="Amenities"
+      <PageFrame title="Amenities"
         under="Switch on what this hotel has; guests see them on their page. One list for every hotel in the group."
         refused={refused} refreshing={pulled && q.loading} onRefresh={() => { setPulled(true); q.reload(); }}>
         <Read q={q} what="the amenities">

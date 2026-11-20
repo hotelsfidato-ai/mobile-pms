@@ -46,7 +46,7 @@ export function PropProfile({ hotel, role, who }: AdminProps) {
   const mayEdit = mayEditHere(role);
   return (
     <View style={{ flex: 1 }}>
-      <PageFrame hotel={hotel.name} title="Profile" under="The name, address and numbers the hotel prints, and where it is."
+      <PageFrame title="Profile" under="The name, address and numbers the hotel prints, and where it is."
         refused={refused} refreshing={pulled && q.loading} onRefresh={() => { setPulled(true); q.reload(); }}>
         <Read q={q} what="the profile">
           {(d) => d ? (

@@ -33,7 +33,7 @@ export function PropPolicies({ hotel, role }: AdminProps) {
   const mayEdit = mayEditHere(role);
   return (
     <View style={{ flex: 1 }}>
-      <PageFrame hotel={hotel.name} title="Policies" under="What the hotel asks of its guests, in the words they read."
+      <PageFrame title="Policies" under="What the hotel asks of its guests, in the words they read."
         refused={refused} refreshing={pulled && q.loading} onRefresh={() => { setPulled(true); q.reload(); }}>
         <Read q={q} what="the policies">
           {(d) => d ? (

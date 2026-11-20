@@ -1008,6 +1008,18 @@ export const PHONE_ROUTES: Readonly<Record<string, string>> = {
   "/admin/sign-ins": "/admin/:code/sign-ins",
   "/settings/people/signing-in": "/admin/:code/signing-in",
   "/settings/connections/modules": "/admin/:code/modules",
+  /* settings (mobile/m13-set-property, 20 Nov): Settings → Property's own pages; the bell's and "Back to
+     setup"'s /h/:code/setup lands on Set up this hotel, as the web's does. */
+  "/settings/property/profile": "/settings/:code/profile",
+  "/settings/property/set-up-this-hotel": "/settings/:code/set-up-this-hotel",
+  "/h/:code/setup": "/settings/:code/set-up-this-hotel",
+  "/settings/property/old-data": "/settings/:code/old-data",
+  "/settings/property/photos": "/settings/:code/photos",
+  "/settings/property/highlights": "/settings/:code/highlights",
+  "/settings/property/amenities": "/settings/:code/amenities",
+  "/settings/property/group": "/settings/:code/group",
+  "/settings/property/policies": "/settings/:code/policies",
+  "/settings/property/documents": "/settings/:code/documents",
   "/properties": "/admin/:code/properties",
   "/people": "/admin/:code/people",
   "/admin/users": "/admin/:code/users",
