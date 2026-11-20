@@ -910,6 +910,29 @@ export const PHONE_ROUTES: Readonly<Record<string, string>> = {
   "/h/:code/requests": "/guest-services/:code/requests",
   /* mobile/t2-approvals (4 Nov) */
   "/h/:code/approvals": "/approvals/:code",
+  /* mobile/m13-pos-setup (19 Nov): the Menu and Restaurant setup */
+  "/pos/:code/menu": "/pos/:code/menu",
+  "/pos/:code/setup": "/pos/:code/setup",
+  /* mobile/m13-groups (19 Nov): Groups (one group under it) and the Waitlist (16 Nov release) */
+  "/h/:code/groups": "/reservations/:code/groups",
+  "/h/:code/waitlist": "/reservations/:code/waitlist",
+  /* mobile/m13-sales (19 Nov): Guest feedback, Possible same person, Leads and WhatsApp, Marketing,
+     Contracts (a company's page is reached from its list). */
+  "/h/:code/feedback": "/reputation/:code/feedback",
+  "/crm/same-person": "/guests/:code/same-person",
+  "/h/:code/leads": "/leads/:code",
+  "/h/:code/marketing": "/marketing/:code",
+  "/contracts": "/contracts/:code",
+  /* mobile/m13-rep-ops (19 Nov): All reports, the day's reports, No show, Item sales, Group reports. */
+  "/reports": "/reports/:code",
+  "/reports/manager": "/reports/:code/manager",
+  "/reports/night-audit": "/reports/:code/night-audit",
+  "/reports/monthly-occupancy": "/reports/:code/monthly-occupancy",
+  "/reports/monthly-stats": "/reports/:code/monthly-stats",
+  "/reports/yearly-stats": "/reports/:code/yearly-stats",
+  "/reports/no-show": "/reports/:code/no-show",
+  "/reports/item-sales": "/reports/:code/item-sales",
+  "/group-reports": "/reports/:code/group-reports",
   /* mobile/m13-rooms (19 Nov): Rooms, the house as tiles for today. */
   "/h/:code/stay": "/front-desk/:code/rooms",
   /* mobile/m13-till (19 Nov): the Till and the Terminal, each its own twin. */
@@ -967,19 +990,6 @@ export const PHONE_ROUTES: Readonly<Record<string, string>> = {
   "/reports/petty-cash": "/reports/:code/petty-cash",
   "/reports/voids": "/reports/:code/voids",
   "/reports/nc-bills": "/reports/:code/nc-bills",
-  /* mobile/m13-pos-setup (19 Nov): the Menu and Restaurant setup */
-  "/pos/:code/menu": "/pos/:code/menu",
-  "/pos/:code/setup": "/pos/:code/setup",
-  /* mobile/m13-groups (19 Nov): Groups (one group under it) and the Waitlist (16 Nov release) */
-  "/h/:code/groups": "/reservations/:code/groups",
-  "/h/:code/waitlist": "/reservations/:code/waitlist",
-  /* mobile/m13-sales (19 Nov): Guest feedback, Possible same person, Leads and WhatsApp, Marketing,
-     Contracts (a company's page is reached from its list). */
-  "/h/:code/feedback": "/reputation/:code/feedback",
-  "/crm/same-person": "/guests/:code/same-person",
-  "/h/:code/leads": "/leads/:code",
-  "/h/:code/marketing": "/marketing/:code",
-  "/contracts": "/contracts/:code",
   /* mobile/t2-revenue (4 Nov) */
   "/h/:code/revenue-outlook": "/revenue/:code",
   /* mobile/t2-crs (4 Nov) */

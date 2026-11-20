@@ -109,6 +109,98 @@ tapped chart readings.
 
 ---
 
+## Lane mobile/m13-rep-ops (19-20 Nov): All reports, the operations reports, Group reports
+
+**Web twin (today's PMS, 16 Nov release):** `src/modules/reports/pages/Index.tsx` (`/reports`),
+`ManagerReport.tsx`, `NightAudit.tsx`, `Statistics.tsx` (three), `Ledgers.tsx` `NoShowPage`,
+`Voids.tsx` `ItemSalesPage` (`WindowReport`), `GroupReports.tsx` (`/group-reports`); drawn by
+`components/DocumentReport.tsx` → `ReportShell.tsx` + `ReportView.tsx`; data `data/document.ts`
+(`getReport`, `GROUP_REPORTS`, `groupQuery`), `groupHotels.ts`; menu rules `nav.ts`; guard
+`components/app/RequireAccess.tsx`.
+**API and gates (`api/src/roleGate.ts`):** `GET /api/hotels/:code/reports/{manager,night-audit,no-show,
+monthly-occupancy,monthly-statistics,yearly-statistics,item-sales}` → `REPORTS = see("report", "reports")`
+(1033-1044); `GET /api/group/reports/:key?hotels=…` → `own` (reports/group.ts: every property asked the
+one-property rule with the person's role there; a refusal names the property). `GET /api/hotels/:code/modules`
+(the shell's read, for the bar's switch). **Offline:** reads only; this lane writes nothing to the API (the
+stars are kept on the phone, as the web keeps them in the browser).
+
+| Screen | Route | File | Picture |
+|---|---|---|---|
+| All reports | `/reports/[code]` | `ReportsIndex.tsx` | `all/50-reports-all-reports` |
+| Manager report | `/reports/[code]/manager` | `OpsReport.tsx` `ManagerReport` | `all/51-reports-manager-report` |
+| Night audit report | `/reports/[code]/night-audit` | `NightAuditReport` | `all/52-reports-night-audit-report` |
+| No show | `/reports/[code]/no-show` | `NoShowReport` | `all/54-reports-no-show` |
+| Monthly occupancy | `/reports/[code]/monthly-occupancy` | `MonthlyOccupancy` | `all/55-reports-monthly-occupancy` |
+| Monthly statistics | `/reports/[code]/monthly-stats` | `MonthlyStatistics` | `all/56-reports-monthly-statistics` |
+| Yearly statistics | `/reports/[code]/yearly-stats` | `YearlyStatistics` | `all/57-reports-yearly-statistics` |
+| Item sales | `/reports/[code]/item-sales` | `ItemSales` | not pictured (16 Nov) |
+| Group reports | `/reports/[code]/group-reports` | `GroupReports.tsx` | not pictured (16 Nov) |
+
+Pieces: `opsDoc.ts` (the document contract; ReportView's `formatCell`, `factsLine`; a section as lines or
+cards; the chart's axis; the export table; the day words), `opsIndex.ts` (Index.tsx's 37 rows in 4 groups,
+each with its nav.ts rule and switch; the guard's and the API's sentences), `opsGroup.ts` (GROUP_REPORTS,
+`hotelsWhere`, the question and its words), `opsData.ts` (the reads; the stars in AsyncStorage),
+`OpsDocView.tsx` (masthead, sections, chart, footnotes, "Printed … who"; the four states),
+`OpsReport.tsx` (one report screen, the seven pages, the day stepper). Checks: `opsDoc.check.ts`,
+`opsIndex.check.ts`, `opsGroup.check.ts`.
+
+**Every row opens a phone screen** (20 Nov, after the stock and money lanes merged): all 37 of the
+index's rows have their `app/reports/[code]/<name>.tsx`, and `opsIndex.check.ts` fails if one is lost.
+The phone's Accounting export (`/reports/accounting`, the money lane's) is reached from the menu, as on
+the web, whose index does not list it.
+
+**Rules.** Every figure is the server's document: money with its paise (`₹7,582.50`), a percent to two
+places, Indian digits, `25/08/2026`, a moment in the property's time through `instant()` (Postgres's
+text reads NaN on Hermes); null is `-`, never 0; a negative sum of money red; a total row is the server's
+row, where it put it — **nothing on these screens adds a column up** (the web's ReportView does not
+either; Group reports' totals are reports/group.ts's). The day, month and year are the property's
+business date's (REP-1); Item sales asks From and To with day steppers (M-7), From never after To.
+A section of one label and one figure is lines; a wider one (the Manager report's Today/PTD/YTD, the
+night audit's, the statistics grid) is a card per row: its first column as its name, every other
+column as a labelled figure, two across, in the web's order. Who sees what: the web's menu rule for
+each row (`can` of the core's matrix, identical to `api/src/permissions.ts` on 19 Nov — compared role
+by role, resource by resource, action by action); the core's 4 Nov menu port lacks the entries added
+since, so the rules are carried in `opsIndex.ts` and the check holds them equal to the core's
+`mayReach` wherever the port has the entry (29 of the 37 rows, every role).
+
+**Files (M-14):** the core's `ExportButtons` (PDF, Excel as CSV, Print) from `exportOf(doc)`: the rows as
+the screen writes them; sections with one set of columns keep them, mixed sections become "line and its
+figures"; a chart alone (Monthly occupancy) its days. **Left on the website:** Email (the web's dialog,
+`POST /reports/:key/email`; a write with no key the phone could reuse - one shared build for every
+report lane is better than seven).
+
+## Picture match (19-20 Nov, lane m13-rep-ops)
+
+Compared by reading the code against each picture at full size (780 px, cut in 1500 px pieces);
+**never seen running** (no Expo, no API in the cloud). The pictures are of 31 Oct (the GM, development
+build): the top bar and the banner are the shell's.
+
+| Screen | Result |
+|---|---|
+| All reports | **Matches**, with: today's page lists 37 reports (the picture 29 of 29: NC bills, Item sales, Money owed by age, Statement of account, Commission owed, GSTR-1, Input tax credit and GST on advances came since, MEMORY 14) — built from today's code |
+| Manager report | **Matches**, with differences 1-3 |
+| Night audit report | **Matches**, with differences 1-3 |
+| No show | **Matches**, with differences 1-3 |
+| Monthly occupancy | **Matches**, with differences 1, 2, 4 |
+| Monthly statistics | **Matches**, with differences 1-4 |
+| Yearly statistics | **Matches**, with differences 1-3 |
+| Item sales, Group reports | not pictured: built from the web's code |
+
+1. **The table is cards on the phone.** The web's table runs off a 390 px screen and scrolls sideways
+   (the picture shows "TODAY" with PTD cut off); the phone shows each row as a card of labelled figures
+   in the web's order (BRIEF-T3, NATIVE.md). A two-column section stays lines with its header.
+2. **The file buttons** are the core's PDF, Excel, Print (the picture's Print, PDF, Excel, CSV); the
+   web's Email (since the picture) is on the website for now, said under them.
+3. **No "by <group>" line or logo** under the property in the masthead: the group's settings are not
+   read on the phone (no ported read); the picture shows neither, the property has none set.
+4. **The chart** is drawn with react-native-svg and scrolls sideways inside the report, as the web's at
+   640 px; the series' key sits above it on the right; a day the server does not hold has no bar and
+   no figure (the web draws `?? 0`, a bar of no height, and no label: the same to the eye).
+
+**6 of 6 pictured screens match their pictures** (with the differences above); 2 not pictured.
+
+Not compared (no picture): reading, could not read (online, offline), no such property, the page
+guard, the test hotel's mark, the stars, an empty search, Group reports' states.
 ## Lane m13-rep-stock (19 Nov): the store, bar and supplier reports
 
 **Built** 19 Nov 2026 by the cloud helper "m13-rep-stock" on `mobile/m13-rep-stock`, from `main` at
