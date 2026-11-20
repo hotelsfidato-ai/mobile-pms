@@ -156,7 +156,7 @@ column as a labelled figure, two across, in the web's order. Who sees what: the 
 each row (`can` of the core's matrix, identical to `api/src/permissions.ts` on 19 Nov — compared role
 by role, resource by resource, action by action); the core's 4 Nov menu port lacks the entries added
 since, so the rules are carried in `opsIndex.ts` and the check holds them equal to the core's
-`mayReach` wherever the port has the entry (28 rows × 15 roles).
+`mayReach` wherever the port has the entry (29 of the 37 rows, every role).
 
 **Files (M-14):** the core's `ExportButtons` (PDF, Excel as CSV, Print) from `exportOf(doc)`: the rows as
 the screen writes them; sections with one set of columns keep them, mixed sections become "line and its
