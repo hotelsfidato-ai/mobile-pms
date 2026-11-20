@@ -5,6 +5,32 @@ module's `DEFECTS.md` instead. Read the newest first.
 
 ---
 
+### 22 · A stop that guards a write must live as long as the doubt, not as long as the sheet (20 Nov)
+
+Three lanes (minibar, equipment, the finance desk) and the older dialogs kept the unknown-outcome
+stop, and sometimes the idempotency key, inside the sheet or in the screen's React state. Closing
+the sheet, or leaving the screen and coming back (the cache still shows data read before the loss),
+dropped it, and a second tap made a second charge or a second deposit. Independent reviews found
+it each time. **The rule:** on a route that reads no key, (1) while a write is on its way its sheet
+cannot be closed and the screen sends nothing else; (2) the doubt (moment of loss, and the keeper
+where the route reads a key) is kept outside React, keyed by hotel, screen and record; (3) it lifts
+only on success or on a read that **began** after the loss (a read that merely finishes after it
+may have been sent before). The server's key is still the real fix (R-30, R-31 and the M-13 rows).
+
+### 21 · A refusal sentence lives in more than one check (20 Nov)
+
+The Bar role fix changed pos's till refusal, and another module's check (`PayRules.check.ts`) still
+held the old words, so the first gate run failed. **The rule:** when a sentence the server or web
+words changes, search the whole app for the old words before the gates. And check a brief's claim
+("the phone rounds") against the web's own formatter first: the screen matched the web; the export
+file was the fault (MFD-9).
+
+### 20 · A doc conflict can move a section under the wrong heading (20 Nov)
+
+Merging two lanes' MODULE.md sections put one lane's picture table under the other lane's heading;
+the merge looked clean. **The rule:** after any conflict in a module's MODULE.md or DEFECTS.md,
+read the headings around the join.
+
 ### 19 · On Linux, Metro's cache follows TMPDIR, not TEMP/TMP (20 Nov)
 
 `gates.sh` gave each copy its own Metro cache through `TEMP`/`TMP` (MEMORY 5), which is what
