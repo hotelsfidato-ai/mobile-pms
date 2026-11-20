@@ -4,13 +4,13 @@ import { useRef, useState } from "react";
 import { Text, View } from "react-native";
 import { ApiError, HeldError, type Hotel } from "../../core/api";
 import { c, face, space, t } from "../../core/theme";
-import { Head, Screen, useRead } from "../../core/ui";
+import { Head, Screen, Stopped, useRead, useScreenStop } from "../../core/ui";
 import { IconBtn, Pill } from "../finance/Kit";
 import { Back, Box, Btn, body, Loading, SectionHead, Stale, Toast, message, saidOf, type Said } from "../guest-services/kit";
 import { LoadFailed, Note } from "../laundry/kit";
 import { BillCard } from "./Bill";
 import { CancelDialog, CourseDialog, PriceDialog } from "./Changes";
-import { confirmFn, isRefused, readFn, removeCourse } from "./data";
+import { COURSE_UNKNOWN, confirmFn, fnStop, isRefused, readFn, removeCourse } from "./data";
 import { Detail, Line, NotAvailable, Panel, Warn } from "./kit";
 import { whyNotCancel, whyNotChange, whyNotRead } from "./roles";
 import {
@@ -59,7 +59,9 @@ export function FunctionPage({ hotel, role, id, registered, warning, onBack }: {
       : null,
   );
 
-  const q = useRead(() => (refusedRead ? Promise.resolve(null) : readFn(code, id)), ["banquet", code, "fn", id]);
+  /* Add a course whose outcome is unknown (MBNQ-U1): kept by the function's name, outside the dialog. */
+  const stop = useScreenStop(fnStop(code, id));
+  const q = useRead(stop.watch(() => (refusedRead ? Promise.resolve(null) : readFn(code, id))), ["banquet", code, "fn", id]);
   const off = isRefused(q.data) ? q.data.refused : null;
   const f: Fn | null = q.data && !isRefused(q.data) ? q.data : null;
   const refresh = () => cache.invalidateQueries({ queryKey: ["banquet", code] });
@@ -148,6 +150,7 @@ export function FunctionPage({ hotel, role, id, registered, warning, onBack }: {
             ) : null}
             <Stale error={q.error} />
             {refusal ? (refusal.body ? <Note title={refusal.title} alert>{refusal.body}</Note> : <Note alert>{refusal.title}</Note>) : null}
+            {stop.stuck ? <Stopped line={COURSE_UNKNOWN} onRead={q.reload} /> : null}
 
             {f.status === "cancelled" && f.cancelReason ? (
               <Warn icon={<TriangleAlert size={16} color={c.red} />}>
@@ -184,7 +187,7 @@ export function FunctionPage({ hotel, role, id, registered, warning, onBack }: {
                 without invoice view: the gate blanks it) draws no card, as the web. */}
             {f.folioId ? <BillCard hotel={hotel} f={f} role={role} onDone={done} /> : null}
 
-            <Catering f={f} why={why.change} onAdd={() => setAddingFood(true)} onRemove={(k) => void remove(k)} />
+            <Catering f={f} why={why.change} stopped={stop.stuck ? COURSE_UNKNOWN : null} onAdd={() => { if (!stop.isStuck()) setAddingFood(true); }} onRemove={(k) => void remove(k)} />
             <Orders f={f} />
           </>
         )}
@@ -198,7 +201,7 @@ export function FunctionPage({ hotel, role, id, registered, warning, onBack }: {
       ) : null}
       {addingFood && f ? (
         <CourseDialog
-          code={code} f={f} onClose={() => setAddingFood(false)}
+          code={code} f={f} onClose={() => { setAddingFood(false); if (stop.isStuck()) q.reload(); }}
           onDone={() => { setAddingFood(false); done(null); }}
         />
       ) : null}
@@ -260,13 +263,13 @@ function WhatAndWhen({ f }: { f: Fn }) {
 }
 
 /* ── Catering: a course a row, a hairline between; its parts, not a product the phone made ── */
-function Catering({ f, why, onAdd, onRemove }: { f: Fn; why: string | null; onAdd: () => void; onRemove: (k: Course) => void }) {
+function Catering({ f, why, stopped, onAdd, onRemove }: { f: Fn; why: string | null; stopped: string | null; onAdd: () => void; onRemove: (k: Course) => void }) {
   const open = mayChangeFood(f);
   return (
     <Box>
       <View style={{ paddingHorizontal: space.cardX, paddingTop: space.cardY }}>
-        <SectionHead title="Catering" {...(open ? { action: <Btn label="Add a course" icon={Plus} disabled={why != null} onPress={onAdd} /> } : {})} />
-        {open && why ? <Text style={[t.caption, { color: c.grey600, marginTop: -8, marginBottom: 8 }]}>{why}</Text> : null}
+        <SectionHead title="Catering" {...(open ? { action: <Btn label="Add a course" icon={Plus} disabled={why != null || stopped != null} onPress={onAdd} /> } : {})} />
+        {open && (why ?? stopped) ? <Text style={[t.caption, { color: c.grey600, marginTop: -8, marginBottom: 8 }]}>{why ?? stopped}</Text> : null}
       </View>
       {f.catering.length === 0 ? (
         /* Not a nag: a hall let for a meeting feeds nobody, and that is a complete booking. */

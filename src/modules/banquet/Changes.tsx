@@ -2,10 +2,10 @@ import { useRef, useState } from "react";
 import { Text, View } from "react-native";
 import { ApiError, HeldError, outcomeUnknown } from "../../core/api";
 import { c } from "../../core/theme";
-import { useRead } from "../../core/ui";
+import { useRead, useScreenStop } from "../../core/ui";
 import { Field, Input, Tick } from "../finance/Kit";
 import { Btn, body, Dialog, Foot, InDialog, Select, message, saidOf, type Said } from "../guest-services/kit";
-import { addCourse, cancelFn, isRefused, readSetup, setPrice } from "./data";
+import { addCourse, cancelFn, fnStop, isRefused, readSetup, setPrice } from "./data";
 import { choosePackage, courseBody, figure, packageWords, platesProblem, priceBody, priceHint, type CourseDraft, type Fn } from "./rules";
 
 /* ══════════════════════════════════════════════════════════════════
@@ -50,7 +50,7 @@ function useWrite(onDone: () => void, title: string) {
       setBusy(false);
     }
   };
-  return { busy, said, run };
+  return { busy, said, run, stuck: () => stuck.current };
 }
 
 /* ── The hall price: an empty box CLEARS it (a quote withdrawn); 0 only with Free (D27-120) ── */
@@ -61,7 +61,7 @@ export function PriceDialog({ code, f, onClose, onDone }: { code: string; f: Fn;
   const sent = priceBody(amount, free);
   const usual = f.venue.defaultRate;
   return (
-    <Dialog title="The hall" description="What was agreed for this function. Nothing is filled in for you." onClose={onClose}>
+    <Dialog title="The hall" description="What was agreed for this function. Nothing is filled in for you." onClose={onClose} locked={w.busy}>
       <Field label="Agreed amount" hint={sent === null ? "Not a figure." : priceHint(usual)}>
         <Input label="Agreed amount" value={amount} onChange={setAmount} keyboard="decimal-pad" placeholder="-" off={free} tabular />
         <View style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center", gap: 8 }}>
@@ -73,7 +73,7 @@ export function PriceDialog({ code, f, onClose, onDone }: { code: string; f: Fn;
       </Field>
       <InDialog said={w.said} />
       <Foot>
-        <Btn label="Cancel" tall grow onPress={onClose} />
+        <Btn label="Cancel" tall grow disabled={w.busy} onPress={onClose} />
         <Btn
           label={w.busy ? "Saving…" : "Save"} variant="primary" tall grow disabled={w.busy || sent === null}
           onPress={() => void w.run(() => setPrice(code, f.id, sent!))}
@@ -90,10 +90,13 @@ export function CourseDialog({ code, f, onClose, onDone }: { code: string; f: Fn
   const [d, setD] = useState<CourseDraft>({ packageId: "", name: "", heads: f.pax === null ? "" : String(f.pax), rate: "", free: false, notes: "" });
   const set = (patch: Partial<CourseDraft>) => setD((x) => ({ ...x, ...patch }));
   const w = useWrite(onDone, "Not added");
+  /* POST …/catering reads no key: a course whose outcome is unknown stops Add on the FUNCTION, not only
+     here, until a read of it begun after the loss is back (MBNQ-U1). */
+  const stop = useScreenStop(fnStop(code, f.id));
   const sent = courseBody(d);
   const plates = platesProblem(d.heads);
   return (
-    <Dialog title="Add a course" description="From a package, or off-menu. A rate can wait - the total says so until it arrives." onClose={onClose}>
+    <Dialog title="Add a course" description="From a package, or off-menu. A rate can wait - the total says so until it arrives." onClose={onClose} locked={w.busy}>
       {packages.length > 0 ? (
         <Field label="Package">
           <Select<string>
@@ -120,10 +123,10 @@ export function CourseDialog({ code, f, onClose, onDone }: { code: string; f: Fn
       </Field>
       <InDialog said={w.said} />
       <Foot>
-        <Btn label="Cancel" tall grow onPress={onClose} />
+        <Btn label="Cancel" tall grow disabled={w.busy} onPress={onClose} />
         <Btn
-          label={w.busy ? "Adding…" : "Add"} variant="primary" tall grow disabled={w.busy || sent === null}
-          onPress={() => void w.run(() => addCourse(code, f.id, sent!))}
+          label={w.busy ? "Adding…" : "Add"} variant="primary" tall grow disabled={w.busy || w.stuck() || stop.stuck || sent === null}
+          onPress={() => { if (!stop.isStuck()) void w.run(() => stop.guard(() => addCourse(code, f.id, sent!))); }}
         />
       </Foot>
     </Dialog>
@@ -135,13 +138,13 @@ export function CancelDialog({ code, f, onClose, onDone }: { code: string; f: Fn
   const [reason, setReason] = useState("");
   const w = useWrite(onDone, "Not cancelled");
   return (
-    <Dialog title="Cancel this function" description="The hall goes back on the diary. The cancellation stays on the record." onClose={onClose}>
+    <Dialog title="Cancel this function" description="The hall goes back on the diary. The cancellation stays on the record." onClose={onClose} locked={w.busy}>
       <Field label="Why?" required hint="This is the line somebody asks about a month later.">
         <Input label="Why?" value={reason} onChange={setReason} multiline />
       </Field>
       <InDialog said={w.said} />
       <Foot>
-        <Btn label="Keep it" tall grow onPress={onClose} />
+        <Btn label="Keep it" tall grow disabled={w.busy} onPress={onClose} />
         <Btn
           label={w.busy ? "Cancelling…" : "Cancel the function"} variant="danger" tall grow disabled={!reason.trim() || w.busy}
           onPress={() => void w.run(() => cancelFn(code, f.id, reason))}
