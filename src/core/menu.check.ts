@@ -189,7 +189,11 @@ eq(phoneRoute("/people", "5EL"), "/admin/5EL/people");
 eq(phoneRoute("/admin/users", "5EL"), "/admin/5EL/users");
 eq(phoneRoute("/settings/money/bank", "5EL"), "/admin/5EL/bank");
 eq([phoneRoute("/reports/item-sales", "5EL"), phoneRoute("/settings/property/old-data", "5EL"), phoneRoute("/settings/messages/scheduled-reports", "5EL")],
-  ["/reports/5EL/item-sales", null, null]);
+  ["/reports/5EL/item-sales", null, "/settings/5EL/scheduled-reports"]);
+/* mobile/m13-set-messages (20 Nov): Messages' own pages and Rivals' prices. */
+eq(phoneRoute("/settings/messages/switches", "5EL"), "/settings/5EL/switches");
+eq(phoneRoute("/settings/messages/daily-report-emails", "5EL"), "/settings/5EL/daily-report-emails");
+eq(phoneRoute("/settings/connections/rivals-prices", "5EL"), "/settings/5EL/rivals-prices");
 eq(phoneRoute("/settings/people/signing-in", "5EL"), "/admin/5EL/signing-in");
 eq(phoneRoute("/settings", "5EL"), "/admin/5EL");
 eq(phoneRoute("/settings/property/backfill-data", "5EL"), "/admin/5EL/backfill");
@@ -278,8 +282,6 @@ const NOT_ON_PHONE = [
   ...["payment-methods", "extra-charges", "discounts", "commission", "pickup"].map((x) => `/settings/money/${x}`),
   ...["market-segments", "reservation-types", "reasons", "holidays", "id-types", "vip"].map((x) => `/settings/lists/${x}`),
   "/settings/front-desk/times-and-rules", "/settings/front-desk/front-desk",
-  "/settings/messages/switches", "/settings/messages/daily-report-emails", "/settings/messages/scheduled-reports",
-  "/settings/connections/rivals-prices",
 ];
 const everywhere = new Set(ROLES.flatMap((role) => flatNavigationFor(role, ":code", ALL_ON, groupAdmin).map((i) => i.to)));
 eq([...everywhere].filter((to) => phoneRoute(to, "5EL") === null).sort(), [...NOT_ON_PHONE].sort());

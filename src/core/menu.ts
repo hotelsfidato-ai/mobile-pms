@@ -1008,6 +1008,11 @@ export const PHONE_ROUTES: Readonly<Record<string, string>> = {
   "/admin/sign-ins": "/admin/:code/sign-ins",
   "/settings/people/signing-in": "/admin/:code/signing-in",
   "/settings/connections/modules": "/admin/:code/modules",
+  /* settings (mobile/m13-set-messages, 20 Nov): Messages' own pages and Rivals' prices. */
+  "/settings/messages/switches": "/settings/:code/switches",
+  "/settings/messages/daily-report-emails": "/settings/:code/daily-report-emails",
+  "/settings/messages/scheduled-reports": "/settings/:code/scheduled-reports",
+  "/settings/connections/rivals-prices": "/settings/:code/rivals-prices",
   "/properties": "/admin/:code/properties",
   "/people": "/admin/:code/people",
   "/admin/users": "/admin/:code/users",
