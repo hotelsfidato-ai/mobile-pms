@@ -58,3 +58,40 @@ formatter, `rupees`, to the paisa on the core's dash; `owedLine` says the server
 word; `startAmount` starts blank when nothing is owed; `typedShown` dashes nothing typed; each in
 `bill.check.ts`, the clamp broken once and seen to fail. **The rule:** on a bill a figure is shown as
 the server sent it - never rounded, never clamped - and a dash means only "not sent".
+
+---
+
+## Lane m13-fin-desk (letter D)
+
+### MFIN-D1 · The web's drawer read turns every failure into "No drawer open" (avoided, 19 Nov)
+
+`getCashierDrawer` (web `data/cashier.ts`) catches every error and returns null, and the page then
+offers to open a drawer: offline, refused or a server failure all read as "the shift has not
+started". **Found** reading the web twin before porting. **Done:** the phone reads through the
+core's `api()`; a failure is its own state (no connection, or the server's sentence). For the web:
+in the report. **The rule:** a read that failed is never drawn as an empty state.
+
+### MFIN-D2 · A count of nothing is saved as ₹0 counted (avoided, 19 Nov)
+
+The web's Save the count is enabled with nothing typed and sends `{ denominations: [] }`; the
+server (`cashier.ts` /count) then sets `counted_cash` to the sum of nothing, ₹0 - a count nobody
+made, which the close then reads as "short by" the whole drawer. **Found** reading the route
+against the page. **Done:** `countBody` is null until a box is typed, and Save waits for it
+(`desk.check.ts`, broken once: a blank box sent as 0 fails). **The rule:** a blank is never a zero,
+in a count as in a price.
+
+### MFIN-D3 · A mistyped note opens a drawer on a figure nobody counted (avoided, 19 Nov)
+
+The web adds `Number(box) || 0` for the opening float, so "-3" × ₹500 lowers the float and "abc"
+vanishes; the server checks only that the opening is ≥ 0. **Done:** `openingOf` refuses a box that
+is not a whole number with the count's own sentence ("A count is a whole number of notes or coins
+- zero or more."), checked and broken once. **The rule:** what is typed is sent or refused, never
+quietly changed.
+
+### MFIN-D4 · The server's "no" is a 409, which the key keeper reads as "not yet" (noted, 19 Nov)
+
+The cashier, deposits, company payments and Form III routes answer their own refusals with 409
+(`{ ok: false, reason }`); `core/keys.ts` keeps a 409's key 30 s as a "not yet". Harmless today
+(none of these routes reads a key), and the sentence is shown as the server's. **The rule:** if
+the API starts reading keys on these routes, it should answer a refusal with 422, or the keeper
+needs to know these routes.

@@ -125,3 +125,91 @@ Compared by reading the code against the pictures and their words, **never seen 
 
 0 of 1 screens matched to a picture: the one screen has none. Asked of the mobile chat: a capture of
 the stay panel's Bill tab, Settle and the check-out sheet (in house, due out, split, checked out).
+
+---
+
+# Lane m13-fin-desk (19-20 Nov): the finance desk
+
+Five web screens on the phone, NEW files only: `desk.ts` (+ `desk.check.ts`, the rules and the
+API's sentences), `deskData.ts` (reads and writes), `DeskKit.tsx` (the sheet with safe areas, the
+pill with a warning tone, the four read states, the export, one write per intent), and one screen
+each: `Cashiering.tsx`, `CityLedger.tsx`, `CashDeposits.tsx`, `FormC.tsx`, `SupplierDues.tsx`.
+Routes `app/finance/[code]/{cashiering,city-ledger,cash-deposits,form-c,supplier-dues}.tsx`. The
+existing `Kit.tsx` (Btn, Field, Input, Choice, Tick, SaidCard, Refused) is imported, never edited.
+
+## The web twin's map (today's PMS, 16 Nov)
+
+| Web address | Page and data | API (read · writes) | Who (roleGate.ts) | Offline (offline.ts) |
+|---|---|---|---|---|
+| `/h/:code/cashiering` | finance `pages/Cashiering.tsx`, `data/cashier.ts` | `GET /cashier-shift` · `POST /cashier-shift/{open,count,movements,close}` | read MONEY (`payment` view); write DRAWER (`payment` create) | refused, the Payment sentence |
+| `/h/:code/city-ledger` | finance `pages/Billing.tsx` PropertyCityLedgerPage, `flows/CompanyPayments.tsx`, `data/companyPayments.ts` | `GET /reports/city-ledger?from&asOn`, `GET /company-payments` · `POST /company-payments`, `POST /company-payments/:id/reverse` | read MONEY_REPORT / `invoice` view; record `payment` create; reverse `payment` edit | refused, unlisted |
+| `/h/:code/cash-deposits` | finance `pages/CashDeposits.tsx`, `data/deposits.ts` | `GET /cash-deposits` · `POST /cash-deposits`, `/:id/reverse`, `/:id/verify`, `/days/:date/explain` | the route's own (deposits.ts): see owner, admin, GM, accountant, viewer; record/reverse/explain owner, admin, GM; verify owner, accountant (`canRecord`, `canVerify`) | refused, unlisted |
+| `/h/:code/form-c` | guests `pages/FormC.tsx`, `data/formC.ts` | `GET /form-c` · `POST /form-c/:reservationId`, `PUT /form-c/:reservationId/details` | read GUEST_ID, write FORM_C (`customer` edit: owner, admin, GM, hotel manager, reception) | refused, "This change" (`/form-c`) |
+| `/h/:code/supplier-dues` | purchasing `pages/SupplierDuesPage.tsx`, `components/SupplierDues.tsx`, `data/purchasing.ts` | `GET /purchasing/dues`, `GET /reports/supplier-dues` (totals) · `POST /purchasing/dues/:id/payment`, `/credit-notes`, `/reverse` | DUES_ROLES (owner, admin, GM, accountant), PURCHASING_REFUSED's words | refused, unlisted |
+
+None of these write routes reads an idempotency key: every write here is latched at the tap and
+STOPS once its outcome is unknown (`useWrite` in DeskKit: the core's `useStuck`, MEMORY 16) until
+the sheet is closed or the screen pulled down and the record read again; a money form empties
+its amount. A keeper per screen per hotel (`deskData.ts`) is passed to `send()` all the same.
+
+## Money: what the server gives, what the phone shows
+
+Every figure is the server's, to the paisa (`bill.ts` `rupees`), a dash where none was sent.
+
+| The web adds in the browser | The phone shows instead |
+|---|---|
+| Company accounts' "₹X owed" (the balances summed) | the City ledger report's own **Total** row (`ledgerOwed`); no pill when the report sent none |
+| A ledger figure not sent, `Number(v ?? 0)` = ₹0 | a dash (`ledgerRows`) |
+| Supplier dues' "Owed to suppliers" and each supplier's total | the Supplier dues report's own total rows for the same day (`duesTotals`); a dash when that report is not read |
+| The drawer's Counted and the difference, live from the typed notes | the server's `counted` and `variance`, after Save the count; the typed tally shows on the Save / Open button only, as the person's own |
+| The drawer's per-kind sums (Paid out, Cash in, To the safe) | left out: each movement is listed with its own amount; Expected is the server's |
+| The close's "To deposit: counted - kept", the last close's "to deposit" | left out; after a close the server's own `toDeposit` is said |
+
+The one sum the phone makes is the web's own: the notes the person typed (value × count), shown
+as theirs; a count is SENT as typed (each box with something in it; a blank box is not sent; a
+mistyped box is sent for the server to refuse, QA FI-10).
+
+## Where the phone differs from the web, and why
+
+1. **A count of nothing is not saved** (Save waits for a typed box): the web sends `[]` and the
+   server saves ₹0 counted, a figure nobody counted (D27-190's own rule). MFIN-D2.
+2. **Open refuses a box that is not a whole number** with the count's own sentence: the web's
+   `Number(x) || 0` opens on a float nobody counted (a "-3" lowers it). MFIN-D3.
+3. **A failed read of the drawer says so**: the web's `getCashierDrawer` turns every failure into
+   "No drawer open". MFIN-D1.
+4. **A refused act is grey with the server's words** where the web hides it (AGENTS rule 1):
+   Verify for the GM ("That is for the owner or the accountant."), Record deposit / Explain /
+   Reverse for the accountant and a viewer, Record payment and Reverse on Company accounts.
+5. **On the website for now** (a package or a screen the phone lacks): a paid-out's bill photo
+   and the slip's photo (`expo-image-picker` ~57.0.20), the account's Statement and "Money owed by
+   age" (reports not on the phone), the supplier's Statement. Each is drawn grey; a tap says why.
+6. **Dates are typed YYYY-MM-DD** (M-7: no date-picker package): Deposited on, Received on, Paid
+   on, a credit note's date, the right bill's dates; the server checks each.
+7. **Selects are capsules** (Kit `Choice`); **TDS deducted is a Switch** (docs/NATIVE.md).
+8. **Exports** (core `ExportButtons`) on the three lists the web exports: Cash deposits, Company
+   accounts (with the report's Total row) and Form III (the passport masked to its last four, as
+   the server's file, `maskId`). Refused, as the server refuses a file, for a role that does not
+   download reports, in its words (`whyNotExport`).
+9. **The Form III card** is a sheet with the web's lines and Print (expo-print, M-9); a test
+   hotel's card says TEST · NOT VALID.
+
+## States (each screen)
+
+Loading ("Reading …") · no connection (its own card: nothing here can be changed offline) ·
+failed (the server's sentence and Try again) · empty (the web's words) · refused (the API's
+sentence, no read).
+
+## Picture match (20 Nov)
+
+Compared by reading the code against the pictures and their words, **never seen running**.
+
+| Screen | Picture | Result |
+|---|---|---|
+| Cashiering, no drawer open | `all/39-finance-cashiering` | **Matches** in words, order and grouping: the title, "Your drawer · 11 Oct 2026", the card's title and line, the handed float's sentence (₹2,000.00, paise as the picture), eight note rows ₹500…₹2 with ×, a box showing 0 and a dash, the grey "Count a float to open by hand" with the wallet. Left: the box is 96 px where the picture's is wider. The open shift, the movement and close sheets are **not pictured** (built from the web's code). |
+| Company accounts | `all/40-finance-company-accounts` | **Matches** in words and order: title with the yellow pill, the period line, Record payment (orange), each account a card of OPENING / SENT TO THE ACCOUNT / RECEIVED / BALANCE, the footnote, Payments received and its empty words. Left, on purpose: figures to the paisa (₹7,768.00, MFIN-4); the pill is the report's Total; the export row (M-13); the grey Statement and "Money owed by age" links (the web's code of 16 Nov, newer than the picture: MEMORY 14). |
+| Form III | `all/41-finance-form-c` | **Matches**: title and red pill, the line under, the yellow "does not file" notice, the unrecorded adults' sentence, the guest's card (name; nationality · room · in the room; adults recorded in yellow; PASSPORT; ARRIVAL with the time, the overdue pill and "by …"; Record number; DEPARTURE In house; Complete details and the printer). Left: the export row. |
+| Cash deposits | `new/n-h-cash-deposits` | **Matches**: the title and line, Cash to deposit with each day (long date, the points, To deposit / Deposited / Difference in red, Record deposit, Explain), Deposits with the line, the recorded line, the amount, Add slip photo and Reverse. Left: Add slip photo is grey (no picker); Verify shows grey for the GM with the server's words, where the web hides it; the export row. |
+| Supplier dues | `new/n-h-supplier-dues` | **Matches** in words and order: the title and line, "Owed to suppliers: ₹2,152.50 · 1 bill", the supplier's card with Statement, Credit note and its total, the bill with its order's reference, dates, Amount, Left, overdue in red, Record payment, Credit note, Reverse. Left, on purpose: the web's table is a card of labelled figures (it scrolled sideways in the picture); the totals are the report's; Statement grey. |
+
+**5 of 5 screens match their pictures** in words, order and grouping, each with the differences
+listed and their reasons; the states the pictures do not show are built from the web's code.
