@@ -6,10 +6,9 @@ import { useRef, useState, type ReactNode } from "react";
 import { KeyboardAvoidingView, Platform, Text, View } from "react-native";
 import { ApiError, HeldError, outcomeUnknown, type Hotel } from "../../core/api";
 import { cash, dateLong } from "../../core/format";
-import { TimeField } from "../../core/DateField";
+import { DateField, TimeField } from "../../core/DateField";
 import { c, face, space, t } from "../../core/theme";
 import { Card, notKnown, Screen, Stopped, useRead, useScreenStop } from "../../core/ui";
-import { Day } from "../housekeeping/DayStepper";
 import {
   allIn, assignReason, byContract, checkInReason, discountIn, gstinProblem, inclusive, MARKET_SEGMENTS, OTHER, PLANS, priceLine, saveReason, summary, TITLES, worthAsking,
   type DiscountMode,
@@ -324,12 +323,10 @@ export function WalkIn({ hotel, role, room: walkRoom, onClose }: { hotel: Hotel;
           action={<Button label="Another room" Icon={Plus} size="sm" reason={WEBSITE} onRefused={(r) => setToast({ title: r, body: "A walk-in is one room on the phone; a group is New booking's, on the website.", tone: "held" })} onPress={() => undefined} />}
         >
           <Field label="Arrival"><Text style={[t.label, t.tab, { color: c.ink900, minHeight: 28 }]}>{dateLong(from)}</Text></Field>
-          <Field
-            label="Departure"
+          <DateField
+            label="Departure" value={to} onChange={setTo} hotel={hotel} min={from}
             hint={dayUse ? `Day use - in and out on ${day(from)}. Type the day's price; it is charged at check-in.` : `${nights} ${nights === 1 ? "night" : "nights"}`}
-          >
-            <Day label="Departure" value={to} min={from} off={false} onChange={setTo} />
-          </Field>
+          />
           <Field label="Booking source" required hint="How it reached us. It cannot be filled in later.">
             <Pick
               value={bookingSourceId} onChange={setSourceId} title="Booking source" placeholder="Choose one…" tall

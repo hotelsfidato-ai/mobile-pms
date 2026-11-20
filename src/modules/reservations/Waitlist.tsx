@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { ActivityIndicator, Linking, Pressable, Text, View } from "react-native";
 import { type Hotel, outcomeUnknown } from "../../core/api";
 import { ExportButtons } from "../../core/Export";
+import { DateField } from "../../core/DateField";
 import { c, face, space, t } from "../../core/theme";
 import { Capsule, Card, notKnown, Screen, useRead, useScreenStop } from "../../core/ui";
 import { dateDay } from "../finance/bill";
@@ -12,7 +13,6 @@ import { Choice } from "../finance/Kit";
 import { body, Box, Button, Empty, Field, PageHead, Pill, Toast, WEBSITE, type Said } from "../front-desk/kit";
 import { Kept, NotRead } from "../front-desk/StayList";
 import { dateTime } from "../guest-services/rules";
-import { Day } from "../housekeeping/DayStepper";
 import { moveArrival } from "./book";
 import { Panel, Said as SaidLine, Sheet } from "./GroupKit";
 import { whyNotUnwaitlist, whyNotWaitlist } from "./groupRoles";
@@ -208,13 +208,10 @@ function AddSheet({ code, today, types, stuck, stuckLine, onClose, onAdded, onUn
       <Field label="Phone">
         <Box label="Phone" value={form.phone} keyboard="phone-pad" tall onChange={set("phone")} />
       </Field>
-      <Field label="Arrival">
-        <Day label="Arrival" value={form.arrival} min={today} off={false}
-          onChange={(v) => { const m = moveArrival(form.arrival, form.departure, v, addDays); setForm((f) => ({ ...f, arrival: m.from, departure: m.to })); }} />
-      </Field>
-      <Field label="Departure">
-        <Day label="Departure" value={form.departure} min={addDays(form.arrival, 1)} off={false} onChange={set("departure")} />
-      </Field>
+      {/* WaitlistDialog's two date inputs: each phone's own picker (M-16), never before today; a stay keeps a night. */}
+      <DateField label="Arrival" value={form.arrival} hotel={{ today, businessDate: today }} min={today}
+        onChange={(v) => { const m = moveArrival(form.arrival, form.departure, v, addDays); setForm((f) => ({ ...f, arrival: m.from, departure: m.to })); }} />
+      <DateField label="Departure" value={form.departure} hotel={{ today, businessDate: today }} min={addDays(form.arrival, 1)} onChange={set("departure")} />
       <Field label="Room type">
         {/* The web's NativeSelect as capsules: no sheet over the sheet. */}
         <Choice label="Room type" value={form.roomTypeId} onPick={set("roomTypeId")} options={types.map((x) => ({ value: x.id, label: x.name }))} />

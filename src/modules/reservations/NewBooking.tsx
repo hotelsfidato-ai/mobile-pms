@@ -5,10 +5,9 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { KeyboardAvoidingView, Platform, Pressable, Text, View } from "react-native";
 import { ApiError, HeldError, type Hotel, outcomeUnknown } from "../../core/api";
 import { cash } from "../../core/format";
-import { TimeField } from "../../core/DateField";
+import { DateField, TimeField } from "../../core/DateField";
 import { c, face, space, t } from "../../core/theme";
 import { Card, notKnown, Screen, Stopped, useRead, useScreenStop, ripple, shade } from "../../core/ui";
-import { Day } from "../housekeeping/DayStepper";
 import {
   allIn, byContract, discountIn, gstinProblem, inclusive, MARKET_SEGMENTS, OTHER, PLANS, priceLine, summary, TITLES, worthAsking,
   type DiscountMode, type Split, type Tariff,
@@ -366,12 +365,9 @@ export function NewBooking({ hotel, role, room: walkRoom, date: walkDate }: { ho
         </Section>
 
         <Section title="Stay" action={<Button label="Another room" Icon={Plus} size="sm" reason={types.length === 0 ? "No room types are set up yet." : null} onPress={addLine} />}>
-          <Field label="Arrival">
-            <Day label="Arrival" value={from} off={false} onChange={(v) => { const m = moveArrival(from, to, v, addDays); setFrom(m.from); setTo(m.to); }} />
-          </Field>
-          <Field label="Departure" hint={departureHint(from, to, nights, day)}>
-            <Day label="Departure" value={to} min={from} off={false} onChange={setTo} />
-          </Field>
+          {/* BookingPage.tsx's two date inputs: each phone's own picker (M-16); a new arrival moves the departure as the web's. */}
+          <DateField label="Arrival" value={from} hotel={hotel} onChange={(v) => { const m = moveArrival(from, to, v, addDays); setFrom(m.from); setTo(m.to); }} />
+          <DateField label="Departure" hint={departureHint(from, to, nights, day)} value={to} hotel={hotel} min={from} onChange={setTo} />
           <Field label="Booking source" required hint="How it reached us. It cannot be filled in later.">
             <Pick
               value={sourceId} onChange={setSourceId} title="Booking source" placeholder="Choose one…" tall

@@ -5,10 +5,10 @@ import {
 import { useRef, useState, type ReactNode } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { HeldError, type Hotel } from "../../core/api";
+import { DateField } from "../../core/DateField";
 import { cash } from "../../core/format";
 import { c, t } from "../../core/theme";
 import { notKnown, useRead, useScreenStop, ripple, shade } from "../../core/ui";
-import { Day } from "../housekeeping/DayStepper";
 import {
   addStayInclusion, amendStay, cancelConfirmed, cancelPreview, cancelWaiting, confirmWaiting, exchangeRooms, moveRoom, readExchangeable, readInclusions,
   inclusionsStop, readReasons, readStayInclusions, removeStayInclusion, said, stayStop, SWAP_UNKNOWN, unassignRoom, voidStay, type DeskStay,
@@ -96,7 +96,7 @@ export function MoreOptions({ hotel, stay, role, onSaid }: { hotel: Hotel; stay:
         </ScrollView>
       </Sheet>
 
-      {act === "amend" ? <Amend code={code} stay={stay} onClose={close} onDone={done} /> : null}
+      {act === "amend" ? <Amend code={code} hotel={hotel} stay={stay} onClose={close} onDone={done} /> : null}
       {act === "move" ? <Move code={code} stay={stay} businessDate={hotel.businessDate} onClose={close} onDone={done} /> : null}
       {act === "swap" ? <Exchange code={code} stay={stay} businessDate={hotel.businessDate} onClose={close} onDone={done} /> : null}
       {act === "inclusions" ? <Inclusions code={code} stay={stay} onClose={close} /> : null}
@@ -145,7 +145,7 @@ const Foot = ({ cancel = "Cancel", onCancel, children }: { cancel?: string; onCa
 );
 
 /* ── Change dates or guests (AmendStayFlow.tsx) ──────────────────── */
-function Amend({ code, stay, onClose, onDone }: { code: string; stay: DeskStay; onClose: () => void; onDone: (s: Said) => void }) {
+function Amend({ code, hotel, stay, onClose, onDone }: { code: string; hotel: Hotel; stay: DeskStay; onClose: () => void; onDone: (s: Said) => void }) {
   const [checkIn, setCheckIn] = useState(stay.arrival);
   const [checkOut, setCheckOut] = useState(stay.departure);
   const [adults, setAdults] = useState(String(stay.adults));
@@ -178,8 +178,9 @@ function Amend({ code, stay, onClose, onDone }: { code: string; stay: DeskStay; 
       description={was === 0 ? `Day use, ${day(stay.arrival)}.` : `${was} ${was === 1 ? "night" : "nights"}, ${day(stay.arrival)} to ${day(stay.departure)}.`}
       foot={<Foot onCancel={onClose}><Button label="Save" kind="primary" size="lg" busy={busy} reason={!changed || wrong !== null || nights < 0 || (nights === 0) !== (was === 0) ? "" : null} onPress={() => void submit()} /></Foot>}
     >
-      <Field label="Arrival" hint={arrived ? "They have already arrived." : null}><Day label="Arrival" value={checkIn} off={arrived} onChange={setCheckIn} /></Field>
-      <Field label="Departure"><Day label="Departure" value={checkOut} min={checkIn} off={false} onChange={setCheckOut} /></Field>
+      {/* AmendStayFlow's two date inputs: each phone's own picker (M-16); Departure from Arrival on. */}
+      <DateField label="Arrival" hint={arrived ? "They have already arrived." : undefined} value={checkIn} onChange={setCheckIn} hotel={hotel} disabled={arrived || busy} />
+      <DateField label="Departure" value={checkOut} onChange={setCheckOut} hotel={hotel} min={checkIn} disabled={busy} />
       <View style={{ flexDirection: "row", gap: 12 }}>
         <View style={{ flex: 1 }}><Field label="Adults"><Box value={adults} label="Adults" keyboard="number-pad" tall onChange={setAdults} /></Field></View>
         <View style={{ flex: 1 }}><Field label="Children"><Box value={children} label="Children" keyboard="number-pad" tall onChange={setChildren} /></Field></View>
@@ -235,9 +236,9 @@ function Move({ code, stay, businessDate, onClose, onDone }: { code: string; sta
       foot={<Foot onCancel={onClose}><Button label="Move" kind="primary" size="lg" busy={busy} reason={room.trim() ? null : ""} onPress={() => void submit()} /></Foot>}
     >
       <Field label="To which room" required><Box value={room} label="To which room" placeholder="305" tall onChange={setRoom} /></Field>
-      <Field label="From which night" hint={`The first night in the new room. Up to ${lastMovable} - the night of departure belongs to nobody.`}>
-        <Day label="From which night" value={from} min={stay.arrival} off={false} onChange={(v) => setFrom(v > lastMovable ? lastMovable : v)} />
-      </Field>
+      <DateField label="From which night" hint={`The first night in the new room. Up to ${lastMovable} - the night of departure belongs to nobody.`}
+        value={from} hotel={{ businessDate }} min={stay.arrival} max={lastMovable} disabled={busy}
+        onChange={(v) => setFrom(v > lastMovable ? lastMovable : v)} />
       <Field label="Why" hint={chosen.hint}><Pick value={reason} onChange={setReason} title="Why" tall options={MOVE_REASONS.map((r) => ({ value: r.value, label: r.label }))} /></Field>
       <Field label="New rate per night" hint="Optional. Leave empty and nothing about the money changes.">
         <Box value={rate} label="New rate per night" placeholder={String(stay.offeredTariff)} keyboard="decimal-pad" tall onChange={setRate} />
@@ -313,9 +314,9 @@ function Exchange({ code, stay, businessDate, onClose, onDone }: { code: string;
               ))}
             </ScrollView>
           </View>
-          <Field label="From which night" required hint="Nights already slept stay in the room they were slept in.">
-            <Day label="From which night" value={from} min={stay.arrival} off={false} onChange={(v) => setFrom(v > stay.departure ? stay.departure : v)} />
-          </Field>
+          <DateField label="From which night" required hint="Nights already slept stay in the room they were slept in."
+            value={from} hotel={{ businessDate }} min={stay.arrival} max={stay.departure} disabled={busy}
+            onChange={(v) => setFrom(v > stay.departure ? stay.departure : v)} />
           <Field label="Why" required hint="Two guests changed rooms - somebody will ask.">
             <Box value={reason} label="Why" placeholder="Couple wanted the quiet side" onChange={setReason} />
           </Field>
