@@ -415,8 +415,15 @@ export interface BankDetails {
 
 /* ── Backfill's three forms (BackfillPage.tsx StayDialog, BillDialog, CashDialog) ── */
 
-/** BackfillPage `typed`: blank is "not typed" (null, a dash), never zero; anything else as the web sends it. */
-export const typedFig = (v: string) => (v.trim() === "" ? null : Number(v));
+/** BackfillPage `typed`: blank is "not typed" (null, a dash), never zero; a figure as a number. Text that is
+    not a figure ("4,500") is sent as typed, so the server refuses it in its own words - never Number()'s
+    NaN, which JSON sends as null and saves as a dash without a word (backfill.ts 73). */
+export const typedFig = (v: string): number | string | null => {
+  const t = v.trim();
+  if (t === "") return null;
+  const n = Number(t);
+  return Number.isFinite(n) ? n : t;
+};
 /** BackfillPage `shown`: a figure back into its box; nothing typed is blank. */
 export const shownFig = (v: number | null | undefined) => (v === null || v === undefined ? "" : String(v));
 /** The day before (`addDays(firstDay, -1)`): the last day a bill, a cash line or an arrival may be. */

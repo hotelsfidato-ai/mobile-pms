@@ -97,7 +97,7 @@ export function PropOldData({ hotel, role }: AdminProps) {
     going.current = true;
     setBusy(save ? "save" : "check");
     setProblem(null);
-    const body = { name: f.name, data: f.data, system: systemName.trim(), columns: cols, choices, sendVouchers };
+    const body = { name: f.name, data: f.data, system: systemName.trim(), columns: cols, choices, sendVouchers: sendVouchers && !!q.data?.voucherOn };
     try {
       if (save) {
         const out = await stop.guard(() => bringIn(code, kind, body));
@@ -115,9 +115,12 @@ export function PropOldData({ hotel, role }: AdminProps) {
       if (out.reason) setProblem(out.reason);
     } catch (e) {
       const said = e instanceof Error ? e.message : String(e);
-      if (save && outcomeUnknown(e)) setProblem(notKnown("brought in", "Brought in here below", e).body);
+      /* Not known: once a fresh read lets the page go, the old check must not bring it in again - a new check first. */
+      if (save && outcomeUnknown(e)) { setProblem(notKnown("brought in", "Brought in here below", e).body); setStale(true); }
       /* Refused at the save: nothing was saved. The web shows the rows the server sent; here, check again. */
       else if (save) { setProblem(said); setStale(true); }
+      /* A check saves nothing: with nothing back, say so plainly (not send()'s sentence for a write). */
+      else if (outcomeUnknown(e)) { setProblem("Could not reach the server, so the file was not checked. Nothing was saved. Try again when the connection is back."); setCheck(null); }
       else { setProblem(said); setCheck(null); }
     } finally {
       going.current = false;

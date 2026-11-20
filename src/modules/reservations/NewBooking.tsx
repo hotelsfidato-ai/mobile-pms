@@ -366,8 +366,8 @@ export function NewBooking({ hotel, role, room: walkRoom, date: walkDate }: { ho
 
         <Section title="Stay" action={<Button label="Another room" Icon={Plus} size="sm" reason={types.length === 0 ? "No room types are set up yet." : null} onPress={addLine} />}>
           {/* BookingPage.tsx's two date inputs: each phone's own picker (M-16); a new arrival moves the departure as the web's. */}
-          <DateField label="Arrival" value={from} hotel={hotel} onChange={(v) => { const m = moveArrival(from, to, v, addDays); setFrom(m.from); setTo(m.to); }} />
-          <DateField label="Departure" hint={departureHint(from, to, nights, day)} value={to} hotel={hotel} min={from} onChange={setTo} />
+          <DateField label="Arrival" value={from} hotel={hotel} disabled={saving} onChange={(v) => { const m = moveArrival(from, to, v, addDays); setFrom(m.from); setTo(m.to); }} />
+          <DateField label="Departure" hint={departureHint(from, to, nights, day)} value={to} hotel={hotel} min={from} disabled={saving} onChange={setTo} />
           <Field label="Booking source" required hint="How it reached us. It cannot be filled in later.">
             <Pick
               value={sourceId} onChange={setSourceId} title="Booking source" placeholder="Choose one…" tall

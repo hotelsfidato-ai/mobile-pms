@@ -208,10 +208,10 @@ function AddSheet({ code, today, types, stuck, stuckLine, onClose, onAdded, onUn
       <Field label="Phone">
         <Box label="Phone" value={form.phone} keyboard="phone-pad" tall onChange={set("phone")} />
       </Field>
-      {/* WaitlistDialog's two date inputs: each phone's own picker (M-16), never before today; a stay keeps a night. */}
-      <DateField label="Arrival" value={form.arrival} hotel={{ today, businessDate: today }} min={today}
+      {/* WaitlistDialog's two date inputs: each phone's own picker (M-16); no minimum on Arrival, Departure from it (the web's). */}
+      <DateField label="Arrival" value={form.arrival} hotel={{ today, businessDate: today }}
         onChange={(v) => { const m = moveArrival(form.arrival, form.departure, v, addDays); setForm((f) => ({ ...f, arrival: m.from, departure: m.to })); }} />
-      <DateField label="Departure" value={form.departure} hotel={{ today, businessDate: today }} min={addDays(form.arrival, 1)} onChange={set("departure")} />
+      <DateField label="Departure" value={form.departure} hotel={{ today, businessDate: today }} min={form.arrival} onChange={set("departure")} />
       <Field label="Room type">
         {/* The web's NativeSelect as capsules: no sheet over the sheet. */}
         <Choice label="Room type" value={form.roomTypeId} onPick={set("roomTypeId")} options={types.map((x) => ({ value: x.id, label: x.name }))} />

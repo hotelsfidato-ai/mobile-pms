@@ -166,5 +166,5 @@ Lane m16-pick-front (M-16; PICKERS 3.12, 3.13 and the optional steppers). Nothin
 
 - **View voucher** on the Booked card (`NewBooking.tsx:800`): `viewVoucher(code, stayId, reference)` in `data.ts` → GET `/stays/:id/voucher.pdf` (`reservation` create) through the core's `downloadToShare`; one at a time; "No voucher" with the server's or the web's offline sentence. A read: safe to tap again.
 - **Expected check-in / check-out** (`NewBooking.tsx:452, 454`): `TimeField`, clearable.
-- **Arrival, Departure** (`NewBooking.tsx:369-370`, `Waitlist.tsx:212, 214`): `DateField`; a new arrival moves the departure as before (`moveArrival`); the waitlist never before today.
+- **Arrival, Departure** (`NewBooking.tsx:369-370`, `Waitlist.tsx:212, 214`): `DateField`; a new arrival moves the departure as before (`moveArrival`); the waitlist as the web (no minimum on Arrival, Departure from it; the review of 20 Nov).
 - `Returning` is exported from NewBooking.tsx for Backfill's Add a stay (admin).

@@ -324,7 +324,7 @@ export function WalkIn({ hotel, role, room: walkRoom, onClose }: { hotel: Hotel;
         >
           <Field label="Arrival"><Text style={[t.label, t.tab, { color: c.ink900, minHeight: 28 }]}>{dateLong(from)}</Text></Field>
           <DateField
-            label="Departure" value={to} onChange={setTo} hotel={hotel} min={from}
+            label="Departure" value={to} onChange={setTo} hotel={hotel} min={from} disabled={saving}
             hint={dayUse ? `Day use - in and out on ${day(from)}. Type the day's price; it is charged at check-in.` : `${nights} ${nights === 1 ? "night" : "nights"}`}
           />
           <Field label="Booking source" required hint="How it reached us. It cannot be filled in later.">

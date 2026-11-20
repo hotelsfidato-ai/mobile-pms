@@ -68,3 +68,7 @@ would accept it.
 ### MADM-K1 · Backfill's stop lived in the screen's state (fixed)
 
 What happened: Remove's unknown-outcome stop was `useStop(seenAt)`, React state of the Backfill screen: leaving the screen and coming back dropped it (MEMORY 22). With Add (a repeat makes a second line, and a stay's bill email goes twice) the gap mattered more. How found: wiring Add and Correct. Done: the three writes share the core's `useScreenStop("admin/<code>/backfill")`, its read wrapped by `watch`, so only a read begun after the loss lets it go. The rule: every new write on an old screen moves that screen's stop to the core's book first.
+
+### MADM-K2 · "4,500" saved a backfill figure as a dash, silently (fixed)
+
+What happened: `typedFig` used Number(v): "4,500" or "₹500" became NaN, JSON sent null, and the server saved the line with a dash and no word (backfill.ts 73). How found: the independent review of 42ac810. Done: the money boxes keep only digits and one point as typed (inventory/rates.ts `typedPrice`, as Settings › Money), and `typedFig` sends text that is not a figure as typed, so the server refuses it in its own words; checked. The rule: never Number() a typed figure without saying what NaN becomes.

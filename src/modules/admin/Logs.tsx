@@ -25,9 +25,8 @@ import type { AdminProps } from "./Route";
      guest's details read "changed" (the server never sends them). "Across
      the group" for the owner and an Admin.
    Both read only. At phone width each entry is a card of the web's
-   columns, labelled, in its order (the pictures). The dates are typed as
-   the API takes them (YYYY-MM-DD): the web's date box needs a date picker
-   package on a phone (MODULE.md, 6).
+   columns, labelled, in its order (the pictures). From and To are each
+   phone's own date picker (M-16), sent as the API takes them (YYYY-MM-DD).
    ══════════════════════════════════════════════════════════════════ */
 
 const AUDIT_TONE: Record<string, Tone> = { charge: "info", payment: "success", reversal: "danger" };

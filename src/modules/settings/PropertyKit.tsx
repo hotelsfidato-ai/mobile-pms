@@ -6,6 +6,7 @@ import { ON_THE_WEBSITE, can, mayReach, phoneRoute, type Role } from "../../core
 import { c, face, space, t } from "../../core/theme";
 import { outcomeUnknown } from "../../core/api";
 import { Head, Screen, Stopped, notKnown, ripple, shade, useRead, useScreenStop } from "../../core/ui";
+import { File } from "expo-file-system";
 import type { FileRule, Picked } from "../../core/files";
 import { explainPick } from "../../core/pickers";
 import { base64For } from "../../core/upload";
@@ -114,7 +115,10 @@ export function CardHead({ title, line, info, action }: { title: string; line?: 
 /** A file or a photo chosen with the phone's own picker (M-16; core pickers.ts), checked against the web's or
     the server's own limits BEFORE anything is sent (files.ts), and read as base64 for a JSON route's `data`
     (the web's FileReader). Null: cancelled, or refused - said here (`refused(name)` is the toast's title;
-    a camera refused by the phone says so in its own dialog, with Settings). One picker at a time (`open`). */
+    a camera refused by the phone says so in its own dialog, with Settings). One picker at a time (`open`).
+    DPDP: the pickers copy the file into this app's cache (an old system's file holds guests' ID numbers,
+    birth dates and phones); the copy is deleted as soon as it is read, kept or refused. The page keeps
+    only the base64 in memory (for Check again), gone with the page. */
 export function usePickData(say: (s: Said) => void) {
   const open = useRef(false);
   const [picking, setPicking] = useState(false);
@@ -127,6 +131,7 @@ export function usePickData(say: (s: Said) => void) {
       try { picked = await choose(); } catch (e) { if (!explainPick(e)) say(saidOf(e, "Nothing chosen")); return null; }
       if (!picked) return null;
       const read = await base64For(picked, rule);
+      try { new File(picked.uri).delete(); } catch { /* already gone, or not ours to delete */ }
       if (!read.ok) { say({ title: refused(picked.name), body: read.reason, tone: "bad" }); return null; }
       return { picked, data: read.data };
     } finally {

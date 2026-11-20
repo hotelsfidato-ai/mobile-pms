@@ -182,3 +182,11 @@ sends with the session is kept as current as the frame's read, never only from s
 ### MSET-K1 · "Choosing a file … not installed" stayed after the packages were (fixed)
 
 What happened: after M-16 installed the three pickers, the logos, Add photos, Bring in old data, Remind me and a tax band's dates still said the packages were not installed. How found: docs/PICKERS.md lane 3. Done: each is on the phone's own picker now (MODULE.md "m16 pickers"); `NeedsFile` is gone. The rule: when a package arrives, search the module for its name and the sentence that waited for it.
+
+### MSET-K2 · A picked file's copy stayed in the app's cache (fixed)
+
+What happened: the document picker copies the chosen file into the app's cache; an old system's file holds guests' full ID numbers, birth dates and phones (the server keeps only an ID's last four), and the copy stayed on the phone after the import, an undo, even sign-out. Logos and gallery photos the same. How found: the independent review of 42ac810 (DPDP). Done: `usePickData` deletes the copy as soon as it is read (kept or refused); the page holds only the base64 in memory for Check again. The rule: a file picked on the phone is read once and its copy deleted at once.
+
+### MSET-K3 · After an unknown Bring in, the old check could bring it in again (fixed)
+
+What happened: once a fresh read let the page's stop go, "Bring in N rows" was live on the old check, and the route reads no key: a second tap would import everything twice. A failed check offline also said send()'s sentence for a write. How found: the independent review. Done: an unknown outcome marks the check stale (a new Check first); a check with nothing back says plainly that nothing was checked or saved; the voucher switch sends what it shows (`sendVouchers && voucherOn`). The rule: after an unknown outcome, the form that sent it must be rebuilt from the server, never re-sent as it was.

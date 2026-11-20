@@ -5,6 +5,7 @@ import { DateField } from "../../core/DateField";
 import { c, face, t } from "../../core/theme";
 import { keys, notKnown, type useScreenStop } from "../../core/ui";
 import { ID_TYPES } from "../front-desk/guestId";
+import { typedPrice } from "../inventory/rates";
 import { Returning } from "../reservations/NewBooking";
 import { addBackfill, correctBackfill } from "./data";
 import { Btn, Choose, Field, Segmented, Sheet, body, type Said } from "./kit";
@@ -103,7 +104,8 @@ function useSave({ w, onSaid, onClose }: Pick<Props, "w" | "onSaid" | "onClose">
 
 /** Money: blank is "not recorded (a dash)", never 0. */
 function Money({ label, value, set, hint }: { label: string; value: string; set: (v: string) => void; hint?: string }) {
-  return <Field label={label} value={value} onChangeText={set} input={keys.amount} hint={hint ?? "Blank: not recorded (a dash)."} />;
+  /* Settings › Money's filter (inventory/rates.ts typedPrice): digits and one point, paise at most - no "4,500" or "₹". */
+  return <Field label={label} value={value} onChangeText={(x) => set(typedPrice(x))} input={keys.amount} hint={hint ?? "Blank: not recorded (a dash)."} />;
 }
 /** The hotel's payment methods; "Not recorded" for none. */
 function Method({ v, value, set, label = "Paid by" }: { v: BackfillView; value: string; set: (m: string) => void; label?: string }) {

@@ -127,6 +127,7 @@ eq(trailWords({ changeReason: "typo", changedBy: "A", removedReason: "twice", re
 Date.parse = realParse;
 /* Backfill's forms: blank is null (a dash), never 0; paise kept; the web's own bodies. */
 eq([typedFig(""), typedFig("  "), typedFig("0"), typedFig("1250.50")], [null, null, 0, 1250.5], "blank is not typed; zero is a figure; paise kept");
+eq([typedFig("4,500"), typedFig("₹500"), typedFig(" 12abc ")], ["4,500", "₹500", "12abc"], "not a figure: sent as typed for the server's own refusal, never NaN (null, a silent dash)");
 eq([shownFig(null), shownFig(0), shownFig(7.25)], ["", "0", "7.25"], "a figure back into its box");
 eq([dayBeforeFirst("2026-03-01"), dayBeforeFirst("2026-01-01")], ["2026-02-28", "2025-12-31"], "the last day before the first, across a month and a year");
 const rooms = { rooms: [{ id: "r1", number: "101" }] };
