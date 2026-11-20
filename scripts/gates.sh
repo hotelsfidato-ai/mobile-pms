@@ -10,10 +10,11 @@
 # ("dirty" when the copy had uncommitted changes). Logs sit beside it.
 # The first phone bundle after a while takes about 3 minutes on this PC.
 cd "$(dirname "$0")/.." || exit 9
-# Each copy its own Metro cache (MEMORY 4): the copies share node_modules,
+# Each copy its own Metro cache (MEMORY 4, 19): the copies share node_modules,
 # and through one shared cache a copy's export carried another copy's routes.
+# Windows reads TEMP/TMP, Linux and macOS TMPDIR: all three are set.
 T="$(cd .. && { pwd -W 2>/dev/null || pwd; })/.local/metro-tmp"
-mkdir -p "$T" && export TEMP="$T" TMP="$T"
+mkdir -p "$T" && export TEMP="$T" TMP="$T" TMPDIR="$T"
 S="../.local/mobile-gates"
 mkdir -p "$S"
 P="$S/progress.txt"
