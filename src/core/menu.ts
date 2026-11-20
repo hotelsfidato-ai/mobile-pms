@@ -963,6 +963,12 @@ export const PHONE_ROUTES: Readonly<Record<string, string>> = {
   "/h/:code/equipment": "/equipment/:code",
   "/h/:code/minibar": "/housekeeping/:code/minibar",
   "/h/:code/checklists": "/housekeeping/:code/checklists",
+  /* mobile/m13-fin-desk (19 Nov): the drawer, company accounts, cash deposits, Form III, supplier dues. */
+  "/h/:code/cashiering": "/finance/:code/cashiering",
+  "/h/:code/city-ledger": "/finance/:code/city-ledger",
+  "/h/:code/cash-deposits": "/finance/:code/cash-deposits",
+  "/h/:code/form-c": "/finance/:code/form-c",
+  "/h/:code/supplier-dues": "/finance/:code/supplier-dues",
   /* mobile/m13-rooms (19 Nov): Rooms, the house as tiles for today. */
   "/h/:code/stay": "/front-desk/:code/rooms",
   /* mobile/m13-till (19 Nov): the Till and the Terminal, each its own twin. */
