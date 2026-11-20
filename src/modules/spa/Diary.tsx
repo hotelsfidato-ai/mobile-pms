@@ -1,14 +1,14 @@
 import { router } from "expo-router";
 import { CalendarDays, Plus, Settings2 } from "lucide-react-native";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Text, View } from "react-native";
 import type { Hotel } from "../../core/api";
 import { c, face, space, t } from "../../core/theme";
-import { Head, Screen, useRead } from "../../core/ui";
+import { Head, Screen, Stopped, useRead, useScreenStop } from "../../core/ui";
 import { Btn, body, Empty, Loading, NotYours, Stale, Toast, type Said } from "../guest-services/kit";
 import { LoadFailed, StatePill } from "../laundry/kit";
 import { Book, Cancel, Charge } from "./Acts";
-import { isRefused, readDiary } from "./data";
+import { BOOK_UNKNOWN, dayStop, isRefused, readDiary } from "./data";
 import {
   actsOf, bandWords, clockTime, countLine, rupees, SETTLEMENT, shiftDay, UNPRICED_LINE,
   type SpaAppointment, type SpaDiaryTherapist,
@@ -44,9 +44,13 @@ export function Diary({ hotel, role }: { hotel: Hotel; role: string | null }) {
   const [charging, setCharging] = useState<SpaAppointment | null>(null);
   const [said, setSaid] = useState<Said | null>(null);
 
-  const q = useRead(() => (refusedRead ? Promise.resolve(null) : readDiary(code, day)), ["spa", code, "diary", day ?? ""]);
+  /* The day on show (the first read opens on the property's business date): its stop (MSPA-U1). */
+  const shown = useRef("");
+  const stop = useScreenStop(dayStop(code, day ?? shown.current));
+  const q = useRead(stop.watch(() => (refusedRead ? Promise.resolve(null) : readDiary(code, day))), ["spa", code, "diary", day ?? ""]);
   const off = isRefused(q.data) ? q.data.refused : null;
   const d = q.data && !isRefused(q.data) ? q.data : null;
+  if (d && day === null) shown.current = d.from;
   const done = (s: Said) => { setBooking(false); setCancelling(null); setCharging(null); setSaid(s); };
 
   /* The read refused (the spa switched off, or the role): the server's one
@@ -68,10 +72,11 @@ export function Diary({ hotel, role }: { hotel: Hotel; role: string | null }) {
         <View style={{ gap: 4, marginTop: -4 }}>
           <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
             <Btn label="Treatments and therapists" icon={Settings2} disabled={setUp != null} onPress={() => router.push(`/spa/${code}/setup`)} />
-            <Btn label="Book a treatment" variant="primary" icon={Plus} disabled={mayBook != null || !d} onPress={() => setBooking(true)} />
+            <Btn label="Book a treatment" variant="primary" icon={Plus} disabled={mayBook != null || !d || stop.stuck} onPress={() => { if (!stop.isStuck()) setBooking(true); }} />
           </View>
           {setUp ? <Text style={[t.caption, { color: c.grey600 }]}>Treatments and therapists: {setUp}</Text> : null}
           {mayBook ? <Text style={[t.caption, { color: c.grey600 }]}>{mayBook}</Text> : null}
+          {stop.stuck ? <Stopped line={BOOK_UNKNOWN} onRead={q.reload} /> : null}
         </View>
         {/* The web's DIARY_EXPORT, the day shown; the spa's own export right. */}
         <ListExport screen="spa-diary" role={role} table={d ? {
@@ -127,7 +132,7 @@ export function Diary({ hotel, role }: { hotel: Hotel; role: string | null }) {
         )}
       </Screen>
 
-      {booking && d ? <Book code={code} day={d.from} onClose={() => setBooking(false)} onDone={done} /> : null}
+      {booking && d ? <Book code={code} day={d.from} onClose={() => { setBooking(false); if (stop.isStuck()) q.reload(); }} onDone={done} /> : null}
       {cancelling ? <Cancel code={code} appointment={cancelling} onClose={() => setCancelling(null)} onDone={done} /> : null}
       {charging ? <Charge code={code} appointment={charging} onClose={() => setCharging(null)} onDone={done} /> : null}
       <Toast said={said} onClose={() => setSaid(null)} />

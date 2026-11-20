@@ -4,9 +4,9 @@ import { Clock } from "lucide-react-native";
 import { useRef, useState } from "react";
 import { Text } from "react-native";
 import { c, face, t } from "../../core/theme";
-import { useRead } from "../../core/ui";
+import { useRead, useScreenStop } from "../../core/ui";
 import { Btn, body, Dialog, Field, Foot, InDialog, Input, Loading, Select, saidOf, type Said } from "../guest-services/kit";
-import { book, cancel, charge, isRefused, readStays, readTherapists, readTreatments } from "./data";
+import { book, cancel, charge, dayStop, isRefused, readStays, readTherapists, readTreatments } from "./data";
 import { bookBody, chargedWords, clockDate, rupees, stayWords, timeWords, treatmentWords, whatAndWhen, type SpaAppointment } from "./diary";
 
 /* ══════════════════════════════════════════════════════════════════
@@ -35,6 +35,10 @@ export function Book({ code, day, onClose, onDone }: { code: string; day: string
   const latch = useRef(false);
   const stuck = useRef(false);
   const [said, setSaid] = useState<Said | null>(null);
+  /* POST /spa/appointments reads no key. An identical repeat meets the therapist's clash and is
+     refused, but a reopened, empty form invites a second booking at another time: the stop is the
+     diary day's, outside this dialog (MSPA-U1). */
+  const stop = useScreenStop(dayStop(code, day));
 
   const stays = useRead(() => readStays(code), ["spa", code, "stays"]);
   const treatments = useRead(() => readTreatments(code), ["spa", code, "treatments"]);
@@ -46,14 +50,14 @@ export function Book({ code, day, onClose, onDone }: { code: string; day: string
   const chosen = onOffer.find((x) => x.id === treatmentId);
 
   async function submit() {
-    if (latch.current) return;
+    if (latch.current || stop.isStuck()) return;
     setSaid(null);
     const out = bookBody(day, { stayId, treatmentId, therapistId, time });
     if ("problem" in out) { setSaid({ title: out.problem, tone: "bad" }); return; }
     latch.current = true;
     setBusy(true);
     try {
-      await book(code, out.body);
+      await stop.guard(() => book(code, out.body));
       void cache.invalidateQueries({ queryKey: ["spa", code] });
       onDone({ title: "The treatment is in the diary.", tone: "ok" });
     } catch (e) {
@@ -75,7 +79,7 @@ export function Book({ code, day, onClose, onDone }: { code: string; day: string
       : isRefused(q.data) ? <Text style={[body, { color: c.red700 }]} accessibilityRole="alert">{q.data.refused}</Text> : null;
 
   return (
-    <Dialog title="Book a treatment" onClose={onClose}>
+    <Dialog title="Book a treatment" onClose={onClose} locked={busy}>
       <Text style={[body, { color: c.grey500 }]}>On {clockDate(day)}, at this property's own clock.</Text>
 
       {stays.data?.length === 0 ? (
@@ -128,8 +132,8 @@ export function Book({ code, day, onClose, onDone }: { code: string; day: string
 
       <InDialog said={said} />
       <Foot>
-        <Btn label="Cancel" tall grow onPress={onClose} />
-        <Btn label={busy ? "Booking…" : "Book it"} variant="primary" tall grow disabled={busy} onPress={() => void submit()} />
+        <Btn label="Cancel" tall grow disabled={busy} onPress={onClose} />
+        <Btn label={busy ? "Booking…" : "Book it"} variant="primary" tall grow disabled={busy || stuck.current || stop.stuck} onPress={() => void submit()} />
       </Foot>
     </Dialog>
   );
