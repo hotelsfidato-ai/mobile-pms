@@ -4,12 +4,11 @@ import { useRef, useState } from "react";
 import { Text, View } from "react-native";
 import type { Hotel } from "../../core/api";
 import { c, space, t } from "../../core/theme";
-import { Head, notKnown, Screen, useRead, useStuck } from "../../core/ui";
+import { Head, notKnown, Screen, Stopped, useRead, useScreenStop } from "../../core/ui";
 import { actOnRequest, listRequests, raiseRequest } from "./data";
 import {
   Back, Box, Btn, body, Dialog, Empty, Failed, Field, Foot, IconChip, InDialog, Input, Loading, NotYours, Pill,
-  Segmented, Select, Stale, Toast, roomChoices, saidOf, usePoll, type Said,
-} from "./kit";
+  Segmented, Select, Stale, Toast, roomChoices, saidOf, usePoll, type Said, gsStop } from "./kit";
 import { TEAMS, whyNotRequests, type Team } from "./roles";
 import { ListExport } from "../reports/ListExport";
 import { requestTable } from "./exports";
@@ -40,7 +39,11 @@ export function Requests({ hotel, role, onBack }: { hotel: Hotel; role: string |
   const [busy, setBusy] = useState<string | null>(null);
   const [pulled, setPulled] = useState(false);
 
-  const list = useRead(() => (refused ? Promise.resolve(null) : listRequests(code, view)), ["guest-services", code, "requests", view]);
+  /* A new one whose outcome is unknown (MGS-U1): kept by the list, not the dialog; let go by a read of
+     the "open" view begun after it. */
+  const stop = useScreenStop(gsStop(code, "requests"));
+  const readIt = () => (refused ? Promise.resolve(null) : listRequests(code, view));
+  const list = useRead(view === "open" ? stop.watch(readIt) : readIt, ["guest-services", code, "requests", view]);
   usePoll(["guest-services", code, "requests"]);
   const refresh = () => void cache.invalidateQueries({ queryKey: ["guest-services", code, "requests"] });
 
@@ -64,8 +67,9 @@ export function Requests({ hotel, role, onBack }: { hotel: Hotel; role: string |
       <Screen refreshing={pulled && list.loading} onRefresh={() => { setPulled(true); list.reload(); }}>
         <Head title="Guest requests" under="What guests in house have asked for, and who is doing it." action={<Back onPress={onBack} />} />
         <View style={{ flexDirection: "row", marginTop: -4, marginBottom: 8 }}>
-          <Btn label="New request" variant="primary" icon={Plus} disabled={refused != null} onPress={() => setRaising(true)} />
+          <Btn label="New request" variant="primary" icon={Plus} disabled={refused != null || stop.stuck} onPress={() => { if (!stop.isStuck()) setRaising(true); }} />
         </View>
+        {stop.stuck ? <Stopped line={notKnown("raised", "the open requests").line} onRead={() => { setView("open"); list.reload(); }} /> : null}
         {refused ? null : (
           <ListExport screen="requests" role={role}
             table={list.data ? requestTable(shown, `${view === "open" ? "open" : "done, last 24 h"}${team !== "all" ? ` · ${TEAM_LABEL[team]}` : ""}`) : null} />
@@ -166,19 +170,22 @@ function RaiseDialog({ code, rooms, onClose, onDone }: {
      the tap, and after an unknown outcome no more taps until this is closed
      and the open requests read again (MGS-3). */
   const latch = useRef(false);
-  const once = useStuck();
+  const [dead, setDead] = useState(false);
+  const once = useScreenStop(gsStop(code, "requests"));
 
   async function save() {
-    if (latch.current || once.isStuck()) return;
+    if (latch.current || dead || once.isStuck()) return;
     latch.current = true;
     setBusy(true);
     setSaid(null);
     try {
-      await raiseRequest(code, { reservationId, team, what, when });
+      await once.guard(() => raiseRequest(code, { reservationId, team, what, when }));
       onClose();
       onDone(`${TEAM_LABEL[team]}: ${what.trim()}`);
     } catch (e) {
-      setSaid(once.stop(e) ? { ...notKnown("raised", "the open requests once this is closed", e), tone: "bad" } : saidOf("Not raised", e));
+      const unknown = once.stop(e);
+      if (unknown) setDead(true);
+      setSaid(unknown ? { ...notKnown("raised", "the open requests once this is closed", e), tone: "bad" } : saidOf("Not raised", e));
       setBusy(false);
     } finally {
       latch.current = false;
@@ -186,7 +193,7 @@ function RaiseDialog({ code, rooms, onClose, onDone }: {
   }
 
   return (
-    <Dialog title="New request" description="For a guest in house now." onClose={onClose}>
+    <Dialog title="New request" description="For a guest in house now." onClose={onClose} locked={busy}>
       {rooms.length === 0 ? (
         <Text style={body}>Nobody is checked in, so there is nobody to raise a request for.</Text>
       ) : (
@@ -206,8 +213,8 @@ function RaiseDialog({ code, rooms, onClose, onDone }: {
           </Field>
           <InDialog said={said} />
           <Foot>
-            <Btn label="Cancel" tall grow onPress={onClose} />
-            <Btn label="Raise it" variant="primary" tall grow disabled={busy || once.stuck || !reservationId || !what.trim()} onPress={() => void save()} />
+            <Btn label="Cancel" tall grow disabled={busy} onPress={onClose} />
+            <Btn label="Raise it" variant="primary" tall grow disabled={busy || dead || once.stuck || !reservationId || !what.trim()} onPress={() => void save()} />
           </Foot>
         </>
       )}

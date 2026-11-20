@@ -57,6 +57,10 @@ const SAID = {
 };
 
 /** The floating line the web's toast is; goes by itself, or tapped. */
+/** The name of a guest-services list's stop (core useScreenStop, MGS-U1): a request, a call or an item whose
+    outcome is unknown greys its New button until a read of the list's first view begun after it is back. */
+export const gsStop = (code: string, list: "requests" | "wake-up-calls" | "lost-property") => `guest-services/${code}/${list}`;
+
 export function Toast({ said, onClose }: { said: Said | null; onClose: () => void }) {
   useEffect(() => {
     if (!said) return;
