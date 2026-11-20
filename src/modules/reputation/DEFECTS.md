@@ -38,3 +38,9 @@ is a 4xx; a 5xx tells the phone it may have happened.
 ## Fixed
 
 None yet.
+
+---
+
+## Lane F — Guest feedback (mobile/m13-sales, 19 Nov)
+
+No defect found. Guest feedback reads only.

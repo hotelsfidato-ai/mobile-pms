@@ -123,3 +123,32 @@ the read refused, a role that may not ask, an outcome not known.
 ## Every act of the web, and where it is
 
 Built: the read, Save the link, Clear it, Ask by WhatsApp, Ask by email. **Left out: none.**
+
+---
+
+## Lane F — Guest feedback (M-13, mobile/m13-sales, 19 Nov)
+
+**Web twin:** `src/modules/reputation/pages/Feedback.tsx`, `data/feedback.ts`, `nav.ts` ("Guest
+feedback" at `/h/:code/feedback`, Guests & CRM, order 45, `canSee` FEEDBACK_ROLES); the API
+`api/src/modules/reputation/feedback.ts` (GET `/:code/feedback`), its own list `feedbackRoles.ts`
+(the owner, an administrator, the GM; 403 "Guest feedback is for the owner, an administrator or the
+general manager."); new in the 16 Nov release (D27-383 item 10, D27-396). **Read only**: the survey
+is answered on the guest's own page; nothing here writes.
+
+| Screen | Route → file | Picture | Reads (key) |
+|---|---|---|---|
+| Guest feedback | `app/reputation/[code]/feedback.tsx` → `Feedback.tsx` | **none** (the pictures of 31 Oct are older than the page) | `["reputation", code, "feedback"]` |
+
+Rules and words: `feedback.ts` (`feedback.check.ts`, broken once: a part nobody scored read as 0.0
+fails it); call: `feedbackData.ts`. In the web's order: the card when the hotel is not asking
+("Feedback survey" off), Scores by month (a card per month: ANSWERS, OVERALL, ROOM, CLEANLINESS,
+FOOD, STAFF, LOW (1-2) in red when any), Latest answers (the guest, the booking · room, the moment;
+the Overall pill red when low, green from 4; the parts; the comment or a dash). Every score is the
+server's average as it rounded it; a part nobody scored is a dash. The export (the web's ANSWER_EXPORT)
+is the core's print / share sheet, for those who download reports (a file of guests' details).
+
+**Menu:** PHONE_ROUTES `"/h/:code/feedback": "/reputation/:code/feedback"` is added, but the core's
+port of the web's menu (`src/core/menu.ts`, 4 Nov) has no "Guest feedback" entry yet: until the
+mobile chat adds it (the diff is in the lane's report), the screen is reached by its address only.
+
+**Picture match:** not pictured — built from the web's code; 0 of 0 pictures.

@@ -973,6 +973,13 @@ export const PHONE_ROUTES: Readonly<Record<string, string>> = {
   /* mobile/m13-groups (19 Nov): Groups (one group under it) and the Waitlist (16 Nov release) */
   "/h/:code/groups": "/reservations/:code/groups",
   "/h/:code/waitlist": "/reservations/:code/waitlist",
+  /* mobile/m13-sales (19 Nov): Guest feedback, Possible same person, Leads and WhatsApp, Marketing,
+     Contracts (a company's page is reached from its list). */
+  "/h/:code/feedback": "/reputation/:code/feedback",
+  "/crm/same-person": "/guests/:code/same-person",
+  "/h/:code/leads": "/leads/:code",
+  "/h/:code/marketing": "/marketing/:code",
+  "/contracts": "/contracts/:code",
   /* mobile/t2-revenue (4 Nov) */
   "/h/:code/revenue-outlook": "/revenue/:code",
   /* mobile/t2-crs (4 Nov) */
