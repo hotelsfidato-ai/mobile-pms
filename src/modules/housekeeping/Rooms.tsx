@@ -7,17 +7,19 @@ import { useCallback, useEffect, useRef, useState, type ReactNode } from "react"
 import { AppState, Modal, Pressable, RefreshControl, ScrollView, Text, View } from "react-native";
 import type { Room, Stay } from "../../core/types";
 import { api, HeldError, send, type Hotel } from "../../core/api";
-import { DASH } from "../../core/format";
+import { DASH, dateLong } from "../../core/format";
 import { isOnline, watchConnection, type OutboxEntry } from "../../core/offline";
 import { list, subscribe } from "../../core/outbox";
 import { c, face, space, t } from "../../core/theme";
-import { Capsule, Card, Head, ReadFailed, s, useRead } from "../../core/ui";
+import { Capsule, Card, Head, ReadFailed, s, useRead, ripple, shade, modalEdge, useSheetPad } from "../../core/ui";
 import { AnchorGauge, Fade, IconChip, more, Ring, type ChipTone } from "../reports/kit";
 import {
   assignPath, boardHead, boardRooms, firstSheet, GROUPS, heldAssignee, heldMark, inGroup, markPath, onSheet, whyNotClean, whyNotInspected, whyNotOpenRepair,
   type BoardRoom, type Housekeeper, type HouseNow, type RoomAssignment, type Sheet,
 } from "./board";
 import { whyNotAssign, whyNotBlock } from "./roles";
+import { ListExport } from "../reports/ListExport";
+import { boardTable } from "./exports";
 
 /* ══════════════════════════════════════════════════════════════════
    THE HOUSEKEEPING BOARD on a phone — the web's /h/:code/housekeeping
@@ -69,6 +71,7 @@ export function Rooms({ hotel, role, me, onBack, onSignOut }: {
   const [said, setSaid] = useState<Said | null>(null);
   const [picking, setPicking] = useState<string | null>(null);
   const [pulled, setPulled] = useState(false);
+  const pad = useSheetPad();
   const [held, setHeld] = useState<OutboxEntry[]>([]);
   const [online, setOnline] = useState(isOnline);
   const scroller = useRef<ScrollView>(null);
@@ -260,6 +263,12 @@ export function Rooms({ hotel, role, me, onBack, onSignOut }: {
           </Card>
         ) : null}
 
+        <ListExport
+          screen="housekeeping" role={role}
+          table={data ? boardTable(shown, (n) => { const id = assignee(n); return id ? nameOf(id) : null; },
+            `Date ${dateLong(date)} · Sheet ${sheet === "all" ? "every room" : sheet === "unassigned" ? "rooms nobody has" : staff.find((p) => p.id === (sheet === "mine" ? me : sheet))?.name ?? "-"}`) : null}
+        />
+
         {rooms.length > 0 ? <BoardHead rooms={rooms} onJump={jump} /> : null}
 
         {/* Whose sheet. Scrolls sideways rather than wrapping into a block that pushes the rooms off the screen. */}
@@ -302,17 +311,17 @@ export function Rooms({ hotel, role, me, onBack, onSignOut }: {
       ) : null}
 
       {/* Who is cleaning it: the web's native select, as a sheet from the bottom. */}
-      <Modal visible={picking != null} transparent animationType="fade" onRequestClose={() => setPicking(null)}>
+      <Modal visible={picking != null} transparent animationType="fade" onRequestClose={() => setPicking(null)} {...modalEdge}>
         <View style={{ flex: 1, backgroundColor: "rgba(3,23,40,0.4)" }}>
           <Pressable style={{ flex: 1 }} onPress={() => setPicking(null)} accessibilityRole="button" accessibilityLabel="Close" />
-          <View style={{ backgroundColor: c.white, borderTopLeftRadius: 16, borderTopRightRadius: 16, paddingHorizontal: space.side, paddingTop: 16, paddingBottom: 24, gap: 4, maxHeight: "75%" }}>
+          <View style={{ backgroundColor: c.white, borderTopLeftRadius: 16, borderTopRightRadius: 16, paddingHorizontal: space.side, paddingTop: 16, paddingBottom: pad.bottom + 8, gap: 4, maxHeight: "75%" }}>
             <Text style={[t.heading, { marginBottom: 4 }]} accessibilityRole="header">Who is cleaning room {picking}</Text>
             <ScrollView>
               {[{ id: null as string | null, name: "Unassigned" }, ...staff].map((p) => (
-                <Pressable
+                <Pressable android_ripple={ripple}
                   key={p.id ?? "none"} onPress={() => void give(picking!, p.id)}
                   accessibilityRole="button" accessibilityLabel={p.name} accessibilityState={{ selected: current === p.id }}
-                  style={({ pressed }) => ({ minHeight: 48, flexDirection: "row", alignItems: "center", gap: 8, borderTopWidth: 1, borderTopColor: c.grey100, backgroundColor: pressed ? c.grey50 : c.white })}
+                  style={shade(({ pressed }) => ({ minHeight: 48, flexDirection: "row", alignItems: "center", gap: 8, borderTopWidth: 1, borderTopColor: c.grey100, backgroundColor: pressed ? c.grey50 : c.white }))}
                 >
                   <Text style={[t.label, { flex: 1, color: p.id ? c.ink900 : c.grey500 }]}>{p.name}</Text>
                   {current === p.id ? <Check size={18} color={c.orange} /> : null}
@@ -398,14 +407,14 @@ function HeadCount({ icon, chip = "neutral", label, n, job, warn, goodAtZero, on
   const tappable = !!onPress && n > 0;
   const good = goodAtZero && n === 0;
   return (
-    <Pressable
+    <Pressable android_ripple={ripple}
       disabled={!tappable} onPress={onPress}
       accessibilityRole={tappable ? "button" : undefined} accessibilityLabel={`${label}, ${n}`}
-      style={({ pressed }) => ({
+      style={shade(({ pressed }) => ({
         flexBasis: "47%", flexGrow: 1, borderRadius: 12, borderWidth: 1, paddingHorizontal: 14, paddingVertical: 12, gap: 4,
         backgroundColor: job === "orange" ? c.orange50 : job === "yellow" ? c.yellow50 : pressed ? c.grey50 : c.white,
         borderColor: job === "orange" ? c.orange100 : job === "yellow" ? c.yellow100 : c.grey200,
-      })}
+      }))}
     >
       <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
         <IconChip icon={icon} tone={chip} size={24} />
@@ -447,7 +456,7 @@ function RoomCard({ code, room, role, pending, who, queuedWho, assignReason, onM
         {pending != null ? <Text style={[t.caption, { color: c.yellow800, marginTop: 4 }]}>Queued: mark {pending}</Text> : null}
       </View>
 
-      <Pressable
+      <Pressable android_ripple={ripple}
         onPress={() => (assignReason ? setSaid(assignReason) : onPick())}
         accessibilityRole="button" accessibilityLabel={`Who is cleaning room ${n}: ${who}`}
         accessibilityState={{ disabled: assignReason != null }} accessibilityHint={assignReason ?? undefined}
@@ -464,13 +473,13 @@ function RoomCard({ code, room, role, pending, who, queuedWho, assignReason, onM
 
       {blocked ? (
         /* What it does (the owner, 17 September): opens what is out, with Put back on it. */
-        <Pressable
+        <Pressable android_ripple={ripple}
           onPress={() => (putBack ? setSaid(putBack) : open("out-of-service"))}
           accessibilityRole="button" accessibilityLabel={`Put room ${n} back`} accessibilityState={{ disabled: putBack != null }} accessibilityHint={putBack ?? undefined}
-          style={({ pressed }) => ({
+          style={shade(({ pressed }) => ({
             minHeight: 44, marginTop: 4, borderRadius: 999, borderWidth: 1, borderColor: c.grey300, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 6,
             backgroundColor: putBack ? c.grey100 : pressed ? c.red50 : c.white,
-          })}
+          }))}
         >
           <RotateCcw size={16} color={putBack ? c.grey300 : c.red700} />
           <Text style={[t.label, { color: putBack ? c.grey500 : c.red700 }]}>Put back</Text>
@@ -498,13 +507,13 @@ function Act({ label, Icon, a11y, reason, onPress, onRefused }: {
 }) {
   const ready = reason == null;
   return (
-    <Pressable
+    <Pressable android_ripple={ripple}
       onPress={() => (ready ? onPress() : onRefused(reason))}
       accessibilityRole="button" accessibilityLabel={a11y} accessibilityState={{ disabled: !ready }} accessibilityHint={reason ?? undefined}
-      style={({ pressed }) => ({
+      style={shade(({ pressed }) => ({
         flex: 1, minHeight: 56, borderRadius: 10, borderWidth: 1, alignItems: "center", justifyContent: "center", gap: 4, paddingHorizontal: 4,
         borderColor: ready ? c.grey300 : "transparent", backgroundColor: !ready ? c.grey100 : pressed ? c.grey50 : c.white,
-      })}
+      }))}
     >
       <Icon size={20} color={ready ? c.ink900 : c.grey300} />
       <Text style={[t.label, { color: ready ? c.ink900 : c.grey500 }]} numberOfLines={1}>{label}</Text>
@@ -517,7 +526,7 @@ function Chip({ label, count, active, reason, onPress, onRefused }: {
   label: string; count: string; active: boolean; reason: string | null; onPress: () => void; onRefused: (reason: string) => void;
 }) {
   return (
-    <Pressable
+    <Pressable android_ripple={ripple}
       onPress={() => (reason ? onRefused(reason) : onPress())}
       accessibilityRole="button" accessibilityLabel={`${label}, ${count}`} accessibilityState={{ selected: active, disabled: reason != null }}
       accessibilityHint={reason ?? undefined}

@@ -6,7 +6,7 @@ import type { Room } from "../../core/types";
 import { api, orNull, send, type Hotel } from "../../core/api";
 import { isOnline } from "../../core/offline";
 import { c, t } from "../../core/theme";
-import { Capsule, notKnown, ReadFailed, s, useRead, useStuck } from "../../core/ui";
+import { Capsule, notKnown, ReadFailed, s, useRead, useStuck, ripple } from "../../core/ui";
 import {
   addDays, BLOCK_REASONS, blockBody, blockSpan, ended, reasonLabel, statusWord, takenOut, whyNotTake, type BlockForm,
 } from "./block";
@@ -207,7 +207,7 @@ export function OutOfService({ hotel, room: n, role, onBack }: {
                 {read.data?.ready.length ? (
                   <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 6 }}>
                     {read.data.ready.map((r) => (
-                      <Pressable
+                      <Pressable android_ripple={ripple}
                         key={r.id} onPress={() => set({ note: r.label })} disabled={off} accessibilityRole="button" accessibilityLabel={r.label}
                         style={{ minHeight: 44, paddingHorizontal: 10, borderRadius: 999, borderWidth: 1, borderColor: c.grey200, backgroundColor: c.white, justifyContent: "center" }}
                       >
