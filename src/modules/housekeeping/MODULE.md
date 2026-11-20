@@ -196,8 +196,8 @@ are absent (not empty) for anybody who may not see money, and then no Costs butt
 close held on this phone. `/repair-costs` is **refused** offline (the default tier), in the web's
 sentence. The key is minted at the tap (M-5); one tap of Start / Put back is one change (MHK-W2).
 
-**Left on the website** ("On the website for now"): **Record the cost** (it needs the bill's photo
-or file as proof, D17-6; the phone has no picker — a package for the owner) and **See the proof**.
+**Record the cost** with its proof and **See the proof** are on the phone since 20 Nov (M-16;
+"m16 pickers" below).
 The equipment item is plain words (the phone has no equipment page).
 
 **Where the phone differs from the web:** a held Start or Close is said and shown on its card, and
@@ -297,3 +297,35 @@ failure has come back; a `duplicate` answer is said as the earlier take, not as 
 while its write is on its way; `?room=` asks who may first.
 **Amended again 20 Nov (the money review, MHK-K3):** the take and the desk's doubts are kept outside React by hotel
 (`care.ts doubtStore`), so leaving the screen and coming back keeps the key and the stop.
+
+## m16 pickers (20 Nov, lane m16-pick-money)
+
+`docs/PICKERS.md` Lane 1, row 1.14 and its steppers (M-16).
+
+- **1.14 Record the cost** (`WorkOrdersScreen.tsx` `CostsDialog`; flows/RepairCosts.tsx): for
+  `mayRecordCosts`, Amount in rupees, the Proof (required, D17-6: the camera, the photos or a file,
+  finance's `BillField`, 9 MB checked first) and a Note; POST `/repair-costs` as a form
+  (`workOrderId`, `amount` as typed and trimmed, `note`, `file`), never held offline (the web's "A
+  cost needs the connection: …"). The amount is checked first against the server's `readAmount`
+  (`costAmountProblem`, its sentence) so a photo is not sent to be refused. Anyone else sees Record
+  grey with `COST_REFUSED`.
+  - **A repeat**: the server refuses the same file as the proof of a second standing cost ("That
+    file is already the proof of a cost on … One bill proves one cost."); another file would be a
+    second cost. So an unknown outcome empties the amount and the proof and greys Record
+    (`housekeeping/<code>/costs`, core `useScreenStop`) until the repairs are read again after it;
+    the dialog cannot close while the cost is on its way. A keeper per hotel is kept for the day the
+    route reads a key.
+- **See the proof**: GET `/attachments/:id/file`, opened under the server's name to the share sheet;
+  offline "The proof needs the connection to open."; a refusal in the server's words.
+- **Out of service, Report a repair** (`OutOfService.tsx`, `ReportRepair.tsx`): From and Until on each
+  phone's own date picker; Until stays at least the day after From (M-7, R-8) and is cleared for "no
+  end date" (was a Set an end date / No end date pair). `DayStepper.tsx`'s `Day` stays for the other
+  lanes' screens.
+
+- **The money review of 20 Nov (m16)**: a cost's amount with a comma that is not a thousands'
+  grouping ("18,50", which the server would read as ₹1,850) is refused with the desk's COMMA sentence;
+  once recorded, the figure said is the server's (read back), not the typed text.
+
+Nothing here was opened on a phone or the preview: the cloud runs no API, Expo or simulator. Proved
+by the type check, the module's checks and the gates on a clean commit; the pickers, the share sheet
+and the uploads are the core's (lane m16-core), used as `docs/PICKERS.md` says.

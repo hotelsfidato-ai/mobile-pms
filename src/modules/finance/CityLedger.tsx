@@ -4,6 +4,7 @@ import { Building2, Plus, Undo2 } from "lucide-react-native";
 import { useState } from "react";
 import { Text, View } from "react-native";
 import type { Hotel } from "../../core/api";
+import { DateField } from "../../core/DateField";
 import { dateLong, monthStart } from "../../core/format";
 import { c, face, t } from "../../core/theme";
 import { Card, Screen } from "../../core/ui";
@@ -40,7 +41,7 @@ export function CityLedger({ hotel, role }: { hotel: Hotel; role: string | null 
   const asOn = hotel.businessDate;
   const doc = useDeskRead(() => (refused ? Promise.resolve(null) : readLedger(code, from, asOn)), ["finance", code, "desk", "city-ledger", from, asOn]);
   const paid = useDeskRead(() => (refused ? Promise.resolve(null) : readCompanyPayments(code)), ["finance", code, "desk", "company-payments"]);
-  const stop = useStop(`${code}/company-accounts`, paid.began);
+  const stop = useStop(`${code}/company-accounts`, paid.began, paid.reload);
   const [said, setSaid] = useState<Said | null>(null);
   const [sheet, setSheet] = useState<{ kind: "record" } | { kind: "reverse"; p: CompanyPayment } | null>(null);
   const pulling = usePull(doc.loading || paid.loading, () => { doc.reload(); paid.reload(); });
@@ -86,7 +87,7 @@ export function CityLedger({ hotel, role }: { hotel: Hotel; role: string | null 
             : <Received view={paid.data} role={role} onReverse={(p) => setSheet({ kind: "reverse", p })} onRefused={refusedSaid("Not reversed")} />}
         </>
       )}
-      {sheet?.kind === "record" && paid.data ? <RecordSheet stop={stop} code={code} view={paid.data} onClose={() => setSheet(null)} onDone={done} /> : null}
+      {sheet?.kind === "record" && paid.data ? <RecordSheet stop={stop} code={code} hotel={hotel} view={paid.data} onClose={() => setSheet(null)} onDone={done} /> : null}
       {sheet?.kind === "reverse" ? <ReverseSheet stop={stop} code={code} p={sheet.p} onClose={() => setSheet(null)} onDone={done} /> : null}
     </Screen>
   );
@@ -143,7 +144,7 @@ function Received({ view, role, onReverse, onRefused }: {
   );
 }
 
-function RecordSheet({ stop, code, view, onClose, onDone }: { stop: Stop; code: string; view: CompanyPaymentsView; onClose: () => void; onDone: (s: Said | null) => void }) {
+function RecordSheet({ stop, code, hotel, view, onClose, onDone }: { stop: Stop; code: string; hotel: Hotel; view: CompanyPaymentsView; onClose: () => void; onDone: (s: Said | null) => void }) {
   const [f, setF] = useState({ account: "", amount: "", receivedOn: "", method: "", reference: "", note: "" });
   const set = (k: keyof typeof f) => (v: string) => setF({ ...f, [k]: v });
   const [problem, setProblem] = useState<string | null>(null);
@@ -178,9 +179,8 @@ function RecordSheet({ stop, code, view, onClose, onDone }: { stop: Stop; code: 
         <Input value={f.amount} onChange={set("amount")} label="Amount received" keyboard="decimal-pad" tabular />
         <Refused text={s.problem} />
       </Field>
-      <Field label="Received on" hint="The day the money reached the hotel, as YYYY-MM-DD.">
-        <Input value={f.receivedOn} onChange={set("receivedOn")} label="Received on" keyboard="numbers-and-punctuation" placeholder="YYYY-MM-DD" tabular />
-      </Field>
+      {/* M-16: the phone's own date picker (flows/CompanyPayments.tsx's DatePicker), the same text sent. */}
+      <DateField label="Received on" hint="The day the money reached the hotel." value={f.receivedOn} onChange={set("receivedOn")} hotel={hotel} disabled={w.out} />
       <Field label="How">
         <Choice label="How" value={f.method} onPick={set("method")} options={Object.entries(view.methods).map(([value, label]) => ({ value, label }))} />
       </Field>

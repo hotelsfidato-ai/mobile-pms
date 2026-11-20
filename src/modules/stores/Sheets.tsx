@@ -1,12 +1,15 @@
 import { outcomeUnknown } from "../../core/api";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { ChevronLeft, ChevronRight, FileText, Plus } from "lucide-react-native";
+import { FileText, Plus } from "lucide-react-native";
 import { useRef, useState } from "react";
 import { Pressable, Text, TextInput, View } from "react-native";
 import type { Hotel } from "../../core/api";
+import { DateField } from "../../core/DateField";
+import { DownloadButton } from "../../core/Download";
 import { c, face, space, t } from "../../core/theme";
 import { Head, Screen, Stopped, useRead, useScreenStop, ripple, shade, keys } from "../../core/ui";
 import { ListExport } from "../reports/ListExport";
+import { BarBills } from "../purchasing/BarBills";
 import { LoadFailed, StatePill } from "../laundry/kit";
 import {
   Back, Box, Btn, body, Empty, Field, InDialog, Input, Loading, NotYours, Pill, Segmented, Select, Stale, Toast, saidOf, type Said,
@@ -17,9 +20,9 @@ import {
 } from "./data";
 import { GroupHead, STOP, STOP_LINE, unknownSaid } from "./kit";
 import { ON_THE_WEBSITE, whyNotSee, whyNotSeeBar } from "./roles";
-import { dayText, rupees as rupeeOf } from "./shelf";
+import { rupees as rupeeOf } from "./shelf";
 import {
-  askBody, barBody, barDifference, barLead, barPlaceName, belowZero, countSaidWords, dayStep, figure, held, KITCHEN_COLUMNS,
+  askBody, barBody, barDifference, barLead, barPlaceName, belowZero, countSaidWords, figure, held, KITCHEN_COLUMNS,
   kitchenBody, kitchenDifference, morningText, moved, otherMoves, REQUEST_STATE, requestUnit, subOf, wholeWord,
   type BarSheet, type KitchenItem, type KitchenSheet, type Moment, type Place, type SheetDrink,
 } from "./sheets";
@@ -34,9 +37,10 @@ import {
 
    THE FLOOR'S WORK: today's sheet and its count (closing, or the bar's
    morning count), the counter's asks of the store (ask, approve, reject),
-   "the bar did not open today". THE DESK'S, on the website for now: the
-   bar's Bills and Set up, the Recipes, which store is the kitchen's, the
-   excise registers (FLR PDFs) and the Bar stock report.
+   "the bar did not open today", the bar's Bills (purchasing's BarBills) and
+   the excise registers (FLR PDFs, downloaded) - M-16. THE DESK'S, on the
+   website for now: the bar's Set up, the Recipes, which store is the
+   kitchen's and the Bar stock report. The Day is each phone's own picker.
 
    The web's table is wider than a phone; here each drink and each item is
    a card of its labelled figures, in the table's order. Every figure is
@@ -82,7 +86,7 @@ export function Inventory({ hotel, role, door, tab: startTab, onBack }: {
             />
           </View>
         ) : null}
-        {tab === "bar" ? <BarBody code={code} role={role} onSaid={setSaid} /> : <KitchenBody code={code} role={role} onSaid={setSaid} />}
+        {tab === "bar" ? <BarBody hotel={hotel} role={role} onSaid={setSaid} /> : <KitchenBody code={code} role={role} onSaid={setSaid} />}
       </Screen>
       <Toast said={said} onClose={() => setSaid(null)} />
     </View>
@@ -91,29 +95,16 @@ export function Inventory({ hotel, role, door, tab: startTab, onBack }: {
 
 /* ── Shared ─────────────────────────────────────────────────────── */
 
-/** The web's Day date input, stepped (M-7): never after the business date. */
+/** The web's Day date input (BarStock.tsx, KitchenStock.tsx, max the business date): each phone's own
+    date picker (M-16, core DateField); the day as the same text. */
 function DayStep({ date, max, onChange }: { date: string; max: string; onChange: (d: string) => void }) {
-  const step = (n: number, label: string, Icon: typeof ChevronLeft, off: boolean) => (
-    <Pressable android_ripple={ripple}
-      onPress={() => onChange(dayStep(date, n))} disabled={off} accessibilityRole="button" accessibilityLabel={label} accessibilityState={{ disabled: off }}
-      style={shade(({ pressed }) => ({ width: 44, height: 44, borderRadius: 22, borderWidth: 1, borderColor: c.grey300, alignItems: "center", justifyContent: "center", backgroundColor: off ? c.grey50 : pressed ? c.grey100 : c.white }))}
-    >
-      <Icon size={16} color={off ? c.grey400 : c.ink900} />
-    </Pressable>
-  );
-  return (
-    <View style={{ gap: 6 }}>
-      <Text style={t.caption}>Day</Text>
-      <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-        {step(-1, "The day before", ChevronLeft, false)}
-        <Text style={[t.label, t.tab, { color: c.ink900, minWidth: 104, textAlign: "center" }]}>{dayText(date)}</Text>
-        {step(1, "The day after", ChevronRight, date >= max)}
-      </View>
-    </View>
-  );
+  return <DateField label="Day" value={date} max={max} hotel={{ businessDate: max }} onChange={(d) => { if (d) onChange(d); }} />;
 }
 
-/** A labelled figure in a card's row: the web table's one cell. */
+/** The web's downloadRegister (stores/data/barSheet.ts): the day's registers, FLR-3 for its month. */
+const flrPath = (code: string, which: "flr-daily" | "flr-monthly", date: string) =>
+  `/api/hotels/${encodeURIComponent(code)}/reports/${which}.pdf?asOn=${date}${which === "flr-monthly" ? `&month=${date.slice(0, 7)}` : ""}`;
+
 function Cell({ label, value, red, strong }: { label: string; value: string; red?: boolean; strong?: boolean }) {
   return (
     <View style={{ minWidth: 76, gap: 1 }}>
@@ -284,7 +275,8 @@ function KitchenLine({ item: i, first, mayCount, value, onChange }: { item: Kitc
 
 type BarPart = "sheet" | "requests" | "bills" | "setup";
 
-function BarBody({ code, role, onSaid }: { code: string; role: string | null; onSaid: (s: Said) => void }) {
+function BarBody({ hotel, role, onSaid }: { hotel: Hotel; role: string | null; onSaid: (s: Said) => void }) {
+  const code = hotel.code;
   const [part, setPart] = useState<BarPart>("sheet");
   return (
     <>
@@ -294,7 +286,9 @@ function BarBody({ code, role, onSaid }: { code: string; role: string | null; on
       </View>
       {part === "sheet" ? <BarSheetCard code={code} role={role} onSaid={onSaid} onRequests={() => setPart("requests")} />
         : part === "requests" ? <Requests code={code} role={role} onSaid={onSaid} />
-          : <Box><Empty compact title={part === "bills" ? "Bills" : "Set up"} description={`${part === "bills" ? "The bar's bills, recorded from the supplier's paper." : "The bar's drinks, how the sheet looks and what each dish takes."} ${ON_THE_WEBSITE}.`} /></Box>}
+          /* Bills: the web's own BarBills (purchasing), Record a bar bill with its photo (M-16 row 1.9). */
+          : part === "bills" ? <BarBills hotel={hotel} role={role} onSaid={onSaid} />
+          : <Box><Empty compact title="Set up" description={`The bar's drinks, how the sheet looks and what each dish takes. ${ON_THE_WEBSITE}.`} /></Box>}
     </>
   );
 }
@@ -405,11 +399,13 @@ function BarSheetCard({ code, role, onSaid, onRequests }: { code: string; role: 
         ) : null}
         {s.mayApprove ? (
           <View style={{ gap: 4 }}>
-            <View style={{ flexDirection: "row", gap: 8 }}>
-              <Btn label="FLR-1A/2A/3A" icon={FileText} disabled onPress={() => undefined} />
-              <Btn label="FLR-3" icon={FileText} disabled onPress={() => undefined} />
+            {/* The excise registers (D27-361; M-16 row 1.12): the server's PDFs for the day shown, to the share sheet. */}
+            <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
+              <DownloadButton label="FLR-1A/2A/3A" a11y="The excise register FLR-1A/2A/3A, as a PDF" path={flrPath(code, "flr-daily", s.date)}
+                fileName={`${code.toUpperCase()}-flr-daily-${s.date}.pdf`} mimeType="application/pdf" />
+              <DownloadButton label="FLR-3" a11y="The excise register FLR-3, as a PDF" path={flrPath(code, "flr-monthly", s.date)}
+                fileName={`${code.toUpperCase()}-flr-monthly-${s.date.slice(0, 7)}.pdf`} mimeType="application/pdf" />
             </View>
-            <Text style={[t.caption, { color: c.grey600 }]}>The excise registers: {ON_THE_WEBSITE}</Text>
           </View>
         ) : null}
         {s.mayCount ? (

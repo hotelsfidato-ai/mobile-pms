@@ -13,7 +13,7 @@ import {
   whyNotRaise, workOrderBody, type HouseNow, type RepairForm,
 } from "./repair";
 import { addDays } from "./block";
-import { Day } from "./DayStepper";
+import { DateField } from "../../core/DateField";
 import { Button, Field, Input, Select, Sheet } from "./Form";
 import { whyNotBlock } from "./roles";
 
@@ -178,19 +178,11 @@ export function ReportRepair({ hotel, room, role, onDone }: {
               <Field label="Why is it coming out?" required>
                 <Select label="Why is it coming out?" value={f.reason} options={BLOCK_REASONS} onChange={(reason) => set({ reason })} />
               </Field>
-              <Field label="From" required>
-                <Day label="From" value={f.from} off={false} onChange={(from) => set({ from, until: f.until && f.until <= from ? addDays(from, 1) : f.until })} />
-              </Field>
-              <Field label="Until" hint="Leave empty if unknown">
-                {f.until ? (
-                  <View style={{ gap: 8 }}>
-                    <Day label="Until" value={f.until} min={addDays(f.from, 1)} off={false} onChange={(until) => set({ until })} />
-                    <View style={{ flexDirection: "row" }}><Button label="No end date" onPress={() => set({ until: "" })} /></View>
-                  </View>
-                ) : (
-                  <View style={{ flexDirection: "row" }}><Button label="Set an end date" onPress={() => set({ until: addDays(f.from, 1) })} /></View>
-                )}
-              </Field>
+              {/* M-16: each phone's own date picker (the web's date boxes); Until at least the day after From (M-7, R-8), blank is open-ended. */}
+              <DateField label="From" required value={f.from} hotel={hotel}
+                onChange={(from) => { if (from) set({ from, until: f.until && f.until <= from ? addDays(from, 1) : f.until }); }} />
+              <DateField label="Until" hint="Leave empty if unknown" value={f.until} min={addDays(f.from, 1)} hotel={hotel} clearable
+                onChange={(until) => set({ until })} />
             </>
           ) : null}
         </View>

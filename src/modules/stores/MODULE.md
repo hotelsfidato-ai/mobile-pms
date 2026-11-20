@@ -117,8 +117,8 @@ Differences left, each with its reason:
 7. Inventory, Bar: **each drink is a card of labelled figures** (Opening, From the store, Sold, Other
    moves, Closing; Counted, Difference, Morning), not the web's wide excise table; the paper format's
    NIP/30/60/90/ml and Rate/Amount are one line under the figures; **"Amount, all drinks" is not
-   drawn** (MST-1); **the Day is stepped** (‹ 11 Oct 2026 ›, M-7), not a date input; the FLR buttons
-   and the Bar stock report are grey ("On the website for now"); Bills and Set up open a card saying so.
+   drawn** (MST-1); **the Day** is each phone's own date picker (M-16, was stepped); the FLR buttons
+   download (M-16); Bills is purchasing's BarBills (M-16); the Bar stock report and Set up stay grey.
 
 **3 of 3 pictured screens match their pictures** (Store; Inventory/Bar stock; Kitchen stock's
 refusal) with the differences above; 6 screens, states or dialogs not pictured.
@@ -139,3 +139,21 @@ What I saw      nothing: never opened on a screen (the cloud has no API or phone
 Accessibility   44 px targets (tiles 64, count boxes 44, the history's Undo 44); icon buttons labelled
 Packages        none
 ```
+
+## m16 pickers (20 Nov, lane m16-pick-money)
+
+`docs/PICKERS.md` Lane 1, row 1.12 and its steppers (M-16).
+
+- **1.12 The excise registers** (`Sheets.tsx`, the bar's sheet, shown where the web shows them:
+  `mayApprove`): FLR-1A/2A/3A and FLR-3 are the core's `DownloadButton`s, GET
+  `/reports/flr-daily.pdf?asOn=<day>` and `/reports/flr-monthly.pdf?asOn=<day>&month=<YYYY-MM>` for
+  the day on the sheet, saved under the server's names (`<CODE>-flr-daily-<day>.pdf`,
+  `<CODE>-flr-monthly-<month>.pdf`). The route's gate (STORE_REPORTS) answers in its own words.
+- **The Day** on the kitchen's and the bar's sheet: each phone's own date picker, never after the
+  business date (the web's max), the day as the same text (was stepped, M-7).
+- **Bills** on the bar's parts is purchasing's `BarBills` (the web's Bar stock renders the same
+  component): the list and Record a bar bill with its photo. Set up stays a card.
+
+Nothing here was opened on a phone or the preview: the cloud runs no API, Expo or simulator. Proved
+by the type check, the module's checks and the gates on a clean commit; the pickers, the share sheet
+and the uploads are the core's (lane m16-core), used as `docs/PICKERS.md` says.

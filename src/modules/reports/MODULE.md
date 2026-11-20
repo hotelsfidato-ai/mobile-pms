@@ -411,8 +411,31 @@ column order (BRIEF-T3), which the web itself does only on the Accounting export
 ### Every web act of this lane left out, and why
 
 - Email a report (`POST /reports/:key/email`): a dialog not built yet; "on the website for now".
-- The GSTR-1 file (JSON, for the GST portal): a byte-exact server download; "on the website for now"
+- The GSTR-1 file (JSON, for the GST portal): a byte-exact server download; on the phone since 20 Nov (M-16, "m16 pickers" below); before that "on the website for now"
   (or the web's own sentence for a role that may not download reports).
 - The accounting export's own files (day book CSV/.xlsx in the server's layout, Tally XML): "on the
   website for now".
 - The server's own PDF/.xlsx of a report: replaced by the phone's PDF/CSV of the same rows (M-14).
+
+## m16 pickers (20 Nov, lane m16-pick-money)
+
+`docs/PICKERS.md` Lane 1, row 1.13 and its steppers (M-16).
+
+- **1.13 The GSTR-1 file (JSON)** (`MoneyReports.tsx` `Gstr1`): the core's `DownloadButton`, GET
+  `/reports/gstr-1.json?month=<YYYY-MM>`, saved under the server's own name
+  (`<CODE>-GSTR1-<GSTIN>-<month>.json`, the GSTIN the phone does not hold), for whoever
+  `mayDownloadGstr1` lets; anyone else keeps the refusal line. A month the server cannot make
+  ("The GSTR-1 file was not made. …") is said under the button in its words. Email stays on the
+  website.
+- **Every report's day is each phone's own date picker** (was stepped, M-7), the day sent as the same
+  text: MoneyKit's `DayStep` and `RangeStep` (Money owed by age, the statement, commission, TDS,
+  petty cash, the accounting range), Item sales' From and To (`OpsReport.tsx` `DayPick`), the group
+  reports' From and As on (`GroupReports.tsx`), the stock reports' From and To (`StockReport.tsx`).
+  The web's min and max stay. **A month stays stepped** (MonthStep, the group reports' Month): the
+  picker picks days.
+
+- **The money review of 20 Nov (m16)**: the group reports' To is never before From.
+
+Nothing here was opened on a phone or the preview: the cloud runs no API, Expo or simulator. Proved
+by the type check, the module's checks and the gates on a clean commit; the pickers, the share sheet
+and the uploads are the core's (lane m16-core), used as `docs/PICKERS.md` says.

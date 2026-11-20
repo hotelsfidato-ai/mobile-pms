@@ -13,6 +13,7 @@
 
 import type { OutboxEntry } from "../../core/offline.ts";
 import { DASH, dateLong, dateShort } from "../../core/format.ts";
+import { COMMA } from "../finance/desk.ts";
 
 /* ── The shapes (data/housekeeping.ts) ─────────────────────────── */
 
@@ -203,9 +204,40 @@ const inrPrecise = new Intl.NumberFormat("en-IN", { style: "currency", currency:
 /** The web's moneyPrecise, "₹1,800.00": a cost's own figure shows its paise. */
 export const paise = (n: number) => inrPrecise.format(n);
 
-/** Why "Record the cost" is grey: the API's refusal first, else the proof
-    the phone cannot attach yet. Never null on the phone. */
-export const whyNotRecord = (mayRecord: boolean) => (mayRecord ? ON_WEBSITE : COST_REFUSED);
+/** Why "Record the cost" is refused: the API's sentence, or null (M-16: the proof is picked on the phone). */
+export const whyNotRecord = (mayRecord: boolean) => (mayRecord ? null : COST_REFUSED);
+
+/* ── Recording a cost with its proof (M-16 row 1.14; data/housekeeping.ts recordRepairCost) ── */
+
+export const costPath = (code: string) => `/api/hotels/${code}/repair-costs`;
+/** The proof back: the shared attachments route (proofAddress). */
+export const proofPath = (code: string, attachmentId: string) => `/api/hotels/${code}/attachments/${attachmentId}/file`;
+/** proofAddress's offline sentence. */
+export const PROOF_OFFLINE = "The proof needs the connection to open.";
+
+/** The server's readAmount (api/src/modules/housekeeping/repairs.ts), checked before a photo goes up
+    for nothing: commas, spaces and ₹ ignored, paise at most, more than zero. The amount is SENT AS
+    TYPED (trimmed, the web's); null while nothing is typed (the button is grey) or it would pass. */
+export function costAmountProblem(typed: string): string | null {
+  if (typed.trim() === "") return null;
+  /* The server drops every comma: "18,50" would be ₹1,850. A comma is let through only as a
+     thousands' grouping, Indian (1,00,000) or the bill's (1,800.50); else the desk's sentence. */
+  const bare = typed.replace(/[\s₹]/g, "");
+  if (bare.includes(",") && !/^(\d{1,2}(,\d{2})*,\d{3}|\d{1,3}(,\d{3})+)(\.\d{1,2})?$/.test(bare)) return COMMA;
+  const text = bare.replace(/,/g, "");
+  const value = Number(text);
+  return /^\d+(\.\d{1,2})?$/.test(text) && value > 0 && value < 1e10 ? null
+    : "How much was it? Type the amount in rupees, more than zero.";
+}
+
+/** Why "Record the cost" is grey: no amount, no proof (the web's disabled), or the amount's problem. */
+export function costMissing(amount: string, hasProof: boolean): string | null {
+  if (!amount.trim()) return "How much was it? Type the amount in rupees, more than zero.";
+  const problem = costAmountProblem(amount);
+  if (problem) return problem;
+  return hasProof ? null
+    : "Attach the proof: a photo or screenshot of the bill, the payment or the transaction. A cost is not recorded without it.";
+}
 
 /** Why "Cancel this cost" is grey; null = allowed. */
 export const whyNotCancel = (mayRecord: boolean) => (mayRecord ? null : COST_REFUSED);

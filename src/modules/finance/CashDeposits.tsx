@@ -3,8 +3,9 @@ import { AlertTriangle, Check, FileImage, PiggyBank, Plus, Undo2 } from "lucide-
 import { useState } from "react";
 import { Text, View } from "react-native";
 import type { Hotel } from "../../core/api";
+import { DateField } from "../../core/DateField";
+import type { Picked } from "../../core/files";
 import { dateLong } from "../../core/format";
-import { ON_THE_WEBSITE } from "../../core/menu";
 import { c, face, t } from "../../core/theme";
 import { Card, Screen } from "../../core/ui";
 import {
@@ -12,7 +13,9 @@ import {
   explainHead, explanationLine, pointsLine, rupees, whyNotExport, whyNotReadDeposits,
   type CashDeposits as Deposits, type Deposit, type DepositDay,
 } from "./desk";
-import { explainDay, readDeposits, recordDeposit, reverseDeposit, verifyDeposit } from "./deskData";
+import { attachSlip, explainDay, readDeposits, recordDeposit, reverseDeposit, slipPath, verifyDeposit } from "./deskData";
+import { pickBill } from "./billPick";
+import { BillField, useOpenStored } from "./BillPhoto";
 import {
   CardHead, DeskExport, DeskSheet, Figure, Hair, PageHead, ReadState, RefusedCard, TonePill, failedSaid, useWrite, StopCard, useDeskRead, usePull, useStop, type Stop } from "./DeskKit";
 import { Btn, Choice, Field, Input, Refused, SaidCard, type Said } from "./Kit";
@@ -27,7 +30,9 @@ import { Btn, Choice, Field, Input, Refused, SaidCard, type Said } from "./Kit";
    a dash. A day stays red until somebody explains it. Append-only: a wrong
    line is reversed, never edited. Who may record and verify is the server's
    (canRecord, canVerify): a refused act is grey with its words. The slip's
-   photo needs a picker the phone does not have: on the website for now.
+   photo (M-16): added in Record or later from its line, opened from its
+   line; a form, never held offline (deskData.ts). Deposited on: the
+   phone's own date picker (core DateField), sent as the same text.
    Every write is refused offline in the web's words (unlisted).
    ══════════════════════════════════════════════════════════════════ */
 
@@ -38,7 +43,7 @@ export function CashDeposits({ hotel, role }: { hotel: Hotel; role: string | nul
   const cache = useQueryClient();
   const refused = whyNotReadDeposits(role);
   const q = useDeskRead(() => (refused ? Promise.resolve(null) : readDeposits(code)), ["finance", code, "desk", "deposits"]);
-  const stop = useStop(`${code}/deposits`, q.began);
+  const stop = useStop(`${code}/deposits`, q.began, q.reload);
   const [said, setSaid] = useState<Said | null>(null);
   const [sheet, setSheet] = useState<Sheet | null>(null);
   const pulling = usePull(q.loading, () => { q.reload(); });
@@ -83,7 +88,7 @@ export function CashDeposits({ hotel, role }: { hotel: Hotel; role: string | nul
           )}
         </>
       )}
-      {sheet?.kind === "record" && d ? <RecordSheet stop={stop} code={code} days={d.days} date={sheet.date} onClose={() => setSheet(null)} onDone={done} /> : null}
+      {sheet?.kind === "record" && d ? <RecordSheet stop={stop} code={code} hotel={hotel} days={d.days} date={sheet.date} onClose={() => setSheet(null)} onDone={done} /> : null}
       {sheet?.kind === "explain" ? <ExplainSheet stop={stop} code={code} day={sheet.day} onClose={() => setSheet(null)} onDone={done} /> : null}
       {sheet?.kind === "reverse" ? <ReverseSheet stop={stop} code={code} x={sheet.x} onClose={() => setSheet(null)} onDone={done} /> : null}
     </Screen>
@@ -121,7 +126,20 @@ function DepositRow({ stop, code, x, first, d, onSaid, onDone, onRefused, onReve
   onRefused: (title: string) => (why: string) => void; onReverse: () => void;
 }) {
   const w = useWrite(stop, "verified", "this deposit");
+  const pw = useWrite(stop, "saved", SLIP_WHERE);
+  const stored = useOpenStored((title, text) => onSaid({ tone: "refused", title, text }));
   const acts = depositActs(x, d);
+  /* The web's addPhoto (attachSlip): one tap, one file; the screen's stop holds an unknown outcome. */
+  const addSlip = async () => {
+    if (stop.isBusy() || stop.isStuck()) return;
+    const got = await pickBill("Add slip photo");
+    if (!got) return;
+    if ("problem" in got) return onSaid({ tone: "refused", title: "Photo not saved", text: got.problem });
+    void pw.run(async () => {
+      await attachSlip(code, x.id, got.file);
+      onDone({ tone: "ok", title: "Slip photo saved", text: `Slip ${x.slipNo ?? "-"}.` });
+    }, (e) => { onSaid(failedSaid(e, "Photo not saved", "saved", SLIP_WHERE)); onDone(null); });
+  };
   const verify = () => void w.run(async () => {
     await verifyDeposit(code, x.id);
     onDone({ tone: "ok", title: "Verified", text: `${rupees(x.amount)} for ${dateDay(x.businessDate)}.` });
@@ -140,8 +158,10 @@ function DepositRow({ stop, code, x, first, d, onSaid, onDone, onRefused, onReve
         <View style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center", gap: 8 }}>
           {x.reversed ? <TonePill tone="neutral" words="Reversed" /> : null}
           {x.verifiedAt ? <TonePill tone="success" words="Verified" /> : null}
-          {x.slipId ? <Btn label="Slip photo" Icon={FileImage} why={ON_THE_WEBSITE} onRefused={onRefused("Slip photo")} onPress={() => undefined} />
-            : !x.reversed ? <Btn label="Add slip photo" Icon={FileImage} why={d.canRecord ? ON_THE_WEBSITE : RECORD_DEPOSIT_REFUSED} onRefused={onRefused("Add slip photo")} onPress={() => undefined} /> : null}
+          {x.slipId ? <Btn label={stored.opening ? "Opening…" : "Slip photo"} Icon={FileImage} busy={stored.opening !== null}
+              onPress={() => void stored.open(slipPath(code, x.slipId!), "The photo needs the connection to open.")} />
+            : !x.reversed ? <Btn label={pw.busy ? "Saving…" : "Add slip photo"} Icon={FileImage} busy={pw.busy} off={pw.stuck || pw.out}
+              why={d.canRecord ? null : RECORD_DEPOSIT_REFUSED} onRefused={onRefused("Add slip photo")} onPress={() => void addSlip()} /> : null}
           {acts.verify ? <Btn label="Verify" kind="primary" Icon={Check} busy={w.busy} off={w.stuck || w.out} why={acts.verify.why} onRefused={onRefused("Not verified")} onPress={verify} /> : null}
           {acts.reverse ? <Btn label="Reverse" Icon={Undo2} why={acts.reverse.why} onRefused={onRefused("Not reversed")} onPress={onReverse} /> : null}
         </View>
@@ -150,8 +170,12 @@ function DepositRow({ stop, code, x, first, d, onSaid, onDone, onRefused, onReve
   );
 }
 
-function RecordSheet({ stop, code, days, date, onClose, onDone }: { stop: Stop; code: string; days: DepositDay[]; date: string; onClose: () => void; onDone: (s: Said | null) => void }) {
+/** Where to look when a slip's photo is not known to have been saved. */
+const SLIP_WHERE = "the deposit's line";
+
+function RecordSheet({ stop, code, hotel, days, date, onClose, onDone }: { stop: Stop; code: string; hotel: Hotel; days: DepositDay[]; date: string; onClose: () => void; onDone: (s: Said | null) => void }) {
   const [f, setF] = useState({ day: date, amount: "", depositedOn: "", bank: "", slipNo: "" });
+  const [file, setFile] = useState<Picked | null>(null);
   const set = (k: keyof typeof f) => (v: string) => setF({ ...f, [k]: v });
   const [problem, setProblem] = useState<string | null>(null);
   const w = useWrite(stop, "recorded", "the deposits");
@@ -161,10 +185,20 @@ function RecordSheet({ stop, code, days, date, onClose, onDone }: { stop: Stop; 
     if (!s.body) return;
     const sent = s.body;
     setProblem(null);
+    const slip = file;
     void w.run(async () => {
-      await recordDeposit(code, sent);
+      const r = await recordDeposit(code, sent);
+      /* The deposit stands without the photo; it can be added from its line (the web's words). */
+      let without: Said | null = null;
+      if (slip && r.id) {
+        try { await attachSlip(code, r.id, slip); } catch (e) {
+          without = stop.lose(e, "saved", SLIP_WHERE)
+            ? { tone: "warn", title: "Deposit recorded. Not known whether the slip's photo was saved", text: `${e instanceof Error ? e.message : String(e)} Look at ${SLIP_WHERE} before adding it again.` }
+            : { tone: "refused", title: "Deposit recorded, photo not saved", text: e instanceof Error ? e.message : String(e) };
+        }
+      }
       onClose();
-      onDone({ tone: "ok", title: "Deposit recorded", text: `${rupees(sent.amount)} for ${dateDay(sent.businessDate)}.` });
+      onDone(without ?? { tone: "ok", title: "Deposit recorded", text: `${rupees(sent.amount)} for ${dateDay(sent.businessDate)}.` });
     }, (e, lost) => {
       const x = failedSaid(e, "Not recorded", "recorded", "the deposits");
       if (lost) { onClose(); onDone(x); return; }
@@ -185,18 +219,14 @@ function RecordSheet({ stop, code, days, date, onClose, onDone }: { stop: Stop; 
         <Input value={f.amount} onChange={set("amount")} label="Amount deposited" keyboard="decimal-pad" tabular />
         <Refused text={s.problem} />
       </Field>
-      <Field label="Deposited on" hint="As YYYY-MM-DD.">
-        <Input value={f.depositedOn} onChange={set("depositedOn")} label="Deposited on" keyboard="numbers-and-punctuation" placeholder="YYYY-MM-DD" tabular />
-      </Field>
+      <DateField label="Deposited on" value={f.depositedOn} onChange={set("depositedOn")} hotel={hotel} disabled={w.out} />
       <Field label="Bank">
         <Input value={f.bank} onChange={set("bank")} label="Bank" />
       </Field>
       <Field label="Slip number" hint="As printed on the bank's slip. A slip for two days is one line per day, same number.">
         <Input value={f.slipNo} onChange={set("slipNo")} label="Slip number" />
       </Field>
-      <Field label="Photo of the slip" hint={`${ON_THE_WEBSITE}: it can be added later from its line on the website; it is verified only once it is there.`}>
-        <Btn label="Take or pick a photo" Icon={FileImage} off onPress={() => undefined} a11y={`Photo of the slip: ${ON_THE_WEBSITE}`} />
-      </Field>
+      <BillField label="Photo of the slip" hint="It can be added later from its line; it is verified only once it is there." file={file} onFile={setFile} off={w.out} />
       <Refused text={problem} />
     </DeskSheet>
   );

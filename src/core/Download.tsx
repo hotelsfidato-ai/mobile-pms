@@ -27,7 +27,7 @@ import { c, face, t as type } from "./theme";
     web's own sentence for this file when nothing comes back (the voucher's), else downloadFile's. */
 export async function downloadToShare(path: string, fileName: string, mimeType: string, offline = DOWNLOAD_OFFLINE): Promise<void> {
   const url = `${API_URL}${path}`;
-  const file = new File(Paths.cache, fileName);
+  const file = fileName ? new File(Paths.cache, fileName) : Paths.cache; /* "": the SERVER's name (Content-Disposition) - a stored bill the phone cannot name (m16-pick-money) */
   let got: File;
   try {
     got = await File.downloadFileAsync(url, file, { headers: await who(), idempotent: true });

@@ -2,6 +2,7 @@ import { Minus, Plus, type LucideIcon } from "lucide-react-native";
 import { useState, type ReactNode } from "react";
 import { Pressable, Text, View } from "react-native";
 import type { Hotel } from "../../core/api";
+import { DateField } from "../../core/DateField";
 import { ExportButtons } from "../../core/Export";
 import { asRole } from "../../core/menu";
 import { useSession } from "../../core/session";
@@ -121,14 +122,20 @@ export function ItemSales({ hotel, role }: Page) {
       period={rangeWords(from, to)} query={{ from, asOn: to }} what="the item sales"
       controls={(
         <View style={{ gap: 12 }}>
-          <DayStep label="From" value={from} max={to} onChange={setFrom} />
-          <DayStep label="To" value={to} min={from} onChange={setTo} />
+          <DayPick label="From" value={from} max={to} onChange={setFrom} />
+          <DayPick label="To" value={to} min={from} onChange={setTo} />
         </View>
       )} />
   );
 }
 
-/** A day stepper (M-7: no date-picker package): − a day earlier, + a day later, within the web's min and max. */
+/** A report's day (the web's date input, its min and max): each phone's own date picker (M-16, core
+    DateField), the day as the same text. */
+export function DayPick({ label, value, min, max, onChange }: { label: string; value: string; min?: string; max?: string; onChange: (v: string) => void }) {
+  return <DateField label={label} value={value} min={min} max={max} hotel={{ businessDate: value }} onChange={(d) => { if (d) onChange(d); }} />;
+}
+
+/** A stepper (M-7), kept for a month (DateField picks days): − a day earlier, + a day later, within the web's min and max. */
 export function DayStep({ label, value, min, max, onChange, words = dayWords, step = (d, n) => plusDays(d, n) }: {
   label: string; value: string; min?: string; max?: string; onChange: (v: string) => void;
   words?: (v: string) => string; step?: (v: string, n: number) => string;

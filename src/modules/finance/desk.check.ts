@@ -23,13 +23,23 @@ eq(stillUnknown(1000, 1000), true, "a read begun at the same moment proves nothi
 eq(stillUnknown(1000, 1001), false, "a read begun after it came back: the person sees the record");
 
 /* The stop outlives the screen (the money review, 2): kept by screen, forgotten only by a later read. */
-deskStop.lose("5EL/deposits", { at: 1000, done: "recorded", where: "the deposits" });
+/* A server's own failure (500): it answered, so nothing is still being written - a read begun after frees it. */
+deskStop.lose("5EL/deposits", { at: 1000, done: "recorded", where: "the deposits" }, 500);
 eq(deskStop.lost("5EL/deposits", 0)?.done, "recorded", "the screen opened again with no read: still stopped");
 eq(deskStop.lost("5EL/deposits", 900)?.at, 1000, "the cache from before the loss: still stopped");
 eq(deskStop.lost("5EL/drawer", 0), null, "another screen is not stopped");
 eq(deskStop.lost("6EL/deposits", 0), null, "another hotel is not stopped");
 eq(deskStop.lost("5EL/deposits", 1001), null, "a read begun after it: lifted");
 eq(deskStop.lost("5EL/deposits", 900), null, "and forgotten");
+/* Nothing came back, or a gateway gave up (504): the server may still be writing (core settleMs). A read
+   begun 100 ms after the loss keeps it; one begun 5 s after frees it (the money review of 20 Nov, m16). */
+deskStop.lose("5EL/deposits", { at: 1000, done: "recorded", where: "the deposits" }, 504);
+eq(deskStop.lost("5EL/deposits", 1100)?.done, "recorded", "504: a read begun 100 ms after keeps it");
+eq(deskStop.lost("5EL/deposits", 6000)?.done, "recorded", "504: a read begun exactly 5 s after still keeps it");
+eq(deskStop.lost("5EL/deposits", 6001), null, "504: a read begun after 5 s frees it");
+deskStop.lose("5EL/drawer", { at: 1000, done: "saved", where: "the drawer" }, 0);
+eq(deskStop.lost("5EL/drawer", 1001)?.done, "saved", "nothing came back: a read begun 1 ms after keeps it");
+eq(deskStop.lost("5EL/drawer", 6001), null, "nothing came back: a read begun after 5 s frees it");
 deskStop.begin("5EL/drawer"); deskStop.begin("5EL/drawer");
 eq(deskStop.flying("5EL/drawer"), true, "a write on its way (the money review, 1)");
 deskStop.end("5EL/drawer");

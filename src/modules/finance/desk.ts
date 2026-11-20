@@ -1,4 +1,5 @@
 import { DASH } from "../../core/format.ts";
+import { settleMs } from "../../core/stop.ts";
 import { dateDay, rupees } from "./bill.ts";
 
 /* ══════════════════════════════════════════════════════════════════
@@ -38,12 +39,15 @@ export const stillUnknown = (stuckAt: number | null, began: number) => stuckAt !
     `${code}/${screen}`, so leaving the screen and coming back does not drop it while the read on
     screen is from before the loss; and the writes on their way, so no second write leaves while
     one is out (none of these routes reads a key). A loss is forgotten only once a read begun
-    after it has come back. */
+    after it has come back - and when nothing came back or a gateway gave up (0, 502, 503, 504),
+    only one begun SETTLE_MS after it (core stop.ts settleMs): the server may still be writing, and
+    a read begun at once would show the record without it (the money review of 20 Nov, m16). */
 export interface Lost { at: number; done: string; where: string }
 const losses = new Map<string, Lost>();
 const flying = new Map<string, number>();
 export const deskStop = {
-  lose: (key: string, v: Lost) => { losses.set(key, v); },
+  /** `status`: the failed write's answer (0 when nothing came back); `v.at` the moment it was lost. */
+  lose: (key: string, v: Lost, status: number) => { losses.set(key, { ...v, at: v.at + settleMs(status) }); },
   /** The loss still unknown against the read on screen, begun at `began` (0: none read yet). */
   lost: (key: string, began: number): Lost | null => {
     const v = losses.get(key);

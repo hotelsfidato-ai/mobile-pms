@@ -41,7 +41,7 @@ export function FormC({ hotel, role }: { hotel: Hotel; role: string | null }) {
   const cache = useQueryClient();
   const refused = whyNotReadFormC(role);
   const q = useDeskRead(() => (refused ? Promise.resolve(null) : readFormC(code)), ["finance", code, "desk", "form-c"]);
-  const stop = useStop(`${code}/form-c`, q.began);
+  const stop = useStop(`${code}/form-c`, q.began, q.reload);
   const [said, setSaid] = useState<Said | null>(null);
   const [editing, setEditing] = useState<FormCRow | null>(null);
   const [card, setCard] = useState<FormCRow | null>(null);

@@ -2,6 +2,7 @@ import { outcomeUnknown } from "../../core/api";
 import { useRef, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import type { Hotel } from "../../core/api";
+import { DateField } from "../../core/DateField";
 import { c, face, t } from "../../core/theme";
 import { Btn, body, Dialog, Field, Foot, InDialog, Input, saidOf, Select, type Said } from "../guest-services/kit";
 import { recordDelivery } from "./data";
@@ -26,8 +27,9 @@ import { ripple, shade, keys } from "../../core/ui";
    THE GST AMOUNT IS THE BILL'S: the web fills it from came × cost × rate on
    the device; the phone shows those parts beside the box and the person
    types the amount the bill prints (money is the server's, or the bill's;
-   never the phone's sum). Dates are typed YYYY-MM-DD (M-7: no date-picker
-   package). The stock lands in the Store through its own door; who may is
+   never the phone's sum). Use by, Bill date and Due on are each phone's own
+   date picker (M-16, core DateField), sent as the same YYYY-MM-DD text.
+   The stock lands in the Store through its own door; who may is
    the Store's rule (roles.ts whyNotReceive). Refused offline with the web's
    sentence; one tap is one delivery (latched, the request's keeper), and
    the server refuses a second ("…This one is delivered.").
@@ -140,9 +142,7 @@ export function Delivery({ code, id, store, lines, hotel, onClose, onDone }: {
                 </Field>
               </View>
               <View style={{ flex: 1 }}>
-                <Field label="Use by">
-                  <Input label={`Use by, the ${l.item}, as YYYY-MM-DD`} keyboardType="numbers-and-punctuation" value={d.useBy} onChangeText={(v) => set(l.id, { useBy: v })} placeholder="YYYY-MM-DD" />
-                </Field>
+                <DateField label="Use by" value={d.useBy} onChange={(v) => set(l.id, { useBy: v })} hotel={hotel} clearable disabled={busy} />
               </View>
             </View>
           </View>
@@ -168,14 +168,10 @@ export function Delivery({ code, id, store, lines, hotel, onClose, onDone }: {
           </Field>
           <View style={{ flexDirection: "row", gap: 8 }}>
             <View style={{ flex: 1 }}>
-              <Field label="Bill date">
-                <Input label="Bill date, as YYYY-MM-DD" keyboardType="numbers-and-punctuation" value={bill.billDate} onChangeText={(v) => setBill((b) => ({ ...b, billDate: v }))} placeholder="YYYY-MM-DD" />
-              </Field>
+              <DateField label="Bill date" value={bill.billDate} onChange={(v) => setBill((b) => ({ ...b, billDate: v }))} hotel={hotel} disabled={busy} />
             </View>
             <View style={{ flex: 1 }}>
-              <Field label="Due on">
-                <Input label="Due on, as YYYY-MM-DD" keyboardType="numbers-and-punctuation" value={bill.dueOn} onChangeText={(v) => setBill((b) => ({ ...b, dueOn: v }))} placeholder="YYYY-MM-DD" />
-              </Field>
+              <DateField label="Due on" value={bill.dueOn} onChange={(v) => setBill((b) => ({ ...b, dueOn: v }))} hotel={hotel} disabled={busy} />
             </View>
           </View>
           <Field label="Amount, as printed, ₹">

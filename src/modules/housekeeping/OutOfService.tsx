@@ -1,5 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { Plus, RotateCcw, Wrench } from "lucide-react-native";
+import { RotateCcw, Wrench } from "lucide-react-native";
 import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import type { Room } from "../../core/types";
@@ -10,7 +10,7 @@ import { Capsule, notKnown, ReadFailed, s, useRead, useStuck, ripple } from "../
 import {
   addDays, BLOCK_REASONS, blockBody, blockSpan, ended, reasonLabel, statusWord, takenOut, whyNotTake, type BlockForm,
 } from "./block";
-import { Day } from "./DayStepper";
+import { DateField } from "../../core/DateField";
 import { Button, Field, Input, Select, Sheet } from "./Form";
 import { whyNotBlock } from "./roles";
 
@@ -21,8 +21,8 @@ import { whyNotBlock } from "./roles";
    and a note, with the hotel's ready reasons. ONLINE ONLY (M-5): `send`
    refuses it offline with the web's sentence (src/core/offline.ts,
    unlisted), and nothing is held.
-   Differences from the web: a day stepper for the dates (no date-picker
-   package); a block starting after the business date is said as "goes
+   Differences from the web: the dates on each phone's own date picker
+   (M-16), Until at least the day after From (M-7); a block starting after the business date is said as "goes
    out on", and Put back says the status the room was read back with,
    not "It returns as dirty." (a hotel may take it back as it was).
    ══════════════════════════════════════════════════════════════════ */
@@ -181,24 +181,12 @@ export function OutOfService({ hotel, room: n, role, onBack }: {
                 <Select label="Why is it coming out?" value={form.reason} options={BLOCK_REASONS} onChange={(reason) => set({ reason })} off={off} />
               </Field>
 
-              <Field label="From" required>
-                <Day label="From" value={form.from} off={off} onChange={(from) => set({ from, to: form.to && form.to <= from ? addDays(from, 1) : form.to })} />
-              </Field>
+              {/* M-16: each phone's own date picker (the web's date boxes); Until at least the day after From (M-7, R-8), blank is open-ended. */}
+              <DateField label="From" required value={form.from} hotel={hotel} disabled={off}
+                onChange={(from) => { if (from) set({ from, to: form.to && form.to <= from ? addDays(from, 1) : form.to }); }} />
 
-              <Field label="Until" hint="Leave empty if unknown">
-                {form.to === null ? (
-                  <View style={{ flexDirection: "row" }}>
-                    <Button label="Set an end date" icon={Plus} disabled={off} onPress={() => set({ to: addDays(form.from, 1) })} />
-                  </View>
-                ) : (
-                  <View style={{ gap: 8 }}>
-                    <Day label="Until" value={form.to} min={addDays(form.from, 1)} off={off} onChange={(to) => set({ to })} />
-                    <View style={{ flexDirection: "row" }}>
-                      <Button label="No end date" disabled={off} onPress={() => set({ to: null })} />
-                    </View>
-                  </View>
-                )}
-              </Field>
+              <DateField label="Until" hint="Leave empty if unknown" value={form.to ?? ""} min={addDays(form.from, 1)} hotel={hotel} disabled={off} clearable
+                onChange={(to) => set({ to: to || null })} />
 
               <View style={{ gap: 6 }}>
                 <Field label="Note" hint="What is actually wrong">

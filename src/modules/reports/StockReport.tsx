@@ -1,5 +1,5 @@
 import { AlertTriangle, ChevronDown, ChevronUp, Lock } from "lucide-react-native";
-import { useState, type ReactNode } from "react";
+import { useState } from "react";
 import { ActivityIndicator, Platform, Pressable, Text, View } from "react-native";
 import type { Hotel } from "../../core/api";
 import { ExportButtons } from "../../core/Export";
@@ -8,7 +8,7 @@ import { isOnline } from "../../core/offline";
 import { c, face, space, t } from "../../core/theme";
 import { Head, Screen, useRead } from "../../core/ui";
 import { Back } from "../guest-services/kit";
-import { Day } from "../housekeeping/DayStepper";
+import { DateField } from "../../core/DateField";
 import { LoadFailed } from "../laundry/kit";
 import { readStockReport, readSuppliers } from "./stockData";
 import {
@@ -69,8 +69,9 @@ export function StockReportScreen({ hotel, report, by, supplier, onSupplier, onB
       {windowed || statement ? (
         <View style={{ gap: 10 }}>
           {statement ? <SupplierPick list={list.data} loading={list.loading} error={list.error} picked={supplier ?? null} name={name ?? null} onPick={(id) => onSupplier?.(id)} onRetry={list.reload} /> : null}
-          <Labelled label="From"><Day label="From" value={from} off={false} onChange={pickFrom} /></Labelled>
-          <Labelled label="To"><Day label="To" value={to} min={from} off={false} onChange={setTo} /></Labelled>
+          {/* M-16: each phone's own date picker (the web's date boxes), the day as the same text. */}
+          <DateField label="From" value={from} hotel={hotel} onChange={(d) => { if (d) pickFrom(d); }} />
+          <DateField label="To" value={to} min={from} hotel={hotel} onChange={(d) => { if (d) setTo(d); }} />
         </View>
       ) : null}
 
@@ -212,15 +213,6 @@ function ChartFigures({ chart }: { chart: NonNullable<ReportDoc["chart"]> }) {
 }
 
 /* ── The choices (Ledgers.tsx SupplierStatementPage, Voids.tsx WindowReport) ── */
-
-function Labelled({ label, children }: { label: string; children: ReactNode }) {
-  return (
-    <View style={{ gap: 4 }}>
-      <Text style={[t.label, { color: c.grey600 }]}>{label}</Text>
-      {children}
-    </View>
-  );
-}
 
 type Listed = Awaited<ReturnType<typeof readSuppliers>> | null | undefined;
 function SupplierPick({ list, loading, error, picked, name, onPick, onRetry }: {
