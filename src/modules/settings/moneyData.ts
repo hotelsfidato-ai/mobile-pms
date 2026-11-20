@@ -20,17 +20,11 @@ import type {
    ApiError 503): nothing is held. A refusal (409 {ok:false, reason}, 403
    the role gate's sentence) is an ApiError carrying the server's words.
    NO KEY is read by these routes; the screens keep the unknown-outcome
-   stop (moneyRules.ts moneyStop).
+   stop on the core's stop book (moneyKit.tsx useWriter, src/core/stop.ts).
    ══════════════════════════════════════════════════════════════════ */
 
 const H = (code: string) => `/api/hotels/${encodeURIComponent(code)}`;
 type Ok = { ok: true; id?: string };
-
-/** When the read began, with what came back: a doubt lifts only on a read begun after it. */
-export const stamped = async <T>(read: () => Promise<T>) => {
-  const began = Date.now();
-  return { began, d: await read() };
-};
 
 /* ── The three lists (money.ts moneyList) ─────────────────────────── */
 

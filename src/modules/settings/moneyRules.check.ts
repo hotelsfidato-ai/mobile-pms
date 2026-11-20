@@ -4,13 +4,14 @@
    the doubt outlives the screen, and the plans' tree as the web draws it. */
 import {
   COMMISSION, GST, MONEY_READ, MONEY_SETTING, PRICE, SETUP_CHANGE, categoryChoices, chargeBody, chargeLine, chargePrice,
-  commissionSaved, contractLine, dateShortOrNull, dayBefore, discountBody, discountOff, discountProblem, discountReady, draftsOf, feesBody,
-  feesChanged, flipDay, kindsFor, matches, mealDaysInWords, moneyStop, moved, offsetWords, orphanLine, orphaned, planRows,
+  commissionSaved, contractLine, dateShortOrNull, dayBefore, freshBook, discountBody, discountOff, discountProblem, discountReady, draftsOf, feesBody,
+  feesChanged, flipDay, kindsFor, matches, planAsk, mealDaysInWords, moved, offsetWords, orphanLine, orphaned, planRows,
   planSteps, refusalFor, sacProblem, sacShown, slabWords, slabsBody, taxSaved, typedSigned, whyNot,
   type Discount, type ExtraCharge, type PlanSetting, type TaxKindRules, type TaxSetup,
 } from "./moneyRules.ts";
 import { refusalFor as configRefusal, SETUP_CHANGE as CONFIG_SETUP, COMMISSION as CONFIG_COMMISSION } from "../inventory/configRoles.ts";
 import type { BreakupDay, Pricing } from "../inventory/rates.ts";
+import { stopBook } from "../../core/stop.ts";
 
 const eq = (got: unknown, want: unknown, what: string) => {
   if (JSON.stringify(got) !== JSON.stringify(want)) throw new Error(`${what}: got ${JSON.stringify(got)}, want ${JSON.stringify(want)}`);
@@ -28,18 +29,21 @@ eq(whyNot(PRICE, "hotel_manager") !== null, true, "the hotel manager does not");
 eq(whyNot(MONEY_READ, "front_desk"), "Reading the money settings is for the owner, an administrator or the general manager. Ask one of them.", "reading");
 eq(whyNot(MONEY_SETTING, "nonsense"), refusalFor(MONEY_SETTING), "an unknown role is a viewer");
 
-/* ── The doubt: kept outside React, lifted only by a read BEGUN after the loss ── */
-moneyStop.lose("5EL/payment-methods", "Not known whether it was saved: look at the list before trying again.", 1000);
-eq(moneyStop.doubt("5EL/payment-methods", undefined)?.lostAt, 1000, "no read yet: still in doubt");
-eq(moneyStop.doubt("5EL/payment-methods", 900)?.lostAt, 1000, "a read begun before the loss lifts nothing");
-eq(moneyStop.doubt("5EL/payment-methods", 1000)?.lostAt, 1000, "nor one begun at the same moment");
-eq(moneyStop.doubt("AGR/payment-methods", undefined), null, "another hotel is not in doubt");
-eq(moneyStop.doubt("5EL/payment-methods", 1001), null, "a read begun after it lifts it");
-eq(moneyStop.doubt("5EL/payment-methods", undefined), null, "and it is gone");
-moneyStop.begin("5EL/taxes"); moneyStop.begin("5EL/taxes"); moneyStop.end("5EL/taxes");
-eq(moneyStop.flying("5EL/taxes"), true, "one write still on its way");
-moneyStop.end("5EL/taxes");
-eq(moneyStop.flying("5EL/taxes"), false, "none on its way");
+/* ── Fresh after a write: only a read begun after the write's end lets the page write again (MSET-M5) ── */
+const book = stopBook({ now: () => 0 });
+const fresh = freshBook(book);
+const NAME = "settings/5EL/taxes";
+eq(fresh.stale(NAME), false, "nothing written: not stale");
+const before = book.begin();      // a read already on its way
+fresh.wrote(NAME);
+eq(fresh.stale(NAME), true, "just written: stale");
+fresh.seen(NAME, before);
+eq(fresh.stale(NAME), true, "a read begun before the write's end lets nothing go");
+fresh.seen("settings/AGR/taxes", book.begin());
+eq(fresh.stale(NAME), true, "another hotel's read lets nothing go");
+fresh.seen(NAME, book.begin());
+eq(fresh.stale(NAME), false, "a read begun after it does");
+eq(fresh.stale("settings/AGR/taxes"), false, "another hotel was never stale");
 
 /* ── Lists ── */
 eq(matches("Agoda", "  ago "), true, "search ignores case and spaces");
@@ -160,5 +164,13 @@ eq(planSteps(ste, { amount: 1500, unit: "rupees" }, "master", "1500", "rupees", 
   [{ what: "basis", roomTypeId: "ste" }, { what: "sources", sources: ["s1"] }], "made the master, sold by one source");
 eq(planSteps(rows[1]!, null, "independent", "", "rupees", []), [], "independent stays independent");
 eq(typedSigned(" -₹1,500.255"), "-1500.25", "a difference keeps its minus and two places");
+/* What the editor asks first (MSET-M6). */
+const was = { amount: 1500, unit: "rupees" as const };
+eq(planAsk(ste, planSteps(ste, was, "master", "1500", "rupees", []))?.act, "Make it the master", "the master asks");
+eq(planAsk(ste, planSteps(ste, was, "independent", "1500", "rupees", []))?.message,
+  "Suite will no longer follow the master. Its plans lose their price unless Suite has its own base on Rates.", "Independent asks, in plain words");
+eq(planAsk(ste, planSteps(ste, was, "derived", "", "rupees", []))?.act, "Clear the difference", "a blanked difference asks");
+eq(planAsk(ste, planSteps(ste, was, "derived", "1750", "rupees", [])), null, "a new difference does not");
+eq(planAsk(ste, planSteps(ste, was, "derived", "1500", "rupees", ["s1"])), null, "the sources alone do not");
 
 console.log("settings moneyRules: all checks pass");

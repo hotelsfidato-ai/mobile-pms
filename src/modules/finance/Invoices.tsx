@@ -7,9 +7,8 @@ import type { Hotel } from "../../core/api";
 import { ExportButtons } from "../../core/Export";
 import type { ExportTable } from "../../core/exportDoc";
 import { DASH } from "../../core/format";
-import { ON_THE_WEBSITE } from "../../core/menu";
 import { c, face, space, t } from "../../core/theme";
-import { Card, notKnown, Screen, useRead, useStuck } from "../../core/ui";
+import { Capsule, Card, notKnown, Screen, useRead, useStuck } from "../../core/ui";
 import { body, Empty, PageHead, Pill } from "../front-desk/kit";
 import { Kept, NotRead } from "../front-desk/StayList";
 import { Line } from "../guests/kit";
@@ -168,9 +167,15 @@ function Lists({ hotel, role }: { hotel: Hotel; role: string | null }) {
         </>
       )}
 
-      {/* D23-1: the four who may set a rate see the tax card on the web (TaxRulesCard): its form is the website's for now. */}
+      {/* D23-1: the four who may set a rate see the tax card on the web (TaxRulesCard); on the phone it is the
+          Taxes page, which the accountant may open too (roleGate GST; mobile/m13-set-money, MSET-M4). */}
       {seeTaxRules ? (
-        <Note icon={<IconChip icon={Percent} />} title="GST and VAT rates">{`${ON_THE_WEBSITE}: the rates are set on the website's Invoices page, or Settings › Taxes and billing.`}</Note>
+        <Note icon={<IconChip icon={Percent} />} title="GST and VAT rates">
+          <View style={{ gap: 8 }}>
+            <Text style={[t.label, body, { color: c.grey600, lineHeight: 21 }]}>The rates the front desk and the till bill at, and each heading's HSN/SAC code, are set on Taxes.</Text>
+            <View style={{ flexDirection: "row" }}><Capsule label="Open Taxes" onPress={() => router.push(`/settings/${code}/taxes` as Href)} /></View>
+          </View>
+        </Note>
       ) : null}
 
       {asking ? (

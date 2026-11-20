@@ -3,13 +3,13 @@ import { AlertTriangle, Plus, Receipt, X } from "lucide-react-native";
 import { useState, type ReactNode } from "react";
 import { Pressable, Text, View } from "react-native";
 import { c, face, space, t } from "../../core/theme";
-import { Head, Screen, confirmAct, ripple, useRead } from "../../core/ui";
+import { Head, Screen, confirmAct, ripple, Stopped, useRead } from "../../core/ui";
 import { ON_THE_WEBSITE } from "../../core/menu";
 import { Refused as NotYours } from "../admin/kit";
 import type { AdminProps } from "../admin/Route";
 import { Btn, Failed, Field, Loading, Pill, Select, Sheet, TextBox } from "../inventory/configKit";
 import { InDialog, Stale, Toast, body, type Said } from "../inventory/kit";
-import { readTaxSetup, setCategoryTaxKind, setTaxRules, setTaxSac, stamped } from "./moneyData";
+import { readTaxSetup, setCategoryTaxKind, setTaxRules, setTaxSac } from "./moneyData";
 import { Grey, refusedPage, useWriter, type Writer } from "./moneyKit";
 import {
   DASH, GST, NO_RATES, TAX_LABEL, TAX_WHAT, categoryChoices, dateShortOrNull, draftsOf, firstRate, newBand, orphanLine, orphaned, sacProblem,
@@ -47,17 +47,19 @@ import {
 export function Taxes({ hotel, role }: AdminProps) {
   const code = hotel.code;
   const cache = useQueryClient();
-  const refused = refusedPage(role, "/settings/rates/taxes", "Taxes");
+  /* The console offers Taxes to the owner, an administrator and the GM; the accountant, who sets GST
+     too (roleGate GST, the web's Invoices card), opens it from Invoices (MSET-M4). Never wider than GST. */
+  const refused = whyNot(GST, role) === null ? null : refusedPage(role, "/settings/rates/taxes", "Taxes");
   const key = ["settings", code, "tax"];
-  const q = useRead(() => (refused ? Promise.resolve(null) : stamped(() => readTaxSetup(code))), key);
-  const w = useWriter(`${code}/taxes`, q.data?.began);
+  const w = useWriter(`settings/${code}/taxes`);
+  const q = useRead(w.watch(() => (refused ? Promise.resolve(null) : readTaxSetup(code))), key);
   const cannot = whyNot(GST, role);
-  const locked = Boolean(cannot || w.blocked || w.busy);
+  const locked = Boolean(cannot) || w.locked;
   const [editing, setEditing] = useState<TaxKind | null>(null);
   const [said, setSaid] = useState<Said | null>(null);
   const [pulled, setPulled] = useState(false);
   const refresh = () => void cache.invalidateQueries({ queryKey: key });
-  const setup = q.data?.d;
+  const setup = q.data;
   const current = setup?.kinds.find((k) => k.kind === editing) ?? null;
 
   const changeKind = async (name: string, kind: string) => {
@@ -70,7 +72,7 @@ export function Taxes({ hotel, role }: AdminProps) {
   let main: ReactNode;
   if (refused) main = <NotYours sentence={refused} />;
   else if (!setup) main = q.error ? <Failed title="The taxes did not load" what="The taxes" error={q.error} onRetry={q.reload} /> : <Loading words="Reading the taxes…" />;
-  else main = <><Stale error={q.error} /><Card setup={setup} locked={locked} grey={w.blocked ?? cannot} onEdit={setEditing} onKind={(n, k) => void changeKind(n, k)} /></>;
+  else main = <><Stale error={q.error} /><Card setup={setup} locked={locked} line={w.line} onRead={q.reload} grey={cannot} onEdit={setEditing} onKind={(n, k) => void changeKind(n, k)} /></>;
 
   return (
     <View style={{ flex: 1 }}>
@@ -88,8 +90,8 @@ export function Taxes({ hotel, role }: AdminProps) {
   );
 }
 
-function Card({ setup, locked, grey, onEdit, onKind }: {
-  setup: TaxSetup; locked: boolean; grey: string | null; onEdit: (k: TaxKind) => void; onKind: (name: string, kind: string) => void;
+function Card({ setup, locked, line, onRead, grey, onEdit, onKind }: {
+  setup: TaxSetup; locked: boolean; line: string | null; onRead: () => void; grey: string | null; onEdit: (k: TaxKind) => void; onKind: (name: string, kind: string) => void;
 }) {
   const orphans = orphaned(setup);
   return (
@@ -105,6 +107,7 @@ function Card({ setup, locked, grey, onEdit, onKind }: {
           <Text style={[body, { flex: 1, color: c.ink900 }]}>{orphanLine(orphans.map((x) => x.name))}</Text>
         </View>
       ) : null}
+      {line ? <Stopped line={line} onRead={onRead} /> : null}
       <Grey line={grey} />
       {setup.kinds.map((k) => <Tile key={k.kind} rules={k} locked={locked} onEdit={() => onEdit(k.kind)} />)}
       {setup.categories.length > 0 ? (
@@ -166,7 +169,7 @@ function SlabsSheet({ code, rules, w, onClose, onDone }: { code: string; rules: 
   const [sac, setSac] = useState(rules.sac ?? "");
   const [said, setSaid] = useState<Said | null>(null);
   const [lost, setLost] = useState<string | null>(null);
-  const grey = w.blocked ?? lost;
+  const grey = w.line ?? lost;
   const built = slabsBody(rules.kind, rows);
   const problem = "problem" in built ? built.problem : sacProblem(sac);
   const set = (i: number, patch: Partial<SlabDraft>) => setRows((r) => r.map((x, j) => (j === i ? { ...x, ...patch } : x)));
@@ -175,18 +178,15 @@ function SlabsSheet({ code, rules, w, onClose, onDone }: { code: string; rules: 
     if ("problem" in built || sacProblem(sac)) return;
     setSaid(null);
     let slabs = 0;
-    const r = await w.run(async () => { slabs = (await setTaxRules(code, rules.kind, built.slabs)).slabs; }, { title: "Not saved", done: "saved", where: "this heading" });
+    let phase: "rates" | "code" = "rates";
+    /* One write of two steps (SlabsDialog save): the bands, then the code if it changed. A refused code
+       after the bands went says so, and the sheet stays (the web's toast); a retry sends the same bands. */
+    const r = await w.run(async () => {
+      slabs = (await setTaxRules(code, rules.kind, built.slabs)).slabs;
+      if (sacValue(sac) !== rules.sac) { phase = "code"; await setTaxSac(code, rules.kind, sacValue(sac)); }
+    }, { title: () => (phase === "code" ? "HSN/SAC not saved" : "Not saved"), done: "saved", where: "this heading" });
     if (!r) return;
     if (!r.ok) { setSaid(r.said); if (r.unknown) setLost(`${r.said.title}: close this and look at the heading before trying again.`); return; }
-    if (sacValue(sac) !== rules.sac) {
-      const s = await w.run(() => setTaxSac(code, rules.kind, sacValue(sac)), { title: "HSN/SAC not saved", done: "saved", where: "the HSN/SAC code" });
-      if (s && !s.ok) {
-        /* The rates went; the code did not: said, and the sheet stays (the web's toast). */
-        setSaid(s.said);
-        if (s.unknown) setLost(`${s.said.title}: close this and look at the heading before trying again.`);
-        return;
-      }
-    }
     const words = taxSaved(rules.kind, slabs);
     onDone({ title: words.title, body: words.body, tone: "ok" });
   }
@@ -202,7 +202,7 @@ function SlabsSheet({ code, rules, w, onClose, onDone }: { code: string; rules: 
           {problem ? <Text style={[t.caption, { color: c.red700 }]}>{problem}</Text> : null}
           <View style={{ flexDirection: "row", gap: 8 }}>
             <Btn label="Cancel" grow disabled={w.busy} onPress={onClose} />
-            <Btn label={w.busy ? "Saving…" : "Save"} variant="primary" grow disabled={w.busy || grey !== null || problem !== null} onPress={save} />
+            <Btn label={w.busy ? "Saving…" : "Save"} variant="primary" grow disabled={w.busy || (grey !== null || w.locked) || problem !== null} onPress={save} />
           </View>
         </>
       }>

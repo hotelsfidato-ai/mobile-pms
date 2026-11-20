@@ -1,14 +1,15 @@
 import { ArrowDown, ArrowUp, Check, Pencil, Plus, Trash2 } from "lucide-react-native";
-import { useRef, useState, type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { Platform, Pressable, Switch, Text, View } from "react-native";
 import { outcomeUnknown } from "../../core/api";
 import { asRole, mayReach } from "../../core/menu";
 import { c, face, space, t } from "../../core/theme";
-import { notKnown, ripple, shade } from "../../core/ui";
+import { notKnown, ripple, shade, useScreenStop } from "../../core/ui";
+import { stops } from "../../core/stop";
 import { notYourRole } from "../admin/roles";
 import { Btn, TextBox } from "../inventory/configKit";
 import { Empty, body, saidOf, type Said } from "../inventory/kit";
-import { matches, moneyStop } from "./moneyRules";
+import { freshBook, matches } from "./moneyRules";
 
 /* ══════════════════════════════════════════════════════════════════
    THE PIECES THE LANE'S PAGES SHARE (lane m13-set-money, 20 Nov). The
@@ -17,11 +18,13 @@ import { matches, moneyStop } from "./moneyRules";
    InDialog, Stale, Segmented, saidOf) are used as they are; here only
    what this lane adds:
 
-     useWriter  one tap, one write (a latch at the tap, MEMORY 8); while
-                it is on its way nothing else is sent and the sheet cannot
-                close; after an unknown outcome the page's writes stay grey
-                until a read BEGUN after the loss has come back (MEMORY 16,
-                22; the doubt is moneyRules.ts moneyStop, outside React)
+     useWriter  one tap, one write, on the core's stop book (src/core/
+                stop.ts, ui.tsx useScreenStop; MEMORY 8, 16, 22): while a
+                write is on its way nothing else is sent and the sheet
+                cannot close; after an unknown outcome the page's writes
+                stay grey until a good read BEGUN after the loss (and its
+                settle) has come back; after a write that landed, until a
+                read begun after it has (moneyRules.ts freshBook, MSET-M5)
      refusedPage  the web's console: a page not offered to the role is
                 "not part of your role" (the web's Settings.tsx sends such
                 a person to the first page they may open)
@@ -33,36 +36,56 @@ import { matches, moneyStop } from "./moneyRules";
 
 export type Outcome = { ok: true } | { ok: false; unknown: boolean; said: Said };
 
-export function useWriter(key: string, began: number | undefined) {
-  const latch = useRef(false);
+/** The app's one fresh-after-write book (moneyRules.ts freshBook), ordered by the core stop book. */
+const fresh = freshBook(stops);
+/** The words of the last loss under each name, for the core's Stopped line (the book keeps no words). */
+const lines = new Map<string, string>();
+
+/** One page's writes and its read, by name "settings/<code>/<page>": the core stop book (useScreenStop)
+    for the unknown outcome and the write on its way, and the fresh-after-write rule. `watch` wraps the
+    page's read: a good read begun after a loss (and its settle) or after a write lets the page go. */
+export function useWriter(name: string) {
+  const st = useScreenStop(name);
   const [busy, setBusy] = useState(false);
   const [, redraw] = useState(0);
-  const doubt = moneyStop.doubt(key, began);
-  /** `title`: the refusal's heading ("Not saved"); `done` and `where`: "Not known whether it was
-      <done>… Look at <where> before trying again." Null when the tap was not taken. */
-  async function run(fn: () => Promise<unknown>, words: { title: string; done: string; where: string }): Promise<Outcome | null> {
-    if (latch.current || moneyStop.flying(key) || moneyStop.doubt(key, began)) return null;
-    latch.current = true;
+  const stale = fresh.stale(name);
+  /** `title`: the refusal's heading ("Not saved"), or a function for a write of two steps; `done` and
+      `where`: "Not known whether it was <done>… Look at <where> before trying again". Null: the tap
+      was not taken (stopped, on its way, or not yet read again since the last write). */
+  async function run(fn: () => Promise<unknown>, words: { title: string | (() => string); done: string; where: string }): Promise<Outcome | null> {
+    if (st.isStuck() || fresh.stale(name)) return null;
     setBusy(true);
-    moneyStop.begin(key);
     try {
-      await fn();
+      await st.guard(fn);
+      fresh.wrote(name);
       return { ok: true };
     } catch (e) {
       if (outcomeUnknown(e)) {
         const n = notKnown(words.done, words.where, e);
-        moneyStop.lose(key, n.line, Date.now());
-        redraw((x) => x + 1);
+        lines.set(name, n.line);
         return { ok: false, unknown: true, said: { title: n.title, body: n.body, tone: "bad" } };
       }
-      return { ok: false, unknown: false, said: saidOf(words.title, e) };
+      return { ok: false, unknown: false, said: saidOf(typeof words.title === "function" ? words.title() : words.title, e) };
     } finally {
-      moneyStop.end(key);
-      latch.current = false;
       setBusy(false);
+      redraw((x) => x + 1);
     }
   }
-  return { busy, blocked: doubt?.line ?? null, run };
+  const watch = <T,>(read: () => Promise<T>) => st.watch(async (ctx?: { signal?: AbortSignal }) => {
+    const ticket = stops.begin();
+    const got = await read();
+    if (!ctx?.signal?.aborted) fresh.seen(name, ticket);
+    return got;
+  });
+  return {
+    busy,
+    /** Every write of the page grey: lost, on its way, or not yet read again after one. */
+    locked: st.stuck || stale || busy,
+    /** The "Not known whether…" line while lost (the core's Stopped draws it). */
+    line: st.unknown ? lines.get(name) ?? notKnown("saved", "this page").line : null,
+    run,
+    watch,
+  };
 }
 export type Writer = ReturnType<typeof useWriter>;
 

@@ -2,7 +2,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useState, type ReactNode } from "react";
 import { Platform, Pressable, Text, View } from "react-native";
 import { c, face, space, t } from "../../core/theme";
-import { Head, Screen, confirmAct, ripple, shade, useRead } from "../../core/ui";
+import { Head, Screen, confirmAct, ripple, shade, Stopped, useRead } from "../../core/ui";
 import { Refused as NotYours } from "../admin/kit";
 import type { AdminProps } from "../admin/Route";
 import { readSources } from "../inventory/configData";
@@ -10,11 +10,11 @@ import { Btn, Failed, Field, Loading, Pill, Sheet, TextBox } from "../inventory/
 import { readBreakup, readInventory, readPricing } from "../inventory/data";
 import { Empty, InDialog, Segmented, Stale, Toast, body, type Said } from "../inventory/kit";
 import type { Pricing } from "../inventory/rates";
-import { orderPlans, planStep, readPlanSettings, setMealDays, setPlanOn, stamped } from "./moneyData";
+import { orderPlans, planStep, readPlanSettings, setMealDays, setPlanOn } from "./moneyData";
 import { Grey, MoveButtons, OnOff, TickBox, refusedPage, useWriter, type Writer } from "./moneyKit";
 import {
   KIND_WORDS, MEALS, MEAL_DAYS, MEAL_PLANS, PLAN_NAME, PRICE, PRICES, SOURCES_READ, flipDay, kindsFor, mealDaysInWords, moved, offsetWords,
-  planPriceLine, planRows, planSteps, rupees, typedSigned, whyNot,
+  planAsk, planPriceLine, planRows, planSteps, rupees, typedSigned, whyNot,
   type Day, type Meal, type MealDays, type PlanKind, type PlanRow,
 } from "./moneyRules";
 
@@ -65,15 +65,15 @@ export function RatePlans({ hotel, role }: AdminProps) {
   const refused = refusedPage(role, "/settings/rates/plans", "Rate plans");
   const cannotRead = refused ?? whyNot(PRICES, role);
   const key = ["settings", code, "plans"];
-  const q = useRead(() => (cannotRead ? Promise.resolve(null) : stamped(() => readPlans(code))), key);
-  const w = useWriter(`${code}/plans`, q.data?.began);
+  const w = useWriter(`settings/${code}/plans`);
+  const q = useRead(w.watch(() => (cannotRead ? Promise.resolve(null) : readPlans(code))), key);
   const cannot = whyNot(PRICE, role);
   const [editing, setEditing] = useState<PlanRow | null>(null);
   const [said, setSaid] = useState<Said | null>(null);
   const [pulled, setPulled] = useState(false);
   /* Rates shows the same prices: its reads go too. */
   const refresh = () => void cache.invalidateQueries({ predicate: (x) => (x.queryKey[0] === "settings" && x.queryKey[1] === code && (x.queryKey[2] === "plans" || x.queryKey[2] === "meal-plans")) || (x.queryKey[0] === "inventory" && x.queryKey[1] === code) });
-  const v = q.data?.d;
+  const v = q.data;
   const rows = v ? planRows(v.pricing, v.days, v.settings.plans) : [];
 
   const toggle = async (r: PlanRow, on: boolean) => {
@@ -97,7 +97,8 @@ export function RatePlans({ hotel, role }: AdminProps) {
           <Explain bold="Derived" text="- follows the master or its own room only, by a difference or the meal add-on." />
           <Explain bold="Independent" text="- its own base, typed on Rates." />
         </View>
-        <Grey line={w.blocked ?? cannot} />
+        {w.line ? <Stopped line={w.line} onRead={q.reload} /> : null}
+          <Grey line={cannot} />
         {rows.length === 0 ? (
           <Empty title="No room types yet" description="Add room types under Rooms; each appears here on every meal plan it is sold on." />
         ) : (
@@ -106,7 +107,7 @@ export function RatePlans({ hotel, role }: AdminProps) {
               const offset = offsetWords(r.offset);
               return (
                 <View key={r.key} style={{ flexDirection: "row", alignItems: "center", gap: 10, minHeight: 64, paddingVertical: 10, paddingLeft: r.plan !== "EP" || r.kind === "derived" ? space.cardX + 12 : space.cardX, paddingRight: 8, borderTopWidth: i === 0 ? 0 : 1, borderTopColor: c.grey100 }}>
-                  <OnOff on={r.setting?.isActive ?? true} label={`${r.name} offered`} disabled={Boolean(cannot || w.blocked || w.busy)} onChange={(on) => void toggle(r, on)} />
+                  <OnOff on={r.setting?.isActive ?? true} label={`${r.name} offered`} disabled={Boolean(cannot) || w.locked} onChange={(on) => void toggle(r, on)} />
                   <View style={{ flex: 1, gap: 4 }}>
                     <Text style={[t.label, face[500], { color: c.ink900 }]}>{r.name}</Text>
                     <Pill tone={r.kind === "master" ? "accent" : r.kind === "derived" ? "success" : "neutral"} dot={false}>{KIND_WORDS[r.kind]}</Pill>
@@ -168,7 +169,7 @@ function PlanSheet({ code, row, rows, pricing, mealDays, cannot, role, w, onClos
   const noSources = whyNot(SOURCES_READ, role);
   const sources = useRead(() => (noSources ? Promise.resolve([]) : readSources(code)), ["inventory", code, "booking-sources"]);
   const meals = mealDaysInWords(mealDays);
-  const grey = w.blocked ?? lost;
+  const grey = w.line ?? lost;
   const keys = rows.map((r) => r.key);
   const steps = planSteps(row, type.difference, kind, amount, unit, chosen);
   const sourceWords = chosen.length === 0 ? "Every source" : (sources.data ?? []).filter((s) => chosen.includes(s.id)).map((s) => s.name).join(", ");
@@ -184,8 +185,9 @@ function PlanSheet({ code, row, rows, pricing, mealDays, cannot, role, w, onClos
   }
   const update = () => {
     if (steps.length === 0) { onDone({ title: "Saved", body: row.name, tone: "ok" }); return; }
-    /* Making it the master moves every derived plan: asked first, in the editor's own words. */
-    if (steps.some((s) => s.what === "basis")) confirmAct(`Make ${row.roomType} the master?`, "Making it the master moves every derived plan to follow it.", "Make it the master", () => void send());
+    /* Making it the master, or clearing a difference, moves prices: asked first (planAsk, MSET-M6). */
+    const ask = planAsk(row, steps);
+    if (ask) confirmAct(ask.title, ask.message, ask.act, () => void send());
     else void send();
   };
   const move = async (by: -1 | 1) => {
@@ -210,7 +212,7 @@ function PlanSheet({ code, row, rows, pricing, mealDays, cannot, role, w, onClos
             <Btn label="Cancel" grow disabled={w.busy} onPress={onClose} />
             {step > 1 ? <Btn label="Back" grow disabled={w.busy} onPress={() => setStep(step - 1)} /> : null}
             {step < 3 ? <Btn label="Next" variant="primary" grow onPress={() => setStep(step + 1)} /> : null}
-            {step === 3 && mayEdit ? <Btn label={w.busy ? "Saving…" : "Update"} variant="primary" grow disabled={w.busy || grey !== null} onPress={update} /> : null}
+            {step === 3 && mayEdit ? <Btn label={w.busy ? "Saving…" : "Update"} variant="primary" grow disabled={w.busy || (grey !== null || w.locked)} onPress={update} /> : null}
           </View>
         </>
       }>
@@ -220,7 +222,7 @@ function PlanSheet({ code, row, rows, pricing, mealDays, cannot, role, w, onClos
           <Line label="Meal plan" value={PLAN_NAME[row.plan]} />
           <Line label="Name" value={`${row.name} (by itself)`} />
           <Line label="Meals" value={meals ?? "-"} />
-          {mayEdit ? <MoveButtons first={keys[0] === row.key} last={keys[keys.length - 1] === row.key} disabled={w.busy || grey !== null} onMove={(by) => void move(by)} /> : null}
+          {mayEdit ? <MoveButtons first={keys[0] === row.key} last={keys[keys.length - 1] === row.key} disabled={w.busy || (grey !== null || w.locked)} onMove={(by) => void move(by)} /> : null}
         </View>
       ) : null}
       {step === 2 ? (
@@ -291,13 +293,13 @@ export function MealPlans({ hotel, role }: AdminProps) {
   const refused = refusedPage(role, "/settings/rates/meal-plans", "Meal plans");
   const cannotRead = refused ?? whyNot(PRICES, role);
   const key = ["settings", code, "meal-plans"];
-  const q = useRead(() => (cannotRead ? Promise.resolve(null) : stamped(() => readPlanSettings(code))), key);
-  const w = useWriter(`${code}/meal-plans`, q.data?.began);
+  const w = useWriter(`settings/${code}/meal-plans`);
+  const q = useRead(w.watch(() => (cannotRead ? Promise.resolve(null) : readPlanSettings(code))), key);
   const cannot = whyNot(PRICE, role);
   const [said, setSaid] = useState<Said | null>(null);
   const [pulled, setPulled] = useState(false);
   const refresh = () => void cache.invalidateQueries({ predicate: (x) => x.queryKey[0] === "settings" && x.queryKey[1] === code && (x.queryKey[2] === "meal-plans" || x.queryKey[2] === "plans") });
-  const v = q.data?.d;
+  const v = q.data;
 
   let main: ReactNode;
   if (refused) main = <NotYours sentence={refused} />;
@@ -307,7 +309,8 @@ export function MealPlans({ hotel, role }: AdminProps) {
     main = (
       <View style={{ gap: 12 }}>
         <Stale error={q.error} />
-        <Grey line={w.blocked ?? cannot} />
+        {w.line ? <Stopped line={w.line} onRead={q.reload} /> : null}
+          <Grey line={cannot} />
         {MEAL_PLANS.map((p) => {
           const days = v.mealDays.find((d) => d.mealPlan === p.code);
           return <PlanCard key={`${p.code}/${JSON.stringify(days ?? null)}`} code={code} plan={p} days={days} cannot={cannot} w={w}
@@ -363,7 +366,7 @@ function PlanCard({ code, plan, days, cannot, w, onSaid }: {
       ))}
       {mayEdit ? (
         <View style={{ flexDirection: "row", marginTop: 4 }}>
-          <Btn label={w.busy ? "Saving…" : "Save"} disabled={w.busy || w.blocked !== null} onPress={() => void save()} />
+          <Btn label={w.busy ? "Saving…" : "Save"} disabled={w.busy || w.locked} onPress={() => void save()} />
         </View>
       ) : null}
     </View>

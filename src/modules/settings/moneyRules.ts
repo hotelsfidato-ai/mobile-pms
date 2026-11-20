@@ -81,32 +81,38 @@ export const refusalFor = (g: Grant) => `${g.doing} is for ${list(whoMay(g).map(
 /** null when the API lets this role through, else its sentence (an unknown role is a viewer). */
 export const whyNot = (g: Grant, role: string | null): string | null => (allows(g, asRole(role)) ? null : refusalFor(g));
 
-/* ══ AN UNKNOWN OUTCOME (MEMORY 16, 22; BRIEF-T4) ═════════════════
+/* ══ AN UNKNOWN OUTCOME, AND FRESH AFTER A WRITE ══════════════════
    None of these routes reads an idempotency key (api/src: only refunds,
    postings, housekeeping, minibar, banquet, loyalty, night audit and pos
-   do). So when nothing came back, or the server failed, the page's writes
-   stay grey until a read of the page that BEGAN after the loss has come
-   back. The doubt is kept here, outside React, by hotel and page: leaving
-   the page and coming back finds it. While a write is on its way the page
-   sends nothing else and its sheet cannot be closed. */
+   do). The unknown outcome is the core's stop book (src/core/stop.ts,
+   ui.tsx useScreenStop), one for the app, named "settings/<code>/<page>".
 
-export interface Doubt { lostAt: number; line: string }
-const doubts = new Map<string, Doubt>();
-const flying = new Map<string, number>();
+   FRESH AFTER A WRITE (the review of 20 Nov, MSET-M5): every write here
+   that opens from a sheet REPLACES a whole set - PUT tax/:kind deletes and
+   re-inserts every band (tax.ts 226-236), PUT plan-settings sources the
+   same (planSettings.ts 117-125). After a save, a sheet opened from the
+   last read would carry the old set, and its Save would send it back. So a
+   page's writes stay grey after each one that landed until a read that
+   BEGAN after its end has come back good. Ordered by the stop book's own
+   counter (`begin`), so a read already on its way when the write ended
+   never counts. Kept outside React, by the same name. */
 
-export const moneyStop = {
-  lose: (key: string, line: string, at: number) => { doubts.set(key, { lostAt: at, line }); },
-  /** The doubt still standing against the last read that came back, begun at `began`. */
-  doubt: (key: string, began: number | undefined): Doubt | null => {
-    const d = doubts.get(key);
-    if (!d) return null;
-    if (began !== undefined && began > d.lostAt) { doubts.delete(key); return null; }
-    return d;
-  },
-  begin: (key: string) => { flying.set(key, (flying.get(key) ?? 0) + 1); },
-  end: (key: string) => { const n = (flying.get(key) ?? 1) - 1; if (n > 0) flying.set(key, n); else flying.delete(key); },
-  flying: (key: string) => (flying.get(key) ?? 0) > 0,
-};
+export interface FreshBook {
+  /** A write under `name` has just ended (answered yes). */
+  wrote(name: string): void;
+  /** A read that began at `ticket` came back good. */
+  seen(name: string, ticket: { n: number }): void;
+  /** True while no read begun after the last write's end has come back. */
+  stale(name: string): boolean;
+}
+export function freshBook(book: { begin: () => { n: number } }): FreshBook {
+  const wrote = new Map<string, number>();
+  return {
+    wrote: (name) => { wrote.set(name, book.begin().n); },
+    seen: (name, ticket) => { const w = wrote.get(name); if (w !== undefined && ticket.n > w) wrote.delete(name); },
+    stale: (name) => wrote.has(name),
+  };
+}
 
 /* ══ WHAT IS TYPED ════════════════════════════════════════════════ */
 
@@ -433,6 +439,24 @@ export function planSteps(row: PlanRow, was: Difference, kind: PlanKind, amount:
   const before = new Set(row.setting?.sources ?? []);
   if (chosen.length !== before.size || chosen.some((s) => !before.has(s))) steps.push({ what: "sources", sources: [...chosen] });
   return steps;
+}
+
+/** What the editor asks before it sends (each phone's own dialog), or null. Making a type the master
+    moves every derived plan (the web's own warning); clearing a type's difference - Independent, or the
+    difference left blank - sends PUT pricing/addon {amount: null}, and its plans then have no price
+    unless the type has its own base on Rates (the review of 20 Nov, MSET-M6). */
+export function planAsk(row: PlanRow, steps: readonly PlanStep[]): { title: string; message: string; act: string } | null {
+  if (steps.some((s) => s.what === "basis")) {
+    return { title: `Make ${row.roomType} the master?`, message: "Making it the master moves every derived plan to follow it.", act: "Make it the master" };
+  }
+  if (steps.some((s) => s.what === "addon" && s.body.amount === null)) {
+    return {
+      title: `Clear ${row.roomType}'s difference?`,
+      message: `${row.roomType} will no longer follow the master. Its plans lose their price unless ${row.roomType} has its own base on Rates.`,
+      act: "Clear the difference",
+    };
+  }
+  return null;
 }
 
 /** The editor's summary line (RatePlans.tsx 323-325). */

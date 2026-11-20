@@ -3,7 +3,7 @@ import { Star } from "lucide-react-native";
 import { useState, type ReactNode } from "react";
 import { Text, View } from "react-native";
 import { c, space, t } from "../../core/theme";
-import { Head, Screen, useRead } from "../../core/ui";
+import { Head, Screen, Stopped, useRead } from "../../core/ui";
 import { useSession } from "../../core/session";
 import { Refused as NotYours } from "../admin/kit";
 import type { AdminProps } from "../admin/Route";
@@ -11,7 +11,7 @@ import { Btn, Failed, Field, Loading, Select, Sheet, SwitchLine, TextBox } from 
 import { Empty, InDialog, Segmented, Stale, Toast, body, type Said } from "../inventory/kit";
 import { confirmAct } from "../../core/ui";
 import {
-  listAdd, listChange, listOrder, listRemove, makeDefaultMethod, readDiscounts, readExtraCharges, readPaymentMethods, setEarlyLateFees, stamped,
+  listAdd, listChange, listOrder, listRemove, makeDefaultMethod, readDiscounts, readExtraCharges, readPaymentMethods, setEarlyLateFees,
   type MoneyList,
 } from "./moneyData";
 import { Grey, ListCard, MoveButtons, OnOff, Why, WhyLine, refusedPage, useWriter, type Outcome, type Writer } from "./moneyKit";
@@ -84,8 +84,8 @@ const askDelete = (name: string, onYes: () => void) =>
   confirmAct(`Delete ${name}?`, "It comes off the list. Only what nothing has used can be deleted; anything used is switched Off instead.", "Delete", onYes);
 
 /** The sheet's foot: what came back, the grey line, Cancel and Save. */
-function Foot({ said, grey, saveLabel = "Save", ready, busy, onCancel, onSave, extra }: {
-  said: Said | null; grey: string | null; saveLabel?: string; ready: boolean; busy: boolean; onCancel: () => void; onSave: () => void; extra?: ReactNode;
+function Foot({ said, grey, saveLabel = "Save", ready, busy, locked, onCancel, onSave, extra }: {
+  said: Said | null; grey: string | null; saveLabel?: string; ready: boolean; busy: boolean; locked: boolean; onCancel: () => void; onSave: () => void; extra?: ReactNode;
 }) {
   return (
     <>
@@ -94,7 +94,7 @@ function Foot({ said, grey, saveLabel = "Save", ready, busy, onCancel, onSave, e
       {extra}
       <View style={{ flexDirection: "row", gap: 8 }}>
         <Btn label="Cancel" grow disabled={busy} onPress={onCancel} />
-        <Btn label={busy ? "Saving…" : saveLabel} variant="primary" grow disabled={!ready || busy || grey !== null} onPress={onSave} />
+        <Btn label={busy ? "Saving…" : saveLabel} variant="primary" grow disabled={!ready || busy || locked || grey !== null} onPress={onSave} />
       </View>
     </>
   );
@@ -108,12 +108,12 @@ export function PaymentMethods({ hotel, role }: AdminProps) {
   const refused = refusedPage(role, "/settings/money/payment-methods", "Payment methods");
   const cannotRead = refused ?? whyNot(MONEY_READ, role);
   const key = ["settings", code, "payment-methods"];
-  const q = useRead(() => (cannotRead ? Promise.resolve(null) : stamped(() => readPaymentMethods(code))), key);
-  const w = useWriter(`${code}/payment-methods`, q.data?.began);
+  const w = useWriter(`settings/${code}/payment-methods`);
+  const q = useRead(w.watch(() => (cannotRead ? Promise.resolve(null) : readPaymentMethods(code))), key);
   const cannot = whyNot(MONEY_SETTING, role);
   const { said, setSaid, after, refresh } = useAfter(key);
   const [editing, setEditing] = useState<PaymentMethodRow | "new" | null>(null);
-  const v = q.data?.d;
+  const v = q.data;
   /* The desk's screens read the hotel's list from the session (PaymentMethods.tsx done): read it again. */
   const done = (r: Outcome | null, ok: string) => { const yes = after(r, ok); if (r) void session.refresh(); return yes; };
   const act = (fn: () => Promise<unknown>) => w.run(fn, { title: "Not saved", done: "saved", where: "the list" });
@@ -128,8 +128,9 @@ export function PaymentMethods({ hotel, role }: AdminProps) {
       ) : null}>
       {v ? (
         <View style={{ gap: 8 }}>
-          <Grey line={w.blocked ?? cannot} />
-          <ListCard rows={v.methods} name={(m) => m.label} empty="No payment methods yet." addLabel="Add a method" locked={Boolean(cannot || w.blocked || w.busy)}
+          {w.line ? <Stopped line={w.line} onRead={q.reload} /> : null}
+          <Grey line={cannot} />
+          <ListCard rows={v.methods} name={(m) => m.label} empty="No payment methods yet." addLabel="Add a method" locked={Boolean(cannot) || w.locked}
             detail={(m) => (
               <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
                 <Text style={[t.label, { color: c.grey500 }]}>{kindWords(v, m.kind)}</Text>
@@ -159,7 +160,7 @@ function MethodSheet({ code, v, row, w, onClose, onDone }: {
   const [lost, setLost] = useState<string | null>(null);
   const isDef = row !== null && isDefault(v, row);
   const ids = v.methods.map((m) => m.id);
-  const grey = w.blocked ?? lost;
+  const grey = w.line ?? lost;
   const go = async (fn: () => Promise<unknown>, ok: string, done: string) => {
     setSaid(null);
     const r = await w.run(fn, { title: "Not saved", done, where: "the list" });
@@ -175,10 +176,10 @@ function MethodSheet({ code, v, row, w, onClose, onDone }: {
   const defaultWhy = row ? whyNotDefault(row) : null;
   return (
     <Sheet title={row ? `Edit ${row.label}` : "Add a payment method"} onClose={onClose}
-      foot={<Foot said={said} grey={grey} ready={methodReady(label, kind)} busy={w.busy} onCancel={onClose} onSave={save}
+      foot={<Foot said={said} grey={grey} ready={methodReady(label, kind)} busy={w.busy} locked={w.locked} onCancel={onClose} onSave={save}
         extra={row && !isDef ? (
           <View style={{ gap: 4 }}>
-            <Btn label="Make default" disabled={w.busy || grey !== null || defaultWhy !== null}
+            <Btn label="Make default" disabled={w.busy || (grey !== null || w.locked) || defaultWhy !== null}
               onPress={() => void go(() => makeDefaultMethod(code, row.id), `${row.label} is the default`, "made the default")} />
             {defaultWhy ? <Text style={t.caption}>{defaultWhy}</Text> : null}
           </View>
@@ -190,7 +191,7 @@ function MethodSheet({ code, v, row, w, onClose, onDone }: {
       </Field>
       {isDef ? <Text style={[body, { color: c.grey600 }]}>The default: it stays On.</Text> : null}
       {row ? (
-        <MoveButtons first={ids[0] === row.id} last={ids[ids.length - 1] === row.id} disabled={w.busy || grey !== null}
+        <MoveButtons first={ids[0] === row.id} last={ids[ids.length - 1] === row.id} disabled={w.busy || (grey !== null || w.locked)}
           onMove={(by) => { const order = moved(ids, row.id, by); if (order) void go(() => listOrder(code, "payment-methods", order), "Order saved", "moved"); }} />
       ) : null}
       <Why>
@@ -219,12 +220,12 @@ function Charges({ hotel, role, transport }: AdminProps & { transport: boolean }
   const cannotRead = refused ?? whyNot(MONEY_READ, role);
   /* One read for both pages (the web's ["extra-charges", hotel]): one list behind them. */
   const key = ["settings", code, "extra-charges"];
-  const q = useRead(() => (cannotRead ? Promise.resolve(null) : stamped(() => readExtraCharges(code))), key);
-  const w = useWriter(`${code}/extra-charges`, q.data?.began);
+  const w = useWriter(`settings/${code}/extra-charges`);
+  const q = useRead(w.watch(() => (cannotRead ? Promise.resolve(null) : readExtraCharges(code))), key);
   const cannot = whyNot(MONEY_SETTING, role);
   const { said, setSaid, after, refresh } = useAfter(key);
   const [editing, setEditing] = useState<ExtraCharge | "new" | null>(null);
-  const v = q.data?.d;
+  const v = q.data;
   const rows = v ? chargesOf(v, transport) : [];
   const act = (fn: () => Promise<unknown>) => w.run(fn, { title: "Not saved", done: "saved", where: "the list" });
 
@@ -239,9 +240,10 @@ function Charges({ hotel, role, transport }: AdminProps & { transport: boolean }
       ) : null}>
       {v ? (
         <View style={{ gap: 12 }}>
-          <Grey line={w.blocked ?? cannot} />
+          {w.line ? <Stopped line={w.line} onRead={q.reload} /> : null}
+          <Grey line={cannot} />
           {!transport ? <EarlyLate key={`${v.earlyCheckinCharge}/${v.lateCheckoutCharge}`} code={code} v={v} w={w} cannot={whyNot(SETUP_CHANGE, role)} onSaid={after} /> : null}
-          <ListCard rows={rows} name={(x) => x.name} detail={chargeLine} locked={Boolean(cannot || w.blocked || w.busy)}
+          <ListCard rows={rows} name={(x) => x.name} detail={chargeLine} locked={Boolean(cannot) || w.locked}
             addLabel={transport ? "Add a pickup or drop" : "Add a charge"} empty={transport ? "No pickup or drop yet." : "No extra charges yet."}
             onAdd={() => setEditing("new")} onEdit={setEditing}
             onToggle={async (x, on) => after(await act(() => listChange(code, "extra-charges", x.id, { isActive: on })), on ? `${x.name} is On` : `${x.name} is Off`)}
@@ -269,7 +271,7 @@ function EarlyLate({ code, v, w, cannot, onSaid }: {
       </Field>
       {cannot ? <Text style={t.caption}>{cannot}</Text> : null}
       <View style={{ flexDirection: "row" }}>
-        <Btn label={w.busy ? "Saving…" : "Save fees"} variant="primary" disabled={!changed || w.busy || cannot !== null || w.blocked !== null}
+        <Btn label={w.busy ? "Saving…" : "Save fees"} variant="primary" disabled={!changed || w.busy || cannot !== null || w.locked}
           onPress={async () => onSaid(await w.run(() => setEarlyLateFees(code, feesBody(e, l)), { title: "Not saved", done: "saved", where: "the fees" }), "Saved")} />
       </View>
     </View>
@@ -285,7 +287,7 @@ function ChargeSheet({ code, all, row, transport, w, onClose, onDone }: {
   const [isTransport, setIsTransport] = useState(row?.isTransport ?? transport);
   const [said, setSaid] = useState<Said | null>(null);
   const [lost, setLost] = useState<string | null>(null);
-  const grey = w.blocked ?? lost;
+  const grey = w.line ?? lost;
   /* The order is the whole list's (pickups and charges are one table, sort_order across both). */
   const ids = all.map((x) => x.id);
   const go = async (fn: () => Promise<unknown>, ok: string, done: string) => {
@@ -314,7 +316,7 @@ function ChargeSheet({ code, all, row, transport, w, onClose, onDone }: {
   };
   return (
     <Sheet title={row ? `Edit ${row.name}` : transport ? "Add a pickup or drop" : "Add a charge"} onClose={onClose}
-      foot={<Foot said={said} grey={grey} ready={name.trim() !== ""} busy={w.busy} onCancel={onClose} onSave={save} />}>
+      foot={<Foot said={said} grey={grey} ready={name.trim() !== ""} busy={w.busy} locked={w.locked} onCancel={onClose} onSave={save} />}>
       <Field label="Name"><TextBox label="Name" value={name} caps="sentences" onChangeText={setName} /></Field>
       <Field label="Price" hint="Blank: included at no charge.">
         <TextBox label="Price" value={rate} keyboardType="decimal-pad" onChangeText={(x) => setRate(typedFigure(x))} />
@@ -322,7 +324,7 @@ function ChargeSheet({ code, all, row, transport, w, onClose, onDone }: {
       <Field label="Bill's column"><Select label="Bill's column" value={category} options={COLUMNS} onChange={setCategory} /></Field>
       <SwitchLine label="A pickup or a drop" on={isTransport} onChange={setIsTransport} />
       {row ? (
-        <MoveButtons first={shown[0] === row.id} last={shown[shown.length - 1] === row.id} disabled={w.busy || grey !== null} onMove={move} />
+        <MoveButtons first={shown[0] === row.id} last={shown[shown.length - 1] === row.id} disabled={w.busy || (grey !== null || w.locked)} onMove={move} />
       ) : null}
       <Why>
         <WhyLine bold="The price" text={'is what the desk adds to the bill: "Airport pickup ₹1,000". Leave it blank when the rate includes it at no charge - a welcome drink.'} />
@@ -339,13 +341,13 @@ export function Discounts({ hotel, role }: AdminProps) {
   const refused = refusedPage(role, "/settings/money/discounts", "Room discounts");
   const cannotRead = refused ?? whyNot(MONEY_READ, role);
   const key = ["settings", code, "discounts"];
-  const q = useRead(() => (cannotRead ? Promise.resolve(null) : stamped(() => readDiscounts(code))), key);
-  const w = useWriter(`${code}/discounts`, q.data?.began);
+  const w = useWriter(`settings/${code}/discounts`);
+  const q = useRead(w.watch(() => (cannotRead ? Promise.resolve(null) : readDiscounts(code))), key);
   const cannot = whyNot(MONEY_SETTING, role);
   const { said, setSaid, after, refresh } = useAfter(key);
   const cache = useQueryClient();
   const [editing, setEditing] = useState<Discount | "new" | null>(null);
-  const rows = q.data?.d.discounts;
+  const rows = q.data?.discounts;
   /* The booking form's own list of them is read again too (Discounts.tsx done). */
   const done = (r: Outcome | null, ok: string) => { const yes = after(r, ok); if (r) void cache.invalidateQueries({ predicate: (x) => x.queryKey.includes("room-promotions") }); return yes; };
   const act = (fn: () => Promise<unknown>) => w.run(fn, { title: "Not saved", done: "saved", where: "the list" });
@@ -359,9 +361,10 @@ export function Discounts({ hotel, role }: AdminProps) {
       ) : null}>
       {rows ? (
         <View style={{ gap: 8 }}>
-          <Grey line={w.blocked ?? cannot} />
+          {w.line ? <Stopped line={w.line} onRead={q.reload} /> : null}
+          <Grey line={cannot} />
           <ListCard rows={rows} name={(d) => d.name} detail={discountOff} addLabel="Add a discount" empty="No named discounts yet."
-            locked={Boolean(cannot || w.blocked || w.busy)} onAdd={() => setEditing("new")} onEdit={setEditing}
+            locked={Boolean(cannot) || w.locked} onAdd={() => setEditing("new")} onEdit={setEditing}
             onToggle={async (d, on) => done(await act(() => listChange(code, "discounts", d.id, { isActive: on })), on ? `${d.name} is On` : `${d.name} is Off`)}
             onDelete={(d) => askDelete(d.name, async () => done(await act(() => listRemove(code, "discounts", d.id)), `${d.name} deleted`))} />
         </View>
@@ -376,7 +379,7 @@ function DiscountSheet({ code, row, w, onClose, onDone }: { code: string; row: D
   const [value, setValue] = useState(String(row?.percent ?? row?.amount ?? ""));
   const [said, setSaid] = useState<Said | null>(null);
   const [lost, setLost] = useState<string | null>(null);
-  const grey = w.blocked ?? lost;
+  const grey = w.line ?? lost;
   const problem = discountProblem(by, value);
   const save = async () => {
     if (!discountReady(name, by, value)) return;
@@ -389,7 +392,7 @@ function DiscountSheet({ code, row, w, onClose, onDone }: { code: string; row: D
   };
   return (
     <Sheet title={row ? `Edit ${row.name}` : "Add a discount"} onClose={onClose}
-      foot={<Foot said={said} grey={grey} ready={discountReady(name, by, value)} busy={w.busy} onCancel={onClose} onSave={() => void save()} />}>
+      foot={<Foot said={said} grey={grey} ready={discountReady(name, by, value)} busy={w.busy} locked={w.locked} onCancel={onClose} onSave={() => void save()} />}>
       <Field label="Name"><TextBox label="Name" value={name} caps="words" onChangeText={setName} /></Field>
       <Segmented label="Percent or rupees" value={by} onChange={setBy} options={[{ value: "percent", label: "%" }, { value: "amount", label: "₹" }]} />
       <Field label={by === "percent" ? "Percent off each night" : "Rupees off each night"} error={problem}>

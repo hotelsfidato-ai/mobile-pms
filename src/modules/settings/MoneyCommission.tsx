@@ -2,13 +2,13 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useState, type ReactNode } from "react";
 import { Text, View } from "react-native";
 import { c, face, space, t } from "../../core/theme";
-import { Head, Screen, useRead } from "../../core/ui";
+import { Head, Screen, Stopped, useRead } from "../../core/ui";
 import { Refused as NotYours } from "../admin/kit";
 import type { AdminProps } from "../admin/Route";
 import { commissionNote, commissionOf, commissionValue } from "../inventory/config";
 import { Btn, Failed, Field, Loading, Sheet, TextBox } from "../inventory/configKit";
 import { Empty, InDialog, Stale, Toast, body, type Said } from "../inventory/kit";
-import { readCommission, setSourceCommission, stamped } from "./moneyData";
+import { readCommission, setSourceCommission } from "./moneyData";
 import { Grey, refusedPage, useWriter, type Writer } from "./moneyKit";
 import { COMMISSION, MONEY_READ, commissionSaved, contractLine, typedFigure, whyNot, type CommissionView } from "./moneyRules";
 
@@ -38,15 +38,15 @@ export function Commission({ hotel, role }: AdminProps) {
   const refused = refusedPage(role, "/settings/money/commission", "Commission");
   const cannotRead = refused ?? whyNot(MONEY_READ, role);
   const key = ["settings", code, "commission"];
-  const q = useRead(() => (cannotRead ? Promise.resolve(null) : stamped(() => readCommission(code))), key);
-  const w = useWriter(`${code}/commission`, q.data?.began);
+  const w = useWriter(`settings/${code}/commission`);
+  const q = useRead(w.watch(() => (cannotRead ? Promise.resolve(null) : readCommission(code))), key);
   const cannot = whyNot(COMMISSION, role);
   const [editing, setEditing] = useState<Source | null>(null);
   const [said, setSaid] = useState<Said | null>(null);
   const [pulled, setPulled] = useState(false);
   /* The Booking sources screen shows the same figure: its read goes too. */
   const refresh = () => void cache.invalidateQueries({ predicate: (x) => (x.queryKey[0] === "settings" && x.queryKey[2] === "commission") || x.queryKey[2] === "booking-sources" });
-  const v = q.data?.d;
+  const v = q.data;
 
   let main: ReactNode;
   if (refused) main = <NotYours sentence={refused} />;
@@ -57,12 +57,13 @@ export function Commission({ hotel, role }: AdminProps) {
       <View style={{ gap: space.section }}>
         <Stale error={q.error} />
         <Card title="Booking sources" under="Blank: no commission agreed (a dash, not 0%).">
-          <Grey line={w.blocked ?? cannot} />
+          {w.line ? <Stopped line={w.line} onRead={q.reload} /> : null}
+          <Grey line={cannot} />
           {v.sources.length === 0 ? <Text style={[body, { color: c.grey500 }]}>No booking sources yet.</Text> : v.sources.map((s, i) => (
             <View key={s.id} style={{ flexDirection: "row", alignItems: "center", gap: 12, minHeight: 52, borderTopWidth: i === 0 ? 0 : 1, borderTopColor: c.grey200 }}>
               <Text style={[t.label, { flex: 1, fontSize: 16, color: c.ink900 }]} numberOfLines={2}>{s.name}</Text>
               <Text style={[t.label, t.tab, face[600], { fontSize: 16, color: s.commissionPct === null ? c.grey500 : c.ink900 }]}>{commissionOf(s.commissionPct)}</Text>
-              <Btn label="Change" a11y={`${s.name}: commission`} disabled={cannot !== null || w.blocked !== null || w.busy} onPress={() => setEditing(s)} />
+              <Btn label="Change" a11y={`${s.name}: commission`} disabled={cannot !== null || w.locked || w.busy} onPress={() => setEditing(s)} />
             </View>
           ))}
         </Card>
@@ -116,7 +117,7 @@ function RateSheet({ code, source, w, onClose, onDone }: { code: string; source:
   const [lost, setLost] = useState<string | null>(null);
   const { value, invalid } = commissionValue(pct);
   const changed = value !== source.commissionPct;
-  const grey = w.blocked ?? lost;
+  const grey = w.line ?? lost;
   const save = async () => {
     if (invalid || !changed) return;
     setSaid(null);
@@ -133,7 +134,7 @@ function RateSheet({ code, source, w, onClose, onDone }: { code: string; source:
           <Grey line={grey} />
           <View style={{ flexDirection: "row", gap: 8 }}>
             <Btn label="Cancel" grow disabled={w.busy} onPress={onClose} />
-            <Btn label={w.busy ? "Saving…" : "Save"} variant="primary" grow disabled={invalid || !changed || w.busy || grey !== null} onPress={() => void save()} />
+            <Btn label={w.busy ? "Saving…" : "Save"} variant="primary" grow disabled={invalid || !changed || w.busy || (grey !== null || w.locked)} onPress={() => void save()} />
           </View>
         </>
       }>
