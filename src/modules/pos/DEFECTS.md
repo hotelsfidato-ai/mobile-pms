@@ -76,3 +76,25 @@ good and each column scrolled on its own.
 and the board (By stage and By table), with one pull to refresh (`2dd8bb6`).
 **The rule:** a full-length picture taller than the screen means the page scrolls as one; draw
 inner scrolls only where the picture shows a clipped box.
+
+## The service lane (Bill history, Close restaurant day, Charges to rooms, Table bookings), 20 Nov
+
+### MPOS-S1 · The module's roles.ts predates the Bar role (20 Nov)
+
+**What happened.** `src/modules/pos/roles.ts` (15 Oct) lists TILL and TILL_READ without `bar` and its
+sentences say "a till operator"; today's API (roleGate TILL, TILL_READ; the Bar role D27-324) lets a bar
+person in and its refusal says "a waiter, a bar person". A bar person would see the till's controls grey
+with an old sentence. **How found:** mapping this lane's gates from today's `roleGate.ts`. **What was
+done:** this lane's own rights are in `serviceRoles.ts` with today's lists and sentences (checked in
+`roomCharges.check.ts`); `roles.ts` is not this lane's to edit — asked of the mobile chat (report).
+**The rule:** a role list is read from today's `roleGate.ts` and `permissions.ts`, not copied from an
+older module file.
+
+### MPOS-S2 · A Record whose reply is lost could put a second paid-out in the tin (20 Nov, before it shipped)
+
+**What happened.** `POST /till/day-end/movements` reads no idempotency key; a second tap after a lost
+reply inserts a second movement (and a second approval request for an expense). **How found:** reading
+till.ts 4728-4800 while porting the sheet. **What was done:** the sheet empties its amount, says "Not
+known whether it was recorded" and is stuck until closed (useStuck); the close re-reads the day; the
+API fault goes to the PMS (report). **The rule:** a write on a route without a key that makes a new
+record stops on an unknown outcome (MEMORY 16).

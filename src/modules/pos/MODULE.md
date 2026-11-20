@@ -166,3 +166,97 @@ Compared by reading the code against the pictures (`reference/pms-shots/all/45-p
 of your role" for Kitchen stock), not part of the pass: **not built**, not in this lane.
 
 1 of 1 screens built here matches its pictures apart from the differences above.
+
+## The service lane: Bill history, Close restaurant day, Charges to rooms, Table bookings (m13-pos-service, 19-20 Nov)
+
+**Web twin, mapped from today's PMS (16 Nov release), read not run:**
+- **Bill history** `/pos/:code/bill-history` — `pages/BillHistory.tsx`; `GET /till/bills` (TILL_READ;
+  a range of dates or any filter only for BILL_HISTORY_ROLES, till.ts 2152, its own 403 sentence),
+  `GET /till/waiters` (TILL_READ), `GET /till/orders/:id` and the Till's reprint `POST bill-print`
+  (TILL; refused offline). The web's first question is from = to = the business day, so anyone
+  outside BILL_HISTORY_ROLES is refused by the server: the phone shows that sentence as the screen.
+- **Close restaurant day** `/pos/:code/day-end` — `pages/DayEnd.tsx`; `GET /till/day-end?outlet=REST`
+  (payment view + pos, bar, kitchen_manager), `POST day-end/open | movements | count | close`
+  (DAY_END: payment create + pos, bar, kitchen_manager). Offline: every day-end write refused
+  ("Bill settlement" tier, `offline.ts`). The movement's photo route (`POST …/movements/:id/photo`)
+  needs a picker: not built.
+- **Charges to rooms** `/pos/:code/room-charges` — `pages/Pos.tsx`; `GET /pos/outlets`,
+  `GET /pos/tickets` (BILLS: invoice view). Read only.
+- **Table bookings** `/pos/:code/table-bookings` — `pages/TableBookings.tsx`; `GET /table-bookings?date=`
+  (TILL_READ, read every 60 s), `POST /table-bookings`, `/:id/confirm | decline | arrive | seat |
+  no-show | cancel` (TABLE_ANSWER: payment create + pos, bar). Offline: not in the web's list, so
+  refused ("This cannot be done offline yet"). The hours (`GET/PUT /table-bookings/hours`) are
+  Restaurant setup's, another lane's.
+- The web's PosGate (`GET /till/access`) wraps Bill history, Close restaurant day and Table bookings:
+  the phone asks it too (`useAccess`, TablesKit).
+
+**Files (new only):** `serviceRoles.ts` (the API's lists and sentences), `billHistory.ts`, `dayEnd.ts`,
+`roomCharges.ts`, `tableBookings.ts` (each with its `.check.ts`; `serviceRoles` is checked in
+`roomCharges.check.ts`), `serviceData.ts` (reads and writes), `ServiceKit.tsx` (the pieces the four
+share, drawn to docs/NATIVE.md), `BillHistory.tsx`, `DayEnd.tsx`, `RoomCharges.tsx`,
+`TableBookings.tsx`; routes `app/pos/[code]/{bill-history,day-end,room-charges,table-bookings}.tsx`.
+Reused by import: `TablesKit` (useAccess, ReadProblem, Refused, Stale, SaidBar, ty), `Pay.tsx`'s
+`PrintBill` (the reprint), `bill.ts` (`billRows`), `types.ts` (`Order`).
+
+**Money is the server's.** Every figure shown is a field the server sends, written as sent (paise
+kept, MEMORY 9: `rupees`/`precise` in `dayEnd.ts`). Where the web adds figures up in the browser, the
+phone shows the server's rows instead:
+- Close restaurant day: the Complimentary tile's "₹X not in sales" and the NC card's total line (the
+  web sums the NC values) are left out; each NC bill's value is on its row. "The sum" lists each
+  movement that counts as its own row instead of the web's per-kind totals. The Cash step's Counted
+  and its variance box are the server's saved count and variance, not the web's live sum of the notes
+  typed (the Save button still says the typed sum, which is what the person counted and what the notes
+  sent make). The Finalize hint "To deposit: ₹X" (count − float, worked in the browser) is not drawn;
+  the hint always says "From ₹0 to the ₹X counted. The rest is deposited."
+- Charges to rooms: each bill shows "₹before tax + ₹tax tax" as sent, not the web's amount + tax;
+  the Bills heading's "₹X on folios" pill (a browser sum) is not drawn; the export has Before tax and
+  Tax, not Amount.
+- The notes and coins typed (Open the day, Count the drawer) are added by the phone as on the web,
+  whole notes only, in integers: Open the day must send that figure (the API takes `opening`).
+
+**Unknown outcome (MEMORY 16):** Record a movement (the route reads no key; a repeat is a second
+movement) empties its amount, says "Not known whether it was recorded" and takes no more taps until its
+sheet is closed (the day is then read again). Close empties the float kept and stays grey until the day
+has been read again after the lost reply. A new table booking (a repeat books a second table) stops
+"Book the table" until the sheet is closed. Count (replaced whole), Open (a second is refused) and
+every act on a booking (refused from a state it may not be done in) are safe to repeat; each is
+latched at the tap (MEMORY 8). Close asks first with the phone's own dialog (docs/NATIVE.md).
+
+**States:** loading ("Loading the restaurant day…", "Loading the bills…", …) · failed (ReadProblem: the
+server's refusal, "did not load", or unreachable with no copy) · empty (the web's words for each) ·
+a failed re-read keeps the figures with Stale's "Not up to date: …". Offline writes are refused with the
+web's sentence (send()).
+
+### Picture match (20 Nov)
+
+Compared by **reading the code against the pictures**; **nothing was opened on a screen**. The
+pictures were taken on 31 Oct as the GM; the code is today's (16 Nov), so where they differ the code
+wins (MEMORY 14).
+
+| Screen | Picture(s) | Result |
+|---|---|---|
+| Close restaurant day | `all/47-point-of-sale-close-restaurant-day` = `new/n-pos-day-end` (identical files) | Matches in order and words, with the differences below |
+| Charges to rooms | `all/48-point-of-sale-charges-to-rooms` = `new/n-pos-room-charges` (identical) | Matches, differences below |
+| Bill history | `new/n-pos-bill-history` | Matches, differences below |
+| Table bookings | `new/n-pos-table-bookings` | Matches the empty page; New booking and the day are today's code, not pictured |
+
+**Differences left, each with its reason:**
+1. All four: the top bar and the business-date banner are the shell's frame, not these screens.
+2. Close restaurant day: the money rows above (server's figures only). The NC card's line is today's
+   code ("Bills given free, at their menu prices…", with each value) not the picture's ("no value is
+   counted for them"). The step tiles truncate their words at 375 px as the picture does. The movement's
+   photo (take, pick, open) is "On the website for now" (`expo-image-picker` ~57.0.20). The Record sheet,
+   the Cash and Finalize steps, a closed day and a blocker are **not pictured**: built from the code.
+3. Charges to rooms: "₹294" in the picture is "₹280 + ₹14 tax" on the phone (the server's two figures);
+   no "₹3,343 on folios" pill; the Till link in "This is the outside door" is plain words (the Till is
+   another lane's screen). The refusals box and an empty list are not pictured.
+4. Bill history: "Download to Excel" (picture) is today's ExportButtons (PDF or print, share) — the
+   web's CSV/Excel file itself waits for `expo-file-system` ~57.0.7 + `expo-sharing` ~57.0.23 (or the
+   core's export, M-14). From / To are typed (2026-10-27) with − / + day steppers, not the web's date
+   picker (`@react-native-community/datetimepicker` 9.1.0). An NC bill reads "NC ₹336.00" (today's code,
+   D27-394), the picture "NC". The opened bill and its reprint are not pictured.
+5. Table bookings: the description is today's longer sentence; New booking, the day stepper and every
+   card are not pictured. The acts are drawn **greyed with the API's sentence** for anyone who may not
+   answer (a viewer), where the web hides them (AGENTS rule 1). The time is typed (20:30), not picked.
+
+**4 of 4 screens match their pictures apart from the differences above.**
