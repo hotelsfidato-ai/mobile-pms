@@ -70,7 +70,7 @@ export function StuckLine({ stuck }: { stuck: boolean }) {
 
 /** The page's frame: the hotel above, the web's title and line, pull down to read again. */
 export function PageFrame({ hotel, title, under, refused, refreshing, onRefresh, children }: {
-  hotel: string; title: string; under: string; refused: string | null; refreshing: boolean; onRefresh: () => void; children: ReactNode;
+  hotel?: string; title: string; under: string; refused: string | null; refreshing: boolean; onRefresh: () => void; children: ReactNode;
 }) {
   return (
     <Screen refreshing={refreshing} onRefresh={onRefresh}>
