@@ -35,7 +35,7 @@ import {
 
 type Done = (said: Said) => void;
 /** The company page's own record of a write nobody knows the end of (Company.tsx). */
-export type OnUnknown = (title: string, line: string) => void;
+export type OnUnknown = (title: string, line: string, e: unknown) => void;
 
 /** Shared by the three: the latch, the stop, the sheet's own message. */
 function useWrite(onUnknown: OnUnknown) {
@@ -55,7 +55,7 @@ function useWrite(onUnknown: OnUnknown) {
       if (stuck.stop(e)) {
         const w = notKnown(unknownWhat, "the company's contracts and allotments", e);
         setSaid({ title: w.title, body: w.body, tone: "bad" });
-        onUnknown(w.title, w.line);
+        onUnknown(w.title, w.line, e);
       } else if (e instanceof HeldError) setSaid({ title: "Saved on this phone", body: e.message, tone: "held" });
       else setSaid({ title: notDone, body: message(e), tone: "bad" });
     } finally {
