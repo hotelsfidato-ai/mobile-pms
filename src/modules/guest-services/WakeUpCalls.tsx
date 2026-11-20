@@ -4,12 +4,11 @@ import { useRef, useState } from "react";
 import { Text, View } from "react-native";
 import type { Hotel } from "../../core/api";
 import { c, space, t } from "../../core/theme";
-import { Head, notKnown, Screen, useRead, useStuck } from "../../core/ui";
+import { Head, notKnown, Screen, Stopped, useRead, useScreenStop } from "../../core/ui";
 import { actOnWakeUp, listWakeUps, setWakeUp } from "./data";
 import {
   Back, Box, Btn, body, Dialog, Empty, Failed, Field, Foot, IconChip, InDialog, Input, Loading, NotYours, Pill,
-  Segmented, Select, Stale, Toast, roomChoices, saidOf, usePoll, type Said,
-} from "./kit";
+  Segmented, Select, Stale, Toast, roomChoices, saidOf, usePoll, type Said, gsStop } from "./kit";
 import { whyNotWakeUps } from "./roles";
 import { ListExport } from "../reports/ListExport";
 import { callTable } from "./exports";
@@ -40,7 +39,11 @@ export function WakeUpCalls({ hotel, role, onBack }: { hotel: Hotel; role: strin
   const [busy, setBusy] = useState(false);
   const [pulled, setPulled] = useState(false);
 
-  const list = useRead(() => (refused ? Promise.resolve(null) : listWakeUps(code, view)), ["guest-services", code, "wake-up-calls", view]);
+  /* A new one whose outcome is unknown (MGS-U1): kept by the list, not the dialog; let go by a read of
+     the "open" view begun after it. */
+  const stop = useScreenStop(gsStop(code, "wake-up-calls"));
+  const readIt = () => (refused ? Promise.resolve(null) : listWakeUps(code, view));
+  const list = useRead(view === "open" ? stop.watch(readIt) : readIt, ["guest-services", code, "wake-up-calls", view]);
   usePoll(["guest-services", code, "wake-up-calls"]);
   const refresh = () => void cache.invalidateQueries({ queryKey: ["guest-services", code, "wake-up-calls"] });
 
@@ -63,8 +66,9 @@ export function WakeUpCalls({ hotel, role, onBack }: { hotel: Hotel; role: strin
       <Screen refreshing={pulled && list.loading} onRefresh={() => { setPulled(true); list.reload(); }}>
         <Head title="Wake-up calls" under="Calls to make, on the hotel's clock. Due from fifteen minutes before." action={<Back onPress={onBack} />} />
         <View style={{ flexDirection: "row", marginTop: -4, marginBottom: 8 }}>
-          <Btn label="Set a call" variant="primary" icon={Plus} disabled={refused != null} onPress={() => setSetting(true)} />
+          <Btn label="Set a call" variant="primary" icon={Plus} disabled={refused != null || stop.stuck} onPress={() => { if (!stop.isStuck()) setSetting(true); }} />
         </View>
+        {stop.unknown ? <Stopped line={notKnown("set", "the calls").line} onRead={() => { setView("open"); list.reload(); }} /> : null}
         {refused ? null : (
           <ListExport screen="wake-up-calls" role={role} table={list.data ? callTable(calls, view === "open" ? "to make" : "done, last 24 h") : null} />
         )}
@@ -141,20 +145,23 @@ function SetDialog({ code, rooms, today, onClose, onDone }: {
      the tap, and after an unknown outcome no more taps until this is closed
      and the calls read again (MGS-3). */
   const latch = useRef(false);
-  const once = useStuck();
+  const [dead, setDead] = useState(false);
+  const once = useScreenStop(gsStop(code, "wake-up-calls"));
   const clock = timeOf(time);
 
   async function save() {
-    if (latch.current || once.isStuck()) return;
+    if (latch.current || dead || once.isStuck()) return;
     latch.current = true;
     setBusy(true);
     setSaid(null);
     try {
-      await setWakeUp(code, { reservationId, day, time: clock!, note });
+      await once.guard(() => setWakeUp(code, { reservationId, day, time: clock!, note }));
       onClose();
       onDone();
     } catch (e) {
-      setSaid(once.stop(e) ? { ...notKnown("set", "the calls once this is closed", e), tone: "bad" } : saidOf("Not set", e));
+      const unknown = once.stop(e);
+      if (unknown) setDead(true);
+      setSaid(unknown ? { ...notKnown("set", "the calls once this is closed", e), tone: "bad" } : saidOf("Not set", e));
       setBusy(false);
     } finally {
       latch.current = false;
@@ -162,7 +169,7 @@ function SetDialog({ code, rooms, today, onClose, onDone }: {
   }
 
   return (
-    <Dialog title="Set a wake-up call" description="For a guest in house now, on the hotel's clock." onClose={onClose}>
+    <Dialog title="Set a wake-up call" description="For a guest in house now, on the hotel's clock." onClose={onClose} locked={busy}>
       {rooms.length === 0 ? (
         <Text style={body}>Nobody is checked in, so there is nobody to call.</Text>
       ) : (
@@ -188,8 +195,8 @@ function SetDialog({ code, rooms, today, onClose, onDone }: {
           </Field>
           <InDialog said={said} />
           <Foot>
-            <Btn label="Cancel" tall grow onPress={onClose} />
-            <Btn label="Set the call" variant="primary" tall grow disabled={busy || once.stuck || !reservationId || !day || !clock} onPress={() => void save()} />
+            <Btn label="Cancel" tall grow disabled={busy} onPress={onClose} />
+            <Btn label="Set the call" variant="primary" tall grow disabled={busy || dead || once.stuck || !reservationId || !day || !clock} onPress={() => void save()} />
           </Foot>
         </>
       )}

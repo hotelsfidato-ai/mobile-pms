@@ -156,6 +156,16 @@ export const readReasons = (code: string, kind: string) =>
   api<Array<{ id: string; label: string; active: boolean }>>(`/api/hotels/${code}/lists/${kind}`).catch(() => []);
 export const readExchangeable = (code: string, id: string) =>
   api<{ rooms: Array<{ id: string; guest: string; room: string; reference: string; departs: string }> }>(`/api/hotels/${code}/stays/${id}/exchangeable`).then((o) => o.rooms, () => []);
+/** The names of a stay's stops (core useScreenStop, MFD-U1, U2): POST …/exchange and …/inclusions read no
+    key. An exchange whose outcome is unknown greys Exchange on the stay until a read of the stay begun
+    after it is back (a second one swaps them back); an inclusion, Add until the list is read again. */
+export const stayStop = (code: string, id: string) => `front-desk/${code}/stay/${id}`;
+export const inclusionsStop = (code: string, id: string) => `front-desk/${code}/stay-inclusions/${id}`;
+/** A walk-in booking (POST /bookings reads no key; MFD-U4): let go by a read of today's Arrivals begun after it. */
+export const walkInStop = (code: string) => `front-desk/${code}/walk-in`;
+export const adultsStop = (code: string, id: string) => `front-desk/${code}/companions/${id}`;
+export const SWAP_UNKNOWN = "Not known whether the rooms were exchanged: look at both stays' rooms before exchanging again.";
+
 export const exchangeRooms = (code: string, id: string, input: object) =>
   send<{ from: string; to: string }>("POST", `/api/hotels/${code}/stays/${id}/exchange`, input);
 export const readInclusions = (code: string) =>

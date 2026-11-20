@@ -1,4 +1,4 @@
-import { unknownSaid } from "./kit";
+import { STOP, unknownSaid } from "./kit";
 import { outcomeUnknown } from "../../core/api";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRef, useState } from "react";
@@ -12,7 +12,7 @@ import {
   ACTION_LABEL, blankMove, bookIn, correctionWords, heldText, moveBody, movedWords, NOT_AN_OUTLET, NOT_KNOWN,
   offeredFor, startingStore, transferBody, type MoveDraft, type StockItem, type StockKind, type StoreList, type StoreSummary,
 } from "./shelf";
-import { ripple, keys } from "../../core/ui";
+import { ripple, keys, useScreenStop } from "../../core/ui";
 
 /* ══════════════════════════════════════════════════════════════════
    ONE ACT ON ONE ITEM — the web's MoveDialog and TransferDialog
@@ -61,6 +61,7 @@ export function Act({ code, list, item, kind, startStoreId, onClose, onDone }: {
   const [busy, setBusy] = useState(false);
   const latch = useRef(false);
   const stuck = useRef(false);
+  const stop = useScreenStop(STOP.shelf(code));
   const [said, setSaid] = useState<Said | null>(null);
 
   const store = offered.find((s) => s.id === d.storeId) ?? null;
@@ -73,12 +74,12 @@ export function Act({ code, list, item, kind, startStoreId, onClose, onDone }: {
   const note = correctionWords(d, item);
 
   async function submit() {
-    if (latch.current || !("body" in out)) return;
+    if (latch.current || stop.isStuck() || !("body" in out)) return;
     latch.current = true;
     setBusy(true);
     setSaid(null);
     try {
-      const res = await recordMovement(code, out.body);
+      const res = await stop.guard(() => recordMovement(code, out.body));
       void cache.invalidateQueries({ queryKey: ["stores", code] });
       const w = movedWords(kind, d.qty, item, res);
       onDone({ title: w.title, body: w.body, tone: "ok" });
@@ -95,7 +96,7 @@ export function Act({ code, list, item, kind, startStoreId, onClose, onDone }: {
     <Dialog
       title={`${ACTION_LABEL[kind]} - ${item.name}`}
       description={!store ? "Choose a store" : item.byStore[store.id] === undefined ? `None in ${store.name}` : `${here} ${item.unit} in ${store.name}`}
-      onClose={onClose}
+      onClose={onClose} locked={busy}
     >
       <Field label={kind === "breakage" ? "Where it broke" : "Which store"} required>
         <Select<string>
@@ -200,8 +201,8 @@ export function Act({ code, list, item, kind, startStoreId, onClose, onDone }: {
       {"missing" in out && d.qty.trim() !== "" ? <Text style={[t.caption, { color: c.grey600 }]}>{out.missing}</Text> : null}
       <InDialog said={said} />
       <Foot>
-        <Btn label="Cancel" tall grow onPress={onClose} />
-        <Btn label={busy ? "Recording…" : ACTION_LABEL[kind]} variant="primary" tall grow disabled={busy || !("body" in out)} onPress={() => void submit()} />
+        <Btn label="Cancel" tall grow disabled={busy} onPress={onClose} />
+        <Btn label={busy ? "Recording…" : ACTION_LABEL[kind]} variant="primary" tall grow disabled={busy || stuck.current || stop.stuck || !("body" in out)} onPress={() => void submit()} />
       </Foot>
     </Dialog>
   );
@@ -223,18 +224,19 @@ export function Transfer({ code, list, item, startFromId, onClose, onDone }: {
   const [busy, setBusy] = useState(false);
   const latch = useRef(false);
   const stuck = useRef(false);
+  const stop = useScreenStop(STOP.shelf(code));
   const [said, setSaid] = useState<Said | null>(null);
   const from = holding.find((s) => s.id === fromId) ?? null;
   const destinations = places.filter((s) => s.isActive && s.id !== fromId);
   const out = transferBody(item, fromId, toId, qty, why);
 
   async function submit() {
-    if (latch.current || !("body" in out)) return;
+    if (latch.current || stop.isStuck() || !("body" in out)) return;
     latch.current = true;
     setBusy(true);
     setSaid(null);
     try {
-      const res = await moveStock(code, out.body);
+      const res = await stop.guard(() => moveStock(code, out.body));
       void cache.invalidateQueries({ queryKey: ["stores", code] });
       onDone({
         title: `Moved ${qty.trim()} ${item.unit} of ${item.name}`,
@@ -250,7 +252,7 @@ export function Transfer({ code, list, item, startFromId, onClose, onDone }: {
   }
 
   return (
-    <Dialog title={`Move to another store - ${item.name}`} description={from ? `${bookIn(item, from.id)} ${item.unit} in ${from.name}` : "Choose a store"} onClose={onClose}>
+    <Dialog title={`Move to another store - ${item.name}`} description={from ? `${bookIn(item, from.id)} ${item.unit} in ${from.name}` : "Choose a store"} onClose={onClose} locked={busy}>
       <Field label="From" required>
         <Select<string>
           label="From" value={fromId} onChange={(v) => { setFromId(v); if (v === toId) setToId(""); }}
@@ -271,8 +273,8 @@ export function Transfer({ code, list, item, startFromId, onClose, onDone }: {
       </Field>
       <InDialog said={said} />
       <Foot>
-        <Btn label="Cancel" tall grow onPress={onClose} />
-        <Btn label={busy ? "Moving…" : "Move"} variant="primary" tall grow disabled={busy || !("body" in out)} onPress={() => void submit()} />
+        <Btn label="Cancel" tall grow disabled={busy} onPress={onClose} />
+        <Btn label={busy ? "Moving…" : "Move"} variant="primary" tall grow disabled={busy || stuck.current || stop.stuck || !("body" in out)} onPress={() => void submit()} />
       </Foot>
     </Dialog>
   );

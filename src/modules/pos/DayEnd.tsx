@@ -10,7 +10,8 @@ import { dateLong } from "../../core/format";
 import { ON_THE_WEBSITE } from "../../core/menu";
 import { useSession } from "../../core/session";
 import { c, face, space, t } from "../../core/theme";
-import { Screen, notKnown, useStuck } from "../../core/ui";
+import { Screen, notKnown, useScreenStop } from "../../core/ui";
+import { drawerStop } from "./floor";
 import {
   DENOMINATIONS, EXPENSE_CATEGORIES, MOVEMENTS, STEPS, approvalWords, badRow, closeBody, dayAt, hotelNameOf, mayRecord,
   methodWord, methodsByAmount, movementBody, movementOf, needsReason, precise, rowFigure, rupees, seedCounts, signed, stillUnknown, typed,
@@ -62,9 +63,10 @@ export function DayEndScreen({ hotel, role }: { hotel: Hotel; role: string | nul
   const refusedRead = whyNotReadDay(role);
   const [step, setStep] = useState<Step>("overview");
   const [pulled, setPulled] = useState(false);
-  /* A Record whose reply was lost: the moment, kept here so no fresh sheet forgets it (MPOS-S4). */
-  const [movementLost, setMovementLost] = useState<number | null>(null);
-  const q = useQuery({ queryKey: KEY(code), queryFn: () => readDayEnd(code), enabled: !refusedRead });
+  /* A Record whose reply was lost (MPOS-S4, MPOS-U4): kept by name outside this screen and every sheet,
+     let go only by a read of the day that BEGAN after it and came back good. */
+  const drawer = useScreenStop(drawerStop(code));
+  const q = useQuery({ queryKey: KEY(code), queryFn: drawer.watch(() => readDayEnd(code)), enabled: !refusedRead });
   const refresh = () => { void cache.invalidateQueries({ queryKey: ["pos", code] }); };
   const reload = () => { setPulled(true); void q.refetch(); };
 
@@ -100,7 +102,7 @@ export function DayEndScreen({ hotel, role }: { hotel: Hotel; role: string | nul
       <Steps current={step} onPick={setStep} blockers={d.blockers.length} />
       {step === "overview" ? <Overview day={d} /> : null}
       {step === "cash" ? <CashStep key={`${d.businessDate}-${d.cash.counted}`} code={code} role={role} day={d} onDone={refresh}
-        loadedAt={q.dataUpdatedAt} movementLost={movementLost} onMovementLost={setMovementLost} /> : null}
+        lost={drawer.stuck} /> : null}
       {step === "finalize" ? (
         <Finalize code={code} role={role} hotelName={hotelName} day={d} loadedAt={q.dataUpdatedAt} onDone={refresh}
           onBack={() => setStep("cash")} reread={() => void q.refetch()} />
@@ -321,8 +323,8 @@ function OpenDay({ code, role, onDone }: { code: string; role: string | null; on
 }
 
 /* ── Step two: what is in the tin ────────────────────────────────────── */
-function CashStep({ code, role, day, onDone, loadedAt, movementLost, onMovementLost }: {
-  code: string; role: string | null; day: DayEnd; onDone: () => void; loadedAt: number; movementLost: number | null; onMovementLost: (at: number) => void;
+function CashStep({ code, role, day, onDone, lost }: {
+  code: string; role: string | null; day: DayEnd; onDone: () => void; lost: boolean;
 }) {
   const closed = Boolean(day.closedAt);
   /* Seeded from the count that exists, so the grid shows what was saved. */
@@ -353,7 +355,7 @@ function CashStep({ code, role, day, onDone, loadedAt, movementLost, onMovementL
         </View>
       </Panel>
 
-      <Movements code={code} role={role} day={day} onDone={onDone} lost={stillUnknown(movementLost, loadedAt)} onLost={onMovementLost} />
+      <Movements code={code} role={role} day={day} onDone={onDone} lost={lost} />
 
       <Panel head={<Heading title="The sum" />}>
         {/* The server's figures, line by line; each movement its own row, never added up here. */}
@@ -395,8 +397,8 @@ function VarianceBox({ v }: { v: ReturnType<typeof variance> }) {
 }
 
 /* ── Money in and out that is not a sale ─────────────────────────────── */
-function Movements({ code, role, day, onDone, lost, onLost }: {
-  code: string; role: string | null; day: DayEnd; onDone: () => void; lost: boolean; onLost: (at: number) => void;
+function Movements({ code, role, day, onDone, lost }: {
+  code: string; role: string | null; day: DayEnd; onDone: () => void; lost: boolean;
 }) {
   const [open, setOpen] = useState(0);
   const [last, setLast] = useState<Said | null>(null);
@@ -436,32 +438,33 @@ function Movements({ code, role, day, onDone, lost, onLost }: {
       )}
       {last ? <SaidBar said={last} onDone={() => setLast(null)} style={{ marginTop: 10 }} /> : null}
       {/* A fresh sheet each time it opens: a stuck Record is let go only by closing it. */}
-      {open > 0 ? <MovementSheet key={open} code={code} onLost={onLost} onClose={(said) => { setOpen(0); setLast(said ?? null); onDone(); }} /> : null}
+      {open > 0 ? <MovementSheet key={open} code={code} onClose={(said) => { setOpen(0); setLast(said ?? null); onDone(); }} /> : null}
     </Panel>
   );
 }
 
-function MovementSheet({ code, onClose, onLost }: { code: string; onClose: (said?: Said) => void; onLost: (at: number) => void }) {
+function MovementSheet({ code, onClose }: { code: string; onClose: (said?: Said) => void }) {
   const [kind, setKind] = useState<MovementKind>("expense");
   const [amount, setAmount] = useState("");
   const [reason, setReason] = useState("");
   const [category, setCategory] = useState("");
   const w = useWrite();
-  const stuck = useStuck();
+  const stuck = useScreenStop(drawerStop(code));
+  const [dead, setDead] = useState(false);
   const chosen = MOVEMENTS.find((m) => m.kind === kind)!;
   const expense = kind === "expense";
   const unknown = notKnown("recorded", "In and out of the drawer");
   const record = () => {
-    if (stuck.isStuck()) return;
+    if (dead || stuck.isStuck()) return;
     const sent = movementBody(kind, amount, reason, category);
     void w.run(async () => {
-      await recordMovement(code, sent);
+      await stuck.guard(() => recordMovement(code, sent));
       const said: Said = { tone: "ok", title: "Recorded", body: `${chosen.label} - ${rupees(sent.amount)}` };
       setTimeout(() => onClose(said), 0);
       return said;
     }, (e) => {
       /* A lost reply: the amount goes, and no more taps until the sheet is closed and the day read again (MEMORY 16). */
-      if (stuck.stop(e)) { setAmount(""); onLost(Date.now()); return failed("Not recorded", e, "recorded", "In and out of the drawer"); }
+      if (stuck.stop(e)) { setAmount(""); setDead(true); return failed("Not recorded", e, "recorded", "In and out of the drawer"); }
       return failed("Not recorded", e, "recorded", "In and out of the drawer");
     });
   };
@@ -472,9 +475,9 @@ function MovementSheet({ code, onClose, onLost }: { code: string; onClose: (said
         <>
           <View style={{ flexDirection: "row", gap: 8 }}>
             <Btn label="Cancel" style={{ flex: 1 }} tall disabled={w.busy} onPress={() => onClose()} />
-            <Btn primary label="Record" style={{ flex: 1 }} tall busy={w.busy} disabled={off || stuck.stuck} onPress={record} />
+            <Btn primary label="Record" style={{ flex: 1 }} tall busy={w.busy} disabled={off || dead || stuck.stuck} onPress={record} />
           </View>
-          {stuck.stuck ? <Why>{unknown.line}</Why> : null}
+          {dead || stuck.unknown ? <Why>{unknown.line}</Why> : null}
         </>
       }>
       <Field label="What happened" hint={chosen.hint}>

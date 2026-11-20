@@ -1,3 +1,4 @@
+import { useScreenStop } from "../../core/ui";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRef, useState } from "react";
 import { Text, View } from "react-native";
@@ -28,31 +29,32 @@ import { adjustOf, dayOf, lineWords, memberLine, pointsText, signed, signedDigit
 
 export function MemberCard({ code, guestId }: { code: string; guestId: string }) {
   const cache = useQueryClient();
-  const card = useQuery({ queryKey: ["loyalty", code, "card", guestId], queryFn: () => readCard(code, guestId) });
+  /* An adjustment whose outcome is unknown (MLOY-U1): POST …/adjust reads no key, so a repeat is a second
+     adjustment. Kept by name outside this card - leaving the guest and coming back lets nothing go - and let
+     go only by a read of the card that BEGAN after the loss (it was card state, compared with a read's finish). */
+  const stop = useScreenStop(`loyalty/${code}/card/${guestId}`);
+  const card = useQuery({ queryKey: ["loyalty", code, "card", guestId], queryFn: stop.watch(() => readCard(code, guestId)) });
   const [points, setPoints] = useState("");
   const [reason, setReason] = useState("");
   const [busy, setBusy] = useState(false);
   const [leaving, setLeaving] = useState(false);
   const latch = useRef(false);
-  /* When an unknown outcome stopped Adjust: it starts again once a read of the card lands after it. */
-  const [stuckAt, setStuckAt] = useState<number | null>(null);
   const [said, setSaid] = useState<Said | null>(null);
-  const stuck = stuckAt !== null && card.dataUpdatedAt <= stuckAt;
+  const stuck = stop.stuck;
   const reread = () => cache.invalidateQueries({ queryKey: ["loyalty"] });
 
   async function act(write: () => Promise<unknown>, done: string, fail: string, unknown: string) {
-    if (latch.current || stuck) return;
+    if (latch.current || stop.isStuck()) return;
     latch.current = true;
     setSaid(null);
     setBusy(true);
     try {
-      await write();
+      await stop.guard(write);
       setSaid({ title: done, tone: "ok" });
       setPoints(""); setReason(""); setLeaving(false);
     } catch (e) {
       if (outcomeUnknown(e)) {
         setPoints("");
-        setStuckAt(Date.now());
         setSaid({ title: unknown, body: `${message(e)} The card is read again: look at the statement before trying again.`, tone: "bad" });
       } else setSaid(saidOf(fail, e));
     } finally {

@@ -48,6 +48,11 @@ export const readStays = async (code: string) =>
     Once the docket is read again (readDocket) the person sees whether it is
     on the bill. The server's own guard is the stronger one: it locks the
     docket and answers "already on the bill" to a second charge. */
+/** The name of the Dockets list's stop (core useScreenStop, MLDY-U1): POST dockets reads no key, so a bag
+    whose outcome is unknown greys Collect a bag until a read of every docket begun after it is back. */
+export const docketsStop = (code: string) => `laundry/${code}/dockets`;
+export const COLLECT_UNKNOWN = "Not known whether the bag was collected: look at the dockets before collecting it again.";
+
 const keepers = new Map<string, KeyKeeper>();
 const keysOf = (code: string, id: string) => {
   const k = `${code}/${id}`;

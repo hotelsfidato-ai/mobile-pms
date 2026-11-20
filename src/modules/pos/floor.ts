@@ -204,3 +204,28 @@ export function kotLines(kinds: KotKind[], now = new Date()): { id: string; text
     return { id: k.id, text: `${k.name} KOTs wait: ${k.station.name} not seen since ${since(k.station.seenAt, now)}`, printing: false };
   });
 }
+
+/** The name of an outlet's parcel stop (core useScreenStop, MPOS-U1): POST till/orders reads no key and a
+    parcel or a counter order has no table to clash on, so one whose outcome is unknown greys opening
+    another at that outlet until a read of its floor begun after the loss is back. */
+export const parcelsStop = (code: string, outlet: string) => `pos/${code}/parcels/${outlet}`;
+
+/** The name of a round's stop (MPOS-U2): POST till/orders/batch reads no key, so a round whose outcome is
+    unknown greys Send on that order's pad - kept outside the pad, whose draft survives a close - until a
+    read of the order begun after the loss is back; a round that opened a table, by that TABLE, until a read
+    of the floor showing it. */
+export const roundStop = (code: string, orderId: string | undefined, table?: string) =>
+  `pos/${code}/round/${orderId ?? `table/${table ?? ""}`}`;
+
+/** The name of the table bookings' stop (MPOS-U3): a booking whose outcome is unknown greys New booking until
+    a read of the list as first opened (today and what comes after) begun after the loss is back. */
+export const tableBookingStop = (code: string) => `pos/${code}/table-bookings`;
+
+/** The name of the drawer's stop (MPOS-U4): POST till/day-end/movements reads no key, so a movement whose
+    outcome is unknown greys Record until a read of the day begun after the loss is back - kept outside the
+    screen, so leaving Close restaurant day and coming back lets nothing go. */
+export const drawerStop = (code: string) => `pos/${code}/day-end/movements`;
+
+/** The name of an outlet's open-order stop (MPOS-U1, the review): an order opened with no table, or for the
+    counter, shows only in the open orders (/till/orders), never on the floor - so only that read lets it go. */
+export const openStop = (code: string, outlet: string) => `pos/${code}/open/${outlet}`;

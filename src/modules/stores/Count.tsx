@@ -1,4 +1,4 @@
-import { unknownSaid } from "./kit";
+import { STOP, STOP_LINE, unknownSaid } from "./kit";
 import { outcomeUnknown } from "../../core/api";
 import { useQueryClient } from "@tanstack/react-query";
 import { Printer } from "lucide-react-native";
@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { Text, TextInput, View } from "react-native";
 import type { Hotel } from "../../core/api";
 import { c, face, space, t } from "../../core/theme";
-import { Head, Screen, useRead, keys } from "../../core/ui";
+import { Head, Screen, Stopped, useRead, useScreenStop, keys } from "../../core/ui";
 import { LoadFailed } from "../laundry/kit";
 import { Back, Box, Btn, body, Empty, InDialog, Loading, NotYours, SectionHead, Select, Toast, saidOf, type Said } from "../guest-services/kit";
 import { isRefused, readStore, saveStoreCount } from "./data";
@@ -33,7 +33,10 @@ export function Count({ hotel, role, startStoreId, onBack }: {
   const code = hotel.code;
   const cache = useQueryClient();
   const refused = whyNotSee(role) ?? whyNotCorrect(role);
-  const q = useRead(() => (refused ? Promise.resolve(null) : readStore(code)), ["stores", code, "shelf"]);
+  /* The shelf's stop (MST-U1): the same record as the Store screen, so the same name. A save whose
+     outcome is unknown stops Save here and every act on the shelf until a read begun after it is back. */
+  const stop = useScreenStop(STOP.shelf(code));
+  const q = useRead(stop.watch(() => (refused ? Promise.resolve(null) : readStore(code))), ["stores", code, "shelf"]);
   const list = q.data && !isRefused(q.data) ? q.data : null;
   const off = isRefused(q.data) ? q.data.refused : null;
 
@@ -48,17 +51,18 @@ export function Count({ hotel, role, startStoreId, onBack }: {
   const [reasons, setReasons] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
   const latch = useRef(false);
-  const stuck = useRef(false);
   const [said, setSaid] = useState<Said | null>(null);
   const [done, setDone] = useState<Said | null>(null);
 
-  /* The book is taken when the sheet opens: once, from the first good read. */
+  /* The book is taken when the sheet opens: once, from the first good read - and after a save whose
+     outcome is unknown (the sheet is emptied then), again, only from the read that let the stop go: the
+     cached book may be from before, and a count typed on it could be saved twice (MST-U1, the review). */
   useEffect(() => {
-    if (!list || lines !== null) return;
-    const id = startingStore(placesOf(list), startStoreId);
+    if (!list || lines !== null || stop.stuck) return;
+    const id = storeId || startingStore(placesOf(list), startStoreId);
     setStoreId(id);
     setLines(linesOf(list.items, id));
-  }, [list]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [list, stop.stuck]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (refused || off) {
     return (
@@ -79,12 +83,12 @@ export function Count({ hotel, role, startStoreId, onBack }: {
   };
 
   async function save() {
-    if (latch.current || !store || !lines || !("lines" in out)) return;
+    if (latch.current || stop.isStuck() || !store || !lines || !("lines" in out)) return;
     latch.current = true;
     setBusy(true);
     setSaid(null);
     try {
-      const res = await saveStoreCount(code, store.id, out.lines);
+      const res = await stop.guard(() => saveStoreCount(code, store.id, out.lines));
       void cache.invalidateQueries({ queryKey: ["stores", code] });
       /* The web goes back to the list with this said; the phone stays on the
          sheet, cleared, with the book read again - another store may be next. */
@@ -96,8 +100,13 @@ export function Count({ hotel, role, startStoreId, onBack }: {
       const fresh = await readStore(code).catch(() => null);
       if (fresh && !isRefused(fresh)) setLines(linesOf(fresh.items, store.id));
     } catch (e) {
-      if (outcomeUnknown(e)) { stuck.current = true; setSaid(unknownSaid("Not saved", e)); }
-      else setSaid(saidOf("Not saved", e));
+      if (outcomeUnknown(e)) {
+        setSaid(unknownSaid("Not saved", e));
+        /* Emptied: the book and the counts come back only from a read begun after the loss. */
+        setLines(null); setCounts({}); setMls({}); setReasons({});
+        return;
+      }
+      setSaid(saidOf("Not saved", e));
       /* The lines whose book moved take the new book and lose their count. */
       try {
         const fresh = await readStore(code);
@@ -111,7 +120,7 @@ export function Count({ hotel, role, startStoreId, onBack }: {
         }
       } catch { /* the refusal is already said */ }
     } finally {
-      latch.current = stuck.current;
+      latch.current = false;
       setBusy(false);
     }
   }
@@ -119,7 +128,7 @@ export function Count({ hotel, role, startStoreId, onBack }: {
   const saveButton = (
     <Btn
       label={busy ? "Saving…" : `Save the count${typedCount ? ` (${typedCount})` : ""}`} variant="primary"
-      disabled={busy || !("lines" in out)} onPress={() => void save()}
+      disabled={busy || stop.stuck || !("lines" in out)} onPress={() => void save()}
     />
   );
 
@@ -139,6 +148,7 @@ export function Count({ hotel, role, startStoreId, onBack }: {
         </View>
         <Text style={[t.caption, { color: c.grey600 }]}>Print the sheet: {ON_THE_WEBSITE}</Text>
       </View>
+      {stop.unknown ? <Stopped line={STOP_LINE} onRead={q.reload} /> : null}
 
       {q.data === undefined ? (
         q.error

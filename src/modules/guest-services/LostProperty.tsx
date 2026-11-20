@@ -4,14 +4,13 @@ import { useRef, useState } from "react";
 import { Text, View } from "react-native";
 import type { Hotel } from "../../core/api";
 import { c, space, t } from "../../core/theme";
-import { Head, notKnown, Screen, useRead, useStuck } from "../../core/ui";
+import { Head, notKnown, Screen, Stopped, useRead, useScreenStop } from "../../core/ui";
 import { ListExport } from "../reports/ListExport";
 import { clearLost, listLost, logLost } from "./data";
 import { lostTable } from "./exports";
 import {
   Back, Box, Btn, body, Dialog, Empty, Failed, Field, Foot, IconChip, InDialog, Input, Loading, NotYours, Pill,
-  Segmented, Stale, saidOf, type Said,
-} from "./kit";
+  Segmented, Stale, saidOf, type Said, gsStop } from "./kit";
 import { CLEAR_REFUSED, whyNotLost } from "./roles";
 import { clearedLine, foundLine, type LostItem } from "./rules";
 
@@ -36,7 +35,11 @@ export function LostProperty({ hotel, role, onBack }: { hotel: Hotel; role: stri
   const [clearing, setClearing] = useState<{ item: LostItem; action: "returned" | "disposed" } | null>(null);
   const [pulled, setPulled] = useState(false);
 
-  const list = useRead(() => (refused ? Promise.resolve(null) : listLost(code, view)), ["guest-services", code, "lost-property", view]);
+  /* A new one whose outcome is unknown (MGS-U1): kept by the list, not the dialog; let go by a read of
+     the "kept" view begun after it. */
+  const stop = useScreenStop(gsStop(code, "lost-property"));
+  const readIt = () => (refused ? Promise.resolve(null) : listLost(code, view));
+  const list = useRead(view === "kept" ? stop.watch(readIt) : readIt, ["guest-services", code, "lost-property", view]);
   const refresh = () => void cache.invalidateQueries({ queryKey: ["guest-services", code, "lost-property"] });
   const items = list.data?.items ?? [];
   const mayClear = list.data?.mayClear === true;
@@ -46,8 +49,9 @@ export function LostProperty({ hotel, role, onBack }: { hotel: Hotel; role: stri
       <Screen refreshing={pulled && list.loading} onRefresh={() => { setPulled(true); list.reload(); }}>
         <Head title="Lost property" under="What was found, kept until it goes back to its owner or is disposed of." action={<Back onPress={onBack} />} />
         <View style={{ flexDirection: "row", marginTop: -4, marginBottom: 8 }}>
-          <Btn label="Log an item" variant="primary" icon={Plus} disabled={refused != null} onPress={() => setLogging(true)} />
+          <Btn label="Log an item" variant="primary" icon={Plus} disabled={refused != null || stop.stuck} onPress={() => { if (!stop.isStuck()) setLogging(true); }} />
         </View>
+        {stop.unknown ? <Stopped line={notKnown("logged", "the items kept").line} onRead={() => { setView("kept"); list.reload(); }} /> : null}
         {refused ? null : (
           <ListExport screen="lost-property" role={role}
             table={list.data ? lostTable(items, view === "kept" ? "kept" : "returned or disposed of") : null} />
@@ -119,19 +123,22 @@ function LogDialog({ code, onClose, onDone }: { code: string; onClose: () => voi
      the tap, and after an unknown outcome no more taps until this is closed
      and the items kept read again (MGS-3). */
   const latch = useRef(false);
-  const once = useStuck();
+  const [dead, setDead] = useState(false);
+  const once = useScreenStop(gsStop(code, "lost-property"));
 
   async function save() {
-    if (latch.current || once.isStuck()) return;
+    if (latch.current || dead || once.isStuck()) return;
     latch.current = true;
     setBusy(true);
     setSaid(null);
     try {
-      await logLost(code, { what, foundWhere, roomNumber, keptWhere });
+      await once.guard(() => logLost(code, { what, foundWhere, roomNumber, keptWhere }));
       onClose();
       onDone();
     } catch (e) {
-      setSaid(once.stop(e) ? { ...notKnown("logged", "the items kept once this is closed", e), tone: "bad" } : saidOf("Not logged", e));
+      const unknown = once.stop(e);
+      if (unknown) setDead(true);
+      setSaid(unknown ? { ...notKnown("logged", "the items kept once this is closed", e), tone: "bad" } : saidOf("Not logged", e));
       setBusy(false);
     } finally {
       latch.current = false;
@@ -139,7 +146,7 @@ function LogDialog({ code, onClose, onDone }: { code: string; onClose: () => voi
   }
 
   return (
-    <Dialog title="Log an item" description="What was found, and where." onClose={onClose}>
+    <Dialog title="Log an item" description="What was found, and where." onClose={onClose} locked={busy}>
       <Field label="What it is" required>
         <Input label="What it is" maxLength={200} value={what} onChangeText={setWhat} autoFocus />
       </Field>
@@ -160,8 +167,8 @@ function LogDialog({ code, onClose, onDone }: { code: string; onClose: () => voi
       </View>
       <InDialog said={said} />
       <Foot>
-        <Btn label="Cancel" tall grow onPress={onClose} />
-        <Btn label="Log it" variant="primary" tall grow disabled={busy || once.stuck || !what.trim() || !foundWhere.trim()} onPress={() => void save()} />
+        <Btn label="Cancel" tall grow disabled={busy} onPress={onClose} />
+        <Btn label="Log it" variant="primary" tall grow disabled={busy || dead || once.stuck || !what.trim() || !foundWhere.trim()} onPress={() => void save()} />
       </Foot>
     </Dialog>
   );

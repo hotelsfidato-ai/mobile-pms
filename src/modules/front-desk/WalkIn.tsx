@@ -1,12 +1,13 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { router, type Href } from "expo-router";
+import { newBookingStop } from "../reservations/data";
 import { AlertTriangle, Plus, UserCheck } from "lucide-react-native";
 import { useRef, useState, type ReactNode } from "react";
 import { KeyboardAvoidingView, Platform, Text, View } from "react-native";
 import { ApiError, HeldError, outcomeUnknown, type Hotel } from "../../core/api";
 import { cash, dateLong } from "../../core/format";
 import { c, face, space, t } from "../../core/theme";
-import { Card, notKnown, Screen, useRead, useStuck } from "../../core/ui";
+import { Card, notKnown, Screen, Stopped, useRead, useScreenStop } from "../../core/ui";
 import { Day } from "../housekeeping/DayStepper";
 import {
   allIn, assignReason, byContract, checkInReason, discountIn, gstinProblem, inclusive, MARKET_SEGMENTS, OTHER, PLANS, priceLine, saveReason, summary, TITLES, worthAsking,
@@ -15,8 +16,7 @@ import {
 import { Companions } from "./Companions";
 import {
   assignRoom, checkIn, createBooking, readAccounts, readAssignable, readBeforeGst, readBilling, readContract, readEarly, readInventory, readModules, readPromotions,
-  readReturning, readRooms, readSalesPeople, readSegments, readSources, readTariff, readTaxRate, rulesOf, said, takeAdvance, timesOf, type Booked as Made,
-} from "./data";
+  readReturning, readRooms, readSalesPeople, readSegments, readSources, readTariff, readTaxRate, rulesOf, said, takeAdvance, timesOf, type Booked as Made, walkInStop } from "./data";
 import { addDays, day, moneyPrecise, nightsBetween } from "./desk";
 import { deskGuestId, guestIdPayload, guestIdState, type GuestId } from "./guestId";
 import { GuestIdFields } from "./GuestIdFields";
@@ -60,7 +60,9 @@ export function WalkIn({ hotel, role, room: walkRoom, onClose }: { hotel: Hotel;
   /* One tap, one booking (MEMORY 8); a booking whose outcome is unknown is
      never made again from here - POST bookings reads no key (MFD-8). */
   const latch = useRef(false);
-  const once = useStuck();
+  /* A booking whose outcome is unknown (MFD-U4): kept outside this screen, so going back and opening a
+     walk-in again lets nothing go until a read of today's Arrivals begun after it is back. */
+  const once = useScreenStop(walkInStop(code));
   const unknownBooking = notKnown("booked", "Arrivals");
 
   const [title, setTitle] = useState(rules?.defaultTitle ?? "");
@@ -198,7 +200,7 @@ export function WalkIn({ hotel, role, room: walkRoom, onClose }: { hotel: Hotel;
     setSaving(true);
     let made: Made;
     try {
-      made = await createBooking(code, {
+      made = await once.guard(() => createBooking(code, {
         guestName: guestName.trim(), phone: phone.trim(), ...(email.trim() ? { email: email.trim() } : {}),
         bookingSourceId, ...(siteSource ? { prepaidOnSite: prepaid } : {}),
         ...(businessSource ? { businessSource } : {}), ...(marketSegment ? { marketSegment } : {}), ...(salesPerson ? { salesPerson } : {}),
@@ -222,13 +224,13 @@ export function WalkIn({ hotel, role, room: walkRoom, onClose }: { hotel: Hotel;
           ...(comp || rate.trim() === "" ? {} : { agreedRate: Number(rate) }),
           ...(!comp && incl && !quote.data?.contractRate ? { rateIncludesGst: true } : {}),
         }],
-      });
+      }), newBookingStop(code));
     } catch (e) {
       latch.current = false;
       setSaving(false);
       /* Nothing came back, or the server failed: it may be booked. No more
          taps until Arrivals is looked at (MEMORY 16). */
-      if (once.stop(e)) {
+      if (once.stop(e, newBookingStop(code))) {
         const n = notKnown("booked", "Arrivals", e);
         setToast({ title: n.title, body: n.body, tone: "bad" });
         return;
@@ -504,6 +506,7 @@ export function WalkIn({ hotel, role, room: walkRoom, onClose }: { hotel: Hotel;
 
         {/* The three buttons: the one filled is the job the page was opened for. */}
         <View style={{ gap: 8 }}>
+          {once.unknown ? <Stopped line={unknownBooking.line} act="Open Arrivals" onRead={() => router.push(`/front-desk/${code}` as Href)} /> : null}
           <Button label="Save booking" size="lg" busy={saving} reason={once.stuck ? unknownBooking.line : reasonToSave} onPress={() => void submit(false)} />
           <Button label="Save and assign room" size="lg" busy={saving} reason={once.stuck ? unknownBooking.line : reasonToSave ?? reasonToAssign} onPress={() => void submit(false)} />
           <Button label="Check in now" kind="primary" size="lg" busy={saving} reason={once.stuck ? unknownBooking.line : reasonToSave ?? reasonToCheckIn} onPress={() => void submit(true)} />

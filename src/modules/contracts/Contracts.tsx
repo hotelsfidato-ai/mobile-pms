@@ -5,14 +5,14 @@ import { useState } from "react";
 import { ActivityIndicator, Text, View } from "react-native";
 import type { Hotel } from "../../core/api";
 import { c, t } from "../../core/theme";
-import { Screen, useRead } from "../../core/ui";
+import { notKnown, Screen, useRead, useScreenStop } from "../../core/ui";
 import { PageHead, Pill } from "../front-desk/kit";
 import { Btn, Failed, NotYours, Stale, Toast, type Said } from "../guest-services/kit";
 import { Blank, Exports, Line, Panel, RowCard } from "../leads/kit";
 import { isRefused, readCompanyRecords } from "./data";
 import { CompanyDialog } from "./Dialogs";
 import { whyNotAddCompany, whyNotChangeCompany, whyNotContracts } from "./roles";
-import { contractHere, contractsTable, creditLine, EMPTY, KIND_LABEL, stillUnknown, TITLE, UNDER } from "./rules";
+import { contractHere, contractsTable, creditLine, EMPTY, KIND_LABEL, TITLE, UNDER } from "./rules";
 
 /* ══════════════════════════════════════════════════════════════════
    CONTRACTS on a phone — the web's /contracts
@@ -34,15 +34,18 @@ export function Contracts({ hotel, role }: { hotel: Hotel; role: string | null }
   const keeper = whyNotChangeCompany(role) === null;
   const key = ["contracts", code] as const;
   const cache = useQueryClient();
-  const q = useRead(() => (refusedRead ? Promise.resolve(null) : readCompanyRecords(code)), [...key, "list"]);
+  /* An add nobody knows the end of (MCON-U1): kept by name outside this screen; Add company stays grey
+     until a read of the list that BEGAN after it is back. */
+  /* The list of companies is the group's (the review): a lost Add at one hotel greys Add at every hotel
+     this phone sees, so the name carries no hotel. */
+  const lstop = useScreenStop("contracts/companies");
+  const q = useRead(lstop.watch(() => (refusedRead ? Promise.resolve(null) : readCompanyRecords(code))), [...key, "list"]);
   const [adding, setAdding] = useState(false);
   const [said, setSaid] = useState<Said | null>(null);
   const [pulled, setPulled] = useState(false);
   /* An add nobody knows the end of: Add company stays grey until the list is read after it (rules.ts stillUnknown). */
-  const [unknown, setUnknown] = useState<{ line: string; at: number } | null>(null);
-  const st = cache.getQueryState([...key, "list"]);
-  const blocked = stillUnknown(unknown?.at ?? null, st ? { dataUpdatedAt: st.dataUpdatedAt, error: st.error } : undefined);
-  const whyAdd = mayAdd ?? (blocked ? unknown!.line : null);
+  const [unknown, setUnknown] = useState<{ line: string } | null>(null);
+  const whyAdd = mayAdd ?? (lstop.stuck ? (unknown ?? notKnown("added", "the list of companies")).line : null);
   const refused = isRefused(q.data) ? q.data.refused : null;
   const rows = Array.isArray(q.data) ? q.data : null;
 
@@ -99,7 +102,7 @@ export function Contracts({ hotel, role }: { hotel: Hotel; role: string | null }
       </Screen>
       {adding ? (
         <CompanyDialog
-          code={code} keeper={keeper} onUnknown={(_, line) => setUnknown({ line, at: Date.now() })}
+          code={code} keeper={keeper} onUnknown={(_, line, e) => { lstop.stop(e); setUnknown({ line }); }}
           onClose={() => { setAdding(false); void cache.invalidateQueries({ queryKey: key }); }}
           onDone={(s, id) => {
             setAdding(false);

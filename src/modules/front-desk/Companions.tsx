@@ -4,8 +4,8 @@ import { useRef, useState } from "react";
 import { Text, View } from "react-native";
 import { HeldError } from "../../core/api";
 import { c, t } from "../../core/theme";
-import { notKnown, useRead, useStuck } from "../../core/ui";
-import { addCompanion, readCompanions, readDesk, removeCompanion, said, saveCompanion, type Companion } from "./data";
+import { notKnown, useRead, useScreenStop } from "../../core/ui";
+import { addCompanion, adultsStop, readCompanions, readDesk, removeCompanion, said, saveCompanion, type Companion } from "./data";
 import { deskGuestId, guestIdState, ID_TYPES, noGuestId, particularsPayload, sameVisit, type GuestId, type Particulars } from "./guestId";
 import { GuestIdFields } from "./GuestIdFields";
 import { body, Box, Button, Field, FormSheet, Pill, Toast, WEBSITE, type Said } from "./kit";
@@ -31,7 +31,10 @@ export function Companions({ code, stayId, today, rules, adults, leadAnswers }: 
   leadAnswers?: Particulars;
 }) {
   const key = ["front-desk", code, "companions", stayId];
-  const q = useRead(() => readCompanions(code, stayId), key);
+  /* An adult added whose outcome is unknown (MFD-U3): POST …/companions reads no key, so Add an adult
+     stays grey until a read of this list begun after it is back - kept outside the sheet. */
+  const stop = useScreenStop(adultsStop(code, stayId));
+  const q = useRead(stop.watch(() => readCompanions(code, stayId)), key);
   const cache = useQueryClient();
   const [editing, setEditing] = useState<Companion | "new" | null>(null);
   const [removing, setRemoving] = useState<string | null>(null);
@@ -56,7 +59,7 @@ export function Companions({ code, stayId, today, rules, adults, leadAnswers }: 
       <View style={{ flexDirection: "row", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
         <Text style={[t.label, { color: c.ink900 }]} accessibilityRole="header">Adults in the room</Text>
         <Pill tone={recorded < expected ? "warning" : "neutral"}>{peopleWords(expected, recorded)}</Pill>
-        {open ? <View style={{ marginLeft: "auto" }}><Button label="Add an adult" size="sm" onPress={() => setEditing("new")} /></View> : null}
+        {open ? <View style={{ marginLeft: "auto" }}><Button label="Add an adult" size="sm" reason={stop.stuck ? notKnown("added", "the stay's guests").line : null} onPress={() => { if (!stop.isStuck()) setEditing("new"); }} /></View> : null}
       </View>
       <View style={{ paddingVertical: 8, borderBottomWidth: companions.length ? 1 : 0, borderBottomColor: c.grey100 }}>
         <Text style={[t.label, { color: c.ink900 }]}>{lead} <Text style={[body, { color: c.grey600 }]}>· the guest on the booking</Text></Text>
@@ -89,7 +92,7 @@ export function Companions({ code, stayId, today, rules, adults, leadAnswers }: 
         <AdultSheet
           code={code} stayId={stayId} today={today} rules={rules} person={editing === "new" ? null : editing}
           nationality={leadNationality} leadVisit={leadAnswers ?? q.data.leadVisit ?? {}}
-          onDone={(s) => { setEditing(null); if (s) { setToast(s); void cache.invalidateQueries({ queryKey: ["front-desk", code] }); } }}
+          onDone={(s) => { setEditing(null); if (s) { setToast(s); void cache.invalidateQueries({ queryKey: ["front-desk", code] }); } else if (stop.isStuck()) q.reload(); }}
         />
       ) : null}
       <Toast said={toast} onClose={() => setToast(null)} />
@@ -134,7 +137,8 @@ function AdultSheet({ code, stayId, today, rules, person, nationality, leadVisit
      tap, and none after an unknown outcome until the stay is seen (MFD-8).
      Edit sets the same details again: safe to repeat. */
   const latch = useRef(false);
-  const once = useStuck();
+  const once = useScreenStop(adultsStop(code, stayId));
+  const [dead, setDead] = useState(false);
   const s = guestIdState(id, today);
   const wrong = !name.trim() ? "A guest has a name." : s.wrong;
 
@@ -145,29 +149,29 @@ function AdultSheet({ code, stayId, today, rules, person, nationality, leadVisit
       identity: { ...p.identity, ...(s.captured ? { idType: id.idType, idNumber: id.idNumber.trim() } : {}) },
       ...(s.foreign ? { visit: p.visit } : {}),
     };
-    if (latch.current || once.isStuck()) return;
+    if (latch.current || dead || (!person && once.isStuck())) return;
     latch.current = true;
     setBusy(true);
     try {
-      await (person ? saveCompanion(code, stayId, person.guestId, input) : addCompanion(code, stayId, input));
+      await (person ? saveCompanion(code, stayId, person.guestId, input) : once.guard(() => addCompanion(code, stayId, input)));
       onDone({ title: person ? "Saved" : "Added", body: name.trim(), tone: "ok" });
     } catch (e) {
       setBusy(false);
       setBad(e instanceof HeldError ? { title: "Saved on this phone", body: e.message, tone: "held" }
-        : !person && once.stop(e) ? { ...notKnown("added", "the stay's guests", e), tone: "bad" }
+        : !person && once.stop(e) ? (setDead(true), { ...notKnown("added", "the stay's guests", e), tone: "bad" as const })
         : { title: "Not saved", body: said(e), tone: "bad" });
     } finally { latch.current = false; }
   };
 
   return (
     <FormSheet
-      title={person ? `Edit ${person.name}` : "Add an adult"} onClose={() => onDone(null)} said={bad} onSaid={setBad}
+      title={person ? `Edit ${person.name}` : "Add an adult"} onClose={() => { if (!busy) onDone(null); }} said={bad} onSaid={setBad}
       description="Their own name and ID, as on the document. Saved on the stay at once; nothing here holds up the check-in."
       foot={(
         <View style={{ gap: 6 }}>
           <View style={{ flexDirection: "row", gap: 8, justifyContent: "flex-end" }}>
-            <Button label="Cancel" size="lg" onPress={() => onDone(null)} />
-            <Button label="Save" kind="primary" size="lg" busy={busy} reason={once.stuck ? notKnown("added", "the stay's guests").line : wrong} onPress={() => void save()} />
+            <Button label="Cancel" size="lg" reason={busy ? "" : null} onPress={() => { if (!busy) onDone(null); }} />
+            <Button label="Save" kind="primary" size="lg" busy={busy} reason={dead || (!person && once.stuck) ? notKnown("added", "the stay's guests").line : wrong} onPress={() => void save()} />
           </View>
           {wrong ? <Text style={t.caption}>{wrong}</Text> : null}
         </View>

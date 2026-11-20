@@ -7,8 +7,8 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { api, ApiError, HeldError, send } from "../../core/api";
 import { newKey } from "../../core/offline";
 import { c, face, space, t } from "../../core/theme";
-import { notKnown, useStuck } from "../../core/ui";
-import { kotLines, maySetUpKots, startCard, type KotKind } from "./floor";
+import { notKnown, useScreenStop } from "../../core/ui";
+import { kotLines, maySetUpKots, parcelsStop, startCard, type KotKind } from "./floor";
 import { Btn, Field, Input, OVERLAY, SheetHead, sheetCard, sheetFooter, ty, type Said } from "./TablesKit";
 import { orderHref, padHref, PARCEL_NAMELESS, parcelBody, rowFigure, rowLabel, rowLine, type TillRow } from "./till";
 import type { Order } from "./types";
@@ -228,21 +228,23 @@ export function NewParcelSheet({ code, outlet, onCancel, onHeld, onOpened }: {
   const [busy, setBusy] = useState(false);
   const [problem, setProblem] = useState<string | null>(null);
   const inFlight = useRef(false);
-  const once = useStuck();
+  /* Kept by the outlet, outside this sheet (MPOS-U1): reopening it lets nothing go. */
+  const once = useScreenStop(parcelsStop(code, outlet));
+  const [dead, setDead] = useState(false);
   const where = "the open orders once this is closed";
   const unknown = notKnown("opened", where);
 
   async function create() {
     if (!name.trim()) { setProblem(PARCEL_NAMELESS); return; }
-    if (inFlight.current || once.isStuck()) return;
+    if (inFlight.current || dead || once.isStuck()) return;
     inFlight.current = true;
     setBusy(true);
     try {
-      const order = await send<Order & { ok: true }>("POST", `/api/hotels/${code}/till/orders`, parcelBody(outlet, name, phone));
+      const order = await once.guard(() => send<Order & { ok: true }>("POST", `/api/hotels/${code}/till/orders`, parcelBody(outlet, name, phone)));
       onOpened(order, name.trim());
     } catch (e) {
       if (e instanceof HeldError) onHeld({ title: "Saved on this phone", body: e.message, tone: "held" });
-      else if (once.stop(e)) setProblem(`${unknown.title}. ${notKnown("opened", where, e).body}`);
+      else if (once.stop(e)) { setDead(true); setProblem(`${unknown.title}. ${notKnown("opened", where, e).body}`); }
       else setProblem(e instanceof ApiError || e instanceof Error ? e.message : String(e));
     } finally {
       inFlight.current = false;
@@ -252,11 +254,11 @@ export function NewParcelSheet({ code, outlet, onCancel, onHeld, onOpened }: {
 
   return (
     <TillSheet
-      open onClose={onCancel} title="New parcel"
+      open onClose={() => { if (!busy) onCancel(); }} title="New parcel"
       footer={(
         <View style={{ flexDirection: "row", justifyContent: "flex-end", gap: 8 }}>
-          <Btn label="Cancel" size="md" onPress={onCancel} />
-          <Btn label="Open the parcel" size="md" primary busy={busy} disabled={once.stuck} hint={once.stuck ? unknown.line : undefined} onPress={() => void create()} />
+          <Btn label="Cancel" size="md" disabled={busy} onPress={onCancel} />
+          <Btn label="Open the parcel" size="md" primary busy={busy} disabled={dead || once.stuck} hint={dead || once.stuck ? unknown.line : undefined} onPress={() => void create()} />
         </View>
       )}
     >

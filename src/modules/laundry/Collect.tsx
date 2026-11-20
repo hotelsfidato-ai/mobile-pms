@@ -4,9 +4,9 @@ import { Trash2 } from "lucide-react-native";
 import { useRef, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { c, face, t } from "../../core/theme";
-import { notKnown, useRead, useStuck, ripple, shade, keys } from "../../core/ui";
+import { notKnown, useRead, useScreenStop, ripple, shade, keys } from "../../core/ui";
 import { Btn, body, Dialog, Field, Foot, InDialog, Input, Loading, Select, saidOf, type Said } from "../guest-services/kit";
-import { collect, isRefused, readPriceList, readStays } from "./data";
+import { collect, isRefused, readPriceList, readStays, docketsStop } from "./data";
 import { collectBody, itemWords, stayWords, type Draft } from "./docket";
 
 /* ══════════════════════════════════════════════════════════════════
@@ -35,7 +35,9 @@ export function Collect({ code, onClose, onCollected }: {
   /* A second docket on a lost reply: POST dockets reads no key, so after an
      unknown outcome Collect it takes no more taps until this is closed and
      the dockets read again (MLDY-2). */
-  const once = useStuck();
+  const once = useScreenStop(docketsStop(code));
+  /* This dialog stays dead after an unknown outcome until it is closed, even if a read lets the list go. */
+  const [dead, setDead] = useState(false);
   const [said, setSaid] = useState<Said | null>(null);
 
   const prices = useRead(() => readPriceList(code), ["laundry", code, "price-list"]);
@@ -44,18 +46,19 @@ export function Collect({ code, onClose, onCollected }: {
   const set = (i: number, patch: Partial<Draft>) => setLines((all) => all.map((l, n) => (n === i ? { ...l, ...patch } : l)));
 
   async function submit() {
-    if (latch.current || once.isStuck()) return;
+    if (latch.current || dead || once.isStuck()) return;
     setSaid(null);
     const out = collectBody(belongsTo, stayId, notes, lines);
     if ("problem" in out) { setSaid({ title: out.problem, tone: "bad" }); return; }
     latch.current = true;
     setBusy(true);
     try {
-      const made = await collect(code, out.body);
+      const made = await once.guard(() => collect(code, out.body));
       void cache.invalidateQueries({ queryKey: ["laundry", code] });
       onCollected(made.data.id, made.data.number);
     } catch (e) {
       if (once.stop(e)) {
+        setDead(true);
         void cache.invalidateQueries({ queryKey: ["laundry", code] });
         setSaid({ ...notKnown("collected", "the dockets once this is closed", e), tone: "bad" });
       } else setSaid(saidOf("Not collected", e));
@@ -66,7 +69,7 @@ export function Collect({ code, onClose, onCollected }: {
   }
 
   return (
-    <Dialog title="Collect a bag" onClose={onClose}>
+    <Dialog title="Collect a bag" onClose={onClose} locked={busy}>
       <Field
         label="Whose is this" required
         hint="A guest's bag charges to their room. The hotel's own linen is counted out and counted back, and is never charged to anybody."
@@ -156,8 +159,8 @@ export function Collect({ code, onClose, onCollected }: {
 
       <InDialog said={said} />
       <Foot>
-        <Btn label="Cancel" tall grow onPress={onClose} />
-        <Btn label={busy ? "Collecting…" : "Collect it"} variant="primary" tall grow disabled={busy || once.stuck} onPress={() => void submit()} />
+        <Btn label="Cancel" tall grow disabled={busy} onPress={onClose} />
+        <Btn label={busy ? "Collecting…" : "Collect it"} variant="primary" tall grow disabled={busy || dead || once.stuck} onPress={() => void submit()} />
       </Foot>
     </Dialog>
   );
