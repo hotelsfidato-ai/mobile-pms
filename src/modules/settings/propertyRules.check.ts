@@ -1,10 +1,9 @@
 /* Run: node --experimental-strip-types src/modules/settings/propertyRules.check.ts
    Settings → Property's rules (lane P), on made-up data chosen so that a wrong rule gives a different
    answer (MEMORY 11): the child ages, a typed age, a row's move, a logo, the setup's open step, its
-   summary and its words, the checklist, the documents' lines, the import's words, and the doubt
-   that outlives a sheet (MEMORY 22). */
+   summary and its words, the checklist, the documents' lines, the import's words. */
 import {
-  addDays, ageOf, broughtWords, checkAddress, checklistLine, childAgeWords, dayCompact, docWhen, doneIn, doubt,
+  addDays, ageOf, broughtWords, checkAddress, checklistLine, childAgeWords, dayCompact, docWhen, doneIn,
   findAmenities, groupNameSaid, kindNote, logoOf, mapPoint, mayUndo, moved, openStep, rowOf, showsChecklist,
   stateText, STEPS, summaryOf, typedAgeWords, typeWord, voucherWords,
   type Commissioning, type ImportRecord, type SetupView,
@@ -88,17 +87,5 @@ eq(broughtWords(imp), "2 filled in, 1 booking, 3 past stays", "brought in");
 eq(broughtWords({ ...imp, filled: 0, bookings: 0, stays: 0 }), "-", "nothing brought in is a dash");
 eq([voucherWords(imp), voucherWords({ ...imp, kind: "guests" })], ["Not sent", "-"], "vouchers");
 eq(kindNote("bookings", "1 Oct 2026").includes("(before 1 Oct 2026)"), true, "the first day in the note");
-
-/* The doubt: stuck after a loss, through any number of looks, until a read that BEGAN after it. */
-const k = "5EL profile";
-eq(doubt.stuck(k, 100), false, "no loss, no stop");
-doubt.mark(k, 500);
-eq(doubt.stuck(k), true, "a loss stops the page");
-eq(doubt.stuck(k, 400), true, "a read that began before the loss does not free it");
-eq(doubt.stuck(k, 500), true, "nor one that began at the same moment");
-eq(doubt.stuck("5EL amenities", 0), false, "another page is not stopped");
-eq(doubt.stuck("AGR profile"), false, "nor another hotel");
-eq(doubt.stuck(k, 501), false, "a read that began after it frees it");
-eq(doubt.stuck(k, 0), false, "and it stays freed");
 
 console.log("propertyRules.check: ok");

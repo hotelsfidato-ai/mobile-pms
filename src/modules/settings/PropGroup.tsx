@@ -51,7 +51,7 @@ export function PropGroup({ hotel, role }: AdminProps) {
               }));
             return (
               <>
-                <StuckLine stuck={w.stuck} />
+                <StuckLine w={w} />
                 <View style={[core.card, { gap: 16 }]}>
                   <CardHead title="Group name and logo" line={"One for every hotel, printed on every bill: the hotel's name, then \"by\" the group's."} />
                   {typed === null ? (
@@ -118,7 +118,7 @@ function Office({ code, office, mayEdit, w }: { code: string; office: GroupOffic
             <Field key={key} label={label} hint={hint} input={input(key)} value={form[key]}
               onChangeText={(v) => setForm({ ...form, [key]: key === "gstin" ? v.toUpperCase() : v })} />
           ))}
-          <StuckLine stuck={w.stuck} />
+          <StuckLine w={w} />
         </Sheet>
       ) : null}
     </View>

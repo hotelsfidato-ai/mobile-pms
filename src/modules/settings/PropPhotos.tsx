@@ -53,7 +53,7 @@ export function PropPhotos({ hotel, role }: AdminProps) {
               }));
             return (
               <>
-                <StuckLine stuck={w.stuck} />
+                <StuckLine w={w} />
                 <View style={[core.card, { gap: 12 }]}>
                   <CardHead title="This hotel's logo" line="On this hotel's bills and documents in place of the group's logo."
                     info="With none, the group's prints. The voucher PDF prints a PNG logo; an SVG logo shows on the bills and the group's logo on the voucher." />

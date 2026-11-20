@@ -25,7 +25,7 @@ import type {
    OFFLINE: none of these writes is on the web's list (src/lib/offline.ts),
    so `send` refuses each one with the web's sentence and holds nothing.
    KEYS: these routes read no idempotency key, so what stops a repeat after a
-   lost reply is the page (propertyRules `doubt`); a keeper per page all the
+   lost reply is the page (the core stop book, src/core/stop.ts); a keeper per page all the
    same, let go at each read, so the key is right once the PMS honours it.
    ══════════════════════════════════════════════════════════════════ */
 
@@ -50,7 +50,7 @@ async function read<T>(page: string, fn: () => Promise<T>): Promise<T> {
 /** The web's "null, not an error worth a screen" readers (getPropertyDetail, getCommissioning). */
 const orNothing = <T>(p: Promise<T>): Promise<T | null> => p.catch(() => null);
 
-/* ── Reads, one per page (the page's doubt lifts on it) ───────────── */
+/* ── Reads, one per page (a good one lets the page's stop go) ───────────── */
 
 export const readProfilePage = (code: string) => read(`${code} profile`, () => Promise.all([
   orNothing(api<Commissioning>(`${H(code)}/commissioning`)),

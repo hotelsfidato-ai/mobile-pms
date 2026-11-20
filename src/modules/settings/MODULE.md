@@ -26,15 +26,16 @@ only, with roleGate's sentence under it. Every refusal from the server is shown 
 
 **Offline:** none of these writes is on the web's list; `send()` refuses each with the web's sentence.
 **Keys:** these routes read no idempotency key. After an unknown outcome (`outcomeUnknown`) every write on
-the page stays grey until a read of the page that BEGAN after the loss has come back; the doubt is kept
-outside React by hotel and page (`propertyRules.ts` `doubt`, checked), and one latch holds the page while a
-write is on its way, its sheet unable to close (MEMORY 16, 22). One key keeper per page all the same.
+the page stays grey until a good read of the page that BEGAN after the loss (and, for a lost reply or a
+gateway's give-up, 5 s after it) has come back: the core's stop book (`src/core/stop.ts`, `useScreenStop`),
+named `settings/<code>/<page>`, outside React; it also holds the page while a write is on its way. One latch
+per page, and a sheet cannot close while its write is on its way (MEMORY 16, 22). One key keeper per page.
 
 ### Files
 
 `propertyRules.ts` (+ `.check.ts`): the texts' kinds, property types, child-age words and the typed age,
 moving a row, logos, office fields, the 18 steps word for word, the open step, the summary, the checklist's
-line, the documents' lines, the import's words, the doubt. `propertyData.ts`: every call. `PropertyKit.tsx`:
+line, the documents' lines, the import's words. `propertyData.ts`: every call. `PropertyKit.tsx`:
 the page hook, the latch, the frame and the four states, links, the text editor, tabs.
 `Prop<Page>.tsx`: one per page.
 

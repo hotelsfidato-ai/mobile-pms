@@ -34,7 +34,7 @@ export function PropHighlights({ hotel, role }: AdminProps) {
         <Read q={q} what="the highlights">
           {(p) => p ? (
             <>
-              <StuckLine stuck={w.stuck} />
+              <StuckLine w={w} />
               <Tabs label="Highlights" value={kind} onChange={setKind} options={HIGHLIGHTS} />
               <View style={[core.card, { gap: 12 }]}>
                 {/* Keyed by the kind: a tab change starts from what is saved, as the web's tab does. */}

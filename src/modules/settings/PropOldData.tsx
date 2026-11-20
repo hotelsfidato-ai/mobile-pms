@@ -58,7 +58,7 @@ export function PropOldData({ hotel, role }: AdminProps) {
             const lastSystem = v.imports?.[0]?.system ?? "";
             return (
               <>
-                <StuckLine stuck={w.stuck} />
+                <StuckLine w={w} />
                 <View style={[core.card, { gap: 14 }]}>
                   <CardHead title="Bring in a file" line="Every row is checked and shown before anything is saved; then all of it is saved at once." />
                   <View style={{ gap: 6 }}>

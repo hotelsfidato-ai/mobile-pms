@@ -38,7 +38,7 @@ export function PropPolicies({ hotel, role }: AdminProps) {
         <Read q={q} what="the policies">
           {(d) => d ? (
             <>
-              <StuckLine stuck={w.stuck} />
+              <StuckLine w={w} />
               {d[1] ? <HousePolicies code={code} policies={d[1].property.housePolicies ?? []} w={w} />
                 : <View style={core.card}><Text style={[body, { color: c.grey500 }]}>The house policies could not be read for this property.</Text></View>}
               <View style={[core.card, { gap: 20 }]}>
@@ -92,7 +92,7 @@ function HousePolicies({ code, policies, w }: { code: string; policies: string[]
           <TextInput value={typed} onChangeText={setTyped} multiline accessibilityLabel="Policies"
             style={{ minHeight: 220, padding: 12, borderRadius: 10, borderWidth: 1, borderColor: c.grey300, fontSize: 16, lineHeight: 22, color: c.ink900, textAlignVertical: "top", ...face[500] }} />
           <Text style={[t.caption, { lineHeight: 17 }]}>At most 8, each up to 200 characters. Move a line to change the order; empty the box for none.</Text>
-          <StuckLine stuck={w.stuck} />
+          <StuckLine w={w} />
         </Sheet>
       ) : null}
     </View>

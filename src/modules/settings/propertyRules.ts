@@ -423,20 +423,3 @@ export const kindNote = (kind: ImportKind, firstDay: string) =>
   kind === "guests"
     ? "Name, phone, email, address, nationality, ID type and number (only its last four are kept), date of birth, company and GSTIN, notes. A guest already on file by phone or email is shown, and you choose: keep, merge (only empty fields are filled) or skip."
     : `Bookings to come become ordinary confirmed bookings, never overbooked; a rate left blank is a dash, set at the desk before arrival. An advance becomes a payment on the booking, dated the day it was paid (before ${firstDay}), never an invoice. A stay already over comes in as history only: no bill, no tax, no report changes.`;
-
-/* ── A doubt about a write, kept outside React (MEMORY 16, 22) ────── */
-
-/** The admin routes read no idempotency key: after a write whose outcome is unknown, the page's
-    writes stay grey until a read of the page that BEGAN after the loss has come back. Kept by hotel
-    and page, outside any screen, so closing a sheet or leaving the page does not free it. */
-const lostAt = new Map<string, number>();
-export const doubt = {
-  mark: (key: string, at: number) => { lostAt.set(key, at); },
-  /** Stuck, unless the last read that came back began after the loss (then the doubt goes). */
-  stuck: (key: string, seenAt?: number): boolean => {
-    const at = lostAt.get(key);
-    if (at === undefined) return false;
-    if (seenAt !== undefined && seenAt > at) { lostAt.delete(key); return false; }
-    return true;
-  },
-};

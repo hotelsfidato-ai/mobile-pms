@@ -51,7 +51,7 @@ export function PropProfile({ hotel, role, who }: AdminProps) {
         <Read q={q} what="the profile">
           {(d) => d ? (
             <>
-              <StuckLine stuck={w.stuck} />
+              <StuckLine w={w} />
               {showsChecklist(d[0]) ? <Checklist d={d[0]} code={code} /> : null}
               {d[1] ? <ProfileCard p={d[1].property} onEdit={() => setEditing(true)} off={w.off} /> : null}
               {d[1] ? <Fssai code={code} value={d[1].property.fssaiNumber} mayEdit={mayEdit} w={w} /> : null}
@@ -294,7 +294,7 @@ function EditProperty({ p, nameLocked, w, onClose }: { p: P; nameLocked: boolean
       <Field label="Reservations phone" hint="Kept here. It prints on no document." input={keys.phone} value={more.reservationsPhone} onChangeText={putMore("reservationsPhone")} />
       <Field label="Website" hint="Kept here. It prints on no document." input={{ keyboardType: "url", autoCapitalize: "none", autoCorrect: false }} value={more.website} onChangeText={putMore("website")} />
       <Field label="PAN" hint="Ten characters. Kept here; it prints on no document." maxLength={10} input={keys.code} value={more.pan} onChangeText={putMore("pan", true)} />
-      {w.stuck ? <StuckLine stuck /> : null}
+      <StuckLine w={w} />
     </Sheet>
   );
 }

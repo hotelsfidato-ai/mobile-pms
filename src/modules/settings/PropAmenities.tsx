@@ -67,7 +67,7 @@ export function PropAmenities({ hotel, role }: AdminProps) {
             };
             return (
               <>
-                <StuckLine stuck={w.stuck} />
+                <StuckLine w={w} />
                 {d.mayKeep && adding === null ? (
                   <View style={{ alignSelf: "flex-start" }}>
                     <Btn variant="primary" label="Add" a11y="Add an amenity" disabled={w.off} icon={<Plus size={16} color={w.off ? c.grey500 : c.white} />} onPress={() => setAdding("")} />
@@ -162,7 +162,7 @@ function Row({ code, a, first, mayEdit, mayKeep, w, top, bottom, searching, onMo
           {!a.used ? <Icon44 label={`Delete ${a.name}`} disabled={w.off} onPress={remove}><Trash2 size={16} color={c.grey700} /></Icon44> : null}
         </View>
       ) : null}
-      {renaming !== null ? <View style={{ alignSelf: "flex-start" }}><Btn variant="ghost" label="Cancel" onPress={() => setRenaming(null)} /></View> : null}
+      {renaming !== null ? <View style={{ alignSelf: "flex-start" }}><Btn variant="ghost" label="Cancel" disabled={w.busy} onPress={() => setRenaming(null)} /></View> : null}
     </View>
   );
 }

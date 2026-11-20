@@ -1,23 +1,25 @@
 import { router } from "expo-router";
 import { ArrowUpRight, ChevronRight } from "lucide-react-native";
-import { useState, type ReactNode } from "react";
+import { useRef, useState, type ReactNode } from "react";
 import { Pressable, Text, TextInput, View } from "react-native";
 import { ON_THE_WEBSITE, can, mayReach, phoneRoute, type Role } from "../../core/menu";
 import { c, face, space, t } from "../../core/theme";
-import { Head, Screen, notKnown, ripple, shade, useRead } from "../../core/ui";
-import { Btn, Failed, Loading, Refused, Stale, body, saidOf, useAct, type Said, type Stop } from "../admin/kit";
+import { outcomeUnknown } from "../../core/api";
+import { Head, Screen, Stopped, notKnown, ripple, shade, useRead, useScreenStop } from "../../core/ui";
+import { Btn, Failed, Loading, Refused, Stale, body, saidOf, type Said } from "../admin/kit";
 import { notYourRole, refusalFor } from "../admin/roles";
-import { doubt, TEXT_MOST, type TextKind } from "./propertyRules";
+import { TEXT_MOST, type TextKind } from "./propertyRules";
 import { saveText } from "./propertyData";
 
 /* ══════════════════════════════════════════════════════════════════
    WHAT EVERY PROPERTY PAGE SHARES (lane P): who may open it (the web's
    console: RequireAccess on /settings/property/<slug>), its one read and
    the moment it began, the page's stop after an unknown outcome kept
-   outside React (propertyRules `doubt`, MEMORY 16 and 22), one latch for
+   outside React (MEMORY 16 and 22), one latch for
    the whole page so it sends one thing at a time, a link to another page
    (the phone's, or greyed "On the website for now"), and the web's
-   TextEditor (pages/property/TextEditor.tsx).
+   TextEditor (pages/property/TextEditor.tsx). The stop is the core's
+   (src/core/stop.ts, useScreenStop), named settings/<code>/<page>.
    ══════════════════════════════════════════════════════════════════ */
 
 /** RequireAccess's sentence when the console does not offer this page to the role, else null. */
@@ -29,43 +31,49 @@ export const mayEditHere = (role: Role) => can(role, "edit", "room_config");
 /** roleGate's sentence for a write this role is refused: shown where the page is read only. */
 export const readOnlyLine = (doing: string) => refusalFor(doing, "room_config", "edit");
 
-/** The page's one read, when it began (the doubt lifts only on a read that began after a loss), and its stop. */
+/** The page's stop name in the core's book (src/core/stop.ts): by hotel and page. */
+export const stopName = (code: string, page: string) => `settings/${code}/${page}`;
+
+/** The page's one read, watched by the core's stop: a good read begun after a loss (and its wait) lets it go. */
 export function usePage<T>(code: string, page: string, fn: () => Promise<T>) {
-  const [seenAt, setSeenAt] = useState<number | undefined>(undefined);
-  const q = useRead(async () => {
-    const started = Date.now();
-    const answer = await fn();
-    setSeenAt(started);
-    return answer;
-  }, ["settings", code, page]);
-  const [, tick] = useState(0);
-  const key = `${code} ${page}`;
-  const stop: Stop = { stuck: doubt.stuck(key, seenAt), mark: () => { doubt.mark(key, Date.now()); tick((n) => n + 1); } };
+  const stop = useScreenStop(stopName(code, page));
+  const q = useRead(stop.watch(fn), ["settings", code, page]);
   return { q, stop };
 }
 
-/** One latch for the page (MEMORY 8, 22: one write at a time), the server's answer said. */
-export function useWrites(stop: Stop, reload: () => void, say: (s: Said) => void) {
-  const act = useAct(undefined, stop);
-  const write = <T,>(fn: () => Promise<T>, w: {
+/** One latch for the page (MEMORY 8, 22: one write at a time), each write guarded by the core's stop (stopped
+    while on its way, lost on an unknown outcome, outside React), the server's answer said. */
+export function useWrites(stop: ReturnType<typeof useScreenStop>, reload: () => void, say: (s: Said) => void) {
+  const latch = useRef(false);
+  const [busy, setBusy] = useState(false);
+  const write = async <T,>(fn: () => Promise<T>, w: {
     ok: (r: T) => Said | null; done: string; where: string; no?: string; after?: (r: T) => void;
-  }) => act.run(fn, {
-    ok: (r) => { const s = w.ok(r); if (s) say(s); w.after?.(r); reload(); },
-    no: (e) => say(saidOf(e, w.no ?? "Not saved")),
-    unknown: (e) => { say({ ...notKnown(w.done, w.where, e), tone: "bad" }); reload(); },
-  });
-  return { busy: act.busy, stuck: act.stuck, off: act.busy || act.stuck, write };
+  }) => {
+    if (latch.current || stop.isStuck()) return;
+    latch.current = true;
+    setBusy(true);
+    try {
+      const r = await stop.guard(fn);
+      const s = w.ok(r);
+      if (s) say(s);
+      w.after?.(r);
+      reload();
+    } catch (e) {
+      if (outcomeUnknown(e)) say({ ...notKnown(w.done, w.where, e), tone: "bad" });
+      else say(saidOf(e, w.no ?? "Not saved"));
+    } finally {
+      latch.current = false;
+      setBusy(false);
+    }
+  };
+  return { busy, stuck: stop.stuck, unknown: stop.unknown, off: busy || stop.stuck, write, reload };
 }
 export type Writes = ReturnType<typeof useWrites>;
 
-/** Said while the page is stopped: why nothing here can be pressed. */
-export function StuckLine({ stuck }: { stuck: boolean }) {
-  if (!stuck) return null;
-  return (
-    <Text style={[t.caption, { color: c.red700, lineHeight: 17 }]} accessibilityRole="alert">
-      Not known whether the last change was saved. Pull down to read this page again before changing anything.
-    </Text>
-  );
+/** Said while the page is stopped after an unknown outcome: why nothing here can be pressed, and the read that frees it. */
+export function StuckLine({ w }: { w: Writes }) {
+  if (!w.unknown) return null;
+  return <Stopped line="Not known whether the last change was saved: read this page again before changing anything." onRead={w.reload} />;
 }
 
 /** The page's frame: the web's title and its line (as the pictures: no hotel above it), pull down to read again. */

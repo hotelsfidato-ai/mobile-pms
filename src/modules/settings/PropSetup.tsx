@@ -68,7 +68,7 @@ export function PropSetup({ hotel, role }: AdminProps) {
               w.write(() => chooseStep(code, id, choice), { ok: () => null, done: "saved", where: `step ${STEPS.find((s) => s.id === id)!.number}`, after });
             return (
               <>
-                <StuckLine stuck={w.stuck} />
+                <StuckLine w={w} />
                 {SETUP_GROUPS.map((group) => {
                   const steps = STEPS.filter((s) => s.group === group.key);
                   return (
