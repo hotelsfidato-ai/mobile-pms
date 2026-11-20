@@ -3,7 +3,7 @@
 import {
   changeItemBody, countedText, decideBody, failedText, guestText, itemsOf, lineText, listEmpty, money, newItemBody,
   newListBody, priceInput, recordedLine, recordedOf, recordedPill, runPill, runsEmptyTitle, runsPath, startStore, step,
-  exportStatus, recordRow, runRow, stillUnknown, stockText, takeBody, takeLines, takenWords, waitingOf, waitingPill, whatWasTaken, whyNotDecline, whyNotOpenTake,
+  doubtStore, exportStatus, recordRow, runRow, stillUnknown, stockText, takeBody, takeLines, takenWords, waitingOf, waitingPill, whatWasTaken, whyNotDecline, whyNotOpenTake,
   whyNotSaveItem, whyNotSaveList, whyNotTake, RECORD_REFUSED, SAY_WHY_NOT,
   type MinibarItem, type MinibarRecord,
 } from "./care.ts";
@@ -144,3 +144,20 @@ eq(stillUnknown(200, 150), true); // a read begun before the failure proves noth
 eq(stillUnknown(200, 200), true);
 eq(stillUnknown(200, 201), false);
 console.log("care: the unknown outcome passes");
+
+/* The doubt outlives the screen: kept until a read begun after the loss (the money review, 20 Nov). */
+const store = doubtStore<{ key: string; lostAt: number | null }>();
+let made = 0;
+const first = store.keep("5EL", () => ({ key: `k${++made}`, lostAt: null }));
+store.lost("5EL", 200);
+eq(store.keep("5EL", () => ({ key: `k${++made}`, lostAt: null })).key, first.key); // back on the screen: the SAME key
+eq(store.settle("5EL", undefined), false); // the opening read failed: still kept
+eq(store.settle("5EL", 150), false); // a read begun before the loss: still kept
+eq(store.get("5EL")?.lostAt, 200);
+eq(store.settle("5EL", 201), true);
+eq(store.get("5EL"), null);
+eq(store.keep("5EL", () => ({ key: `k${++made}`, lostAt: null })).key, "k2"); // a new take, a new key
+eq(store.get("AGR"), null); // another hotel shares nothing
+store.drop("5EL");
+eq(store.get("5EL"), null);
+console.log("care: the doubt store passes");

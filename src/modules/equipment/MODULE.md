@@ -103,3 +103,5 @@ WARRANTY ENDS (a dash) as labelled rows in small capitals, a chevron on the righ
 **Amended 20 Nov (the review, MEQ-3):** the unknown-outcome stop is the Item's and the Register's (a read begun
 after the failure unlocks it), not each dialog's; no dialog closes while busy; the repair's key is the Item
 screen's, kept across reopening until such a read.
+**Amended again 20 Nov (MHK-K3):** the item's doubt and its repair's key are kept outside React by hotel and
+item, the register's Add by hotel (`doubtStore`), so leaving and coming back keeps them.

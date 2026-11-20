@@ -317,3 +317,25 @@ export const runRow = (r: ChecklistRun, when: (at: string | null) => string): st
 export const stillUnknown = (lostAt: number | null, began: number | undefined) =>
   lostAt !== null && (began === undefined || began <= lostAt);
 export const TAKE_UNKNOWN = "Not known whether the last take was recorded: Record for a room opens again once the minibar is read. Pull down to read it.";
+
+/** WHERE A DOUBT IS KEPT: outside React, by hotel (and record), so leaving the screen and coming
+    back - or the route pushed again - finds the same key and the same stop (the money review of
+    20 Nov; the finance desk's keepers live the same way). An entry goes only on success (`drop`) or
+    when a read BEGUN after its loss has come back (`settle`). */
+export function doubtStore<T extends { lostAt: number | null }>() {
+  const m = new Map<string, T>();
+  return {
+    get: (k: string): T | null => m.get(k) ?? null,
+    /** The entry for `k`, made by `make` when there is none. */
+    keep: (k: string, make: () => T): T => { const e = m.get(k); if (e) return e; const n = make(); m.set(k, n); return n; },
+    lost: (k: string, at: number) => { const e = m.get(k); if (e) e.lostAt = at; },
+    /** Forgotten once the doubt is over (or there never was one); true when it went. */
+    settle: (k: string, began: number | undefined): boolean => {
+      const e = m.get(k);
+      if (!e || stillUnknown(e.lostAt, began)) return false;
+      m.delete(k);
+      return true;
+    },
+    drop: (k: string) => { m.delete(k); },
+  };
+}

@@ -91,3 +91,15 @@ desk's decision waits the same way (a read begun after). **The rule:** a key tha
 the doubt, not as long as a dialog — hold it where the person can come back to it, and unlock only on a read
 begun after the failure. **The web's MinibarFlow.tsx (40-44) has the same flaw:** it mints a new `pressKey`
 each time the window opens (for `docs/api-requests.md`).
+
+### MHK-K3 · The take's key and the stop lived in the screen's state (20 Nov) — fixed
+
+**What happened:** after MHK-K2 the take {keeper, lostAt} and the desk's stop sat in the Minibar screen's
+`useRef` / `useState`: leaving the screen and coming back (or the route pushed again) dropped them while the
+cache still showed the minibar as read before the loss, and if the opening read failed everything was live
+again — a fresh take, a new key, a second charge. **How it was found:** the money review of 20 Nov (the same
+hole as the finance desk's). **What was done:** `care.ts doubtStore` (checked: kept on return, kept on a failed
+or an older read, gone only on a read begun after the loss or on success; broken once); the takes and the desk's
+doubts live in module-level stores by hotel (and record); the equipment item's doubt and its repair's key by
+hotel and item, the register's Add by hotel (MEQ-3). **The rule:** a doubt about money lives outside React,
+keyed by what it is about, so no screen's coming and going can forget it.

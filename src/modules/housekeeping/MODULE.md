@@ -295,3 +295,5 @@ route `?room=` is ready for it.
 outcome is unknown, the take locked as sent with Try again, Record for a room grey until a read begun after the
 failure has come back; a `duplicate` answer is said as the earlier take, not as a new charge; no dialog closes
 while its write is on its way; `?room=` asks who may first.
+**Amended again 20 Nov (the money review, MHK-K3):** the take and the desk's doubts are kept outside React by hotel
+(`care.ts doubtStore`), so leaving the screen and coming back keeps the key and the stop.

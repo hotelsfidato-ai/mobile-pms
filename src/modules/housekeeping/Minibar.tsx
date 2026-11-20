@@ -12,7 +12,7 @@ import {
   changeItemBody, countable, countedText, decideBody, decidedWords, guestText, itemSavedWords, KEEP_REFUSED, lineText,
   listEmpty, listNote, money, newItemBody, NO_PRICE, priceInput, priceText, RECORD_COLUMNS, recordedLine, recordedOf,
   recordedPill, recordRow, shownItems, startStore, step, stockText, takeBody, takeLabel, takeLines, takenWords, waitingOf,
-  stillUnknown, TAKE_UNKNOWN, waitingPill, whatWasTaken, whyNotDecline, whyNotOpenTake, whyNotSaveItem, whyNotTake, DESK_DECIDES,
+  doubtStore, stillUnknown, TAKE_UNKNOWN, waitingPill, whatWasTaken, whyNotDecline, whyNotOpenTake, whyNotSaveItem, whyNotTake, DESK_DECIDES,
   type Counts, type Minibar as MinibarData, type MinibarItem, type MinibarRecord,
 } from "./care";
 import { addMinibarItem, changeMinibarItem, decideMinibar, readMinibar, recordMinibar } from "./careData";
@@ -53,6 +53,11 @@ const readStamped = async (code: string) => {
 /** The take on its way: its one key, kept at the SCREEN, so closing and reopening the dialog can
     never mint a second key for a take whose outcome is unknown (the review's H1). */
 interface Take { keeper: KeyKeeper; lostAt: number | null }
+/** The takes, by hotel; and the desk's decisions in doubt, by hotel and record - outside React, so
+    leaving the screen and coming back keeps the key and the stop (the money review, 20 Nov). */
+const TAKES = doubtStore<Take>();
+const DECIDES = doubtStore<{ lostAt: number | null }>();
+const newTake = (): Take => ({ keeper: formKeeper(newKey(), currentSubject), lostAt: null });
 
 export function Minibar({ hotel, room, onBack }: { hotel: Hotel; room?: string; onBack: () => void }) {
   const code = hotel.code;
@@ -68,18 +73,16 @@ export function Minibar({ hotel, room, onBack }: { hotel: Hotel; room?: string; 
   const refresh = () => void cache.invalidateQueries({ queryKey: ["housekeeping", code, "minibar"] });
   const d = q.data?.d;
   const began = q.data?.began;
-  const take = useRef<Take | null>(null);
-  const [takeLost, setTakeLost] = useState<number | null>(null);
+  /* Re-drawn when the store changes; what is in doubt is read from TAKES, never this screen's state. */
+  const [, redraw] = useState(0);
+  const takeLost = TAKES.get(code)?.lostAt ?? null;
   const takeUnknown = stillUnknown(takeLost, began);
   /* A read begun after the failure has come back, the dialog closed: the person sees the record, so the key goes. */
   useEffect(() => {
-    if (takeLost !== null && !takeUnknown && !taking) { take.current = null; setTakeLost(null); }
-  }, [takeLost, takeUnknown, taking]);
+    if (takeLost !== null && !takeUnknown && !taking && TAKES.settle(code, began)) redraw((n) => n + 1);
+  }, [code, takeLost, takeUnknown, taking, began]);
   const openWhy = d ? (takeUnknown ? TAKE_UNKNOWN : whyNotOpenTake(d)) : null;
-  const openTake = () => {
-    if (!take.current) take.current = { keeper: formKeeper(newKey(), currentSubject), lostAt: null };
-    setTaking(true);
-  };
+  const openTake = () => { TAKES.keep(code, newTake); setTaking(true); };
   const refused = !d && q.error ? refusalOf(q.error) : null;
 
   return (
@@ -113,10 +116,10 @@ export function Minibar({ hotel, room, onBack }: { hotel: Hotel; room?: string; 
 
       {/* The deep link (?room=) asks the same as the button (the review's H5). */}
       {taking && d && !openWhy ? (
-        <TakeDialog code={code} items={d.items} room={room} take={take.current ?? (take.current = { keeper: formKeeper(newKey(), currentSubject), lostAt: null })}
-          onLost={(at) => setTakeLost(at)}
-          onClose={() => { setTaking(false); if (take.current?.lostAt == null) take.current = null; refresh(); }}
-          onDone={(s) => { setTaking(false); take.current = null; setTakeLost(null); setSaid(s); refresh(); }} />
+        <TakeDialog code={code} items={d.items} room={room} take={TAKES.keep(code, newTake)}
+          onLost={(at) => { TAKES.lost(code, at); redraw((n) => n + 1); }}
+          onClose={() => { setTaking(false); if (TAKES.get(code)?.lostAt == null) TAKES.drop(code); refresh(); }}
+          onDone={(s) => { setTaking(false); TAKES.drop(code); setSaid(s); refresh(); }} />
       ) : null}
       {editing && d ? (
         <ItemDialog code={code} d={d} item={editing === "new" ? null : editing}
@@ -161,9 +164,12 @@ function WaitingCard({ code, r, mayDecide, began, onDone, onUnknown }: {
   /* The route reads no key: a lost reply then a second tap could charge twice
      but for the server's "already decided". Stuck until the list is read again. */
   const stuck = useStuck();
-  const [stuckAt, setStuckAt] = useState<number | null>(null);
+  const [, redraw] = useState(0);
+  const doubtKey = `${code}/${r.id}`;
+  const stuckAt = DECIDES.get(doubtKey)?.lostAt ?? null;
   const [unknownLine, setUnknownLine] = useState<string | null>(null);
   const held = stillUnknown(stuckAt, began);
+  useEffect(() => { if (stuckAt !== null && !held && DECIDES.settle(doubtKey, began)) redraw((n) => n + 1); }, [doubtKey, stuckAt, held, began]);
 
   async function decide(charge: boolean) {
     if (latch.current || held) return;
@@ -178,7 +184,9 @@ function WaitingCard({ code, r, mayDecide, began, onDone, onUnknown }: {
       if (stuck.stop(e)) {
         const k = notKnown(charge ? "charged" : "decided", "this room's take once the list is read again", e);
         setUnknownLine(k.line);
-        setStuckAt(Date.now());
+        DECIDES.keep(doubtKey, () => ({ lostAt: null }));
+        DECIDES.lost(doubtKey, Date.now());
+        redraw((n) => n + 1);
         onUnknown();
       } else setSaid(saidOf(charge ? "Not charged to the bill" : "Not decided", e));
     } finally {
@@ -200,7 +208,7 @@ function WaitingCard({ code, r, mayDecide, began, onDone, onUnknown }: {
       {!mayDecide ? (
         <Text style={[body, { marginTop: 4 }]}>{DESK_DECIDES}</Text>
       ) : held ? (
-        <Text style={[body, { color: c.yellow800, marginTop: 4 }]} accessibilityRole="alert">{unknownLine}</Text>
+        <Text style={[body, { color: c.yellow800, marginTop: 4 }]} accessibilityRole="alert">{unknownLine ?? notKnown("decided", "this room's take once the list is read again").line}</Text>
       ) : declining ? (
         <View style={{ gap: 8, marginTop: 8 }}>
           <Input label="Why it is not charged" placeholder="Why it is not charged" value={note} onChangeText={setNote} rows={2} />
@@ -324,7 +332,6 @@ function TakeDialog({ code, items, room: fixedRoom, take, onLost, onClose, onDon
         /* Nothing came back: the take is locked and its key kept at the screen until a read
            begun after this has shown the record. */
         const at = Date.now();
-        take.lostAt = at;
         onLost(at);
         setLocked(true);
         const k = notKnown("recorded", "Waiting for the desk and Recorded", e);

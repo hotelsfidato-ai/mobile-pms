@@ -8,7 +8,7 @@ import { ExportButtons } from "../../core/Export";
 import { ON_THE_WEBSITE } from "../../core/menu";
 import { c, face, space, t } from "../../core/theme";
 import { Head, notKnown, ripple, Screen, useRead, useStuck } from "../../core/ui";
-import { stillUnknown } from "../housekeeping/care";
+import { doubtStore, stillUnknown } from "../housekeeping/care";
 import {
   Act, Back, body, Box, Btn, Dialog, Empty, Failed, Fact, Field, Foot, IconChip, InDialog, Input, Loading, NotYours, Pill,
   Refused, saidOf, Segmented, Select, Stale, Toast, type Said,
@@ -37,6 +37,9 @@ import {
    and the add form's three dates (no date picker): MODULE.md.
    ══════════════════════════════════════════════════════════════════ */
 
+/** Adds whose outcome is unknown, by hotel. */
+const ADDS = doubtStore<{ lostAt: number | null }>();
+
 const STATUS_OPTIONS: { value: StatusFilter; label: string }[] = [
   { value: "all", label: "Any status" }, { value: "in_use", label: STATUS_LABEL.in_use },
   { value: "under_repair", label: STATUS_LABEL.under_repair }, { value: "retired", label: STATUS_LABEL.retired },
@@ -51,9 +54,12 @@ export function Register({ hotel, role, onBack }: { hotel: Hotel; role: string |
   const [place, setPlace] = useState("all");
   const [status, setStatus] = useState<StatusFilter>("all");
   const [adding, setAdding] = useState(false);
-  const [addLost, setAddLost] = useState<number | null>(null);
+  /* An Add in doubt is kept by hotel outside React, so leaving and coming back keeps the stop (the money review, 20 Nov). */
+  const [, redraw] = useState(0);
+  const addLost = ADDS.get(code)?.lostAt ?? null;
   const addUnknown = stillUnknown(addLost, q.data?.began);
-  useEffect(() => { if (addLost !== null && !addUnknown && !adding) setAddLost(null); }, [addLost, addUnknown, adding]);
+  const setAddLost = (when: number) => { ADDS.keep(code, () => ({ lostAt: null })); ADDS.lost(code, when); redraw((n) => n + 1); };
+  useEffect(() => { if (addLost !== null && !addUnknown && !adding && ADDS.settle(code, q.data?.began)) redraw((n) => n + 1); }, [code, addLost, addUnknown, adding, q.data?.began]);
   const [pulled, setPulled] = useState(false);
   const [said, setSaid] = useState<Said | null>(null);
   const unsay = useCallback(() => setSaid(null), []);

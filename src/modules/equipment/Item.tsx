@@ -1,14 +1,14 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { router } from "expo-router";
 import { Archive, ArrowRightLeft, CheckCircle2, Clock, Pencil, Plus, Wrench } from "lucide-react-native";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Text, View } from "react-native";
 import { currentSubject, type Hotel } from "../../core/api";
 import type { KeyKeeper } from "../../core/keys";
 import { newKey } from "../../core/offline";
 import { c, face, space, t } from "../../core/theme";
 import { Head, notKnown, Screen, useRead } from "../../core/ui";
-import { stillUnknown } from "../housekeeping/care";
+import { doubtStore, stillUnknown } from "../housekeeping/care";
 import { formKeeper } from "../housekeeping/repair";
 import { dateTime } from "../night-audit/audit";
 import {
@@ -42,20 +42,28 @@ import {
 
 type Open = "edit" | "move" | "status" | "retire" | "repair" | null;
 
+/** Each item's doubt and its repair's key, by hotel and item: outside React (the money review, 20 Nov). */
+const DOUBTS = doubtStore<{ lostAt: number | null; repair: KeyKeeper | null }>();
+const fresh = () => ({ lostAt: null, repair: null });
+
 export function Item({ hotel, role, id, onBack }: { hotel: Hotel; role: string | null; id: string; onBack: () => void }) {
   const code = hotel.code;
   const cache = useQueryClient();
   /* Stamped with when the read BEGAN: an unknown outcome waits for a read begun after it (H3). */
   const q = useRead(async () => { const began = Date.now(); return { began, ...(await readItem(code, id)) }; }, ["equipment", code, "item", id]);
-  const [lostAt, setLostAt] = useState<number | null>(null);
+  /* What is in doubt is read from DOUBTS (outside React, by hotel and item), never this screen's
+     state: leaving and coming back keeps the stop and the repair's key (the money review, 20 Nov). */
+  const at = `${code}/${id}`;
+  const [, redraw] = useState(0);
+  const lostAt = DOUBTS.get(at)?.lostAt ?? null;
   const lost = stillUnknown(lostAt, q.data?.began);
-  /* The repair's one key, at the screen: kept across reopening until a read begun after a lost
-     reply has come back (POST /work-orders reads it; the review's H4). */
-  const repairKeys = useRef<KeyKeeper | null>(null);
-  const repairKeeper = () => repairKeys.current ?? (repairKeys.current = formKeeper(newKey(), currentSubject));
+  const setLostAt = (when: number) => { DOUBTS.keep(at, fresh); DOUBTS.lost(at, when); redraw((n) => n + 1); };
+  /* The repair's one key: kept across reopening until a read begun after a lost reply has come
+     back (POST /work-orders reads it; the review's H4). */
+  const repairKeeper = () => { const e = DOUBTS.keep(at, fresh); return e.repair ?? (e.repair = formKeeper(newKey(), currentSubject)); };
   const inbox = useRead(() => readEquipmentApprovals(code), ["equipment", code, "approvals"]);
   const [open, setOpen] = useState<Open>(null);
-  useEffect(() => { if (lostAt !== null && !lost && open === null) { setLostAt(null); repairKeys.current = null; } }, [lostAt, lost, open]);
+  useEffect(() => { if (lostAt !== null && !lost && open === null && DOUBTS.settle(at, q.data?.began)) redraw((n) => n + 1); }, [at, lostAt, lost, open, q.data?.began]);
   const [pulled, setPulled] = useState(false);
   const [said, setSaid] = useState<Said | null>(null);
   const unsay = useCallback(() => setSaid(null), []);
@@ -68,7 +76,8 @@ export function Item({ hotel, role, id, onBack }: { hotel: Hotel; role: string |
   };
   const done = (d: Done) => {
     setOpen(null);
-    if (open === "repair") repairKeys.current = null;
+    /* Landed (or held with its key): this repair's key, and any doubt, are over. */
+    if (open === "repair") DOUBTS.drop(at);
     setSaid(d.said);
     refresh();
     /* Part of a count went elsewhere as its own line: that line is what was just acted on. */
