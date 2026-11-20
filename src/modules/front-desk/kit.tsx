@@ -6,6 +6,12 @@ import {
 } from "react-native";
 import { c, face, space, t } from "../../core/theme";
 import type { Tone } from "./desk";
+import { keys, modalEdge, ripple, shade, useSheetPad } from "../../core/ui";
+
+/** The keyboard's own helpers for a field (docs/NATIVE.md): only the keyboard changes, never what is sent. */
+const KEYS: Partial<Record<KeyboardTypeOptions, object>> = {
+  "email-address": keys.email, "phone-pad": keys.phone, "decimal-pad": keys.amount, "number-pad": keys.count,
+};
 
 /* ══════════════════════════════════════════════════════════════════
    THE WEB'S KIT, AS THE FRONT DESK USES IT ON A PHONE — after
@@ -63,7 +69,7 @@ export function Segmented<T extends string>({ value, onChange, options }: {
       {options.map((o) => {
         const on = o.value === value;
         return (
-          <Pressable
+          <Pressable android_ripple={ripple}
             key={o.value} onPress={() => onChange(o.value)} accessibilityRole="tab" accessibilityState={{ selected: on }}
             style={[{ flex: 1, minHeight: 44, borderRadius: 7, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 6, paddingHorizontal: 12 },
               on ? { backgroundColor: c.white, shadowColor: c.ink900, shadowOpacity: 0.08, shadowRadius: 2, shadowOffset: { width: 0, height: 1 }, elevation: 1 } : null]}
@@ -88,14 +94,14 @@ export function Button({ label, onPress, kind = "secondary", Icon, Trail, busy, 
     : kind === "primary" ? c.orange600 : kind === "danger" ? c.red : kind === "secondary" ? (off ? c.grey50 : c.white) : "transparent";
   const ink = kind === "primary" || kind === "danger" ? (off ? c.grey600 : c.white) : off ? c.grey500 : kind === "ghost" ? c.grey600 : c.ink900;
   return (
-    <Pressable
+    <Pressable android_ripple={ripple}
       onPress={off ? () => { if (reason) onRefused?.(reason); } : onPress} accessibilityRole="button" accessibilityLabel={label}
       accessibilityState={{ disabled: off, busy: busy === true }} accessibilityHint={reason ?? undefined}
-      style={({ pressed }) => [{
+      style={shade(({ pressed }) => [{
         minHeight: size === "lg" ? 48 : 44, paddingHorizontal: size === "sm" ? 12 : 16, borderRadius: 999, flexDirection: "row",
         alignItems: "center", justifyContent: "center", gap: 8, backgroundColor: pressed && !off && kind === "secondary" ? c.grey100 : fill,
         borderWidth: kind === "secondary" ? 1 : 0, borderColor: c.grey300, opacity: pressed && !off ? 0.9 : 1,
-      }, style]}
+      }, style])}
     >
       {busy ? <ActivityIndicator size="small" color={ink} /> : Icon ? <Icon size={16} color={ink} /> : null}
       <Text numberOfLines={1} style={[t.label, { color: ink, fontSize: size === "lg" ? 16 : 14 }]}>{label}</Text>
@@ -107,7 +113,7 @@ export function Button({ label, onPress, kind = "secondary", Icon, Trail, busy, 
 /** The quiet underlined link beside the marks (Mark VIP, Edit guest). A grey one says why when tapped. */
 export function MarkLink({ label, onPress, reason, onRefused }: { label: string; onPress: () => void; reason?: string | null; onRefused?: (reason: string) => void }) {
   return (
-    <Pressable
+    <Pressable android_ripple={ripple}
       onPress={() => { if (reason) onRefused?.(reason); else onPress(); }} accessibilityRole="button" accessibilityLabel={label}
       accessibilityState={{ disabled: reason != null }} accessibilityHint={reason ?? undefined} hitSlop={8} style={{ minHeight: 32, justifyContent: "center", paddingHorizontal: 4 }}
     >
@@ -119,7 +125,7 @@ export function MarkLink({ label, onPress, reason, onRefused }: { label: string;
 /** A plain text link: orange-700, as the web's `link` button. */
 export function TextLink({ label, onPress, Icon, a11y }: { label: string; onPress: () => void; Icon?: LucideIcon; a11y?: string }) {
   return (
-    <Pressable onPress={onPress} accessibilityRole="link" accessibilityLabel={a11y ?? label} style={{ minHeight: 44, flexDirection: "row", alignItems: "center", gap: 6 }}>
+    <Pressable android_ripple={ripple} onPress={onPress} accessibilityRole="link" accessibilityLabel={a11y ?? label} style={{ minHeight: 44, flexDirection: "row", alignItems: "center", gap: 6 }}>
       <Text style={[t.label, { color: c.orange700 }]}>{label}</Text>
       {Icon ? <Icon size={14} color={c.orange700} /> : null}
     </Pressable>
@@ -143,14 +149,16 @@ export function Field({ label, required, hint, error, children }: { label: strin
 const BOX: ViewStyle = { minHeight: 44, borderRadius: 10, borderWidth: 1, borderColor: c.grey300, backgroundColor: c.white, paddingHorizontal: 12 };
 
 /** Input.tsx Input: 44px under a thumb, 16px text so a phone does not zoom. */
-export function Box({ value, onChange, placeholder, label, keyboard, disabled, upper, max, multiline, tall }: {
+export function Box({ value, onChange, placeholder, label, keyboard, disabled, upper, max, multiline, tall, kind }: {
   value: string; onChange: (v: string) => void; placeholder?: string; label: string; keyboard?: KeyboardTypeOptions;
   disabled?: boolean; upper?: boolean; max?: number; multiline?: boolean; tall?: boolean;
+  /** A person's or a company's name, or a code typed in capitals: the keyboard only (core `keys`). */
+  kind?: "name" | "code";
 }) {
   return (
     <TextInput
       value={value} onChangeText={onChange} placeholder={placeholder} placeholderTextColor={c.grey400} editable={!disabled}
-      accessibilityLabel={label} keyboardType={keyboard} autoCapitalize={upper ? "characters" : undefined} maxLength={max} multiline={multiline}
+      accessibilityLabel={label} {...(keyboard ? KEYS[keyboard] : null)} {...(kind ? keys[kind] : null)} keyboardType={keyboard} {...(upper ? { autoCapitalize: "characters" } : null)} maxLength={max} multiline={multiline}
       style={[BOX, { fontSize: 16, color: c.ink900, ...face[500] }, tall ? { minHeight: 48 } : null, multiline ? { minHeight: 76, paddingTop: 10, textAlignVertical: "top" } : null, disabled ? { backgroundColor: c.grey50, color: c.grey500 } : null]}
     />
   );
@@ -166,7 +174,7 @@ export function Pick({ value, onChange, options, title, label, placeholder, disa
   const shown = options.find((o) => o.value === value);
   return (
     <>
-      <Pressable
+      <Pressable android_ripple={ripple}
         onPress={() => setOpen(true)} disabled={disabled} accessibilityRole="button"
         accessibilityLabel={`${label ?? title}: ${shown?.label ?? placeholder ?? ""}`} accessibilityState={{ disabled: disabled === true }}
         style={[BOX, { flexDirection: "row", alignItems: "center", gap: 8 }, tall ? { minHeight: 48 } : null, disabled ? { backgroundColor: c.grey50 } : null]}
@@ -177,10 +185,10 @@ export function Pick({ value, onChange, options, title, label, placeholder, disa
       <Sheet open={open} onClose={() => setOpen(false)} title={title}>
         <ScrollView>
           {options.map((o) => (
-            <Pressable
+            <Pressable android_ripple={ripple}
               key={o.value} disabled={o.disabled} onPress={() => { setOpen(false); onChange(o.value); }} accessibilityRole="button"
               accessibilityLabel={o.label} accessibilityState={{ selected: o.value === value, disabled: o.disabled === true }}
-              style={({ pressed }) => ({ minHeight: 48, flexDirection: "row", alignItems: "center", gap: 8, paddingVertical: 6, borderTopWidth: 1, borderTopColor: c.grey100, backgroundColor: pressed ? c.grey50 : c.white })}
+              style={shade(({ pressed }) => ({ minHeight: 48, flexDirection: "row", alignItems: "center", gap: 8, paddingVertical: 6, borderTopWidth: 1, borderTopColor: c.grey100, backgroundColor: pressed ? c.grey50 : c.white }))}
             >
               <View style={{ flex: 1 }}>
                 <Text style={[t.label, { color: o.disabled ? c.grey500 : c.ink900 }]}>{o.label}</Text>
@@ -197,11 +205,12 @@ export function Pick({ value, onChange, options, title, label, placeholder, disa
 
 /** A sheet from the bottom: the phone's dialog. */
 export function Sheet({ open, onClose, title, children }: { open: boolean; onClose: () => void; title: string; children: ReactNode }) {
+  const pad = useSheetPad();
   return (
-    <Modal visible={open} transparent animationType="fade" onRequestClose={onClose}>
+    <Modal visible={open} transparent animationType="fade" onRequestClose={onClose} {...modalEdge}>
       <View style={{ flex: 1, backgroundColor: "rgba(3,23,40,0.4)" }}>
         <Pressable style={{ flex: 1 }} onPress={onClose} accessibilityRole="button" accessibilityLabel="Close" />
-        <View style={{ backgroundColor: c.white, borderTopLeftRadius: 16, borderTopRightRadius: 16, paddingHorizontal: space.side, paddingTop: 16, paddingBottom: 24, gap: 6, maxHeight: "80%" }}>
+        <View style={{ backgroundColor: c.white, borderTopLeftRadius: 16, borderTopRightRadius: 16, paddingHorizontal: space.side, paddingTop: 16, paddingBottom: pad.bottom + 8, gap: 6, maxHeight: "80%" }}>
           <Text style={[t.heading, { marginBottom: 4 }]} accessibilityRole="header">{title}</Text>
           {children}
         </View>
@@ -214,20 +223,21 @@ export function Sheet({ open, onClose, title, children }: { open: boolean; onClo
 export function FormSheet({ title, description, foot, onClose, said, onSaid, children }: {
   title: string; description?: string; foot: ReactNode; onClose: () => void; said: Said | null; onSaid: (s: Said | null) => void; children: ReactNode;
 }) {
+  const pad = useSheetPad();
   return (
-    <Modal visible animationType="slide" onRequestClose={onClose}>
-      <KeyboardAvoidingView style={{ flex: 1, backgroundColor: c.white }} behavior={Platform.OS === "ios" ? "padding" : undefined}>
+    <Modal visible animationType="slide" onRequestClose={onClose} {...modalEdge}>
+      <KeyboardAvoidingView style={{ flex: 1, backgroundColor: c.white, paddingTop: pad.top, paddingLeft: pad.left, paddingRight: pad.right }} behavior={Platform.OS === "ios" ? "padding" : "height"}>
         <View style={{ flexDirection: "row", alignItems: "flex-start", gap: 8, paddingHorizontal: space.side, paddingTop: 16, paddingBottom: 12, borderBottomWidth: 1, borderBottomColor: c.grey200 }}>
           <View style={{ flex: 1, gap: 2 }}>
             <Text style={[t.heading, { fontSize: 16 }]} accessibilityRole="header">{title}</Text>
             {description ? <Text style={[t.label, body, { color: c.grey500 }]}>{description}</Text> : null}
           </View>
-          <Pressable onPress={onClose} accessibilityRole="button" accessibilityLabel="Close" hitSlop={10} style={{ width: 44, height: 44, alignItems: "center", justifyContent: "center" }}>
+          <Pressable android_ripple={ripple} onPress={onClose} accessibilityRole="button" accessibilityLabel="Close" hitSlop={10} style={{ width: 44, height: 44, alignItems: "center", justifyContent: "center" }}>
             <X size={20} color={c.grey600} />
           </Pressable>
         </View>
-        <ScrollView contentContainerStyle={{ padding: space.side, gap: 16 }} keyboardShouldPersistTaps="handled">{children}</ScrollView>
-        <View style={{ padding: space.side, borderTopWidth: 1, borderTopColor: c.grey200 }}>{foot}</View>
+        <ScrollView contentContainerStyle={{ padding: space.side, gap: 16 }} keyboardShouldPersistTaps="handled" keyboardDismissMode="interactive">{children}</ScrollView>
+        <View style={{ paddingHorizontal: space.side, paddingTop: space.side, paddingBottom: pad.bottom + 4, borderTopWidth: 1, borderTopColor: c.grey200 }}>{foot}</View>
         <Toast said={said} onClose={() => onSaid(null)} />
       </KeyboardAvoidingView>
     </Modal>
@@ -258,7 +268,7 @@ export function Tick({ value, onChange, label, disabled, reason, onRefused }: {
   const refused = reason != null;
   if (refused) disabled = true;
   return (
-    <Pressable
+    <Pressable android_ripple={ripple}
       onPress={() => (refused ? onRefused?.(reason) : onChange(!value))} disabled={disabled && !refused} accessibilityRole="checkbox" accessibilityLabel={label}
       accessibilityState={{ checked: value, disabled: disabled === true }} accessibilityHint={reason ?? undefined}
       style={{ minHeight: 44, flexDirection: "row", alignItems: "center", gap: 10 }}
@@ -276,7 +286,7 @@ export function Fold({ title, children }: { title: string; children: ReactNode }
   const [open, setOpen] = useState(false);
   return (
     <View style={{ backgroundColor: c.white, borderWidth: 1, borderColor: c.grey200, borderRadius: 12 }}>
-      <Pressable
+      <Pressable android_ripple={ripple}
         onPress={() => setOpen(!open)} accessibilityRole="button" accessibilityLabel={title} accessibilityState={{ expanded: open }}
         style={{ minHeight: 48, flexDirection: "row", alignItems: "center", paddingHorizontal: space.cardX }}
       >

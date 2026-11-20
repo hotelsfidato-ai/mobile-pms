@@ -5,7 +5,7 @@ import { Pressable, ScrollView, StyleSheet, Text, View, type NativeScrollEvent, 
 import { api, HeldError, send, type Hotel } from "../../core/api";
 import { cash } from "../../core/format";
 import { c, face, space, t } from "../../core/theme";
-import { notKnown, useStuck } from "../../core/ui";
+import { notKnown, useStuck, ripple, shade } from "../../core/ui";
 import { DishSheet } from "./DishSheet";
 import { since, type FloorNow } from "./floor";
 import { OrderPadCustomise } from "./OrderPadCustomise";
@@ -345,14 +345,14 @@ export function OrderPad({ hotel, role, table, orderId, onClose }: {
                     const off = !item.isActive;
                     const price = dishPrice(item);
                     return (
-                      <Pressable
+                      <Pressable android_ripple={ripple}
                         key={item.id} disabled={off} onPress={() => tap(item)}
                         accessibilityRole="button" accessibilityState={{ disabled: off }}
                         accessibilityLabel={`${item.name}, ${off ? "off the menu today" : cash(price)}`}
-                        style={({ pressed }) => ({
+                        style={shade(({ pressed }) => ({
                           minHeight: 56, paddingHorizontal: 14, paddingVertical: 12, borderRadius: 12, borderWidth: 1, borderColor: c.grey200,
                           flexDirection: "row", alignItems: "center", gap: 12, backgroundColor: off || pressed ? c.grey50 : c.white,
-                        })}
+                        }))}
                       >
                         <View style={{ flex: 1 }}>
                           <Text style={[t.label, ty.sm, { color: c.ink900 }]} numberOfLines={1}>{item.name}</Text>
@@ -437,7 +437,7 @@ function Rows({ children }: { children: ReactNode }) {
 /** A menu section, or a side: orange when chosen (the web's chips). */
 function Chip({ label, on, onPress }: { label: string; on: boolean; onPress: () => void }) {
   return (
-    <Pressable
+    <Pressable android_ripple={ripple}
       onPress={onPress} accessibilityRole="button" accessibilityState={{ selected: on }}
       style={{ minHeight: 44, paddingHorizontal: 14, justifyContent: "center", borderRadius: 999, borderWidth: 1,
         borderColor: on ? c.orange : c.grey300, backgroundColor: on ? c.orange50 : c.white }}

@@ -5,6 +5,7 @@ import { Btn, body, Dialog, Field, Foot, InDialog, Input, saidOf, Select, type S
 import { cancelRequest, priceLine, sendOrder } from "./data";
 import { Tick } from "./kit";
 import { cancelProblem, isFree, priceBody, sendProblem, sentWords, type PurchaseLine } from "./purchase";
+import { keys } from "../../core/ui";
 
 /* ══════════════════════════════════════════════════════════════════
    THREE SMALL ACTS ON ONE ORDER — the web's SendDialog, CancelDialog and
@@ -121,7 +122,7 @@ export function PriceDialog({ code, id, line, onClose, onDone }: {
           {free ? (
             <Text style={[body, { color: c.grey500 }]} accessibilityLabel={`Agreed price for ${line.item}: free`}>0</Text>
           ) : (
-            <Input label={`Agreed price for ${line.item}`} keyboardType="numbers-and-punctuation" value={price} onChangeText={setPrice} placeholder="-" />
+            <Input label={`Agreed price for ${line.item}`} {...keys.amount} value={price} onChangeText={setPrice} placeholder="-" />
           )}
         </View>
         <Tick label="Free" on={free} onChange={setFree} disabled={w.busy} />

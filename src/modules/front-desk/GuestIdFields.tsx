@@ -81,7 +81,7 @@ export function GuestIdFields({ value, onChange, today, idsOff, withDocument = t
             />
           </Field>
           <Field label="Number" required={Boolean(value.idType)}>
-            <Box value={value.idNumber} label="Number" disabled={!value.idType} onChange={(idNumber) => set({ idNumber })}
+            <Box value={value.idNumber} label="Number" kind="code" disabled={!value.idType} onChange={(idNumber) => set({ idNumber })}
               placeholder={value.idType === "passport" ? "P1234567" : "Document number"} />
           </Field>
           {!s.captured && !companion ? (

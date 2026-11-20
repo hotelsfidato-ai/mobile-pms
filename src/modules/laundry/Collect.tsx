@@ -3,7 +3,7 @@ import { Trash2 } from "lucide-react-native";
 import { useRef, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { c, face, t } from "../../core/theme";
-import { notKnown, useRead, useStuck } from "../../core/ui";
+import { notKnown, useRead, useStuck, ripple, shade, keys } from "../../core/ui";
 import { Btn, body, Dialog, Field, Foot, InDialog, Input, Loading, Select, saidOf, type Said } from "../guest-services/kit";
 import { collect, isRefused, readPriceList, readStays } from "./data";
 import { collectBody, itemWords, stayWords, type Draft } from "./docket";
@@ -109,18 +109,18 @@ export function Collect({ code, onClose, onCollected }: {
                   </View>
                   <View style={{ width: 100 }}>
                     <Input
-                      label={`How many on line ${i + 1}`} placeholder="How many" keyboardType="numbers-and-punctuation"
+                      label={`How many on line ${i + 1}`} placeholder="How many" {...keys.count}
                       value={l.quantity} onChangeText={(v) => set(i, { quantity: v })} maxLength={4}
                     />
                   </View>
                   {lines.length > 1 ? (
-                    <Pressable
+                    <Pressable android_ripple={ripple}
                       onPress={() => setLines((all) => all.filter((_, n) => n !== i))}
                       accessibilityRole="button" accessibilityLabel={`Take line ${i + 1} off`}
-                      style={({ pressed }) => ({
+                      style={shade(({ pressed }) => ({
                         width: 44, height: 44, borderRadius: 999, borderWidth: 1, borderColor: c.grey300,
                         alignItems: "center", justifyContent: "center", backgroundColor: pressed ? c.grey100 : c.white,
-                      })}
+                      }))}
                     >
                       <Trash2 size={16} color={c.ink900} />
                     </Pressable>

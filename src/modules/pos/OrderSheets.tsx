@@ -7,7 +7,7 @@ import {
 import { api, type Hotel } from "../../core/api";
 import { cash } from "../../core/format";
 import { c, face, space, t } from "../../core/theme";
-import { useRead } from "../../core/ui";
+import { useRead, ripple, shade, modalEdge, useSheetPad, keys } from "../../core/ui";
 import {
   CHANNELS, discountBody, headerBody, headerForm, orderPath, type Act, type Ask, type HeaderForm,
 } from "./order";
@@ -37,19 +37,19 @@ export function Btn({ label, onPress, kind = "secondary", Icon, off, why, onRefu
   const grey = off || why != null;
   const fg = grey ? c.grey500 : kind === "primary" ? c.white : c.ink900;
   return (
-    <Pressable
+    <Pressable android_ripple={ripple}
       onPress={() => (off || busy ? undefined : why != null ? onRefused?.(why) : onPress())}
       disabled={off}
       accessibilityRole="button" accessibilityLabel={a11y ?? label}
       accessibilityState={{ disabled: grey, busy: Boolean(busy) }} accessibilityHint={why ?? undefined}
-      style={({ pressed }) => ({
+      style={shade(({ pressed }) => ({
         minHeight: small ? 44 : 48, paddingHorizontal: small ? 12 : 14, borderRadius: 999, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 8,
         ...(grow ? { flex: 1 } : {}),
         borderWidth: kind === "secondary" ? 1 : 0, borderColor: grey ? c.grey200 : c.grey300,
         backgroundColor: kind === "primary" ? (grey ? c.grey200 : pressed ? c.orange700 : c.orange600)
           : kind === "secondary" ? (grey ? c.grey100 : pressed ? c.grey100 : c.white) : pressed ? c.grey100 : "transparent",
         opacity: busy ? 0.6 : 1,
-      })}
+      }))}
     >
       {busy ? <ActivityIndicator size="small" color={fg} /> : Icon ? <Icon size={16} color={fg} /> : null}
       <Text style={[small ? t.label : t.heading, { color: fg, ...face[kind === "ghost" || small ? 500 : 600] }]} numberOfLines={1}>{label}</Text>
@@ -61,22 +61,23 @@ export function Btn({ label, onPress, kind = "secondary", Icon, off, why, onRefu
 export function Sheet({ visible, onClose, title, description, children, footer }: {
   visible: boolean; onClose: () => void; title: string; description?: string; children?: ReactNode; footer: ReactNode;
 }) {
+  const pad = useSheetPad();
   return (
     /* No slide in the web preview: a tab in the background never ends a CSS
        animation, and the closed sheet stayed over the order (MEMORY 4's pane). */
-    <Modal visible={visible} transparent animationType={Platform.OS === "web" ? "none" : "slide"} onRequestClose={onClose}>
-      <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : undefined}>
-        <View style={{ flex: 1, backgroundColor: "rgba(3,23,40,0.4)" }}>
+    <Modal visible={visible} transparent animationType={Platform.OS === "web" ? "none" : "slide"} onRequestClose={onClose} {...modalEdge}>
+      <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : "height"}>
+        <View style={{ flex: 1, backgroundColor: "rgba(3,23,40,0.4)", paddingTop: pad.top }}>
           <Pressable style={{ flex: 1, minHeight: 48 }} onPress={onClose} accessibilityRole="button" accessibilityLabel="Close" />
           <View style={{ backgroundColor: c.white, borderTopLeftRadius: 16, borderTopRightRadius: 16, maxHeight: "88%" }}>
-            <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingHorizontal: space.side, paddingTop: 18, paddingBottom: 12, gap: 14 }}>
+            <ScrollView keyboardShouldPersistTaps="handled" keyboardDismissMode="interactive" contentContainerStyle={{ paddingHorizontal: space.side, paddingTop: 18, paddingBottom: 12, gap: 14 }}>
               <View style={{ gap: 4 }}>
                 <Text style={t.heading} accessibilityRole="header">{title}</Text>
                 {description ? <Text style={t.label}>{description}</Text> : null}
               </View>
               {children}
             </ScrollView>
-            <View style={{ paddingHorizontal: space.side, paddingTop: 8, paddingBottom: 20, gap: 8, borderTopWidth: 1, borderTopColor: c.grey100 }}>
+            <View style={{ paddingHorizontal: space.side, paddingTop: 8, paddingBottom: pad.bottom + 4, gap: 8, borderTopWidth: 1, borderTopColor: c.grey100 }}>
               {footer}
             </View>
           </View>
@@ -98,16 +99,18 @@ export function Field({ label, required, hint, children }: { label: string; requ
   );
 }
 
-export function Input({ label, number, multiline, ...props }: {
+export function Input({ label, number, multiline, kind, ...props }: {
   label: string; value: string; onChangeText: (v: string) => void; placeholder?: string; autoFocus?: boolean;
   number?: boolean; multiline?: boolean; editable?: boolean;
+  /** The keyboard only (docs/NATIVE.md, the core's `keys`): a count, a phone, a name. */
+  kind?: "count" | "phone" | "name";
 }) {
   return (
     <TextInput
       {...props}
       accessibilityLabel={label}
       multiline={multiline}
-      keyboardType={number ? "decimal-pad" : "default"}
+      {...(number ? keys.amount : null)} {...(kind ? keys[kind] : null)}
       placeholderTextColor={c.grey500}
       style={{
         minHeight: multiline ? 72 : 48, paddingHorizontal: 12, paddingVertical: 10, borderRadius: 8, borderWidth: 1,
@@ -121,13 +124,13 @@ export function Input({ label, number, multiline, ...props }: {
 /** One choice of several, the web's orange ring when chosen. */
 export function Choice({ label, on, onPress, grow }: { label: string; on: boolean; onPress: () => void; grow?: boolean }) {
   return (
-    <Pressable
+    <Pressable android_ripple={ripple}
       onPress={onPress} accessibilityRole="radio" accessibilityState={{ checked: on }} accessibilityLabel={label}
-      style={({ pressed }) => ({
+      style={shade(({ pressed }) => ({
         minHeight: 44, paddingHorizontal: 14, borderRadius: 999, borderWidth: 1, alignItems: "center", justifyContent: "center",
         ...(grow ? { flexGrow: 1, flexBasis: "45%" } : {}),
         borderColor: on ? c.orange : c.grey300, backgroundColor: on ? c.orange50 : pressed ? c.grey50 : c.white,
-      })}
+      }))}
     >
       <Text style={[t.label, { color: on ? c.orange700 : c.grey700 }]}>{label}</Text>
     </Pressable>
@@ -296,7 +299,7 @@ export function HeaderSheet({ hotel, order, onClose, write }: {
       </View>
 
       <Field label="Covers" hint="People eating, not seats">
-        <Input label="Covers" value={f.covers} onChangeText={(covers) => set({ covers })} placeholder="-" number />
+        <Input label="Covers" value={f.covers} onChangeText={(covers) => set({ covers })} placeholder="-" kind="count" />
       </Field>
 
       {/* POS-4: a list that failed is not a property with nobody to choose. */}
@@ -317,8 +320,8 @@ export function HeaderSheet({ hotel, order, onClose, write }: {
           <Text style={[t.label, { flex: 1, color: c.yellow800 }]}>A delivery needs a phone number, or it gets cooked and cannot leave the building.</Text>
         </View>
       ) : null}
-      <Field label="Mobile"><Input label="Mobile" value={f.phone} onChangeText={(phone) => set({ phone })} placeholder="-" /></Field>
-      <Field label="Name"><Input label="Name" value={f.name} onChangeText={(name) => set({ name })} placeholder="-" /></Field>
+      <Field label="Mobile"><Input label="Mobile" value={f.phone} onChangeText={(phone) => set({ phone })} placeholder="-" kind="phone" /></Field>
+      <Field label="Name"><Input label="Name" value={f.name} onChangeText={(name) => set({ name })} placeholder="-" kind="name" /></Field>
       {f.channel === "delivery" ? (
         <>
           <Field label="Address"><Input label="Address" value={f.address} onChangeText={(address) => set({ address })} placeholder="-" /></Field>

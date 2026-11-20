@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Pressable, Text, View } from "react-native";
 import { ApiError, outcomeUnknown } from "../../core/api";
 import { c, face, space, t } from "../../core/theme";
-import { useRead } from "../../core/ui";
+import { useRead, ripple, shade } from "../../core/ui";
 import { Box as Input, Field, Pick, Toggle } from "../front-desk/kit";
 import { Box, Btn, Failed, Loading, body, type Said } from "../guest-services/kit";
 import { failedWords, formOf, readsAsLine, type SetupForm } from "./bookings";
@@ -99,10 +99,10 @@ export function Setup({ code, onSaid }: { code: string; onSaid: (s: Said) => voi
               <Labelled label={i === 0 ? "Is this room type here" : undefined}>
                 <Pick title="Is this room type here" label="Room type here" value={r.roomTypeId} options={types} onChange={(v) => setRow(i, { roomTypeId: v })} />
               </Labelled>
-              <Pressable
+              <Pressable android_ripple={ripple}
                 onPress={() => set({ roomTypes: form.roomTypes.filter((_, j) => j !== i) })}
                 accessibilityRole="button" accessibilityLabel="Remove this room type"
-                style={({ pressed }) => ({ width: 44, height: 44, borderRadius: 999, alignItems: "center", justifyContent: "center", backgroundColor: pressed ? c.grey200 : "transparent" })}
+                style={shade(({ pressed }) => ({ width: 44, height: 44, borderRadius: 999, alignItems: "center", justifyContent: "center", backgroundColor: pressed ? c.grey200 : "transparent" }))}
               >
                 <Trash2 size={16} color={c.grey600} />
               </Pressable>

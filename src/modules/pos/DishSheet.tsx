@@ -6,6 +6,7 @@ import { offNow } from "./floor";
 import { BAR_NOTES, chooseRule, countIn, dishReady, pickedIds, PRESET_NOTES, sheetFigure, toggleSide, typesOf } from "./pad";
 import type { MenuItem } from "./types";
 import { Btn, Caps, Input, Sheet, ty, web } from "./TablesKit";
+import { ripple } from "../../core/ui";
 
 /* ══════════════════════════════════════════════════════════════════
    A DISH'S SHEET — the web's DishDialog (src/modules/pos/flows/
@@ -60,7 +61,7 @@ export function DishSheet({ item, bar, onCancel, onAdd }: {
             {kind.choices.map((v) => {
               const on = picked[kind.typeNo] === v.id;
               return (
-                <Pressable
+                <Pressable android_ripple={ripple}
                   key={v.id} onPress={() => setPicked((p) => ({ ...p, [kind.typeNo]: v.id }))}
                   accessibilityRole="button" accessibilityState={{ selected: on }} accessibilityLabel={`${v.label}, ${v.price === 0 ? "Free" : cash(v.price)}`}
                   style={{ minWidth: 96, minHeight: 64, paddingHorizontal: 16, justifyContent: "center", borderRadius: 12, borderWidth: 1,
@@ -96,7 +97,7 @@ export function DishSheet({ item, bar, onCancel, onAdd }: {
                     /* The group has all it allows: the rest wait until one is taken back. */
                     const full = !on && g.maxSelect !== null && g.maxSelect > 1 && countIn(g, chosen) >= g.maxSelect;
                     return (
-                      <Pressable
+                      <Pressable android_ripple={ripple}
                         key={a.id} disabled={off || full} onPress={() => setChosen((prev) => toggleSide(prev, a.id, g))}
                         accessibilityRole="button" accessibilityState={{ selected: on, disabled: off || full }}
                         accessibilityLabel={`${a.label}, ${off ? "off today" : a.price === 0 ? "Free" : cash(a.price)}`}
@@ -120,7 +121,7 @@ export function DishSheet({ item, bar, onCancel, onAdd }: {
         <Caps>{bar ? "Note for the bar" : "Note for the kitchen"}</Caps>
         <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
           {(bar ? BAR_NOTES : PRESET_NOTES).map((n) => (
-            <Pressable
+            <Pressable android_ripple={ripple}
               key={n} onPress={() => setNote(note === n ? "" : n)} accessibilityRole="button" accessibilityState={{ selected: note === n }}
               style={{ minHeight: 44, paddingHorizontal: 14, justifyContent: "center", borderRadius: 999, borderWidth: 1,
                 borderColor: note === n ? c.orange : c.grey300, backgroundColor: note === n ? c.orange50 : c.white }}
