@@ -91,7 +91,7 @@ export function CourseDialog({ code, f, onClose, onDone }: { code: string; f: Fn
   const set = (patch: Partial<CourseDraft>) => setD((x) => ({ ...x, ...patch }));
   const w = useWrite(onDone, "Not added");
   /* POST …/catering reads no key: a course whose outcome is unknown stops Add on the FUNCTION, not only
-     here, until a read of it begun after the loss is back (MBNQ-U1). */
+     here, until a read of it begun after the loss is back (MBQ-U1). */
   const stop = useScreenStop(fnStop(code, f.id));
   const sent = courseBody(d);
   const plates = platesProblem(d.heads);

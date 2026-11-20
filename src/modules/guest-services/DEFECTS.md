@@ -47,3 +47,20 @@ None yet.
   `pos/floor.ts`), with a check on the converted text (node reads both forms, so the result alone
   proves nothing).
 - **The rule it leaves:** every server time goes through one ISO conversion before `Date`.
+
+---
+
+# m13-stops (20 Nov)
+
+## MGS-U1 · A request, a wake-up call or a kept item, sent again from a reopened dialog
+
+POST requests, wake-up calls and lost property read no key; each dialog's stop went with the dialog, and
+closing it read the list while New was already pressable again. **Found** by the m13-stops sweep (grep for `useStuck` / `outcomeUnknown` inside sheets), reading the API to see which routes read the key. **Done:** `gsStop(code,
+list)`: New request / Set a call / Log an item grey until a read of the list's first view (Open, Kept)
+begun after the loss; each dialog stays dead until closed; dialogs cannot close mid-write (the shared
+`Dialog` takes `locked`). **The rule:** a write on a route that reads no idempotency key keeps its stop OUTSIDE the sheet and the screen (core `useScreenStop`, by name), stopped while it is on its way, and let go only by a read of the record that BEGAN after the loss and came back good.
+
+## MGS-U2 · A reply to a guest, after leaving the thread
+
+The reply's stop was the thread screen's: leaving and opening the thread again gave Send reply back.
+**Done:** kept by the thread's name; a read of the thread begun after the loss lets it go.

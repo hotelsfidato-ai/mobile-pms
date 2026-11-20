@@ -63,3 +63,23 @@ slice 1 export.
 on both bundles, and fails on both again when the old line is put back (both seen 15 Oct).
 **The rule:** anything that exists only for development sits **behind `__DEV__` itself**, not in a
 value that only a `__DEV__` branch reads. `scripts/gates.sh` refuses a bundle that carries it.
+
+---
+
+# m13-stops (20 Nov)
+
+## MCORE-U1 · The unknown-outcome stop lived inside the sheet that sent the write
+
+`useStuck` (ui.tsx) is component state: closing and reopening a sheet, switching a tab, or leaving the
+screen and coming back gave a fresh, unstopped act, so a write whose reply was lost could be sent again -
+on a route that reads no key, a second real write. Where a module lifted the moment to its screen
+(contracts, waitlist, pos Day end, loyalty, reputation), it was `useState` (gone on a remount) compared
+with a read's FINISH (`dataUpdatedAt`), so a read already on its way at the loss let it go. **Found** by the m13-stops sweep (grep for `useStuck` / `outcomeUnknown` inside sheets), reading the API to see which routes read the key.
+**Done:** `src/core/stop.ts` (pure, `stop.check.ts`): one book, by name, outside every component; one
+counter orders each loss and each read's start; `lost`, `sending` (stopped while a write is on its way),
+`good(name, ticket)` lets go only a loss before the read's start; `unknown` is the loss alone (the words).
+`useScreenStop(name)` in ui.tsx: `stuck`, `unknown`, `isStuck()`, `stop(e)`, `guard(write)` (on its way,
+then lost on `outcomeUnknown`), `watch(read)` (wraps a screen's read; a read react-query cancelled lets
+nothing go); `Stopped` is the screen's line with a way to read again. The check was broken once each way
+(a read begun before the loss let go; the in-flight stop removed) and failed, then restored by copying the
+file back (MEMORY 18). **The rule:** a write on a route that reads no idempotency key keeps its stop OUTSIDE the sheet and the screen (core `useScreenStop`, by name), stopped while it is on its way, and let go only by a read of the record that BEGAN after the loss and came back good.

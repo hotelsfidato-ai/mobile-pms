@@ -51,7 +51,7 @@ export function Purchasing({ hotel, role, onBack }: { hotel: Hotel; role: string
   const [said, setSaid] = useState<Said | null>(null);
   const unsay = useCallback(() => setSaid(null), []);
 
-  /* An Ask whose outcome is unknown (MPUR-U1): Ask to buy stays grey until a read of the list begun after it. */
+  /* An Ask whose outcome is unknown (MPUR-U2): Ask to buy stays grey until a read of the list begun after it. */
   const stop = useScreenStop(listStop(code));
   const ask = () => { if (!stop.isStuck()) setAsking(true); };
   const q = useRead(stop.watch(() => (refused ? Promise.resolve(null) : readPurchasing(code))), ["purchasing", code, "list"]);

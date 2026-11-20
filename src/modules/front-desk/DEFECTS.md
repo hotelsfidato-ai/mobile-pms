@@ -94,3 +94,29 @@ Rooms with "Rooms, the house as tiles, is on the website for now." Found on 19 N
 which is now `/front-desk/<code>/rooms`. **Done:** nothing here (reservations' file, another lane);
 the exact change is in the lane's report for the mobile chat. **The rule:** a screen that lands
 looks for the greyed links that pointed at it.
+
+---
+
+# m13-stops (20 Nov)
+
+## MFD-U1 · Exchange rooms could be sent again - and a second exchange swaps them back
+
+POST /stays/:id/exchange reads no key; the sheet held the stop. **Found** by the m13-stops sweep (grep for `useStuck` / `outcomeUnknown` inside sheets), reading the API to see which routes read the key. **Done:** `stayStop`:
+Exchange with another guest greys on the stay (More options says why; the stay shows the line) until a
+read of the stay begun after the loss; closing reads it; the sheet cannot close mid-write. **The rule:** a write on a route that reads no idempotency key keeps its stop OUTSIDE the sheet and the screen (core `useScreenStop`, by name), stopped while it is on its way, and let go only by a read of the record that BEGAN after the loss and came back good.
+
+## MFD-U2 · An inclusion added twice
+
+POST …/inclusions reads no key. **Done:** `inclusionsStop`: Add greys until a read of the list begun after
+the loss (the sheet shows it); the sheet cannot close mid-write.
+
+## MFD-U3 · An adult added twice
+
+POST …/companions reads no key. **Done:** `adultsStop`: Add an adult greys until a read of the stay's adults
+begun after the loss; closing reads them; the sheet cannot close mid-write (Edit is a PUT: no stop).
+
+## MFD-U4 · A walk-in booked twice by going back and opening it again
+
+POST /bookings reads no key; the walk-in's stop was its screen's. **Done:** `walkInStop`: the walk-in's
+three buttons stay grey, with "Open Arrivals", until a read of today's Arrivals begun after the loss (a
+walk-in is always today's).

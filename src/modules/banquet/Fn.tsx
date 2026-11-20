@@ -59,7 +59,7 @@ export function FunctionPage({ hotel, role, id, registered, warning, onBack }: {
       : null,
   );
 
-  /* Add a course whose outcome is unknown (MBNQ-U1): kept by the function's name, outside the dialog. */
+  /* Add a course whose outcome is unknown (MBQ-U1): kept by the function's name, outside the dialog. */
   const stop = useScreenStop(fnStop(code, id));
   const q = useRead(stop.watch(() => (refusedRead ? Promise.resolve(null) : readFn(code, id))), ["banquet", code, "fn", id]);
   const off = isRefused(q.data) ? q.data.refused : null;

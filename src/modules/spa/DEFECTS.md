@@ -45,3 +45,15 @@ back in the words the screen will later show, before it is sent.
 therapist guard then refuses it, naming the person's own first booking). On an unknown outcome the
 Book dialog now takes no more taps: "Not known whether it was booked: close this and look at the
 diary before booking again" (MEMORY 16).
+
+---
+
+# m13-stops (20 Nov)
+
+## MSPA-U1 · Book a treatment, reopened after an unknown outcome
+
+POST /spa/appointments reads no key. An identical repeat meets the therapist's clash and is refused, but
+the reopened dialog is empty, and a second booking at another time for the same guest was one tap away.
+**Found** by the m13-stops sweep (grep for `useStuck` / `outcomeUnknown` inside sheets), reading the API to see which routes read the key. **Done:** `dayStop(code, day)`: Book a treatment greys for that diary day until a read of
+the day begun after the loss; the dialog cannot close mid-write. Left: Cancel (refused once cancelled),
+Charge to room (refused once closed: "already closed and on the bill"). **The rule:** a write on a route that reads no idempotency key keeps its stop OUTSIDE the sheet and the screen (core `useScreenStop`, by name), stopped while it is on its way, and let go only by a read of the record that BEGAN after the loss and came back good.
