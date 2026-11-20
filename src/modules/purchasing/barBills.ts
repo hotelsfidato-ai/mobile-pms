@@ -22,6 +22,7 @@
 
 import { DASH } from "../../core/format.ts";
 import { dateDay, rupees } from "../finance/bill.ts";
+import { COMMA } from "../finance/desk.ts";
 
 export { rupees };
 
@@ -110,6 +111,13 @@ export const EMPTY_LINE: LineDraft = { itemId: "", name: "", sizeMl: "", unit: "
 export const UNITS = ["bottle", "can", "packet", "piece"];
 
 const num = (v: string) => (v.trim() === "" ? null : Number(v));
+/** A box with something in it that is not a number ("1250,50", "12 bottles"): Number() would make it
+    NaN, sent as null and counted as 0 by the check (the money review of 20 Nov, m16). The sentence:
+    the desk's COMMA for a comma, else the box named. Null: blank, or a number. */
+export function notNumber(v: string, what: string): string | null {
+  if (v.trim() === "" || Number.isFinite(Number(v))) return null;
+  return v.includes(",") ? COMMA : `${what}: type it as a number.`;
+}
 
 /** A line's amount as the bill works it: the server's lineAmount, copied (as the web copies it). */
 export const lineAmount = (l: { perCase: number; cases: number; bottles: number; ratePerCase: number }) =>
@@ -132,6 +140,8 @@ export const draftAmount = (l: LineDraft): string => {
 /** The web's check of the typed figures against the printed total: what the lines, handling and TCS
     make, and whether that matches the bill (within the server's ₹1 round-off). Never sent. */
 export function billCheck(lines: LineDraft[], handling: string, tcs: string, printed: string) {
+  /* A charge or the total that is not a number makes nothing: no figure, no match, never a 0 in its place. */
+  if ([handling, tcs, printed].some((v) => notNumber(v, "") !== null)) return { made: DASH, words: null };
   const sum = lines.reduce((t, l) => { const f = figures(l); return t + (f ? lineAmount(f) : 0); }, 0);
   const made = Math.round((sum + (Number(handling) || 0) + (Number(tcs) || 0)) * 100) / 100;
   const off = printed.trim() === "" ? null : Math.round((made - Number(printed)) * 100) / 100;
@@ -151,6 +161,11 @@ export function billBody(f: BillDraft, lines: LineDraft[]): { body: BarBillBody 
   const out: NewBillLine[] = [];
   for (const l of lines) {
     if (!l.itemId) return { problem: "Pick each drink, or choose Add another drink." };
+    const n = out.length + 1;
+    const wrong = notNumber(l.perCase, `Bottles a case, line ${n}`) ?? notNumber(l.cases, `Cases, line ${n}`)
+      ?? notNumber(l.bottles, `Loose bottles, line ${n}`) ?? notNumber(l.mrp, `MRP, line ${n}`) ?? notNumber(l.rate, `Rate a case, line ${n}`)
+      ?? (l.itemId === "new" ? notNumber(l.sizeMl, `Size, line ${n}`) : null);
+    if (wrong) return { problem: wrong };
     const fig = figures(l);
     if (!fig) return { problem: "Type each line's bottles to a case, the cases or loose bottles, and the rate per case." };
     const common = { ...fig, mrp: num(l.mrp) };
@@ -160,6 +175,8 @@ export function billBody(f: BillDraft, lines: LineDraft[]): { body: BarBillBody 
   }
   if (!f.supplierId) return { problem: "Who is the bill from? Pick the supplier." };
   if (f.printed.trim() === "") return { problem: "Type the bill's total, as printed on it." };
+  const charge = notNumber(f.handling, "Handling charges") ?? notNumber(f.tcs, "TCS") ?? notNumber(f.printed, "Total, as printed");
+  if (charge) return { problem: charge };
   if (f.onCredit && !f.dueOn) return { problem: "Pick the date the bill is due." };
   return {
     body: {

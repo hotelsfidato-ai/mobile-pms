@@ -54,6 +54,16 @@ const added = billBody(f, [line({ itemId: "new", name: " Old Monk ", sizeMl: "18
 eq("body" in added ? added.body.lines[0] : added,
   { newDrink: { name: "Old Monk", unit: "bottle", sizeMl: 180 }, perCase: 12, cases: 2, bottles: 3, ratePerCase: 12000, mrp: null }, "another drink");
 
+/* A box that is not a number is refused, never sent as null nor counted as 0 (the money review of 20 Nov). */
+const COMMA_SAID = "Type the amount with a point for the paise, not a comma: 1500.50.";
+eq(billBody({ ...f, handling: "1250,50" }, [line({})]), { problem: COMMA_SAID }, "a comma in the handling");
+eq(billBody(f, [line({ mrp: "1,250" })]), { problem: COMMA_SAID }, "a comma in the MRP");
+eq(billBody({ ...f, tcs: "270 rs" }, [line({})]), { problem: "TCS: type it as a number." }, "words in the TCS");
+eq(billBody(f, [line({ itemId: "new", name: "Old Monk", sizeMl: "180ml" })]), { problem: "Size, line 1: type it as a number." }, "a size with letters");
+eq(billBody({ ...f, printed: "27,270" }, [line({})]), { problem: COMMA_SAID }, "a comma in the total");
+eq(billCheck([line({})], "150,00", "", "27150").words, null, "the check says nothing for a charge that is not a number");
+eq(billCheck([line({})], "150,00", "", "27150").made, DASH, "and makes no figure");
+
 /* A recorded bill: the server's figures, a dash where none. */
 const bill = (over: Partial<BarBill>): BarBill => ({
   id: "b1", supplier: "Amit Traders", billNo: "4411", billDate: "2026-11-18", tpNo: null, handling: null, tcs: 270, total: 27270,
