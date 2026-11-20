@@ -5,7 +5,7 @@ import { useRef, useState } from "react";
 import { Pressable, Text, TextInput, View } from "react-native";
 import type { Hotel } from "../../core/api";
 import { c, face, space, t } from "../../core/theme";
-import { Head, Screen, useRead, ripple, shade, keys } from "../../core/ui";
+import { Head, Screen, Stopped, useRead, useScreenStop, ripple, shade, keys } from "../../core/ui";
 import { ListExport } from "../reports/ListExport";
 import { LoadFailed, StatePill } from "../laundry/kit";
 import {
@@ -15,7 +15,7 @@ import {
   approveRequest, askTheStore, isRefused, markBarClosed, readBarDrinks, readBarRequests, readBarSheet, readKitchenSheet,
   readModules, rejectRequest, saveBarCount, saveKitchenCount, undoBarClosed,
 } from "./data";
-import { GroupHead, unknownSaid } from "./kit";
+import { GroupHead, STOP, STOP_LINE, unknownSaid } from "./kit";
 import { ON_THE_WEBSITE, whyNotSee, whyNotSeeBar } from "./roles";
 import { dayText, rupees as rupeeOf } from "./shelf";
 import {
@@ -156,7 +156,11 @@ function KitchenSheetCard({ code, role, onSaid }: { code: string; role: string |
   const cache = useQueryClient();
   const refused = whyNotSee(role);
   const [date, setDate] = useState<string | undefined>(undefined);
-  const q = useRead(() => (refused ? Promise.resolve(null) : readKitchenSheet(code, date)), ["stores", code, "kitchen-sheet", date ?? "today"]);
+  /* A count whose outcome is unknown (MST-U2): Save stays grey until a read of TODAY's sheet begun
+     after it is back - kept outside this card, so switching to Recipes and back lets nothing go. */
+  const stop = useScreenStop(STOP.kitchen(code));
+  const readIt = () => (refused ? Promise.resolve(null) : readKitchenSheet(code, date));
+  const q = useRead(date === undefined ? stop.watch(readIt) : readIt, ["stores", code, "kitchen-sheet", date ?? "today"]);
   const [draft, setDraft] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
   const latch = useRef(false);
@@ -191,7 +195,7 @@ function KitchenSheetCard({ code, role, onSaid }: { code: string; role: string |
     setBusy(true);
     setSaid(null);
     try {
-      const res = await saveKitchenCount(code, out.lines);
+      const res = await stop.guard(() => saveKitchenCount(code, out.lines));
       setDraft({});
       void cache.invalidateQueries({ queryKey: ["stores", code] });
       onSaid({ title: "The closing count is saved", body: countSaidWords(res), tone: "ok" });
@@ -217,9 +221,10 @@ function KitchenSheetCard({ code, role, onSaid }: { code: string; role: string |
         }} />
         {s.mayCount ? (
           <View style={{ flexDirection: "row" }}>
-            <Btn label={busy ? "Saving…" : `Save the closing count${typedN ? ` (${typedN})` : ""}`} variant="primary" disabled={busy || typedN === 0} onPress={() => void save()} />
+            <Btn label={busy ? "Saving…" : `Save the closing count${typedN ? ` (${typedN})` : ""}`} variant="primary" disabled={busy || stuck.current || stop.stuck || typedN === 0} onPress={() => void save()} />
           </View>
         ) : null}
+        {stop.stuck ? <Stopped line={STOP_LINE} onRead={() => { setDate(undefined); q.reload(); }} /> : null}
         <Text style={[body, { color: c.grey600 }]}>
           {!today ? "An earlier day: the count is typed on today's sheet."
             : s.mayCount ? "The closing count: type each item you count, in its unit; a blank line is not counted. Below zero is red - a delivery or a count puts it right."
@@ -303,7 +308,12 @@ function BarSheetCard({ code, role, onSaid, onRequests }: { code: string; role: 
   const [date, setDate] = useState<string | undefined>(undefined);
   const [place, setPlace] = useState<Place>("counter");
   const [moment, setMoment] = useState<Moment>("closing");
-  const q = useRead(() => (refused ? Promise.resolve(null) : readBarSheet(code, place, date)), ["stores", code, "bar-sheet", date ?? "today", place]);
+  /* A count whose outcome is unknown (MST-U2): Save stays grey until a read of TODAY's sheet of that
+     place begun after it is back - kept outside this card. Marking the bar closed or open sets a
+     value, so a repeat changes nothing. */
+  const stop = useScreenStop(STOP.bar(code, place));
+  const readIt = () => (refused ? Promise.resolve(null) : readBarSheet(code, place, date));
+  const q = useRead(date === undefined ? stop.watch(readIt) : readIt, ["stores", code, "bar-sheet", date ?? "today", place]);
   const [draft, setDraft] = useState<Draft>({});
   const [busy, setBusy] = useState(false);
   const latch = useRef(false);
@@ -329,8 +339,8 @@ function BarSheetCard({ code, role, onSaid, onRequests }: { code: string; role: 
   const anyTyped = Object.values(draft).some((x) => x.nip.trim() !== "" || x.ml.trim() !== "");
 
   /* One write at a time, latched at the tap (MEMORY 8). */
-  async function once(title: string, act: () => Promise<Said>) {
-    if (latch.current) return;
+  async function once(title: string, act: () => Promise<Said>, counting = false) {
+    if (latch.current || (counting && stop.isStuck())) return;
     latch.current = true;
     setBusy(true);
     setSaid(null);
@@ -348,10 +358,10 @@ function BarSheetCard({ code, role, onSaid, onRequests }: { code: string; role: 
   const save = () => {
     if (!("lines" in out)) return;
     void once("Not saved", async () => {
-      const res = await saveBarCount(code, s.place, moment, out.lines);
+      const res = await stop.guard(() => saveBarCount(code, s.place, moment, out.lines));
       setDraft({});
       return { title: moment === "morning" ? "The morning count is saved" : "The closing count is saved", body: countSaidWords(res), tone: "ok" };
-    });
+    }, true);
   };
   const closeBar = () => void once("Not saved", async () => {
     await markBarClosed(code, closing ?? "");
@@ -406,9 +416,10 @@ function BarSheetCard({ code, role, onSaid, onRequests }: { code: string; role: 
         ) : null}
         {s.mayCount ? (
           <View style={{ flexDirection: "row" }}>
-            <Btn label={busy ? "Saving…" : `Save the ${moment === "morning" ? "morning" : "closing"} count${typedN ? ` (${typedN})` : ""}`} variant="primary" disabled={busy || typedN === 0} onPress={save} />
+            <Btn label={busy ? "Saving…" : `Save the ${moment === "morning" ? "morning" : "closing"} count${typedN ? ` (${typedN})` : ""}`} variant="primary" disabled={busy || stop.stuck || typedN === 0} onPress={save} />
           </View>
         ) : null}
+        {stop.stuck ? <Stopped line={STOP_LINE} onRead={() => { setDate(undefined); q.reload(); }} /> : null}
         <Text style={[body, { color: c.grey600 }]}>{barLead(s, moment)}</Text>
         {"missing" in out && anyTyped ? <Text style={[t.caption, { color: c.red700 }]}>{out.missing}</Text> : null}
         {s.mayCloseBar && today && !s.closedToday ? (
@@ -496,7 +507,12 @@ function DrinkLine({ d, s, first, x, onChange }: {
 function Requests({ code, role, onSaid }: { code: string; role: string | null; onSaid: (s: Said) => void }) {
   const cache = useQueryClient();
   const refused = whyNotSeeBar(role);
-  const q = useRead(() => (refused ? Promise.resolve(null) : readBarRequests(code)), ["stores", code, "bar-requests"]);
+  /* An ask whose outcome is unknown (MST-U3): POST /bar/requests reads no key, so a repeat is a
+     second ask. Ask stays grey until a read of the requests begun after it is back - kept outside
+     this card, so switching to Today's sheet and back lets nothing go. Approve and Reject are
+     refused once decided ("This ask was approved already"), so they need no stop. */
+  const stop = useScreenStop(STOP.requests(code));
+  const q = useRead(stop.watch(() => (refused ? Promise.resolve(null) : readBarRequests(code))), ["stores", code, "bar-requests"]);
   const drinks = useRead(() => (refused ? Promise.resolve(null) : readBarDrinks(code)), ["stores", code, "bar-drinks"]);
   const [lines, setLines] = useState<{ itemId: string; qty: string }[]>([{ itemId: "", qty: "" }]);
   const [note, setNote] = useState("");
@@ -521,7 +537,7 @@ function Requests({ code, role, onSaid }: { code: string; role: string | null; o
   const setLine = (i: number, patch: Partial<{ itemId: string; qty: string }>) => setLines((all) => all.map((x, j) => (j === i ? { ...x, ...patch } : x)));
 
   async function once(key: string, title: string, act: () => Promise<Said>) {
-    if (latch.current) return;
+    if (latch.current || (key === "ask" && stop.isStuck())) return;
     latch.current = true;
     setBusy(key);
     setSaid(null);
@@ -540,7 +556,7 @@ function Requests({ code, role, onSaid }: { code: string; role: string | null; o
   const ask = () => {
     if (!("body" in asked)) { setSaid({ title: "Not sent", body: asked.missing, tone: "bad" }); return; }
     void once("ask", "Not sent", async () => {
-      await askTheStore(code, asked.body);
+      await stop.guard(() => askTheStore(code, asked.body));
       setLines([{ itemId: "", qty: "" }]); setNote("");
       return { title: "Sent to the store", body: "The GM or the Inventory Manager approves it, and it moves to the counter.", tone: "ok" };
     });
@@ -549,6 +565,7 @@ function Requests({ code, role, onSaid }: { code: string; role: string | null; o
   return (
     <View style={{ gap: space.card }}>
       <InDialog said={said} />
+      {stop.stuck ? <Stopped line="Not known whether the ask was sent: read the requests again before asking again." onRead={q.reload} /> : null}
       {mayAsk ? (
         <View style={[card, { padding: space.cardX, gap: 12 }]}>
           <View style={{ gap: 2 }}>
@@ -570,7 +587,7 @@ function Requests({ code, role, onSaid }: { code: string; role: string | null; o
           <Field label="Note (optional)">
             <Input label="Note (optional)" placeholder="For tonight's party" value={note} onChangeText={setNote} maxLength={300} />
           </Field>
-          <View style={{ flexDirection: "row" }}><Btn label={busy === "ask" ? "Sending…" : "Ask the store"} variant="primary" disabled={busy !== null} onPress={ask} /></View>
+          <View style={{ flexDirection: "row" }}><Btn label={busy === "ask" ? "Sending…" : "Ask the store"} variant="primary" disabled={busy !== null || stop.stuck} onPress={ask} /></View>
         </View>
       ) : null}
 
