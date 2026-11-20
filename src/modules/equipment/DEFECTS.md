@@ -23,3 +23,15 @@ for the unknown-outcome rule (MEMORY 16). **What was done:** each dialog latches
 outcome, says "Not known whether it was added: look at the register…" and takes no more taps until closed;
 closing reads again. **The rule:** where the server reads no key, the dialog stops; asked of the PMS for
 `docs/api-requests.md` (honour the key on `POST /equipment`).
+
+### MEQ-3 · The stop after an unknown outcome lived inside each dialog (20 Nov) — fixed
+
+**What happened:** Move, Status and Retire (with a count) and Add (a counted line) read no key; their
+`useStuck` sat inside each dialog, so closing and reopening it before the re-read landed let the same change be
+sent again (a second split, a second line). Report a repair said "Not raised" on a 5xx, and its key died with the
+form. **How it was found:** the independent review (H3, H4). **What was done:** the Item and Register screens
+keep the mark (`stillUnknown`, reads stamped with when they began): every act is grey with "Not known whether
+it was made…" until a read begun after the failure has come back; no dialog closes while busy; the repair's
+keeper is the Item screen's, kept across reopening until such a read (POST /work-orders reads it), and an
+unknown outcome says "Not known whether it was raised" with "Raise it again sends the same repair".
+**The rule:** the stop belongs to the screen that outlives the dialog.

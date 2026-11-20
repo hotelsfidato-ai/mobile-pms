@@ -203,8 +203,11 @@ export function countedText(lines: { quantity: number }[]): string {
   return n === 0 ? "Nothing counted yet" : `${n} counted`;
 }
 
-/** The web's toast once the server has answered (MinibarFlow save). */
-export function takenWords(room: string, answer: { status?: string; waitingWhy?: string | null } | undefined): string {
+/** The web's toast once the server has answered (MinibarFlow save). `duplicate`: the server
+    answered this take's key with a take it ALREADY recorded (minibar.ts), so these counts were not
+    sent again - said as that, never as a new charge (the review's H2). */
+export function takenWords(room: string, answer: { status?: string; waitingWhy?: string | null } | undefined, duplicate = false): string {
+  if (duplicate) return "This take was already recorded, before the reply was lost. Nothing more was sent: look at Waiting for the desk and Recorded.";
   const n = room.trim().toUpperCase();
   if (answer?.status === "charged") return `On room ${n}'s bill. The refill is out of the store.`;
   if (answer?.waitingWhy === "after_checkout") return `Room ${n}'s guest has left: the desk decides.`;
@@ -306,3 +309,11 @@ export const RUN_COLUMNS = ["Room", "Job", "Result", "Ticked by", "When", "What 
 export const runRow = (r: ChecklistRun, when: (at: string | null) => string): string[] => [
   r.room, JOB_LABELS[r.job], runPill(r).label, r.doneBy ?? DASH, when(r.doneAt), r.failed.map(failedText).join("; ") || DASH,
 ];
+
+/* ── An unknown outcome, until a read has shown the record (MEMORY 16; the review's H1) ── */
+
+/** True while nothing read since `lostAt` has come back: a read must BEGIN after the failure
+    (`began`, stamped when the read starts) and succeed. Null: nothing is unknown. */
+export const stillUnknown = (lostAt: number | null, began: number | undefined) =>
+  lostAt !== null && (began === undefined || began <= lostAt);
+export const TAKE_UNKNOWN = "Not known whether the last take was recorded: Record for a room opens again once the minibar is read. Pull down to read it.";

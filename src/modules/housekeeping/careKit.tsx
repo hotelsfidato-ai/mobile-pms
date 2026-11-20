@@ -277,9 +277,13 @@ export const Back = ({ onPress }: { onPress: () => void }) => (
 
 /** The web's Dialog: centred, 16px from each side, a hairline under the head; the
     safe areas kept, the keyboard lifting it, Android's back closing it (NATIVE.md). */
-export function Dialog({ title, description, onClose, children }: {
-  title: string; description?: string; onClose: () => void; children: ReactNode;
+export function Dialog({ title, description, onClose: close, busy, children }: {
+  title: string; description?: string; onClose: () => void;
+  /** A write on its way: the dialog does not close - not by ✕, the shade nor Android's back - so its
+      answer is never lost behind a closed dialog (the review's H1). */
+  busy?: boolean; children: ReactNode;
 }) {
+  const onClose = busy ? () => undefined : close;
   const { height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
   return (
@@ -295,7 +299,7 @@ export function Dialog({ title, description, onClose, children }: {
               <Text style={t.heading} accessibilityRole="header">{title}</Text>
               {description ? <Text style={[t.label, { color: c.grey500, marginTop: 4, lineHeight: 21 }]}>{description}</Text> : null}
             </View>
-            <Pressable onPress={onClose} accessibilityRole="button" accessibilityLabel="Close" android_ripple={{ ...coreRipple, borderless: true }}
+            <Pressable onPress={onClose} disabled={busy} accessibilityRole="button" accessibilityLabel="Close" accessibilityState={{ disabled: Boolean(busy) }} android_ripple={{ ...coreRipple, borderless: true }}
               style={{ width: 44, height: 44, alignItems: "center", justifyContent: "center" }}>
               <X size={16} color={c.grey500} />
             </Pressable>

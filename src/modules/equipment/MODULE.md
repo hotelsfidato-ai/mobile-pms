@@ -99,3 +99,7 @@ WARRANTY ENDS (a dash) as labelled rows in small capitals, a chevron on the righ
 `dev-stores` (Inventory Manager: add, edit, approve), `dev-hotel-manager` (retiring a tagged item waits),
 `dev-desk` (view: may only ask to take a thing out of a store), `dev-finance` (view, export), `dev-revenue`
 (refused the register).
+
+**Amended 20 Nov (the review, MEQ-3):** the unknown-outcome stop is the Item's and the Register's (a read begun
+after the failure unlocks it), not each dialog's; no dialog closes while busy; the repair's key is the Item
+screen's, kept across reopening until such a read.

@@ -72,3 +72,22 @@ passed, because no case held a real zero — a ₹0.00 the server sent would hav
 **How it was found:** the lane's own break-once. **What was done:** `care.check.ts` now holds
 `money(0) = "₹0.00"`; broken again, it failed; restored from a copy. **The rule:** a dash is for "not sent" only;
 a check of a figure rule holds a zero, and a file is copied aside before it is broken.
+
+### MHK-K2 · A take's key died with its dialog, so a second refill and charge were one reopen away (20 Nov) — fixed
+
+**What happened:** the take's idempotency key was minted per TakeDialog mount, the dialog could be closed while
+its request was in flight (Cancel, ✕, the shade, Android's back), and Record for a room was never held. After a
+lost reply or a 5xx, close + reopen + Record sent a NEW key: `POST /minibar/records` would issue a second refill
+and post a second charge. After an unknown outcome the room also stayed editable, so a new room + Record replayed
+the old key and the server answered `duplicate: true` with the FIRST take — which the phone toasted as "On room
+205's bill". And the `?room=` link opened the take without asking who may. **How it was found:** the independent
+review of lane m13-hk (H1, H2, H5). **What was done:** the take's keeper lives on the Minibar screen; on an
+unknown outcome the take is locked as sent (room, counts, "not sure"), its button says Try again (the same take,
+the same key), and Record for a room is grey with "Not known whether the last take was recorded…" until a read
+that BEGAN after the failure has come back (`care.ts stillUnknown`, checked); `duplicate` is read and said as
+"This take was already recorded … Nothing more was sent" (checked); no dialog of the lane closes while its write
+is on its way (`careKit Dialog busy`, Cancel grey); the deep link asks `whyNotOpenTake` as the button does. The
+desk's decision waits the same way (a read begun after). **The rule:** a key that guards money lives as long as
+the doubt, not as long as a dialog — hold it where the person can come back to it, and unlock only on a read
+begun after the failure. **The web's MinibarFlow.tsx (40-44) has the same flaw:** it mints a new `pressKey`
+each time the window opens (for `docs/api-requests.md`).

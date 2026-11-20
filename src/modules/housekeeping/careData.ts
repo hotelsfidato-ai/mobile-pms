@@ -30,7 +30,8 @@ import {
    outcome (MEMORY 8, 16).
    ══════════════════════════════════════════════════════════════════ */
 
-type Answer<T = unknown> = { ok: true; data?: T };
+/** `duplicate`: the server answered a key it had already seen with the first write's answer. */
+type Answer<T = unknown> = { ok: true; data?: T; duplicate?: boolean };
 
 /** The list and the last fortnight's records, waiting ones first. */
 export const readMinibar = (code: string) => api<Minibar>(minibarPath(code));

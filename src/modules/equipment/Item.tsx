@@ -1,11 +1,15 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { router } from "expo-router";
 import { Archive, ArrowRightLeft, CheckCircle2, Clock, Pencil, Plus, Wrench } from "lucide-react-native";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Text, View } from "react-native";
-import type { Hotel } from "../../core/api";
+import { currentSubject, type Hotel } from "../../core/api";
+import type { KeyKeeper } from "../../core/keys";
+import { newKey } from "../../core/offline";
 import { c, face, space, t } from "../../core/theme";
-import { Head, Screen, useRead } from "../../core/ui";
+import { Head, notKnown, Screen, useRead } from "../../core/ui";
+import { stillUnknown } from "../housekeeping/care";
+import { formKeeper } from "../housekeeping/repair";
 import { dateTime } from "../night-audit/audit";
 import {
   Act, Back, body, Box, Btn, Failed, Hairline, IconChip, Inside, Loading, NotYours, Pill, Stale, Toast, type Said,
@@ -41,9 +45,17 @@ type Open = "edit" | "move" | "status" | "retire" | "repair" | null;
 export function Item({ hotel, role, id, onBack }: { hotel: Hotel; role: string | null; id: string; onBack: () => void }) {
   const code = hotel.code;
   const cache = useQueryClient();
-  const q = useRead(() => readItem(code, id), ["equipment", code, "item", id]);
+  /* Stamped with when the read BEGAN: an unknown outcome waits for a read begun after it (H3). */
+  const q = useRead(async () => { const began = Date.now(); return { began, ...(await readItem(code, id)) }; }, ["equipment", code, "item", id]);
+  const [lostAt, setLostAt] = useState<number | null>(null);
+  const lost = stillUnknown(lostAt, q.data?.began);
+  /* The repair's one key, at the screen: kept across reopening until a read begun after a lost
+     reply has come back (POST /work-orders reads it; the review's H4). */
+  const repairKeys = useRef<KeyKeeper | null>(null);
+  const repairKeeper = () => repairKeys.current ?? (repairKeys.current = formKeeper(newKey(), currentSubject));
   const inbox = useRead(() => readEquipmentApprovals(code), ["equipment", code, "approvals"]);
   const [open, setOpen] = useState<Open>(null);
+  useEffect(() => { if (lostAt !== null && !lost && open === null) { setLostAt(null); repairKeys.current = null; } }, [lostAt, lost, open]);
   const [pulled, setPulled] = useState(false);
   const [said, setSaid] = useState<Said | null>(null);
   const unsay = useCallback(() => setSaid(null), []);
@@ -56,6 +68,7 @@ export function Item({ hotel, role, id, onBack }: { hotel: Hotel; role: string |
   };
   const done = (d: Done) => {
     setOpen(null);
+    if (open === "repair") repairKeys.current = null;
     setSaid(d.said);
     refresh();
     /* Part of a count went elsewhere as its own line: that line is what was just acted on. */
@@ -80,6 +93,8 @@ export function Item({ hotel, role, id, onBack }: { hotel: Hotel; role: string |
 
   const { item, history } = data;
   const acts = actsOf(item, role);
+  /* Not known whether the last change was made: every act waits for the item read again. */
+  const lostLine = lost ? notKnown("made", "this item once it is read again (pull down)").line : null;
   const approvalFor = (approvalId: string) => inbox.data?.find((a) => a.id === approvalId);
 
   return (
@@ -91,12 +106,13 @@ export function Item({ hotel, role, id, onBack }: { hotel: Hotel; role: string |
 
         <View style={{ gap: 8 }}>
           <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
-            <Btn label="Change details" icon={Pencil} disabled={acts.edit !== null} onPress={() => setOpen("edit")} />
-            <Btn label={acts.moveLabel} icon={ArrowRightLeft} disabled={acts.move !== null} onPress={() => setOpen("move")} />
-            <Btn label={acts.statusLabel} icon={item.status === "under_repair" ? CheckCircle2 : Wrench} disabled={acts.edit !== null} onPress={() => setOpen("status")} />
-            <Btn label="Retire" icon={Archive} disabled={acts.edit !== null} onPress={() => setOpen("retire")} />
+            <Btn label="Change details" icon={Pencil} disabled={acts.edit !== null || lost} onPress={() => setOpen("edit")} />
+            <Btn label={acts.moveLabel} icon={ArrowRightLeft} disabled={acts.move !== null || lost} onPress={() => setOpen("move")} />
+            <Btn label={acts.statusLabel} icon={item.status === "under_repair" ? CheckCircle2 : Wrench} disabled={acts.edit !== null || lost} onPress={() => setOpen("status")} />
+            <Btn label="Retire" icon={Archive} disabled={acts.edit !== null || lost} onPress={() => setOpen("retire")} />
           </View>
           {/* One sentence for the grey ones, the web's line under the head. */}
+          {lostLine ? <Text style={[body, { color: c.yellow800 }]} accessibilityRole="alert">{lostLine}</Text> : null}
           {acts.line ? <Text style={[body, { color: c.grey600 }]}>{acts.line}</Text> : null}
         </View>
 
@@ -163,11 +179,11 @@ export function Item({ hotel, role, id, onBack }: { hotel: Hotel; role: string |
       </Screen>
       <Toast said={said} onClose={unsay} />
 
-      {open === "edit" ? <EditDialog code={code} item={item} onClose={close} onDone={done} /> : null}
-      {open === "move" ? <MoveDialog code={code} item={item} mayEdit={may(role, "edit")} onClose={close} onDone={done} /> : null}
-      {open === "status" ? <StatusDialog code={code} item={item} onClose={close} onDone={done} /> : null}
-      {open === "retire" ? <RetireDialog code={code} item={item} waits={retireWaits(item, role)} onClose={close} onDone={done} /> : null}
-      {open === "repair" ? <RepairDialog code={code} item={item} onClose={close} onDone={done} /> : null}
+      {open === "edit" ? <EditDialog code={code} item={item} onClose={close} onDone={done} onLost={setLostAt} /> : null}
+      {open === "move" ? <MoveDialog code={code} item={item} mayEdit={may(role, "edit")} onClose={close} onDone={done} onLost={setLostAt} /> : null}
+      {open === "status" ? <StatusDialog code={code} item={item} onClose={close} onDone={done} onLost={setLostAt} /> : null}
+      {open === "retire" ? <RetireDialog code={code} item={item} waits={retireWaits(item, role)} onClose={close} onDone={done} onLost={setLostAt} /> : null}
+      {open === "repair" ? <RepairDialog code={code} item={item} keeper={repairKeeper()} onClose={close} onDone={done} onLost={setLostAt} /> : null}
     </View>
   );
 }

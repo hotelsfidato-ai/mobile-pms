@@ -290,3 +290,8 @@ route `?room=` is ready for it.
 |---|---|---|
 | Minibar | none (`all/`, `new/`, `roles/` hold none: the page came on 16 Nov) | **NOT PICTURED** — built from `Minibar.tsx` |
 | Housekeeping checklists | none | **NOT PICTURED** — built from `Checklists.tsx` |
+
+**Amended 20 Nov (the review, MHK-K2):** the take's key is the Minibar SCREEN's, not the dialog's: kept while the
+outcome is unknown, the take locked as sent with Try again, Record for a room grey until a read begun after the
+failure has come back; a `duplicate` answer is said as the earlier take, not as a new charge; no dialog closes
+while its write is on its way; `?room=` asks who may first.

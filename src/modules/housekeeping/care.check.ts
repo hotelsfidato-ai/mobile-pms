@@ -3,7 +3,7 @@
 import {
   changeItemBody, countedText, decideBody, failedText, guestText, itemsOf, lineText, listEmpty, money, newItemBody,
   newListBody, priceInput, recordedLine, recordedOf, recordedPill, runPill, runsEmptyTitle, runsPath, startStore, step,
-  exportStatus, recordRow, runRow, stockText, takeBody, takeLines, takenWords, waitingOf, waitingPill, whatWasTaken, whyNotDecline, whyNotOpenTake,
+  exportStatus, recordRow, runRow, stillUnknown, stockText, takeBody, takeLines, takenWords, waitingOf, waitingPill, whatWasTaken, whyNotDecline, whyNotOpenTake,
   whyNotSaveItem, whyNotSaveList, whyNotTake, RECORD_REFUSED, SAY_WHY_NOT,
   type MinibarItem, type MinibarRecord,
 } from "./care.ts";
@@ -133,3 +133,14 @@ eq(recordRow(rec({ status: "waiting", charged: null }), when)[5], "-");
 eq(runRow({ id: "k", room: "204", job: "inspection", doneAt: "x", doneBy: null, passed: false, failed: [{ item: "Towels", note: "Stained" }] }, when),
   ["204", "Inspection", "Failed", "-", "19 Nov 2026, 10:00 AM", "Towels - Stained"]);
 console.log("care: the files pass");
+
+/* A replayed key is the FIRST take: never "on room 205's bill" for counts that were not sent (H2). */
+eq(takenWords("205", { status: "charged" }, true), "This take was already recorded, before the reply was lost. Nothing more was sent: look at Waiting for the desk and Recorded.");
+eq(takenWords("205", { status: "charged" }, false), "On room 205's bill. The refill is out of the store.");
+/* Unknown until a read that BEGAN after the failure has come back (H1). */
+eq(stillUnknown(null, 100), false);
+eq(stillUnknown(200, undefined), true);
+eq(stillUnknown(200, 150), true); // a read begun before the failure proves nothing
+eq(stillUnknown(200, 200), true);
+eq(stillUnknown(200, 201), false);
+console.log("care: the unknown outcome passes");

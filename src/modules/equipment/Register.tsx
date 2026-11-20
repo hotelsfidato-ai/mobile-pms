@@ -8,6 +8,7 @@ import { ExportButtons } from "../../core/Export";
 import { ON_THE_WEBSITE } from "../../core/menu";
 import { c, face, space, t } from "../../core/theme";
 import { Head, notKnown, ripple, Screen, useRead, useStuck } from "../../core/ui";
+import { stillUnknown } from "../housekeeping/care";
 import {
   Act, Back, body, Box, Btn, Dialog, Empty, Failed, Fact, Field, Foot, IconChip, InDialog, Input, Loading, NotYours, Pill,
   Refused, saidOf, Segmented, Select, Stale, Toast, type Said,
@@ -44,11 +45,15 @@ const STATUS_OPTIONS: { value: StatusFilter; label: string }[] = [
 export function Register({ hotel, role, onBack }: { hotel: Hotel; role: string | null; onBack: () => void }) {
   const code = hotel.code;
   const cache = useQueryClient();
-  const q = useRead(() => readEquipment(code), ["equipment", code, "list"]);
+  /* Stamped with when the read BEGAN: an unknown Add waits for a read begun after it (H3). */
+  const q = useRead(async () => { const began = Date.now(); return { began, items: await readEquipment(code) }; }, ["equipment", code, "list"]);
   const inbox = useRead(() => readEquipmentApprovals(code), ["equipment", code, "approvals"]);
   const [place, setPlace] = useState("all");
   const [status, setStatus] = useState<StatusFilter>("all");
   const [adding, setAdding] = useState(false);
+  const [addLost, setAddLost] = useState<number | null>(null);
+  const addUnknown = stillUnknown(addLost, q.data?.began);
+  useEffect(() => { if (addLost !== null && !addUnknown && !adding) setAddLost(null); }, [addLost, addUnknown, adding]);
   const [pulled, setPulled] = useState(false);
   const [said, setSaid] = useState<Said | null>(null);
   const unsay = useCallback(() => setSaid(null), []);
@@ -58,7 +63,7 @@ export function Register({ hotel, role, onBack }: { hotel: Hotel; role: string |
     void cache.invalidateQueries({ queryKey: ["equipment", code] });
     void cache.invalidateQueries({ queryKey: ["approvals", code] });
   };
-  const items = q.data;
+  const items = q.data?.items;
   const refused = !items && q.error && /is for .*Ask one of them\.$/.test(q.error) ? q.error : null;
   const places = items ? placesOf(items) : [];
   const shown = items ? shownOf(items, place, status) : [];
@@ -81,7 +86,9 @@ export function Register({ hotel, role, onBack }: { hotel: Hotel; role: string |
           <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8, alignItems: "flex-start" }}>
             <Refused label="Import" icon={Upload} reason={mayCreate ? ON_THE_WEBSITE : ADD_REFUSED()} />
           </View>
-          <Act label="Add an item" icon={Plus} variant="primary" reason={mayCreate ? null : ADD_REFUSED()} onPress={() => setAdding(true)} />
+          <Act label="Add an item" icon={Plus} variant="primary"
+            reason={!mayCreate ? ADD_REFUSED() : addUnknown ? notKnown("added", "the register once it is read again (pull down)").line : null}
+            onPress={() => setAdding(true)} />
         </View>
         <Stale error={items ? q.error : undefined} />
 
@@ -141,7 +148,7 @@ export function Register({ hotel, role, onBack }: { hotel: Hotel; role: string |
       </Screen>
       <Toast said={said} onClose={unsay} />
       {adding ? (
-        <AddDialog code={code} onClose={() => { setAdding(false); refresh(); }}
+        <AddDialog code={code} onLost={setAddLost} onClose={() => { setAdding(false); refresh(); }}
           onAdded={(id, s) => { setAdding(false); setSaid(s); refresh(); router.push(`/equipment/${code}/${id}`); }} />
       ) : null}
     </View>
@@ -176,7 +183,9 @@ function Line({ i, today, onPress }: { i: EquipmentItem; today: string; onPress:
 
 /* ── Adding a thing to the register (AddEquipmentDialog) ─────────── */
 
-function AddDialog({ code, onClose, onAdded }: { code: string; onClose: () => void; onAdded: (id: string, s: Said) => void }) {
+function AddDialog({ code, onLost, onClose, onAdded }: {
+  code: string; onLost: (at: number) => void; onClose: () => void; onAdded: (id: string, s: Said) => void;
+}) {
   const options = useRead(() => readOptions(code), ["equipment", code, "options"]);
   const o = options.data;
   const [f, setF] = useState<AddForm>({
@@ -203,6 +212,7 @@ function AddDialog({ code, onClose, onAdded }: { code: string; onClose: () => vo
       onAdded(res.id, { title: `${f.name.trim()} added`, tone: "ok" });
     } catch (e) {
       if (stuck.stop(e)) {
+        onLost(Date.now());
         const k = notKnown("added", "the register", e);
         setSaid({ title: k.title, body: k.body, tone: "held" });
       } else setSaid(saidOf("Not added", e));
@@ -215,7 +225,7 @@ function AddDialog({ code, onClose, onAdded }: { code: string; onClose: () => vo
   const noPlaces = (o?.places.length ?? 0) === 0;
   const noSuppliers = (o?.suppliers.length ?? 0) === 0;
   return (
-    <Dialog title="Add an item" description="Something durable the property owns." onClose={onClose}>
+    <Dialog title="Add an item" description="Something durable the property owns." onClose={onClose} busy={busy}>
       {!o ? (
         options.error ? <Text style={[body, { color: c.red700 }]}>{`The rooms and places could not be loaded, so nothing can be added yet. ${options.error}`}</Text>
           : <Loading words="Reading the rooms and places…" />
@@ -276,7 +286,7 @@ function AddDialog({ code, onClose, onAdded }: { code: string; onClose: () => vo
       )}
       <InDialog said={said} />
       <Foot>
-        <Btn label="Cancel" grow tall onPress={onClose} />
+        <Btn label="Cancel" grow tall disabled={busy} onPress={onClose} />
         <Btn label="Add" variant="primary" grow tall busy={busy} disabled={!o || Boolean(why)} onPress={() => void add()} />
       </Foot>
       {o && why && !said ? <Text style={[t.caption, { color: c.grey600 }]}>{why}</Text> : null}

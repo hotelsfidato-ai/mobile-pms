@@ -226,7 +226,7 @@ function ListDialog({ code, d, list, onClose, onDone }: {
   const askRemove = () => confirmAct("Remove this checklist?", "What was ticked with it stays on each room's record.", "Remove", () => void run("remove"));
 
   return (
-    <Dialog title={list ? listTitle(list) : "Add a checklist"} description="One item per line, in the order it is done." onClose={onClose}>
+    <Dialog title={list ? listTitle(list) : "Add a checklist"} description="One item per line, in the order it is done." onClose={onClose} busy={busy}>
       {!list ? (
         <>
           <Field label="Job" required>
@@ -244,7 +244,7 @@ function ListDialog({ code, d, list, onClose, onDone }: {
       </Field>
       <InDialog said={said} />
       <Foot>
-        <Btn label="Cancel" grow tall onPress={onClose} />
+        <Btn label="Cancel" grow tall disabled={busy} onPress={onClose} />
         <Btn label="Save" variant="primary" grow tall busy={busy} disabled={Boolean(why)} onPress={() => void run("save")} />
       </Foot>
       {why && !said ? <Text style={[t.caption, { color: c.grey600 }]}>{why}</Text> : null}

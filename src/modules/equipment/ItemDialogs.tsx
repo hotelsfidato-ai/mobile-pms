@@ -1,12 +1,12 @@
 import { useRef, useState } from "react";
 import { Text, View } from "react-native";
-import { currentSubject, HeldError } from "../../core/api";
+import { HeldError, outcomeUnknown } from "../../core/api";
+import type { KeyKeeper } from "../../core/keys";
 import { ON_THE_WEBSITE } from "../../core/menu";
-import { newKey } from "../../core/offline";
 import { c, t } from "../../core/theme";
 import { notKnown, useRead, useStuck } from "../../core/ui";
 import { body, Btn, Dialog, Field, Foot, InDialog, Input, Loading, saidOf, Segmented, Select, type Said } from "../housekeeping/careKit";
-import { formKeeper, PRIORITIES, REPAIR_KINDS } from "../housekeeping/repair";
+import { PRIORITIES, REPAIR_KINDS } from "../housekeeping/repair";
 import { editEquipment, moveEquipment, raiseRepair, readOptions, retireEquipment, setEquipmentStatus } from "./data";
 import {
   askCount, changesOf, countHint, countOf, leaves, movedWords, whyNotMove, whyNotRetire, type EquipmentItem,
@@ -27,10 +27,14 @@ import {
    ══════════════════════════════════════════════════════════════════ */
 
 export interface Done { landedOn: string; said: Said }
-interface Props { code: string; item: EquipmentItem; onClose: () => void; onDone: (d: Done) => void }
+interface Props {
+  code: string; item: EquipmentItem; onClose: () => void; onDone: (d: Done) => void;
+  /** An unknown outcome: the SCREEN keeps the mark, so a reopened dialog cannot repeat it (the review's H3). */
+  onLost: (at: number) => void;
+}
 
 /** The shared catch: an unknown outcome sticks the dialog; anything else is the server's no. */
-function useWrite(what: string, done: string) {
+function useWrite(what: string, done: string, onLost: (at: number) => void) {
   const [said, setSaid] = useState<Said | null>(null);
   const [busy, setBusy] = useState(false);
   const latch = useRef(false);
@@ -44,6 +48,7 @@ function useWrite(what: string, done: string) {
       await fn();
     } catch (e) {
       if (stuck.stop(e)) {
+        onLost(Date.now());
         const k = notKnown(done, "this item once it is read again", e);
         setSaid({ title: k.title, body: k.body, tone: "held" });
       } else setSaid(saidOf(what, e));
@@ -70,7 +75,7 @@ function Why({ text }: { text: string | null }) {
 
 /* ── Details ──────────────────────────────────────────────────────── */
 
-export function EditDialog({ code, item, onClose, onDone }: Props) {
+export function EditDialog({ code, item, onClose, onDone, onLost }: Props) {
   const options = useRead(() => readOptions(code), ["equipment", code, "options"]);
   const o = options.data;
   const [f, setF] = useState({
@@ -78,14 +83,14 @@ export function EditDialog({ code, item, onClose, onDone }: Props) {
     unitCost: item.unitCost === null ? "" : String(item.unitCost),
   });
   const set = (patch: Partial<typeof f>) => setF((x) => ({ ...x, ...patch }));
-  const w = useWrite("Not saved", "saved");
+  const w = useWrite("Not saved", "saved", onLost);
   const why = w.stuck ? "Not known whether it was saved: close this and look at the item first." : f.name.trim() ? null : "What is it called?";
   const suppliers = [{ value: "", label: "Not known" },
     ...(item.supplierId && !o?.suppliers.some((s) => s.id === item.supplierId) ? [{ value: item.supplierId, label: item.supplier ?? "-" }] : []),
     ...(o?.suppliers ?? []).map((s) => ({ value: s.id, label: s.name }))];
 
   return (
-    <Dialog title="Change the details" description={item.name} onClose={onClose}>
+    <Dialog title="Change the details" description={item.name} onClose={onClose} busy={w.busy}>
       {!o && !options.error ? <Loading words="Reading the suppliers and categories…" /> : (
         <>
           <Field label="What is it" required><Input label="What is it" value={f.name} onChangeText={(v) => set({ name: v })} /></Field>
@@ -112,7 +117,7 @@ export function EditDialog({ code, item, onClose, onDone }: Props) {
       )}
       <InDialog said={w.said} />
       <Foot>
-        <Btn label="Cancel" grow tall onPress={onClose} />
+        <Btn label="Cancel" grow tall disabled={w.busy} onPress={onClose} />
         <Btn label="Save" variant="primary" grow tall busy={w.busy} disabled={Boolean(why) || !o}
           onPress={() => void w.run(async () => {
             const res = await editEquipment(code, item.id, changesOf(item, f));
@@ -126,7 +131,7 @@ export function EditDialog({ code, item, onClose, onDone }: Props) {
 
 /* ── Moving it ────────────────────────────────────────────────────── */
 
-export function MoveDialog({ code, item, mayEdit, onClose, onDone }: Props & { mayEdit: boolean }) {
+export function MoveDialog({ code, item, mayEdit, onClose, onDone, onLost }: Props & { mayEdit: boolean }) {
   const options = useRead(() => readOptions(code), ["equipment", code, "options"]);
   const o = options.data;
   const fromStore = item.placeKind === "store";
@@ -135,7 +140,7 @@ export function MoveDialog({ code, item, mayEdit, onClose, onDone }: Props & { m
   const [locationId, setLocationId] = useState("");
   const [count, setCount] = useState("");
   const [note, setNote] = useState("");
-  const w = useWrite("Not moved", "moved");
+  const w = useWrite("Not moved", "moved", onLost);
 
   const where = whereKind === "room" ? roomId : locationId;
   const toKind = whereKind === "room" ? "room" : (o?.places.find((p) => p.id === locationId)?.kind ?? null);
@@ -145,7 +150,7 @@ export function MoveDialog({ code, item, mayEdit, onClose, onDone }: Props & { m
   const why = w.stuck ? "Not known whether it moved: close this and look at the item first." : whyNotMove(where !== "", leaving, note);
 
   return (
-    <Dialog title={fromStore && !mayEdit ? "Ask to take it out of the store" : "Move it"} description={`${item.name} · now in ${item.place}`} onClose={onClose}>
+    <Dialog title={fromStore && !mayEdit ? "Ask to take it out of the store" : "Move it"} description={`${item.name} · now in ${item.place}`} onClose={onClose} busy={w.busy}>
       {!o ? (options.error ? <Text style={[body, { color: c.red700 }]}>{options.error}</Text> : <Loading words="Reading the rooms and places…" />) : (
         <>
           <Segmented label="Where to" value={whereKind} onChange={setWhereKind}
@@ -174,7 +179,7 @@ export function MoveDialog({ code, item, mayEdit, onClose, onDone }: Props & { m
       )}
       <InDialog said={w.said} />
       <Foot>
-        <Btn label="Cancel" grow tall onPress={onClose} />
+        <Btn label="Cancel" grow tall disabled={w.busy} onPress={onClose} />
         <Btn label={leaving ? "Ask" : "Move"} variant="primary" grow tall busy={w.busy} disabled={Boolean(why) || !o}
           onPress={() => void w.run(async () => {
             const n = countOf(item, count);
@@ -191,20 +196,20 @@ export function MoveDialog({ code, item, mayEdit, onClose, onDone }: Props & { m
 
 /* ── Under repair, or back in use ─────────────────────────────────── */
 
-export function StatusDialog({ code, item, onClose, onDone }: Props) {
+export function StatusDialog({ code, item, onClose, onDone, onLost }: Props) {
   const to = item.status === "under_repair" ? "in_use" : "under_repair";
   const [count, setCount] = useState("");
   const [note, setNote] = useState("");
-  const w = useWrite("Not changed", "changed");
+  const w = useWrite("Not changed", "changed", onLost);
   return (
-    <Dialog title={to === "under_repair" ? "Mark it under repair" : "Mark it back in use"} description={item.name} onClose={onClose}>
+    <Dialog title={to === "under_repair" ? "Mark it under repair" : "Mark it back in use"} description={item.name} onClose={onClose} busy={w.busy}>
       <CountField item={item} value={count} onChange={setCount} what="marks" />
       <Field label="What is wrong, or what was done" hint="Optional. It is kept with the change.">
         <Input label="What is wrong, or what was done" value={note} onChangeText={setNote} />
       </Field>
       <InDialog said={w.said} />
       <Foot>
-        <Btn label="Cancel" grow tall onPress={onClose} />
+        <Btn label="Cancel" grow tall disabled={w.busy} onPress={onClose} />
         <Btn label={to === "under_repair" ? "Under repair" : "Back in use"} variant="primary" grow tall busy={w.busy} disabled={w.stuck}
           onPress={() => void w.run(async () => {
             const n = countOf(item, count);
@@ -218,10 +223,10 @@ export function StatusDialog({ code, item, onClose, onDone }: Props) {
 
 /* ── Retiring it ──────────────────────────────────────────────────── */
 
-export function RetireDialog({ code, item, waits, onClose, onDone }: Props & { waits: boolean }) {
+export function RetireDialog({ code, item, waits, onClose, onDone, onLost }: Props & { waits: boolean }) {
   const [reason, setReason] = useState("");
   const [count, setCount] = useState("");
-  const w = useWrite("Not retired", "retired");
+  const w = useWrite("Not retired", "retired", onLost);
   const why = w.stuck ? "Not known whether it was retired: close this and look at the item first." : whyNotRetire(reason);
   return (
     <Dialog
@@ -229,7 +234,7 @@ export function RetireDialog({ code, item, waits, onClose, onDone }: Props & { w
       description={waits
         ? `${item.name} is tagged, so retiring it waits in the approvals inbox for the Inventory Manager - or the owner, an administrator or the general manager when they are away.`
         : `${item.name}. It stays in the register as retired, with who, when and why - nothing is deleted.`}
-      onClose={onClose}
+      onClose={onClose} busy={w.busy}
     >
       <CountField item={item} value={count} onChange={setCount} what="retires" />
       <Field label="Why" required hint="Broken beyond repair, lost, sold, given away.">
@@ -237,7 +242,7 @@ export function RetireDialog({ code, item, waits, onClose, onDone }: Props & { w
       </Field>
       <InDialog said={w.said} />
       <Foot>
-        <Btn label="Cancel" grow tall onPress={onClose} />
+        <Btn label="Cancel" grow tall disabled={w.busy} onPress={onClose} />
         <Btn label={waits ? "Ask to retire" : "Retire"} variant="danger" grow tall busy={w.busy} disabled={Boolean(why)}
           onPress={() => void w.run(async () => {
             const n = countOf(item, count);
@@ -255,7 +260,11 @@ export function RetireDialog({ code, item, waits, onClose, onDone }: Props & { w
 const KINDS = REPAIR_KINDS.map((k) => ({ value: k, label: k }));
 const LEVELS = PRIORITIES.map((p) => ({ value: p.value, label: p.label }));
 
-export function RepairDialog({ code, item, onClose, onDone }: Props) {
+export function RepairDialog({ code, item, keeper, onClose, onDone, onLost }: Props & {
+  /** The SCREEN's keeper for this repair: POST /work-orders reads the key, so a reopened form after a
+      lost reply sends the same key and the server answers with the first repair (the review's H4). */
+  keeper: KeyKeeper;
+}) {
   const [what, setWhat] = useState("");
   const [detail, setDetail] = useState("");
   const [kind, setKind] = useState<string>("maintenance");
@@ -263,9 +272,6 @@ export function RepairDialog({ code, item, onClose, onDone }: Props) {
   const [said, setSaid] = useState<Said | null>(null);
   const [busy, setBusy] = useState(false);
   const latch = useRef(false);
-  /* ONE FORM, ONE REPAIR (MHK-3): POST /work-orders reads the key and answers a repeat with the first. */
-  const keys = useRef<ReturnType<typeof formKeeper> | null>(null);
-  if (!keys.current) keys.current = formKeeper(newKey(), currentSubject);
   const room = item.roomId ? item.place.replace(/^Room /, "") : null;
   const why = what.trim() ? null : "What needs fixing?";
 
@@ -277,12 +283,16 @@ export function RepairDialog({ code, item, onClose, onDone }: Props) {
     try {
       await raiseRepair(code, {
         title: what.trim(), detail: detail.trim(), category: kind, priority, ...(room ? { roomNumber: room } : {}), equipmentItemId: item.id,
-      }, keys.current!);
+      }, keeper);
       onDone({ landedOn: item.id, said: { title: "Repair raised", body: `${item.name} (${item.tag ?? "-"}) is under repair.`, tone: "ok" } });
     } catch (e) {
       /* Held on this phone, as the web holds a work order: never a failure. */
       if (e instanceof HeldError) onDone({ landedOn: item.id, said: saidOf("", e) });
-      else setSaid(saidOf("Not raised", e));
+      else if (outcomeUnknown(e)) {
+        onLost(Date.now());
+        const k = notKnown("raised", "this item's repairs", e);
+        setSaid({ title: k.title, body: `${k.body} Raise it again sends the same repair: the server makes it once.`, tone: "held" });
+      } else setSaid(saidOf("Not raised", e));
     } finally {
       latch.current = false;
       setBusy(false);
@@ -290,7 +300,7 @@ export function RepairDialog({ code, item, onClose, onDone }: Props) {
   }
 
   return (
-    <Dialog title={`Report a repair · ${item.name}`} description="It shows as under repair until the repair is closed." onClose={onClose}>
+    <Dialog title={`Report a repair · ${item.name}`} description="It shows as under repair until the repair is closed." onClose={onClose} busy={busy}>
       <Text style={[body, { color: c.ink900 }]}>{item.name}<Text style={{ color: c.grey500 }}>{` · ${item.tag ?? "-"}`}</Text></Text>
       <Field label="What needs fixing" required>
         <Input label="What needs fixing" value={what} onChangeText={setWhat} placeholder="Dripping tap in the bathroom" autoFocus />
@@ -300,7 +310,7 @@ export function RepairDialog({ code, item, onClose, onDone }: Props) {
       <Field label="Anything else" hint="Optional."><Input label="Anything else" value={detail} onChangeText={setDetail} rows={3} /></Field>
       <InDialog said={said} />
       <Foot>
-        <Btn label="Cancel" grow tall onPress={onClose} />
+        <Btn label="Cancel" grow tall disabled={busy} onPress={onClose} />
         <Btn label="Raise it" variant="primary" grow tall busy={busy} disabled={Boolean(why)} onPress={() => void raise()} />
       </Foot>
       {!said ? <Why text={why} /> : null}

@@ -77,13 +77,13 @@ export function DecideButtons({ code, approval, approveLabel, loading, onDone }:
       {stuck.stuck ? <Btn label="Open Approvals" onPress={() => router.push(`/approvals/${code}`)} style={{ alignSelf: "flex-start" }} /> : null}
       {!refusing ? <InDialog said={said} /> : null}
       {refusing ? (
-        <Dialog title="Refuse it" description="Say why. The person who asked has to know what to do next." onClose={() => setRefusing(false)}>
+        <Dialog title="Refuse it" description="Say why. The person who asked has to know what to do next." onClose={() => setRefusing(false)} busy={busy}>
           <Field label="Why" required>
             <Input label="Why" value={note} onChangeText={setNote} rows={3} autoFocus />
           </Field>
           <InDialog said={said} />
           <Foot>
-            <Btn label="Cancel" grow tall onPress={() => setRefusing(false)} />
+            <Btn label="Cancel" grow tall disabled={busy} onPress={() => setRefusing(false)} />
             <Btn label="Refuse" variant="danger" grow tall busy={busy} disabled={!note.trim()} onPress={() => void go("rejected")} />
           </Foot>
           <Text style={[t.caption]}>It is decided in the one approvals inbox, the same as in Approvals.</Text>

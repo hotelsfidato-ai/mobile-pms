@@ -12,7 +12,7 @@ import {
   changeItemBody, countable, countedText, decideBody, decidedWords, guestText, itemSavedWords, KEEP_REFUSED, lineText,
   listEmpty, listNote, money, newItemBody, NO_PRICE, priceInput, priceText, RECORD_COLUMNS, recordedLine, recordedOf,
   recordedPill, recordRow, shownItems, startStore, step, stockText, takeBody, takeLabel, takeLines, takenWords, waitingOf,
-  waitingPill, whatWasTaken, whyNotDecline, whyNotOpenTake, whyNotSaveItem, whyNotTake, DESK_DECIDES,
+  stillUnknown, TAKE_UNKNOWN, waitingPill, whatWasTaken, whyNotDecline, whyNotOpenTake, whyNotSaveItem, whyNotTake, DESK_DECIDES,
   type Counts, type Minibar as MinibarData, type MinibarItem, type MinibarRecord,
 } from "./care";
 import { addMinibarItem, changeMinibarItem, decideMinibar, readMinibar, recordMinibar } from "./careData";
@@ -21,6 +21,7 @@ import {
   saidOf, SectionHead, Select, Stale, Stepper, Tick, Toast, type Said,
 } from "./careKit";
 import { formKeeper } from "./repair";
+import type { KeyKeeper } from "../../core/keys";
 
 /* ══════════════════════════════════════════════════════════════════
    MINIBAR on a phone - the web's /h/:code/minibar (16 Nov release,
@@ -43,31 +44,42 @@ import { formKeeper } from "./repair";
    Every write here is refused offline in the web's words (careData.ts).
    ══════════════════════════════════════════════════════════════════ */
 
-/** Each time a read lands: a card stuck on an unknown outcome waits for one (MEMORY 16). */
-function useReadEpoch(loading: boolean) {
-  const [epoch, setEpoch] = useState(0);
-  const was = useRef(loading);
-  useEffect(() => {
-    if (was.current && !loading) setEpoch((e) => e + 1);
-    was.current = loading;
-  }, [loading]);
-  return epoch;
-}
+/** The minibar, stamped with when its read BEGAN: an unknown outcome waits for a read begun after it. */
+const readStamped = async (code: string) => {
+  const began = Date.now();
+  return { began, d: await readMinibar(code) };
+};
+
+/** The take on its way: its one key, kept at the SCREEN, so closing and reopening the dialog can
+    never mint a second key for a take whose outcome is unknown (the review's H1). */
+interface Take { keeper: KeyKeeper; lostAt: number | null }
 
 export function Minibar({ hotel, room, onBack }: { hotel: Hotel; room?: string; onBack: () => void }) {
   const code = hotel.code;
   const cache = useQueryClient();
-  const q = useRead(() => readMinibar(code), ["housekeeping", code, "minibar"]);
+  const q = useRead(() => readStamped(code), ["housekeeping", code, "minibar"]);
   const [taking, setTaking] = useState(Boolean(room));
   const [editing, setEditing] = useState<MinibarItem | "new" | null>(null);
   const [pulled, setPulled] = useState(false);
   const [said, setSaid] = useState<Said | null>(null);
   const unsay = useCallback(() => setSaid(null), []);
-  const epoch = useReadEpoch(q.loading);
   useEffect(() => { if (!q.loading) setPulled(false); }, [q.loading]);
 
   const refresh = () => void cache.invalidateQueries({ queryKey: ["housekeeping", code, "minibar"] });
-  const d = q.data;
+  const d = q.data?.d;
+  const began = q.data?.began;
+  const take = useRef<Take | null>(null);
+  const [takeLost, setTakeLost] = useState<number | null>(null);
+  const takeUnknown = stillUnknown(takeLost, began);
+  /* A read begun after the failure has come back, the dialog closed: the person sees the record, so the key goes. */
+  useEffect(() => {
+    if (takeLost !== null && !takeUnknown && !taking) { take.current = null; setTakeLost(null); }
+  }, [takeLost, takeUnknown, taking]);
+  const openWhy = d ? (takeUnknown ? TAKE_UNKNOWN : whyNotOpenTake(d)) : null;
+  const openTake = () => {
+    if (!take.current) take.current = { keeper: formKeeper(newKey(), currentSubject), lostAt: null };
+    setTaking(true);
+  };
   const refused = !d && q.error ? refusalOf(q.error) : null;
 
   return (
@@ -76,7 +88,7 @@ export function Minibar({ hotel, room, onBack }: { hotel: Hotel; room?: string; 
         <Head title="Minibar" under="What each room's minibar holds, what was taken, and what waits for the desk." action={<Back onPress={onBack} />} />
         {d ? (
           <View style={{ gap: 12 }}>
-            <Act label="Record for a room" icon={GlassWater} variant="primary" reason={whyNotOpenTake(d)} onPress={() => setTaking(true)} />
+            <Act label="Record for a room" icon={GlassWater} variant="primary" reason={openWhy} onPress={openTake} />
             <ExportButtons table={{
               title: "Minibar", subtitle: `${hotel.name} · the last 14 days`, columns: RECORD_COLUMNS,
               rows: d.records.map((r) => recordRow(r, dateTime)),
@@ -91,7 +103,7 @@ export function Minibar({ hotel, room, onBack }: { hotel: Hotel; room?: string; 
               : <Loading words="Reading the minibar…" />
         ) : (
           <>
-            <Waiting code={code} d={d} epoch={epoch} onDone={(s) => { setSaid(s); refresh(); }} onUnknown={refresh} />
+            <Waiting code={code} d={d} began={began} onDone={(s) => { setSaid(s); refresh(); }} onUnknown={refresh} />
             <Recorded records={recordedOf(d)} />
             <TheList d={d} onAdd={() => setEditing("new")} onChange={setEditing} />
           </>
@@ -99,10 +111,12 @@ export function Minibar({ hotel, room, onBack }: { hotel: Hotel; room?: string; 
       </Screen>
       <Toast said={said} onClose={unsay} />
 
-      {taking && d ? (
-        <TakeDialog code={code} items={d.items} room={room}
-          onClose={() => { setTaking(false); refresh(); }}
-          onDone={(s) => { setTaking(false); setSaid(s); refresh(); }} />
+      {/* The deep link (?room=) asks the same as the button (the review's H5). */}
+      {taking && d && !openWhy ? (
+        <TakeDialog code={code} items={d.items} room={room} take={take.current ?? (take.current = { keeper: formKeeper(newKey(), currentSubject), lostAt: null })}
+          onLost={(at) => setTakeLost(at)}
+          onClose={() => { setTaking(false); if (take.current?.lostAt == null) take.current = null; refresh(); }}
+          onDone={(s) => { setTaking(false); take.current = null; setTakeLost(null); setSaid(s); refresh(); }} />
       ) : null}
       {editing && d ? (
         <ItemDialog code={code} d={d} item={editing === "new" ? null : editing}
@@ -120,8 +134,8 @@ function refusalOf(error: string): string | null {
 
 /* ── Waiting for the desk ───────────────────────────────────────── */
 
-function Waiting({ code, d, epoch, onDone, onUnknown }: {
-  code: string; d: MinibarData; epoch: number; onDone: (s: Said) => void; onUnknown: () => void;
+function Waiting({ code, d, began, onDone, onUnknown }: {
+  code: string; d: MinibarData; began: number | undefined; onDone: (s: Said) => void; onUnknown: () => void;
 }) {
   const waiting = waitingOf(d);
   return (
@@ -130,14 +144,14 @@ function Waiting({ code, d, epoch, onDone, onUnknown }: {
       {waiting.length === 0 ? (
         <Box><Empty compact title="Nothing waits for the desk" description="A take housekeeping is not sure of, or one found after the guest left, shows here." /></Box>
       ) : waiting.map((r) => (
-        <WaitingCard key={r.id} code={code} r={r} mayDecide={d.mayDecide} epoch={epoch} onDone={onDone} onUnknown={onUnknown} />
+        <WaitingCard key={r.id} code={code} r={r} mayDecide={d.mayDecide} began={began} onDone={onDone} onUnknown={onUnknown} />
       ))}
     </View>
   );
 }
 
-function WaitingCard({ code, r, mayDecide, epoch, onDone, onUnknown }: {
-  code: string; r: MinibarRecord; mayDecide: boolean; epoch: number; onDone: (s: Said) => void; onUnknown: () => void;
+function WaitingCard({ code, r, mayDecide, began, onDone, onUnknown }: {
+  code: string; r: MinibarRecord; mayDecide: boolean; began: number | undefined; onDone: (s: Said) => void; onUnknown: () => void;
 }) {
   const [declining, setDeclining] = useState(false);
   const [note, setNote] = useState("");
@@ -149,7 +163,7 @@ function WaitingCard({ code, r, mayDecide, epoch, onDone, onUnknown }: {
   const stuck = useStuck();
   const [stuckAt, setStuckAt] = useState<number | null>(null);
   const [unknownLine, setUnknownLine] = useState<string | null>(null);
-  const held = stuckAt !== null && epoch <= stuckAt;
+  const held = stillUnknown(stuckAt, began);
 
   async function decide(charge: boolean) {
     if (latch.current || held) return;
@@ -164,7 +178,7 @@ function WaitingCard({ code, r, mayDecide, epoch, onDone, onUnknown }: {
       if (stuck.stop(e)) {
         const k = notKnown(charge ? "charged" : "decided", "this room's take once the list is read again", e);
         setUnknownLine(k.line);
-        setStuckAt(epoch);
+        setStuckAt(Date.now());
         onUnknown();
       } else setSaid(saidOf(charge ? "Not charged to the bill" : "Not decided", e));
     } finally {
@@ -277,20 +291,18 @@ function TheList({ d, onAdd, onChange }: { d: MinibarData; onAdd: () => void; on
 
 /* ── What was taken from a room (MinibarFlow) ───────────────────── */
 
-function TakeDialog({ code, items, room: fixedRoom, onClose, onDone }: {
-  code: string; items: MinibarItem[]; room?: string; onClose: () => void; onDone: (s: Said) => void;
+function TakeDialog({ code, items, room: fixedRoom, take, onLost, onClose, onDone }: {
+  code: string; items: MinibarItem[]; room?: string; take: Take; onLost: (at: number) => void; onClose: () => void; onDone: (s: Said) => void;
 }) {
   const [room, setRoom] = useState(fixedRoom ?? "");
   const [count, setCount] = useState<Counts>({});
   const [disputed, setDisputed] = useState(false);
   const [said, setSaid] = useState<Said | null>(null);
   const [busy, setBusy] = useState(false);
+  /* After an unknown outcome the take is LOCKED as it was sent: the room, the counts and "not sure"
+     cannot change, and Try again sends the same take with the same key (the review's H2). */
+  const [locked, setLocked] = useState(false);
   const latch = useRef(false);
-  /* ONE TAKE, ONE KEY (D27-396): minted when the dialog opens and sent with
-     every tap, so a double tap or a try after a lost reply is answered with
-     the first record - never a second refill or charge. */
-  const keys = useRef<ReturnType<typeof formKeeper> | null>(null);
-  if (!keys.current) keys.current = formKeeper(newKey(), currentSubject);
 
   const shown = shownItems(items);
   const lines = takeLines(items, count);
@@ -303,16 +315,20 @@ function TakeDialog({ code, items, room: fixedRoom, onClose, onDone }: {
     setBusy(true);
     setSaid(null);
     try {
-      const res = await recordMinibar(code, takeBody(room, lines, disputed), keys.current!);
+      /* ONE TAKE, ONE KEY (D27-396): the screen's keeper for this take, sent with every tap. */
+      const res = await recordMinibar(code, takeBody(room, lines, disputed), take.keeper);
       /* Closed BEFORE the list is read again, so a second tap has nothing to press. */
-      onDone({ title: takenWords(room, res.data), tone: "ok" });
+      onDone({ title: takenWords(room, res.data, res.duplicate === true), tone: "ok" });
     } catch (e) {
       if (outcomeUnknown(e)) {
-        /* Nothing came back: the counts empty, the KEY STAYS (this dialog's), so a
-           new count sent from here is the same take if the first was made. */
+        /* Nothing came back: the take is locked and its key kept at the screen until a read
+           begun after this has shown the record. */
+        const at = Date.now();
+        take.lostAt = at;
+        onLost(at);
+        setLocked(true);
         const k = notKnown("recorded", "Waiting for the desk and Recorded", e);
-        setCount({});
-        setSaid({ title: k.title, body: k.body, tone: "held" });
+        setSaid({ title: k.title, body: `${k.body} Try again sends this same take: the server records it once.`, tone: "held" });
       } else setSaid(saidOf("Not recorded", e));
     } finally {
       latch.current = false;
@@ -321,11 +337,11 @@ function TakeDialog({ code, items, room: fixedRoom, onClose, onDone }: {
   }
 
   return (
-    <Dialog title={fixedRoom ? `Minibar · Room ${fixedRoom}` : "Minibar"}
+    <Dialog title={fixedRoom ? `Minibar · Room ${fixedRoom}` : "Minibar"} busy={busy}
       description="How many of each were taken. It goes on the guest's bill, and the refill comes out of the store." onClose={onClose}>
       {!fixedRoom ? (
         <Field label="Room" required>
-          <Input label="Room" value={room} onChangeText={setRoom} placeholder="204" autoCapitalize="characters" />
+          <Input label="Room" value={room} onChangeText={setRoom} placeholder="204" autoCapitalize="characters" editable={!locked && !busy} />
         </Field>
       ) : null}
       {shown.length === 0 ? (
@@ -343,19 +359,21 @@ function TakeDialog({ code, items, room: fixedRoom, onClose, onDone }: {
                     {i.alcohol ? <Pill>VAT</Pill> : null}
                   </View>
                 </View>
-                {countable(i) ? <Stepper n={count[i.id] ?? 0} name={i.name} onStep={(by) => { setCount((x) => step(x, i.id, by)); setSaid(null); }} /> : null}
+                {!countable(i) ? null : locked || busy ? (
+                  <Text style={[t.heading, t.tab, { minWidth: 44, textAlign: "center" }]}>{count[i.id] ?? 0}</Text>
+                ) : <Stepper n={count[i.id] ?? 0} name={i.name} onStep={(by) => { setCount((x) => step(x, i.id, by)); setSaid(null); }} />}
               </View>
             </View>
           ))}
         </View>
       )}
-      <Tick on={disputed} onChange={setDisputed} label="Not sure, or the guest says not theirs - the desk confirms it" />
+      <Tick on={disputed} onChange={(v) => { if (!locked && !busy) setDisputed(v); }} label="Not sure, or the guest says not theirs - the desk confirms it" />
       <Text style={[t.label, t.tab]}>{countedText(lines)}</Text>
       <InDialog said={said} />
       <Foot>
-        <Btn label="Cancel" grow tall onPress={onClose} />
+        <Btn label="Cancel" grow tall disabled={busy} onPress={onClose} />
         {/* Grey until counted, and says why when tapped (the board's MarkButton). */}
-        <Btn label={takeLabel(disputed)} variant="primary" grow tall busy={busy} style={why ? { opacity: 0.6 } : undefined} onPress={() => void save()} />
+        <Btn label={locked ? "Try again" : takeLabel(disputed)} variant="primary" grow tall busy={busy} style={why ? { opacity: 0.6 } : undefined} onPress={() => void save()} />
       </Foot>
     </Dialog>
   );
@@ -401,7 +419,7 @@ function ItemDialog({ code, d, item, onClose, onDone }: {
   }
 
   return (
-    <Dialog title={item ? item.name : "Add an item to the minibar"}
+    <Dialog title={item ? item.name : "Add an item to the minibar"} busy={busy}
       description="The price is what the guest pays before tax. Leave it empty until it is decided: it cannot be charged until then." onClose={onClose}>
       {!item ? (
         <Field label="Store item" required>
@@ -424,7 +442,7 @@ function ItemDialog({ code, d, item, onClose, onDone }: {
       ) : null}
       <InDialog said={said} />
       <Foot>
-        <Btn label="Cancel" grow tall onPress={onClose} />
+        <Btn label="Cancel" grow tall disabled={busy} onPress={onClose} />
         <Btn label={item ? "Save" : "Add to the minibar"} variant="primary" grow tall busy={busy} disabled={Boolean(why)} onPress={() => void save()} />
       </Foot>
       {why && !said ? <Text style={[t.caption, { color: c.grey600 }]}>{why}</Text> : null}
