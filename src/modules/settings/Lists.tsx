@@ -2,13 +2,14 @@ import { useQueryClient, type QueryClient } from "@tanstack/react-query";
 import { ArrowDown, ArrowUp, Plus, Trash2 } from "lucide-react-native";
 import { useState } from "react";
 import { Pressable, Switch, Text, View } from "react-native";
+import { DateField } from "../../core/DateField";
 import { useSession } from "../../core/session";
 import { c, space, t } from "../../core/theme";
 import { notKnown, ripple, s as core, shade, useRead } from "../../core/ui";
 import { Btn, Empty, Failed, Field, Loading, Segmented, Sheet, Stale, body, confirm, saidOf, useSaid, type Said } from "../admin/kit";
 import type { AdminProps } from "../admin/Route";
 import {
-  HOLIDAY_COLOUR, ID_TYPES, LIST_PAGES, STATES, UNKNOWN_LINE, emptyWords, pageName, isDay, mayAddHoliday, mayMove, nextOff,
+  HOLIDAY_COLOUR, ID_TYPES, LIST_PAGES, STATES, UNKNOWN_LINE, emptyWords, pageName, mayAddHoliday, mayMove, nextOff,
   shownRows, swapSorts, typedColour, type DeskRules, type ListItem, type ListPane, type ListSource,
 } from "./lists";
 import {
@@ -25,8 +26,9 @@ import { ColourField, IconBtn, Page, Swatch, Why, usePageWrite, whyNotChange } f
      ListEditor - search, add, move up or down, On/Off, rename (and a VIP
      level's colour), delete (the server refuses one in use: "switch it
      Off instead");
-   - Holidays: a day typed YYYY-MM-DD (M-7, no date picker), a name, a
-     colour; deleted one at a time;
+   - Holidays: a day picked with the phone's own date picker (DateField,
+     M-16; sent as the web's YYYY-MM-DD), a name, a colour; deleted one at
+     a time;
    - ID types: one switch each (saved as the desk's settings, idTypesOff);
    - Reservation types: each booking state's colour on the Calendar, and
      back to the built-in colours.
@@ -219,7 +221,6 @@ export function HolidaysScreen({ hotel, role }: AdminProps) {
   const after = () => { void cache.invalidateQueries({ queryKey }); void session.refresh(); };
   const unknown = (e: unknown) => { say({ ...notKnown("saved", "the holidays", e), tone: "bad" }); after(); };
   const typed = typedColour(colour);
-  const badDay = day.trim() !== "" && !isDay(day.trim());
   const add = () => {
     if (off || !mayAddHoliday(day, name) || !typed) return;
     void w.run(key, () => addHoliday(code, { day: day.trim(), name: name.trim(), colour: typed }), {
@@ -232,8 +233,7 @@ export function HolidaysScreen({ hotel, role }: AdminProps) {
       explain="Days the Calendar and Rates shade like a weekend, with the holiday's name on the Calendar. No price reads them."
       refreshing={pulled && read.loading} onRefresh={() => { setPulled(true); read.reload(); }} said={said} onSaidClose={close}>
       <View style={[core.card, { gap: 12 }]}>
-        <Field label="Day" value={day} onChangeText={setDay} editable={!off} keyboardType="numbers-and-punctuation" placeholder="2026-11-08"
-          maxLength={10} input={{ autoCapitalize: "none", autoCorrect: false }} hint="Typed as YYYY-MM-DD." error={badDay ? "A date is written YYYY-MM-DD." : undefined} />
+        <DateField label="Day" value={day} onChange={setDay} hotel={hotel} disabled={off} />
         <Field label="Name" value={name} onChangeText={setName} editable={!off} placeholder="Diwali" />
         <ColourField label="Colour" value={colour} onChangeText={setColour} editable={!off} />
         <Btn label={w.busy ? "Adding…" : "Add"} variant="primary" disabled={off || !mayAddHoliday(day, name) || !typed} onPress={add} />

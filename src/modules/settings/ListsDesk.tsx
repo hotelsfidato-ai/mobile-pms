@@ -1,6 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useState, type ReactNode } from "react";
 import { Pressable, Text, View } from "react-native";
+import { TimeField } from "../../core/DateField";
 import { useSession } from "../../core/session";
 import { c, face, t } from "../../core/theme";
 import { notKnown, ripple, s as core, shade, useRead } from "../../core/ui";
@@ -303,7 +304,6 @@ function HoursSheet({ current, auditRefused, busy, off, onClose, onSave }: {
   const [cout, setCout] = useState(current.checkOutTime);
   const [audit, setAudit] = useState(current.nightAuditOpensAt);
   const [said, setSaid] = useState<Said | null>(null);
-  const time = { keyboardType: "numbers-and-punctuation" as const, maxLength: 5, placeholder: "HH:MM", input: { autoCorrect: false, autoComplete: "off" as const } };
   const submit = () => {
     setSaid(null);
     const wrong = hoursProblem(cin.trim(), cout.trim(), audit.trim());
@@ -316,11 +316,12 @@ function HoursSheet({ current, auditRefused, busy, off, onClose, onSave }: {
         <Btn label="Cancel" onPress={onClose} disabled={busy} grow />
         <Btn label={busy ? "Saving…" : "Save"} variant="primary" disabled={off || busy} grow onPress={submit} />
       </>}>
-      <Field label="Rooms ready from" required value={cin} onChangeText={setCin} editable={!busy} hint="A 24-hour time, like 13:00." {...time} />
-      <Field label="Check-out by" required value={cout} onChangeText={setCout} editable={!busy} {...time} />
+      {/* FrontDeskCard.tsx's three <input type="time">: each phone's own clock (TimeField, M-16), sent as "HH:MM". */}
+      <TimeField label="Rooms ready from" required value={cin} onChange={setCin} disabled={busy} />
+      <TimeField label="Check-out by" required value={cout} onChange={setCout} disabled={busy} />
       {/* D27-338: the owner's and an administrator's; anybody else sees it, and the route's words. */}
-      <Field label="Night audit opens at" required value={audit} onChangeText={setAudit} editable={!busy && auditRefused === null}
-        hint={auditRefused ?? "Before this time, today's night audit cannot be run. A day already behind can always be closed. The owner or an administrator may change it."} {...time} />
+      <TimeField label="Night audit opens at" required value={audit} onChange={setAudit} disabled={busy || auditRefused !== null}
+        hint={auditRefused ?? "Before this time, today's night audit cannot be run. A day already behind can always be closed. The owner or an administrator may change it."} />
       <Text style={[body, { color: c.grey600 }]}>The early arrival and late departure fees are set on Settings › Money › Extra charges.</Text>
       <Text style={[body, { color: c.grey500 }]}>
         A guest arriving before the first time, or leaving after the second, needs a reason and somebody to allow it. The charge reaches their folio unless it is waived, and the reason is kept either way.
