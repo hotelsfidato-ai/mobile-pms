@@ -256,6 +256,13 @@ const shift = (day: string, n: number) => {
 /** The server keeps the first day a rate does NOT apply; the card says the last day it does. */
 export const dayBefore = (day: string) => shift(day, -1);
 
+/** The day after: the first day a band with this Last day does NOT apply (TaxRulesCard 211 dayAfter). */
+export const dayAfter = (day: string) => shift(day, 1);
+/** A band's Last day as its picker shows it (TaxRulesCard 244: the day before the server's validTo); "" is none (current). */
+export const lastDayOf = (validTo: string | null) => (validTo ? dayBefore(validTo) : "");
+/** The Last day picked, kept as the server keeps it (TaxRulesCard 211): the day after; blank is none. */
+export const validToOf = (lastDay: string) => (lastDay ? dayAfter(lastDay) : null);
+
 /** A band's date as the sheet shows it: the first day, or (`last`) the last day it applies; null for none. */
 export const dateShortOrNull = (day: string | null, last = false) => (day ? dateShort(last ? dayBefore(day) : day) : null);
 
@@ -283,8 +290,9 @@ export const categoryChoices = (servesAlcohol: boolean, current: TaxKind | null)
   { value: "other", label: "Everything else" },
 ];
 
-/** One band being edited. The dates are kept exactly as the server sent them (the phone has no date
-    picker: they are shown, not changed - BRIEF-T4), so a save never moves a period. */
+/** One band being edited. The dates are the server's own (validTo the first day a band does NOT apply);
+    the sheet picks "From" and "Last day" with the phone's picker (M-16) and keeps a Last day as the day
+    after it (`validToOf`), as the web does, so an untouched band is sent back exactly as read. */
 export interface SlabDraft { overAmount: string; rate: string; note: string; validFrom: string | null; validTo: string | null }
 export const draftsOf = (r: TaxKindRules): SlabDraft[] =>
   r.slabs.length > 0

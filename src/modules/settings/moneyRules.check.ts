@@ -4,7 +4,7 @@
    the doubt outlives the screen, and the plans' tree as the web draws it. */
 import {
   COMMISSION, GST, MONEY_READ, MONEY_SETTING, PRICE, SETUP_CHANGE, categoryChoices, chargeBody, chargeLine, chargePrice,
-  commissionSaved, contractLine, dateShortOrNull, dayBefore, freshBook, discountBody, discountOff, discountProblem, discountReady, draftsOf, feesBody,
+  commissionSaved, contractLine, dateShortOrNull, dayAfter, dayBefore, lastDayOf, validToOf, freshBook, discountBody, discountOff, discountProblem, discountReady, draftsOf, feesBody,
   feesChanged, flipDay, kindsFor, matches, planAsk, mealDaysInWords, moved, offsetWords, orphanLine, orphaned, planRows,
   planSteps, refusalFor, sacProblem, sacShown, slabWords, slabsBody, taxSaved, typedSigned, whyNot,
   type Discount, type ExtraCharge, type PlanSetting, type TaxKindRules, type TaxSetup,
@@ -91,6 +91,10 @@ eq(slabWords(ROOM.slabs[0]!, ROOM), { where: "up to the next band", when: null }
 eq(slabWords(ROOM.slabs[1]!, ROOM), { where: "above ₹7,500.50", when: "from 1 Apr 2026 until 31 Mar 2027" }, "paise kept; the last day it applies");
 eq(slabWords(ROOM.slabs[0]!, { ...ROOM, slabs: [ROOM.slabs[0]!] }), { where: "on everything", when: null }, "a lone base band");
 eq(dayBefore("2026-03-01"), "2026-02-28", "the day before, across a month");
+eq([dayAfter("2026-12-31"), dayAfter("2028-02-28")], ["2027-01-01", "2028-02-29"], "the day after, across a year and into a leap day");
+eq([lastDayOf("2027-04-01"), lastDayOf(null)], ["2027-03-31", ""], "a band's Last day shown: the day before the server's validTo; none is blank");
+eq([validToOf("2027-03-31"), validToOf("")], ["2027-04-01", null], "a Last day picked is kept as the day after (TaxRulesCard 211); blank is none");
+eq(validToOf(lastDayOf("2027-04-01")), "2027-04-01", "a band left alone goes back as read");
 eq([dateShortOrNull(null), dateShortOrNull("2026-04-01"), dateShortOrNull("2027-04-01", true)], [null, "1 Apr 2026", "31 Mar 2027"], "a band's dates shown");
 eq(sacShown(ROOM), "996311", "rooms keep 996311 when unsaid");
 eq(sacShown({ kind: "bar", sac: null }), "-", "the others a dash");

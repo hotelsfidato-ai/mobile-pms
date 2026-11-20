@@ -1,6 +1,7 @@
 import { Printer } from "lucide-react-native";
 import { useState } from "react";
 import { Text, View } from "react-native";
+import { DownloadButton } from "../../core/Download";
 import { ON_THE_WEBSITE } from "../../core/menu";
 import { c } from "../../core/theme";
 import { s as core } from "../../core/ui";
@@ -16,13 +17,15 @@ import { DOCS, docWhen, type Doc } from "./propertyRules";
    rules for the tax invoice: GET /api/hotels' deskRules) and where that is
    set. Nothing here is saved or sent.
 
-   "Print a sample" is greyed "On the website for now": the samples are the
-   website's own drawings of each document (the tax invoice, the proforma
-   bill, the registration card, the restaurant bill) with this hotel's
-   header and a made-up guest; the voucher is the server's PDF (GET /:code/
-   documents/sample-voucher.pdf, `setting` view), which the phone's core
-   cannot fetch yet (api() reads JSON only - a core change, asked in the
-   report). So the phone shows no sample. Not pictured.
+   The VOUCHER's sample is the server's PDF (GET /:code/documents/sample-
+   voucher.pdf, `setting` view; the web opens it to print): on the phone it
+   is downloaded with the sign-in and handed to the share sheet (the core's
+   downloadToShare, M-16) - print it, or save it, from there. Offline, the
+   web's download sentence; a refusal, the server's. The other four samples
+   are the website's own drawings (the tax invoice, the proforma bill, the
+   registration card, the restaurant bill) with this hotel's header and a
+   made-up guest: "Print a sample" stays greyed "On the website for now"
+   on those tabs. Not pictured.
    ══════════════════════════════════════════════════════════════════ */
 
 type Rules = { invoiceAtCheckout?: string; invoiceCopies?: number };
@@ -40,13 +43,21 @@ export function PropDocuments({ hotel, role }: AdminProps) {
       <Tabs label="Documents" value={doc} onChange={setDoc} options={DOCS} />
       <View style={[core.card, { gap: 12 }]}>
         <CardHead title={DOCS.find(([k]) => k === doc)![1]} line={when} />
-        <View style={{ gap: 4 }}>
-          <View style={{ alignSelf: "flex-start" }}>
-            <Btn variant="primary" label="Print a sample" a11y={`Print a sample: ${ON_THE_WEBSITE}`} disabled onPress={() => undefined}
-              icon={<Printer size={16} color={c.grey500} />} />
+        {doc === "voucher" ? (
+          <View style={{ gap: 4 }}>
+            <DownloadButton label="Print a sample" a11y="Print a sample voucher" path={`/api/hotels/${encodeURIComponent(code)}/documents/sample-voucher.pdf`}
+              fileName={`Sample voucher ${code}.pdf`} mimeType="application/pdf" />
+            <Text style={[body, { color: c.grey600 }]}>The sample opens in the share sheet: print it from there, or save it as a PDF.</Text>
           </View>
-          <Text style={[body, { color: c.grey600 }]}>{`${ON_THE_WEBSITE}: the sample is drawn by the website, with this hotel's header. Pick the printer to test it there, or Save as PDF.`}</Text>
-        </View>
+        ) : (
+          <View style={{ gap: 4 }}>
+            <View style={{ alignSelf: "flex-start" }}>
+              <Btn variant="primary" label="Print a sample" a11y={`Print a sample: ${ON_THE_WEBSITE}`} disabled onPress={() => undefined}
+                icon={<Printer size={16} color={c.grey500} />} />
+            </View>
+            <Text style={[body, { color: c.grey600 }]}>{`${ON_THE_WEBSITE}: the sample is drawn by the website, with this hotel's header. Pick the printer to test it there, or Save as PDF.`}</Text>
+          </View>
+        )}
         {where ? (
           <View style={{ borderTopWidth: 1, borderColor: c.grey100, paddingTop: 4 }}>
             <GoTo to={where.to} code={code} label={`Change it on ${where.label}`} inline />

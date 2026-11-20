@@ -5,6 +5,7 @@ import { Pressable, Text, View } from "react-native";
 import { ON_THE_WEBSITE, mayReach, phoneRoute, type Role } from "../../core/menu";
 import { c, face, space, t } from "../../core/theme";
 import { msAt } from "../../core/format";
+import { DateField } from "../../core/DateField";
 import { s as core, ripple, shade } from "../../core/ui";
 import { Btn, Pill, Toast, body, useSaid } from "../admin/kit";
 import type { AdminProps } from "../admin/Route";
@@ -35,9 +36,10 @@ import {
    The open step is the address's ?step= (the bell's reminder, carried
    through phoneRoute), else the first still to do, fixed once.
 
-   Differences: the reminder's own date is a date picker
-   (@react-native-community/datetimepicker 9.1.0, not installed): greyed;
-   Tomorrow, In 3 days and In a week are here. The web's "Back to setup"
+   The reminder's own date is the phone's own date picker (DateField, M-16),
+   from the day after the hotel's today (the web's `earliest`), sent as the
+   web sends it: { choice: "remind", remindOn }; Tomorrow, In 3 days and In
+   a week as the web. The web's "Back to setup"
    bar on the opened screen (?setup=) is not on the phone: Back returns
    here. Step 14's logo and photos are files: said on the step.
    ══════════════════════════════════════════════════════════════════ */
@@ -184,6 +186,10 @@ function Choices({ step, state, today, w, onChoose, onNext }: {
   onChoose: (id: StepId, c: StepChoice, after?: () => void) => Promise<void>; onNext: () => void;
 }) {
   const [reminding, setReminding] = useState(false);
+  /* RemindMe: the chosen day, from the day after the hotel's today. */
+  const [date, setDate] = useState("");
+  const earliest = addDays(today, 1);
+  const tooSoon = date !== "" && date < earliest;
   const done = state.state === "done";
   return (
     <View style={{ gap: 8 }} accessibilityLabel={`Choices for ${step.title}`}>
@@ -206,8 +212,12 @@ function Choices({ step, state, today, w, onChoose, onNext }: {
                 onPress={() => void onChoose(step.id, { choice: "remind", remindOn: addDays(today, days) }, () => setReminding(false))} />
             ))}
           </View>
-          <View style={{ alignSelf: "flex-start" }}><Btn label="Remind me on this date" a11y={`Remind me on this date: ${ON_THE_WEBSITE}`} disabled onPress={() => undefined} /></View>
-          <Text style={[t.caption, { lineHeight: 17 }]}>{`Choosing a date: ${ON_THE_WEBSITE.toLowerCase()} (a date picker, @react-native-community/datetimepicker 9.1.0, is not installed).`}</Text>
+          <DateField label="Remind me on this date" value={date} onChange={setDate} hotel={{ today, businessDate: today }} min={earliest}
+            disabled={w.off} error={tooSoon ? "Pick a day after today." : undefined} />
+          <View style={{ alignSelf: "flex-start" }}>
+            <Btn label="Remind me on this date" disabled={w.off || !date || tooSoon}
+              onPress={() => void onChoose(step.id, { choice: "remind", remindOn: date }, () => { setReminding(false); setDate(""); })} />
+          </View>
         </View>
       ) : null}
     </View>

@@ -4,7 +4,8 @@ import { useState, type ReactNode } from "react";
 import { Pressable, Text, View } from "react-native";
 import { c, face, space, t } from "../../core/theme";
 import { Head, Screen, confirmAct, ripple, Stopped, useRead } from "../../core/ui";
-import { ON_THE_WEBSITE } from "../../core/menu";
+import type { Hotel } from "../../core/api";
+import { DateField } from "../../core/DateField";
 import { Refused as NotYours } from "../admin/kit";
 import type { AdminProps } from "../admin/Route";
 import { Btn, Failed, Field, Loading, Pill, Select, Sheet, TextBox } from "../inventory/configKit";
@@ -12,7 +13,7 @@ import { InDialog, Stale, Toast, body, type Said } from "../inventory/kit";
 import { readTaxSetup, setCategoryTaxKind, setTaxRules, setTaxSac } from "./moneyData";
 import { Grey, refusedPage, useWriter, type Writer } from "./moneyKit";
 import {
-  DASH, GST, NO_RATES, TAX_LABEL, TAX_WHAT, categoryChoices, dateShortOrNull, draftsOf, firstRate, newBand, orphanLine, orphaned, sacProblem,
+  DASH, GST, NO_RATES, TAX_LABEL, TAX_WHAT, categoryChoices, draftsOf, lastDayOf, validToOf, firstRate, newBand, orphanLine, orphaned, sacProblem,
   sacShown, sacValue, slabWords, slabsBody, taxName, taxSaved, typedFigure, whyNot,
   type SlabDraft, type TaxKind, type TaxKindRules, type TaxSetup,
 } from "./moneyRules";
@@ -39,9 +40,11 @@ import {
    STRICTER THAN THE WEB, ON PURPOSE (BRIEF-T4): the web drops a band whose
    rate is blank - and so can clear a whole heading unasked - and sends a
    blank amount as 0. Here a blank is never sent (the row is finished or
-   removed), and clearing a heading asks first. A band's dates are shown,
-   not changed: the phone has no date picker (On the website for now); a
-   save sends them back exactly as read, so no period moves.
+   removed), and clearing a heading asks first. A band's From and Last day
+   are each phone's own date picker (M-16), clearable as the web's empty
+   boxes ("always", "current"); the Last day shown is the day before the
+   server's validTo and is kept as the day after it (TaxRulesCard 211), so
+   a band left alone goes back exactly as read.
    ══════════════════════════════════════════════════════════════════ */
 
 export function Taxes({ hotel, role }: AdminProps) {
@@ -81,7 +84,7 @@ export function Taxes({ hotel, role }: AdminProps) {
         {main}
       </Screen>
       {current ? (
-        <SlabsSheet code={code} rules={current} w={w}
+        <SlabsSheet code={code} hotel={hotel} rules={current} w={w}
           onClose={() => { if (!w.busy) { setEditing(null); refresh(); } }}
           onDone={(s) => { setEditing(null); setSaid(s); refresh(); }} />
       ) : null}
@@ -162,7 +165,7 @@ function Tile({ rules, locked, onEdit }: { rules: TaxKindRules; locked: boolean;
 
 /* ── The bands of one heading, edited together (SlabsDialog) ─────── */
 
-function SlabsSheet({ code, rules, w, onClose, onDone }: { code: string; rules: TaxKindRules; w: Writer; onClose: () => void; onDone: (s: Said) => void }) {
+function SlabsSheet({ code, hotel, rules, w, onClose, onDone }: { code: string; hotel: Hotel; rules: TaxKindRules; w: Writer; onClose: () => void; onDone: (s: Said) => void }) {
   const single = rules.kind === "alcohol";
   const name = taxName(rules.kind);
   const [rows, setRows] = useState<SlabDraft[]>(() => draftsOf(rules));
@@ -230,16 +233,15 @@ function SlabsSheet({ code, rules, w, onClose, onDone }: { code: string; rules: 
               <X size={18} color={c.grey500} />
             </Pressable>
           </View>
-          <View style={{ flexDirection: "row", gap: 8 }}>
-            <View style={{ flex: 1 }}><Shown label="From" value={dateShortOrNull(r.validFrom) ?? "Always"} /></View>
-            <View style={{ flex: 1 }}><Shown label="Last day" value={dateShortOrNull(r.validTo, true) ?? "Current"} /></View>
-          </View>
+          <DateField label="From" hint="Empty: always." clearable hotel={hotel} value={r.validFrom ?? ""} disabled={w.busy}
+            onChange={(d) => set(i, { validFrom: d || null })} />
+          <DateField label="Last day" hint="Empty: current." clearable hotel={hotel} value={lastDayOf(r.validTo)} disabled={w.busy}
+            onChange={(d) => set(i, { validTo: validToOf(d) })} />
           <Field label="Note" hint={single ? "Who confirmed it, and when. It shows on this card." : "Why this band exists. It shows on this card."}>
             <TextBox label="Note" value={r.note} placeholder={single ? "-" : "Rooms above 7,500 a night"} onChangeText={(x) => set(i, { note: x })} />
           </Field>
         </View>
       ))}
-      {rows.length > 0 ? <Text style={t.caption}>{`Changing a band's dates: ${ON_THE_WEBSITE.toLowerCase()} - the phone has no date picker yet. A save keeps them as they are.`}</Text> : null}
       {!single ? <Btn label="Add a band" icon={Plus} onPress={() => setRows((r) => [...r, newBand()])} /> : null}
       {single && rows.length === 0 ? <Btn label="Add the rate" icon={Plus} onPress={() => setRows([firstRate()])} /> : null}
       <Field label="HSN/SAC code" error={sacProblem(sac)}
@@ -254,18 +256,5 @@ function SlabsSheet({ code, rules, w, onClose, onDone }: { code: string; rules: 
         </View>
       ) : null}
     </Sheet>
-  );
-}
-
-/** A value the phone shows but does not change: grey, as a disabled field. */
-function Shown({ label, value }: { label: string; value: string }) {
-  return (
-    <View style={{ gap: 6 }}>
-      <Text style={[t.label, { color: c.grey700 }]}>{label}</Text>
-      <View style={{ minHeight: 44, justifyContent: "center", paddingHorizontal: 12, borderRadius: 10, borderWidth: 1, borderColor: c.grey200, backgroundColor: c.grey100 }}
-        accessibilityLabel={`${label}: ${value}. ${ON_THE_WEBSITE}`}>
-        <Text style={[t.label, t.tab, { fontSize: 16, color: c.grey500 }]}>{value}</Text>
-      </View>
-    </View>
   );
 }
