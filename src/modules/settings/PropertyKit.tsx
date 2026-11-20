@@ -6,6 +6,9 @@ import { ON_THE_WEBSITE, can, mayReach, phoneRoute, type Role } from "../../core
 import { c, face, space, t } from "../../core/theme";
 import { outcomeUnknown } from "../../core/api";
 import { Head, Screen, Stopped, notKnown, ripple, shade, useRead, useScreenStop } from "../../core/ui";
+import type { FileRule, Picked } from "../../core/files";
+import { explainPick } from "../../core/pickers";
+import { base64For } from "../../core/upload";
 import { Btn, Failed, Loading, Refused, Stale, body, saidOf, type Said } from "../admin/kit";
 import { notYourRole, refusalFor } from "../admin/roles";
 import { TEXT_MOST, type TextKind } from "./propertyRules";
@@ -108,14 +111,30 @@ export function CardHead({ title, line, info, action }: { title: string; line?: 
   );
 }
 
-/** A control that needs a file the phone cannot choose yet: greyed, with the package it waits for. */
-export function NeedsFile({ label, pkg }: { label: string; pkg: string }) {
-  return (
-    <View style={{ gap: 4 }}>
-      <View style={{ alignSelf: "flex-start" }}><Btn label={label} a11y={`${label}: ${ON_THE_WEBSITE}`} disabled onPress={() => undefined} /></View>
-      <Text style={[t.caption, { lineHeight: 17 }]}>{`${ON_THE_WEBSITE}: choosing a file on the phone needs ${pkg}, not installed.`}</Text>
-    </View>
-  );
+/** A file or a photo chosen with the phone's own picker (M-16; core pickers.ts), checked against the web's or
+    the server's own limits BEFORE anything is sent (files.ts), and read as base64 for a JSON route's `data`
+    (the web's FileReader). Null: cancelled, or refused - said here (`refused(name)` is the toast's title;
+    a camera refused by the phone says so in its own dialog, with Settings). One picker at a time (`open`). */
+export function usePickData(say: (s: Said) => void) {
+  const open = useRef(false);
+  const [picking, setPicking] = useState(false);
+  const pick = async (choose: () => Promise<Picked | null>, rule: FileRule, refused: (name: string) => string) => {
+    if (open.current) return null;
+    open.current = true;
+    setPicking(true);
+    try {
+      let picked: Picked | null;
+      try { picked = await choose(); } catch (e) { if (!explainPick(e)) say(saidOf(e, "Nothing chosen")); return null; }
+      if (!picked) return null;
+      const read = await base64For(picked, rule);
+      if (!read.ok) { say({ title: refused(picked.name), body: read.reason, tone: "bad" }); return null; }
+      return { picked, data: read.data };
+    } finally {
+      open.current = false;
+      setPicking(false);
+    }
+  };
+  return { picking, pick };
 }
 
 /** A link to another page: the phone's screen where it has one, else greyed and said. */

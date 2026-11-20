@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { Text, View } from "react-native";
 import { c, t } from "../../core/theme";
+import { LOGO } from "../../core/files";
+import { pickFile } from "../../core/pickers";
 import { Contact, s as core, confirmAct, keys } from "../../core/ui";
 import { Btn, Field, Sheet, Toast, useSaid } from "../admin/kit";
 import type { AdminProps } from "../admin/Route";
-import { CardHead, PageFrame, Read, StuckLine, Value, mayEditHere, readOnlyLine, refusedPage, usePage, useWrites, type Writes } from "./PropertyKit";
+import { CardHead, PageFrame, Read, StuckLine, Value, mayEditHere, readOnlyLine, refusedPage, usePage, usePickData, useWrites, type Writes } from "./PropertyKit";
 import { LogoRow } from "./PropPhotos";
-import { readGroup, removeGroupLogo, setGroupName, setGroupOffice } from "./propertyData";
+import { readGroup, removeGroupLogo, setGroupLogo, setGroupName, setGroupOffice } from "./propertyData";
 import { OFFICE, OFFICE_SHOWN, groupNameSaid, type GroupOffice } from "./propertyRules";
 
 /* ══════════════════════════════════════════════════════════════════
@@ -18,9 +20,10 @@ import { OFFICE, OFFICE_SHOWN, groupNameSaid, type GroupOffice } from "./propert
 
    Changed by the owner, an administrator or the GM (`room_config` edit:
    PUT /:code/group/name, DELETE /:code/group/logo, PUT /:code/group/
-   office). The logo's Upload / Replace is a file the phone cannot choose
-   yet (expo-document-picker ~57.0.3): greyed "On the website for now".
-   Remove asks first (the web removes at one tap). GET /:code/group. Not
+   office, PUT /:code/group/logo { data }). The logo's Upload / Replace is
+   the phone's own file picker (M-16): a PNG or an SVG, 200 KB at most
+   (files.ts LOGO, the server's sentence), sent as picked, base64; a repeat
+   puts the same logo again. Remove asks first (the web removes at one tap). GET /:code/group. Not
    pictured. The phone and email open the dialler and mail.
    ══════════════════════════════════════════════════════════════════ */
 
@@ -33,6 +36,17 @@ export function PropGroup({ hotel, role }: AdminProps) {
   const [pulled, setPulled] = useState(false);
   const [typed, setTyped] = useState<string | null>(null);
   const mayEdit = mayEditHere(role);
+  const files = usePickData(say);
+  /* Upload / Replace (GroupCard.tsx upload): the file as picked; the server says what it is. */
+  const uploadLogo = async () => {
+    if (w.off || files.picking) return;
+    const got = await files.pick(() => pickFile({ types: LOGO.types }), LOGO, () => "Not saved");
+    if (!got) return;
+    await w.write(() => setGroupLogo(code, got.data), {
+      ok: () => ({ title: "Logo saved", body: "It prints on every bill at every hotel that has no logo of its own.", tone: "ok" }),
+      done: "saved", where: "the group's logo",
+    });
+  };
   return (
     <View style={{ flex: 1 }}>
       <PageFrame title="Group" under={hotel.name}
@@ -68,7 +82,7 @@ export function PropGroup({ hotel, role }: AdminProps) {
                       </View>
                     </View>
                   )}
-                  <LogoRow logo={g.logo} alt="The group's logo" mayEdit={mayEdit} off={w.off} onRemove={removeLogo} />
+                  <LogoRow logo={g.logo} alt="The group's logo" mayEdit={mayEdit} off={w.off || files.picking} onUpload={() => void uploadLogo()} onRemove={removeLogo} />
                   <Office code={code} office={g.office} mayEdit={mayEdit} w={w} />
                 </View>
                 {!mayEdit ? <Text style={t.caption}>{readOnlyLine("Changing the group's name")}</Text> : null}

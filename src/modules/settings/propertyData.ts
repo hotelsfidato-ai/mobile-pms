@@ -114,13 +114,21 @@ export const removeAmenity = (code: string, id: string) => send<Done>("DELETE", 
 
 /* ── Logos, the group, the gallery ─────────────────────────────────── */
 
+/** PUT /:code/logo { data } (admin/data/groupSettings.ts setHotelLogo): the file's bytes, base64, as picked; the
+    server reads what it is. A repeat puts the same logo again (it replaces). */
+export const setHotelLogo = (code: string, data: string) => send<{ ok: true; type: string }>("PUT", `${H(code)}/logo`, { data }, keysOf(`${code} photos`));
 export const removeHotelLogo = (code: string) => send<Done>("DELETE", `${H(code)}/logo`, undefined, keysOf(`${code} photos`));
 export const setGroupName = (code: string, name: string) =>
   send<{ ok: true; name: string | null }>("PUT", `${H(code)}/group/name`, { name }, keysOf(`${code} group`));
+/** PUT /:code/group/logo { data } (setGroupLogo): as the hotel's. */
+export const setGroupLogo = (code: string, data: string) => send<{ ok: true; type: string }>("PUT", `${H(code)}/group/logo`, { data }, keysOf(`${code} group`));
 export const removeGroupLogo = (code: string) => send<Done>("DELETE", `${H(code)}/group/logo`, undefined, keysOf(`${code} group`));
 export const setGroupOffice = (code: string, office: Record<keyof GroupOffice, string>) =>
   send<Done>("PUT", `${H(code)}/group/office`, office, keysOf(`${code} group`));
 const G = (code: string) => keysOf(`${code} photos`);
+/** POST /:code/gallery { data } (admin/data/gallery.ts addPhoto): a JPEG's bytes, base64. The route reads no
+    key and a repeat ADDS A SECOND PHOTO, so an unknown outcome stops the page until it is read again. */
+export const addPhoto = (code: string, data: string) => send<{ ok: true; id: string }>("POST", `${H(code)}/gallery`, { data }, G(code));
 export const captionPhoto = (code: string, id: string, caption: string) => send<Done>("PATCH", `${H(code)}/gallery/${enc(id)}`, { caption }, G(code));
 export const orderPhotos = (code: string, ids: string[]) => send<Done>("PUT", `${H(code)}/gallery/order`, { ids }, G(code));
 export const removePhoto = (code: string, id: string) => send<Done>("DELETE", `${H(code)}/gallery/${enc(id)}`, undefined, G(code));
