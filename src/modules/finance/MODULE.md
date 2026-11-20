@@ -125,3 +125,109 @@ Compared by reading the code against the pictures and their words, **never seen 
 
 0 of 1 screens matched to a picture: the one screen has none. Asked of the mobile chat: a capture of
 the stay panel's Bill tab, Settle and the check-out sheet (in house, due out, split, checked out).
+
+---
+
+# Lane B, m13-fin-bills (19-20 Nov): Folios, Invoices, Payments, an invoice's page
+
+**Web twin:** `src/modules/finance/pages/Folios.tsx`, `Billing.tsx` (PaymentsPage), `Invoices.tsx`,
+`Invoice.tsx`, `VatBill.tsx`, `flows/CreditNoteFlow.tsx`, `flows/IssueInvoiceDialog.tsx`; data
+`data/folios.ts`, `data/billing.ts`; the API `api/src/modules/finance/folios.ts` (GET /folios),
+`billing.ts` (GET /payments, /billable), `invoices.ts` (GET /invoices, /invoices/:number,
+/invoice-series, /vat-bills, /vat-bills/:number; POST /stays/:id/invoice, /invoices/:number/credit-note,
+/vat-bills/:number/cancel), `front-desk/stays.ts` (GET /stays?owing=1). **Gates** (`roleGate.ts`):
+every read here is BILLS (`invoice` view: owner, admin, GM, hotel manager, reception, accountant,
+viewer) except GET /payments, MONEY (`payment` view, the same seven); Issue is TAX_INVOICE (`invoice`
+create: the six without the viewer); a credit note CREDIT_NOTE and a VAT bill's cancellation VAT_CANCEL
+(`invoice` approve: owner, admin, GM, accountant). **Offline** (`core/offline.ts`): Issue and a credit
+note refused, "An invoice cannot be raised offline…"; a VAT bill's cancellation refused, unlisted,
+"This cannot be done offline yet…". Nothing is held.
+
+## Screens
+
+| Screen | Route → file | Web twin |
+|---|---|---|
+| Folios | `app/finance/[code]/folios.tsx` → `Folios.tsx` | `/h/:code/folios` |
+| Invoices | `app/finance/[code]/invoices.tsx` → `Invoices.tsx` | `/h/:code/invoices` |
+| Payments | `app/finance/[code]/payments.tsx` → `Payments.tsx` | `/h/:code/payments` |
+| A tax invoice or credit note | `app/finance/[code]/invoice.tsx?number=…` → `InvoiceDoc.tsx` | `/h/:code/invoices/doc/*` |
+| A VAT bill | `app/finance/[code]/vat-bill.tsx?number=…` → `InvoiceDoc.tsx` | `/h/:code/invoices/vat/*` |
+
+A document's number carries slashes (5EL/2026-27/00001): it rides as `?number=`, because the gate's
+route check reads only lower-case `[segments]` and a catch-all would never match (MEMORY 10). A folio
+row opens the stay's own bill, `/folio/<code>/<stay id>` (Folio.tsx, unchanged). Menu: PHONE_ROUTES
+`/h/:code/folios|invoices|payments` → `/finance/:code/…`.
+
+Files (new): `books.ts` + `books.check.ts` (the rules, the API's sentences, the write paths),
+`booksData.ts` (reads and writes), `BooksKit.tsx` (Act, BookSheet with safe areas, More, Note),
+`Folios.tsx`, `Payments.tsx`, `Invoices.tsx`, `InvoiceDoc.tsx`. Imported, never edited: finance's
+`bill.ts` (`rupees`), `data.ts` (`issueInvoice`, the stay's key keeper), `Kit.tsx`, `roles.ts`; the
+front desk's `desk.ts`, `kit.tsx`, `StayList.tsx` (`NotRead`, `Kept`); guests' `Tile`, `Line`;
+reports' `IconChip`; guest-services' `dateTime`; the core's `ExportButtons`.
+
+## Money: where each rule is enforced
+
+| Rule | Where |
+|---|---|
+| Every figure the server's, to the paisa | `bill.ts` `rupees` everywhere; `books.ts` `balanceShown` (checked at ₹7,582.50, ₹0.20, an overpaid ₹784 that is never ₹0, a real ₹0.00, a dash for not sent) |
+| The phone sums no money | `books.ts` `openCounts`, `methodCounts` COUNT rows (checked: no amount field is made); no total anywhere |
+| Never clamped | `balanceShown` (`Math.abs` with "over" and the colour, as StayTable; the clamp broken once and seen to fail) |
+| Who may, in the API's words, disabled with its reason | `books.ts` `whyNotReadBills`, `whyNotReadPayments`, `whyNotCreditNote`, `whyNotCancelVat`; finance `roles.ts` `whyNotInvoice` (checked; the credit note's list widened once and seen to fail) |
+| Refused offline in the web's sentence | `books.check.ts` runs `ruleFor` on each write path |
+| One tap, one write; an unknown outcome stops the button | `Invoices.tsx` IssueSheet and `InvoiceDoc.tsx` CancelSheet: a `useRef` latch at the tap, `useStuck` + `notKnown` on `outcomeUnknown`, closed → the list read again. The server also answers a repeat with the document already made (invoices.ts "duplicate") |
+| A key per document | `booksData.ts` one keeper per invoice / VAT bill, `seen()` after its read; Issue uses the stay's keeper in `data.ts` |
+| A server time read as ISO | Payments' `at` through guest-services `dateTime` → `instant()` (checked) |
+
+## Where the phone differs from the web, and why
+
+1. **Folios' three tiles** (Outstanding, Overpaid, Net position) and the overpaid banner's "₹X to
+   return" are the browser's sums of the balances. The server sends no total: the tiles keep their
+   counts ("12 folios owing", "Nothing to refund") and show a dash, with a line saying why. Asked of
+   the PMS (a total on GET /folios).
+2. **Payments' tile per way of paying and Total received** are the browser's sums. The phone counts
+   the live receipts per method ("290 receipts", reversals out) and shows a dash for the figure;
+   the tiles are ordered by count, where the web orders by the summed amount. Asked of the PMS.
+3. **Every figure to the paisa** (₹1,050.00) where the web's money() prints whole rupees (finance
+   difference 8, MFIN-4).
+4. **A settled bill's balance on Invoices is ₹0.00**, where the web prints a dash: a dash means
+   "not sent" (MFIN-4).
+5. **An invoice's page** prints each line's own taxable value and its own GST (rate and amount, as the
+   server sent them) and the invoice's stored Taxable value, SGST, CGST, Total tax and Total. The web's
+   per-line CGST/SGST split (`splitByLine`), the rate-wise tax table (`rateWise`), Total charges, Total
+   discount, Total payment and Balance are worked out in the browser, so they are not drawn; the
+   payments received are listed, not totalled. No logos, no signature lines, no UPI QR (a package).
+6. **Print and Send invoice** are grey, "On the website for now": the printed tax invoice is the
+   legal document and carries the browser's per-line split (Rule 46); Send needs guest messaging's
+   connection state, not on the phone. Asked of the owner.
+7. **GST and VAT rates** (TaxRulesCard, for the four who may set one): a note "On the website for
+   now", not the form.
+8. **Long lists page by 50** with "Show more" and "N of M shown" (Invoices' ready-to-bill list ran
+   to 765 rows in the picture); the web draws every row.
+9. **Group bills** are listed with their balance but are not links: a group's page is not on the
+   phone.
+10. **Cancel this invoice / VAT bill** for a role the API refuses is grey with the server's sentence
+    ("Issuing a credit note is for…"), where the web's button carries its own words ("Cancelling an
+    invoice is for…"). Not offered on a credit note or a cancelled document, as the web.
+11. Not offered on Payments, as the web: a refund (it is taken on the stay's bill, FolioPanel).
+
+## States
+
+Each screen: loading ("Reading the open folios…", "Reading the invoices…", "Reading the payments…",
+"Reading the invoice…"), failed (the server's words and Try again), offline ("No connection … once
+the line is back", the front desk's `NotRead`; a failed re-read over rows shown says so, `Kept`),
+empty (the web's words: "Every folio is settled", "Nothing has departed yet", "No invoice has been
+issued", "No payments yet"), refused (the API's sentence, no read).
+
+## Picture match (20 Nov)
+
+Compared by reading the code against the pictures and their words, **never seen running**.
+
+| Screen | Pictures | Result |
+|---|---|---|
+| Folios | `all/36-finance-folios` (dev-gm) | **Differences left:** (1) the three tiles show a dash for the figure (difference 1); (2) balances to the paisa (₹1,050.00, difference 3); (3) "Show more" past 50 rows; (4) export buttons at the foot (the web's are in the table's head). The rest matches: title and "12 open" pill, the description, the tiles' labels, chips and notes in order, the search box with "12 of 12", each card (room, state pill, chevron, guest, reference, Type / Arrival / Departure / Balance in red), the closing note. |
+| Invoices | `all/37-finance-invoices` (dev-gm) | **Differences left:** (1) figures to the paisa; (2) a settled balance ₹0.00, not "-" (difference 4); (3) "Show more" past 50 (the picture's list is 765 rows); (4) the GST and VAT rates note (the picture, as the GM, ends with the web's tax card). The rest matches: the pill "765 ready to bill", the two notes with the series line, each bill's card (guest, room · reference, BILLED TO, NIGHTS, CHARGES, TAX, BALANCE, Issue), Issued with its description and cards. |
+| Payments | `all/38-finance-payments` (dev-gm) | **Differences left:** (1) the method tiles and Total received show a dash (difference 2); (2) amounts to the paisa; (3) "Show more" past 50. The rest matches: the description, the tiles' labels and "N receipts" / "Reversals excluded" notes, each receipt's card (time, GUEST with room · reference, struck when reversed, METHOD pill with "Reversed", NARRATION, TAKEN BY, AMOUNT struck when reversed), the closing note on reversals. |
+| An invoice's page, a VAT bill's page | **None** (no picture of `/invoices/doc/…` or `/invoices/vat/…`) | Not pictured: built from `Invoice.tsx` and `VatBill.tsx`. |
+
+**3 of 5 screens have pictures; none of the 3 matches exactly** — every difference left is one of the
+money rules (no phone sum, paise kept, a dash only for "not sent") or the phone's paging.
