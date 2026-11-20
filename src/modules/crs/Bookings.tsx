@@ -9,8 +9,9 @@ import { Pill } from "../front-desk/kit";
 import { Box, Btn, Failed, Loading, NotYours, Refused, Stale, Toast, body, type Said } from "../guest-services/kit";
 import { Fact } from "../laundry/kit";
 import {
-  connectionOf, failedWords, noteOf, outcomeOf, stayLines, stayOf, toldOf, type CrsBooking, type CrsConnection,
+  connectionOf, dateTime, dayYear, failedWords, noteOf, outcomeOf, stayLines, stayOf, toldOf, type CrsBooking, type CrsConnection,
 } from "./bookings";
+import { ListExport } from "../reports/ListExport";
 import { listCrsBookings, markNoteDone } from "./data";
 import { maySetUp, whyNotDone, whyNotRead } from "./roles";
 import { Setup } from "./Setup";
@@ -78,6 +79,16 @@ export function CrsBookingsScreen({ hotel, role }: { hotel: Hotel; role: string 
           <>
             {maySetUp(role) ? <Setup code={code} onSaid={setSaid} /> : null}
             {list.data ? <Connection c={list.data.connection} /> : null}
+            {/* The web's CRS_EXPORT, every booking the CRS sold here. */}
+            <ListExport screen="crs-bookings" role={role} table={list.data ? {
+              columns: ["CRS booking", "Guest", "Arrival", "Departure", "Sold by", "Company", "Here", "Bookings here", "Why",
+                "The CRS register", "Changed in the CRS", "Change done", "Arrived here"],
+              rows: rows.map((b) => [
+                b.crsReference, b.guestName ?? "-", dayYear(b.checkIn), dayYear(b.checkOut), b.salesperson ?? "-", b.company ?? "-",
+                outcomeOf(b.outcome).words, stayLines(b).join(", ") || "-", b.reason ?? "-", toldOf(b).text, b.changeNote ?? "-",
+                b.changeNote ? (b.changeDone ? "Yes" : "No") : "-", dateTime(b.readAt),
+              ]),
+            } : null} />
             {list.data === undefined || list.data === null
               ? (list.error ? <Failed title="CRS bookings did not load" error={list.error} onRetry={list.reload} />
                 : list.data === undefined ? <Loading words="Reading the CRS bookings…" /> : null)
