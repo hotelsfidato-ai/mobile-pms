@@ -4,6 +4,45 @@
 
 ---
 
+## 20 November 2026 — read this first: every web screen is on the phone (M-13)
+
+**Where it stands.** `main` holds every screen of the 16 Nov web on the phone, 181 route files
+(CHANGELOG 19/20 Nov): Tier 1 and 2, the reports, the admin screens and the whole Settings console,
+with real PDF / CSV / print exports (M-14). The menu is the 16 Nov web's, checked against the web's
+own navigation for every role. Every batch was gated green (types, checks, Android, iPhone, routes)
+and pushed; the money, rights and set-up lanes each had an independent review, fixed before merging.
+**Nothing has been opened on a screen** and no API has been run: the cloud has neither.
+
+**The one rule every write follows now:** `src/core/stop.ts` (MEMORY 16, 22, 24). A write whose
+outcome is unknown stops its screen until a read begun after the loss (5 s after a lost reply);
+no sheet closes mid-write; a whole-list write waits for its fresh read. The server's idempotency key
+is the real fix: R-30, R-31, R-33, R-46, R-48 ask the PMS for it.
+
+**Next, on the PC (the owner's order):**
+1. The test build (M-8; the owner said "later"): the owner's yes for the Expo build, then open every
+   screen on a phone with each role, the held path included (MEMORY 1: warm both bundles).
+2. Connect the PMS: `EXPO_PUBLIC_API_URL` and the owner's public Firebase settings (M-10); nothing
+   else changes (docs/NATIVE.md, "The backend").
+3. Take `docs/api-requests.md` R-32..R-48 to the PMS's main chat.
+
+**Questions waiting for the owner (each with a recommendation):**
+1. Ask first before deleting a list entry, a holiday, a photo, an amenity or a logo (the web does it
+   at one tap). *Yes, keep the question.*
+2. "Move up / Move down" instead of dragging to reorder. *Yes.*
+3. A tax band's dates and other dates typed, not picked: `@react-native-community/datetimepicker`
+   9.1.0 would add a picker. *Not now.*
+4. Uploads from the phone (logo, photos, documents, old data, a deposit slip, a bill photo):
+   `expo-image-picker` ~57.0.20 and `expo-document-picker` ~57.0.3. *Not yet; on the website.*
+5. The web's tax editor fault (R-43): should the web refuse a blank band as the phone does? *Yes.*
+6. Older questions still open: paise on amounts (keep), phone-side previews (keep, as the web),
+   Back / Sign out on module screens (remove where the frame covers it).
+
+**Copies in the cloud** (`/home/user/wt/*`) are helpers' worktrees; their branches are merged.
+The PMS is read from `/home/user/hotelsfidato-ai/pms` (read only; its committed `.env*` files are
+never opened).
+
+---
+
 ## 4–5 November 2026 — read this first: the work moves to the cloud (M-12)
 
 **Latest, 4 Nov (end of the cloud session's day) — Tier 1 and Tier 2 are on `main`** (`fa07f58`

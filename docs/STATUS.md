@@ -5,6 +5,26 @@ Kept by the mobile chat; brought up to date at every merge. Each slice is built 
 its own scratch database, its own ports), and merged into `mobile/app` by the mobile chat after
 review and green gates.
 
+## Every web screen on the phone (20 Nov, M-13)
+
+**181 route files on `main`**: every screen of the 16 Nov web's menu and its Settings console, except
+what the web itself has not built (Online payments, Room systems) and the Store reports index.
+Built in parallel lanes from today's PMS code; money, rights and set-up lanes independently reviewed;
+every batch gated green. **Nothing opened on a screen.** Pickers and uploads are greyed "On the
+website for now" until the owner approves their packages (HANDOVER questions 3-4).
+
+| Batch | What | On `main` |
+|---|---|---|
+| 1 | Rooms, the Till, stock reports, set-up (config) | `c17893c` |
+| 2 | Bills: folios, invoices, payments, credit notes; pos service | `e2a09aa` |
+| 3 | The native sweep; money reports | `6a4865e` |
+| 4 | Restaurant setup; Groups; Sales (leads, contracts, allotments, marketing) | `a6be3f6` |
+| 5 | Reports index, operations reports, Group reports, four set-up screens | `bf7b874` |
+| 6 | Admin (14 screens); Minibar, Checklists, Equipment; Cashiering and the ledgers (5) | `3413ce0` |
+| 7 | The menu from the 16 Nov web; Dashboard links; small fixes; notes | `873d6fe` |
+| — | The core stop book and ~20 older dialogs on it | `7bd0c88` |
+| 8 | The Settings console: Property (9), Rates and tax (3), Money (5), Lists and Front desk (8), Messages (4) | `0dc105a` |
+
 ## Screens, at a glance (4 Nov, after the cloud session; Tier 2 added the same day)
 
 **All of Tier 1 is merged into `main`** (`b628aae`, ALL GATES GREEN on each merge commit): the nine

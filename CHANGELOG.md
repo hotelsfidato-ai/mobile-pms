@@ -5,6 +5,51 @@ commits.
 
 ---
 
+## 2026-11-19/20 · M-13: every web screen on the phone; real export files (M-14); the menu from the 16 Nov web
+
+**Asked for** (the owner, 19-20 Nov): "START ALL OF THIS OK ALL 70% AT THE SAME TIME" (M-13) — every
+remaining web screen, the reports and the admin and set-up screens included, native on both phones
+(docs/NATIVE.md: safe areas, the phone's own controls, padding) with the export live; "yes approve
+both packages, do the test build later" (M-14); "yes add the confirm for module off" (M-15);
+"finish all and merge and push the code in the GitHub".
+
+**Shipped** (each lane built by a helper from today's PMS code, the money and rights lanes reviewed
+by an independent second look and fixed, every batch gated green and pushed to `main`):
+- **Batch 1-5** `c17893c` `e2a09aa` `6a4865e` `a6be3f6` `bf7b874`: Rooms, the Till, stock reports,
+  set-up (config); bills (folios, invoices, payments, credit notes), pos service; the native sweep
+  (`ui.tsx`: ripple, sheet padding, keyboards, `confirmAct`, tel:/mailto:) and the money reports;
+  Restaurant setup with its Set up links, Groups, Sales (leads, contracts, allotments, marketing);
+  the reports index, the operations reports, Group reports, four set-up screens.
+- **Exports (M-14):** `src/core/Export.tsx` — PDF file and Excel-readable CSV through each phone's
+  share sheet, Print through its print sheet, on every list and report the web downloads.
+- **Batch 6** `3413ce0`: Admin (people, properties, modules with M-15's confirm, roles, sign-ins,
+  signing in, bank, backfill, integrations, system health, activity, audit log); Minibar,
+  Checklists, Equipment; Cashiering, Company accounts, Cash deposits, Form III, Supplier dues.
+- **Batch 7** `873d6fe`: the menu re-ported from the 16 Nov web (checked against the web's own
+  navigation for every role, no difference); Settings opens the phone's console (MADM-1); the
+  Dashboard's Quick reports and No-shows links; the Bar role at the till (MPOS-T1/S1); a voided or
+  NC bill's words (MPOS-T2); the stay list's export to the paisa (MFD-9); the sign-in sheet's edges;
+  laundry's price-list sentence; decision M-15, MEMORY 20-22, requests R-32..R-42.
+- **The stops** `7bd0c88`: one core stop book (`src/core/stop.ts`, `useScreenStop`, `Stopped`) for
+  every write whose outcome is unknown: kept outside React, released only by a read begun after the
+  loss (5 s after a lost reply), no sheet closes mid-write; about 20 older dialogs moved onto it.
+- **Batch 8** `0dc105a`: the Settings console's 29 pages — Property (profile, set up
+  this hotel, old data, photos, highlights, amenities, group, policies, documents), Rates and tax
+  (rate plans, meal plans, taxes, the accountant included as GST allows), Money (payment methods,
+  extra charges, room discounts, commission, pickup), Lists and Front desk (8 pages), Messages
+  (switches, daily report emails, scheduled reports, rivals' prices); the session's hotels kept
+  current from the frame's every read (`src/core/hotels.ts`); the bell's setup reminder keeps its
+  step; MEMORY 23-24, R-43..R-48.
+
+**Found:** reviews caught a minibar take that could charge twice, a deposit or company payment sent
+twice by closing a sheet mid-write, stops lost on leaving a screen, a supplier total looked up by
+name, an exchange's doubt on one stay only, whole-list settings dropping a change, a stale hotel day
+— each fixed before merging. **Proved:** types, every check (each new rule broken once and seen to
+fail), both phone bundles, the route gate, on every batch. **Not proved:** nothing was opened on a
+screen; no API run; no role tried; the test build waits for the owner (M-8, M-14).
+
+---
+
 ## 2026-11-04 · Tier 2 finished: wave 3, and one rule for every write whose outcome is unknown
 
 **Shipped** (merged into `main`, gates green on each merge):

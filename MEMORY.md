@@ -5,6 +5,24 @@ module's `DEFECTS.md` instead. Read the newest first.
 
 ---
 
+### 24 · A whole list sent from the last read must wait for the next read (20 Nov)
+
+The Settings lists (ID types, booking colours, required fields) and Taxes send a whole list or a
+whole heading built from the last read, and the server replaces it. After a write LANDED, the
+controls were live before the re-read came back, so a second change sent a list without the first
+(or the old bands back). MEMORY 22 covers only the doubt after a lost reply. **The rule:** after a
+landed write that sends a whole record, keep its controls grey until a read that began after the
+write's end has come back (`<name>/fresh` in the stop book; money's `freshBook`).
+
+### 23 · A port of the web's menu goes stale, and a web rule on a phone address lies (20 Nov)
+
+The phone's menu was a 2/4 Nov port: fifteen web entries were missing by 16 Nov and nobody saw it.
+And the web's "which space is this page in" rule, applied to PHONE addresses, put every console
+screen in the Front office. **The rule:** compare the port with the web by running the web's own
+navigation under node for every role (1,685 comparisons, MADM-1's re-port), any web rule on a phone
+address goes through the route table first, and a check against the files in `app/` beats a
+hand-kept list of allowed routes.
+
 ### 22 · A stop that guards a write must live as long as the doubt, not as long as the sheet (20 Nov)
 
 Three lanes (minibar, equipment, the finance desk) and the older dialogs kept the unknown-outcome
