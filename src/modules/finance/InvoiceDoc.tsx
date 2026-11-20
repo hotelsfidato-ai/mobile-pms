@@ -13,7 +13,7 @@ import { NotRead } from "../front-desk/StayList";
 import { Line } from "../guests/kit";
 import { rupees } from "./bill";
 import {
-  amountInWords, cancellable, creditable, dayOf, halfLabel, invoiceFacts, invoiceTitle, isTestHotel, placeAfter, placeLine,
+  amountInWords, cancellable, invoiceTotals, creditable, dayOf, invoiceFacts, invoiceTitle, isTestHotel, placeAfter, placeLine,
   signed, supplyLine, TEST_DOCUMENT, vatTitle, whyNotCancelVat, whyNotCreditNote, whyNotReadBills,
   type VatBillDetail,
 } from "./books";
@@ -205,11 +205,8 @@ function Invoice({ hotel, number, role }: { hotel: Hotel; number: string; role: 
         </View>
 
         <View style={{ gap: 2 }}>
-          <Sum label="Taxable value" value={rupees(sign(d.taxableValue))} />
-          <Sum label={halfLabel("SGST", d.sgst.rate)} value={rupees(sign(d.sgst.amount))} />
-          <Sum label={halfLabel("CGST", d.cgst.rate)} value={rupees(sign(d.cgst.amount))} />
-          <Sum label="Total tax" value={rupees(sign(d.taxTotal))} />
-          <Sum label="Total" value={rupees(sign(d.total))} strong />
+          {/* The server's totals as stored: a credit note's are already negative (MFIN-B3). */}
+          {invoiceTotals(d).map(([label, value], i, all) => <Sum key={label} label={label} value={value} strong={i === all.length - 1} />)}
         </View>
 
         <View style={{ gap: 2 }}>
@@ -406,7 +403,11 @@ function CancelSheet({ code, noun, number, total, send, onClose, onDone }: {
       onDone({ tone: "ok", title: `Credit note ${r.number ?? ""}`, text: `${number} is cancelled. Both documents stay on the record.` });
     } catch (e) {
       /* Nothing came back, or the server failed: the note may have been made. */
-      if (stuck.stop(e)) setRefused(notKnown("cancelled", `this ${noun} once it is read again`, e).line);
+      if (stuck.stop(e)) {
+        /* The body keeps the error's own words: offline, the web's refusal sentence. */
+        const n = notKnown("cancelled", `this ${noun} once it is read again`, e);
+        setRefused(`${n.title}. ${n.body}`);
+      }
       else setRefused(`Not cancelled. ${e instanceof Error ? e.message : ""}`.trim());
     } finally {
       going.current = false;

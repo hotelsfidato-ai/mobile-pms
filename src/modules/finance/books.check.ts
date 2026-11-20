@@ -6,7 +6,7 @@ import { instant } from "../../core/format.ts";
 import { ruleFor } from "../../core/offline.ts";
 import {
   BOOK_READS, BOOK_WRITES, amountInWords, balanceShown, cancellable, creditable, groupBalance, groupBills, halfLabel,
-  invoiceFacts, issuedState, methodCounts, openCounts, openFolios, openPill, overpaidBanner, overpaidNote, owingNote,
+  invoiceFacts, invoiceTotals, issuedState, methodCounts, openCounts, openFolios, openPill, overpaidBanner, overpaidNote, owingNote,
   placeLine, readyToBill, reversedNote, shownLine, signed, supplyLine, vatState, whyNotCancelVat, whyNotCreditNote,
   whyNotIssueYet, whyNotReadBills, whyNotReadPayments, type BillableRow, type InvoiceDetail, type PaymentRow,
 } from "./books.ts";
@@ -88,6 +88,11 @@ eq(creditable({ creditsInvoiceId: "x", creditedBy: null }), false, "a credit not
 eq(creditable({ creditsInvoiceId: null, creditedBy: "5EL/2026-27/00002" }), false, "nor one already cancelled");
 eq(cancellable({ cancelsNumber: null, cancelledBy: null }), true, "a live VAT bill may be cancelled");
 eq([signed(true, 525), signed(false, 525)], [-525, 525], "a credit note's sign");
+/* A credit note's totals are stored negative by the server: printed as sent, never signed again (MFIN-B3). */
+const note = { ...inv, creditsInvoiceId: "i-1", taxableValue: -1000, sgst: { rate: 2.5, amount: -25 }, cgst: { rate: 2.5, amount: -25 }, taxTotal: -50, total: -1050 };
+eq(invoiceTotals(note), [["Taxable value", "-₹1,000.00"], ["SGST @ 2.5%", "-₹25.00"], ["CGST @ 2.5%", "-₹25.00"], ["Total tax", "-₹50.00"], ["Total", "-₹1,050.00"]], "a credit note's totals as the server sent them");
+eq(invoiceTotals(inv).at(-1), ["Total", "₹525.00"], "an invoice's total as sent");
+eq(amountInWords(note.total), "Minus One Thousand Fifty Rupees Only", "the words follow the figure as sent");
 eq(halfLabel("CGST", null), "CGST", "mixed rates name none");
 eq(halfLabel("SGST", 2.5), "SGST @ 2.5%", "one rate named");
 eq(supplyLine("996311").includes("s.12(3)(b)"), true, "accommodation");

@@ -347,6 +347,20 @@ export function invoiceFacts(d: InvoiceDetail, test: boolean): { left: Array<[st
   return { left, right };
 }
 
+/** The invoice's totals, EXACTLY as the server stored them: a credit note's
+    are already negative (invoices.ts inserts -taxable_value … -total), so no
+    sign is put on them here - only a line, read from the ledger positive,
+    takes the document's sign (`signed`). */
+export function invoiceTotals(d: Pick<InvoiceDetail, "taxableValue" | "sgst" | "cgst" | "taxTotal" | "total">): Array<[string, string]> {
+  return [
+    ["Taxable value", rupees(d.taxableValue)],
+    [halfLabel("SGST", d.sgst.rate), rupees(d.sgst.amount)],
+    [halfLabel("CGST", d.cgst.rate), rupees(d.cgst.amount)],
+    ["Total tax", rupees(d.taxTotal)],
+    ["Total", rupees(d.total)],
+  ];
+}
+
 /** "CGST @ 2.5%" when the invoice's lines share one rate, else the word alone
     (the server's `rate` is null then: no single rate can honestly be named). */
 export const halfLabel = (word: "CGST" | "SGST", rate: number | null) => (rate === null ? word : `${word} @ ${rate}%`);

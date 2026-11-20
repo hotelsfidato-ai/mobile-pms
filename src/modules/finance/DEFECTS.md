@@ -82,3 +82,26 @@ added up in the browser (`Folios.tsx` 47-51, `billing.ts` paymentsByMethod); no 
 figure, with a line saying why (MODULE.md differences 1-2; `books.check.ts` proves no amount is made).
 **The rule:** where the web sums money in the browser, the phone shows the server's rows and asks the
 API for the total.
+
+## MFIN-B3 · A credit note's totals printed positive (fixed 20 Nov)
+
+`InvoiceDoc.tsx` put the document's sign on the invoice's totals as well as its lines. The server
+already stores a credit note's totals negative (`api/src/modules/finance/invoices.ts` 812-814 inserts
+`-taxable_value … -total`), so the sign was applied twice: a credit note whose lines read −₹1,000.00
+showed Taxable value, SGST, CGST, Total tax and Total as +₹1,050.00, while the Issued list showed
+−₹1,050.00. **Found** by the mobile chat's independent review (20 Nov). **Done:** `books.ts`
+`invoiceTotals` prints the five totals exactly as sent; only a line (read from the ledger, positive)
+takes the sign; the words follow the figure as sent ("Minus One Thousand Fifty Rupees Only"). Checked
+in `books.check.ts`, the double sign put back once and seen to fail. **The web has the same fault**
+(`src/modules/finance/pages/Invoice.tsx` 622-629: `sign(data.sgst.amount)`, `sign(data.cgst.amount)`,
+`sign(data.total)` on a credit note's already negative figures) - for `docs/api-requests.md`.
+**The rule:** a figure the server stores signed is printed as sent; a sign is put only on what the
+server sends unsigned.
+
+## MFIN-B4 · An unknown outcome hid the error's own words (fixed 20 Nov)
+
+Issue (`Invoices.tsx`) and Cancel (`InvoiceDoc.tsx`) said `notKnown(…).line`, which drops the error:
+offline, the person never read "An invoice cannot be raised offline…". **Found** by the same review.
+**Done:** both say the title and `notKnown(…).body` (the error's words, then where to look), as
+WalkIn, StayActs and LostProperty do; the button stays stuck until the sheet is closed and the record
+read again. **The rule:** an unknown outcome says what came back, not only that it is unknown.

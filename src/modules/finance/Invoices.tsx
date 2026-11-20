@@ -282,7 +282,11 @@ function IssueSheet({ code, row, series, onClose, onDone }: {
       onDone({ tone: "ok", title: `Issued ${r.number ?? ""}${r.vatBill ? `, and VAT bill ${r.vatBill} for the alcohol` : ""}.` });
     } catch (e) {
       /* Nothing came back, or the server failed: it may have been issued. */
-      if (stuck.stop(e)) setRefused(notKnown("issued", "the Issued list", e).line);
+      if (stuck.stop(e)) {
+        /* The body keeps the error's own words: offline, the web's refusal sentence. */
+        const n = notKnown("issued", "the Issued list", e);
+        setRefused(`${n.title}. ${n.body}`);
+      }
       else setRefused(e instanceof Error ? e.message : "The invoice was not issued. Nothing was changed.");
     } finally {
       going.current = false;
