@@ -3,15 +3,17 @@ import { BedDouble, ChevronRight, Cigarette, Layers, Plus, Upload } from "lucide
 import { useRef, useState } from "react";
 import { Platform, Pressable, Text, View } from "react-native";
 import { outcomeUnknown, type Hotel } from "../../core/api";
+import { ROOM_SPEC, ROOM_TYPE_SPEC } from "../../core/importSpec";
 import { c, face, space, t } from "../../core/theme";
-import { Head, Screen, notKnown, useRead, useStuck } from "../../core/ui";
+import { Head, Screen, notKnown, useRead, useScreenStop, useStuck } from "../../core/ui";
+import { ImportSheet } from "../pos/ImportSheet";
 import {
   baseError, maxError, plural, roomBody, roomLine, roomRange, roomsOf, setupLine, severalWords, sleepsOf,
   typeFirstBody, typeForm, typeMoreBody, typeReady, typedCount,
-  type RoomForm, type RoomSetup, type RoomTypeSetup, type TypeForm,
+  setupImportStop, type RoomForm, type RoomSetup, type RoomTypeSetup, type TypeForm,
 } from "./config";
 import {
-  addRoom, addRoomType, amendRoom, amendRoomType, readAmenities, readRoomSetup, readTypeAmenities, removeRoom, removeRoomType,
+  addRoom, addRoomType, amendRoom, amendRoomType, importSetup, readAmenities, readRoomSetup, readTypeAmenities, removeRoom, removeRoomType,
   setTypeAmenities,
 } from "./configData";
 import { asRole, mayReach } from "../../core/menu";
@@ -19,6 +21,7 @@ import { Btn, Failed, Field, Loading, NotYourRole, Pill, Refused, Select, Sheet,
 import { SETUP_ADD, SETUP_CHANGE, SETUP_READ, whyNot } from "./configRoles";
 import { Empty, InDialog, Segmented, Stale, Toast, body, saidOf, type Said } from "./kit";
 import { ON_THE_WEBSITE } from "./roles";
+import { TypePhotos } from "./TypePhotos";
 
 /* ══════════════════════════════════════════════════════════════════
    ROOM TYPES on a phone — the web's Settings → Rooms → Room types
@@ -31,9 +34,11 @@ import { ON_THE_WEBSITE } from "./roles";
    USE IS DELETED: a type or a room switches off; only one nothing uses may
    be Removed, and the server says what uses it.
 
-   On the website for now: Import (a file picker, expo-document-picker),
-   the type's Photos (expo-image-picker), the colour picker (the colour is
-   typed), and putting the rooms in order (dragging).
+   Import (room types, then the rooms of them, as the web offers the second
+   file straight after the first) and a type's Photos come through the
+   phone's own pickers (M-16; ImportSheet.tsx, TypePhotos.tsx).
+   On the website for now: the colour picker (the colour is typed), and
+   putting the rooms in order (dragging).
    ══════════════════════════════════════════════════════════════════ */
 
 export function RoomTypes({ hotel, role }: { hotel: Hotel; role: string | null }) {
@@ -50,13 +55,17 @@ function RoomTypesScreen({ hotel, role }: { hotel: Hotel; role: string | null })
   const cannotRead = whyNot(SETUP_READ, role);
   const cannotAdd = whyNot(SETUP_ADD, role);
   const cannotChange = whyNot(SETUP_CHANGE, role);
-  const setup = useRead(() => (cannotRead ? Promise.resolve(null) : readRoomSetup(code)), ["inventory", code, "room-setup"]);
+  /* An import whose reply was lost is let go by a read of the set-up begun after it (ImportSheet.tsx). */
+  const imports = useScreenStop(setupImportStop(code));
+  const setup = useRead(imports.watch(() => (cannotRead ? Promise.resolve(null) : readRoomSetup(code))), ["inventory", code, "room-setup"]);
+  const [importing, setImporting] = useState<"room-types" | "rooms" | null>(null);
   const [addingType, setAddingType] = useState(false);
   const [editingType, setEditingType] = useState<RoomTypeSetup | null>(null);
   const [addingRoom, setAddingRoom] = useState(false);
   const [editingRoom, setEditingRoom] = useState<RoomSetup | null>(null);
   const [said, setSaid] = useState<Said | null>(null);
   const [pulled, setPulled] = useState(false);
+  const typesLanded = useRef(false);
 
   /* The tape chart, the floor and the rate grid read this too (RoomSetup.tsx 70-75). */
   const refresh = () => {
@@ -119,7 +128,7 @@ function RoomTypesScreen({ hotel, role }: { hotel: Hotel; role: string | null })
         <Head title="Room types" under={v ? setupLine(v) : cannotRead ? undefined : "Loading…"} />
         {v ? (
           <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
-            <Refused label="Import" icon={Upload} reason={ON_THE_WEBSITE} />
+            {cannotAdd ? <Refused label="Import" icon={Upload} reason={cannotAdd} /> : <Btn label="Import" icon={Upload} onPress={() => setImporting("room-types")} />}
             {cannotAdd ? <Refused label="Add a room type" icon={Layers} reason={cannotAdd} /> : <Btn label="Add a room type" icon={Layers} onPress={() => setAddingType(true)} />}
             {/* The web's Button is secondary by default (Button.tsx 75), as the picture shows. */}
             {cannotAdd ? <Refused label="Add a room" icon={Plus} reason={cannotAdd} />
@@ -128,10 +137,18 @@ function RoomTypesScreen({ hotel, role }: { hotel: Hotel; role: string | null })
         ) : null}
         {main}
       </Screen>
-      {addingType ? <TypeSheet code={code} type={null} mayRemove={false} onClose={() => setAddingType(false)} onDone={done} /> : null}
-      {editingType ? <TypeSheet code={code} type={editingType} mayRemove onClose={() => setEditingType(null)} onDone={done} /> : null}
+      {addingType ? <TypeSheet code={code} type={null} mayRemove={false} cannotChange={cannotChange} onClose={() => setAddingType(false)} onDone={done} /> : null}
+      {editingType ? <TypeSheet code={code} type={editingType} mayRemove cannotChange={cannotChange} onClose={() => setEditingType(null)} onDone={done} /> : null}
       {addingRoom && v ? <RoomSheet code={code} room={null} types={v.types} existing={v.rooms.map((r) => r.number)} onClose={() => { setAddingRoom(false); refresh(); }} onDone={done} /> : null}
       {editingRoom && v ? <RoomSheet code={code} room={editingRoom} types={v.types} existing={[]} onClose={() => setEditingRoom(null)} onDone={done} /> : null}
+      {importing ? (
+        <ImportSheet key={importing} spec={importing === "room-types" ? ROOM_TYPE_SPEC : ROOM_SPEC} stopName={setupImportStop(code)}
+          where={importing === "room-types" ? "the room types" : "the rooms"}
+          load={(rows, dryRun) => importSetup(code, importing, rows, dryRun)}
+          /* Room types first, then the rooms of them: the second file is offered straight after the first (RoomSetup.tsx 272-280). */
+          onClose={() => { const next = importing === "room-types" && typesLanded.current; typesLanded.current = false; setImporting(next ? "rooms" : null); }}
+          onImported={() => { refresh(); if (importing === "room-types") typesLanded.current = true; }} />
+      ) : null}
       <Toast said={said} onClose={() => setSaid(null)} />
     </View>
   );
@@ -172,8 +189,8 @@ function RoomTile({ room, onPress }: { room: RoomSetup; onPress?: () => void }) 
 
 /* ── A room type: add or edit (RoomSetup.tsx TypeDialog) ─────────── */
 
-function TypeSheet({ code, type, mayRemove, onClose, onDone }: {
-  code: string; type: RoomTypeSetup | null; mayRemove: boolean; onClose: () => void; onDone: (s: Said) => void;
+function TypeSheet({ code, type, mayRemove, cannotChange, onClose, onDone }: {
+  code: string; type: RoomTypeSetup | null; mayRemove: boolean; cannotChange: string | null; onClose: () => void; onDone: (s: Said) => void;
 }) {
   const [tab, setTab] = useState<"basic" | "amenities" | "photos">("basic");
   const [f, setF] = useState<TypeForm>(() => typeForm(type));
@@ -242,7 +259,7 @@ function TypeSheet({ code, type, mayRemove, onClose, onDone }: {
           options={[{ value: "basic", label: "Basic" }, { value: "amenities", label: "Amenities" }, { value: "photos", label: "Photos" }]} />
       ) : null}
       {tab === "amenities" && type ? <TypeAmenities code={code} typeId={type.id} /> : null}
-      {tab === "photos" && type ? <Text style={[body, { color: c.grey600 }]}>Adding, ordering and deleting a type's photos: {ON_THE_WEBSITE.toLowerCase()} (a photo picker is not on the phone yet).</Text> : null}
+      {tab === "photos" && type ? <TypePhotos code={code} typeId={type.id} cannotChange={cannotChange} /> : null}
       {tab === "basic" ? (
         <>
           {!type ? (

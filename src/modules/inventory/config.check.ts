@@ -133,3 +133,15 @@ eq(priceOrDash(null), "-", "nobody priced it");
 eq(priceOrDash(3222.22), "₹3,222.22", "paise kept");
 
 console.log("inventory set-up rules: ok");
+
+/* A room type's photos (M-16): the web's move; the count line; stops by type. */
+{
+  const { movedOrder, photosLine, photosStop } = await import("./config.ts");
+  const ids = ["a", "b", "c"];
+  if (JSON.stringify(movedOrder(ids, 1, 0)) !== JSON.stringify(["b", "a", "c"])) throw new Error("Earlier moves one place up");
+  if (JSON.stringify(movedOrder(ids, 1, 2)) !== JSON.stringify(["a", "c", "b"])) throw new Error("Later moves one place down");
+  if (JSON.stringify(movedOrder(ids, 2, 3)) !== JSON.stringify(ids)) throw new Error("past the end: unchanged");
+  if (JSON.stringify(ids) !== JSON.stringify(["a", "b", "c"])) throw new Error("the read's list is not changed");
+  if (photosLine(3, 10) !== "3 of 10. The first is shown first.") throw new Error("the count line");
+  if (photosStop("5EL", "t1") === photosStop("5EL", "t2")) throw new Error("each type its own stop");
+}
