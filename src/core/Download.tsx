@@ -1,0 +1,83 @@
+import { File, Paths } from "expo-file-system";
+import * as Sharing from "expo-sharing";
+import { Download as DownloadIcon } from "lucide-react-native";
+import { useRef, useState } from "react";
+import { Platform, Pressable, Text, View } from "react-native";
+import { API_URL, ApiError, refused, who } from "./api";
+import { DOWNLOAD_OFFLINE, statusIn, utiOf } from "./files";
+import { noteReachable, noteUnreachable } from "./offline";
+import { c, face, t as type } from "./theme";
+
+/* ══════════════════════════════════════════════════════════════════
+   A FILE THE SERVER MAKES, TO THE SHARE SHEET (M-16, 20 Nov) — the web's
+   downloadFile (src/lib/api.ts) on a phone: fetched with the sign-in
+   (who(), as every request) by expo-file-system's own download into the
+   cache, then handed to the phone's share sheet (expo-sharing, M-14) -
+   save to Files / Drive, WhatsApp, mail, print from there. First for
+   Settings › Documents' sample voucher (GET /:code/documents/sample-
+   voucher.pdf); any GET file route after it.
+   A download is a read with no cached copy: with nothing coming back it
+   is refused in the web's sentence, never held. A refusal is the
+   server's own sentence: the download says only its status, so the same
+   GET is asked once more to read it (a read, safe to repeat). Files go
+   to the cache, which the phone may clear: nothing is kept (DPDP).
+   ══════════════════════════════════════════════════════════════════ */
+
+/** Downloads `path` (the API's, with its query) as `fileName` and opens the share sheet. */
+export async function downloadToShare(path: string, fileName: string, mimeType: string): Promise<void> {
+  const url = `${API_URL}${path}`;
+  const file = new File(Paths.cache, fileName);
+  let got: File;
+  try {
+    got = await File.downloadFileAsync(url, file, { headers: await who(), idempotent: true });
+  } catch (e) {
+    const status = statusIn(e instanceof Error ? e.message : String(e));
+    if (status === null) { noteUnreachable(); throw new ApiError(0, DOWNLOAD_OFFLINE); }
+    noteReachable();
+    /* The server's own words for its refusal. */
+    let again: Response;
+    try { again = await fetch(url, { headers: await who() }); } catch { throw new ApiError(status, `Request failed (${status}).`); }
+    throw again.ok ? new ApiError(status, `Request failed (${status}).`) : await refused(again);
+  }
+  noteReachable();
+  if (!(await Sharing.isAvailableAsync())) throw new Error("This phone cannot share a file, so it was not opened.");
+  await Sharing.shareAsync(got.uri, { mimeType, UTI: utiOf(mimeType), dialogTitle: fileName });
+}
+
+/** A download as a capsule, in ExportButtons' style: one tap at a time, its failure said under it. */
+export function DownloadButton({ label, a11y, path, fileName, mimeType, disabled }: {
+  label: string; a11y?: string; path: string; fileName: string; mimeType: string; disabled?: boolean;
+}) {
+  const [said, setSaid] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+  const going = useRef(false);
+  const on = !disabled && !busy;
+  const press = async () => {
+    if (going.current) return;
+    going.current = true;
+    setBusy(true);
+    setSaid(null);
+    try { await downloadToShare(path, fileName, mimeType); }
+    catch (e) { setSaid(e instanceof Error && e.message ? e.message : "The file could not be downloaded."); }
+    finally { going.current = false; setBusy(false); }
+  };
+  return (
+    <View style={{ gap: 6 }}>
+      <View style={{ flexDirection: "row" }}>
+        <Pressable
+          onPress={on ? () => void press() : undefined} disabled={!on} accessibilityRole="button" accessibilityLabel={a11y ?? label}
+          accessibilityState={{ disabled: !on, busy }} android_ripple={{ color: c.grey200, borderless: false }}
+          style={({ pressed }) => ({
+            minHeight: 44, paddingHorizontal: 14, borderRadius: 22, borderWidth: 1, borderColor: c.grey300,
+            flexDirection: "row", alignItems: "center", gap: 6, overflow: "hidden",
+            backgroundColor: pressed && Platform.OS === "ios" ? c.grey50 : c.white, opacity: on ? 1 : 0.45,
+          })}
+        >
+          <DownloadIcon size={16} color={c.grey600} />
+          <Text style={[type.label, { color: c.ink900, ...face[500] }]}>{busy ? "Downloading…" : label}</Text>
+        </Pressable>
+      </View>
+      {said ? <Text style={[type.caption, { color: c.red700 }]} accessibilityRole="alert">{said}</Text> : null}
+    </View>
+  );
+}
