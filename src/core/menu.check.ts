@@ -144,6 +144,8 @@ eq(phoneRoute("/h/5EL/online-checkin", "5EL"), "/guest-services/5EL/online-check
 eq(phoneRoute("/h/5EL/approvals", "5EL"), "/approvals/5EL");
 eq(phoneRoute("/people", "5EL"), "/admin/5EL/people");
 eq(phoneRoute("/admin/users", "5EL"), "/admin/5EL/users");
+eq(phoneRoute("/settings/property/backfill-data", "5EL"), "/admin/5EL/backfill");
+eq(phoneRoute("/h/5EL/backfill", "5EL"), "/admin/5EL/backfill");
 eq(phoneRoute("/settings/connections/modules", "5EL"), "/admin/5EL/modules");
 eq(phoneRoute("/properties", "5EL"), "/admin/5EL/properties");
 eq(phoneRoute("/admin/system-health", "5EL"), "/admin/5EL/system-health");
