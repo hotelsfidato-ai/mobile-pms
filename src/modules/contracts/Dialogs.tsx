@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { Alert, Text, View } from "react-native";
 import { ApiError, HeldError } from "../../core/api";
+import { DateField } from "../../core/DateField";
 import { c, t } from "../../core/theme";
 import { notKnown, useStuck } from "../../core/ui";
 import { Toggle } from "../front-desk/kit";
@@ -16,7 +17,9 @@ import {
 /* ══════════════════════════════════════════════════════════════════
    THE THREE FORMS OF CONTRACTS on a phone (mobile/m13-sales): the web's
    CompanyDialog, ContractDialog and AllotmentDialog
-   (src/modules/contracts/components/), each a whole-screen sheet.
+   (src/modules/contracts/components/), each a whole-screen sheet. Their
+   dates are each phone's own date picker (DateField, M-16), opening on the
+   hotel's today; an allotment's inside its contract, as the web's min/max.
 
    The web's guards, word for word: the first thing the server would
    refuse is said in red and the primary button stays grey until it is
@@ -166,11 +169,9 @@ export function ContractDialog({ code, data, contract, onClose, onDone, onUnknow
       )}
     >
       <Field label="Name"><Box label="Name" value={form.name} onChange={set("name")} max={80} placeholder={`${data.company.name} 2026-27`} /></Field>
-      {/* The web's date inputs; typed here as they send it (no date picker on the phone yet). */}
-      <View style={{ flexDirection: "row", gap: 12 }}>
-        <Field label="Valid from" hint="As 2026-04-01"><Box label="Valid from" value={form.validFrom} onChange={set("validFrom")} keyboard="numbers-and-punctuation" max={10} mono /></Field>
-        <Field label="Valid to" hint="As 2027-03-31"><Box label="Valid to" value={form.validTo} onChange={set("validTo")} keyboard="numbers-and-punctuation" max={10} mono /></Field>
-      </View>
+      {/* The web's two <input type="date">: each phone's own picker (M-16), sent as the web sends them. */}
+      <DateField label="Valid from" value={form.validFrom} onChange={set("validFrom")} hotel={{ today: data.today, businessDate: data.today }} disabled={w.busy} />
+      <DateField label="Valid to" value={form.validTo} onChange={set("validTo")} hotel={{ today: data.today, businessDate: data.today }} disabled={w.busy} />
       <Field label="Priced by">
         <Segmented label="Priced by" stacked value={form.pricing} onChange={set("pricing")}
           options={[{ value: "rates", label: "Fixed rates" }, { value: "discount", label: "Discount off the day's rate" }]} />
@@ -266,10 +267,11 @@ export function AllotmentDialog({ code, data, contract, allotment, onClose, onDo
         <Choices label="Room type" value={form.roomTypeId} disabled={Boolean(allotment)} onChange={set("roomTypeId")}
           options={data.roomTypes.map((rt) => ({ value: rt.id, label: rt.name }))} />
       </Field>
-      <View style={{ flexDirection: "row", gap: 12 }}>
-        <Field label="First night" hint="As 2026-12-24"><Box label="First night" value={form.firstNight} onChange={set("firstNight")} keyboard="numbers-and-punctuation" max={10} mono /></Field>
-        <Field label="Last night" hint="As 2026-12-31"><Box label="Last night" value={form.lastNight} onChange={set("lastNight")} keyboard="numbers-and-punctuation" max={10} mono /></Field>
-      </View>
+      {/* AllotmentDialog's dates: inside the contract (the web's min and max), the last night from the first. */}
+      <DateField label="First night" value={form.firstNight} onChange={set("firstNight")} hotel={{ today: data.today, businessDate: data.today }}
+        min={contract.validFrom} max={contract.validTo} disabled={w.busy} />
+      <DateField label="Last night" value={form.lastNight} onChange={set("lastNight")} hotel={{ today: data.today, businessDate: data.today }}
+        min={form.firstNight || contract.validFrom} max={contract.validTo} disabled={w.busy} />
       <View style={{ flexDirection: "row", gap: 12 }}>
         <Field label="Rooms a night"><Box label="Rooms a night" value={form.rooms} onChange={set("rooms")} keyboard="number-pad" mono /></Field>
         <Field label="Release (days before each night)" hint="Rooms nobody booked go back on sale at that night audit.">
