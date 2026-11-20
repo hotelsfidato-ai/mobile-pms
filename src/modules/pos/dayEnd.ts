@@ -228,3 +228,16 @@ export const rupees = (n: number | null | undefined) =>
 export const precise = (n: number | null | undefined) => (n == null || !Number.isFinite(n) ? "-" : exact.format(n));
 /** A movement's figure, signed as the web signs it. */
 export const signed = (sign: -1 | 1 | undefined, n: number) => `${sign === 1 ? "+" : "−"}${rupees(n)}`;
+
+/** A write whose outcome was lost (MEMORY 16) stays unknown until a read of the day that began after it
+    has come back: `stuckAt` is the moment it was lost, `loadedAt` when the day on screen was read. */
+export const stillUnknown = (stuckAt: number | null, loadedAt: number) => stuckAt !== null && loadedAt <= stuckAt;
+
+/** Why Save the count is grey, or null. A blank grid is never a count of zero (MEMORY 9): the server
+    would record ₹0 counted from an empty list, and the close would open as short (MPOS-S3). */
+export function whyNotSave(day: Pick<DayEnd, "opened">, n: Pick<Typed, "any" | "bad">): string | null {
+  if (!day.opened) return "Open the day first: this outlet's first float is counted once.";
+  if (n.bad !== null) return badRow(n.bad);
+  if (!n.any) return "Type the notes and coins in the tin first. A blank is not a count of zero: type 0 for an empty row.";
+  return null;
+}

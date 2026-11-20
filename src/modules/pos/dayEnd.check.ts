@@ -1,7 +1,7 @@
 /* Run: node --experimental-strip-types src/modules/pos/dayEnd.check.ts
    Close restaurant day's rules: the notes typed, the tin's words, the close's guards. */
 import {
-  approvalWords, closeBody, precise as exact, rupees as money, signed, dayAt, hotelNameOf, kept, methodsByAmount, mayRecord, movementBody, needsReason, rowFigure, seedCounts,
+  approvalWords, closeBody, stillUnknown, whyNotSave, precise as exact, rupees as money, signed, dayAt, hotelNameOf, kept, methodsByAmount, mayRecord, movementBody, needsReason, rowFigure, seedCounts,
   typed, variance, waitsOrRefused, whyNotClose, type DayEnd,
 } from "./dayEnd.ts";
 
@@ -82,5 +82,17 @@ eq(money(null), "-");
 eq(exact(336), "₹336.00");
 eq(signed(-1, 120.5), "−₹120.50");
 eq(signed(1, 500), "+₹500");
+
+/* Save the count: never from a blank grid (MPOS-S3); a typed 0 is an answer. */
+eq(whyNotSave({ opened: true }, typed({})), "Type the notes and coins in the tin first. A blank is not a count of zero: type 0 for an empty row.");
+eq(whyNotSave({ opened: true }, typed({ 500: "0" })), null);
+eq(whyNotSave({ opened: true }, typed({ 500: "1.5" })), "₹500: whole notes only.");
+eq(whyNotSave({ opened: false }, typed({ 500: "2" })), "Open the day first: this outlet's first float is counted once.");
+
+/* A lost write stays unknown until a read that came back after it (MEMORY 16, MPOS-S4). */
+eq(stillUnknown(null, 100), false);
+eq(stillUnknown(200, 100), true);
+eq(stillUnknown(200, 200), true);
+eq(stillUnknown(200, 201), false);
 
 console.log("dayEnd.check: ok");

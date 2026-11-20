@@ -13,8 +13,8 @@ import { c, face, space, t } from "../../core/theme";
 import { Screen, notKnown, useStuck } from "../../core/ui";
 import {
   DENOMINATIONS, EXPENSE_CATEGORIES, MOVEMENTS, STEPS, approvalWords, badRow, closeBody, dayAt, hotelNameOf, mayRecord,
-  methodWord, methodsByAmount, movementBody, movementOf, needsReason, precise, rowFigure, rupees, seedCounts, signed, typed,
-  variance, waitsOrRefused, whyNotClose, type Counts, type DayEnd, type MovementKind, type Step,
+  methodWord, methodsByAmount, movementBody, movementOf, needsReason, precise, rowFigure, rupees, seedCounts, signed, stillUnknown, typed,
+  variance, waitsOrRefused, whyNotClose, whyNotSave, type Counts, type DayEnd, type MovementKind, type Step,
 } from "./dayEnd";
 import { closeDay, countDrawer, openDay, readDayEnd, recordMovement } from "./serviceData";
 import { BottomSheet, Btn, Empty, Field, Heading, Input, Line, Loading, PageHead, Panel, Pill, Select, Why } from "./ServiceKit";
@@ -62,6 +62,8 @@ export function DayEndScreen({ hotel, role }: { hotel: Hotel; role: string | nul
   const refusedRead = whyNotReadDay(role);
   const [step, setStep] = useState<Step>("overview");
   const [pulled, setPulled] = useState(false);
+  /* A Record whose reply was lost: the moment, kept here so no fresh sheet forgets it (MPOS-S4). */
+  const [movementLost, setMovementLost] = useState<number | null>(null);
   const q = useQuery({ queryKey: KEY(code), queryFn: () => readDayEnd(code), enabled: !refusedRead });
   const refresh = () => { void cache.invalidateQueries({ queryKey: ["pos", code] }); };
   const reload = () => { setPulled(true); void q.refetch(); };
@@ -97,7 +99,8 @@ export function DayEndScreen({ hotel, role }: { hotel: Hotel; role: string | nul
       {!d.opened && !d.closedAt ? <OpenDay code={code} role={role} onDone={refresh} /> : null}
       <Steps current={step} onPick={setStep} blockers={d.blockers.length} />
       {step === "overview" ? <Overview day={d} /> : null}
-      {step === "cash" ? <CashStep key={`${d.businessDate}-${d.cash.counted}`} code={code} role={role} day={d} onDone={refresh} /> : null}
+      {step === "cash" ? <CashStep key={`${d.businessDate}-${d.cash.counted}`} code={code} role={role} day={d} onDone={refresh}
+        loadedAt={q.dataUpdatedAt} movementLost={movementLost} onMovementLost={setMovementLost} /> : null}
       {step === "finalize" ? (
         <Finalize code={code} role={role} hotelName={hotelName} day={d} loadedAt={q.dataUpdatedAt} onDone={refresh}
           onBack={() => setStep("cash")} reread={() => void q.refetch()} />
@@ -318,13 +321,16 @@ function OpenDay({ code, role, onDone }: { code: string; role: string | null; on
 }
 
 /* ── Step two: what is in the tin ────────────────────────────────────── */
-function CashStep({ code, role, day, onDone }: { code: string; role: string | null; day: DayEnd; onDone: () => void }) {
+function CashStep({ code, role, day, onDone, loadedAt, movementLost, onMovementLost }: {
+  code: string; role: string | null; day: DayEnd; onDone: () => void; loadedAt: number; movementLost: number | null; onMovementLost: (at: number) => void;
+}) {
   const closed = Boolean(day.closedAt);
   /* Seeded from the count that exists, so the grid shows what was saved. */
   const [counts, setCounts] = useState<Counts>(() => seedCounts(day.cash.denominations));
   const w = useWrite();
   const n = typed(counts);
-  const why = whyNotCloseDay(role) ?? (!day.opened ? "Open the day first: this outlet's first float is counted once." : n.bad !== null ? badRow(n.bad) : null);
+  /* A blank grid is never a count of zero (MPOS-S3): Save waits for something typed, as Open does. */
+  const why = whyNotCloseDay(role) ?? whyNotSave(day, n);
   const save = () => void w.run(async () => {
     await countDrawer(code, n.denominations);
     return { tone: "ok", title: "Count saved", body: `${rupees(n.total)} in the drawer.` };
@@ -339,7 +345,7 @@ function CashStep({ code, role, day, onDone }: { code: string; role: string | nu
           {!closed ? (
             <>
               <Btn primary tall busy={w.busy} disabled={why !== null} onPress={save}
-                label={!day.opened ? "Open the day first" : `Save the count - ${rupees(n.total)}`} />
+                label={!day.opened ? "Open the day first" : n.any ? `Save the count - ${rupees(n.total)}` : "Count the drawer first"} />
               <Why>{why}</Why>
             </>
           ) : null}
@@ -347,7 +353,7 @@ function CashStep({ code, role, day, onDone }: { code: string; role: string | nu
         </View>
       </Panel>
 
-      <Movements code={code} role={role} day={day} onDone={onDone} />
+      <Movements code={code} role={role} day={day} onDone={onDone} lost={stillUnknown(movementLost, loadedAt)} onLost={onMovementLost} />
 
       <Panel head={<Heading title="The sum" />}>
         {/* The server's figures, line by line; each movement its own row, never added up here. */}
@@ -389,11 +395,14 @@ function VarianceBox({ v }: { v: ReturnType<typeof variance> }) {
 }
 
 /* ── Money in and out that is not a sale ─────────────────────────────── */
-function Movements({ code, role, day, onDone }: { code: string; role: string | null; day: DayEnd; onDone: () => void }) {
+function Movements({ code, role, day, onDone, lost, onLost }: {
+  code: string; role: string | null; day: DayEnd; onDone: () => void; lost: boolean; onLost: (at: number) => void;
+}) {
   const [open, setOpen] = useState(0);
   const [last, setLast] = useState<Said | null>(null);
   const closed = Boolean(day.closedAt);
-  const why = whyNotCloseDay(role);
+  /* After a lost reply Record stays grey until the day has been read again (MEMORY 16, MPOS-S4). */
+  const why = whyNotCloseDay(role) ?? (lost ? notKnown("recorded", "In and out of the drawer, read again").line : null);
   return (
     <Panel head={
       <Heading title="In and out of the drawer" under="Money that was not a sale."
@@ -427,12 +436,12 @@ function Movements({ code, role, day, onDone }: { code: string; role: string | n
       )}
       {last ? <SaidBar said={last} onDone={() => setLast(null)} style={{ marginTop: 10 }} /> : null}
       {/* A fresh sheet each time it opens: a stuck Record is let go only by closing it. */}
-      {open > 0 ? <MovementSheet key={open} code={code} onClose={(said) => { setOpen(0); setLast(said ?? null); onDone(); }} /> : null}
+      {open > 0 ? <MovementSheet key={open} code={code} onLost={onLost} onClose={(said) => { setOpen(0); setLast(said ?? null); onDone(); }} /> : null}
     </Panel>
   );
 }
 
-function MovementSheet({ code, onClose }: { code: string; onClose: (said?: Said) => void }) {
+function MovementSheet({ code, onClose, onLost }: { code: string; onClose: (said?: Said) => void; onLost: (at: number) => void }) {
   const [kind, setKind] = useState<MovementKind>("expense");
   const [amount, setAmount] = useState("");
   const [reason, setReason] = useState("");
@@ -452,7 +461,7 @@ function MovementSheet({ code, onClose }: { code: string; onClose: (said?: Said)
       return said;
     }, (e) => {
       /* A lost reply: the amount goes, and no more taps until the sheet is closed and the day read again (MEMORY 16). */
-      if (stuck.stop(e)) { setAmount(""); return failed("Not recorded", e, "recorded", "In and out of the drawer"); }
+      if (stuck.stop(e)) { setAmount(""); onLost(Date.now()); return failed("Not recorded", e, "recorded", "In and out of the drawer"); }
       return failed("Not recorded", e, "recorded", "In and out of the drawer");
     });
   };
@@ -504,7 +513,7 @@ function Finalize({ code, role, hotelName, day, loadedAt, onDone, onBack, reread
   const w = useWrite();
   /* A lost reply: grey until the day has been read again after it (MEMORY 16). */
   const [stuckAt, setStuckAt] = useState<number | null>(null);
-  const stuck = stuckAt !== null && loadedAt <= stuckAt;
+  const stuck = stillUnknown(stuckAt, loadedAt);
   const label = dayAt(dateLong(day.businessDate), hotelName);
 
   if (day.closedAt) {
@@ -536,10 +545,18 @@ function Finalize({ code, role, hotelName, day, loadedAt, onDone, onBack, reread
     }, () => onDone());
   };
   /* The phone's own dialog before the act that cannot be undone (docs/NATIVE.md). */
-  const ask = () => Alert.alert(`Close ${label}?`, "A closed day cannot be edited.", [
-    { text: "Cancel", style: "cancel" },
-    { text: "Close the day", style: "destructive", onPress: close },
-  ]);
+  const ask = () => {
+    /* Alert.alert's buttons do nothing on react-native-web: the PC preview asks the browser's own way. */
+    if (Platform.OS === "web") {
+      const confirm = (globalThis as { confirm?: (m: string) => boolean }).confirm;
+      if (confirm?.(`Close ${label}?\n\nA closed day cannot be edited.`)) close();
+      return;
+    }
+    Alert.alert(`Close ${label}?`, "A closed day cannot be edited.", [
+      { text: "Cancel", style: "cancel" },
+      { text: "Close the day", style: "destructive", onPress: close },
+    ]);
+  };
 
   return (
     <View style={{ gap: space.card }}>
