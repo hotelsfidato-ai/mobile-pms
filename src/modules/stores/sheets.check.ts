@@ -5,7 +5,7 @@
 import {
   askBody, barBody, barCountOf, barDifference, barLead, held, kitchenBody, kitchenDifference, morningText, moved, otherMoves,
   countSaidWords, dayStep, type BarSheet, type KitchenItem, type SheetDrink,
-} from "./sheets.ts";
+} from "./sheetsRules.ts";
 
 const eq = (got: unknown, want: unknown, what: string) => {
   if (JSON.stringify(got) !== JSON.stringify(want)) throw new Error(`${what}: got ${JSON.stringify(got)}, want ${JSON.stringify(want)}`);

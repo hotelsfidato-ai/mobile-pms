@@ -2,7 +2,7 @@
    Rooms, the house as tiles (HouseFloor.tsx, StayView.tsx todaysStays). */
 import type { Room, Stay } from "../../core/types.ts";
 import { buildChart, groupsOf, roomVisible, type ChartRoom } from "../reservations/chart.ts";
-import { dirtyMark, inPairs, tileAct, tileState, tileType, tileWhen, todaysStays, TILE_LABEL } from "./rooms.ts";
+import { dirtyMark, inPairs, tileAct, tileState, tileType, tileWhen, todaysStays, TILE_LABEL } from "./roomsRules.ts";
 
 const eq = (got: unknown, want: unknown, what: string) => {
   if (JSON.stringify(got) !== JSON.stringify(want)) throw new Error(`${what}: got ${JSON.stringify(got)}, want ${JSON.stringify(want)}`);

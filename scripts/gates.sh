@@ -38,7 +38,14 @@ routes() {
     || { echo "  x the bundle's routes are not this copy's app/ (< app only, > bundle only)"; return 1; }
 }
 bundle() { npx expo export --platform "$1" --output-dir "$S/export-$1" && node scripts/check-no-dev-login.mjs "$S/export-$1" && routes "$S/export-$1"; }
+# No two files whose import names differ only in capitals (Sheets.tsx and sheets.ts): on Windows and
+# macOS an import finds the wrong one (MEMORY 27, MPOS-1); Linux never notices, so it is checked here.
+names() {
+  local twins; twins=$(git ls-files | sed -E 's/\.(tsx?|jsx?)$//' | sort -f | uniq -di)
+  [ -z "$twins" ] && echo "  ✓ no names differ only in capitals" || { echo "  x these differ only in capitals:"; echo "$twins"; return 1; }
+}
 
+step names -- names
 step types -- npx tsc --noEmit
 step checks -- checks
 step android -- bundle android

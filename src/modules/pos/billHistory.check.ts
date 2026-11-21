@@ -2,7 +2,7 @@
    Bill history's rules: the question, the words, the server's figures as sent. */
 import {
   EMPTY, askPath, askProblem, countWords, guestOf, headingOf, isDay, modesWords, opening, stateOf, stepDay, totalCell,
-} from "./billHistory.ts";
+} from "./billHistoryRules.ts";
 
 const eq = (got: unknown, want: unknown) => {
   if (JSON.stringify(got) !== JSON.stringify(want)) throw new Error(`got ${JSON.stringify(got)}, want ${JSON.stringify(want)}`);

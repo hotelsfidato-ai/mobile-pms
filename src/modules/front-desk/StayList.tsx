@@ -9,7 +9,7 @@ import { c, face, t } from "../../core/theme";
 import { roleAt, useSession } from "../../core/session";
 import { Capsule, Card, ReadFailed, useRead, ripple, shade } from "../../core/ui";
 import { ListExport } from "../reports/ListExport";
-import type { ListScreenKey } from "../reports/listExport";
+import type { ListScreenKey } from "../reports/listExportRules";
 import { checkInPath, readBlacklist, type DeskStay } from "./data";
 import { day, fileMoney, matches, statusOf } from "./desk";
 import { body, Button, Empty, Pill } from "./kit";

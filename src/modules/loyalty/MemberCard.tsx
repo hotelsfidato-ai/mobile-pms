@@ -8,7 +8,7 @@ import { Btn, body, Field, InDialog, Loading, message, saidOf, type Said } from 
 import { LoadFailed } from "../laundry/kit";
 import { adjust, isRefused, leave, readCard } from "./data";
 import { LCard, Typed } from "./kit";
-import { adjustOf, dayOf, lineWords, memberLine, pointsText, signed, signedDigits } from "./loyalty";
+import { adjustOf, dayOf, lineWords, memberLine, pointsText, signed, signedDigits } from "./loyaltyRules";
 
 /* ══════════════════════════════════════════════════════════════════
    THE MEMBER CARD — the web's src/modules/loyalty/MemberCard.tsx (D27-179,

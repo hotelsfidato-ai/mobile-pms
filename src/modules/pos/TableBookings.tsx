@@ -15,7 +15,7 @@ import { whyNotAnswerTable, whyNotReadBills } from "./serviceRoles";
 import {
   ACT, answer, dayWords, detailLine, lists, offers, people, statusOf, tableLabel,
   type Asking, type Diner, type TableBooking, type TableBookingList,
-} from "./tableBookings";
+} from "./tableBookingsRules";
 import { ReadProblem, Refused, SaidBar, Stale, ty, useAccess, type Said } from "./TablesKit";
 
 /* ══════════════════════════════════════════════════════════════════

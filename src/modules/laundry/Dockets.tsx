@@ -8,11 +8,11 @@ import { Head, Screen, Stopped, useRead, useScreenStop, ripple, shade } from "..
 import { Back, Box, Btn, body, Empty, Loading, NotYours, Segmented, Stale } from "../guest-services/kit";
 import { Collect } from "./Collect";
 import { isRefused, readDockets, type Whose, COLLECT_UNKNOWN, docketsStop } from "./data";
-import { byState, collectedDay, rupees, STATUS_TONE, STATUS_WORDS, stillOutWords, whoseWords, type Docket } from "./docket";
+import { byState, collectedDay, rupees, STATUS_TONE, STATUS_WORDS, stillOutWords, whoseWords, type Docket } from "./docketRules";
 import { Fact, LoadFailed, StatePill } from "./kit";
 import { whyNotRead, whyNotTake } from "./roles";
 import { ListExport } from "../reports/ListExport";
-import { clockOf, dayOf } from "./docket";
+import { clockOf, dayOf } from "./docketRules";
 
 /* ══════════════════════════════════════════════════════════════════
    THE DOCKETS on a phone — the web's /h/:code/laundry

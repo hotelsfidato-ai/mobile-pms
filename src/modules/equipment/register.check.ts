@@ -5,7 +5,7 @@ import {
   itemRow, leaves, may, movedWords, notesOf, pillsOf, placesOf, retireWaits, rupees, shownOf, waitingOf, whoMay, whyNotAdd,
   whyNotMove, whyNotReport, whyNotRetire, ADD_REFUSED, REPORT_REFUSED, RETIRED_LOCK, WAITING_LOCK,
   type AddForm, type EquipmentItem, type HistoryEntry,
-} from "./register.ts";
+} from "./registerRules.ts";
 
 /* No node:assert, so the app's own type check reads this file too. */
 const eq = (got: unknown, want: unknown) => {
@@ -145,7 +145,7 @@ console.log("register: all checks pass");
 eq(addBody({ ...f, roomId: "r1", purchaseDate: "2025-03-14", amcEnds: "2027-03-31" }),
   { name: "Kettle", heldAs: "counted", quantity: 12, roomId: "r1", purchaseDate: "2025-03-14", amcEnds: "2027-03-31", status: "in_use" });
 {
-  const { changesOf } = await import("./register.ts");
+  const { changesOf } = await import("./registerRules.ts");
   const item = { name: "AC", category: null, heldAs: "tagged", tag: "EQ-1", supplierId: null, unitCost: null,
     purchaseDate: "2025-03-14", warrantyEnds: null, amcEnds: "2026-01-01" } as unknown as EquipmentItem;
   const same = { name: "AC", category: "", tag: "EQ-1", supplierId: "", unitCost: "", purchaseDate: "2025-03-14", warrantyEnds: "", amcEnds: "2026-01-01" };

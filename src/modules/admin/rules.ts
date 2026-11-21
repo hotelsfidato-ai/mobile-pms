@@ -13,7 +13,7 @@
 
 import { instant } from "../../core/format.ts";
 import { dateShort, dateTime } from "../guest-services/rules.ts";
-import { minPasswordFor, roleLabel } from "./roles.ts";
+import { minPasswordFor, roleLabel } from "./rolesRules.ts";
 
 export { dateShort, dateTime, instant };
 export const DASH = "-";

@@ -7,7 +7,7 @@ import { ruleFor } from "../../core/offline.ts";
 import {
   BAD_PRICE, listAct, NO_LENGTH, NO_NAME, NO_THERAPIST, priceWords, therapistBody, treatmentBody, treatmentDone, treatmentDraft,
   treatmentRows, TREATMENT_COLUMNS,
-} from "./setup.ts";
+} from "./setupRules.ts";
 import { LIST_REFUSED, whyNotSetUp } from "./roles.ts";
 
 const eq = (got: unknown, want: unknown, what = "") => {

@@ -5,9 +5,9 @@ import { dateDay } from "../finance/bill.ts";
 import {
   billTo, chipsOf, emptyOf, groupLine, groupsTable, headLine, notYet, owed, routedNote, rowLine, settleOff, stateOf, whyNotLead, whyNotRoute,
   type GroupDetail, type GroupRoom, type StayGroup,
-} from "./groups.ts";
+} from "./groupsRules.ts";
 import { whyNotChangeBill, whyNotChangeBooking, whyNotCharge, whyNotInvoice, whyNotPay, whyNotUnwaitlist, whyNotWaitlist } from "./groupRoles.ts";
-import { bodyOf, freePill, nights, nightsWord, partsOf, stillUnknown, typesOf, waitlistTable, wrongOf, type WaitlistEntry } from "./waitlist.ts";
+import { bodyOf, freePill, nights, nightsWord, partsOf, stillUnknown, typesOf, waitlistTable, wrongOf, type WaitlistEntry } from "./waitlistRules.ts";
 
 const eq = (got: unknown, want: unknown, what: string) => {
   if (JSON.stringify(got) !== JSON.stringify(want)) throw new Error(`${what}: got ${JSON.stringify(got)}, want ${JSON.stringify(want)}`);

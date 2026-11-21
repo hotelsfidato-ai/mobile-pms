@@ -5,7 +5,7 @@ import { c, face, space, t } from "../../core/theme";
 import { Head, Screen, s as core, useRead } from "../../core/ui";
 import { getSystemHealth, listIntegrations } from "./data";
 import { Failed, Labelled, Line, Loading, Pill, Refused, Segmented, Stale, body, usePoll } from "./kit";
-import { refusedScreen } from "./roles";
+import { refusedScreen } from "./rolesRules";
 import {
   BACKUP, DASH, OFFSITE, auditDay, bytes, dateShort, dateTime, freeShare, integrationsOf, ms, number, problemsOf, uptime, within,
   type Traffic,

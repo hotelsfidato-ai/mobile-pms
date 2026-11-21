@@ -23,7 +23,7 @@
 
 import { DASH } from "../../core/format.ts";
 import { amountText } from "../approvals/rules.ts";
-import { clockOf, dayOf } from "../laundry/docket.ts";
+import { clockOf, dayOf } from "../laundry/docketRules.ts";
 
 /* ── The server's shapes (purchasing.ts asRequest, the line select) ── */
 

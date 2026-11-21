@@ -11,12 +11,12 @@ import { Field, Input, Tick } from "../finance/Kit";
 import { Box, body, Empty, Loading, NotYours, Pill, Stale, Toast, type Said } from "../guest-services/kit";
 import { LoadFailed } from "../laundry/kit";
 import { isRefused, readTherapists, readTreatments } from "./data";
-import type { SpaTherapist, SpaTreatment } from "./diary";
+import type { SpaTherapist, SpaTreatment } from "./diaryRules";
 import { whyNotRead, whyNotSetUp } from "./roles";
 import {
   listAct, priceWords, therapistBody, therapistOff, treatmentBody, treatmentDone, treatmentDraft, treatmentOff, treatmentRows,
   TREATMENT_COLUMNS, type TreatmentDraft,
-} from "./setup";
+} from "./setupRules";
 import { addTherapist, addTreatment, changeTreatment, listTherapist, listTreatment } from "./setupData";
 
 /* ══════════════════════════════════════════════════════════════════

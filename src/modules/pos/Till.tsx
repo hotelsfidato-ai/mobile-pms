@@ -11,7 +11,7 @@ import { openStop, parcelsStop } from "./floor";
 import { Btn, Field, Input, ReadProblem, Refused, SaidBar, Stale, ty, useAccess, web, type Said } from "./TablesKit";
 import {
   EARLIER_FAILED, earlierAsked, earlierNone, earlierPath, openBody, openPill, orderHref, ringWhy, TILL_OUTLET, tillLists, type TillRow,
-} from "./till";
+} from "./tillRules";
 import { goToOrder, KotStrip, ListCard, NewParcelSheet, OrderRow, Problem, TillStartHere } from "./TillKit";
 import type { MenuCategory, Order } from "./types";
 

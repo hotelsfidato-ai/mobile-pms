@@ -1,6 +1,6 @@
 /* Run: node --experimental-strip-types src/modules/pos/roomCharges.check.ts
    Charges to rooms' rules, and the lane's rights (serviceRoles.ts). */
-import { headPill, outletPill, refusals, refusedTitle, ticketPill, type PosTicket } from "./roomCharges.ts";
+import { headPill, outletPill, refusals, refusedTitle, ticketPill, type PosTicket } from "./roomChargesRules.ts";
 import {
   whyNotAnswerTable, whyNotCloseDay, whyNotReadBills, whyNotReadDay, whyNotReadRoomCharges, whyNotWideSearch,
 } from "./serviceRoles.ts";

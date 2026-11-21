@@ -13,7 +13,7 @@ import { BOOK_UNKNOWN, dayStop, isRefused, readDiary } from "./data";
 import {
   actsOf, bandWords, clockTime, countLine, rupees, SETTLEMENT, shiftDay, UNPRICED_LINE,
   type SpaAppointment, type SpaDiaryTherapist,
-} from "./diary";
+} from "./diaryRules";
 import { whyNotBook, whyNotRead, whyNotSetUp } from "./roles";
 import { ListExport } from "../reports/ListExport";
 

@@ -13,7 +13,7 @@ import { LoadFailed, Note } from "../laundry/kit";
 import {
   billBody, billCheck, billWhen, chargesLine, creditWords, draftAmount, EMPTY_LINE, lineFigures, recordedWords, rupees, UNITS,
   whyNotRecordBar, type BarDrink, type BillDraft, type LineDraft,
-} from "./barBills";
+} from "./barBillsRules";
 import { addBarPhoto, barPhotoPath, barStop, isRefused, readBarBills, readBarDrinks, recordBarBill } from "./data";
 import { Tick } from "./kit";
 import { suggestedDue } from "./purchase";

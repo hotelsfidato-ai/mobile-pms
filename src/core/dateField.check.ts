@@ -7,7 +7,7 @@ process.env.TZ = "America/New_York";
 Date.parse = () => { throw new Error("Date.parse used: the phone's engine reads only ISO"); };
 const {
   bounds, dateToDay, dateToTime, dayShown, dayToDate, hotelClock, hotelDay, inRange, isDay, isTime, opensOn, timeShown, timeToDate,
-} = await import("./dateField.ts");
+} = await import("./dateFieldRules.ts");
 
 const eq = (got: unknown, want: unknown, what: string) => {
   if (JSON.stringify(got) !== JSON.stringify(want)) throw new Error(`${what}: got ${JSON.stringify(got)}, want ${JSON.stringify(want)}`);

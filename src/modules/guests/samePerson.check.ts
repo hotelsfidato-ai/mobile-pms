@@ -5,7 +5,7 @@
 import { ruleFor } from "../../core/offline.ts";
 import {
   apartTail, contactLine, joinStrip, joinTail, onlyWithId, otherOf, sharedWords, sideLine, sideState, type GuestCard,
-} from "./samePerson.ts";
+} from "./samePersonRules.ts";
 
 const eq = (got: unknown, want: unknown, what: string) => {
   if (JSON.stringify(got) !== JSON.stringify(want)) throw new Error(`${what}: got ${JSON.stringify(got)}, want ${JSON.stringify(want)}`);

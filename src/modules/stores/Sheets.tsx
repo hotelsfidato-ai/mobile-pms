@@ -25,7 +25,7 @@ import {
   askBody, barBody, barDifference, barLead, barPlaceName, belowZero, countSaidWords, figure, held, KITCHEN_COLUMNS,
   kitchenBody, kitchenDifference, morningText, moved, otherMoves, REQUEST_STATE, requestUnit, subOf, wholeWord,
   type BarSheet, type KitchenItem, type KitchenSheet, type Moment, type Place, type SheetDrink,
-} from "./sheets";
+} from "./sheetsRules";
 
 /* ══════════════════════════════════════════════════════════════════
    INVENTORY (Bar | Restaurant), BAR STOCK and KITCHEN STOCK on a phone —

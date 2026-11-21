@@ -1,5 +1,5 @@
 import { api, ApiError, currentSubject, send } from "../../core/api";
-import { redeemKeys, type HotelMonth, type LoyaltyCard, type LoyaltyScreen } from "./loyalty";
+import { redeemKeys, type HotelMonth, type LoyaltyCard, type LoyaltyScreen } from "./loyaltyRules";
 
 /* ══════════════════════════════════════════════════════════════════
    LOYALTY'S CALLS — the web's src/modules/loyalty/data/loyalty.ts, through

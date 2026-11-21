@@ -19,7 +19,7 @@ import {
   methodWord, methodsByAmount, movementBody, movementOf, needsReason, PHOTO_NOT_REACHED, photoPath, photoStop, precise, recordedWords, rowFigure,
   rupees, seedCounts, signed, stillUnknown, typed,
   variance, waitsOrRefused, whyNotClose, whyNotSave, type Counts, type DayEnd, type MovementKind, type Step,
-} from "./dayEnd";
+} from "./dayEndRules";
 import { closeDay, countDrawer, openDay, readDayEnd, recordMovement } from "./serviceData";
 import { BottomSheet, Btn, Empty, Field, Heading, Input, Line, Loading, PageHead, Panel, Pill, Select, Why } from "./ServiceKit";
 import { whyNotCloseDay, whyNotReadDay } from "./serviceRoles";

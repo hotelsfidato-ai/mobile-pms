@@ -11,7 +11,7 @@ import type { FileRule, Picked } from "../../core/files";
 import { explainPick } from "../../core/pickers";
 import { base64For } from "../../core/upload";
 import { Btn, Failed, Loading, Refused, Stale, body, saidOf, type Said } from "../admin/kit";
-import { notYourRole, refusalFor } from "../admin/roles";
+import { notYourRole, refusalFor } from "../admin/rolesRules";
 import { TEXT_MOST, type TextKind } from "./propertyRules";
 import { saveText } from "./propertyData";
 

@@ -14,7 +14,7 @@ import { figure, type Hall, type Package } from "./rules";
 import {
   freeRate, hallBody, hallDraft, hallLine, hallProblems, HALLS_WHO, NO_PACKAGE, packageBody, packageLine, PACKAGES_NOTE, PACKAGES_WHO,
   switchedWords, whyNotReadSetup, whyNotSetUp, type HallDraft, type PackageDraft,
-} from "./setup";
+} from "./setupRules";
 import { addHall, addPackage, changeHall, switchPackage } from "./setupData";
 import { askFirst, Btn, CardHead, Dialog, DialogFoot, ListRow, useDialogWrite, useRowWrite, Why } from "./setupKit";
 

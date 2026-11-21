@@ -9,7 +9,7 @@ import { body, Box, Empty, Input, Loading, NotYours, Stale } from "../guest-serv
 import { LoadFailed } from "../laundry/kit";
 import { isRefused, readGuests } from "./data";
 import { Avatar, Line, OwedText } from "./kit";
-import { rupees } from "../laundry/docket";
+import { rupees } from "../laundry/docketRules";
 import { backWords, byName, guestCount, lastStayWords, OVERLAP_NOTE, overlapTitle, owed, type GuestRecord } from "./lookup";
 import { whyNotGuests } from "./roles";
 import { ListExport } from "../reports/ListExport";

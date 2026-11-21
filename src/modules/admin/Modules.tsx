@@ -5,7 +5,7 @@ import { c, t } from "../../core/theme";
 import { Head, Screen, s as core, notKnown, useRead } from "../../core/ui";
 import { getModules, setModule } from "./data";
 import { Failed, Loading, Refused, Stale, SwitchRow, Toast, body, confirm, saidOf, useAct, useSaid, type Said } from "./kit";
-import { refusedScreen } from "./roles";
+import { refusedScreen } from "./rolesRules";
 import { MODULE_COPY, bookingSection, moduleLabel, switchedWords } from "./rules";
 import type { AdminProps } from "./Route";
 

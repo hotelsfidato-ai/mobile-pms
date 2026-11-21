@@ -21,7 +21,7 @@ import { EditDialog, MoveDialog, RepairDialog, RetireDialog, StatusDialog, type 
 import {
   actsOf, decisionLine, detailsOf, heldText, historyLine, historyNote, may, namesLine, notesOf, placeText, retireWaits,
   rupees, STATUS_LABEL, STATUS_TONE, whoMay, whyNotReport, type EquipmentItem,
-} from "./register";
+} from "./registerRules";
 
 /* ══════════════════════════════════════════════════════════════════
    ONE THING IN THE REGISTER on a phone - the web's /h/:code/equipment/:id

@@ -10,7 +10,7 @@ import {
   type Discount, type ExtraCharge, type PlanSetting, type TaxKindRules, type TaxSetup,
 } from "./moneyRules.ts";
 import { refusalFor as configRefusal, SETUP_CHANGE as CONFIG_SETUP, COMMISSION as CONFIG_COMMISSION } from "../inventory/configRoles.ts";
-import type { BreakupDay, Pricing } from "../inventory/rates.ts";
+import type { BreakupDay, Pricing } from "../inventory/ratesRules.ts";
 import { stopBook } from "../../core/stop.ts";
 
 const eq = (got: unknown, want: unknown, what: string) => {

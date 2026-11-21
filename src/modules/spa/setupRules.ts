@@ -18,7 +18,7 @@
    ══════════════════════════════════════════════════════════════════ */
 
 import { DASH } from "../../core/format.ts";
-import { rupees, type SpaTherapist, type SpaTreatment } from "./diary.ts";
+import { rupees, type SpaTherapist, type SpaTreatment } from "./diaryRules.ts";
 
 /* ── A row (SpaSetup.tsx) ─────────────────────────────────────── */
 

@@ -7,7 +7,7 @@ import { c, face, t } from "../../core/theme";
 import { Head, Screen, s as core, useRead } from "../../core/ui";
 import { listActivity, listAuditLog } from "./data";
 import { Btn, Choose, Empty, Failed, Field, Foot, Labelled, Loading, Pill, Refused, Segmented, Stale, body, type Tone } from "./kit";
-import { refusedScreen, seesGroupActivity } from "./roles";
+import { refusedScreen, seesGroupActivity } from "./rolesRules";
 import {
   ACTIVITY_PAGE, AUDIT_PAGE, DASH, changeWords, dateShort, dateTime, dayOrBlank, entriesWords, paged, type AuditEntry,
 } from "./rules";

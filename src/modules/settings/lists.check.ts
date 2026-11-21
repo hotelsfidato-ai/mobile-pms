@@ -9,7 +9,7 @@ import {
   AUDIT_TIME_REFUSED, COLOUR, FIELDS, LIST_PAGES, REASON_TABS, START, STATES, charge, emptyWords, freshName, pageName,
   hoursBody, hoursProblem, isDay, listPath, mayAddHoliday, mayMove, nextOff, ruleFigures, rulesBody, shownRows,
   pageStuck, pageSending, pageUnknown, swapSorts, timeProblem, watchPage, writeOnce, toggleDay, typedColour, whyNotAuditTime, withField, type ListItem,
-} from "./lists.ts";
+} from "./listsRules.ts";
 
 const eq = (got: unknown, want: unknown, what = "") => {
   if (JSON.stringify(got) !== JSON.stringify(want)) throw new Error(`${what}: got ${JSON.stringify(got)}, want ${JSON.stringify(want)}`);

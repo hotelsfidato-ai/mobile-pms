@@ -6,7 +6,7 @@ import { c, space, t } from "../../core/theme";
 import { Screen, useRead } from "../../core/ui";
 import { PageHead, Pill } from "../front-desk/kit";
 import { body, Box, Btn, Empty, Loading, NotYours, Stale } from "../guest-services/kit";
-import { rupees } from "../laundry/docket";
+import { rupees } from "../laundry/docketRules";
 import { LoadFailed } from "../laundry/kit";
 import { isRefused, readCompanies, readCompanyNames } from "./data";
 import { Line, OwedText, Tile } from "./kit";

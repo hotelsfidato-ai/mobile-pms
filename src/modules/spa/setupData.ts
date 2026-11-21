@@ -1,5 +1,5 @@
 import { send } from "../../core/api";
-import type { TreatmentInput } from "./setup";
+import type { TreatmentInput } from "./setupRules";
 
 /* ══════════════════════════════════════════════════════════════════
    TREATMENTS AND THERAPISTS' WRITES (lane U, 19 Nov) — the web's

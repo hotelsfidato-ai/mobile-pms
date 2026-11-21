@@ -12,7 +12,7 @@ import { Btn, Field, Input, ReadProblem, Refused, SaidBar, Stale, ty, useAccess,
 import {
   activeOutlets, declineTitle, guestDishes, guestTitle, lockedLine, openBody, orderHref, outletKey, outletName, precise, ringWhy,
   roomLine, terminalLine, terminalRowLine, tillLists, type GuestOrder, type PosOutlet, type TillRow,
-} from "./till";
+} from "./tillRules";
 import { goToOrder, KotStrip, NewParcelSheet, Problem, ripple, shade, TillSheet } from "./TillKit";
 import type { Order } from "./types";
 

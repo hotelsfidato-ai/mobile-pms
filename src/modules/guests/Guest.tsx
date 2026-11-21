@@ -8,7 +8,7 @@ import { Head, Screen, useRead } from "../../core/ui";
 import { stayedWords } from "../front-desk/desk";
 import { Pill } from "../front-desk/kit";
 import { Back, body, Box, Btn, Empty, Field, Input, Loading, NotYours, saidOf, Stale, Toast, type Said } from "../guest-services/kit";
-import { dayOf, rupees } from "../laundry/docket";
+import { dayOf, rupees } from "../laundry/docketRules";
 import { LoadFailed } from "../laundry/kit";
 import { MemberCard } from "../loyalty/MemberCard";
 import {

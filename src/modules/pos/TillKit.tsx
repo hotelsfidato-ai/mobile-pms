@@ -10,7 +10,7 @@ import { c, face, space, t } from "../../core/theme";
 import { notKnown, useScreenStop } from "../../core/ui";
 import { kotLines, maySetUpKots, parcelsStop, startCard, type KotKind } from "./floor";
 import { Btn, Field, Input, OVERLAY, SheetHead, sheetCard, sheetFooter, ty, type Said } from "./TablesKit";
-import { orderHref, padHref, PARCEL_NAMELESS, parcelBody, rowFigure, rowLabel, rowLine, type TillRow } from "./till";
+import { orderHref, padHref, PARCEL_NAMELESS, parcelBody, rowFigure, rowLabel, rowLine, type TillRow } from "./tillRules";
 import type { Order } from "./types";
 
 /* ══════════════════════════════════════════════════════════════════

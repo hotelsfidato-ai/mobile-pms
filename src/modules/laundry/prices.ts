@@ -17,7 +17,7 @@
    Pure: no React Native, so prices.check.ts runs under node.
    ══════════════════════════════════════════════════════════════════ */
 
-import { rupees, SERVICE_WORDS, type LaundryService, type PriceItem } from "./docket.ts";
+import { rupees, SERVICE_WORDS, type LaundryService, type PriceItem } from "./docketRules.ts";
 
 /* ── Who may (refusalFor's words; the same six as taking in a bag) ── */
 

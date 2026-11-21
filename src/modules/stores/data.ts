@@ -1,5 +1,5 @@
 import { api, ApiError, send } from "../../core/api";
-import type { BarRequest, BarSheet, KitchenSheet, Moment, Place } from "./sheets";
+import type { BarRequest, BarSheet, KitchenSheet, Moment, Place } from "./sheetsRules";
 import type { StockMovement, StoreList } from "./shelf";
 
 /* ══════════════════════════════════════════════════════════════════

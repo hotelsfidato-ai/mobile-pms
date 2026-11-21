@@ -7,7 +7,7 @@ import { c, face, t } from "../../core/theme";
 import { Head, Screen, s as core, useRead } from "../../core/ui";
 import { listStaff } from "./data";
 import { Empty, Failed, Foot, Labelled, Loading, Pill, Refused, Stale, body, type Tone } from "./kit";
-import { ROLE_DESCRIPTIONS, refusedScreen } from "./roles";
+import { ROLE_DESCRIPTIONS, refusedScreen } from "./rolesRules";
 import { STAFF_STATUS, dateTime } from "./rules";
 import type { AdminProps } from "./Route";
 import type { Role } from "../../core/menu";

@@ -2,7 +2,7 @@ import { api, ApiError, currentSubject, send } from "../../core/api";
 import { keyKeeper, type KeyKeeper } from "../../core/keys";
 import type { Picked } from "../../core/files";
 import { filePart, sendForm } from "../../core/upload";
-import type { BarBill, BarBillBody, BarDrinks } from "./barBills";
+import type { BarBill, BarBillBody, BarDrinks } from "./barBillsRules";
 import {
   approvalFor, type AskBody, type DeliveryBody, type PurchaseApproval, type PurchaseRequest, type PurchasingList, type RequestDetail,
 } from "./purchase";

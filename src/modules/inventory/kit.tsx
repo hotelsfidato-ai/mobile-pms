@@ -6,7 +6,7 @@ import {
 import { HeldError } from "../../core/api";
 import { isOnline } from "../../core/offline";
 import { c, face, space, t } from "../../core/theme";
-import { dateShort } from "./rates";
+import { dateShort } from "./ratesRules";
 import { keys, modalEdge, ripple, shade, useSheetPad } from "../../core/ui";
 
 /* ══════════════════════════════════════════════════════════════════

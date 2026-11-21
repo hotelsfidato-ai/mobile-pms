@@ -5,7 +5,7 @@ import { ROLE_LABELS, type Role } from "../../core/menu";
 import { c, t } from "../../core/theme";
 import { Head, Screen, s as core } from "../../core/ui";
 import { Choose, Foot, Pill, Refused, body } from "./kit";
-import { MATRIX_ROLES, RESOURCES, RESOURCE_LABELS, RESTAURANT_BY_NAME, cellOf, inWords, refusedScreen } from "./roles";
+import { MATRIX_ROLES, RESOURCES, RESOURCE_LABELS, RESTAURANT_BY_NAME, cellOf, inWords, refusedScreen } from "./rolesRules";
 import type { AdminProps } from "./Route";
 
 /* ══════════════════════════════════════════════════════════════════

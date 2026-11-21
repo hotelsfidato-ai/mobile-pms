@@ -24,7 +24,7 @@
    ══════════════════════════════════════════════════════════════════ */
 
 import { DASH } from "../../core/format.ts";
-import { dayOf, rupees } from "../laundry/docket.ts";
+import { dayOf, rupees } from "../laundry/docketRules.ts";
 
 /* ── Guests (GET /guests?asOn=) ───────────────────────────────────── */
 

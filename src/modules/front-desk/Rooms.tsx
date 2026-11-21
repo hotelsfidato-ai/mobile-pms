@@ -19,7 +19,7 @@ import { IconChip, type ChipTone } from "../reports/kit";
 import { readHouse, readRooms } from "./data";
 import { Button, Segmented, Toast, type Said } from "./kit";
 import { whyNotBook, whyNotRoom } from "./roles";
-import { dirtyMark, inPairs, tileAct, tileState, tileType, tileWhen, todaysStays, TILE_LABEL, type TileState } from "./rooms";
+import { dirtyMark, inPairs, tileAct, tileState, tileType, tileWhen, todaysStays, TILE_LABEL, type TileState } from "./roomsRules";
 
 /* ══════════════════════════════════════════════════════════════════
    ROOMS — the web's /h/:code/stay (src/modules/front-desk/pages/

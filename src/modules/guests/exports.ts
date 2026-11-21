@@ -6,7 +6,7 @@
    ══════════════════════════════════════════════════════════════════ */
 
 import type { ExportTable } from "../../core/exportDoc.ts";
-import { dayOf, rupees } from "../laundry/docket.ts";
+import { dayOf, rupees } from "../laundry/docketRules.ts";
 import { commissionWords, owed, revenueWords, type CompanyRecord, type GuestRecord } from "./lookup.ts";
 
 type Table = Omit<ExportTable, "title">;

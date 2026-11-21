@@ -6,7 +6,7 @@ import { asRole, mayReach } from "../../core/menu";
 import { c, face, space, t } from "../../core/theme";
 import { notKnown, ripple, shade, useScreenStop } from "../../core/ui";
 import { stops } from "../../core/stop";
-import { notYourRole } from "../admin/roles";
+import { notYourRole } from "../admin/rolesRules";
 import { Btn, TextBox } from "../inventory/configKit";
 import { Empty, body, saidOf, type Said } from "../inventory/kit";
 import { freshBook, matches } from "./moneyRules";

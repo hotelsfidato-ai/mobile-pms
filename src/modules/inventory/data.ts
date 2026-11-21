@@ -1,5 +1,5 @@
 import { api, orNull, send } from "../../core/api";
-import type { BaseBody, BreakupDay, Inventory, Pricing, RateDay, RestrictionBody } from "./rates";
+import type { BaseBody, BreakupDay, Inventory, Pricing, RateDay, RestrictionBody } from "./ratesRules";
 
 /* ══════════════════════════════════════════════════════════════════
    RATES' READS AND WRITES — the web's data/pricing.ts, data/rates.ts and

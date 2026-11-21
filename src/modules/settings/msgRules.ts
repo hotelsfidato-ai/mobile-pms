@@ -17,7 +17,7 @@
 
 import { DASH, msAt } from "../../core/format.ts";
 import { can, mayReach, type Role } from "../../core/menu.ts";
-import { notYourRole, refusalFor } from "../admin/roles.ts";
+import { notYourRole, refusalFor } from "../admin/rolesRules.ts";
 
 /* ── The shapes (the web's seams) ─────────────────────────────────── */
 

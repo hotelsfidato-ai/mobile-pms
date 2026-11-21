@@ -5,7 +5,7 @@ import { DateField } from "../../core/DateField";
 import { c, face, t } from "../../core/theme";
 import { keys, notKnown, type useScreenStop } from "../../core/ui";
 import { ID_TYPES } from "../front-desk/guestId";
-import { typedPrice } from "../inventory/rates";
+import { typedPrice } from "../inventory/ratesRules";
 import { Returning } from "../reservations/NewBooking";
 import { addBackfill, correctBackfill } from "./data";
 import { Btn, Choose, Field, Segmented, Sheet, body, type Said } from "./kit";

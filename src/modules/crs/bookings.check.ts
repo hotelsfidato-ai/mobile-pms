@@ -5,7 +5,7 @@ import { ruleFor } from "../../core/offline.ts";
 import {
   connectionOf, dateTime, dayYear, factsOf, failedWords, formOf, noteOf, outcomeOf, readsAsLine, stayLines, stayOf, toldOf,
   type CrsBooking, type CrsConnection, type CrsSetup,
-} from "./bookings.ts";
+} from "./bookingsRules.ts";
 
 const eq = (got: unknown, want: unknown, what: string) => {
   if (JSON.stringify(got) !== JSON.stringify(want)) throw new Error(`${what}: got ${JSON.stringify(got)}, want ${JSON.stringify(want)}`);

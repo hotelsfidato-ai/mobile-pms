@@ -9,7 +9,7 @@ import {
   DAYS, addDays, breakupRows, cellsByDay, dayHead, figure, fillOf, lookOf, nightsMark, occupancyOf, rangeOf, rupees,
   tappedPrice, toneOf, typesOf, typesOwnBase,
   type DayRules, type InventoryCell, type Pricing, type RateDay, type Restriction,
-} from "./rates";
+} from "./ratesRules";
 import type { DayTarget, PriceTarget } from "./Dialogs";
 import { ripple, shade } from "../../core/ui";
 

@@ -7,7 +7,7 @@ import type { WorkOrderList } from "../housekeeping/workOrders";
 import {
   itemPath, listPath, movePath, optionsPath, repairsPath, retirePath, statusPath,
   type EquipmentItem, type EquipmentOptions, type HistoryEntry,
-} from "./register";
+} from "./registerRules";
 
 /* ══════════════════════════════════════════════════════════════════
    THE EQUIPMENT REGISTER'S CALLS - the web's data/equipment.ts, through

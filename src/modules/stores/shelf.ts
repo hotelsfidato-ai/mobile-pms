@@ -19,7 +19,7 @@
    Pure: no React Native here, so shelf.check.ts runs under node.
    ══════════════════════════════════════════════════════════════════ */
 
-import { rupees } from "../inventory/rates.ts";
+import { rupees } from "../inventory/ratesRules.ts";
 
 export const DASH = "-";
 

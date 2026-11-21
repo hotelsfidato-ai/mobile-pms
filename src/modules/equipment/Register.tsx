@@ -21,7 +21,7 @@ import {
   ADD_REFUSED, addBody, askedLine, costText, endsText, EXPORT_REFUSED, headLine, heldText, ITEM_COLUMNS, itemRow, may,
   pillsOf, placesOf, placeText, shownOf, STATUS_LABEL, waitingOf, waitingTitle, whyNotAdd,
   type AddForm, type EquipmentItem, type StatusFilter,
-} from "./register";
+} from "./registerRules";
 
 /* ══════════════════════════════════════════════════════════════════
    EQUIPMENT on a phone - the web's /h/:code/equipment (16 Nov release):

@@ -6,7 +6,7 @@ import { ruleFor } from "../../core/offline.ts";
 import {
   backWords, byState, clockOf, collectBody, collectedDay, dayOf, itemWords, lineParts, mayCancel, mayCharge, mayReturn,
   returnBody, rupees, stayChoices, stayWords, stillOutWords, unpricedWords, whoseWords, type Docket,
-} from "./docket.ts";
+} from "./docketRules.ts";
 
 const eq = (got: unknown, want: unknown, what: string) => {
   if (JSON.stringify(got) !== JSON.stringify(want)) throw new Error(`${what}: got ${JSON.stringify(got)}, want ${JSON.stringify(want)}`);

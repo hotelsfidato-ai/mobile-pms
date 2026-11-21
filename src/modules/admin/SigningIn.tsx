@@ -6,7 +6,7 @@ import { c, t } from "../../core/theme";
 import { Head, Screen, s as core, notKnown, useRead } from "../../core/ui";
 import { getTwoStep, setTwoStepRequired } from "./data";
 import { Loading, Refused, SwitchRow, Toast, body, saidOf, useAct, useSaid } from "./kit";
-import { MIN_MANAGER_PASSWORD, MIN_PASSWORD, refusedScreen, setsTwoStepRequired } from "./roles";
+import { MIN_MANAGER_PASSWORD, MIN_PASSWORD, refusedScreen, setsTwoStepRequired } from "./rolesRules";
 import type { AdminProps } from "./Route";
 
 /* ══════════════════════════════════════════════════════════════════

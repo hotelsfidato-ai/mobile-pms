@@ -1,5 +1,5 @@
 import { send } from "../../core/api";
-import type { HallInput, PackageInput } from "./setup";
+import type { HallInput, PackageInput } from "./setupRules";
 
 /* ══════════════════════════════════════════════════════════════════
    HALLS AND PACKAGES' WRITES (lane U, 19 Nov) — the web's addBanquetVenue,

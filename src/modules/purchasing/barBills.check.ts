@@ -9,7 +9,7 @@ import { ruleFor } from "../../core/offline.ts";
 import {
   BAR_BILL_REFUSED, billBody, billCheck, bottlesOf, casesText, creditWords, draftAmount, EMPTY_LINE, figures, lineAmount,
   lineFigures, whyNotRecordBar, type BarBill, type BillDraft, type LineDraft,
-} from "./barBills.ts";
+} from "./barBillsRules.ts";
 
 const eq = (got: unknown, want: unknown, what: string) => {
   if (JSON.stringify(got) !== JSON.stringify(want)) throw new Error(`${what}: got ${JSON.stringify(got)}, want ${JSON.stringify(want)}`);

@@ -5,7 +5,17 @@ commits.
 
 ---
 
-## 2026-11-20 (night) · M-18: photos shrunk on the phone, as the web does
+## 2026-11-21 · On the PC: the transfer, the API at the 16 Nov release, Expo Go for the phone
+
+**Asked for:** "pull the latest into the PC, check all the files came from the cloud, start the
+development and make the app live so I can test on my phone." **Done:** the PMS worktree
+`D:\fidato pms moblie` brought to PMS `c9394cb` (its `api/`, `db/`, `src/`), `fidato_mobile` migrated to
+`275_upi_qr_on_the_bill.sql` (backup first), the API on 8860; every test person signs in, the waiter
+`dev-pos` included. This copy cloned from GitHub (`6b236d1`, 517 commits, every branch merged into
+`main`, 181 screen files) and `npm ci`. **Found:** the first PC gate run failed on types: 25 pairs of
+names differing only in capitals (MEMORY 27). **Shipped:** each lowercase file renamed
+`<name>Rules.ts`, 129 imports rewritten; a new first gate, `names`, refuses such pairs (broken on
+purpose once). A module's MODULE.md may still name the old lowercase file: read it as `<name>Rules.ts`.
 
 **Asked for:** "yes to all 3 recommendations" (M-18). **Shipped** `5f513ef` `expo-image-manipulator`
 ~57.0.21 (SDK 57's own; nothing else moved); `9c342b7` the web's own resize (`shrinkPhoto.ts`:

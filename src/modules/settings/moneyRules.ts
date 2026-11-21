@@ -34,7 +34,7 @@
    ══════════════════════════════════════════════════════════════════ */
 
 import { ROLES, can, asRole, type Resource, type Role } from "../../core/menu.ts";
-import { DASH, dateShort, rupees, typedPrice, type BreakupDay, type Pricing } from "../inventory/rates.ts";
+import { DASH, dateShort, rupees, typedPrice, type BreakupDay, type Pricing } from "../inventory/ratesRules.ts";
 import { figureOf } from "../inventory/config.ts";
 
 export { DASH, rupees };

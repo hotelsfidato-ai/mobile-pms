@@ -5,7 +5,7 @@ import { c, t } from "../../core/theme";
 import { Head, Screen, s as core, keys, notKnown, useRead } from "../../core/ui";
 import { getBankDetails, removeBankDetails, setBankDetails } from "./data";
 import { Btn, Failed, Field, Labelled, Loading, Refused, Sheet, Stale, Toast, body, confirm, saidOf, useAct, useSaid, useStop, type Said, type Stop } from "./kit";
-import { refusedScreen } from "./roles";
+import { refusedScreen } from "./rolesRules";
 import { dateTime, type BankDetails } from "./rules";
 import type { AdminProps } from "./Route";
 

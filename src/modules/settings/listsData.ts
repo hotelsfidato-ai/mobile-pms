@@ -1,5 +1,5 @@
 import { api, send, type HotelsResponse } from "../../core/api";
-import { listPath, type DeskRules, type FrontDeskHours, type Holiday, type ListItem, type ListSource } from "./lists";
+import { listPath, type DeskRules, type FrontDeskHours, type Holiday, type ListItem, type ListSource } from "./listsRules";
 
 /* ══════════════════════════════════════════════════════════════════
    SETTINGS › LISTS AND FRONT DESK — the calls (lane m13-set-lists),

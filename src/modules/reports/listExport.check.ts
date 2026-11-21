@@ -1,6 +1,6 @@
 /* Run: node --experimental-strip-types src/modules/reports/listExport.check.ts
    Who may take a list away as a file (listExport.ts), against the web's sentences. */
-import { LIST_SCREENS, exportRefusal, forWhom, maskId } from "./listExport.ts";
+import { LIST_SCREENS, exportRefusal, forWhom, maskId } from "./listExportRules.ts";
 
 /* No node:assert, so the app's own type check reads this file too. */
 const eq = (got: unknown, want: unknown) => {

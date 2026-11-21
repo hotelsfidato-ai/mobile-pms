@@ -7,7 +7,7 @@ import { Btn, Dialog, Field, InDialog, Input, Select, Tick, Toggle, body, saidOf
 import {
   baseBody, baseDone, dateShort, daysThrough, priceOf, restrictionBody, spanWords, typedNights, typedPrice,
   type Restriction,
-} from "./rates";
+} from "./ratesRules";
 
 /* ══════════════════════════════════════════════════════════════════
    THE QUICK CHANGE — Rates.tsx BaseDialog (837-947) and RestrictionDialog

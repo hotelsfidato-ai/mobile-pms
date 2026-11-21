@@ -7,7 +7,7 @@ import { c, face, t } from "../../core/theme";
 import { notKnown, useRead, useScreenStop, ripple, shade, keys } from "../../core/ui";
 import { Btn, body, Dialog, Field, Foot, InDialog, Input, Loading, Select, saidOf, type Said } from "../guest-services/kit";
 import { collect, isRefused, readPriceList, readStays, docketsStop } from "./data";
-import { collectBody, itemWords, stayWords, type Draft } from "./docket";
+import { collectBody, itemWords, stayWords, type Draft } from "./docketRules";
 
 /* ══════════════════════════════════════════════════════════════════
    COLLECTING A BAG — the web's CollectDialog (pages/Dockets.tsx).

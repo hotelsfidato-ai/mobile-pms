@@ -10,7 +10,7 @@ import { Blank, Exports, Line, Panel, RowCard } from "../leads/kit";
 import {
   answerRef, answersTable, FAILED, LATEST_EMPTY, LATEST_TITLE, latestNote, MONTHS_EMPTY, MONTHS_NOTE, MONTHS_TITLE, monthWords, OFF,
   overallTone, overallWords, PART_WORD, PARTS, partsLine, score, TITLE, UNDER, whyNotFeedback,
-} from "./feedback";
+} from "./feedbackRules";
 import { isRefused, readFeedback } from "./feedbackData";
 import { moment } from "./rules";
 

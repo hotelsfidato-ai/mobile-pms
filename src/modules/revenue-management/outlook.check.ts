@@ -9,7 +9,7 @@ import {
   nearbyLine, nearbySummary, onTheBooksAWeekAgo, paceTiles, percent, pickupNote, pickupOn, plusDays, rivalPrice,
   sameMonthLastYear, softestFirst, suggest, suggestions, temperOf, whyNoPickup, windowOpens,
   type CheckedNight, type DayStatistics, type PeriodStatistics, type Pickup,
-} from "./outlook.ts";
+} from "./outlookRules.ts";
 
 /* No node:assert, so the app's own type check reads this file too. */
 const eq = (got: unknown, want: unknown) => {

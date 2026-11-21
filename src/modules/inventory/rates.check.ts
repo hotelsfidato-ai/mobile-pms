@@ -5,7 +5,7 @@ import {
   addDays, baseBody, breakupRows, cellsByDay, dateShort, dayHead, daysThrough, differenceOf, figure, fillOf, lookOf,
   nightsMark, occupancyOf, offered, priceOf, rangeOf, restrictionBody, rupees, spanWords, tappedPrice, typedNights,
   typedPrice, typesOf, typesOwnBase, toneOf, windowOf, type Pricing, type PricingCell,
-} from "./rates.ts";
+} from "./ratesRules.ts";
 import { ruleFor } from "../../core/offline.ts";
 
 const eq = (got: unknown, want: unknown, what: string) => {

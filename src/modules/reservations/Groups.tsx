@@ -10,7 +10,7 @@ import { dateDay } from "../finance/bill";
 import { body, Button, Empty, PageHead, Pill, Segmented } from "../front-desk/kit";
 import { Kept, NotRead } from "../front-desk/StayList";
 import { ripple, shade } from "./GroupKit";
-import { chipsOf, emptyOf, groupsTable, headLine, owed, rowLine, type Scope, type StayGroup } from "./groups";
+import { chipsOf, emptyOf, groupsTable, headLine, owed, rowLine, type Scope, type StayGroup } from "./groupsRules";
 import { readGroup, readGroups } from "./groupsData";
 
 /* ══════════════════════════════════════════════════════════════════

@@ -9,7 +9,7 @@
    ══════════════════════════════════════════════════════════════════ */
 
 import type { ExportTable } from "../../core/exportDoc.ts";
-import { maskId } from "../reports/listExport.ts";
+import { maskId } from "../reports/listExportRules.ts";
 import {
   dateShort, dateTime, ID_LABEL, TEAM_LABEL, wakeWhen,
   type GuestRequest, type LostItem, type WaitingDetails, type WakeUpCall,

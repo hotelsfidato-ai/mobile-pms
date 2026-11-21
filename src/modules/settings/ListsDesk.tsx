@@ -10,7 +10,7 @@ import type { AdminProps } from "../admin/Route";
 import {
   ADVANCE, DAYS, FIELDS, IDS, TITLES, UNKNOWN_LINE, charge, pageName, hoursBody, hoursProblem, ruleFigures, rulesBody,
   toggleDay, whyNotAuditTime, withField, type DeskRules, type FrontDeskHours,
-} from "./lists";
+} from "./listsRules";
 import { readHours, saveDeskSettings, saveFrontDesk } from "./listsData";
 import { useDesk } from "./Lists";
 import { Page, Section, Why, type usePageWrite, whyNotChange } from "./listsKit";

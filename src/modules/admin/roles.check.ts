@@ -5,7 +5,7 @@ import { ROLES } from "../../core/menu.ts";
 import {
   AUDIT_REFUSED, BACKFILL_REFUSED, HEALTH_REFUSED, INTEGRATIONS_REFUSED, STAFF_REFUSED, cellOf, inWords, minPasswordFor,
   notYourRole, readsBackfill, refusedBackfill, refusedScreen, roleLabel, setsTwoStepRequired, switchesModules, whoMay, type ScreenKey,
-} from "./roles.ts";
+} from "./rolesRules.ts";
 
 const eq = (got: unknown, want: unknown, what: string) => {
   if (JSON.stringify(got) !== JSON.stringify(want)) throw new Error(`${what}: got ${JSON.stringify(got)}, want ${JSON.stringify(want)}`);

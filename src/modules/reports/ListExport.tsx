@@ -4,7 +4,7 @@ import { ExportButtons } from "../../core/Export";
 import type { ExportTable } from "../../core/exportDoc";
 import { asRole } from "../../core/menu";
 import { c, face, t } from "../../core/theme";
-import { LIST_SCREENS, exportRefusal, type ListScreenKey } from "./listExport";
+import { LIST_SCREENS, exportRefusal, type ListScreenKey } from "./listExportRules";
 
 /* ══════════════════════════════════════════════════════════════════
    A LIST SCREEN'S EXPORT (the web's ExportButtons on a list screen,

@@ -1,5 +1,5 @@
 import { api, ApiError } from "../../core/api";
-import type { FeedbackPage } from "./feedback";
+import type { FeedbackPage } from "./feedbackRules";
 
 /* ══════════════════════════════════════════════════════════════════
    GUEST FEEDBACK'S ONE CALL (mobile/m13-sales, lane F) — the web's

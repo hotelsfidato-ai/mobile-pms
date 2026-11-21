@@ -21,7 +21,7 @@
    ══════════════════════════════════════════════════════════════════ */
 
 import { msAt } from "../../core/format.ts";
-import { DASH, rupees, typedPrice } from "./rates.ts";
+import { DASH, rupees, typedPrice } from "./ratesRules.ts";
 
 /* ── What a person types ─────────────────────────────────────────── */
 

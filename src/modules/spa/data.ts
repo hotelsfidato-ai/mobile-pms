@@ -1,6 +1,6 @@
 import { api, ApiError, currentSubject, orNull, send } from "../../core/api";
 import type { Stay } from "../../core/types";
-import { chargeKeys, stayChoices, type SpaDiary, type SpaTherapist, type SpaTreatment } from "./diary";
+import { chargeKeys, stayChoices, type SpaDiary, type SpaTherapist, type SpaTreatment } from "./diaryRules";
 
 /* ══════════════════════════════════════════════════════════════════
    THE SPA'S CALLS — the web's src/modules/spa/data/spa.ts, through the

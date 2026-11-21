@@ -7,7 +7,7 @@ import { Tick } from "../front-desk/kit";
 import { Btn, body, Dialog, Field, Foot, InDialog, message, saidOf, type Said } from "../guest-services/kit";
 import { join, leave, redeem } from "./data";
 import { Typed } from "./kit";
-import { digitsOnly, NO_WORDS, pointsText, rupees, spendLabel, spendOf, type LoyaltyStay } from "./loyalty";
+import { digitsOnly, NO_WORDS, pointsText, rupees, spendLabel, spendOf, type LoyaltyStay } from "./loyaltyRules";
 
 /* ══════════════════════════════════════════════════════════════════
    THE IN-HOUSE CARD'S THREE DIALOGS — the web's JoinDialog, SpendDialog and

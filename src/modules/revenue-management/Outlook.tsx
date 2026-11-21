@@ -11,7 +11,7 @@ import { CardHead, Empty, Failed, Frame, Pill, Refused, Skeleton, Stale, body, s
 import {
   TONE, WORD, aheadBy, dateLines, dayYear, datesWorthALook, nearbyLine, nearbySummary, onTheBooksAWeekAgo, paceTiles,
   pickupNote, pickupOn, rivalPrice, suggestions, temperOf, whyNoPickup, type CheckedNight, type Tile,
-} from "./outlook";
+} from "./outlookRules";
 import { mayOpen, notYourRole, whyNotRead } from "./roles";
 
 /* ══════════════════════════════════════════════════════════════════

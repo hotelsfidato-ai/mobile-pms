@@ -6,9 +6,9 @@ import { mayReach, type Role } from "../../core/menu";
 import { c, face, space, t } from "../../core/theme";
 import { Head, Screen, ripple, shade } from "../../core/ui";
 import { Field, Refused, Toast, body, type Said } from "../admin/kit";
-import { notYourRole } from "../admin/roles";
+import { notYourRole } from "../admin/rolesRules";
 import { whyNot, SETUP_CHANGE } from "../inventory/configRoles";
-import { COLOUR_WRONG, NO_COLOUR, freshName, pageSending, pageStuck, pageUnknown, typedColour, watchPage, writeOnce } from "./lists";
+import { COLOUR_WRONG, NO_COLOUR, freshName, pageSending, pageStuck, pageUnknown, typedColour, watchPage, writeOnce } from "./listsRules";
 
 /* ══════════════════════════════════════════════════════════════════
    THE PIECES THE LISTS AND FRONT DESK PAGES SHARE (lane m13-set-lists)

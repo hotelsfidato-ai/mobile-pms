@@ -1,5 +1,5 @@
 import { api, send } from "../../core/api";
-import type { CrsBookings, CrsSetup, SetupForm } from "./bookings";
+import type { CrsBookings, CrsSetup, SetupForm } from "./bookingsRules";
 
 /* ══════════════════════════════════════════════════════════════════
    CRS BOOKINGS' CALLS — the web's src/modules/crs/data/crs.ts (48-75),

@@ -14,7 +14,7 @@ import {
   apartSaid, apartTail, contactLine, countWords, EMPTY, joinedSaid, joinStrip, joinTail, NO_APART, NO_JOINS, onlyIdWords,
   onlyWithId, otherOf, pairsTable, sharedWords, sideLine, sideState, TITLE, UNDER, UNDO_APART_SAID, UNDO_JOIN_SAID, unknownWords,
   type GuestCard, type SamePersonPair,
-} from "./samePerson";
+} from "./samePersonRules";
 import {
   isRefused, joinGuests, readJoins, readNotSame, readPairs, sayNotSame, undoJoin, undoNotSame,
 } from "./samePersonData";

@@ -11,7 +11,7 @@ import type { AdminProps } from "../admin/Route";
 import {
   HOLIDAY_COLOUR, ID_TYPES, LIST_PAGES, STATES, UNKNOWN_LINE, emptyWords, pageName, mayAddHoliday, mayMove, nextOff,
   shownRows, swapSorts, typedColour, type DeskRules, type ListItem, type ListPane, type ListSource,
-} from "./lists";
+} from "./listsRules";
 import {
   addHoliday, addToList, changeListItem, readDeskRules, readHolidays, readList, removeHoliday, removeListItem, saveDeskSettings,
 } from "./listsData";

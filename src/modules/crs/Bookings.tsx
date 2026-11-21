@@ -10,7 +10,7 @@ import { Box, Btn, Failed, Loading, NotYours, Refused, Stale, Toast, body, type 
 import { Fact } from "../laundry/kit";
 import {
   connectionOf, dateTime, dayYear, failedWords, noteOf, outcomeOf, stayLines, stayOf, toldOf, type CrsBooking, type CrsConnection,
-} from "./bookings";
+} from "./bookingsRules";
 import { ListExport } from "../reports/ListExport";
 import { listCrsBookings, markNoteDone } from "./data";
 import { maySetUp, whyNotDone, whyNotRead } from "./roles";

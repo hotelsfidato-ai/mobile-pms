@@ -1,7 +1,7 @@
 import { api, ApiError, currentSubject, send } from "../../core/api";
 import { keyKeeper, type KeyKeeper } from "../../core/keys";
 import type { Stay } from "../../core/types";
-import { stayChoices, type DocketDetail, type DocketList, type NewDocket, type PriceItem } from "./docket";
+import { stayChoices, type DocketDetail, type DocketList, type NewDocket, type PriceItem } from "./docketRules";
 
 /* ══════════════════════════════════════════════════════════════════
    THE LAUNDRY'S CALLS — the web's src/modules/laundry/data/laundry.ts,

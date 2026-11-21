@@ -9,7 +9,7 @@ import { readSources } from "../inventory/configData";
 import { Btn, Failed, Field, Loading, Pill, Sheet, TextBox } from "../inventory/configKit";
 import { readBreakup, readInventory, readPricing } from "../inventory/data";
 import { Empty, InDialog, Segmented, Stale, Toast, body, type Said } from "../inventory/kit";
-import type { Pricing } from "../inventory/rates";
+import type { Pricing } from "../inventory/ratesRules";
 import { orderPlans, planStep, readPlanSettings, setMealDays, setPlanOn } from "./moneyData";
 import { Grey, MoveButtons, OnOff, TickBox, refusedPage, useWriter, type Writer } from "./moneyKit";
 import {

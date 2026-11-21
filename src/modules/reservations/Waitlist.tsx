@@ -17,7 +17,7 @@ import { moveArrival } from "./book";
 import { Panel, Said as SaidLine, Sheet } from "./GroupKit";
 import { whyNotUnwaitlist, whyNotWaitlist } from "./groupRoles";
 import { addToWaitlist, readTypes, readWaitlist, removeFromWaitlist } from "./groupsData";
-import { bodyOf, freePill, nightsWord, PARTS, partsOf, typesOf, waitlistTable, wrongOf, type WaitlistEntry, type WaitlistInput } from "./waitlist";
+import { bodyOf, freePill, nightsWord, PARTS, partsOf, typesOf, waitlistTable, wrongOf, type WaitlistEntry, type WaitlistInput } from "./waitlistRules";
 
 /* ══════════════════════════════════════════════════════════════════
    THE WAITLIST — the web's /h/:code/waitlist (src/modules/reservations/

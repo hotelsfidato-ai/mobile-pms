@@ -11,7 +11,7 @@ import { Field, Input, Tick } from "../finance/Kit";
 import { Back, Box, body, Empty, Loading, NotYours, Select, Stale, Toast, type Said } from "../guest-services/kit";
 import { YellowChip } from "../purchasing/kit";
 import { isRefused, readPriceList } from "./data";
-import { rupees, SERVICE_WORDS, type LaundryService, type PriceItem } from "./docket";
+import { rupees, SERVICE_WORDS, type LaundryService, type PriceItem } from "./docketRules";
 import { LoadFailed } from "./kit";
 import { addItem, setInUse, setPrice } from "./priceData";
 import {

@@ -7,7 +7,7 @@ import {
   activeOutlets, declineTitle, earlierAsked, earlierNone, earlierPath, guestDishes, guestTitle, lockedLine, openBody, openPill,
   orderHref, outletKey, outletName, padHref, parcelBody, precise, RING_REFUSAL, ringWhy, roomLine, rowFigure, rowLabel, rowLine,
   rupees, SETTLED_SHOWN, terminalLine, terminalRowLine, tillLists, type TillRow,
-} from "./till.ts";
+} from "./tillRules.ts";
 import { whyNotRing } from "./roles.ts";
 
 const eq = (got: unknown, want: unknown, what: string) => {

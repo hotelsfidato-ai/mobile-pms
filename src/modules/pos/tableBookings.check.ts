@@ -1,6 +1,6 @@
 /* Run: node --experimental-strip-types src/modules/pos/tableBookings.check.ts
    Table bookings' rules: the lists, the words, what each card offers and sends. */
-import { answer, dayWords, detailLine, dinerBody, lists, offers, people, statusOf, tableLabel, type TableBooking } from "./tableBookings.ts";
+import { answer, dayWords, detailLine, dinerBody, lists, offers, people, statusOf, tableLabel, type TableBooking } from "./tableBookingsRules.ts";
 
 const eq = (got: unknown, want: unknown) => {
   if (JSON.stringify(got) !== JSON.stringify(want)) throw new Error(`got ${JSON.stringify(got)}, want ${JSON.stringify(want)}`);

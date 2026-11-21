@@ -13,8 +13,8 @@ import { billRows } from "./bill";
 import {
   EMPTY, MODE_CHOICES, MODE_WORD, askProblem, countWords, guestOf, headingOf, modesWords, opening, stateOf, totalCell,
   type Ask, type BillHistory as History, type BillHistoryRow,
-} from "./billHistory";
-import { precise } from "./dayEnd";
+} from "./billHistoryRules";
+import { precise } from "./dayEndRules";
 import { PrintBill } from "./Pay";
 import { readBillHistory, readOrder, readWaiters } from "./serviceData";
 import { BottomSheet, Btn, Empty, Field, Input, Labelled, Loading, PageHead, Panel, Pill, Select } from "./ServiceKit";

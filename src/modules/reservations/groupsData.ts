@@ -1,7 +1,7 @@
 import { api, ApiError, currentSubject, orNull, send } from "../../core/api";
 import { keyKeeper, type KeyKeeper } from "../../core/keys";
-import type { GroupDetail, Scope, StayGroup } from "./groups";
-import type { Waitlist, WaitlistInput } from "./waitlist";
+import type { GroupDetail, Scope, StayGroup } from "./groupsRules";
+import type { Waitlist, WaitlistInput } from "./waitlistRules";
 
 /* ══════════════════════════════════════════════════════════════════
    GROUPS' AND THE WAITLIST'S READS AND WRITES — the web's calls, one file:

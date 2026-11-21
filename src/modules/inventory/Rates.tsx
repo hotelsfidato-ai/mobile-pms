@@ -11,7 +11,7 @@ import { Btn, Empty, Failed, Refused, Segmented, Stale, Toast, body, type Said }
 import {
   DAYS, addDays, cellsByDay, dateShort, differenceOf, figure, offered, rupees, windowOf,
   type Addons, type DayRules, type Pricing,
-} from "./rates";
+} from "./ratesRules";
 import { ON_THE_WEBSITE, PRICE, PRICES, RESTRICTION, refusalFor, whyNot } from "./roles";
 import { ListExport } from "../reports/ListExport";
 

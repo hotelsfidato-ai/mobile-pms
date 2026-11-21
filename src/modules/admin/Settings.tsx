@@ -5,7 +5,7 @@ import { ON_THE_WEBSITE, phoneRoute, sidebarFor, type MenuIcon, type NavItem } f
 import { c, face, space, t } from "../../core/theme";
 import { Head, Screen, s as core, ripple, shade } from "../../core/ui";
 import { Refused } from "./kit";
-import { refusedScreen } from "./roles";
+import { refusedScreen } from "./rolesRules";
 import type { AdminProps } from "./Route";
 
 /* ══════════════════════════════════════════════════════════════════

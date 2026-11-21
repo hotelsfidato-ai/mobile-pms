@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Modal, Platform, Pressable, Text, TextInput, View } from "react-native";
 import {
   bounds, dateToDay, dateToTime, dayShown, dayToDate, hotelClock, hotelDay, isDay, isTime, opensOn, PICKER_ZONE, timeShown, timeToDate,
-} from "./dateField";
+} from "./dateFieldRules";
 import { c, face, space, t } from "./theme";
 import { modalEdge, ripple, shade, useSheetPad } from "./ui";
 

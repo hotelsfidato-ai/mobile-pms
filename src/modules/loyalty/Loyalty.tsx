@@ -13,7 +13,7 @@ import { LCard, Typed } from "./kit";
 import {
   decimalOnly, inHouseNote, monthOfDate, monthWords, OFF_NOTE, pointsText, rateBody, rateText, rowActs, rulesLine,
   rupees, shiftMonth, type LoyaltyScreen, type LoyaltyStay,
-} from "./loyalty";
+} from "./loyaltyRules";
 import { MANAGERS_ONLY, mayJoin as mayJoinOf, RULES_REFUSED, whyNotRead } from "./roles";
 import { ListExport } from "../reports/ListExport";
 

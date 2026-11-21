@@ -9,7 +9,7 @@ import {
   adjustOf, dayOf, decimalOnly, digitsOnly, inHouseNote, lineWords, memberLine, monthOfDate, monthWords, NO_JOIN, NO_REDEEM,
   pointsText, rateBody, rateText, redeemKeys, rowActs, rulesLine, rupees, shiftMonth, signed, signedDigits, spendLabel,
   spendOf, wholeOf, type LoyaltyStay,
-} from "./loyalty.ts";
+} from "./loyaltyRules.ts";
 
 const eq = (got: unknown, want: unknown, what: string) => {
   if (JSON.stringify(got) !== JSON.stringify(want)) throw new Error(`${what}: got ${JSON.stringify(got)}, want ${JSON.stringify(want)}`);

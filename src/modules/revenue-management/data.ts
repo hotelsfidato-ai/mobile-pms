@@ -2,7 +2,7 @@ import { api, orNull } from "../../core/api";
 import {
   WINDOW_NIGHTS, datesAhead, monthOfDate, plusDays, sameMonthLastYear,
   type CheckedNight, type DayStatistics, type Outlook, type Pace, type PeriodStatistics, type Pickup, type Snapshot,
-} from "./outlook";
+} from "./outlookRules";
 
 /* ══════════════════════════════════════════════════════════════════
    THE OUTLOOK'S READS — the web's src/modules/revenue-management/data/

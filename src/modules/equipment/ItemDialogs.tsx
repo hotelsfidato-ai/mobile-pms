@@ -10,7 +10,7 @@ import { PRIORITIES, REPAIR_KINDS } from "../housekeeping/repair";
 import { editEquipment, moveEquipment, raiseRepair, readOptions, retireEquipment, setEquipmentStatus } from "./data";
 import {
   askCount, changesOf, countHint, countOf, leaves, movedWords, whyNotMove, whyNotRetire, type EquipmentItem,
-} from "./register";
+} from "./registerRules";
 
 /* ══════════════════════════════════════════════════════════════════
    WHAT CAN HAPPEN TO ONE THING - the web's flows/ItemDialogs.tsx: change

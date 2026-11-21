@@ -13,7 +13,7 @@ import { cancelDocket, chargeDocket, isRefused, readDocket, recordReturn } from 
 import {
   backWords, clockOf, collectedDay, lineParts, mayCancel, mayCharge, mayReturn, returnBody, rupees, SERVICE_WORDS,
   STATUS_TONE, STATUS_WORDS, unpricedWords, whoseWords, type DocketDetail,
-} from "./docket";
+} from "./docketRules";
 import { LoadFailed, Note, StatePill } from "./kit";
 import { ON_THE_WEBSITE, whyNotCancel, whyNotChange, whyNotCharge, whyNotRead } from "./roles";
 

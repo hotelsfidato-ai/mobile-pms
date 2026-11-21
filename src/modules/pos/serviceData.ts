@@ -9,11 +9,11 @@
    ══════════════════════════════════════════════════════════════════ */
 
 import { api, send } from "../../core/api";
-import { askPath, type Ask, type BillHistory } from "./billHistory";
-import { OUTLET, type DayEnd, type MovementKind } from "./dayEnd";
-import type { PosOutlet, PosTickets } from "./roomCharges";
-import type { Diner, TableBookingList } from "./tableBookings";
-import { dinerBody } from "./tableBookings";
+import { askPath, type Ask, type BillHistory } from "./billHistoryRules";
+import { OUTLET, type DayEnd, type MovementKind } from "./dayEndRules";
+import type { PosOutlet, PosTickets } from "./roomChargesRules";
+import type { Diner, TableBookingList } from "./tableBookingsRules";
+import { dinerBody } from "./tableBookingsRules";
 import type { Order } from "./types";
 
 const H = (code: string) => `/api/hotels/${code}`;

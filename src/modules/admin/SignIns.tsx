@@ -6,7 +6,7 @@ import { c, t } from "../../core/theme";
 import { Head, Screen, s as core, notKnown, useRead } from "../../core/ui";
 import { listPeople, listSignIns, signOutDevice } from "./data";
 import { Btn, Choose, Empty, Failed, Labelled, Loading, Refused, Stale, Toast, confirm, saidOf, useAct, useSaid, type Said } from "./kit";
-import { refusedScreen } from "./roles";
+import { refusedScreen } from "./rolesRules";
 import { dateTime, deviceInWords, signInNow, type SignIn } from "./rules";
 import type { AdminProps } from "./Route";
 

@@ -5,6 +5,17 @@ module's `DEFECTS.md` instead. Read the newest first.
 
 ---
 
+### 27 · Names that differ only in capitals broke the PC's type check (21 Nov)
+
+The cloud (Linux, which tells capitals apart) left 25 pairs such as `stores/Sheets.tsx` beside
+`stores/sheets.ts`. On the PC (Windows), `import "./Sheets"` found `sheets.ts` first: the type check
+failed with TS1149 and TS2305 on the first `bash scripts/gates.sh` after the transfer, while both phone
+bundles still built (Metro matched the capitals). It was found by that first gate run on the PC.
+**What was done:** each lowercase file became `<name>Rules.ts` (as `PayRules.ts`, MPOS-1) and its 129
+imports were rewritten. A new first gate, `names`, refuses two names that differ only in capitals,
+so Linux catches it too; it was broken on purpose once and failed. **The rule:** never give two files
+in one folder the same name but for capitals, with or without the extension.
+
 ### 26 · A "safe" native option can delete what a name from outside points at (20 Nov)
 
 expo-file-system's `idempotent: true` deletes whatever stands at the destination before moving a

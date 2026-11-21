@@ -9,7 +9,7 @@ import { c, face, space, t } from "../../core/theme";
 import { Head, Screen, s as core, notKnown, ripple, useRead } from "../../core/ui";
 import { getTaxInUse, listAdminProperties, listProperties, setPropertyOpen } from "./data";
 import { Btn, Empty, Failed, Foot, Line, Loading, Pill, Refused, Stale, Toast, body, confirm, saidOf, useAct, useSaid, type Said } from "./kit";
-import { refusedScreen } from "./roles";
+import { refusedScreen } from "./rolesRules";
 import { DASH, placeLine, runs, taxRows, type AdminProperty } from "./rules";
 import type { AdminProps } from "./Route";
 

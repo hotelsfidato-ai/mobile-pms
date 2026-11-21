@@ -7,7 +7,7 @@ import { c, face, space, t } from "../../core/theme";
 import { useRead, ripple, shade } from "../../core/ui";
 import { Box as Input, Field, Pick, Toggle } from "../front-desk/kit";
 import { Box, Btn, Failed, Loading, body, type Said } from "../guest-services/kit";
-import { failedWords, formOf, readsAsLine, type SetupForm } from "./bookings";
+import { failedWords, formOf, readsAsLine, type SetupForm } from "./bookingsRules";
 import { getCrsSetup, saveCrsSetup } from "./data";
 
 /* ══════════════════════════════════════════════════════════════════

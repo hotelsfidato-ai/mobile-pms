@@ -14,7 +14,7 @@ import { Cell, Panel, ripple, shade, Tile } from "./GroupKit";
 import { whyNotChangeBill, whyNotChangeBooking, whyNotCharge, whyNotInvoice, whyNotPay } from "./groupRoles";
 import {
   billTo, groupLine, notYet, owed, routedNote, routedSaid, settleOff, stateOf, whyNotLead, whyNotRoute, type GroupRoom,
-} from "./groups";
+} from "./groupsRules";
 import { issueHostInvoice, openHostAccount, readGroup, readSeries, routeRoom, setLead } from "./groupsData";
 import { GroupSettle } from "./GroupSettle";
 

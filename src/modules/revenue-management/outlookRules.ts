@@ -29,7 +29,7 @@
 
 import { DASH, count, dateLong, dateShort, msAt } from "../../core/format.ts";
 import type { PeriodStatistics } from "../../core/types.ts";
-import { rupees } from "../inventory/rates.ts";
+import { rupees } from "../inventory/ratesRules.ts";
 import type { DayStatistics } from "../reports/figures.ts";
 
 export type { DayStatistics, PeriodStatistics };

@@ -7,7 +7,7 @@ import { c, face, t } from "../../core/theme";
 import { useRead, useScreenStop } from "../../core/ui";
 import { Btn, body, Dialog, Field, Foot, InDialog, Input, Loading, Select, saidOf, type Said } from "../guest-services/kit";
 import { book, cancel, charge, dayStop, isRefused, readStays, readTherapists, readTreatments } from "./data";
-import { bookBody, chargedWords, clockDate, rupees, stayWords, timeWords, treatmentWords, whatAndWhen, type SpaAppointment } from "./diary";
+import { bookBody, chargedWords, clockDate, rupees, stayWords, timeWords, treatmentWords, whatAndWhen, type SpaAppointment } from "./diaryRules";
 
 /* ══════════════════════════════════════════════════════════════════
    THE DIARY'S THREE DIALOGS — the web's BookDialog, CancelDialog and

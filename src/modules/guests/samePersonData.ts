@@ -1,5 +1,5 @@
 import { api, ApiError, send } from "../../core/api";
-import type { GuestJoin, NotSameAnswer, SamePersonPair } from "./samePerson";
+import type { GuestJoin, NotSameAnswer, SamePersonPair } from "./samePersonRules";
 
 /* ══════════════════════════════════════════════════════════════════
    POSSIBLE SAME PERSON'S CALLS (mobile/m13-sales, lane S) — the web's

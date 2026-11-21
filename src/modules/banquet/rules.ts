@@ -23,7 +23,7 @@
    ══════════════════════════════════════════════════════════════════ */
 
 import { DASH } from "../../core/format.ts";
-import { clockOf, dayOf, rupees } from "../laundry/docket.ts";
+import { clockOf, dayOf, rupees } from "../laundry/docketRules.ts";
 
 export { clockOf, dayOf, rupees };
 

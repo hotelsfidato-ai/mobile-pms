@@ -8,7 +8,7 @@ import { ruleFor } from "../../core/offline.ts";
 import {
   freeRate, hallBody, hallDraft, hallLine, hallProblems, HALLS_REFUSED, headCount, NO_PACKAGE, packageBody, packageLine,
   SETUP_READ_REFUSED, switchedWords, whyNotReadSetup, whyNotSetUp,
-} from "./setup.ts";
+} from "./setupRules.ts";
 
 const eq = (got: unknown, want: unknown, what = "") => {
   if (JSON.stringify(got) !== JSON.stringify(want)) throw new Error(`${what}: got ${JSON.stringify(got)}, want ${JSON.stringify(want)}`);

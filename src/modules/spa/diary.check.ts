@@ -7,7 +7,7 @@ import { ruleFor } from "../../core/offline.ts";
 import {
   actsOf, bandWords, bookBody, chargeKeys, chargedWords, clockDate, clockTime, countLine, rupees, shiftDay,
   stayChoices, stayWords, timeWords, treatmentWords, whatAndWhen, type SpaAppointment, type SpaDiary,
-} from "./diary.ts";
+} from "./diaryRules.ts";
 
 const eq = (got: unknown, want: unknown, what: string) => {
   if (JSON.stringify(got) !== JSON.stringify(want)) throw new Error(`${what}: got ${JSON.stringify(got)}, want ${JSON.stringify(want)}`);

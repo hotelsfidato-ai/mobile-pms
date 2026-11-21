@@ -13,7 +13,7 @@ import {
   Btn, Choose, Empty, Failed, Field, Foot, Loading, PasswordField, Pill, Refused, Segmented, Sheet, Stale, Toast,
   SwitchRow, body, confirm, saidOf, useAct, useSaid, useStop, type Said, type Stop,
 } from "./kit";
-import { minPasswordFor, refusedScreen, roleLabel, roleWhat } from "./roles";
+import { minPasswordFor, refusedScreen, roleLabel, roleWhat } from "./rolesRules";
 import {
   HOME_SCREENS, addReady, addedWords, chosenRole, grantable, mayGrant, mayTake, peopleLine, placesOf, strandedLine,
   strandedOf, type AdminStaff, type RosterPlace,

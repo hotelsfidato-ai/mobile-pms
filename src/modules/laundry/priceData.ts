@@ -1,5 +1,5 @@
 import { send } from "../../core/api";
-import type { LaundryService } from "./docket";
+import type { LaundryService } from "./docketRules";
 
 /* ══════════════════════════════════════════════════════════════════
    THE PRICE LIST'S WRITES (lane U, 19 Nov) — the web's addPriceItem and
