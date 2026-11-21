@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import type { Hotel } from "./api";
 import { ON_THE_WEBSITE, asRole, landing } from "./menu";
 import { roleAt, useSession } from "./session";
-import { body, regular } from "./Shell";
+import { body, regular } from "./ShellParts";
 import { c, face, t } from "./theme";
 import { ripple, shade } from "./ui";
 

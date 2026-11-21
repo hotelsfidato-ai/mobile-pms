@@ -7,7 +7,7 @@ import {
   ON_THE_WEBSITE, activeRoute, hiddenCount, phoneRoute, sidebarFor, spaceHere, spaceHome, spacesFor,
   type MenuIcon, type NavItem, type Role, type Several, type Space,
 } from "./menu";
-import { regular, SCRIM, Slide } from "./Shell";
+import { regular, SCRIM, Slide } from "./ShellParts";
 import { c, face } from "./theme";
 import { shade } from "./ui";
 

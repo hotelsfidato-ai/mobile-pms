@@ -7,7 +7,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ApiError, orNull, type Hotel } from "./api";
 import { ON_THE_WEBSITE, phoneRoute, relative } from "./menu";
 import { isOnline } from "./offline";
-import { body, regular, Slide } from "./Shell";
+import { body, regular, Slide } from "./ShellParts";
 import { c, face, t } from "./theme";
 import { Capsule, Card, Screen, ripple, shade } from "./ui";
 

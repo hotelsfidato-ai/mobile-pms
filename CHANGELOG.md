@@ -16,6 +16,15 @@ development and make the app live so I can test on my phone." **Done:** the PMS 
 names differing only in capitals (MEMORY 27). **Shipped:** each lowercase file renamed
 `<name>Rules.ts`, 129 imports rewritten; a new first gate, `names`, refuses such pairs (broken on
 purpose once). A module's MODULE.md may still name the old lowercase file: read it as `<name>Rules.ts`.
+**Found on the first open** (browser, 375 px): the app stopped before its first screen, an import
+circle in the frame (MEMORY 28). **Shipped:** `core/ShellParts.tsx` and a gate, `circles`. **Proved:**
+gates green on `4b7ffc2` (all five); after the frame fix: names, circles, types and all 107 checks (the
+bundle exports were not re-run; Expo built Android, iPhone and web from the same code). Opened in the
+browser at 375 × 812, development sign-in: all 12 roles land on their own screen with the API's data
+(Owner and Admin All properties; GM, Reception, Hotel Manager, Revenue, Accountant the Dashboard;
+Housekeeping the board; Waiter Tables; Chef and Kitchen Manager the Kitchen; Inventory the Store); the
+GM's menu opens. **Not proved:** nothing yet on a real phone; no write tried. Expo on 8081 (live
+reload) and the API on 8860 are left running for the owner's phone.
 
 **Asked for:** "yes to all 3 recommendations" (M-18). **Shipped** `5f513ef` `expo-image-manipulator`
 ~57.0.21 (SDK 57's own; nothing else moved); `9c342b7` the web's own resize (`shrinkPhoto.ts`:

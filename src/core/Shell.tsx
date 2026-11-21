@@ -1,8 +1,8 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { router, useGlobalSearchParams, usePathname } from "expo-router";
 import { AlertTriangle, Bell, ChevronDown, Menu, Search } from "lucide-react-native";
-import { useEffect, useRef, useState, type ReactNode } from "react";
-import { Animated, Easing, Modal, Platform, Pressable, StyleSheet, Text, View } from "react-native";
+import { useEffect, useRef, useState } from "react";
+import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
 import { api, type Hotel, type HotelsResponse } from "./api";
 import { dateShort, daysBehind } from "./format";
 import { ON_THE_WEBSITE, ROLE_LABELS, asRole, can, coversTheFrame, initials, mayReach, phoneRoute, severalOf } from "./menu";
@@ -10,6 +10,7 @@ import { roleAt, useSession } from "./session";
 import { ShellAccount } from "./ShellAccount";
 import { ShellMenu, type Modules } from "./ShellMenu";
 import { NotesDrawer, forgetRead, unreadOf, useNotes } from "./ShellNotes";
+import { SCRIM, Slide, body, regular } from "./ShellParts";
 import { c, face, t } from "./theme";
 import { ripple, shade } from "./ui";
 
@@ -21,10 +22,6 @@ import { ripple, shade } from "./ui";
    remembered hotel.
    ══════════════════════════════════════════════════════════════════ */
 
-/** The web's regular weight. theme.ts's `face` starts at 500. */
-export const regular = { fontFamily: "Inter_400Regular" };
-/** text-sm / text-base: the web's 14 on 21. */
-export const body = { fontSize: 14, lineHeight: 21 };
 const GREY_400 = c.grey400; // --color-grey-400
 
 export function Shell() {
@@ -188,27 +185,6 @@ function FindAScreen({ books, onClose }: { books: boolean; onClose: () => void }
           <Text style={[body, { color: c.ink900, ...face[500] }]}>{ON_THE_WEBSITE}</Text>
         </View>
       </View>
-    </Modal>
-  );
-}
-
-/** bg-ink-900/40, the drawer's and the dialog's. */
-export const SCRIM = "rgba(3,23,40,0.4)";
-
-/** A drawer from one side (AppShell.tsx, Overlays.tsx): 200 ms, as motion-drawer. */
-export function Slide({ from, width, scrim, onClose, children }: {
-  from: "left" | "right"; width: number; scrim: string; onClose: () => void; children: ReactNode;
-}) {
-  const x = useRef(new Animated.Value(from === "left" ? -width : width)).current;
-  useEffect(() => {
-    Animated.timing(x, { toValue: 0, duration: 200, easing: Easing.out(Easing.cubic), useNativeDriver: Platform.OS !== "web" }).start();
-  }, [x]);
-  return (
-    <Modal transparent visible onRequestClose={onClose} statusBarTranslucent navigationBarTranslucent>
-      <Pressable style={[StyleSheet.absoluteFill, { backgroundColor: scrim }]} onPress={onClose} accessibilityRole="button" accessibilityLabel="Close" />
-      <Animated.View style={[{ position: "absolute", top: 0, bottom: 0, width, transform: [{ translateX: x }] }, from === "left" ? { left: 0 } : { right: 0 }]}>
-        {children}
-      </Animated.View>
     </Modal>
   );
 }

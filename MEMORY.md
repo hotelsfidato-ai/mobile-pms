@@ -5,6 +5,18 @@ module's `DEFECTS.md` instead. Read the newest first.
 
 ---
 
+### 28 · Two files importing each other stopped the app at its first screen (21 Nov)
+
+`core/Shell.tsx` imported `ShellAccount`, `ShellMenu` and `ShellNotes`, and each of them imported
+`regular` / `body` / `SCRIM` / `Slide` back from `Shell.tsx`. On load, ShellAccount's styles read
+`regular` before Shell had defined it: "Cannot access 'regular' before initialization", and nothing
+rendered. Every gate was green; it was found by the first open in the PC's browser at 375 px (the cloud
+never ran the app). **What was done:** the shared four moved to `core/ShellParts.tsx`; the sign-in, all
+twelve roles' first screens and the GM's menu were then opened. A new gate, `circles`
+(`scripts/check-no-import-circles.mjs`), refuses any import circle among the app's files; it found
+this one when it was put back on purpose. **The rule:** a frame's pieces never import from the frame;
+what they share goes in a file of its own.
+
 ### 27 · Names that differ only in capitals broke the PC's type check (21 Nov)
 
 The cloud (Linux, which tells capitals apart) left 25 pairs such as `stores/Sheets.tsx` beside

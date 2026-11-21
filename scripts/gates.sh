@@ -46,6 +46,7 @@ names() {
 }
 
 step names -- names
+step circles -- node scripts/check-no-import-circles.mjs .
 step types -- npx tsc --noEmit
 step checks -- checks
 step android -- bundle android
