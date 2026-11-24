@@ -5,7 +5,7 @@ import {
   RotateCw, Sparkle, SprayCan, User, Users, Wrench, type LucideIcon,
 } from "lucide-react-native";
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { Pressable, RefreshControl, ScrollView, Text, useWindowDimensions, View, type TextStyle } from "react-native";
+import { Pressable, RefreshControl, ScrollView, type ScrollViewInstance, Text, useWindowDimensions, View, type TextStyle } from "react-native";
 import { HeldError, type Hotel } from "../../core/api";
 import { dateLong } from "../../core/format";
 import { isOnline } from "../../core/offline";
@@ -98,8 +98,8 @@ export function Calendar({ hotel, role, grouping }: { hotel: Hotel; role: string
   useEffect(() => { if (!read.loading) setPulled(false); }, [read.loading]);
 
   /* One horizontal scroll: the body's; the dates and the footer follow it. */
-  const headRef = useRef<ScrollView>(null);
-  const footRef = useRef<ScrollView>(null);
+  const headRef = useRef<ScrollViewInstance>(null);
+  const footRef = useRef<ScrollViewInstance>(null);
   const follow = (x: number) => {
     headRef.current?.scrollTo({ x, animated: false });
     footRef.current?.scrollTo({ x, animated: false });

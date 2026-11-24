@@ -4,7 +4,31 @@
 
 ---
 
-## 20 November 2026 — read this first: every web screen is on the phone (M-13)
+## 25 November 2026 — read this first: on the PC, on Expo SDK 58 (M-19)
+
+**Where it stands.** The app lives on the PC in `D:\fidato pms moblie\mobile-pms` (a clone of GitHub
+`hotelsfidato-ai/mobile-pms`, TRANSFER.md); every cloud branch is in `main`. 21 Nov: two PC-only
+faults fixed and pushed with the owner's yes (MEMORY 27, 28; `main` 02fb5b0). 25 Nov: the app moved
+to **Expo SDK 58** because the stores' Expo Go runs only SDK 58 (M-19, CHANGELOG 25 Nov) on branch
+`sdk-58`, merged into `main` locally once its gates are green; **not pushed** (a push to GitHub needs
+the owner's yes each time).
+
+**Running for the owner's phone** (each detached through WMI, so it outlives the chat; a reboot stops
+all three): Postgres 55432 (keeper), the API on 8860 (`.local/api-8860.log`, database
+`fidato_mobile`, migration 275), Expo on **8082** for now (`.local/mobile-pms-expo.log`): the 8081
+process hung while exiting and kept its port; go back to 8081 once it is gone. The phone link is
+`exp://192.168.1.33:8082`, same Wi-Fi. Warm both bundles after any Expo start (MEMORY 1).
+
+**Next:**
+1. The owner's test on the phone, each role; faults into the modules' DEFECTS.md.
+2. Waiting for the owner: the Firebase public settings (M-10), the test build (M-8), R-32..R-50 to
+   the PMS's main chat.
+3. Tell the PMS main chat its `gates.sh separate-bills` run of 25 Nov ~04:20 was stopped by this chat
+   (MEMORY 30) — through the owner; a cross-session message did not get through.
+
+---
+
+## 20 November 2026 — every web screen is on the phone (M-13)
 
 **Latest, 20 Nov evening — M-16 and M-17 on `main`:** the phones' own photo, file and date pickers
 are in every screen that uploads, imports, downloads or picks a date (44 controls, docs/PICKERS.md;

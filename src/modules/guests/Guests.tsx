@@ -40,7 +40,7 @@ export function Guests({ hotel, role }: { hotel: Hotel; role: string | null }) {
   if (refused || off) {
     return (
       <FlatList
-        data={[]} renderItem={null} style={{ backgroundColor: c.grey50 }} contentContainerStyle={pad}
+        data={[]} renderItem={() => null} style={{ backgroundColor: c.grey50 }} contentContainerStyle={pad}
         ListHeaderComponent={<View style={{ gap: space.card }}><PageHead title="Guests" /><NotYours title="Guests" sentence={refused ?? off!} /></View>}
       />
     );

@@ -75,7 +75,7 @@ export function ImportSheet({ spec, load, stopName, where, onClose, onImported }
       const file = new File(Paths.cache, templateName(spec));
       if (file.exists) file.delete();
       file.create();
-      file.write(templateCsv(spec));
+      await file.write(templateCsv(spec)); // async since SDK 58: shared only once written
       await Sharing.shareAsync(file.uri, { mimeType: "text/csv", UTI: "public.comma-separated-values-text", dialogTitle: templateName(spec) });
     } catch (e) {
       setTemplateSaid(e instanceof Error && e.message ? e.message : "The template could not be made.");

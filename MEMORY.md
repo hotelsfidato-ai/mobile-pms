@@ -5,6 +5,45 @@ module's `DEFECTS.md` instead. Read the newest first.
 
 ---
 
+### 29 · The stores' Expo Go moved to SDK 58 and stopped opening the app (25 Nov)
+
+The owner's phone updated Expo Go to SDK 58; the app was on SDK 57, and Expo Go opens only its own
+SDK. Nothing in the gates can see this: it showed only on the phone. **What was done (M-19):**
+`npx expo install expo@^58.0.0 --fix`, which npm refused twice (ERESOLVE): expo-router 57 had
+`@expo/ui`, `expo-symbols` and `@expo/log-box` as its own dependencies and 58 takes them as peers, so
+the old copies left in `package-lock.json` clashed. Their lock entries (and the old router's) were
+deleted and `npm install` run; the app imports none of them. Then the 9 type errors of React Native
+0.88's strict types (`useRef<ScrollView>` is now `useRef<ScrollViewInstance>`; `renderItem={null}`
+refused), `File.write()` awaited (async since SDK 58: the share must not go before the file is
+written), `@types/react` to 19.3 under devDependencies (`npx expo install @types/react -- --save-dev`
+put it under dependencies). **The rule:** when Expo Go says the SDK does not match, the app follows
+the stores' SDK (Expo Go for an older SDK is Android only); after an SDK move run `npx expo install
+--check` until it says "Dependencies are up to date", then the gates, then open every role.
+
+**The same day, on the phone:** "[Worklets] Mismatch between JavaScript part and native part of
+Worklets (0.14.0 vs 0.13.0)" at the first screen. `react-native-drawer-layout` (inside expo-router)
+needs `react-native-reanimated`; deleting the old lock entries let npm fetch the newest Reanimated
+4.8.0 and Worklets 0.14.0, while Expo Go 58 carries 4.7.1 and 0.13.0 (the lock had had exactly those).
+`npx expo install --check` and the browser could not see it: they look only at the app's own
+dependencies, and the web has no native part. **Done:** the three pinned as the app's own dependencies
+by `npx expo install react-native-reanimated react-native-worklets react-native-gesture-handler`, so
+the next SDK move keeps them in step. **The rule:** never delete a lock entry for a native package;
+after an SDK move compare every native package in `node_modules` with the SDK's
+`bundledNativeModules.json`, not only `package.json`'s.
+
+---
+
+### 30 · Stopping my own gates by name stopped another session's (25 Nov)
+
+To stop the app's gates I killed every process whose command line held `gates.sh`, with
+`taskkill /T`. It also ended the PMS main chat's `bash scripts/gates.sh separate-bills`, running at
+the same time in `D:\fidato pms\.claude\worktrees\separate-bills`. **What was done:** Postgres and the
+API checked (both up), the owner told so that run is repeated. **The rule:** stop a run by the pid
+this chat started it with, or match on this copy's own path (`mobile-pms`), never on a script name
+other copies share.
+
+---
+
 ### 28 · Two files importing each other stopped the app at its first screen (21 Nov)
 
 `core/Shell.tsx` imported `ShellAccount`, `ShellMenu` and `ShellNotes`, and each of them imported

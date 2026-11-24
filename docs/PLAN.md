@@ -14,7 +14,7 @@ releases. It uses the PMS's live API and accounts; it has no server or database 
 
 ```
 Phone (Android / iPhone)
- └─ the app (Expo SDK 57 · React Native 0.86.3 · React 19.2.3 · TypeScript)
+ └─ the app (Expo SDK 58 · React Native 0.88.1 · React 19.3.0 · TypeScript; SDK 57 until 25 Nov, M-19)
      ├─ core/        api client · sign-in · outbox (offline queue) · storage · theme · ui · navigation
      └─ modules/     one per PMS service: screens · data calls · ported rules
             │  HTTPS, the signed-in person's Firebase token on every call
@@ -24,7 +24,7 @@ Phone (Android / iPhone)
 
 | Part | Plan | Decided? |
 |---|---|---|
-| Language and framework | TypeScript, React Native, Expo SDK 57 | ✅ M-1 |
+| Language and framework | TypeScript, React Native, Expo SDK 58 (57 until 25 Nov) | ✅ M-1, M-19 |
 | Screens and layout | Fidato tokens and Type Ladder from the PMS's `theme.css` (`core/theme.ts`, done) | ✅ |
 | Navigation | `expo-router` (Expo's own, file-based) instead of slice 1's hand-made screen switch | owner, before slice 2 |
 | Reading data | A small shared cache with the hotel in every key; `@tanstack/react-query` (the PMS uses it) | owner, before slice 2 |

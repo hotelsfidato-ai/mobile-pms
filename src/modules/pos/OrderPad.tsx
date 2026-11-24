@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Minus, Plus, Search, Trash2, WifiOff } from "lucide-react-native";
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import { Pressable, ScrollView, StyleSheet, Text, View, type NativeScrollEvent, type NativeSyntheticEvent } from "react-native";
+import { Pressable, ScrollView, type ScrollViewInstance, StyleSheet, Text, View, type NativeScrollEvent, type NativeSyntheticEvent } from "react-native";
 import { api, HeldError, send, type Hotel } from "../../core/api";
 import { cash } from "../../core/format";
 import { c, face, space, t } from "../../core/theme";
@@ -87,7 +87,7 @@ export function OrderPad({ hotel, role, table, orderId, onClose }: {
   useEffect(() => { saveDraft({ key, table, ...(orderId ? { orderId } : {}), lines, updatedAt: "" }); }, [key, table, orderId, lines]);
 
   /* On a narrow screen This round sits above the menu: its new line is brought into view. */
-  const scroll = useRef<ScrollView>(null);
+  const scroll = useRef<ScrollViewInstance>(null);
   const scrollY = useRef(0);
   const at = useRef({ round: 0, list: 0, lines: {} as Record<string, number> });
   const pending = useRef<string | null>(null);

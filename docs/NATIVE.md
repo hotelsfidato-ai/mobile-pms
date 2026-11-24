@@ -33,15 +33,15 @@ installed (no new package without the owner's yes).
   `pressed`), never both.
 - **Text** follows the phone's text size (`allowFontScaling` stays on); a figure that must fit uses
   `adjustsFontSizeToFit` with `minimumFontScale={0.8}` rather than clipping.
-- **Pickers (M-16, 20 Nov):** photos and the camera through `expo-image-picker` ~57.0.20, files
-  through `expo-document-picker` ~57.0.3, dates and times through
-  `@react-native-community/datetimepicker` 9.1.0 — each phone's own picker (iOS's inline / spinner,
+- **Pickers (M-16, 20 Nov):** photos and the camera through `expo-image-picker` ~58.0.10, files
+  through `expo-document-picker` ~58.0.5, dates and times through
+  `@react-native-community/datetimepicker` 9.2.1 — each phone's own picker (iOS's inline / spinner,
   Android's dialog). A hotel's or a room type's photo is redrawn on the phone as the web redraws it
-  (upright, 1600 px on its long side at most, JPEG 0.85) through `expo-image-manipulator` ~57.0.21
+  (upright, 1600 px on its long side at most, JPEG 0.85) through `expo-image-manipulator` ~58.0.16
   (M-18, `src/core/photoFit.ts`); a bill's photo goes at full quality, as picked. Installed 19 Nov
   (M-14): `expo-file-system`, `expo-sharing`. Not installed,
-  asked of the owner when wanted: haptics (`expo-haptics` ~57.0.3), the clipboard (`expo-clipboard`
-  ~57.0.2).
+  asked of the owner when wanted: haptics (`expo-haptics` ~58.0.8), the clipboard (`expo-clipboard`
+  ~58.0.4).
 - **Nothing automatic (M-17):** no `expo-updates`, no over-the-air update, no store; testing is in
   Expo Go from the PC.
 - **The core pieces (M-16):** `src/core/pickers.ts` (pickPhoto, pickFile), `upload.ts` (sendForm,

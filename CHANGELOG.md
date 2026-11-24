@@ -5,6 +5,34 @@ commits.
 
 ---
 
+## 2026-11-25 · Expo SDK 58: the stores' Expo Go opens the app again (M-19)
+
+**Asked for:** "how much is completed"; then "Yes, start them" (the servers, down since the PC
+restarted at 00:52); then, Expo Go on the owner's phone being SDK 58 and the app 57, **"Yes, upgrade
+to 58"**. **Done:** Postgres started under its keeper (it recovered from the unclean stop in about 4½
+minutes), the API on 8860, Expo. **Shipped (branch `sdk-58`):** `npx expo install expo@^58.0.0
+--fix`: expo 58.0.26, React Native 0.88.1, React 19.3.0, expo-router 58.0.32 and every Expo package to
+its SDK 58 version (`@react-native-community/datetimepicker` 9.2.1, `react-native-safe-area-context`
+~5.11.1, `react-native-screens` ~4.30.1, `react-native-svg` 15.16.0, `@types/react` ~19.3.0; the
+list in `package.json`). No package new to the app: `react-native-reanimated` 4.7.1,
+`react-native-worklets` 0.13.0 and `react-native-gesture-handler` ~3.3.0 were already installed
+(expo-router needs them) and are now the app's own, pinned to Expo Go 58's (MEMORY 29). Code: React
+Native 0.88's strict types (`useRef<ScrollViewInstance>` in Rooms, the order pad and the calendar; an
+empty list's `renderItem`), and `File.write()` awaited before sharing in Export and the import
+template (async since SDK 58). Docs: PLAN, NATIVE and TESTING name SDK 58. **Found:** npm's ERESOLVE
+on the old router's leftovers; the phone's "[Worklets] Mismatch … (0.14.0 vs 0.13.0)" after the
+leftovers were cleared (MEMORY 29); stopping the gates by script name also stopped the PMS main chat's
+`gates.sh separate-bills` (MEMORY 30; the owner told). **Proved:** ALL GATES GREEN on the
+pinned tree (names, circles, types, 107 checks, the Android and iPhone exports); `npx expo install --check`
+"Dependencies are up to date"; every native package in `node_modules` matches SDK 58's
+`bundledNativeModules.json`; types clean; Expo serves SDK 58.0.0; both phone bundles built, the
+Android one carrying Worklets 0.13.0 and Reanimated 4.7.1; in the browser at 375 × 812 on SDK 58 all
+12 roles land where they did on 21 Nov. **Not proved:** a real phone after the pin (the owner's
+test); no write tried. Expo runs on **8082** for now: the old 8081 process hung while exiting and
+kept the port.
+
+---
+
 ## 2026-11-21 · On the PC: the transfer, the API at the 16 Nov release, Expo Go for the phone
 
 **Asked for:** "pull the latest into the PC, check all the files came from the cloud, start the

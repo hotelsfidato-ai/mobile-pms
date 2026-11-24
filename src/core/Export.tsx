@@ -65,7 +65,7 @@ export function ExportButtons({ table }: { table: ExportTable | null }) {
     if (!dir.exists) dir.create();
     const file = new File(dir, `${fileName(tb.title)}.csv`);
     file.create();
-    file.write(tableCsv(tb));
+    await file.write(tableCsv(tb)); // async since SDK 58: shared only once written
     await Sharing.shareAsync(file.uri, { mimeType: "text/csv", UTI: "public.comma-separated-values-text", dialogTitle: tb.title });
   });
 

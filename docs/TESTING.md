@@ -2,7 +2,7 @@
 
 The owner's route (20 Nov): the app runs from the PC in **Expo Go** on the phone. Nothing is uploaded
 to Expo, no store, no over-the-air update (`expo-updates` is not installed). Every module the app
-uses (SQLite, print, files, sharing, photo / file / date pickers) is part of Expo Go for SDK 57.
+uses (SQLite, print, files, sharing, photo / file / date pickers) is part of Expo Go for SDK 58 (the app moved to SDK 58 on 25 Nov, M-19: the stores' Expo Go runs only the newest SDK).
 
 **Test against the local PMS, not the live hotels.** A phone that reaches the live API can take real
 payments and change real settings. The local API on port 8860 uses the database `fidato_mobile`.

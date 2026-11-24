@@ -4,7 +4,7 @@ import {
   BedDouble, Check, ChevronDown, ChevronLeft, ChevronRight, CloudOff, DoorOpen, LogOut, RefreshCw, RotateCcw, Sparkle, SprayCan, UserRound, Users, Wrench, type LucideIcon,
 } from "lucide-react-native";
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
-import { AppState, Modal, Pressable, RefreshControl, ScrollView, Text, View } from "react-native";
+import { AppState, Modal, Pressable, RefreshControl, ScrollView, type ScrollViewInstance, Text, View } from "react-native";
 import type { Room, Stay } from "../../core/types";
 import { api, HeldError, send, type Hotel } from "../../core/api";
 import { DASH, dateLong } from "../../core/format";
@@ -74,7 +74,7 @@ export function Rooms({ hotel, role, me, onBack, onSignOut }: {
   const pad = useSheetPad();
   const [held, setHeld] = useState<OutboxEntry[]>([]);
   const [online, setOnline] = useState(isOnline);
-  const scroller = useRef<ScrollView>(null);
+  const scroller = useRef<ScrollViewInstance>(null);
   const groupAt = useRef<Record<string, number>>({});
 
   useEffect(() => watchConnection(() => setOnline(isOnline())), []);
